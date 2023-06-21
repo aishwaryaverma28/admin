@@ -27,10 +27,15 @@ const EmployeeView = () => {
     setSearchTerm(event.target.value);
     // console.log(event.target.value);
   }
-  const filteredItems = ((tableData||[]).filter((item)=>
-item.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-  ))
-  // console.log(filteredItems);
+  const filteredItems = (tableData || []).filter((item) => {
+    if (item && item.first_name) {
+      return item.first_name.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return false;
+  });
+  
+
+  console.log(filteredItems);
   return (
     <>
     <header className="headerEditor">
