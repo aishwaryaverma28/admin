@@ -1,0 +1,127 @@
+.addEmployeeFrom{
+    border: 1px solid #dcdcdc;
+    margin: 0.8rem;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+.formDiv{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.rightForm{
+  width: 50%;
+}
+.fromFiled{
+   display: flex;
+   align-items: center;
+  }
+.fromFiled label {
+    color: #1e2224;
+    font-size: 15px;
+    font-family: "Work Sans";
+    text-transform: capitalize;
+    min-width: 150px;
+    font-weight: 600;
+  }
+  
+  .fromFiled label span {
+    color: #f66a6a;
+  }
+  
+  .fromFiled input {
+    /* width: 6%; */
+    color: #1e2224;
+    font-weight: 600;
+    margin-left: 5px;
+    border: 1px solid #dcdcdc;
+     border-radius: 10px;
+    font-size: 14px;
+    font-family: "Work Sans";
+    padding: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .fromFiled textarea {
+    min-width: 310px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    margin-left: 10px;
+    /* margin-bottom: 30px; */
+    padding: 10px;
+    font-size: 14px;
+    font-family: "Work Sans", sans-serif;
+    color: #1e2224;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .secondaryBtn {
+    padding: 11px 23px;
+    font-size: 16px;
+    font-family: "Work Sans";
+    border-radius: 10px;
+    border: 1px solid #077838;
+    background: #077838;
+    color: #ffffff;
+    font-weight: 500;
+  }
+  
+  .secondaryBtn:hover {
+    color: #077838;
+    background: #ffffff;
+    border: 1px solid #077838;
+    transition: all 800ms ease-in-out;
+  }
+  .closeBtn{
+    cursor: pointer;
+    padding: 11px 23px;
+    font-size: 16px;
+    font-family: "Work Sans";
+    border-radius: 10px;
+     border: none;
+    background: #2b74da;
+    color: #ffffff;
+    font-weight: 500;
+  }
+  .closeBtn a{
+    color: #ffffff;
+  }
+  
+  .saveBtnRight{
+    display: flex;
+    justify-content: end;
+  }
+  @media only screen and (max-width: 1110px) {
+    .leftForm{
+      width: 100%;
+    }
+    .rightForm{
+      width: 100%;
+    }
+    .fromFiled{
+      flex-wrap: wrap;
+    }
+    .fromFiled label {
+      width: 25%;
+    }
+    .fromFiled input {
+      width: 70%;
+    } 
+    .fromFiled textarea {
+      width: 70%;
+    }
+  }
+  @media only screen and (max-width: 700px) {
+     .fromFiled label {
+      width: 95%;
+      margin-bottom: 1rem;
+    }
+    .fromFiled input {
+      width: 95%;
+    } 
+    .fromFiled textarea {
+      width: 95%;
+    }
+  }

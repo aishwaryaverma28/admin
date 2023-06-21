@@ -1,0 +1,106 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Work+Sans&display=swap'); */
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(255, 255, 255);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #2b74da;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+}
+
+ html {
+  scroll-behavior: smooth;
+} 
+body {
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-family: "Work Sans", sans-serif;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased; 
+  -moz-osx-font-smoothing: grayscale; 
+  overflow-x: hidden;
+  color: #000;
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  color: #1e2224;
+  text-transform: capitalize;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  font-family: "Work Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Work Sans", sans-serif;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+p {
+  font-family: "Work Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #1e2224;
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font-family: "Work Sans", sans-serif;
+}
+
+.main{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.sidebar{
+  width: 22%;
+  background: #ffffff;
+  color: #1e2224;
+  transition: all 0.3s;
+  border-right: 1px solid #dcdcdc;
+  font-family: 'Work Sans';
+}
+.conatiner{
+  width: 78%;
+}
