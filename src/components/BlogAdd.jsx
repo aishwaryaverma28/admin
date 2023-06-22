@@ -1,25 +1,26 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { BLOG_ADD, GET_TAG,IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import { BLOG_ADD, GET_TAG, IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import "./styles/Editor.css";
 import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
+import ImageEditor from "./ImageEditor";
 
 const BlogAdd = () => {
   // section states
-const [sectionTitle, setSectionTitle] = useState("");
-const [sectionSort, setSectionSort] = useState(null);
-const [dataFromChild, setDataFromChild] = useState("");
-const [hideImages, setHideImages] = useState(false);
-const [isIndex, setIsIndex] = useState(0);
-const fileInputRef = useRef(null);
-const [childData, setChildData] = useState("");
-const [selectedImage, setSelectedImage] = useState(null);
-const [showUploadButton, setShowUploadButton] = useState(false);
-const [showEditButton, setShowEditButton] = useState(false);
-const [showChooseButton, setShowChooseButton] = useState(false);
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [sectionSort, setSectionSort] = useState(null);
+  const [dataFromChild, setDataFromChild] = useState("");
+  const [hideImages, setHideImages] = useState(false);
+  const [isIndex, setIsIndex] = useState(0);
+  const fileInputRef = useRef(null);
+  const [childData, setChildData] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showUploadButton, setShowUploadButton] = useState(false);
+  const [showEditButton, setShowEditButton] = useState(false);
+  const [showChooseButton, setShowChooseButton] = useState(false);
   const [sectionData, setSectionData] = useState([]);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
@@ -71,7 +72,7 @@ const [showChooseButton, setShowChooseButton] = useState(false);
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date);
-    console.log(date);
+    // console.log(date);
   };
 
   //===================================================================== function to track on chnage of form paramerters
@@ -82,61 +83,59 @@ const [showChooseButton, setShowChooseButton] = useState(false);
     });
   }
   // =====================================================================================section data trasfer
-// ========================================================================section image added/deleted
-const handleImageSelect = (event) => {
-  setSelectedImage(event.target.files[0]);
-  setShowUploadButton(true);
-};
+  // ========================================================================section image added/deleted
+  const handleImageSelect = (event) => {
+    setSelectedImage(event.target.files[0]);
+    setShowUploadButton(true);
+  };
 
-const imageUpload = async (event) => {
-  event.preventDefault();
+  const imageUpload = async (event) => {
+    event.preventDefault();
 
-  if (!selectedImage) {
-    console.log("No image selected.");
-    return;
-  }
+    if (!selectedImage) {
+      console.log("No image selected.");
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("blog_img", selectedImage);
+    const formData = new FormData();
+    formData.append("blog_img", selectedImage);
 
-  try {
-    const response = await axios.post(IMAGE_UP, formData);
-    console.log("Image uploaded successfully:", response.data);
-    // Perform any additional actions on successful upload
-    setShowUploadButton(false);
-    setShowEditButton(true);
-    setChildData(response.data.data);
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    // Handle error condition
-  }
-};
+    try {
+      const response = await axios.post(IMAGE_UP, formData);
+      console.log("Image uploaded successfully:", response.data);
+      // Perform any additional actions on successful upload
+      setShowUploadButton(false);
+      setShowEditButton(true);
+      setChildData(response.data.data);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      // Handle error condition
+    }
+  };
 
-const handleClick = () => {
-  fileInputRef.current.click();
-  setShowChooseButton(false);
-};
+  const handleClick = () => {
+    fileInputRef.current.click();
+    setShowChooseButton(false);
+  };
 
-const handleEdit = async (event) => {
-  event.preventDefault();
-  try {
-    const response = await axios.delete( IMAGE_DEL+childData );
-    console.log("Image deleted successfully:", response);
-    // Perform any additional actions on successful upload
-    setSelectedImage(null);
-    setShowUploadButton(false);
-    setShowEditButton(false);
-    setShowChooseButton(true);
-    setChildData(response.data.data);
-   } catch (error) {
-    console.error("Error uploading image:", error);
-    // Handle error condition
-  
-};
-
-};
-// ==========================================================accordion of sub sections
-function accordianClick(index) {
+  const handleEdit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.delete(IMAGE_DEL + childData);
+      console.log("Image deleted successfully:", response);
+      // Perform any additional actions on successful upload
+      setSelectedImage(null);
+      setShowUploadButton(false);
+      setShowEditButton(false);
+      setShowChooseButton(true);
+      setChildData(response.data.data);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      // Handle error condition
+    }
+  };
+  // ==========================================================accordion of sub sections
+  function accordianClick(index) {
     if (index === isIndex) {
       setIsIndex(0);
     } else {
@@ -149,7 +148,7 @@ function accordianClick(index) {
     newSectionData[index].title = event.target.value;
     setSectionData(newSectionData);
   };
-//==============================================================section sort
+  //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
@@ -169,7 +168,6 @@ function accordianClick(index) {
     setSectionData(newSectionData);
   };
 
-  
   //======================================================================================= sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
@@ -194,13 +192,13 @@ function accordianClick(index) {
       section: dataFromChild,
     };
     setSectionData([...sectionData, newSection]);
-       // Reset input fields and image state
+    // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(0);
     setChildData("");
     setDataFromChild("");
-    setShowEditButton(false)
-    setSelectedImage("")
+    setShowEditButton(false);
+    setSelectedImage("");
   };
   // console.log(sectionData);
   // =====================================================================================delete the targeted section
@@ -209,9 +207,9 @@ function accordianClick(index) {
     const newSectionData = [...sectionData];
     newSectionData.splice(index, 1);
     setSectionData(newSectionData);
-    };
+  };
 
-  console.log(sectionData);
+  // console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleFormSubmit(event) {
@@ -223,7 +221,7 @@ function accordianClick(index) {
       date: selectedDate,
       sections: sectionData,
     };
-    console.log(updatedFormData);
+    // console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData).then((response) => {
       console.log(response);
     });
@@ -297,62 +295,64 @@ function accordianClick(index) {
                       onChange={handleSecSortChange}
                     />
                     <div>
-   
-
                       <>
-      {!showUploadButton && !showEditButton && !showChooseButton && (
-        <button
-          type="button"
-          onClick={handleClick}
-          className="imageUploaderData"
-        >
-          Choose Image
-        </button>
-      )}
-      {selectedImage && !showEditButton && (
-        <p className="image">Selected Image: {selectedImage.name}</p>
-      )}
-      <input
-        type="file"
-        name="blog_img"
-        accept="image/*"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleImageSelect}
-      />
-      {showUploadButton && !showEditButton && (
-        <button
-          type="submit"
-          onClick={imageUpload}
-          className="imageUploaderData"
-        >
-          Upload
-        </button>
-      )}
-      {showEditButton && (
-        <>
-          <p className="image">{childData}</p>
-          <button
-            type="button"
-            onClick={handleEdit}
-            className="imageUploaderData"
-          >
-            Edit Image
-          </button>
-        </>
-      )}
-      {showChooseButton && (
-        <>
-          <button
-            type="button"
-            onClick={handleClick}
-            className="imageUploaderData"
-          >
-            Choose Image
-          </button>
-        </>
-      )}
-    </>
+                        {!showUploadButton &&
+                          !showEditButton &&
+                          !showChooseButton && (
+                            <button
+                              type="button"
+                              onClick={handleClick}
+                              className="imageUploaderData"
+                            >
+                              Choose Image
+                            </button>
+                          )}
+                        {selectedImage && !showEditButton && (
+                          <p className="image">
+                            Selected Image: {selectedImage.name}
+                          </p>
+                        )}
+                        <input
+                          type="file"
+                          name="blog_img"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          style={{ display: "none" }}
+                          onChange={handleImageSelect}
+                        />
+                        {showUploadButton && !showEditButton && (
+                          <button
+                            type="submit"
+                            onClick={imageUpload}
+                            className="imageUploaderData"
+                          >
+                            Upload
+                          </button>
+                        )}
+                        {showEditButton && (
+                          <>
+                            <p className="image">{childData}</p>
+                            <button
+                              type="button"
+                              onClick={handleEdit}
+                              className="imageUploaderData"
+                            >
+                              Edit Image
+                            </button>
+                          </>
+                        )}
+                        {showChooseButton && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={handleClick}
+                              className="imageUploaderData"
+                            >
+                              Choose Image
+                            </button>
+                          </>
+                        )}
+                      </>
                     </div>
 
                     <button
@@ -414,10 +414,8 @@ function accordianClick(index) {
                         onChange={(event) => handleSortChange(event, index)}
                       />
                       <div>
-                      {!hideImages && section.image && (
-                          <p>{section.image}</p>
-                        )}
-                        <ImageUploader
+                        <ImageEditor
+                          parentProp={section.image}
                           onDataTransfer={(data) =>
                             subImageTrasfer(data, index)
                           }
@@ -437,11 +435,7 @@ function accordianClick(index) {
                         onClick={() => handleDeleteSection(index)}
                         className="sectionDelete"
                       >
-                        <img
-                          src={trash}
-                          className="deleteIcon"
-                          alt="Delete"
-                        />
+                        <img src={trash} className="deleteIcon" alt="Delete" />
                       </button>
                     </div>
                   </div>
@@ -469,11 +463,7 @@ function accordianClick(index) {
                     ))}
                   </select>
 
-                  <button
-                    onClick={AddTag}
-                    type="button"
-                    className="primaryBtn"
-                  >
+                  <button onClick={AddTag} type="button" className="primaryBtn">
                     Add
                   </button>
                 </div>
