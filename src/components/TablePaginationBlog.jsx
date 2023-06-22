@@ -59,8 +59,7 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
           <tr>
             <th>ID</th>
             <th>Title</th>
-            <th>URL</th>
-            
+            <th>Site</th>
             <th>Date</th>
             
           </tr>
@@ -70,7 +69,7 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
             <tr key={index}>
               <td>{row.id}</td>
               <td className="employeeName"><Link to={"/blog/view/"+row.id}>{row.title}</Link></td>
-              <td>{row.url}</td>              
+              <td>{row.site}</td>              
               <td>{row.date ? row.date.split("T")[0] : ""}</td>              
             </tr>
           ))}
