@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
-import { BLOG_ADD, GET_TAG } from "./utils/Constants";
+import { BLOG_ADD, GET_TAG,IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import "./styles/Editor.css";
+import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
-import ImageUploader from "./ImageUploader";
-import Sections from "./Sections";
 
 const BlogAdd = () => {
   // section states
+const [sectionTitle, setSectionTitle] = useState("");
+const [sectionSort, setSectionSort] = useState(null);
+const [dataFromChild, setDataFromChild] = useState("");
+const [hideImages, setHideImages] = useState(false);
+const [isIndex, setIsIndex] = useState(0);
+const fileInputRef = useRef(null);
+const [childData, setChildData] = useState("");
+const [selectedImage, setSelectedImage] = useState(null);
+const [showUploadButton, setShowUploadButton] = useState(false);
+const [showEditButton, setShowEditButton] = useState(false);
+const [showChooseButton, setShowChooseButton] = useState(false);
   const [sectionData, setSectionData] = useState([]);
-  const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState(null);
-  const [dataFromChild, setDataFromChild] = useState("");
-  const [sectionImage, setSectionImage] = useState("");
-  const [hideImages, setHideImages] = useState(false);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
@@ -24,9 +29,6 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
 
-
-  const [isIndex, setIsIndex] = useState(0);
-
   useEffect(() => {
     axios.get(GET_TAG).then((response) => {
       setTagApi(response);
@@ -34,14 +36,6 @@ const BlogAdd = () => {
   }, []);
   // console.log(tagApi?.data?.data)
   const options = tagApi?.data?.data || [];
-
-  function accordianClick(index) {
-    if (index === isIndex) {
-      setIsIndex(0);
-    } else {
-      setIsIndex(index);
-    }
-  }
 
   const [formData, setFormData] = useState({
     title: "",
@@ -88,34 +82,94 @@ const BlogAdd = () => {
     });
   }
   // =====================================================================================section data trasfer
+// ========================================================================section image added/deleted
+const handleImageSelect = (event) => {
+  setSelectedImage(event.target.files[0]);
+  setShowUploadButton(true);
+};
 
+const imageUpload = async (event) => {
+  event.preventDefault();
+
+  if (!selectedImage) {
+    console.log("No image selected.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("blog_img", selectedImage);
+
+  try {
+    const response = await axios.post(IMAGE_UP, formData);
+    console.log("Image uploaded successfully:", response.data);
+    // Perform any additional actions on successful upload
+    setShowUploadButton(false);
+    setShowEditButton(true);
+    setChildData(response.data.data);
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    // Handle error condition
+  }
+};
+
+const handleClick = () => {
+  fileInputRef.current.click();
+  setShowChooseButton(false);
+};
+
+const handleEdit = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await axios.delete( IMAGE_DEL+childData );
+    console.log("Image deleted successfully:", response);
+    // Perform any additional actions on successful upload
+    setSelectedImage(null);
+    setShowUploadButton(false);
+    setShowEditButton(false);
+    setShowChooseButton(true);
+    setChildData(response.data.data);
+   } catch (error) {
+    console.error("Error uploading image:", error);
+    // Handle error condition
+  
+};
+
+};
+// ==========================================================accordion of sub sections
+function accordianClick(index) {
+    if (index === isIndex) {
+      setIsIndex(0);
+    } else {
+      setIsIndex(index);
+    }
+  }
+  //=============================================================setion title
   const handleSecTitleChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].title = event.target.value;
     setSectionData(newSectionData);
   };
-
+//==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
   };
+  //==============================================================sub section image
   const subImageTrasfer = (data, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].image = data;
     setSectionData(newSectionData);
     setHideImages(true);
   };
+  //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].section = data;
     setSectionData(newSectionData);
   };
 
-  const handleImgTrans = (data) => {
-    setSectionImage(data);
-  };
-  // console.log(sectionImage);
+  
   //======================================================================================= sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
@@ -136,15 +190,17 @@ const BlogAdd = () => {
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort,
-      image: sectionImage,
+      image: childData,
       section: dataFromChild,
     };
     setSectionData([...sectionData, newSection]);
-    // Reset input fields and image state
+       // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(0);
-    setSectionImage("");
+    setChildData("");
     setDataFromChild("");
+    setShowEditButton(false)
+    setSelectedImage("")
   };
   // console.log(sectionData);
   // =====================================================================================delete the targeted section
@@ -153,9 +209,9 @@ const BlogAdd = () => {
     const newSectionData = [...sectionData];
     newSectionData.splice(index, 1);
     setSectionData(newSectionData);
-  };
+    };
 
-  // console.log(sectionData);
+  console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleFormSubmit(event) {
@@ -167,7 +223,7 @@ const BlogAdd = () => {
       date: selectedDate,
       sections: sectionData,
     };
-    // console.log(updatedFormData);
+    console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData).then((response) => {
       console.log(response);
     });
@@ -219,7 +275,7 @@ const BlogAdd = () => {
             </div>
             {/* <BlogSection/> */}
 
-            {/* <>
+            <>
               <div className="addSection">
                 <div className="fromBlogSection">
                   <input
@@ -241,7 +297,62 @@ const BlogAdd = () => {
                       onChange={handleSecSortChange}
                     />
                     <div>
-                      <ImageUploader onDataTransfer={handleImgTrans} />
+   
+
+                      <>
+      {!showUploadButton && !showEditButton && !showChooseButton && (
+        <button
+          type="button"
+          onClick={handleClick}
+          className="imageUploaderData"
+        >
+          Choose Image
+        </button>
+      )}
+      {selectedImage && !showEditButton && (
+        <p className="image">Selected Image: {selectedImage.name}</p>
+      )}
+      <input
+        type="file"
+        name="blog_img"
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleImageSelect}
+      />
+      {showUploadButton && !showEditButton && (
+        <button
+          type="submit"
+          onClick={imageUpload}
+          className="imageUploaderData"
+        >
+          Upload
+        </button>
+      )}
+      {showEditButton && (
+        <>
+          <p className="image">{childData}</p>
+          <button
+            type="button"
+            onClick={handleEdit}
+            className="imageUploaderData"
+          >
+            Edit Image
+          </button>
+        </>
+      )}
+      {showChooseButton && (
+        <>
+          <button
+            type="button"
+            onClick={handleClick}
+            className="imageUploaderData"
+          >
+            Choose Image
+          </button>
+        </>
+      )}
+    </>
                     </div>
 
                     <button
@@ -336,9 +447,7 @@ const BlogAdd = () => {
                   </div>
                 </div>
               ))}
-            </> */}
-
-            <Sections/>
+            </>
           </div>
           {/*==============================================================right side of form end here ============================================================*/}
           {/*==============================================================left side of form starts here ============================================================*/}
