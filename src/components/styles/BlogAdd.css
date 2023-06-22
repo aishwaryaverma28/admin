@@ -19,11 +19,13 @@
 .fromFiled input{
   width: 100%;
   border: 1px solid #dcdcdc;
+  
    border-radius: 10px;
   font-size: 16px;
+  
   font-family: "Work Sans";
   padding: 0.8rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
 }
 .fromUrl{
 display: flex;
@@ -31,15 +33,21 @@ justify-content: space-between;
 gap: 1rem;
 margin-bottom: 1rem;
 }
+
 .fromUrl input{
   width: 70%;
   border: 1px solid #dcdcdc;
    border-radius: 10px;
-  font-size: 16px;
+   font-size: 16px;
   font-family: "Work Sans";
   padding: 0.8rem;
+  outline: rgb(59, 59, 59);
+  background-color: #ffffff;
   height: 3rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.fromUrl input:focus{
+  border: 1px solid rgb(127, 126, 126);;
 }
 /* .imageUploaderData{
     display: flex;
@@ -80,8 +88,13 @@ margin-bottom: 1rem;
   font-size: 16px;
   font-family: "Work Sans";
   padding: 1rem;
+  outline: rgb(59, 59, 59);
+  background-color: #ffffff;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.fromBlogSection input:focus{
+  border: 1px solid rgb(127, 126, 126);;
 }
 .addSectionBtn{
     color: #2b74da;
@@ -161,8 +174,12 @@ color: #fff;
     /* margin-bottom: 30px; */
     border: 1px solid #dcdcdc;
     border-radius: 10px;
+    outline: rgb(59, 59, 59);
     font-size: 16px;
     font-family: "Work Sans";
+  }
+  .contentBox select:focus{
+    border: 1px solid rgb(127, 126, 126);;
   }
   
   .contentBox select option {

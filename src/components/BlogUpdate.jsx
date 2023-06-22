@@ -13,7 +13,8 @@ import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
 import ImageUploader from "./ImageUploader";
-
+import "./styles/BlogAdd.css";
+import "./styles/Editor.css";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states
@@ -98,7 +99,7 @@ const BlogUpdate = () => {
 
   const tagData = () => {   
    const ids = tagId.split(",");
-console.log(ids);
+// console.log(ids);
    ids.forEach((item) => {
   for (const option of options) {
     if (option.id == item && !selectedTags.includes(option.tag)) {
@@ -113,6 +114,7 @@ console.log(ids);
 
   const handleTagSelection = (event) => {
     const id = event.target.value;
+    setStateBtn(1);
     setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
     options.map((option) => {
       if (option.id == id && !selectedTags.includes(option.tag)) {
@@ -122,6 +124,7 @@ console.log(ids);
   };
 
   const handleTagRemoval = (index) => {
+    setStateBtn(1);
     const numbersArray = tagId.split(",");
     numbersArray.splice(index, 1);
     const updatedNumbersString = numbersArray.join(",");
@@ -285,13 +288,25 @@ console.log(ids);
       url: formData.url,
       description: formData.description,
       image: formData.image,
-      date: formData.image,
+      date: formData.date,
       tag: tagId,
       sections: sectionData,
     };
-    axios.put(BLOG_EDIT + id, updatedFormData).then((response) => {
-      console.log(response);
+    // axios.put(BLOG_EDIT+id, updatedFormData).then((response) => {
+    //   console.log(response);
+    // });
+    fetch(BLOG_EDIT + id, {
+      method: 'PUT',
+      body: updatedFormData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
     });
+    console.log(updatedFormData);
   }
 
   return (
@@ -299,7 +314,7 @@ console.log(ids);
       <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
-      <h3>{id}</h3>
+      
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}

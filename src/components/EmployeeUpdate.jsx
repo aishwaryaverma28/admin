@@ -65,6 +65,7 @@ const EmployeeUpdate = () => {
       });
     }
   }
+  
   function formatDate(date) {
     return date ? date.split("T")[0] : "";
    
@@ -74,7 +75,7 @@ const EmployeeUpdate = () => {
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
   }
-// office 365
+console.log(formData.personalEmail)
   function handleSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -128,16 +129,16 @@ const EmployeeUpdate = () => {
                 employee name<span>*</span>
               </label>
 
-              <input type="text"    value={formData.name} onChange={handleChange}/>
-            </div>
-            <div className="fromFiled" top-align>
-              <label for="">
+              <input type="text" value={formData.name} name="name" onChange={handleChange}/>
+            </div> 
+            <div className="fromFiled">
+              <label htmlFor="address1">
                 current address<span>*</span>
               </label>
-
               <textarea
-                type="textarea"
-                value={formData.address} onChange={handleChange}
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
                 rows="5"
                 cols="5"
                 placeholder="Please Enter Address"
@@ -203,7 +204,7 @@ const EmployeeUpdate = () => {
 
               <input
                 type="email"
-                name="personal_email"
+                name="personalEmail"
                 id="personal_email"
                 value={formData.personalEmail} onChange={handleChange}
                 placeholder="Please Enter Email"

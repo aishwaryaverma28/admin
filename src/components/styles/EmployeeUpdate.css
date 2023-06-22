@@ -36,11 +36,16 @@
     font-weight: 600;
     margin-left: 5px;
     border: 1px solid #dcdcdc;
+    outline: rgb(59, 59, 59);
+    background-color: #ffffff;
      border-radius: 10px;
     font-size: 14px;
     font-family: "Work Sans";
     padding: 0.8rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  .fromFiled input:focus{
+    border: 1px solid rgb(127, 126, 126);;
   }
   .fromFiled input:hover{
     background-color:rgb(227, 225, 225);
