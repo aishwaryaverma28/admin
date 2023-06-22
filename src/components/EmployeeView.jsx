@@ -44,7 +44,7 @@ const EmployeeView = () => {
     <div className="buttonBox">
       <div className="searchBar"> <label>Search: <input type="text" onChange={handleSearchTermChange}/></label></div>
       <div>
-        <button type="button" className="addBtn"><Link to={"/employee/add"}>add <i className="fas fa-plus"></i></Link></button>
+      <Link to={"/employee/add"}><button type="button" className="addBtn">add <i className="fas fa-plus"></i></button></Link>
         <lable className="entriesLable"> Show
           <select onChange={selectRows} className="entries">
             <option value="15">15</option>

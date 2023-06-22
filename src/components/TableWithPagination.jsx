@@ -57,21 +57,18 @@ const TableWithPagination = ({ data, rowsPerPage }) => {
       <table>
         <thead>
           <tr>
-            <th>S NO.</th>
             <th>ECODE</th>
             <th>ETYPE</th>
             <th>NAME</th>
             <th>DOB</th>
             <th>PHONE</th>
             <th>CUR. ADDRESS</th>
-            <th>PER. ADDRESS</th>
             <th>STATUS</th>
           </tr>
         </thead>
         <tbody>
           {currentRows.map((row, index) => (
             <tr key={index}>
-              <td>{index}</td>
               <td>{row.emp_no}</td>
               <td>{row.position}</td>
               <td className="employeeName">
@@ -79,10 +76,11 @@ const TableWithPagination = ({ data, rowsPerPage }) => {
                 {row.first_name} {row.last_name}
                 </Link>
               </td>
-              <td>{row.dob}</td>
+              
+              <td>{row.dob ? row.dob.split("T")[0] : ""}</td>
+              
               <td>{row.mobile}</td>
-              <td>{row.address1}</td>
-              <td>{row.address2}</td>
+              <td className="address">{row.address1}</td>
               <td>{}</td>
             </tr>
           ))}

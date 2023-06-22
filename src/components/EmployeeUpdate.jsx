@@ -74,7 +74,7 @@ const EmployeeUpdate = () => {
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
   }
-
+// office 365
   function handleSubmit(event) {
     event.preventDefault();
     const updatedFormData = {

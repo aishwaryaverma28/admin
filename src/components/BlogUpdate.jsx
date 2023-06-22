@@ -1,58 +1,72 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams,Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { BLOG_GET, BLOG_EDIT, SEC_GET,IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import {
+  BLOG_GET,
+  BLOG_EDIT,
+  SEC_GET,
+  IMAGE_UP,
+  IMAGE_DEL,
+  GET_TAG
+} from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
+import ImageUploader from "./ImageUploader";
 
 const BlogUpdate = () => {
-    const { id } = useParams();
-// section states
-const [sectionTitle, setSectionTitle] = useState("");
-const [sectionSort, setSectionSort] = useState(null);
-const [dataFromChild, setDataFromChild] = useState("");
-const [hideImages, setHideImages] = useState(false);
-const [isIndex, setIsIndex] = useState(0);
-const fileInputRef = useRef(null);
-const [childData, setChildData] = useState("");
-const [selectedImage, setSelectedImage] = useState(null);
-const [showUploadButton, setShowUploadButton] = useState(false);
-const [showEditButton, setShowEditButton] = useState(false);
-const [showChooseButton, setShowChooseButton] = useState(false);
+  const { id } = useParams();
+  // section states
+  const [sectionTitle, setSectionTitle] = useState("");
+  const [sectionSort, setSectionSort] = useState(null);
+  const [dataFromChild, setDataFromChild] = useState("");
+  const [hideImages, setHideImages] = useState(false);
+  const [isIndex, setIsIndex] = useState(0);
+  const fileInputRef = useRef(null);
+  const [childData, setChildData] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showUploadButton, setShowUploadButton] = useState(false);
+  const [showEditButton, setShowEditButton] = useState(false);
+  const [showChooseButton, setShowChooseButton] = useState(false);
+  const [addedSections, setAddedSections] = useState([]);
+ // tags states
+ const [selectedTags, setSelectedTags] = useState([]);
+ const [tagId, setTagId] = useState("");
+ const [tagApi, setTagApi] = useState([]);
 
-const [blogData, setBlogData] = useState([]);
-    const [currentBlog, setCurrentBlog] = useState({});
-    const [sectionData, setSectionData] =useState([]);
-    const [formData, setFormData] = useState({      
-        title: "",
-        url: "",
-        description: "",
-        tag: "",
-        image: "",
-        date: "",
-      });
-      const [stateBtn, setStateBtn] = useState(0);
 
-    useEffect(() => {
-      getBlogInfo();
-    }, []);
-  
-    async function getBlogInfo() {
-      const response = await axios.get(BLOG_GET);
-      const data = response.data.data;
-      setBlogData(data);
-      searchData(data);
-      const secResponse = await axios.get(SEC_GET+id);
-      const secData = secResponse.data.data;
-      setSectionData(secData);
-    }
-    
-    function searchData(data) {
-      const blog = data.find((item) => item.id == id);
-      if (blog) {
-        setCurrentBlog(blog);
-        setFormData({
+  const [blogData, setBlogData] = useState([]);
+  const [currentBlog, setCurrentBlog] = useState({});
+  const [sectionData, setSectionData] = useState([]);
+  const [formData, setFormData] = useState({
+    title: "",
+    url: "",
+    description: "",
+    tag: "",
+    image: "",
+    date: "",
+  });
+  const [stateBtn, setStateBtn] = useState(0);
+
+  useEffect(() => {
+    getBlogInfo();
+  }, []);
+
+  async function getBlogInfo() {
+    const response = await axios.get(BLOG_GET);
+    const data = response.data.data;
+    setBlogData(data);
+    searchData(data);
+    const secResponse = await axios.get(SEC_GET + id);
+    const secData = secResponse.data.data;
+    setSectionData(secData);
+  }
+
+  function searchData(data) {
+    const blog = data.find((item) => item.id == id);
+    if (blog) {
+      setCurrentBlog(blog);
+      setFormData({
         ...formData,
         title: blog.title,
         url: blog.url,
@@ -60,14 +74,59 @@ const [blogData, setBlogData] = useState([]);
         tag: blog.tag,
         image: blog.image,
         date: blog.date.split("T")[0],
-        })
-     }
-     }
-     console.log(sectionData);
-    //  console.log(formData);
+      });
+      setTagId(blog.tag)
+    }
+    tagData();
+  }
+  
+  // console.log(sectionData);
+   console.log(tagId);
+  //==========================================================================tag part
+  useEffect(() => {
+    axios.get(GET_TAG).then((response) => {
+      setTagApi(response);
+    });
+  }, []);
+  const options = tagApi?.data?.data || [];
 
-    // ==========================================================================================================================================
-      // ========================================================section image added/deleted
+  const tagData = () => {    
+   const ids = tagId.split(",");
+   ids.forEach((item) => {
+  for (const option of options) {
+    if (option.id === item && !selectedTags.includes(option.tag)) {
+      setSelectedTags((prev) => [...prev, option.tag]);
+      break; // Exit the inner loop after finding a match
+    }
+  }
+});
+  
+  }
+  // console.log(selectedTags)
+
+  const handleTagSelection = (event) => {
+    const id = event.target.value;
+    setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
+    options.map((option) => {
+      if (option.id == id) {
+        setSelectedTags((prev) => [...prev, option.tag]);
+      }
+    });
+  };
+
+  const handleTagRemoval = (index) => {
+    const numbersArray = tagId.split(",");
+    numbersArray.splice(index, 1);
+    const updatedNumbersString = numbersArray.join(",");
+    setTagId(updatedNumbersString);
+    const tagUpdate = selectedTags.splice(index, 1);
+  };
+
+  function AddTag(event) {
+    event.preventDefault();
+  }
+  // ==========================================================================================================================================
+  // ========================================================section image added/deleted
   const handleImageSelect = (event) => {
     setSelectedImage(event.target.files[0]);
     setShowUploadButton(true);
@@ -176,6 +235,7 @@ const [blogData, setBlogData] = useState([]);
       section: dataFromChild,
     };
     setSectionData([...sectionData, newSection]);
+    setAddedSections([...addedSections, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(0);
@@ -185,7 +245,8 @@ const [blogData, setBlogData] = useState([]);
     setSelectedImage("");
     setStateBtn(1);
   };
-  // console.log(sectionData);
+  console.log(sectionData);
+  console.log(addedSections);
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
     // e.preventDefault();
@@ -195,14 +256,30 @@ const [blogData, setBlogData] = useState([]);
     setStateBtn(1);
   };
 
-  console.log(sectionData);
-  // ============================================================================================================================================
-
+  // console.log(sectionData);
+  // ========================================================================================================================================================================
+  
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (formData[name] !== value) setStateBtn(1);
+    setFormData({ ...formData, [name]: value });
+  }
+  // console.log(formData);
+  const handleImageTransfer = (data) => {
+    setFormData.image(data);
+  };
   function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
-      sections : sectionData,
-    }
+      title: formData.title,
+      url: formData.url,
+      description: formData.description,
+      image: formData.image,
+      date: formData.image,
+      tag: tagId,
+      sections: sectionData,
+      addedSections: addedSections,
+    };
     axios.put(BLOG_EDIT + id, updatedFormData).then((response) => {
       console.log(response);
     });
@@ -210,7 +287,7 @@ const [blogData, setBlogData] = useState([]);
 
   return (
     <>
-     <header className="headerEditor">
+      <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
       <h3>{id}</h3>
@@ -218,8 +295,43 @@ const [blogData, setBlogData] = useState([]);
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
           <div className="addBlogMainForm">
-    
-      <>
+          <div className="fromFiled">
+              <input
+                type="text"
+                name="title"
+                id="title"
+                value={formData.title}
+                placeholder="Blog Title"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="fromUrl">
+              <input
+                type="text"
+                name="url"
+                id="url"
+                placeholder="Url"
+                value={formData.url}
+                onChange={handleChange}
+              />
+              <div>
+                {formData.image ? <ImageEditor
+                          parentProp={formData.image}
+                          onDataTransfer={handleImageTransfer}
+                        /> :  <ImageUploader onDataTransfer={handleImageTransfer} />}
+                        </div>
+            </div>
+            <div className="fromFiled">
+              <input
+                type="text"
+                name="description"
+                id="description"
+                value={formData.description}
+                placeholder="Description"
+                onChange={handleChange}
+              />
+            </div>
+            <>
               <div className="addSection">
                 <div className="fromBlogSection">
                   <input
@@ -388,11 +500,57 @@ const [blogData, setBlogData] = useState([]);
                 </div>
               ))}
             </>
-        
-{/* ============================================================================================================================================== */}
-</div>
-<div className="addBlogRightForm">
-<div className="saveBtnRight">
+
+            {/* ============================================================================================================================================== */}
+          </div>
+          <div className="addBlogRightForm">
+          <div className="tags">
+          <div className="tagContent">
+                <h3>Tags</h3>
+                <div className="contentBox">
+                  <select
+                    onChange={handleTagSelection}
+                    className="tagSelectBox"
+                  >
+                    <option value="">Select a tag</option>
+
+                    {options.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.tag}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button onClick={AddTag} type="button" className="primaryBtn">
+                    Add
+                  </button>
+                </div>
+                <div className="tagData">
+                  {selectedTags &&
+                    selectedTags.map((tag, index) => (
+                      <div key={index} className="tagItems">
+                        {tag}
+
+                        <i
+                          className="fa-solid fa-x"
+                          onClick={() => handleTagRemoval(index)}
+                        ></i>
+                      </div>
+                    ))}
+                </div>
+              </div>
+              <div className="tagContent">
+                <h3>Publish</h3>
+                <div className="contentBox">
+                  <input
+                    type="date"
+                    name="date"
+                    id="date"
+                    value={formData.date}
+                    placeholder="please publish date"
+                    onChange={handleChange}
+                  />
+                  <div className="saveBtnRight">
               {stateBtn === 0 ? (
                 <button className="closeBtn">
                   <Link to={"/employee/view"}>Close</Link>
@@ -405,11 +563,15 @@ const [blogData, setBlogData] = useState([]);
                 />
               )}
             </div>
-  </div>
-
-    </div>
-    </form>
-    </> 
+                 
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ function ImageEditor({ parentProp, onDataTransfer }) {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(true);
   const [showChooseButton, setShowChooseButton] = useState(false);
+  // console.log(childData)
   const handleEdit = async (event) => {
     event.preventDefault();
     try {
@@ -60,7 +61,7 @@ function ImageEditor({ parentProp, onDataTransfer }) {
 
   return (
     <>
-      {showEditButton && (
+     {showEditButton && (
         <>
           <p className="image">{childData}</p>
           <button
