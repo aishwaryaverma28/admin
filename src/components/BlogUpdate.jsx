@@ -28,7 +28,7 @@ const BlogUpdate = () => {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
-  const [addedSections, setAddedSections] = useState([]);
+  
  // tags states
  const [selectedTags, setSelectedTags] = useState([]);
  const [tagId, setTagId] = useState("");
@@ -50,7 +50,7 @@ const BlogUpdate = () => {
 
   useEffect(() => {
     getBlogInfo();
-  }, []);
+    }, []);
 
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GET);
@@ -75,26 +75,33 @@ const BlogUpdate = () => {
         image: blog.image,
         date: blog.date.split("T")[0],
       });
-      setTagId(blog.tag)
+      setTagId(blog.tag)      
     }
     tagData();
-  }
+    }
+    useEffect(() => {
+      // Function to be called when data is updated
+      if (tagId) {
+        tagData(); // Replace with your desired function name
+      }
+    }, [tagId]); // Run the effect when the data state changes
   
-  // console.log(sectionData);
-   console.log(tagId);
+    
   //==========================================================================tag part
   useEffect(() => {
     axios.get(GET_TAG).then((response) => {
       setTagApi(response);
     });
+    
   }, []);
   const options = tagApi?.data?.data || [];
 
-  const tagData = () => {    
+  const tagData = () => {   
    const ids = tagId.split(",");
+console.log(ids);
    ids.forEach((item) => {
   for (const option of options) {
-    if (option.id === item && !selectedTags.includes(option.tag)) {
+    if (option.id == item && !selectedTags.includes(option.tag)) {
       setSelectedTags((prev) => [...prev, option.tag]);
       break; // Exit the inner loop after finding a match
     }
@@ -108,7 +115,7 @@ const BlogUpdate = () => {
     const id = event.target.value;
     setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
     options.map((option) => {
-      if (option.id == id) {
+      if (option.id == id && !selectedTags.includes(option.tag)) {
         setSelectedTags((prev) => [...prev, option.tag]);
       }
     });
@@ -190,12 +197,14 @@ const BlogUpdate = () => {
     const newSectionData = [...sectionData];
     newSectionData[index].title = event.target.value;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
   //==============================================================section sort
   const handleSortChange = (event, index) => {
-    const newSectionData = [...sectionData];
+     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
   //==============================================================sub section image
   const subImageTrasfer = (data, index) => {
@@ -203,12 +212,14 @@ const BlogUpdate = () => {
     newSectionData[index].image = data;
     setSectionData(newSectionData);
     setHideImages(true);
+    setStateBtn(1);
   };
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].section = data;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
 
   //=========================================================== sort and title data change
@@ -235,7 +246,6 @@ const BlogUpdate = () => {
       section: dataFromChild,
     };
     setSectionData([...sectionData, newSection]);
-    setAddedSections([...addedSections, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(0);
@@ -245,8 +255,8 @@ const BlogUpdate = () => {
     setSelectedImage("");
     setStateBtn(1);
   };
-  console.log(sectionData);
-  console.log(addedSections);
+  // console.log(sectionData);
+  
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
     // e.preventDefault();
@@ -278,7 +288,6 @@ const BlogUpdate = () => {
       date: formData.image,
       tag: tagId,
       sections: sectionData,
-      addedSections: addedSections,
     };
     axios.put(BLOG_EDIT + id, updatedFormData).then((response) => {
       console.log(response);
