@@ -69,17 +69,17 @@ const TableWithPagination = ({ data, rowsPerPage }) => {
         <tbody>
           {currentRows.map((row, index) => (
             <tr key={index}>
-              <td>{row.emp_no}</td>
-              <td>{row.position}</td>
+              <td className="employeeId">{row.emp_no}</td>
+              <td className="employeePosition">{row.position}</td>
               <td className="employeeName">
                 <Link to={"/employee/view/"+row.id} key={row.id}>
                 {row.first_name} {row.last_name}
                 </Link>
               </td>
               
-              <td>{row.dob ? row.dob.split("T")[0] : ""}</td>
+              <td className="employeeDate">{row.dob ? row.dob.split("T")[0] : ""}</td>
               
-              <td>{row.mobile}</td>
+              <td className="employeeDate">{row.mobile}</td>
               <td className="address">{row.address1}</td>
               <td>{}</td>
             </tr>

@@ -38,7 +38,8 @@ margin-bottom: 1rem;
   width: 70%;
   border: 1px solid #dcdcdc;
    border-radius: 10px;
-   font-size: 16px;
+   font-size: 14px;
+   font-weight: 600;
   font-family: "Work Sans";
   padding: 0.8rem;
   outline: rgb(59, 59, 59);
@@ -48,6 +49,11 @@ margin-bottom: 1rem;
 }
 .fromUrl input:focus{
   border: 1px solid rgb(127, 126, 126);;
+}
+.fromUrl input:hover{
+  background-color:rgb(227, 225, 225);
+transition: all .5s ease-in-out;
+cursor: pointer;
 }
 /* .imageUploaderData{
     display: flex;
@@ -85,7 +91,8 @@ margin-bottom: 1rem;
   border: 1px solid #dcdcdc;
   /* height: 60px; */
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 600;
   font-family: "Work Sans";
   padding: 1rem;
   outline: rgb(59, 59, 59);
@@ -95,6 +102,11 @@ margin-bottom: 1rem;
 }
 .fromBlogSection input:focus{
   border: 1px solid rgb(127, 126, 126);;
+}
+.fromBlogSection input:hover{
+  background-color:rgb(227, 225, 225);
+transition: all .5s ease-in-out;
+cursor: pointer;
 }
 .addSectionBtn{
     color: #2b74da;
@@ -170,8 +182,6 @@ color: #fff;
   
   .contentBox select {
     width: 100%;
-    /* height: 40px; */
-    /* margin-bottom: 30px; */
     border: 1px solid #dcdcdc;
     border-radius: 10px;
     outline: rgb(59, 59, 59);
@@ -180,6 +190,11 @@ color: #fff;
   }
   .contentBox select:focus{
     border: 1px solid rgb(127, 126, 126);;
+  }
+  .contentBox select:hover{
+    background-color:rgb(227, 225, 225);
+transition: all .5s ease-in-out;
+cursor: pointer;
   }
   
   .contentBox select option {

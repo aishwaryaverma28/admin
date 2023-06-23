@@ -80,6 +80,14 @@ cursor: pointer;
 .employeeName a{
     color: #2b74da;
 }
+.employeeId{
+    width: 5rem;
+    text-align: center;
+}
+.employeeDate{
+    width: 8rem;
+    text-align: center;
+}
 .pagination{
     /* border: 2px solid #565c5f; */
     display: flex;

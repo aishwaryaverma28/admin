@@ -58,7 +58,8 @@ cursor: pointer;
     border: 1px solid #dcdcdc;
     border-radius: 10px;
     margin-left: 10px;
-    /* margin-bottom: 30px; */
+    outline: rgb(59, 59, 59);
+    background-color: #ffffff;
     padding: 10px;
     font-size: 14px;
     font-family: "Work Sans", sans-serif;
@@ -66,7 +67,14 @@ cursor: pointer;
     font-weight: 600;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
-
+  .fromFiled textarea:focus{
+    border: 1px solid rgb(127, 126, 126);;
+  }
+  .fromFiled textarea:hover{
+    background-color:rgb(227, 225, 225);
+transition: all .5s ease-in-out;
+cursor: pointer;
+  }
   .secondaryBtn {
     padding: 11px 23px;
     font-size: 16px;
