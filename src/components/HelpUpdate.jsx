@@ -1,5 +1,4 @@
 import React from 'react'
-import './styles/Editor.css'
 
 const HelpUpdate = () => {
   return (

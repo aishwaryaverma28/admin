@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { BLOG_ADD, GET_TAG, IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
 import "./styles/BlogAdd.css";
-import "./styles/Editor.css";
 import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";

@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import "./styles/Editor.css";
+import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
 import {EMPLOYEE_ADD } from './utils/Constants'
-import "./styles/EmployeeUpdate.css";
+
 const EmployeeAdd = () => {
 const [name,setName] = useState("");
 const [fname,setfName] = useState("");

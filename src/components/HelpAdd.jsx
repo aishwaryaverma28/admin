@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles/Editor.css'
+
 const HelpAdd = () => {
   return (
     <header className='headerEditor'>

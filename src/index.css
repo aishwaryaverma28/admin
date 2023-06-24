@@ -94,13 +94,29 @@ ol {
   justify-content: space-between;
 }
 .sidebar{
-  width: 22%;
+  width: 21%;
   background: #ffffff;
   color: #1e2224;
   transition: all 0.3s;
-  border-right: 1px solid #dcdcdc;
+  /* border-right: 1px solid #dcdcdc; */
   font-family: 'Work Sans';
-}
+  height: 100vh;
+  }
 .conatiner{
-  width: 78%;
+  width: 79%;
+  border-left: 1px solid #dcdcdc;
+}
+.headerEditor{
+  /* backdrop-filter: blur(6px); */
+  background: #1e2224;
+  padding: 21px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.headerEditor h2{
+  font-family: "Work Sans";
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 18px;
 }

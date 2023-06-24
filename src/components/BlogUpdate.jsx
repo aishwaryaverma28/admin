@@ -14,7 +14,6 @@ import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
 import ImageUploader from "./ImageUploader";
 import "./styles/BlogAdd.css";
-import "./styles/Editor.css";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states

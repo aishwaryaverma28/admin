@@ -2,7 +2,6 @@ import React,{ useState,useEffect } from 'react'
 import './styles/Editor.css'
 import axios from "axios";
 import { EMPLOYEE_GET } from './utils/Constants'
-import "./styles/EmployeeView.css";
 import TableWithPagination from './TableWithPagination';
 import {Link} from "react-router-dom";
 

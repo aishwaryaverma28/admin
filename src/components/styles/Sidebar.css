@@ -1,5 +1,5 @@
 .sidebar-header {
-  padding: 20px;
+  padding: 16px;
   background: #ffffff;
   border-bottom: 1px solid #dcdcdc;
   position: sticky;
@@ -32,7 +32,7 @@
 }
 .sidebarContainer{
   /* border: 2px solid brown; */
-  max-height: 69vh;
+  max-height: 70vh;
     overflow-y: scroll;
 }
 .sidebar-item, .sidebar-title6{

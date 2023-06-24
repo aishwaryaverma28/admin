@@ -107,7 +107,6 @@ console.log(formData.personalEmail)
       <header className="headerEditor">
         <h2>Update Employee Details</h2>
       </header>
-      <div>Update Employee: {id}</div>
       <form className="addEmployeeFrom" onSubmit={handleSubmit}>
         <div className="formDiv">
           <div className="leftForm">

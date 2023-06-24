@@ -3,7 +3,6 @@ import './styles/Editor.css'
 import axios from "axios";
 import {BLOG_GET} from "./utils/Constants";
 import { Link } from 'react-router-dom';
-import "./styles/EmployeeView.css";
 import TablePaginationBlog from './TablePaginationBlog';
 
 

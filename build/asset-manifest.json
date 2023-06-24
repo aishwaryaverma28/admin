@@ -1,14 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.c1ccecd1.css",
-    "main.js": "/static/js/main.0e60868e.js",
+    "main.css": "/static/css/main.96748943.css",
+    "main.js": "/static/js/main.4b7a9e41.js",
+    "static/media/latest.jpg": "/static/media/latest.cdd6fdbb45bf5f076274.jpg",
     "static/media/delete-icon.svg": "/static/media/delete-icon.d2ae7e39d9351a186362654fe3d65f42.svg",
     "index.html": "/index.html",
-    "main.c1ccecd1.css.map": "/static/css/main.c1ccecd1.css.map",
-    "main.0e60868e.js.map": "/static/js/main.0e60868e.js.map"
+    "static/media/finance.svg": "/static/media/finance.2f86f06a617b26a07f83650e8aabcd5d.svg",
+    "static/media/performence.svg": "/static/media/performence.76a207031928e3c5571f5f20b15360cf.svg",
+    "static/media/career.svg": "/static/media/career.0cbee46eab025c84657529cee6be5107.svg",
+    "static/media/health.svg": "/static/media/health.ed42c22f2a1531a9bc1dcf282b4c9633.svg",
+    "static/media/forms.svg": "/static/media/forms.c0520076013fd88294a1d30790ded139.svg",
+    "main.96748943.css.map": "/static/css/main.96748943.css.map",
+    "main.4b7a9e41.js.map": "/static/js/main.4b7a9e41.js.map"
   },
   "entrypoints": [
-    "static/css/main.c1ccecd1.css",
-    "static/js/main.0e60868e.js"
+    "static/css/main.96748943.css",
+    "static/js/main.4b7a9e41.js"
   ]
 }
