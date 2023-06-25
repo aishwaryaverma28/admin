@@ -20,6 +20,7 @@ const Editor = () => {
     <>
       <header className="headerEditor">
         <h2>Dashboard</h2>
+        
       </header>
 
       <main>
@@ -81,7 +82,7 @@ const Editor = () => {
             </div>
           </div>
         </section>
-        <section>
+        <section className="dashboard">
           <div className="block">
             <div class="companyPeople">
               <h2>People at our Company</h2>

@@ -120,3 +120,8 @@ ol {
   font-weight: 600;
   font-size: 18px;
 }
+@media only screen and (max-width: 700px) {
+  .sidebar{
+    display: none;
+  }
+}

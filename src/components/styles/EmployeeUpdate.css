@@ -141,6 +141,11 @@ cursor: pointer;
       width: 95%;
     } 
     .fromFiled textarea {
-      width: 95%;
+      width: 90%;
+    }
+  }
+  @media only screen and (max-width: 500px) {
+    .fromFiled textarea {
+      min-width: 80%;
     }
   }
