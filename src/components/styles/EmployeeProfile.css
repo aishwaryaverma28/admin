@@ -1,0 +1,82 @@
+.navigationBar2{
+    border-bottom: 1px solid #c9cdd2;
+}
+.navLinks {
+    display: flex;
+    gap: 1.5rem;
+    margin: 15px 30px;
+    
+  }
+  
+.navLinks >li> a {
+    display: inline-block;
+    padding: 7px 10px 7px 10px;
+    text-decoration: none;
+    color: #1e2224;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Work Sans", sans-serif;
+  }
+  
+.navLinks >li> a:hover {
+    background-color: #e2e9f2;
+    color: #2b74da;
+  }
+  
+.active{
+    background-color: #e2e9f2;
+    color: #2b74da !important;
+}
+.timeButton{
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: right;
+}
+.timeBtn{
+    border: 1px solid #dcdcdc;
+    background: #ffffff;
+    color: #2b74da;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: "Work Sans", sans-serif;
+    text-transform: capitalize;
+    padding: 0px 15px;
+    border-radius: 5px 0px 0px 5px;
+    cursor: pointer;
+}
+.timeBtn:hover {
+    border: 1px solid #2b74da;
+    transition: all 0.8s ease-in-out;
+    border-radius: 5px 0px 0px 5px;
+    background: #2b74da;
+    color: #ffffff;
+  }
+.timeSubmit{
+    font-size: 12px;
+  font-family: "Work Sans", sans-serif;
+  border-radius: 5px;
+  border: 1px solid #077838;
+  background: #077838;
+  color: #ffffff;
+  font-weight: 500;
+  text-transform: capitalize;
+  padding: 5px 10px;
+  margin: 0 auto;
+  display: block;
+}
+.timeSubmit:hover {
+    border: 1px solid #077838;
+    background: #ffffff;
+    color: #077838;
+    transition: all 0.8s ease-in-out;
+  }
+  .paginationBtn{
+    padding: 1rem 0;
+    display: flex;
+    justify-content: right;
+    gap: 0.5rem;
+  }
+  .paginationBtn button{
+    padding: 0.2rem;
+  }

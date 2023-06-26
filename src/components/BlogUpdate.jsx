@@ -7,7 +7,7 @@ import {
   SEC_GET,
   IMAGE_UP,
   IMAGE_DEL,
-  GET_TAG
+  GET_TAG,
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -28,13 +28,13 @@ const BlogUpdate = () => {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
-  
- // tags states
- const [selectedTags, setSelectedTags] = useState([]);
- const [tagId, setTagId] = useState("");
- const [tagApi, setTagApi] = useState([]);
 
+  // tags states
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tagId, setTagId] = useState("");
+  const [tagApi, setTagApi] = useState([]);
 
+  const [selectSite, setSelectSite] = useState("");
   const [blogData, setBlogData] = useState([]);
   const [currentBlog, setCurrentBlog] = useState({});
   const [sectionData, setSectionData] = useState([]);
@@ -45,12 +45,13 @@ const BlogUpdate = () => {
     tag: "",
     image: "",
     date: "",
+    site:"",
   });
   const [stateBtn, setStateBtn] = useState(0);
 
   useEffect(() => {
     getBlogInfo();
-    }, []);
+  }, []);
 
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GET);
@@ -74,41 +75,40 @@ const BlogUpdate = () => {
         tag: blog.tag,
         image: blog.image,
         date: blog.date.split("T")[0],
+        site: blog.site,
       });
-      setTagId(blog.tag)      
+      setTagId(blog.tag);
+      setSelectSite(blog.site);
     }
     tagData();
+  }
+  useEffect(() => {
+    // Function to be called when data is updated
+    if (tagId) {
+      tagData(); // Replace with your desired function name
     }
-    useEffect(() => {
-      // Function to be called when data is updated
-      if (tagId) {
-        tagData(); // Replace with your desired function name
-      }
-    }, [tagId]); // Run the effect when the data state changes
-  
-    
+  }, [tagId]); // Run the effect when the data state changes
+
   //==========================================================================tag part
   useEffect(() => {
     axios.get(GET_TAG).then((response) => {
       setTagApi(response);
     });
-    
   }, []);
   const options = tagApi?.data?.data || [];
 
-  const tagData = () => {   
-   const ids = tagId.split(",");
-// console.log(ids);
-   ids.forEach((item) => {
-  for (const option of options) {
-    if (option.id == item && !selectedTags.includes(option.tag)) {
-      setSelectedTags((prev) => [...prev, option.tag]);
-      break; // Exit the inner loop after finding a match
-    }
-  }
-});
-  
-  }
+  const tagData = () => {
+    const ids = tagId.split(",");
+    // console.log(ids);
+    ids.forEach((item) => {
+      for (const option of options) {
+        if (option.id == item && !selectedTags.includes(option.tag)) {
+          setSelectedTags((prev) => [...prev, option.tag]);
+          break; // Exit the inner loop after finding a match
+        }
+      }
+    });
+  };
   // console.log(selectedTags)
 
   const handleTagSelection = (event) => {
@@ -135,6 +135,11 @@ const BlogUpdate = () => {
     event.preventDefault();
   }
   // ==========================================================================================================================================
+  function handleSiteSelection(event) {
+    // console.log(event.target.value);
+    setSelectSite(event.target.value);
+    setStateBtn(1);
+  }
   // ========================================================section image added/deleted
   const handleImageSelect = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -203,7 +208,7 @@ const BlogUpdate = () => {
   };
   //==============================================================section sort
   const handleSortChange = (event, index) => {
-     const newSectionData = [...sectionData];
+    const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
     setStateBtn(1);
@@ -258,7 +263,7 @@ const BlogUpdate = () => {
     setStateBtn(1);
   };
   // console.log(sectionData);
-  
+
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
     // e.preventDefault();
@@ -270,7 +275,7 @@ const BlogUpdate = () => {
 
   // console.log(sectionData);
   // ========================================================================================================================================================================
-  
+
   function handleChange(event) {
     const { name, value } = event.target;
     if (formData[name] !== value) setStateBtn(1);
@@ -288,6 +293,7 @@ const BlogUpdate = () => {
       description: formData.description,
       image: formData.image,
       date: formData.date,
+      site: selectSite,
       tag: tagId,
       sections: sectionData,
     };
@@ -295,20 +301,20 @@ const BlogUpdate = () => {
     //   console.log(response);
     // });
     fetch(BLOG_EDIT + id, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json' // Set the content type to JSON
+        "Content-Type": "application/json", // Set the content type to JSON
       },
-      body: JSON.stringify(updatedFormData) // Convert the data to JSON string
+      body: JSON.stringify(updatedFormData), // Convert the data to JSON string
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
-    
+
     console.log(JSON.stringify(updatedFormData));
   }
 
@@ -317,12 +323,12 @@ const BlogUpdate = () => {
       <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
-      
+
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
           <div className="addBlogMainForm">
-          <div className="fromFiled">
+            <div className="fromFiled">
               <input
                 type="text"
                 name="title"
@@ -342,11 +348,15 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               />
               <div>
-                {formData.image ? <ImageEditor
-                          parentProp={formData.image}
-                          onDataTransfer={handleImageTransfer}
-                        /> :  <ImageUploader onDataTransfer={handleImageTransfer} />}
-                        </div>
+                {formData.image ? (
+                  <ImageEditor
+                    parentProp={formData.image}
+                    onDataTransfer={handleImageTransfer}
+                  />
+                ) : (
+                  <ImageUploader onDataTransfer={handleImageTransfer} />
+                )}
+              </div>
             </div>
             <div className="fromFiled">
               <input
@@ -531,8 +541,8 @@ const BlogUpdate = () => {
             {/* ============================================================================================================================================== */}
           </div>
           <div className="addBlogRightForm">
-          <div className="tags">
-          <div className="tagContent">
+            <div className="tags">
+              <div className="tagContent">
                 <h3>Tags</h3>
                 <div className="contentBox">
                   <select
@@ -578,23 +588,40 @@ const BlogUpdate = () => {
                     onChange={handleChange}
                   />
                   <div className="saveBtnRight">
-              {stateBtn === 0 ? (
-                <button className="closeBtn">
-                  <Link to={"/employee/view"}>Close</Link>
-                </button>
-              ) : (
-                <input
-                  type="submit"
-                  value="Save"
-                  className="secondaryBtn saveBtn"
-                />
-              )}
-            </div>
-                 
+                    {stateBtn === 0 ? (
+                      <button className="closeBtn">
+                        <Link to={"/employee/view"}>Close</Link>
+                      </button>
+                    ) : (
+                      <input
+                        type="submit"
+                        value="Save"
+                        className="secondaryBtn saveBtn"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
+              <div className="tags">
+              <div className="tagContent">
+                <h3>Site</h3>
+                <div className="contentBox">
+                  <select
+                    onChange={handleSiteSelection}
+                    className="SiteSelectBox"
+                  >
+                    <option value="">Select a tag</option>
+                    <option value="leadplaner.com">leadplaner.com</option>
+                    <option value="bookmyplayer.com">bookmyplayer.com</option>
+                    <option value="routplaner.com">routplaner.com</option>
+                  </select>
+                </div>
+              </div>
+              <div className="tagData">
+                <div className="tagItems">{selectSite}</div>
+              </div>
             </div>
-            
+            </div>
           </div>
         </div>
       </form>

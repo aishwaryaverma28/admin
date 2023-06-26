@@ -8,6 +8,7 @@ import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
 
 const BlogAdd = () => {
+  const [selectSite, setSelectSite] = useState("");
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
@@ -211,6 +212,11 @@ const BlogAdd = () => {
   // console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
+  function handleSiteSelection(event) {
+    // console.log(event.target.value);
+    setSelectSite(event.target.value);
+  }
+
   function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -219,6 +225,7 @@ const BlogAdd = () => {
       image: imageName,
       date: selectedDate,
       sections: sectionData,
+      site: selectSite,
     };
     // console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData).then((response) => {
@@ -502,7 +509,27 @@ const BlogAdd = () => {
                 </div>
               </div>
             </div>
+            <div className="tags">
+              <div className="tagContent">
+                <h3>Site</h3>
+                <div className="contentBox">
+                  <select
+                    onChange={handleSiteSelection}
+                    className="SiteSelectBox"
+                  >
+                    <option value="">Select a tag</option>
+                    <option value="leadplaner.com">leadplaner.com</option>
+                    <option value="bookmyplayer.com">bookmyplayer.com</option>
+                    <option value="routplaner.com">routplaner.com</option>
+                  </select>
+                </div>
+              </div>
+              <div className="tagData">
+                <div className="tagItems">{selectSite}</div>
+              </div>
+            </div>
           </div>
+
           {/*=============================================================right side of form ends here ============================================================*/}
         </div>
       </form>
