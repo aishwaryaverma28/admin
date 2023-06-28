@@ -16,6 +16,13 @@
   padding: 25px;
   gap: 15px;
 }
+.userLogoContainer img{
+  width: 100px;
+  height: 100px;
+  max-width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
 .userLogoContainer p{
   line-height: 25px;
   font-size: 18px;

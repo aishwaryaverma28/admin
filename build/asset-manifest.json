@@ -1,24 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.a3dc9419.css",
-    "main.js": "/static/js/main.c319ce6d.js",
+    "main.css": "/static/css/main.70d6867c.css",
+    "main.js": "/static/js/main.ae4d777b.js",
     "static/js/703.a467f9cc.chunk.js": "/static/js/703.a467f9cc.chunk.js",
     "static/js/598.5a41d2bc.chunk.js": "/static/js/598.5a41d2bc.chunk.js",
     "static/media/latest.jpg": "/static/media/latest.cdd6fdbb45bf5f076274.jpg",
     "static/media/delete-icon.svg": "/static/media/delete-icon.d2ae7e39d9351a186362654fe3d65f42.svg",
+    "static/media/profile.png": "/static/media/profile.466a3a5535e2b6427fa1.png",
     "index.html": "/index.html",
     "static/media/finance.svg": "/static/media/finance.2f86f06a617b26a07f83650e8aabcd5d.svg",
     "static/media/performence.svg": "/static/media/performence.76a207031928e3c5571f5f20b15360cf.svg",
     "static/media/career.svg": "/static/media/career.0cbee46eab025c84657529cee6be5107.svg",
     "static/media/health.svg": "/static/media/health.ed42c22f2a1531a9bc1dcf282b4c9633.svg",
     "static/media/forms.svg": "/static/media/forms.c0520076013fd88294a1d30790ded139.svg",
-    "main.a3dc9419.css.map": "/static/css/main.a3dc9419.css.map",
-    "main.c319ce6d.js.map": "/static/js/main.c319ce6d.js.map",
+    "static/media/notupload.svg": "/static/media/notupload.7a7f08682f84d3bd41c3d3572d721035.svg",
+    "static/media/upload.svg": "/static/media/upload.9d37bb71ba165473e7cc356c737fb0c0.svg",
+    "main.70d6867c.css.map": "/static/css/main.70d6867c.css.map",
+    "main.ae4d777b.js.map": "/static/js/main.ae4d777b.js.map",
     "703.a467f9cc.chunk.js.map": "/static/js/703.a467f9cc.chunk.js.map",
     "598.5a41d2bc.chunk.js.map": "/static/js/598.5a41d2bc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a3dc9419.css",
-    "static/js/main.c319ce6d.js"
+    "static/css/main.70d6867c.css",
+    "static/js/main.ae4d777b.js"
   ]
 }

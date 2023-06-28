@@ -1,77 +1,191 @@
-import React from 'react'
-import ViewProfile from './ViewProfile'
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import ViewProfile from "./ViewProfile";
+import "./styles/EmployeeProfile.css";
+import notUpload from "../assets/image/notupload.svg";
+import upload from "../assets/image/upload.svg";
+import {
+  EMPLOYEE_GETID,
+  EMPLOYEE_UPDATE,
+  REMOVE_DOC,
+  UPLOAD_DOC,
+} from "./utils/Constants";
 
-const EmployeeDocuments = () => {
+function DocumentUpload({ label, imageUrl, setImageUrl }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageSelect = (event) => {
+    setSelectedImage(event.target.files[0]);
+    uploadImage(event.target.files[0]);
+  };
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("employeeDoc", file);
+
+    if (imageUrl) {
+      try {
+        await axios.delete(REMOVE_DOC + imageUrl);
+      } catch (error) {
+        console.error("Error deleting previous image:", error);
+      }
+    }
+
+    try {
+      const response = await axios.post(UPLOAD_DOC, formData);
+      console.log("Image uploaded successfully:", response.data);
+      setImageUrl(response.data.data);
+      // Perform any additional actions on successful upload
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      // Handle error condition
+    }
+  };
+
+  const handleViewDocument = () => {
+    if (imageUrl) {
+      window.open(
+        "http://core.leadplaner.com:3001/employee/doc/" + imageUrl,
+        "_blank"
+      );
+    }
+  };
+
   return (
-    <>
-    <ViewProfile/>
-    <div>EmployeeDocuments</div>
-    </>
-  )
+    <div className="aadhar">
+      <div className="docTitle">
+        <p className="docName">{label}</p>
+        {imageUrl ? (
+          <div className="docStatus">
+            <img src={upload} alt="upload" />
+            <p>(Uploaded)</p>
+          </div>
+        ) : (
+          <div className="docStatus">
+            <img src={notUpload} alt="notupload" />
+            <p>(Not Uploaded)</p>
+          </div>
+        )}
+      </div>
+
+      <div className="docData">
+        <span></span>
+        <input
+          type="file"
+          name="employeeDoc"
+          accept="image/*"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleImageSelect}
+        />
+
+        {imageUrl && <p className="imageUrl">{imageUrl}</p>}
+        <span>
+          {imageUrl && (
+            <button onClick={handleViewDocument} className="viewBtn">
+              <i className="fa-sharp fa-solid fa-eye"></i>
+            </button>
+          )}
+          <button onClick={handleButtonClick} className="browseBtn">
+            Browse
+          </button>
+        </span>
+      </div>
+    </div>
+  );
 }
 
-export default EmployeeDocuments
-// import React, { useState } from 'react';
-// import ViewProfile from './ViewProfile'
+function EmployeeDocuments() {
+  const [aadharUrl, setAadharUrl] = useState("");
+  const [panUrl, setPanUrl] = useState("");
+  const [checkUrl, setCheckUrl] = useState("");
+  const [passbookUrl, setPassbookUrl] = useState("");
+  const [empData, setEmpData] = useState([]);
+  const [initialEmpData, setInitialEmpData] = useState({});
 
+  useEffect(() => {
+    getEmployeeInfo();
+  }, []);
 
-// const EmployeeProfile = () => {
-//     const [file, setFile] = useState(null);
-//   const [uploadStatus, setUploadStatus] = useState('');
-//   const [uploadedDocumentUrl, setUploadedDocumentUrl] = useState('');
+  async function getEmployeeInfo() {
+    try {
+      const response = await axios.get(EMPLOYEE_GETID);
+      const data = response.data.data;
+      setEmpData(data[0]);
+      setInitialEmpData(data[0]);
+      setData(data[0]);
+    } catch (error) {
+      console.error("Error retrieving employee info:", error);
+    }
+  }
 
-//   const handleFileChange = (event) => {
-//     setFile(event.target.files[0]);
-//   };
+  function setData(data) {
+    if (data) {
+      setAadharUrl(data.aadhaar_image);
+      setPanUrl(data.tax_image);
+      setCheckUrl(data.bank_image);
+      setPassbookUrl("");
+    }
+  }
 
-//   const handleUpload = () => {
-//     if (file) {
-//       const formData = new FormData();
-//       formData.append('document', file);
+  function handleSubmit(event) {
+    event.preventDefault();
+    const updatedFormData = {
+      aadhaar_image: aadharUrl,
+      tax_image: panUrl,
+      bank_image: checkUrl,
+    };
+    axios.put(EMPLOYEE_UPDATE + "22", updatedFormData).then((response) => {
+      console.log(response);
+    });
+  }
 
-//       // Make API request to upload the document
-//       // Replace `API_ENDPOINT` with the actual endpoint URL
-//       fetch('API_ENDPOINT', {
-//         method: 'POST',
-//         body: formData
-//       })
-//         .then(response => {
-//           // Handle the API response
-//           if (response.ok) {
-//             setUploadStatus('Uploaded successfully!');
-//             return response.json();
-//           } else {
-//             setUploadStatus('Upload failed.');
-//             throw new Error('Upload failed');
-//           }
-//         })
-//         .then(data => {
-//           // Store the uploaded document URL
-//           setUploadedDocumentUrl(data.documentUrl);
-//         })
-//         .catch(error => {
-//           console.error('Error:', error);
-//         });
-//     }
-//   };
+  const resetForm = () => {
+    setAadharUrl(initialEmpData.aadhaar_image);
+    setPanUrl(initialEmpData.tax_image);
+    setCheckUrl(initialEmpData.bank_image);
+    setPassbookUrl("");
+  };
 
-//   const handleViewDocument = () => {
-//     window.open(uploadedDocumentUrl, '_blank');
-//   };
+  return (
+    <>
+      <ViewProfile />
+      <DocumentUpload
+        label="Aadhar Card"
+        imageUrl={aadharUrl}
+        setImageUrl={setAadharUrl}
+      />
+      <DocumentUpload
+        label="Pan Card"
+        imageUrl={panUrl}
+        setImageUrl={setPanUrl}
+      />
+      <DocumentUpload
+        label="Canceled Check"
+        imageUrl={checkUrl}
+        setImageUrl={setCheckUrl}
+      />
+      <DocumentUpload
+        label="Pass Book"
+        imageUrl={passbookUrl}
+        setImageUrl={setPassbookUrl}
+      />
+      {/* Add more DocumentUpload components for other documents */}
+      <div className="timesheetSaveBtn">
+        <button type="button" className="cancleBtn" onClick={resetForm}>
+          Cancel
+        </button>
+        <button type="button" className="changesaveBtn" onClick={handleSubmit}>
+          Save Changes
+        </button>
+      </div>
+    </>
+  );
+}
 
-//   return (
-//     <>
-//     <ViewProfile/>
-//     <div>
-//       <input type="file" onChange={handleFileChange} />
-//       <button onClick={handleUpload}>Upload</button>
-//       {uploadStatus && <p>{uploadStatus}</p>}
-//       {uploadedDocumentUrl && (
-//         <button onClick={handleViewDocument}>View Document</button>
-//       )}
-//     </div>
-//     </>
-//   )
-// }
-
-// export default EmployeeProfile
+export default EmployeeDocuments;

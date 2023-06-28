@@ -10,3 +10,6 @@ export const IMAGE_DEL = start+"api/admin/blog/deleteImg/"
 export const EMPLOYEE_UPDATE = start+"api/employee/edit/";
 export const EMPLOYEE_ADD = start+"api/employee/add";
 export const EMPLOYEE_GET = start+"api/employee/getAll";
+export const EMPLOYEE_GETID = start+"api/employee/get/22";
+export const REMOVE_DOC = start+"api/employee/removeDoc/";
+export const UPLOAD_DOC = start+"api/employee/uploadDoc";
