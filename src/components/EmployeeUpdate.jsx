@@ -273,6 +273,7 @@ const EmployeeUpdate = () => {
 
               <input
                 type="text"
+                name="position"
                 value={formData.position}
                 onChange={handleChange}
                 placeholder="Please Enter Employee Type"

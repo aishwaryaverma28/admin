@@ -517,7 +517,7 @@ const BlogAdd = () => {
                     onChange={handleSiteSelection}
                     className="SiteSelectBox"
                   >
-                    <option value="">Select a tag</option>
+                    <option value="">Select a Site</option>
                     <option value="leadplaner.com">leadplaner.com</option>
                     <option value="bookmyplayer.com">bookmyplayer.com</option>
                     <option value="routplaner.com">routplaner.com</option>
