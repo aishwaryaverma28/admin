@@ -29,6 +29,7 @@ const BlogAdd = () => {
   const [selectedDate, setSelectedDate] = useState("");
   // image useStates
   const [imageName, setImageName] = useState(null);
+  const [updateMessage, setUpdateMessage] = useState("");
 
   useEffect(() => {
     axios.get(GET_TAG).then((response) => {
@@ -230,6 +231,10 @@ const BlogAdd = () => {
     // console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData).then((response) => {
       console.log(response);
+      setUpdateMessage("Blog data added successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
     });
   }
 
@@ -243,6 +248,7 @@ const BlogAdd = () => {
       <header className="headerEditor">
         <h2> Add a new Blog</h2>
       </header>
+      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================left side of form starts here ============================================================*/}
@@ -379,10 +385,10 @@ const BlogAdd = () => {
                 <div key={index} className="section">
                   <div
                     className="sectionDropdown"
-                    onClick={() => accordianClick(section.sort)}
+                    onClick={() => accordianClick(index)}
                   >
                     <h3>{section.heading}</h3>
-                    {isIndex === section.sort ? (
+                    {isIndex === index ? (
                       <span>
                         <i class="fa-sharp fa-solid fa-minus"></i>
                       </span>
@@ -394,7 +400,7 @@ const BlogAdd = () => {
                   </div>
                   <div
                     className={
-                      isIndex === section.sort
+                      isIndex === index
                         ? "answer display_answer"
                         : "answer"
                     }

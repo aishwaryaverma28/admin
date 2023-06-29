@@ -21,7 +21,7 @@ const BlogUpdate = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
-  const [isIndex, setIsIndex] = useState(0);
+  const [isIndex, setIsIndex] = useState(-1);
   const fileInputRef = useRef(null);
   const [childData, setChildData] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -48,7 +48,7 @@ const BlogUpdate = () => {
     site:"",
   });
   const [stateBtn, setStateBtn] = useState(0);
-
+  const [updateMessage, setUpdateMessage] = useState("");
   useEffect(() => {
     getBlogInfo();
   }, []);
@@ -196,7 +196,7 @@ const BlogUpdate = () => {
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
-      setIsIndex(0);
+      setIsIndex(-1);
     } else {
       setIsIndex(index);
     }
@@ -204,7 +204,7 @@ const BlogUpdate = () => {
   //=============================================================setion title
   const handleSecTitleChange = (event, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].title = event.target.value;
+    newSectionData[index].heading = event.target.value;
     setSectionData(newSectionData);
     setStateBtn(1);
   };
@@ -316,7 +316,10 @@ const BlogUpdate = () => {
       .catch((error) => {
         console.error(error);
       });
-
+      setUpdateMessage("Blog data updated successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)  
     console.log(JSON.stringify(updatedFormData));
   }
 
@@ -325,7 +328,7 @@ const BlogUpdate = () => {
       <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
-
+      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
@@ -470,10 +473,10 @@ const BlogUpdate = () => {
                 <div key={index} className="section">
                   <div
                     className="sectionDropdown"
-                    onClick={() => accordianClick(section.sort)}
+                    onClick={() => accordianClick(index)}
                   >
                     <h3>{section.heading}</h3>
-                    {isIndex === section.sort ? (
+                    {isIndex === index ? (
                       <span>
                         <i class="fa-sharp fa-solid fa-minus"></i>
                       </span>
@@ -485,7 +488,7 @@ const BlogUpdate = () => {
                   </div>
                   <div
                     className={
-                      isIndex === section.sort
+                      isIndex === index
                         ? "answer display_answer"
                         : "answer"
                     }

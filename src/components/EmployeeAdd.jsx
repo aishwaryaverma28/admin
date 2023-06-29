@@ -7,6 +7,7 @@ const EmployeeAdd = () => {
 const [name,setName] = useState("");
 const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
+const [updateMessage, setUpdateMessage] = useState("");
 const [details, setDetails] = useState({
   hire_date:"",
   emp_no: "",
@@ -59,6 +60,10 @@ const [details, setDetails] = useState({
   axios.post(EMPLOYEE_ADD , updatedFormData)
         .then((response) => {
           console.log(response);
+          setUpdateMessage("Employee data added successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
           setDetails({
             hire_date:"",
             emp_no: "",
@@ -87,6 +92,7 @@ const [details, setDetails] = useState({
       <header className="headerEditor">
         <h2>Add a new Employee</h2>
       </header>
+      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="addEmployeeFrom" onSubmit={handleSubmit} >
         <div className="formDiv">
           <div className="leftForm">
