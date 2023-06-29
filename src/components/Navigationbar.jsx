@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
+import { UserContext } from "./UserContext";
 import "../components/styles/Sidebar.css";
 import companyLogo from '../assets/image/logo.png'
 import userIcon from '../assets/image/user-img.png'
 import Sidebar from './Sidebar';
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID } from "./utils/Constants";
+import { EMPLOYEE_GETID,VIEW_IMG } from "./utils/Constants";
 
 const NavigationBar = () => {
+  const { profileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState(null);
   const [pic, setPic] = useState("");
 
@@ -20,12 +22,12 @@ const NavigationBar = () => {
       const response = await axios.get(EMPLOYEE_GETID);
       const data = response.data.data;
       setEmpData(data[0]);
-      setPic("http://core.leadplaner.com:3001/employee/doc/" + data[0].profile_image);
+      setPic(VIEW_IMG + data[0].profile_image);
     } catch (error) {
       console.log(error);
     }
   }
-
+console.log(pic);
   return (
     <>
       <div className="sidebar-header">
@@ -34,8 +36,8 @@ const NavigationBar = () => {
       <div className="navigationBar">
         <Link to={"/"}>
           <div className="userLogoContainer">
-            {empData ? (
-              <img src={pic} alt="user-img" />
+          {empData ? (
+              <img src={profileImage|| pic} alt="user-img" />
             ) : (
               <img src={userIcon} alt="user-img" />
             )}

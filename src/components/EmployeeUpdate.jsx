@@ -27,6 +27,8 @@ const EmployeeUpdate = () => {
     department: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
+  const [updateMessage, setUpdateMessage] = useState("");
+
 
   useEffect(() => {
     getEmployeeInfo();
@@ -98,6 +100,10 @@ console.log(formData.personalEmail)
     };
     axios.put(EMPLOYEE_UPDATE + id, updatedFormData).then((response) => {
       console.log(response);
+      setUpdateMessage("Employee data updated successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
     });
   }
 
@@ -107,6 +113,7 @@ console.log(formData.personalEmail)
       <header className="headerEditor">
         <h2>Update Employee Details</h2>
       </header>
+      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="addEmployeeFrom" onSubmit={handleSubmit}>
         <div className="formDiv">
           <div className="leftForm">

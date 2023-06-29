@@ -112,6 +112,27 @@ cursor: pointer;
     display: flex;
     justify-content: end;
   }
+  .updateMsg{
+    color: red;
+    font-size: 15px;
+    font-family: "Work Sans";
+    text-transform: capitalize;
+    min-width: 150px;
+    font-weight: 600;
+text-align: center;
+animation: blink 1s linear infinite;
+  }
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
   @media only screen and (max-width: 1110px) {
     .leftForm{
       width: 100%;

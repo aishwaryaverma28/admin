@@ -1,11 +1,13 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect,useRef,useContext } from "react";
+import { UserContext } from "./UserContext";
 import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_GETID,EMPLOYEE_UPDATE } from "./utils/Constants";
+import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG } from "./utils/Constants";
 
 const EmployeeProfile = () => {
+  const { setProfileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState([]);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [address, setAddress] = useState("");
@@ -43,7 +45,7 @@ const [pic, setPic] = useState("");
     setAddress(add);
     // console.log(add);
     setDocumentUrl(empData.profile_image);
-    setPic( "http://core.leadplaner.com:3001/employee/doc/" + empData.profile_image);
+    setPic( VIEW_IMG + empData.profile_image);
   }
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -62,7 +64,7 @@ const [pic, setPic] = useState("");
       // Delete the previously uploaded image
       try {
         await axios.delete(
-          "http://core.leadplaner.com:3001/api/employee/removeDoc/" +
+          REMOVE_DOC +
             documentUrl
         );
       } catch (error) {
@@ -72,13 +74,14 @@ const [pic, setPic] = useState("");
 
     try {
       const response = await axios.post(
-        "http://core.leadplaner.com:3001/api/employee/uploadDoc",
+        UPLOAD_DOC,
         formData
       );
       console.log("Image uploaded successfully:", response.data);
       setSelectedImage(file);
       setDocumentUrl(response.data.data)
-      setPic( "http://core.leadplaner.com:3001/employee/doc/" + response.data.data)
+      setPic( VIEW_IMG + response.data.data)
+      setProfileImage(VIEW_IMG + response.data.data);
        // Perform any additional actions on successful upload
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -91,7 +94,7 @@ const [pic, setPic] = useState("");
     const updatedFormData = {
       profile_image:documentUrl,
     }
-    axios.put(EMPLOYEE_UPDATE + "22", updatedFormData).then((response) => {
+    axios.put(EMPLOYEE_UPDATE + "6", updatedFormData).then((response) => {
       console.log(response);
     });
   }
