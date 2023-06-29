@@ -15,21 +15,21 @@ const EmployeeUpdate = () => {
     state: "",
     country: "",
     postcode: "",
+    position: "",
     personalEmail: "",
     mobile: "",
     social1: "",
     social2: "",
     salary: "",
     aadhaar: "",
-    formattedDate: "",
+    hire_date: "",
+    aadhaar_no: "",
     dob: "",
-    gender: "",
+    gender: "Male",
     department: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
-
-
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -40,7 +40,6 @@ const EmployeeUpdate = () => {
     setEmpData(data);
     searchData(data);
   }
-  // console.log(empData);
 
   function searchData(data) {
     const employee = data.find((item) => item.id == id);
@@ -55,48 +54,50 @@ const EmployeeUpdate = () => {
         country: employee.country,
         postcode: employee.postcode,
         personalEmail: employee.personal_email,
+        position: employee.position,
         mobile: employee.mobile,
         social1: employee.social1,
         social2: employee.social2,
         salary: employee.salary,
-        aadhaar: employee.aadhaar,
-        formattedDate: formatDate(employee.hire_date),
+        aadhaar_no: employee.aadhaar_no,
+        hire_date: formatDate(employee.hire_date),
         dob: formatDate(employee.dob),
         gender: employee.gender,
         department: employee.department,
       });
     }
   }
-  
+  console.log(currentEmp);
   function formatDate(date) {
     return date ? date.split("T")[0] : "";
-   
   }
-    function handleChange(event) {
+  function handleChange(event) {
     const { name, value } = event.target;
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
   }
-console.log(formData.personalEmail)
+  console.log(formData.hire_date);
   function handleSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
       first_name: formData.name.split(" ")[0],
       last_name: formData.name.split(" ")[1],
-      position: formData.position,
       city: formData.city,
       state: formData.state,
       country: formData.country,
       postcode: formData.postcode,
       dob: formData.dob,
       personal_email: formData.personalEmail,
-      hire_date: formData.formattedDate,
+      hire_date: formData.hire_date,
       mobile: formData.mobile,
+      position: formData.position,
       department: formData.department,
       social1: formData.social1,
       social2: formData.social2,
       address1: formData.address,
       gender: formData.gender,
+      aadhaar_no: formData.aadhaar_no,
+      salary: formData.salary,
     };
     axios.put(EMPLOYEE_UPDATE + id, updatedFormData).then((response) => {
       console.log(response);
@@ -106,7 +107,6 @@ console.log(formData.personalEmail)
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
     });
   }
-
 
   return (
     <>
@@ -135,8 +135,13 @@ console.log(formData.personalEmail)
                 employee name<span>*</span>
               </label>
 
-              <input type="text" value={formData.name} name="name" onChange={handleChange}/>
-            </div> 
+              <input
+                type="text"
+                value={formData.name}
+                name="name"
+                onChange={handleChange}
+              />
+            </div>
             <div className="fromFiled">
               <label htmlFor="address1">
                 current address<span>*</span>
@@ -159,9 +164,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="city"
                 id="city"
-                value={formData.city} onChange={handleChange}
+                value={formData.city}
+                onChange={handleChange}
                 placeholder="Please Enter City"
-                
               />
             </div>
             <div className="fromFiled">
@@ -174,7 +179,8 @@ console.log(formData.personalEmail)
                 name="state"
                 id="state"
                 placeholder="Please Enter State"
-                value={formData.state} onChange={handleChange}
+                value={formData.state}
+                onChange={handleChange}
               />
             </div>
             <div className="fromFiled">
@@ -187,7 +193,8 @@ console.log(formData.personalEmail)
                 name="country"
                 id="country"
                 placeholder="Please Enter Country"
-                value={formData.country} onChange={handleChange}
+                value={formData.country}
+                onChange={handleChange}
               />
             </div>
             <div className="fromFiled">
@@ -199,8 +206,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="postcode"
                 id="postcode"
-             placeholder="Please Enter Postcode"
-             value={formData.postcode} onChange={handleChange}
+                placeholder="Please Enter Postcode"
+                value={formData.postcode}
+                onChange={handleChange}
               />
             </div>
             <div className="fromFiled">
@@ -212,9 +220,9 @@ console.log(formData.personalEmail)
                 type="email"
                 name="personalEmail"
                 id="personal_email"
-                value={formData.personalEmail} onChange={handleChange}
+                value={formData.personalEmail}
+                onChange={handleChange}
                 placeholder="Please Enter Email"
-                
               />
             </div>
             <div className="fromFiled">
@@ -225,11 +233,13 @@ console.log(formData.personalEmail)
               <input
                 type="date"
                 name="hire_date"
-                value={formData.formattedDate} onChange={handleChange}
+                value={formData.hire_date}
+                onChange={handleChange}
                 id="date"
                 placeholder=""
               />
             </div>
+
             <div className="fromFiled">
               <label for="">
                 client/franchisee<span>*</span>
@@ -263,7 +273,8 @@ console.log(formData.personalEmail)
 
               <input
                 type="text"
-                value={formData.position} onChange={handleChange}
+                value={formData.position}
+                onChange={handleChange}
                 placeholder="Please Enter Employee Type"
               />
             </div>
@@ -276,8 +287,9 @@ console.log(formData.personalEmail)
                 type="tel"
                 name="mobile"
                 id="phonenumber"
-                maxlength="10"
-                value={formData.mobile} onChange={handleChange}
+                maxlength="13"
+                value={formData.mobile}
+                onChange={handleChange}
                 placeholder="Please Enter Phone Number"
               />
             </div>
@@ -291,24 +303,24 @@ console.log(formData.personalEmail)
                 type="date"
                 name="dob"
                 id="dob"
-                value={formData.dob} onChange={handleChange}
+                value={formData.dob}
+                onChange={handleChange}
                 placeholder="Please Enter Birth date"
-                
               />
             </div>
             <div className="fromFiled">
-              <label for="">
+              <label htmlFor="gender">
                 Gender<span>*</span>
               </label>
-
-              <input
-                type="text"
+              <select
                 name="gender"
                 id="gender"
-                value={formData.gender} onChange={handleChange}
-                placeholder="Please Enter Gender"
-                
-              />
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
 
             <div className="fromFiled">
@@ -320,9 +332,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="department"
                 id="department"
-                value={formData.department} onChange={handleChange}
+                value={formData.department}
+                onChange={handleChange}
                 placeholder="Please Enter Department"
-                
               />
             </div>
             <div className="fromFiled">
@@ -334,9 +346,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="salary"
                 id="salary"
-                value={formData.salary} onChange={handleChange}
+                value={formData.salary}
+                onChange={handleChange}
                 placeholder="Please Enter Salary"
-                
               />
             </div>
 
@@ -349,9 +361,9 @@ console.log(formData.personalEmail)
                 type="number"
                 name="aadhaar_no"
                 id="aadhaar_no"
-                value={formData.aadhaar} onChange={handleChange}
+                value={formData.aadhaar_no}
+                onChange={handleChange}
                 placeholder="Please Enter Aadhar number"
-                
               />
             </div>
             <div className="fromFiled">
@@ -363,9 +375,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="social1"
                 id="social1"
-                value={formData.social1} onChange={handleChange}
+                value={formData.social1}
+                onChange={handleChange}
                 placeholder="Please Enter Social Account"
-                
               />
             </div>
             <div className="fromFiled">
@@ -377,9 +389,9 @@ console.log(formData.personalEmail)
                 type="text"
                 name="social2"
                 id="social2"
-                value={formData.social2} onChange={handleChange}
+                value={formData.social2}
+                onChange={handleChange}
                 placeholder="Please Enter Social Account"
-                
               />
             </div>
 

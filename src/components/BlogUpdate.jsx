@@ -82,6 +82,8 @@ const BlogUpdate = () => {
     }
     tagData();
   }
+  console.log(currentBlog);
+  console.log(sectionData);
   useEffect(() => {
     // Function to be called when data is updated
     if (tagId) {
