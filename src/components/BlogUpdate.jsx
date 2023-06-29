@@ -61,6 +61,7 @@ const BlogUpdate = () => {
     const secResponse = await axios.get(SEC_GET + id);
     const secData = secResponse.data.data;
     setSectionData(secData);
+    tagData();
   }
 
   function searchData(data) {
@@ -80,37 +81,35 @@ const BlogUpdate = () => {
       setTagId(blog.tag);
       setSelectSite(blog.site);
     }
-    tagData();
-  }
-  console.log(currentBlog);
-  console.log(sectionData);
-  useEffect(() => {
-    // Function to be called when data is updated
-    if (tagId) {
-      tagData(); // Replace with your desired function name
-    }
-  }, [tagId]); // Run the effect when the data state changes
-
+   }
+  //  console.log(sectionData);
+  
   //==========================================================================tag part
-  useEffect(() => {
-    axios.get(GET_TAG).then((response) => {
-      setTagApi(response);
-    });
+   useEffect(() => {
+    axios.get(GET_TAG)
+      .then((response) => {
+        setTagApi(response);
+        tagData(); // Call tagData() after receiving the tag data
+      });
   }, []);
+  
   const options = tagApi?.data?.data || [];
-
   const tagData = () => {
     const ids = tagId.split(",");
-    // console.log(ids);
+    const newTags = [];
     ids.forEach((item) => {
-      for (const option of options) {
-        if (option.id == item && !selectedTags.includes(option.tag)) {
-          setSelectedTags((prev) => [...prev, option.tag]);
-          break; // Exit the inner loop after finding a match
-        }
+      const option = options.find((opt) => opt.id == item);
+      if (option && !selectedTags.includes(option.tag)) {
+        newTags.push(option.tag);
       }
     });
+    setSelectedTags((prevTags) => [...prevTags, ...newTags]);
   };
+  
+  useEffect(() => {
+    tagData();
+  }, [options]); // Run the effect when options (tag data) changes
+    
   // console.log(selectedTags)
 
   const handleTagSelection = (event) => {
@@ -138,8 +137,7 @@ const BlogUpdate = () => {
   }
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
-    // console.log(event.target.value);
-    setSelectSite(event.target.value);
+     setSelectSite(event.target.value);
     setStateBtn(1);
   }
   // ========================================================section image added/deleted
@@ -316,10 +314,7 @@ const BlogUpdate = () => {
       .catch((error) => {
         console.error(error);
       });
-      setUpdateMessage("Blog data updated successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)  
+      
     console.log(JSON.stringify(updatedFormData));
   }
 
@@ -530,14 +525,15 @@ const BlogUpdate = () => {
                         initialContent={section.section}
                       />
                     </div>
-                    <div className="deleteContainer">
+                    {section.id ? <></>:<div className="deleteContainer">
                       <button
                         onClick={() => handleDeleteSection(index)}
                         className="sectionDelete"
                       >
                         <img src={trash} className="deleteIcon" alt="Delete" />
                       </button>
-                    </div>
+                    </div>  }
+                    
                   </div>
                 </div>
               ))}
@@ -635,3 +631,4 @@ const BlogUpdate = () => {
 };
 
 export default BlogUpdate;
+
