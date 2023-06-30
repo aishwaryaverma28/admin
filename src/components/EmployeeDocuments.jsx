@@ -9,12 +9,13 @@ import {
   EMPLOYEE_UPDATE,
   REMOVE_DOC,
   UPLOAD_DOC,
+  VIEW_IMG
 } from "./utils/Constants";
 
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-
+  
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -57,6 +58,7 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
   };
 
   return (
+    <div className="docImage">
     <div className="aadhar">
       <div className="docTitle">
         <p className="docName">{label}</p>
@@ -74,7 +76,7 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
       </div>
 
       <div className="docData">
-        <span></span>
+      {!imageUrl ? <span></span> : null}
         <input
           type="file"
           name="employeeDoc"
@@ -96,6 +98,11 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
           </button>
         </span>
       </div>
+      
+    </div>
+    
+    {imageUrl && <img src={VIEW_IMG + imageUrl} alt="image" className="docUpImg" />}
+
     </div>
   );
 }

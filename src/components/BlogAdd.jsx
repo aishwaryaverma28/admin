@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { BLOG_ADD, GET_TAG, IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import {
+  BLOG_ADD,
+  GET_TAG,
+  IMAGE_UP,
+  IMAGE_DEL,
+  VIEW_IMG,
+} from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
@@ -14,7 +20,7 @@ const BlogAdd = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
-  const [isIndex, setIsIndex] = useState(0);
+  const [isIndex, setIsIndex] = useState(-1);
   const fileInputRef = useRef(null);
   const [childData, setChildData] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -138,7 +144,7 @@ const BlogAdd = () => {
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
-      setIsIndex(0);
+      setIsIndex(-1);
     } else {
       setIsIndex(index);
     }
@@ -341,16 +347,29 @@ const BlogAdd = () => {
                             Upload
                           </button>
                         )}
+
                         {showEditButton && (
                           <>
                             <p className="image">{childData}</p>
-                            <button
-                              type="button"
-                              onClick={handleEdit}
-                              className="imageUploaderData"
-                            >
-                              Edit Image
-                            </button>
+                            <div className="blogImageEdit">
+                              <button
+                                type="button"
+                                onClick={handleEdit}
+                                className="imageUploaderData"
+                              >
+                                Edit Image
+                              </button>
+                              {childData && (
+                                <img
+                                  src={
+                                    "http://core.leadplaner.com:3001/blog/" +
+                                    childData
+                                  }
+                                  alt="image"
+                                  className="docUpImg"
+                                />
+                              )}
+                            </div>
                           </>
                         )}
                         {showChooseButton && (
@@ -400,12 +419,21 @@ const BlogAdd = () => {
                   </div>
                   <div
                     className={
-                      isIndex === index
-                        ? "answer display_answer"
-                        : "answer"
+                      isIndex === index ? "answer display_answer" : "answer"
                     }
                   >
-                    <input
+                    
+                    <div className="sectionBlockOne">
+                      <input
+                        type="number"
+                        name="Sort"
+                        id="Sort"
+                        placeholder="Sort"
+                        className="SubsectionSort"
+                        value={section.sort}
+                        onChange={(event) => handleSortChange(event, index)}
+                      />
+                      <input
                       type="text"
                       name="heading"
                       id="heading"
@@ -415,16 +443,6 @@ const BlogAdd = () => {
                       onChange={(event) => handleSecTitleChange(event, index)}
                     />
 
-                    <div className="sectionBlockOne">
-                      <input
-                        type="number"
-                        name="Sort"
-                        id="Sort"
-                        placeholder="Sort"
-                        className="sectionSort"
-                        value={section.sort}
-                        onChange={(event) => handleSortChange(event, index)}
-                      />
                       <div>
                         <ImageEditor
                           parentProp={section.image}
@@ -524,9 +542,9 @@ const BlogAdd = () => {
                     className="SiteSelectBox"
                   >
                     <option value="">Select a Site</option>
-                    <option value="leadplaner.com">leadplaner.com</option>
-                    <option value="bookmyplayer.com">bookmyplayer.com</option>
-                    <option value="routplaner.com">routplaner.com</option>
+                    <option value="leadplaner">leadplaner</option>
+                    <option value="bookmyplayer">bookmyplayer</option>
+                    <option value="routplaner">routplaner</option>
                   </select>
                 </div>
               </div>

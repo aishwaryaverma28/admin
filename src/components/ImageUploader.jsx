@@ -98,6 +98,7 @@ function ImageUploader({ onDataTransfer }) {
       {showEditButton && (
         <>
           <p className="image">{childData}</p>
+          <div className="blogImageEdit">
           <button
             type="button"
             onClick={handleEdit}
@@ -105,6 +106,8 @@ function ImageUploader({ onDataTransfer }) {
           >
             Edit Image
           </button>
+           {childData && <img src={"http://core.leadplaner.com:3001/blog/" + childData} alt="image" className="docUpImg" />}
+           </div>
         </>
       )}
       {showChooseButton && (

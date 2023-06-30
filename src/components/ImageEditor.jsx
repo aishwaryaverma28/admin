@@ -62,8 +62,9 @@ function ImageEditor({ parentProp, onDataTransfer }) {
   return (
     <>
      {showEditButton && (
-        <>
+        <div className="editBox">
           <p className="image">{childData}</p>
+          <div className="blogImageEdit">
           <button
             type="button"
             onClick={handleEdit}
@@ -71,7 +72,9 @@ function ImageEditor({ parentProp, onDataTransfer }) {
           >
             Edit Image
           </button>
-        </>
+           {childData && <img src={"http://core.leadplaner.com:3001/blog/" + childData} alt="image" className="docUpImg" />}
+           </div>
+        </div>
       )}
       {showChooseButton && (
         <>

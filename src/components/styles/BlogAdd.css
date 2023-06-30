@@ -250,7 +250,6 @@ cursor: pointer;
   }
   .formEditor{
     height: 14rem;
-    padding: 0 1rem;
   }
   .quillEditor{
     height: 9.3rem;
@@ -309,9 +308,21 @@ width: 90%;
   margin: 0.8rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+.SubsectionSort{
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+ font-size: 16px;
+ font-family: "Work Sans";
+ padding: 0.8rem;
+ margin: 0.8rem;
+ width: 3.5rem;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
+ 
+}
 .sectionBlockOne{
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 .deleteContainer{
   display: flex;
@@ -367,4 +378,34 @@ margin:0rem 1rem;
   flex-wrap: wrap;
 }
 
+}
+.updateMsg{
+  color: red;
+  font-size: 15px;
+  font-family: "Work Sans";
+  text-transform: capitalize;
+  min-width: 150px;
+  font-weight: 600;
+text-align: center;
+animation: blink 1s linear infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.blogImageEdit{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.editBox{
+  display: flex;
+  flex-direction: column;
 }

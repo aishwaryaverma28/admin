@@ -38,6 +38,7 @@ const BlogUpdate = () => {
   const [blogData, setBlogData] = useState([]);
   const [currentBlog, setCurrentBlog] = useState({});
   const [sectionData, setSectionData] = useState([]);
+  const [pic, setPic] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -45,7 +46,7 @@ const BlogUpdate = () => {
     tag: "",
     image: "",
     date: "",
-    site:"",
+    site: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
@@ -81,18 +82,17 @@ const BlogUpdate = () => {
       setTagId(blog.tag);
       setSelectSite(blog.site);
     }
-   }
+  }
   //  console.log(sectionData);
-  
+
   //==========================================================================tag part
-   useEffect(() => {
-    axios.get(GET_TAG)
-      .then((response) => {
-        setTagApi(response);
-        tagData(); // Call tagData() after receiving the tag data
-      });
+  useEffect(() => {
+    axios.get(GET_TAG).then((response) => {
+      setTagApi(response);
+      tagData(); // Call tagData() after receiving the tag data
+    });
   }, []);
-  
+
   const options = tagApi?.data?.data || [];
   const tagData = () => {
     const ids = tagId.split(",");
@@ -105,11 +105,11 @@ const BlogUpdate = () => {
     });
     setSelectedTags((prevTags) => [...prevTags, ...newTags]);
   };
-  
+
   useEffect(() => {
     tagData();
   }, [options]); // Run the effect when options (tag data) changes
-    
+
   // console.log(selectedTags)
 
   const handleTagSelection = (event) => {
@@ -137,7 +137,7 @@ const BlogUpdate = () => {
   }
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
-     setSelectSite(event.target.value);
+    setSelectSite(event.target.value);
     setStateBtn(1);
   }
   // ========================================================section image added/deleted
@@ -281,17 +281,25 @@ const BlogUpdate = () => {
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
   }
-  // console.log(formData);
+
   const handleImageTransfer = (data) => {
-    setFormData.image(data);
+    setStateBtn(1);
+    // setFormData.image(data);
+    setPic(data);
+    console.log(data);
   };
-  function handleFormSubmit(event) {
+  const handleImageEditor = (data) => {
+    setStateBtn(1);
+    setPic(data);
+    console.log(data);
+  };
+  async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
       title: formData.title,
       url: formData.url,
       description: formData.description,
-      image: formData.image,
+      image: pic,
       date: formData.date,
       site: selectSite,
       tag: tagId,
@@ -300,22 +308,35 @@ const BlogUpdate = () => {
     // axios.put(BLOG_EDIT+id, updatedFormData).then((response) => {
     //   console.log(response);
     // });
-    fetch(BLOG_EDIT + id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
-      },
-      body: JSON.stringify(updatedFormData), // Convert the data to JSON string
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      
+    // fetch(BLOG_EDIT + id, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json", // Set the content type to JSON
+    //   },
+    //   body: JSON.stringify(updatedFormData), // Convert the data to JSON string
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
     console.log(JSON.stringify(updatedFormData));
+    try {
+      const response = await fetch(BLOG_EDIT + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(updatedFormData), // Convert the data to JSON string
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -351,7 +372,7 @@ const BlogUpdate = () => {
                 {formData.image ? (
                   <ImageEditor
                     parentProp={formData.image}
-                    onDataTransfer={handleImageTransfer}
+                    onDataTransfer={handleImageEditor}
                   />
                 ) : (
                   <ImageUploader onDataTransfer={handleImageTransfer} />
@@ -483,40 +504,35 @@ const BlogUpdate = () => {
                   </div>
                   <div
                     className={
-                      isIndex === index
-                        ? "answer display_answer"
-                        : "answer"
+                      isIndex === index ? "answer display_answer" : "answer"
                     }
                   >
-                    <input
-                      type="text"
-                      name="heading"
-                      id="heading"
-                      placeholder="Section Title"
-                      className="sectionHead"
-                      value={section.heading}
-                      onChange={(event) => handleSecTitleChange(event, index)}
-                    />
-
                     <div className="sectionBlockOne">
                       <input
                         type="number"
                         name="Sort"
                         id="Sort"
                         placeholder="Sort"
-                        className="sectionSort"
+                        className="SubsectionSort"
                         value={section.sort}
                         onChange={(event) => handleSortChange(event, index)}
                       />
-                      <div>
-                        <ImageEditor
-                          parentProp={section.image}
-                          onDataTransfer={(data) =>
-                            subImageTrasfer(data, index)
-                          }
-                        />
-                      </div>
+                      <input
+                        type="text"
+                        name="heading"
+                        id="heading"
+                        placeholder="Section Title"
+                        className="sectionHead"
+                        value={section.heading}
+                        onChange={(event) => handleSecTitleChange(event, index)}
+                      />
+
+                      <ImageEditor
+                        parentProp={section.image}
+                        onDataTransfer={(data) => subImageTrasfer(data, index)}
+                      />
                     </div>
+
                     <div className="formEditor">
                       <ReactEditor
                         onDataTransfer={(data) =>
@@ -525,15 +541,22 @@ const BlogUpdate = () => {
                         initialContent={section.section}
                       />
                     </div>
-                    {section.id ? <></>:<div className="deleteContainer">
-                      <button
-                        onClick={() => handleDeleteSection(index)}
-                        className="sectionDelete"
-                      >
-                        <img src={trash} className="deleteIcon" alt="Delete" />
-                      </button>
-                    </div>  }
-                    
+                    {section.id ? (
+                      <></>
+                    ) : (
+                      <div className="deleteContainer">
+                        <button
+                          onClick={() => handleDeleteSection(index)}
+                          className="sectionDelete"
+                        >
+                          <img
+                            src={trash}
+                            className="deleteIcon"
+                            alt="Delete"
+                          />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -604,24 +627,24 @@ const BlogUpdate = () => {
                 </div>
               </div>
               <div className="tags">
-              <div className="tagContent">
-                <h3>Site</h3>
-                <div className="contentBox">
-                  <select
-                    onChange={handleSiteSelection}
-                    className="SiteSelectBox"
-                  >
-                    <option value="">Select a Site</option>
-                    <option value="leadplaner.com">leadplaner.com</option>
-                    <option value="bookmyplayer.com">bookmyplayer.com</option>
-                    <option value="routplaner.com">routplaner.com</option>
-                  </select>
+                <div className="tagContent">
+                  <h3>Site</h3>
+                  <div className="contentBox">
+                    <select
+                      onChange={handleSiteSelection}
+                      className="SiteSelectBox"
+                    >
+                      <option value="">Select a Site</option>
+                      <option value="leadplaner">leadplaner</option>
+                      <option value="bookmyplayer">bookmyplayer</option>
+                      <option value="routplaner">routplaner</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="tagData">
+                  <div className="tagItems">{selectSite}</div>
                 </div>
               </div>
-              <div className="tagData">
-                <div className="tagItems">{selectSite}</div>
-              </div>
-            </div>
             </div>
           </div>
         </div>
@@ -631,4 +654,3 @@ const BlogUpdate = () => {
 };
 
 export default BlogUpdate;
-
