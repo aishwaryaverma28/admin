@@ -31,9 +31,9 @@ const TimeSheet = () => {
     {}
   ];
 
-const handleSearchTermChange = (e) => {
-  console.log(e.target.value);
-}
+// const handleSearchTermChange = (e) => {
+//   console.log(e.target.value);
+// }
   const selectRows = (e) => {
     setValue(e.target.value);
   }

@@ -107,6 +107,7 @@ function EmployeeDocuments() {
   const [passbookUrl, setPassbookUrl] = useState("");
   const [empData, setEmpData] = useState([]);
   const [initialEmpData, setInitialEmpData] = useState({});
+  const [uploadMessage, setUploadMessage] = useState("");
 
   useEffect(() => {
     getEmployeeInfo();
@@ -140,8 +141,16 @@ function EmployeeDocuments() {
       tax_image: panUrl,
       bank_image: checkUrl,
     };
-    axios.put(EMPLOYEE_UPDATE + "22", updatedFormData).then((response) => {
+    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData).then((response) => {
       console.log(response);
+      setUploadMessage("Documents uploaded successfully");
+      setTimeout(() => {
+        setUploadMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+    })
+    .catch((error) => {
+      console.error(error);
+      setUploadMessage("Error uploading documents");
     });
   }
 
@@ -155,6 +164,7 @@ function EmployeeDocuments() {
   return (
     <>
       <ViewProfile />
+      {uploadMessage && <p className="updateMsg">{uploadMessage}</p>}
       <DocumentUpload
         label="Aadhar Card"
         imageUrl={aadharUrl}

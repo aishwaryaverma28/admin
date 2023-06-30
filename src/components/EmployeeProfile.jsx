@@ -94,7 +94,7 @@ const [pic, setPic] = useState("");
     const updatedFormData = {
       profile_image:documentUrl,
     }
-    axios.put(EMPLOYEE_UPDATE + "6", updatedFormData).then((response) => {
+    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData).then((response) => {
       console.log(response);
     });
   }
