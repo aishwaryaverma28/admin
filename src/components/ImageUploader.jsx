@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,IMG_BASE } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 function ImageUploader({ onDataTransfer }) {
   const fileInputRef = useRef(null);
@@ -9,6 +9,7 @@ function ImageUploader({ onDataTransfer }) {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const handleImageSelect = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -48,7 +49,7 @@ function ImageUploader({ onDataTransfer }) {
   const handleEdit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete( IMAGE_DEL+childData );
+      const response = await axios.delete(IMAGE_DEL + childData);
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
       setSelectedImage(null);
@@ -56,12 +57,10 @@ function ImageUploader({ onDataTransfer }) {
       setShowEditButton(false);
       setShowChooseButton(true);
       setChildData(response.data.data);
-     } catch (error) {
+    } catch (error) {
       console.error("Error uploading image:", error);
       // Handle error condition
-    
-  };
-
+    }
   };
 
   return (
@@ -97,17 +96,29 @@ function ImageUploader({ onDataTransfer }) {
       )}
       {showEditButton && (
         <>
-          <p className="image">{childData}</p>
           <div className="blogImageEdit">
-          <button
-            type="button"
-            onClick={handleEdit}
-            className="imageUploaderData"
-          >
-            Edit Image
-          </button>
-           {childData && <img src={"http://core.leadplaner.com:3001/blog/" + childData} alt="image" className="docUpImg" />}
-           </div>
+            <button
+              type="button"
+              onClick={handleEdit}
+              className="imageUploaderData"
+            >
+              Edit Image
+            </button>
+            {childData && (
+              <div
+                className="imageContainer"
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              >
+                <img
+                  src={IMG_BASE + childData}
+                  alt="image"
+                  className="docUpImg"
+                />
+                {hover && <p className="imageHoverText">{childData}</p>}
+              </div>
+            )}
+          </div>
         </>
       )}
       {showChooseButton && (
@@ -126,5 +137,3 @@ function ImageUploader({ onDataTransfer }) {
 }
 
 export default ImageUploader;
-
-

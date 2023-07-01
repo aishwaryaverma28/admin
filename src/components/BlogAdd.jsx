@@ -5,7 +5,7 @@ import {
   GET_TAG,
   IMAGE_UP,
   IMAGE_DEL,
-  VIEW_IMG,
+  IMG_BASE,
 } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ImageUploader from "./ImageUploader";
@@ -15,9 +15,10 @@ import ImageEditor from "./ImageEditor";
 
 const BlogAdd = () => {
   const [selectSite, setSelectSite] = useState("");
+  const [hover, setHover] = useState(false);
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState(null);
+  const [sectionSort, setSectionSort] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
@@ -182,7 +183,7 @@ const BlogAdd = () => {
   };
 
   const handleSecSortChange = (event) => {
-    const sort = parseInt(event.target.value);
+    const sort = event.target.value;
     setSectionSort(sort);
   };
   //=======================================================================================editor data transfer
@@ -201,7 +202,7 @@ const BlogAdd = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort(0);
+    setSectionSort("");
     setChildData("");
     setDataFromChild("");
     setShowEditButton(false);
@@ -305,7 +306,7 @@ const BlogAdd = () => {
 
                   <div className="formBtnBox">
                     <input
-                      type="number"
+                      type="text"
                       name="Sort"
                       id="Sort"
                       value={sectionSort}
@@ -350,7 +351,6 @@ const BlogAdd = () => {
 
                         {showEditButton && (
                           <>
-                            <p className="image">{childData}</p>
                             <div className="blogImageEdit">
                               <button
                                 type="button"
@@ -360,14 +360,22 @@ const BlogAdd = () => {
                                 Edit Image
                               </button>
                               {childData && (
-                                <img
-                                  src={
-                                    "http://core.leadplaner.com:3001/blog/" +
-                                    childData
-                                  }
-                                  alt="image"
-                                  className="docUpImg"
-                                />
+                                <div
+                                  className="imageContainer"
+                                  onMouseEnter={() => setHover(true)}
+                                  onMouseLeave={() => setHover(false)}
+                                >
+                                  <img
+                                    src={IMG_BASE + childData}
+                                    alt="image"
+                                    className="docUpImg"
+                                  />
+                                  {hover && (
+                                    <p className="imageHoverText">
+                                      {childData}
+                                    </p>
+                                  )}
+                                </div>
                               )}
                             </div>
                           </>
@@ -422,10 +430,9 @@ const BlogAdd = () => {
                       isIndex === index ? "answer display_answer" : "answer"
                     }
                   >
-                    
                     <div className="sectionBlockOne">
                       <input
-                        type="number"
+                        type="text"
                         name="Sort"
                         id="Sort"
                         placeholder="Sort"
@@ -434,14 +441,14 @@ const BlogAdd = () => {
                         onChange={(event) => handleSortChange(event, index)}
                       />
                       <input
-                      type="text"
-                      name="heading"
-                      id="heading"
-                      placeholder="Section Title"
-                      className="sectionHead"
-                      value={section.heading}
-                      onChange={(event) => handleSecTitleChange(event, index)}
-                    />
+                        type="text"
+                        name="heading"
+                        id="heading"
+                        placeholder="Section Title"
+                        className="sectionHead"
+                        value={section.heading}
+                        onChange={(event) => handleSecTitleChange(event, index)}
+                      />
 
                       <div>
                         <ImageEditor

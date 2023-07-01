@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './styles/Editor.css';
+import './styles/Editor.css'
 import axios from 'axios';
-import { BLOG_GET } from './utils/Constants';
+import { GET_SITEPGS } from './utils/Constants';
+import TableWithSitePages from './TableWithSitePages';
 import { Link } from 'react-router-dom';
-import TablePaginationBlog from './TablePaginationBlog';
 
-const EmployeeView = () => {
+
+const SitePagesView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get(BLOG_GET).then((response) => {
+    axios.get(GET_SITEPGS).then((response) => {
       setTableData(response.data.data);
+      console.log(response.data.data);
     });
   }, []);
 
@@ -36,17 +38,19 @@ const EmployeeView = () => {
 
   return (
     <>
-      <header className="headerEditor">
-        <h2>View Blog Details</h2>
-      </header>
-      <div className="buttonBox">
+    <header className='headerEditor'>
+      <h2>
+    View your site
+    </h2>
+    </header>
+    <div className="buttonBox">
         <div className="searchBar">
           <label>
             Search: <input type="text" onChange={handleSearchTermChange} />
           </label>
         </div>
         <div>
-          <Link to="/blog/add">
+          <Link to="/sitePages/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
             </button>
@@ -54,10 +58,10 @@ const EmployeeView = () => {
           <label className="entriesLable">
             Show
             <select onChange={selectRows} className="entries">
-              <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>
               <option value="25">25</option>
+              <option value="30">30</option>
             </select>
             Entries
           </label>
@@ -65,10 +69,11 @@ const EmployeeView = () => {
       </div>
 
       <div className="tableContainer">
-        <TablePaginationBlog data={filteredItems} rowsPerPage={value} />
+        <TableWithSitePages data={filteredItems} rowsPerPage={value} />
       </div>
-    </>
-  );
-};
 
-export default EmployeeView;
+</>
+  )
+}
+
+export default SitePagesView;

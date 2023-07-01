@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,IMG_BASE } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 function ImageEditor({ parentProp, onDataTransfer }) {
   const fileInputRef = useRef(null);
@@ -9,6 +9,8 @@ function ImageEditor({ parentProp, onDataTransfer }) {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(true);
   const [showChooseButton, setShowChooseButton] = useState(false);
+  const [hover, setHover] = useState(false);
+
   // console.log(childData)
   const handleEdit = async (event) => {
     event.preventDefault();
@@ -61,19 +63,32 @@ function ImageEditor({ parentProp, onDataTransfer }) {
 
   return (
     <>
-     {showEditButton && (
+      {showEditButton && (
         <div className="editBox">
-          <p className="image">{childData}</p>
           <div className="blogImageEdit">
-          <button
-            type="button"
-            onClick={handleEdit}
-            className="imageUploaderData"
-          >
-            Edit Image
-          </button>
-           {childData && <img src={"http://core.leadplaner.com:3001/blog/" + childData} alt="image" className="docUpImg" />}
-           </div>
+            <button
+              type="button"
+              onClick={handleEdit}
+              className="imageUploaderData"
+            >
+              Edit Image
+            </button>
+
+            {childData && (
+              <div
+                className="imageContainer"
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              >
+                <img
+                  src={IMG_BASE + childData}
+                  alt="image"
+                  className="docUpImg"
+                />
+                {hover && <p className="imageHoverText">{childData}</p>}
+              </div>
+            )}
+          </div>
         </div>
       )}
       {showChooseButton && (

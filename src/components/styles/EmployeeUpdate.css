@@ -6,13 +6,16 @@
     border-radius: 10px;
   }
 .formDiv{
-    display: flex;
+   display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 1.5rem;
 }
 .rightForm{
-  width: 50%;
+   width: 49%;
+}
+.leftForm{
+   width: 48%;
 }
 .fromFiled{
    display: flex;
@@ -91,10 +94,9 @@ cursor: pointer;
 
   }
   .fromFiled textarea {
-    min-width: 310px;
+    min-width: 330px;
     border: 1px solid #dcdcdc;
     border-radius: 10px;
-    margin-left: 10px;
     outline: rgb(59, 59, 59);
     background-color: #ffffff;
     padding: 10px;
@@ -145,6 +147,7 @@ cursor: pointer;
   }
   
   .saveBtnRight{
+    width: 100%;
     display: flex;
     justify-content: end;
   }
@@ -206,3 +209,24 @@ animation: blink 1s linear infinite;
       min-width: 80%;
     }
   }
+
+  .saveBtnRight > .cancleBtn {
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: "Work Sans", sans-serif;
+    color: #1e2224;
+    font-weight: 500;
+    text-transform: capitalize;
+    background: #ffffff;
+    padding: 7px 15px;
+    margin: 0 1rem;
+  }
+  
+  .saveBtnRight > .cancleBtn:hover {
+    border: 1px solid #077838;
+    color: #ffffff;
+    background: #077838;
+    transition: all 0.8s ease-in-out;
+  }
+  

@@ -51,7 +51,7 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const handleViewDocument = () => {
     if (imageUrl) {
       window.open(
-        "http://core.leadplaner.com:3001/employee/doc/" + imageUrl,
+         VIEW_IMG + imageUrl,
         "_blank"
       );
     }
@@ -192,7 +192,6 @@ function EmployeeDocuments() {
         imageUrl={passbookUrl}
         setImageUrl={setPassbookUrl}
       />
-      {/* Add more DocumentUpload components for other documents */}
       <div className="timesheetSaveBtn">
         <button type="button" className="cancleBtn" onClick={resetForm}>
           Cancel

@@ -9,6 +9,7 @@
     "axios": "^1.4.0",
     "draft-js": "^0.11.7",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.0",
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-calendar": "^4.3.0",

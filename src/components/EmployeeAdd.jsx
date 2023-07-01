@@ -110,7 +110,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                employee name<span>*</span>
+                employee name
               </label>
 
               <input
@@ -123,7 +123,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled" top-align>
               <label for="">
-                current address<span>*</span>
+                current address
               </label>
 
               <textarea
@@ -138,7 +138,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                City<span>*</span>
+                City
               </label>
 
               <input
@@ -151,7 +151,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-              State<span>*</span>
+              State
               </label>
 
               <input
@@ -164,7 +164,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Country<span>*</span>
+                Country
               </label>
 
               <input
@@ -177,7 +177,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Postcode<span>*</span>
+                Postcode
               </label>
 
               <input
@@ -190,7 +190,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Personal Email<span>*</span>
+                Personal Email
               </label>
 
               <input
@@ -203,7 +203,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                date of joining<span>*</span>
+                date of joining
               </label>
 
               <input type="date" name="hire_date" onChange={handleChange} id="date" placeholder="" />
@@ -211,14 +211,14 @@ const [details, setDetails] = useState({
             
             <div className="fromFiled">
               <label for="">
-                client/franchisee<span>*</span>
+                client/franchisee
               </label>
 
               <input type="text" name="client" id="client" placeholder="Please Enter Cilent" />
             </div>
             <div className="fromFiled">
               <label for="">
-                remarks<span>*</span>
+                remarks
               </label>
 
               <input type="text" name="remarks" id="remarks" placeholder="Please Enter Remarks" />
@@ -228,7 +228,7 @@ const [details, setDetails] = useState({
           <div className="rightForm">
             <div className="fromFiled">
               <label for="">
-                employee type<span>*</span>
+                employee type
               </label>
 
               <input
@@ -241,7 +241,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                phone number<span>*</span>
+                phone number
               </label>
 
               <input
@@ -255,7 +255,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Date of Birth<span>*</span>
+                Date of Birth
               </label>
 
               <input
@@ -268,7 +268,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Gender<span>*</span>
+                Gender
               </label>
 
               <input
@@ -281,7 +281,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Department<span>*</span>
+                Department
               </label>
 
               <input
@@ -294,7 +294,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Salary<span>*</span>
+                Salary
               </label>
 
               <input
@@ -308,7 +308,7 @@ const [details, setDetails] = useState({
             
             <div className="fromFiled">
               <label for="">
-                Aadhaar Number<span>*</span>
+                Aadhaar Number
               </label>
 
               <input
@@ -321,7 +321,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Social Account<span>*</span>
+                Social Account
               </label>
 
               <input
@@ -334,7 +334,7 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                Social Account<span>*</span>
+                Social Account
               </label>
 
               <input
@@ -350,7 +350,7 @@ const [details, setDetails] = useState({
             
             <div className="fromFiled">
               <label for="">
-                password<span>*</span>
+                password
               </label>
 
               <input
@@ -362,14 +362,14 @@ const [details, setDetails] = useState({
             </div>
             <div className="fromFiled">
               <label for="">
-                org name<span>*</span>
+                org name
               </label>
 
               <input type="text" name="orgname" id="orgname" placeholder="Please Enter Organisation Name" />
             </div>
             <div className="fromFiled">
               <label for="">
-                OTP<span>*</span>
+                OTP
               </label>
 
               <input type="text" name="otp" id="otp" placeholder="Please Enter the OTP" />

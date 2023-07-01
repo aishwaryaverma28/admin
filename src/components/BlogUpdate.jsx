@@ -18,7 +18,7 @@ const BlogUpdate = () => {
   const { id } = useParams();
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState(null);
+  const [sectionSort, setSectionSort] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
@@ -236,7 +236,7 @@ const BlogUpdate = () => {
   };
 
   const handleSecSortChange = (event) => {
-    const sort = parseInt(event.target.value);
+    const sort = event.target.value;
     setSectionSort(sort);
   };
   //==================================================================editor data transfer
@@ -255,7 +255,7 @@ const BlogUpdate = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort(0);
+    setSectionSort("");
     setChildData("");
     setDataFromChild("");
     setShowEditButton(false);
@@ -403,7 +403,7 @@ const BlogUpdate = () => {
 
                   <div className="formBtnBox">
                     <input
-                      type="number"
+                      type="text"
                       name="Sort"
                       id="Sort"
                       value={sectionSort}
@@ -509,7 +509,7 @@ const BlogUpdate = () => {
                   >
                     <div className="sectionBlockOne">
                       <input
-                        type="number"
+                        type="text"
                         name="Sort"
                         id="Sort"
                         placeholder="Sort"

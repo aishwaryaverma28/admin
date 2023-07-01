@@ -8,6 +8,7 @@ const EmployeeUpdate = () => {
   const { id } = useParams();
   const [empData, setEmpData] = useState([]);
   const [currentEmp, setCurrentEmp] = useState({});
+  const [originalFormData, setOriginalFormData] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -30,6 +31,7 @@ const EmployeeUpdate = () => {
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
+
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -45,6 +47,26 @@ const EmployeeUpdate = () => {
     const employee = data.find((item) => item.id == id);
     if (employee) {
       setCurrentEmp(employee);
+      setOriginalFormData({
+        ...formData,
+        name: employee.first_name + " " + employee.last_name,
+        address: employee.address1,
+        city: employee.city,
+        state: employee.state,
+        country: employee.country,
+        postcode: employee.postcode,
+        personalEmail: employee.personal_email,
+        position: employee.position,
+        mobile: employee.mobile,
+        social1: employee.social1,
+        social2: employee.social2,
+        salary: employee.salary,
+        aadhaar_no: employee.aadhaar_no,
+        hire_date: formatDate(employee.hire_date),
+        dob: formatDate(employee.dob),
+        gender: employee.gender,
+        department: employee.department,
+      });
       setFormData({
         ...formData,
         name: employee.first_name + " " + employee.last_name,
@@ -67,16 +89,22 @@ const EmployeeUpdate = () => {
       });
     }
   }
-  console.log(currentEmp);
+
   function formatDate(date) {
     return date ? date.split("T")[0] : "";
   }
+
   function handleChange(event) {
     const { name, value } = event.target;
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
   }
-  console.log(formData.hire_date);
+
+  function handleCancel() {
+    setFormData(originalFormData);
+    setStateBtn(0);
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -433,6 +461,13 @@ const EmployeeUpdate = () => {
               />
             </div>
             <div className="saveBtnRight">
+              <button
+                type="button"
+                className="cancleBtn"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
               {stateBtn === 0 ? (
                 <button className="closeBtn">
                   <Link to={"/employee/view"}>Close</Link>

@@ -60,8 +60,12 @@ table{
 }
 th,
 td{
-    padding: 1rem;
+    padding:0.6rem 0.8rem;
 }
+table tr {
+    height: 50px; /* Set the desired height for the table rows */
+  }
+  
 th{
     font-size: 14px;
     font-weight: 800;
@@ -75,11 +79,19 @@ background-color:rgb(238, 235, 235);
 transition: all .5s ease-in-out;
 cursor: pointer;
 }
-.address{
-    width: 2rem;
+.routeRedirect a{
+    color: #2b74da;
+}
+.routeRedirect{
+    text-align: center;
+    width: 20rem;   
 }
 .employeeName a{
     color: #2b74da;
+}
+.employeeName{
+    text-align: center;
+    width: 20rem;   
 }
 .employeeId{
     width: 5rem;

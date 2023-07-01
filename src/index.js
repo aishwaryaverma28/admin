@@ -7,8 +7,6 @@ import Editor from "./components/Editor";
 import BlogAdd from "./components/BlogAdd";
 import BlogView from "./components/BlogView";
 import SitePagesAdd from "./components/SitePagesAdd";
-import SitePagesUpdate from "./components/SitePagesUpdate";
-import SitePagesMetakeywords from "./components/SitePagesMetakeywords";
 import HelpAdd from "./components/HelpAdd";
 import HelpUpdate from "./components/HelpUpdate";
 import UserMangAdd from "./components/UserMangAdd";
@@ -25,6 +23,8 @@ import EmployeeProfile from "./components/EmployeeProfile";
 import TimeSheet from "./components/TimeSheet";
 import EmployeeDocuments from "./components/EmployeeDocuments";
 import SalarySlip from "./components/SalarySlip";
+import SitePagesView from "./components/SitePagesView";
+import SitePagesUpdate from "./components/SitePagesUpdate";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -68,12 +68,12 @@ const appRouter = createBrowserRouter([
         element: <SitePagesAdd />,
       },
       {
-        path: "/sitePages/update",
-        element: <SitePagesUpdate />,
+        path: "/sitePages/view",
+        element: <SitePagesView />,
       },
       {
-        path: "/sitePages/metaKeywords",
-        element: <SitePagesMetakeywords />,
+        path: "/sitePages/view/:id",
+        element: <SitePagesUpdate/>,
       },
       {
         path: "/helpSection/add",

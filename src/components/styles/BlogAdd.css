@@ -26,6 +26,7 @@
 .fromUrl{
 display: flex;
 justify-content: space-between;
+align-items: center;
 gap: 1rem;
 margin-bottom: 1rem;
 }
@@ -65,13 +66,14 @@ cursor: pointer;
     background-color: #2b74da;
     color: #fff;
     cursor: pointer;
-    padding: 14px 18px;
-    font-size: 15px;
+    padding: 10px 12px;
+    font-size: 14.5px;
     border-radius: 10px;
     border: none;
     /* width: 20rem; */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     transition: 0.2s linear all;
+    margin: 0.5rem;
   }
 
 .imageUploaderData p{
@@ -290,7 +292,7 @@ cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .sectionHead{
-width: 90%;
+width: 50%;
   border: 1px solid #dcdcdc;
    border-radius: 10px;
   font-size: 16px;
@@ -408,4 +410,28 @@ animation: blink 1s linear infinite;
 .editBox{
   display: flex;
   flex-direction: column;
+}
+.imageContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.imageHoverText {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  width: fit-content;
+  border-radius: 5px;
+}
+.docUpImg{
+  height: 7rem;
+  width: 7rem;
+  border-radius: 50%;
+  margin: 0.5rem;
 }

@@ -28,12 +28,8 @@
                 "path": "/sitePages/add"
             },
             {
-                "title": "Update",
-                "path": "/sitePages/update"
-            },
-            {
-                "title": "Meta Keywords",
-                "path": "/sitePages/metaKeywords"
+                "title": "View",
+                "path": "/sitePages/view"
             }
         ]
     },
