@@ -326,6 +326,7 @@ margin: 0.2rem;
     font-family: "Work Sans", sans-serif;
     color: #1e2224;
     font-weight: 600;
+    margin: 2rem;
    }
    .slarySLipRow1{
     padding: 2rem 3rem;
@@ -380,6 +381,19 @@ margin: 0.2rem;
         100% {
           opacity: 0;
         }
+      }
+      .salaryTable{
+        margin: 2rem;
+      }
+      .sno{
+        width: 2rem;
+      }
+      .slaryMonth{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        margin: 0 1rem;
       }
 @media (max-width: 700px) {
   .userProfile{

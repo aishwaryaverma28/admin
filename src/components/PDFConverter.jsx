@@ -1,7 +1,10 @@
 import React from 'react';
 import html2pdf from 'html2pdf.js';
+import ezukaLogo from '../assets/image/ezukaLogo.png';
+// import './styles/SalarySlip.css';
 
-const PDFConverter = () => {
+const PDFConverter = ({item, position, department, joining,name,emp_no,place}) => {
+  console.log(item, position, department, joining,name,emp_no,place);
   const handleDownload = () => {
     // Get the HTML content as a string
     const htmlContent = `
@@ -13,103 +16,103 @@ const PDFConverter = () => {
         <title>Document</title>
     </head>
     <body>
-    <table class="custom-table" border="1" width="650" style="border-collapse: collapse; text-align: center;" cellpadding="2" cellspacing="10">
+    <table class="custom-table" border="1" width="650" style="border-collapse: collapse; text-align: center; border: 1px solid black;" cellpadding="2" cellspacing="10">
     <tr>
-      <th colspan="1">
-        <img src="https://www.ezuka.com/assets/logo-ezuka.png" alt="" style="width: 160px;" />
+      <th colspan="1" style="border: 1px solid black;">
+        <img src=${ezukaLogo} alt="" style="width: 160px;" />
       </th>
-      <th colspan="4">
+      <th colspan="4" style="border: 1px solid black;">
         Ezuka Services Ltd <br />
         Bourne Business Park, 4 Dashwood Lang Rd, Addlestone KT15 2HJ, United Kingdom
       </th>
     </tr>
     <tr>
-      <th>Employee Name</th>
-      <td>Chenna M</td>
-      <th style="border: none;"></th>
-      <th>Date Of Joining</th>
-      <td>April/6/2023</td>
+      <th style="border: 1px solid black;">Employee Name</th>
+      <td style="border: 1px solid black;">${name}</td>
+      <th style="border: 1px solid black;border-bottom: none;"></th>
+      <th style="border: 1px solid black;">Date Of Joining</th>
+      <td style="border: 1px solid black;">${joining}</td>
     </tr>
     <tr>
-      <th>Employee Code</th>
-      <td>GES-9</td>
-      <th style="border: none;"></th>
-      <th>Place of Posting</th>
-      <td>India</td>
+      <th style="border: 1px solid black;">Employee Code</th>
+      <td style="border: 1px solid black;">${emp_no}</td>
+      <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
+      <th style="border: 1px solid black;">Place of Posting</th>
+      <td style="border: 1px solid black;">${place}</td>
     </tr>
     <tr>
-      <th>Department</th>
-      <td>ERP</td>
-      <th style="border: none;"></th>
-      <th>Working Days</th>
-      <td>23</td>
+      <th style="border: 1px solid black;">Department</th>
+      <td style="border: 1px solid black;">${department}</td>
+      <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
+      <th style="border: 1px solid black;">Working Days</th>
+      <td style="border: 1px solid black;">${item.working_days}</td>
     </tr>
     <tr>
-      <th>Month</th>
-      <td>Apr-2023</td>
-      <th style="border: none;"></th>
-      <th>Bank / Account Number</th>
-      <td>SBI 041010100080951</td>
+      <th style="border: 1px solid black;">Month</th>
+      <td style="border: 1px solid black;">${item.month+","+item.year}</td>
+      <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
+      <th style="border: 1px solid black;">Bank / Account Number</th>
+      <td style="border: 1px solid black;">SBI 041010100080951</td>
     </tr>
     <tr>
-      <th>Position</th>
-      <td>Senior Oracle Cons</td>
-      <th style="border: none;"></th>
-      <th>Sort Code</th>
-      <td>202464</td>
+      <th style="border: 1px solid black;">Position</th>
+      <td style="border: 1px solid black;">${position}</td>
+      <th style="border: 1px solid black; border-top: none;"></th>
+      <th style="border: 1px solid black;">Sort Code</th>
+      <td style="border: 1px solid black;">202464</td>
     </tr>
     <tr>
-      <td colspan="5" style="height: 20px;"></td>
+      <td colspan="5" style="height: 20px;border: 1px solid black;"></td>
     </tr>
     <tr>
-      <th colspan="3">Earnings (Rs)</th>
-      <th colspan="3">Deductions (Rs)</th>
+      <th colspan="3" style="border: 1px solid black;">Earnings (Rs)</th>
+      <th colspan="3" style="border: 1px solid black;">Deductions (Rs)</th>
     </tr>
     <tr>
-      <th>Particulars</th>
-      <th>Actual Amount</th>
-      <th>Payable Amt</th>
-      <th>Particulars</th>
-      <th>Amount</th>
+      <th style="border: 1px solid black;">Particulars</th>
+      <th style="border: 1px solid black;">Actual Amount</th>
+      <th style="border: 1px solid black;">Payable Amt</th>
+      <th style="border: 1px solid black;">Particulars</th>
+      <th style="border: 1px solid black;">Amount</th>
     </tr>
     <tr>
-      <th><b>Basic Salary</b></th>
-      <td>10,50,000</td>
-      <td>87,500</td>
-      <th>Tax</th>
-      <td>0</td>
+      <th style="border: 1px solid black;"><b>Basic Salary</b></th>
+      <td style="border: 1px solid black;">${item.salary}</td>
+      <td style="border: 1px solid black;">87,500</td>
+      <th style="border: 1px solid black;">Tax</th>
+      <td style="border: 1px solid black;">${item.tax}</td>
     </tr>
     <tr>
-      <td colspan="3"></td>
-      <th>NI Contribution</th>
-      <td>0</td>
+      <td colspan="3" style="border: 1px solid black;"></td>
+      <th style="border: 1px solid black;">NI Contribution</th>
+      <td style="border: 1px solid black;">0</td>
     </tr>
     <tr>
-      <th>Incentives</th>
-      <td></td>
-      <td></td>
-      <td colspan="2" style="border: none;"></td>
+      <th style="border: 1px solid black;">Incentives</th>
+      <td style="border: 1px solid black;"></td>
+      <td style="border: 1px solid black;"></td>
+      <td colspan="2" style="border: 1px solid black;border-bottom: none;"></td>
     </tr>
     <tr>
-      <th>Arrears</th>
-      <td></td>
-      <td></td>
-      <td colspan="2" style="border: none;"></td>
+      <th style="border: 1px solid black;">Arrears</th>
+      <td style="border: 1px solid black;"></td>
+      <td style="border: 1px solid black;"></td>
+      <td colspan="2" style="border: 1px solid black; border-top: none;"></td>
     </tr>
     <tr>
-      <th>Total</th>
-      <td>87,500</td>
-      <td>87,500</td>
-      <th>Total Deductions</th>
-      <td>0</td>
+      <th style="border: 1px solid black;">Total</th>
+      <td style="border: 1px solid black;">87,500</td>
+      <td style="border: 1px solid black;">87,500</td>
+      <th style="border: 1px solid black;">Total Deductions</th>
+      <td style="border: 1px solid black;">0</td>
     </tr>
     <tr>
-      <td colspan="3"></td>
-      <th>Net Salary</th>
-      <td>87500</td>
+      <td colspan="3" style="border: 1px solid black;"></td>
+      <th style="border: 1px solid black;">Net Salary</th>
+      <td style="border: 1px solid black;">87500</td>
     </tr>
     <tr>
-      <td colspan="5">
+      <td colspan="5" style="border: 1px solid black;">
         <b>For Ezuka Services Ltd</b> <br />
         <i>This is computer-generated statement; hence signature is not required.</i>
       </td>
@@ -134,7 +137,7 @@ const PDFConverter = () => {
 
   return (
     <div>
-      <button onClick={handleDownload}>Download as PDF</button>
+      <button onClick={handleDownload} className='downBtn'><i class="fa-sharp fa-solid fa-download"></i></button>
     </div>
   );
 };
