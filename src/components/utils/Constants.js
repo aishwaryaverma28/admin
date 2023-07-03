@@ -19,3 +19,4 @@ export const VIEW_IMG = start+"employee/doc/";
 export const GET_SITEPGS = start+"api/site/getAll";
 export const PUT_SITEPGS = start+"api/site/edit/";
 export const ADD_SITEPGS = start+"api/site/add";
+export const SALARY_SLIP = start+"api/employee/getPayslip/1";

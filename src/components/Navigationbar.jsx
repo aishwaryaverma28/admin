@@ -27,7 +27,6 @@ const NavigationBar = () => {
       console.log(error);
     }
   }
-console.log(pic);
   return (
     <>
       <div className="sidebar-header">

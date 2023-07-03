@@ -3,8 +3,8 @@ import html2pdf from 'html2pdf.js';
 import ezukaLogo from '../assets/image/ezukaLogo.png';
 // import './styles/SalarySlip.css';
 
-const PDFConverter = ({item, position, department, joining,name,emp_no,place}) => {
-  console.log(item, position, department, joining,name,emp_no,place);
+const PDFConverter = ({item, position, department, joining,name,emp_no,place,bank}) => {
+  
   const handleDownload = () => {
     // Get the HTML content as a string
     const htmlContent = `
@@ -52,7 +52,7 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place}) =
       <td style="border: 1px solid black;">${item.month+","+item.year}</td>
       <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
       <th style="border: 1px solid black;">Bank / Account Number</th>
-      <td style="border: 1px solid black;">SBI 041010100080951</td>
+      <td style="border: 1px solid black;">${bank}</td>
     </tr>
     <tr>
       <th style="border: 1px solid black;">Position</th>
@@ -78,7 +78,7 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place}) =
     <tr>
       <th style="border: 1px solid black;"><b>Basic Salary</b></th>
       <td style="border: 1px solid black;">${item.salary}</td>
-      <td style="border: 1px solid black;">87,500</td>
+      <td style="border: 1px solid black;">${item.salary}</td>
       <th style="border: 1px solid black;">Tax</th>
       <td style="border: 1px solid black;">${item.tax}</td>
     </tr>
@@ -101,15 +101,15 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place}) =
     </tr>
     <tr>
       <th style="border: 1px solid black;">Total</th>
-      <td style="border: 1px solid black;">87,500</td>
-      <td style="border: 1px solid black;">87,500</td>
+      <td style="border: 1px solid black;">${item.salary}</td>
+      <td style="border: 1px solid black;">${item.salary}</td>
       <th style="border: 1px solid black;">Total Deductions</th>
       <td style="border: 1px solid black;">0</td>
     </tr>
     <tr>
       <td colspan="3" style="border: 1px solid black;"></td>
       <th style="border: 1px solid black;">Net Salary</th>
-      <td style="border: 1px solid black;">87500</td>
+      <td style="border: 1px solid black;">${item.salary}</td>
     </tr>
     <tr>
       <td colspan="5" style="border: 1px solid black;">
