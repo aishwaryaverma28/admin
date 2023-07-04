@@ -2,7 +2,7 @@
     {
     "id":1,
     "title": "View Profile",
-    "path": "/viewProfile/employeeProfile"
+    "path": "/admin/viewProfile/employeeProfile"
     
 },
        {
@@ -11,11 +11,11 @@
         "subNav": [
             {
                 "title": "Add",
-                "path": "/blog/add"
+                "path": "/admin/blog/add"
             },
             {
                 "title": "View",
-                "path": "/blog/view"
+                "path": "/admin/blog/view"
             }
         ]
     },
@@ -25,11 +25,11 @@
         "subNav": [
             {
                 "title": "Add",
-                "path": "/sitePages/add"
+                "path": "/admin/sitePages/add"
             },
             {
                 "title": "View",
-                "path": "/sitePages/view"
+                "path": "/admin/sitePages/view"
             }
         ]
     },
@@ -40,11 +40,11 @@
         "subNav": [
             {
                 "title": "Add",
-                "path": "/helpSection/add"
+                "path": "/admin/helpSection/add"
             },
             {
                 "title": "Update",
-                "path": "/helpSection/update"
+                "path": "/admin/helpSection/update"
             }
         ]
     },
@@ -55,11 +55,11 @@
         "subNav": [
             {
                 "title": "Add",
-                "path": "/userManagement/add"
+                "path": "/admin/userManagement/add"
             },
             {
                 "title": "Update",
-                "path": "/userManagement/update"
+                "path": "/admin/userManagement/update"
             }
         ]
     },
@@ -69,23 +69,23 @@
         "subNav": [
             {
                 "title": "Add",
-                "path": "/employee/add"
+                "path": "/admin/employee/add"
             },
             {
                 "title": "View",
-                "path": "/employee/view"
+                "path": "/admin/employee/view"
             }
         ]
     },
     {
         "id": 7,
         "title": "Access Management",
-        "path": "/accessManagement"
+        "path": "/admin/accessManagement"
     },
     {
         "id": 8,
         "title": "Reports and Analytics",
-        "path": "/reportsAndAnalytics"
+        "path": "/admin/reportsAndAnalytics"
     },
     {
         "id": 9,
@@ -93,7 +93,7 @@
         "subNav": [
             {
                 "title": "City",
-                "path": "/masterSettings/City"
+                "path": "/admin/masterSettings/City"
             }
         ]
     },
@@ -103,7 +103,7 @@
         "subNav": [
             {
                 "title": "State",
-                "path": "/system/state"
+                "path": "/admin/system/state"
             }
         ]
     }

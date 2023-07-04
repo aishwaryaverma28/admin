@@ -13,7 +13,7 @@ const ViewProfile = () => {
           <li>
             <NavLink
             exact
-              to="/viewProfile/employeeProfile"
+              to="/admin/viewProfile/employeeProfile"
               activeClassName="activeLink"
               >
               Personal Details
@@ -22,7 +22,7 @@ const ViewProfile = () => {
           <li>
             <NavLink
             exact
-              to="/viewProfile/timeSheet"
+              to="/admin/viewProfile/timeSheet"
               activeClassName="activeLink"
               
             >
@@ -32,7 +32,7 @@ const ViewProfile = () => {
           <li>
             <NavLink
             exact
-              to="/viewProfile/documents"
+              to="/admin/viewProfile/documents"
               activeClassName="activeLink"
               >
               Documents
@@ -41,7 +41,7 @@ const ViewProfile = () => {
           <li>
             <NavLink
             exact
-              to="/viewProfile/salarySlip"
+              to="/admin/viewProfile/salarySlip"
               activeClassName="activeLink"
               >
               Salary Slip

@@ -1,11 +1,12 @@
 import React from 'react';
 import html2pdf from 'html2pdf.js';
 import ezukaLogo from '../assets/image/ezukaLogo.png';
-// import './styles/SalarySlip.css';
 
 const PDFConverter = ({item, position, department, joining,name,emp_no,place,bank}) => {
-  
-  const handleDownload = () => {
+  const amount = Number(item.salary); 
+const formattedAmount = amount.toLocaleString("en-IN");
+  const handleDownload = () => {    
+    const pdfName = `SalarySlip-${name} ${item.month},${item.year}.pdf`;
     // Get the HTML content as a string
     const htmlContent = `
     <!DOCTYPE html>
@@ -77,8 +78,8 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place,ban
     </tr>
     <tr>
       <th style="border: 1px solid black;"><b>Basic Salary</b></th>
-      <td style="border: 1px solid black;">${item.salary}</td>
-      <td style="border: 1px solid black;">${item.salary}</td>
+      <td style="border: 1px solid black;">${formattedAmount}</td>
+      <td style="border: 1px solid black;">${formattedAmount}</td>
       <th style="border: 1px solid black;">Tax</th>
       <td style="border: 1px solid black;">${item.tax}</td>
     </tr>
@@ -101,15 +102,15 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place,ban
     </tr>
     <tr>
       <th style="border: 1px solid black;">Total</th>
-      <td style="border: 1px solid black;">${item.salary}</td>
-      <td style="border: 1px solid black;">${item.salary}</td>
+      <td style="border: 1px solid black;">${formattedAmount}</td>
+      <td style="border: 1px solid black;">${formattedAmount}</td>
       <th style="border: 1px solid black;">Total Deductions</th>
       <td style="border: 1px solid black;">0</td>
     </tr>
     <tr>
       <td colspan="3" style="border: 1px solid black;"></td>
       <th style="border: 1px solid black;">Net Salary</th>
-      <td style="border: 1px solid black;">${item.salary}</td>
+      <td style="border: 1px solid black;">${formattedAmount}</td>
     </tr>
     <tr>
       <td colspan="5" style="border: 1px solid black;">
@@ -125,7 +126,7 @@ const PDFConverter = ({item, position, department, joining,name,emp_no,place,ban
     // Set the options for PDF generation
     const options = {
       margin: 10,
-      filename: 'output.pdf',
+      filename: pdfName,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },

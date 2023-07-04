@@ -33,7 +33,7 @@ const NavigationBar = () => {
         <a><img src={companyLogo} alt="Logo Image" /></a>
       </div>
       <div className="navigationBar">
-        <Link to={"/"}>
+        <Link to={"/admin"}>
           <div className="userLogoContainer">
           {empData ? (
               <img src={profileImage|| pic} alt="user-img" />

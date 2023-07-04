@@ -50,7 +50,7 @@ const SitePagesView = () => {
           </label>
         </div>
         <div>
-          <Link to="/sitePages/add">
+          <Link to="/admin/sitePages/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
             </button>

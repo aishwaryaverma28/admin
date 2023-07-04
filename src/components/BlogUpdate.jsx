@@ -614,7 +614,7 @@ const BlogUpdate = () => {
                   <div className="saveBtnRight">
                     {stateBtn === 0 ? (
                       <button className="closeBtn">
-                        <Link to={"/employee/view"}>Close</Link>
+                        <Link to={"/admin/blog/view"}>Close</Link>
                       </button>
                     ) : (
                       <input

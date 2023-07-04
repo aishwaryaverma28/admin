@@ -71,7 +71,7 @@ const TableWithSitePages = ({ data, rowsPerPage }) => {
               <td >{row.id}</td>
               <td >{row.site}</td>
               <td className="routeRedirect">
-                <Link to={"/sitePages/view/"+row.id} key={row.id}>
+                <Link to={"/admin/sitePages/view/"+row.id} key={row.id}>
                 {row.route}
                 </Link>
               </td>

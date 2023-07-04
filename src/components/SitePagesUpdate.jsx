@@ -174,7 +174,7 @@ const SitePagesUpdate = () => {
             </button>
             {stateBtn === 0 ? (
               <button className="closeBtn">
-                <Link to={"/employee/view"}>Close</Link>
+                <Link to={"/admin/employee/view"}>Close</Link>
               </button>
             ) : (
               <input
