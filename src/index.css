@@ -87,3 +87,8 @@ ol {
   font-family: "Work Sans", sans-serif;
 }
 
+input:focus {
+  outline: none; /* Removes the default focus outline */
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 0 5px #dcdcdc; /* Adds a blue box shadow when input is focused */
+}

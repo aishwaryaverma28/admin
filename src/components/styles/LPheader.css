@@ -11,7 +11,7 @@
   .nav > .navHeader > .navTitle {
     /* display: inline-block; */
     font-size: 24px;
-    font-family: "Work Sans", sans-serif;
+    font-family: 'Lexend Deca', sans-serif;
     font-weight: 500;
     color: #fff;
     padding: 10px 10px 10px 0px;
@@ -29,6 +29,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
+    align-items: center;
   }
   
   .nav > .navLinks > a {
@@ -54,7 +55,7 @@
   }
     .searchInput {
       width: 100%;
-      font-family: "Work Sans", sans-serif;
+      font-family: 'Lexend Deca', sans-serif;
       font-size: 18px;
       font-weight: 500;
       padding: 10px 15px 10px 45px;
@@ -72,8 +73,8 @@
     -webkit-box-shadow: 0 1px 12px #b8c6db;
   }
   .plusBtn {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     color: #ffffff;
     background-color: #f49c00;
@@ -84,16 +85,36 @@
   font-weight: 900;
   font-size: 1.3rem;
 }
-.bellBtn, .helpBtn {
-  width: 50px;
-  height: 50px;
+.bellBtn, .helpBtn{
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: transparent;
   border: none;
-  font-family: "Work Sans", sans-serif;
+  font-family: 'Lexend Deca', sans-serif;
   font-size: 28px;
   color: #86878a;
 }
+.settingBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: 24px;
+  color: #86878a;
+}
+.bellBtn:hover,
+.helpBtn:hover,
+.settingBtn:hover {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #f49c00;
+  transition: all 800ms ease-in-out;
+}
+
+
 .nav > .userImg {
   display: flex;
   flex-wrap: wrap;
@@ -111,7 +132,7 @@
 }
 .nav > .userImg p {
   color: #ffffff;
-  font-family: "Work Sans", sans-serif;
+  font-family: 'Lexend Deca', sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 20px;
@@ -201,7 +222,7 @@
   
 /* Bottom Nav Start*/
 
-.navbar input[type="checkbox"],
+.navbar input[type='checkbox'],
 .navbar .hamburgerLines {
   display: none;
 }
@@ -215,31 +236,28 @@
   z-index: 100;
   padding: 0px;
   border-bottom: 1px solid #dcdcdc;
-  padding: 0px 30px;
+  padding: 15px 30px;
 }
 
 .navbarContainer {
   display: flex;
-  justify-content: space-between;
-  height: 64px;
+  gap: 12rem;
+  /* padding: 1rem 0; */
   align-items: center;
 }
 
 .menuItems {
-  order: 2;
   display: flex;
-  margin-left: 120px;
+  margin-left: 1.5rem;
 }
 .logo {
-  order: 1;
-  font-size: 2.3rem;
+   width: 10rem;
 }
 
 .menuItems li {
   list-style: none;
-  /* margin-left: 1.5rem; */
-  font-size: 18px;
-  font-family: "Work Sans", sans-serif;
+  font-size: 16px;
+  font-family: 'Lexend Deca', sans-serif;
 }
 
 .navbar a {
@@ -247,10 +265,10 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease-in-out;
-  padding: 20px;
+  padding: 15px 20px;
 }
 
-.navbar .active {
+.navbar .activeNav {
   color: #1e2224;
   background: #d2e9f3;
 }
@@ -275,6 +293,9 @@
     position: relative;
     height: 64px;
     width: 100%;
+  }
+  .navbar .menuItems.open {
+    transform: translateX(0);
   }
 
   .navbarContainer input[type="checkbox"] {
