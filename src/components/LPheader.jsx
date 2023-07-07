@@ -107,9 +107,14 @@ const LPheader = () => {
                 Lead
               </NavLink>
             </li>
-            <li onClick={() => handleNavigationClick("Accounts")}>
-              <NavLink exact to="/accounts" activeClassName="activeNav">
-                Accounts
+            <li onClick={() => handleNavigationClick("Deal")}>
+              <NavLink exact to="/deal" activeClassName="activeNav">
+                Deal
+              </NavLink>
+            </li>
+            <li onClick={() => handleNavigationClick("Mail")}>
+              <NavLink exact to="/mail" activeClassName="activeNav">
+                Mail
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Contacts")}>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
 import user from "../assets/image/user.svg";
+import userIcon from "../assets/image/user-img.png";
 
 const LeadsColn = ({ leadArray, leadKey }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -81,14 +82,32 @@ const LeadsColn = ({ leadArray, leadKey }) => {
       </div>
       {modalVisible && (
         <div className="modal">
-          <div className="modal-content">
+          <div className="customization_popup_container">
             <span className="close" onClick={closeModal}>
-              <i class="fa-sharp fa-solid fa-xmark"></i>
+              <i className="fa-sharp fa-solid fa-xmark"></i>
             </span>
-            <h2>Modal Box</h2>
-            <p>Selected Item ID: {selectedItem.id}</p>
-            <p>{selectedItem.first_name + " " + selectedItem.last_name}</p>
-          </div>
+            <div className="user-details--left">
+              <div className="user-details--heading">
+                <img src={userIcon} alt="user" />
+                <p>
+                  {selectedItem.company_name}
+                  <br />
+                  <span>
+                    ( Last Updated: {selectedItem.update_date.split("T")[0]} )
+                  </span>
+                </p>
+                <a href="#" className="edit-details">
+                  <i className="fa-solid fa-pen"></i>
+                </a>
+              </div>
+              <div className="detailsBox">
+                <p className="detailHead">DETAILS</p>
+                
+              </div>
+            </div>
+            {/* left side of modal ends here */}
+          </div> 
+          {/* modal container ends here */}
         </div>
       )}
     </>

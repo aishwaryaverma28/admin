@@ -451,25 +451,96 @@ position: relative;
   max-width: 400px;
   text-align: center;
   position: relative;
-  border: 2px solid red;
+}
+.customization_popup_container {
+  position: absolute;
+  width: 70%;
+  margin: 0 auto;
+  left: 1rem;
+  top: 0;
+  height: 100vh;
+  background: #fff;
+  border-radius: 0.25em 0.25em 0.4em 0.4em;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translatex(400px);
+  -moz-transform: translatex(400px);
+  -ms-transform: translatex(400px);
+  -o-transform: translatex(400px);
+  transform: translatex(400px);
+  /* -webkit-backface-visibility: hidden; */
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .close {
-  border: 2px solid red;
-  position: absolute;
-  top: 10px;
-  right: 10px;
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
   color: #000;
-
+  position: absolute;
+  top: 8px;
+  left: -40px;
+  padding: 0.5rem;
+  background: #ffffff;
+  border-radius: 5px;
 }
 
-h2 {
-  margin-top: 0;
+
+.user-details--left {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  min-width: 350px;
+  border-right: 1px solid #dcdcdc;
+  padding: 30px;
+  position: relative;
 }
 
-p {
-  margin-bottom: 0;
+.user-details--heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-details--heading img {
+  width: 60px;
+  height: 60px;
+}
+
+.user-details--heading p {
+  text-align: left;
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e2224;
+  line-height: 25px;
+}
+
+.user-details--heading p span {
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 400;
+  color: #818181;
+}
+.detailsBox{
+  display: flex;
+  align-items: flex-start;
+  padding: 2rem 0rem;
+}
+.detailHead{
+  color: #1E2224;
+font-family: Lexend Deca;
+font-size: 1rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+letter-spacing: -0.02563rem;
 }

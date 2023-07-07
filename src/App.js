@@ -26,9 +26,9 @@ import BlogUpdate from "./components/BlogUpdate";
 import SitePagesView from "./components/SitePagesView";
 import SitePagesUpdate from "./components/SitePagesUpdate";
 import Home from "./components/Home";
-import Accounts from "./components/Accounts";
 import Contacts from "./components/Contacts";
 import Deals from "./components/Deals";
+import Mail from './components/Mail';
 
 
 const router = createBrowserRouter(
@@ -46,8 +46,8 @@ const router = createBrowserRouter(
           element:<Home/>,
         },
         {
-          path:"/accounts",
-          element:<Accounts/>,
+          path:"/mail",
+          element:<Mail/>,
         },
         {
           path:"/contacts",
