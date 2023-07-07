@@ -1,16 +1,17 @@
+
 .nav {
     height: auto;
     width: 100%;
     position: relative;
     background: #1e2224;
     display: flex;
-    padding: 5px 26px;
+    padding: 0px 26px;
     align-items: center;
   }
   
   .nav > .navHeader > .navTitle {
     /* display: inline-block; */
-    font-size: 24px;
+    font-size: 1.5rem;
     font-family: 'Lexend Deca', sans-serif;
     font-weight: 500;
     color: #fff;
@@ -30,6 +31,7 @@
     flex-wrap: wrap;
     gap: 25px;
     align-items: center;
+    margin-left: 5rem;
   }
   
   .nav > .navLinks > a {
@@ -56,9 +58,9 @@
     .searchInput {
       width: 100%;
       font-family: 'Lexend Deca', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      padding: 10px 15px 10px 45px;
+      font-size: 0.875rem;
+      font-weight: 400;
+      padding: 8px 15px 8px 45px;
       background-color: #35383e;
       color: #86878a;
       border-radius: 50px;
@@ -73,8 +75,8 @@
     -webkit-box-shadow: 0 1px 12px #b8c6db;
   }
   .plusBtn {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     color: #ffffff;
     background-color: #f49c00;
@@ -83,7 +85,7 @@
   }
 .fa-plus {
   font-weight: 900;
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 .bellBtn, .helpBtn{
   width: 40px;
@@ -92,8 +94,8 @@
   background-color: transparent;
   border: none;
   font-family: 'Lexend Deca', sans-serif;
-  font-size: 28px;
-  color: #86878a;
+  font-size: 1.25rem;
+  color: #dadbe0;
 }
 .settingBtn {
   width: 40px;
@@ -102,8 +104,8 @@
   background-color: transparent;
   border: none;
   font-family: 'Lexend Deca', sans-serif;
-  font-size: 24px;
-  color: #86878a;
+  font-size: 1.25rem;
+  color: #dadbe0;
 }
 .bellBtn:hover,
 .helpBtn:hover,
@@ -127,20 +129,21 @@
   margin-right: 30px;
 }
 .nav > .userImg img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 .nav > .userImg p {
-  color: #ffffff;
-  font-family: 'Lexend Deca', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 20px;
-  margin-left: 15px;
+  color: #FFF;
+font-family: Lexend Deca;
+font-size: 1rem;
+font-weight: 500;
+margin-left: 1rem;
 }
 .nav > .userImg p span {
-  font-size: 15px;
-  color: #86878a;
+  color: #86878A;
+font-family: Lexend Deca;
+font-size: 0.75rem;
+font-weight: 400;
 }
 
 .nav > .nav-btn {
@@ -236,7 +239,7 @@
   z-index: 100;
   padding: 0px;
   border-bottom: 1px solid #dcdcdc;
-  padding: 15px 30px;
+  padding: 10px 30px;
 }
 
 .navbarContainer {
@@ -251,7 +254,7 @@
   margin-left: 1.5rem;
 }
 .logo {
-   width: 10rem;
+   width: 8rem;
 }
 
 .menuItems li {
@@ -263,9 +266,10 @@
 .navbar a {
   color: #444;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 0.875rem;
   transition: color 0.3s ease-in-out;
-  padding: 15px 20px;
+  padding: 10px 20px;
 }
 
 .navbar .activeNav {

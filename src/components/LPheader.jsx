@@ -46,12 +46,13 @@ const LPheader = () => {
               placeholder="Search lead, contact and more"
             />
           </div>
-          <ul className="icons">
-            <li>
+          <div>
               <button type="button" className="plusBtn">
                 <i className="fa-solid fa-plus"></i>
               </button>
-            </li>
+            </div>
+          <ul className="icons">
+           
             <li>
               <button type="button" className="bellBtn">
                 <i className="far fa-bell"></i>
@@ -108,7 +109,7 @@ const LPheader = () => {
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Deal")}>
-              <NavLink exact to="/deal" activeClassName="activeNav">
+              <NavLink exact to="/deals" activeClassName="activeNav">
                 Deal
               </NavLink>
             </li>
