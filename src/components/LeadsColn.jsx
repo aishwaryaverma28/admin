@@ -45,11 +45,15 @@ const LeadsColn = ({ leadArray, leadKey }) => {
           </div>
 
           {leadArray.map((item) => (
-            <div key={item.id} className="user-card">
+            <div
+              key={item.id}
+              className="user-card"
+              onClick={() => openModal(item)}
+            >
               <div className="user-details">
                 <div>
                   <p className="heading">
-                    {item.company_name}
+                    {item.lead_name}
                     <br />
                     <span>
                       <i className="far fa-clock"></i>{" "}
@@ -57,11 +61,7 @@ const LeadsColn = ({ leadArray, leadKey }) => {
                     </span>
                   </p>
                 </div>
-                <a
-                  href="#"
-                  className="user-setting--btn"
-                  onClick={() => openModal(item)}
-                >
+                <a href="#" className="user-setting--btn">
                   <i className="fas fa-ellipsis-h"></i>
                 </a>
               </div>

@@ -1,11 +1,14 @@
+// title,industry,
+
 import React, { useState } from "react";
 import "./styles/LPleads.css";
+import axios from "axios";
 import userIcon from "../assets/image/user-img.png";
 
 const Modal = ({ selectedItem, closeModal }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState(selectedItem);
-
+  const [updateMessage, setUpdateMessage] = useState("");
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
@@ -33,6 +36,19 @@ const Modal = ({ selectedItem, closeModal }) => {
   const toggleEditable = () => {
     setIsEditable(!isEditable);
   };
+  const handleUpdateClick = (event) => {
+    event.preventDefault();
+    axios.put("http://core.leadplaner.com:3001/api/lead/edit/" + editedItem.id, editedItem).then((response) => {
+      console.log(response);
+      setUpdateMessage("Lead data updated successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+    });
+    console.log('Update clicked');
+    console.log(editedItem);
+    setIsEditable(false);
+  };
 
   return (
     <div className="modal">
@@ -50,14 +66,14 @@ const Modal = ({ selectedItem, closeModal }) => {
                     <input
                       type="text"
                       name="company_name"
-                      value={editedItem.company_name}
+                      value={editedItem.lead_name}
                       onChange={handleInputChange}
                     />
                     <br />
                   </>
                 ) : (
                   <>
-                    {editedItem.company_name}
+                    {editedItem.lead_name}
                     <br />
                   </>
                 )}
@@ -70,154 +86,295 @@ const Modal = ({ selectedItem, closeModal }) => {
               <i className="fa-solid fa-pen"></i>
             </a>
           </div>
-          {/* <div className="detailsBox">
-            <p className="detailHead">DETAILS</p>
-            <div className="detailsContent">
-              <div className="detailsLeftContainer">
-                <p>Lead Owner</p>
-                <p>Email</p>
-                <p>Contact</p>
-                <p>Lead Status</p>
-              </div>
-              <div className="detailsRightContainer">
-                <p>-</p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="email"
-                      name="email"
-                      value={editedItem.email}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.email}</span>
-                  )}
-                </p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="email"
-                      name="phone"
-                      value={editedItem.phone}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.phone}</span>
-                  )}
-                </p>
-                <p
-                  className="detailsStatus"
-                  style={{ backgroundColor: getStatusBackgroundColor() }}
-                >
-                  {isEditable ? (
-                    <input
-                      type="text"
-                      name="status"
-                      value={editedItem.status}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.status}</span>
-                  )}
-                </p>
+          <div className="leadDetailsLeft">
+          {updateMessage && <p className="updateMsg">{updateMessage}</p>}
+            <div className="detailsBox">
+              <p className="detailHead">LEAD INFORMATION</p>
+              <div className="detailsContent">
+              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                  <p>First Name</p>
+                  <p>Title</p>
+                  <p>Phone</p>
+                  <p>Lead Source</p>
+                  <p>Company</p>
+                  <p>Annual Revenue</p>
+                  <p>Email</p>
+                  <p>Industry</p>
+                  <p>Lables</p>
+                  <p>Status</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="first_name"
+                        value={editedItem.first_name}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.first_name ? (
+                      <span>{editedItem.first_name}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="position"
+                        value={editedItem.position}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.position ? (
+                      <span>{editedItem.position}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="phone"
+                        value={editedItem.phone}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.phone ? (
+                      <span>{editedItem.phone}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="source"
+                        value={editedItem.source}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.source ? (
+                      <span>{editedItem.source}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="company_name"
+                        value={editedItem.company_name}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.company_name ? (
+                      <span>{editedItem.company_name}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="value"
+                        value={editedItem.value}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.value ? (
+                      <span>{editedItem.value}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="email"
+                        name="email"
+                        value={editedItem.email}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.email ? (
+                      <span>{editedItem.email}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="email"
+                        value={editedItem.email}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.email ? (
+                      <span>{editedItem.email}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="priority"
+                        value={editedItem.priority}
+                        onChange={handleInputChange}
+                        className={
+                          editedItem.priority === "Imp"
+                            ? "imptnt"
+                            : editedItem.priority === "Avg"
+                            ? "avg"
+                            : ""
+                        }
+                      />
+                    ) : editedItem.priority ? (
+                      <span
+                        className={
+                          editedItem.priority === "Imp"
+                            ? "imptnt"
+                            : editedItem.priority === "Avg"
+                            ? "avg"
+                            : ""
+                        }
+                      >
+                        {editedItem.priority}
+                      </span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+
+                  <p
+                    className="detailsStatus"
+                    style={{ backgroundColor: getStatusBackgroundColor() }}
+                  >
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="status"
+                        value={editedItem.status}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.status ? (
+                      <span>{editedItem.status}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                </div>
               </div>
             </div>
-          </div> */}
-          <div className="detailsBox">
-            <p className="detailHead">LEAD INFORMATION</p>
-            <div className="detailsContent">
-              <div className="detailsLeftContainer">
-                <p>First Name</p>
-                <p>Title</p>
-                <p>Phone</p>
-                <p>Lead Source</p>
-                <p>Company</p>
-                <p>Annual Revenue</p>
-                <p>Email</p>
-                <p>Industry</p>
-                <p>Lables</p>
-                <p>Status</p>
-              </div>
-              <div className="detailsRightContainer">
-              <p>
-                  {isEditable ? (
-                    <input
-                      type="first_name"
-                      name="first_name"
-                      value={editedItem.first_name}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.first_name}</span>
-                  )}
-                </p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="position"
-                      name="position"
-                      value={editedItem.position}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>-</span>
-                    // <span>{editedItem.position}</span>
-                  )}
-                </p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={editedItem.phone}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.phone}</span>
-                  )}
-                </p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="text"
-                      name="source"
-                      value={editedItem.s}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.phone}</span>
-                  )}
-                </p>
-                <p>
-                  {isEditable ? (
-                    <input
-                      type="email"
-                      name="email"
-                      value={editedItem.email}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.email}</span>
-                  )}
-                </p>
-                
-                <p
-                  className="detailsStatus"
-                  style={{ backgroundColor: getStatusBackgroundColor() }}
-                >
-                  {isEditable ? (
-                    <input
-                      type="text"
-                      name="status"
-                      value={editedItem.status}
-                      onChange={handleInputChange}
-                    />
-                  ) : (
-                    <span>{editedItem.status}</span>
-                  )}
-                </p>
+            <div className="detailsBox">
+              <p className="detailHead">LEAD OWNER</p>
+              <div className="detailsContent">
+              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                  <p>Lead Owner</p>
+                  <p>Email</p>
+                  <p>Contact</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>-</p>
+                  <p>-</p>
+                  <p>-</p>
+                </div>
               </div>
             </div>
+            <div className="detailsBox">
+              <p className="detailHead">ADDRESS INFORMATION</p>
+              <div className="detailsContent">
+              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                  <p>Street</p>
+                  <p>City</p>
+                  <p>State</p>
+                  <p>Country</p>
+                  <p>Zip Code</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="address1"
+                        value={editedItem.address1}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.address1 ? (
+                      <span>{editedItem.address1}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="city"
+                        value={editedItem.city}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.city ? (
+                      <span>{editedItem.city}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="state"
+                        value={editedItem.state}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.state ? (
+                      <span>{editedItem.state}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="country"
+                        value={editedItem.country}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.country ? (
+                      <span>{editedItem.country}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="pin"
+                        value={editedItem.pin}
+                        onChange={handleInputChange}
+                      />
+                    ) : editedItem.pin ? (
+                      <span>{editedItem.pin}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modalLeftBtnBox">
+            {isEditable ? (
+              <button onClick={handleUpdateClick} className="convertToDeal">Update Lead</button>
+            ) : (
+              <span></span>
+            )}
+            <button className="convertToDeal">Convert to deal</button>
           </div>
         </div>
         {/* left side of modal ends here */}
