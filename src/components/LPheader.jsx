@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
-import logo from "../assets/image/logo.png";
+import logo from "../assets/image/logo.svg";
 
 const LPheader = () => {
   const [pageTitle, setPageTitle] = useState("Lead");
@@ -47,24 +47,24 @@ const LPheader = () => {
             />
           </div>
           <div>
-              <button type="button" className="plusBtn">
+              <button type="button" className="plusBtn" title="Create Lead">
                 <i className="fa-solid fa-plus"></i>
               </button>
             </div>
           <ul className="icons">
            
             <li>
-              <button type="button" className="bellBtn">
+              <button type="button" className="bellBtn" title="Notification">
                 <i className="far fa-bell"></i>
               </button>
             </li>
             <li>
-              <button type="button" className="helpBtn">
+              <button type="button" className="helpBtn" title="Help">
                 <i className="far fa-question-circle"></i>
               </button>
             </li>
             <li>
-              <button type="button" className="settingBtn">
+              <button type="button" className="settingBtn" title="Settings">
               <i className="fa-sharp fa-solid fa-gear"></i>
               </button>
             </li>

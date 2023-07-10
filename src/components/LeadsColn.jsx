@@ -65,6 +65,7 @@ const LeadsColn = ({ leadArray, leadKey }) => {
                   <i className="fas fa-ellipsis-h"></i>
                 </a>
               </div>
+              <div className="lead-value">${item.value.toLocaleString("en-IN")}</div>
               <div className="contact-details">
                 <div className="mail">
                   <img src={user} alt="" />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react';
 import { UserContext } from "./UserContext";
 import "../components/styles/Sidebar.css";
-import companyLogo from '../assets/image/logo.png'
+import companyLogo from '../assets/image/logo.svg'
 import userIcon from '../assets/image/user-img.png'
 import Sidebar from './Sidebar';
 import { Link } from "react-router-dom";
@@ -49,6 +49,7 @@ const NavigationBar = () => {
           <Sidebar />
         </div>
       </div>
+      <div className="adminLogout">Logout</div>
     </>
   );
 }

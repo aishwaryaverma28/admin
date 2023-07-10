@@ -3,6 +3,7 @@ import "./styles/LPleads.css";
 import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
+import CreateLead from "./CreateLead"
 
 const useDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -39,6 +40,7 @@ const LPleads = () => {
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [totalValue,setTotalValue] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
   useEffect(() => {
     axios
       .get("http://core.leadplaner.com:3001/api/lead/getall")
@@ -69,6 +71,15 @@ const LPleads = () => {
 
     setTotalValue(calculateTotalValue());
   }, [data]);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       <section className="lead-body">
@@ -97,8 +108,12 @@ const LPleads = () => {
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
-            <button type="button" className="secondary-btn">
-              Create Deal
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={openModal}
+            >
+              Create Lead
             </button>
             <button type="button" className="simple-btn">
               import
@@ -133,6 +148,7 @@ const LPleads = () => {
           </div>
         ))}
       </section>
+      <CreateLead isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

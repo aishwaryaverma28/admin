@@ -38,8 +38,7 @@
 
 }
 .sidebarContainer{
-  /* border: 2px solid brown; */
-  max-height: 70vh;
+    max-height: 60vh;
     overflow-y: scroll;
 }
 .sidebar-item, .sidebar-title6{
@@ -97,4 +96,23 @@
   color: #2b74da;
   background: #e3e9f2;
   transition: all 0.5s cubic-bezier(1,0,1,0);
+}
+.adminLogout{
+  display: inline-flex;
+  padding: 0.5rem 0.8rem;
+  justify-content: center;
+  align-items: center;
+  margin: 7px 25px;
+  gap: 0.625rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #FF4040;
+  color: #FF4040;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all .5s ease-in-out;
+}
+.adminLogout:hover{
+  cursor: pointer;
+  background: #FF4040;
+  color: #fff;
 }

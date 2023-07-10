@@ -73,7 +73,7 @@
 .headerEditor{
   /* backdrop-filter: blur(6px); */
   background: #1e2224;
-  padding: 21px;
+  padding: 16px;
   position: sticky;
   top: 0;
   z-index: 1;

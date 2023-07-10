@@ -9,6 +9,8 @@ const Modal = ({ selectedItem, closeModal }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState(selectedItem);
   const [updateMessage, setUpdateMessage] = useState("");
+  const [activeTab, setActiveTab] = useState("activity"); // Initial active tab
+
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
@@ -38,16 +40,24 @@ const Modal = ({ selectedItem, closeModal }) => {
   };
   const handleUpdateClick = (event) => {
     event.preventDefault();
-    axios.put("http://core.leadplaner.com:3001/api/lead/edit/" + editedItem.id, editedItem).then((response) => {
-      console.log(response);
-      setUpdateMessage("Lead data updated successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
-    });
-    console.log('Update clicked');
+    axios
+      .put(
+        "http://core.leadplaner.com:3001/api/lead/edit/" + editedItem.id,
+        editedItem
+      )
+      .then((response) => {
+        console.log(response);
+        setUpdateMessage("Lead data updated successfully");
+        setTimeout(() => {
+          setUpdateMessage("");
+        }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      });
+    console.log("Update clicked");
     console.log(editedItem);
     setIsEditable(false);
+  };
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
   };
 
   return (
@@ -87,11 +97,17 @@ const Modal = ({ selectedItem, closeModal }) => {
             </a>
           </div>
           <div className="leadDetailsLeft">
-          {updateMessage && <p className="updateMsg">{updateMessage}</p>}
+            {updateMessage && <p className="updateMsg">{updateMessage}</p>}
             <div className="detailsBox">
               <p className="detailHead">LEAD INFORMATION</p>
               <div className="detailsContent">
-              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                <div
+                  className={
+                    isEditable
+                      ? "detailsLeftContainer2"
+                      : "detailsLeftContainer"
+                  }
+                >
                   <p>First Name</p>
                   <p>Title</p>
                   <p>Phone</p>
@@ -271,7 +287,13 @@ const Modal = ({ selectedItem, closeModal }) => {
             <div className="detailsBox">
               <p className="detailHead">LEAD OWNER</p>
               <div className="detailsContent">
-              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                <div
+                  className={
+                    isEditable
+                      ? "detailsLeftContainer2"
+                      : "detailsLeftContainer"
+                  }
+                >
                   <p>Lead Owner</p>
                   <p>Email</p>
                   <p>Contact</p>
@@ -286,7 +308,13 @@ const Modal = ({ selectedItem, closeModal }) => {
             <div className="detailsBox">
               <p className="detailHead">ADDRESS INFORMATION</p>
               <div className="detailsContent">
-              <div className={isEditable ? "detailsLeftContainer2" : "detailsLeftContainer"}>
+                <div
+                  className={
+                    isEditable
+                      ? "detailsLeftContainer2"
+                      : "detailsLeftContainer"
+                  }
+                >
                   <p>Street</p>
                   <p>City</p>
                   <p>State</p>
@@ -370,7 +398,9 @@ const Modal = ({ selectedItem, closeModal }) => {
           </div>
           <div className="modalLeftBtnBox">
             {isEditable ? (
-              <button onClick={handleUpdateClick} className="convertToDeal">Update Lead</button>
+              <button onClick={handleUpdateClick} className="convertToDeal">
+                Update Lead
+              </button>
             ) : (
               <span></span>
             )}
@@ -378,7 +408,62 @@ const Modal = ({ selectedItem, closeModal }) => {
           </div>
         </div>
         {/* left side of modal ends here */}
+        <div className="user-details--right">
+          <div className="tab-navigation">
+            <button
+              className={activeTab === "notes" ? "active" : ""}
+              onClick={() => handleTabClick("notes")}
+            >
+              <i class="fa-sharp fa-regular fa-note-sticky"></i>
+              Notes
+            </button>
+            <button
+              className={activeTab === "email" ? "active" : ""}
+              onClick={() => handleTabClick("email")}
+            >
+              <i class="fa-sharp fa-regular fa-envelope-open"></i>
+              Email
+            </button>
+            <button
+              className={activeTab === "activity" ? "active" : ""}
+              onClick={() => handleTabClick("activity")}
+            >
+              <i class="fa-sharp fa-regular fa-calendar"></i>
+              Activity
+            </button>
+            <button
+              className={activeTab === "attachment" ? "active" : ""}
+              onClick={() => handleTabClick("attachment")}
+            >
+              <i class="fa-sharp fa-solid fa-paperclip"></i>
+              Attachment
+            </button>
+          </div>
+          <div className="tab-content">
+            {activeTab === "notes" && (
+              <div className="notes-tab-content">
+                <p>Notes</p>
+              </div>
+            )}
+            {activeTab === "email" && (
+              <div className="email-tab-content">
+                <p>Email</p>
+              </div>
+            )}
+            {activeTab === "activity" && (
+              <div className="activity-tab-content">
+                <p>Activity</p>
+              </div>
+            )}
+            {activeTab === "attachment" && (
+              <div className="attachment-tab-content">
+                <p>Attachment</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+
       {/* modal container ends here */}
     </div>
   );

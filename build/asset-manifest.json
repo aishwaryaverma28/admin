@@ -1,12 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.53f5f84a.css",
-    "main.js": "/static/js/main.0b61ce1a.js",
+    "main.css": "/static/css/main.09084070.css",
+    "main.js": "/static/js/main.041f7bdc.js",
     "static/js/703.a467f9cc.chunk.js": "/static/js/703.a467f9cc.chunk.js",
     "static/js/598.5a41d2bc.chunk.js": "/static/js/598.5a41d2bc.chunk.js",
     "static/media/latest.jpg": "/static/media/latest.cdd6fdbb45bf5f076274.jpg",
     "static/media/delete-icon.svg": "/static/media/delete-icon.d2ae7e39d9351a186362654fe3d65f42.svg",
     "static/media/profile.png": "/static/media/profile.466a3a5535e2b6427fa1.png",
+    "static/media/logo.svg": "/static/media/logo.44904081259057c5ce6672f12fa71eb1.svg",
     "index.html": "/index.html",
     "static/media/chart.svg": "/static/media/chart.d7fe504d97ec8f78f7fa72aae82f5067.svg",
     "static/media/finance.svg": "/static/media/finance.2f86f06a617b26a07f83650e8aabcd5d.svg",
@@ -17,13 +18,13 @@
     "static/media/user.svg": "/static/media/user.38c82a0e728a4688f857ca026864f733.svg",
     "static/media/notupload.svg": "/static/media/notupload.7a7f08682f84d3bd41c3d3572d721035.svg",
     "static/media/upload.svg": "/static/media/upload.9d37bb71ba165473e7cc356c737fb0c0.svg",
-    "main.53f5f84a.css.map": "/static/css/main.53f5f84a.css.map",
-    "main.0b61ce1a.js.map": "/static/js/main.0b61ce1a.js.map",
+    "main.09084070.css.map": "/static/css/main.09084070.css.map",
+    "main.041f7bdc.js.map": "/static/js/main.041f7bdc.js.map",
     "703.a467f9cc.chunk.js.map": "/static/js/703.a467f9cc.chunk.js.map",
     "598.5a41d2bc.chunk.js.map": "/static/js/598.5a41d2bc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.53f5f84a.css",
-    "static/js/main.0b61ce1a.js"
+    "static/css/main.09084070.css",
+    "static/js/main.041f7bdc.js"
   ]
 }
