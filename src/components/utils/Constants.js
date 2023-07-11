@@ -20,3 +20,7 @@ export const GET_SITEPGS = start+"api/site/getAll";
 export const PUT_SITEPGS = start+"api/site/edit/";
 export const ADD_SITEPGS = start+"api/site/add";
 export const SALARY_SLIP = start+"api/employee/getpayslip/1";
+
+//===================================================================leadplaner
+export const GET_LEAD = start+"api/lead/getall";
+export const ADD_LEAD = start+"api/lead/add";

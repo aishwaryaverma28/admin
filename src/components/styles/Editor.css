@@ -7,10 +7,6 @@ main{
     padding: 0.5rem 1rem;
     margin: 1rem 0;
 }
-section{
-    display: flex;
-    justify-content: space-evenly;
-}
 .block{
     border: 1px solid #dcdcdc;
     padding: 15px 15px;

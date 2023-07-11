@@ -4,6 +4,7 @@ import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead"
+import {GET_LEAD} from "./utils/Constants"
 
 const useDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -41,9 +42,21 @@ const LPleads = () => {
   const [keys, setKeys] = useState([]);
   const [totalValue,setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
-  useEffect(() => {
+  // useEffect(() => {
+  //   axios
+  //     .get(GET_LEAD)
+  //     .then((response) => {
+  //       const dataArray = Object.entries(response.data.data);
+  //       setData(dataArray.map(([key, value]) => value));
+  //       setKeys(dataArray.map(([key, value]) => key));
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  //     }, []);
+  const fetchLeadsData = () => {
     axios
-      .get("http://core.leadplaner.com:3001/api/lead/getall")
+      .get(GET_LEAD)
       .then((response) => {
         const dataArray = Object.entries(response.data.data);
         setData(dataArray.map(([key, value]) => value));
@@ -52,6 +65,10 @@ const LPleads = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+  
+  useEffect(() => {
+    fetchLeadsData();
   }, []);
   
   useEffect(() => {
@@ -148,7 +165,8 @@ const LPleads = () => {
           </div>
         ))}
       </section>
-      <CreateLead isOpen={isModalOpen} onClose={closeModal} />
+      <CreateLead isOpen={isModalOpen} onClose={closeModal} onLeadAdded={fetchLeadsData} />
+
     </div>
   );
 };
