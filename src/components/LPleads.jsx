@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import "./styles/LPleads.css";
 import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead"
-import {GET_LEAD} from "./utils/Constants"
+import {GET_LEAD,IMPORT_CSV} from "./utils/Constants"
 
 const useDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -40,20 +40,10 @@ const LPleads = () => {
   const { isOpen: isOpenActions, toggleDropdown: toggleActions, handleOptionClick: handleOptionClickActions, dropdownRef: dropdownRefActions } = useDropdown();
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
+  const fileInputRef = useRef(null);
   const [totalValue,setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
-  // useEffect(() => {
-  //   axios
-  //     .get(GET_LEAD)
-  //     .then((response) => {
-  //       const dataArray = Object.entries(response.data.data);
-  //       setData(dataArray.map(([key, value]) => value));
-  //       setKeys(dataArray.map(([key, value]) => key));
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //     }, []);
+  
   const fetchLeadsData = () => {
     axios
       .get(GET_LEAD)
@@ -96,6 +86,30 @@ const LPleads = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const handleButtonClick = async () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("userId","121"); // Replace "yourUserId" with the actual user ID
+
+      try {
+        await axios.post(IMPORT_CSV, formData);
+        console.log("File uploaded successfully");
+        // Handle the success case as needed
+      } catch (error) {
+        console.error("File upload failed", error);
+        // Handle the error case as needed
+      }
+    }
+    fetchLeadsData();
+  };
+
 
   return (
     <div>
@@ -132,10 +146,17 @@ const LPleads = () => {
             >
               Create Lead
             </button>
-            <button type="button" className="simple-btn">
+            <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+            <button type="button" className="simple-btn" onClick={handleButtonClick}>
               import
             </button>
-            <div className="select action-select">
+             <div className="select action-select">
               <div className="dropdown-container" ref={dropdownRefActions}>
                 <div className="dropdown-header2" onClick={toggleActions}>
                   Actions <i class="fa-sharp fa-solid fa-angle-down"></i>

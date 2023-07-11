@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
@@ -47,12 +47,11 @@ const LPheader = () => {
             />
           </div>
           <div>
-              <button type="button" className="plusBtn" title="Create Lead">
-                <i className="fa-solid fa-plus"></i>
-              </button>
-            </div>
+            <button type="button" className="plusBtn" title="Create Lead">
+              <i className="fa-solid fa-plus"></i>
+            </button>
+          </div>
           <ul className="icons">
-           
             <li>
               <button type="button" className="bellBtn" title="Notification">
                 <i className="far fa-bell"></i>
@@ -64,9 +63,11 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <button type="button" className="settingBtn" title="Settings">
-              <i className="fa-sharp fa-solid fa-gear"></i>
-              </button>
+              <Link to="/settings">
+                <button type="button" className="settingBtn" title="Settings">
+                  <i className="fa-sharp fa-solid fa-gear"></i>
+                </button>
+              </Link>
             </li>
           </ul>
         </div>

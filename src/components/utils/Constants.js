@@ -24,3 +24,4 @@ export const SALARY_SLIP = start+"api/employee/getpayslip/1";
 //===================================================================leadplaner
 export const GET_LEAD = start+"api/lead/getall";
 export const ADD_LEAD = start+"api/lead/add";
+export const IMPORT_CSV = start+"api/lead/importcsv";

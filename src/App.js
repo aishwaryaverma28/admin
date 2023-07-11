@@ -29,6 +29,7 @@ import Home from "./components/Home";
 import Contacts from "./components/Contacts";
 import Deals from "./components/Deals";
 import Mail from './components/Mail';
+import LPSetting from './components/LPSetting';
 
 
 const router = createBrowserRouter(
@@ -56,6 +57,10 @@ const router = createBrowserRouter(
         {
           path:"/deals",
           element:<Deals/>
+        },
+        {
+          path:"/settings",
+          element:<LPSetting/>
         }
       ]
     },
