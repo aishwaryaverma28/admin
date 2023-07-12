@@ -725,7 +725,9 @@ color: #818181;
 background: #FFF;
   cursor: pointer;
 }
-
+.tab-navigation button .fa-sharp{
+    margin-right: 0.5rem;
+}
 .tab-navigation button.active {
   border: 1px solid #2B74DA;
   color: #2b74da;
@@ -746,5 +748,53 @@ background: #FFF;
 .email-tab-content,
 .activity-tab-content,
 .notes-tab-content {
-  border: 2px solid red;
+  margin: 0rem 0.7rem;
+}
+
+.notesEditor{
+  /* border: 2px solid red; */
+  height: 14rem;
+padding-right: 0.5rem;
+}
+.addNoteBtn{
+  padding-right: 0.6rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.savedNotes{
+  height: 40vh;
+  overflow-y: scroll;
+  padding-bottom: 0.5rem;
+}
+.addNotesDropdown{
+  /* border:2px solid red; */
+  margin-right: 0.3rem;
+  border: 1px solid #dcdcdc;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.7rem;
+  text-transform: capitalize;
+  color: #385083;
+    background-color: transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.answer{
+  /* background-color:#2b74da; */
+  display: none;
+}
+.display_answer{
+  display: block;
+}
+.deleteNote{
+  border:2px solid red;
+  display: flex;
+  justify-content: flex-end;
+}
+.noteDeleteBtn{
+  cursor: pointer;
+  background: #fff;
+  border: none;
 }

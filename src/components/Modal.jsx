@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
 import userIcon from "../assets/image/user-img.png";
+import AddNotes from "./AddNotes";
 
 const Modal = ({ selectedItem, closeModal }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState(selectedItem);
   const [updateMessage, setUpdateMessage] = useState("");
-  const [activeTab, setActiveTab] = useState("activity"); // Initial active tab
+  const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
 
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
@@ -414,35 +415,35 @@ const Modal = ({ selectedItem, closeModal }) => {
               className={activeTab === "notes" ? "active" : ""}
               onClick={() => handleTabClick("notes")}
             >
-              <i class="fa-sharp fa-regular fa-note-sticky"></i>
+              <i className="fa-sharp fa-regular fa-note-sticky"></i>
               Notes
             </button>
             <button
               className={activeTab === "email" ? "active" : ""}
               onClick={() => handleTabClick("email")}
             >
-              <i class="fa-sharp fa-regular fa-envelope-open"></i>
+              <i className="fa-sharp fa-regular fa-envelope-open"></i>
               Email
             </button>
             <button
               className={activeTab === "activity" ? "active" : ""}
               onClick={() => handleTabClick("activity")}
             >
-              <i class="fa-sharp fa-regular fa-calendar"></i>
+              <i className="fa-sharp fa-regular fa-calendar"></i>
               Activity
             </button>
             <button
               className={activeTab === "attachment" ? "active" : ""}
               onClick={() => handleTabClick("attachment")}
             >
-              <i class="fa-sharp fa-solid fa-paperclip"></i>
+              <i className="fa-sharp fa-solid fa-paperclip"></i>
               Attachment
             </button>
           </div>
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <p>Notes</p>
+                <AddNotes item={selectedItem}/>
               </div>
             )}
             {activeTab === "email" && (
