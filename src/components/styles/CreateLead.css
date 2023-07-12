@@ -9,38 +9,38 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  }
-  
-  .modal-content {
-    width: 45%;
-    height: 100vh;
-    background: #fff;
-    transition: transform 1s ease-in-out;
-    overflow-y: scroll;
-    font-family: "Lexend Deca", sans-serif;
+}
+
+.modal-content {
+  width: 45%;
+  height: 100vh;
+  background: #fff;
+  transition: transform 1s ease-in-out;
+  overflow-y: scroll;
+  font-family: "Lexend Deca", sans-serif;
   font-size: 0.875rem;
-    font-weight: 400;
-   letter-spacing: -0.02563rem;
+  font-weight: 400;
+  letter-spacing: -0.02563rem;
   text-transform: capitalize;
 }
-  
-  .close-icon {
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    position: absolute;
-    top: 10px;
-    right: 39rem;
-    padding: 0.3rem 0.5rem;
-    background: #ffffff;
-    border-radius: 5px;
+
+.close-icon {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+  /* position: absolute; */
+  top: 10px;
+  right: 39rem;
+  padding: 0.3rem 0.5rem;
+  background: #ffffff;
+  border-radius: 5px;
 }
-  
-  
+
 .create-lead-top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 1rem;
   border-bottom: 1px solid #dcdcdc;
 }
@@ -49,6 +49,7 @@
   color: #1e2224;
   font-size: 1.375rem;
   font-weight: 500;
+  font-family: "Lexend Deca", sans-serif;
 }
 
 .cross-icon {
@@ -62,86 +63,89 @@
   margin-top: 1.25rem;
 }
 
+.form-area {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
 .form-section-1 .fa-plus {
   padding: 0.69rem;
   background-color: #f4f5f9;
   border-radius: 5rem;
   margin-left: 1.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.form-section-1 {
+/* .form-section-1 {
   float: left;
   margin-right: 1.5rem;
 }
 
 .form-section-2 {
   float: left;
-}
+} */
 
 .lead-label {
+  font-weight: 400;
+  color: #1e2224; 
   font-size: 0.875rem;
-    font-weight: 500;
-  color: #1e2224;
+  
   margin-bottom: 0.5rem;
   display: block;
-  }
-.lead-label2{
-  font-size: 1rem;
-  font-weight: 500;
-color: #1e2224;
-margin-bottom: 0.5rem;
+}
+.lead-label2 {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #1e2224;
+  margin-bottom: 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .lead-input {
   color: #1e2224;
   width: 17rem;
   height: 2.25rem;
-    font-weight: 600;
-    outline: rgb(59, 59, 59);
-    border-radius: 0.3125rem;
-  border: 1px solid #C0C6CC;
-  background: #FFF;
-    font-size: 14px;
-    font-family: "Work Sans";
-    padding: 0.8rem;
-    margin-bottom: 1.5rem;
+  font-weight: 600;
+  outline: rgb(59, 59, 59);
+  border-radius: 0.3125rem;
+  border: 1px solid #c0c6cc;
+  background: #fff;
+  font-size: 14px;
+  font-family: "Lexend Deca", sans-serif;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
 }
-.lead-input:hover{
-  background-color:rgb(227, 225, 225);
-transition: all .5s ease-in-out;
-cursor: pointer;
+.lead-input:hover {
+  background-color: rgb(227, 225, 225);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 }
-.lead-input:focus{
-border: 1px solid rgb(127, 126, 126);
-}
-.clear-both {
-  clear: both;
+.lead-input:focus {
+  border: 1px solid rgb(127, 126, 126);
 }
 
 .phone-input-section {
-  display: flex;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .phone-input {
   color: #1e2224;
-    height: 2.25rem;
-    font-weight: 600;
-    outline: rgb(59, 59, 59);
-    border-radius: 0.3125rem;
-  border: 1px solid #C0C6CC;
-  background: #FFF;
+  height: 2.25rem;
+  font-weight: 600;
+  outline: rgb(59, 59, 59);
+  border-radius: 0.3125rem;
+  border: 1px solid #c0c6cc;
+  background: #fff;
   width: 17rem;
-    font-size: 14px;
-     padding: 0.8rem;
+  font-size: 14px;
+  padding: 0.8rem;
 }
-.phone-input:hover{
-  background-color:rgb(227, 225, 225);
-transition: all .5s ease-in-out;
-cursor: pointer;
+.phone-input:hover {
+  background-color: rgb(227, 225, 225);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 }
-.phone-input:focus{
-border: 1px solid rgb(127, 126, 126);
+.phone-input:focus {
+  border: 1px solid rgb(127, 126, 126);
 }
 .country-code {
   color: #1e2224;
@@ -156,33 +160,33 @@ border: 1px solid rgb(127, 126, 126);
 
 .currency-input {
   color: #1e2224;
-    height: 2.25rem;
-    width: 12.5rem;
-    font-weight: 600;
-    outline: rgb(59, 59, 59);
-    border-radius: 0.3125rem;
-  border: 1px solid #C0C6CC;
-  background: #FFF;
-    font-size: 14px;
-    font-family: "Work Sans";
-    padding: 0.8rem;
+  height: 2.25rem;
+  width: 12.5rem;
+  font-weight: 600;
+  outline: rgb(59, 59, 59);
+  border-radius: 0.3125rem;
+  border: 1px solid #c0c6cc;
+  background: #fff;
+  font-size: 14px;
+  font-family: "Lexend Deca", sans-serif;
+  padding: 0.8rem;
 }
-.currency-input:hover{
-  background-color:rgb(227, 225, 225);
-transition: all .5s ease-in-out;
-cursor: pointer;
+.currency-input:hover {
+  background-color: rgb(227, 225, 225);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
 }
-.currency-input:focus{
-border: 1px solid rgb(127, 126, 126);
+.currency-input:focus {
+  border: 1px solid rgb(127, 126, 126);
 }
 
 .currency-section {
   display: flex;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .currency-section input {
-    margin-right: 0.31rem;
+  margin-right: 0.31rem;
 }
 
 .currency-value {
@@ -195,7 +199,9 @@ border: 1px solid rgb(127, 126, 126);
   height: 2.25rem;
   margin-right: 0.62rem;
   padding-left: 0.9rem;
-  }
+  font-family: "Lexend Deca", sans-serif;
+  
+}
 
 .select-owner {
   width: 17.5rem;
@@ -209,10 +215,12 @@ border: 1px solid rgb(127, 126, 126);
 /* lead status section  */
 
 .lead-status p {
-  font-size: 0.95rem;
-    font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 400;
   color: #1e2224;
   margin-bottom: 0.38rem;
+  font-family: "Lexend Deca", sans-serif;
+  
 }
 
 .status-value {
@@ -239,7 +247,8 @@ border: 1px solid rgb(127, 126, 126);
   background: #e0e0ff;
   color: #5181ff;
   border: 1px solid rgb(180, 183, 246);
-  padding:0 0.5rem ;
+  padding: 0 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .new-element::before {
   content: "";
@@ -255,7 +264,8 @@ border: 1px solid rgb(127, 126, 126);
   border: 1px solid #b543eb;
   color: #b543eb;
   background-color: #efccff;
-  padding:0 0.5rem ;
+  padding: 0 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .open-element::before {
   content: "";
@@ -271,7 +281,8 @@ border: 1px solid rgb(127, 126, 126);
   border: 1px solid #63c257;
   color: #63c257;
   background-color: #cbffc5;
-  padding:0 0.5rem ;
+  padding: 0 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .progress-element::before {
   content: "";
@@ -288,7 +299,8 @@ border: 1px solid rgb(127, 126, 126);
   border: 1px solid #fd9802;
   color: #fd9802;
   background-color: #ffecd0;
-  padding:0 0.5rem ;
+  padding: 0 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .deal-element::before {
   content: "";
@@ -305,7 +317,8 @@ border: 1px solid rgb(127, 126, 126);
   border: 1px solid #797979;
   color: #797979;
   background-color: #eaeaea;
-  padding:0 0.5rem ;
+  padding: 0 0.5rem;
+  font-family: "Lexend Deca", sans-serif;
 }
 .unread-element::before {
   content: "";
@@ -318,7 +331,6 @@ border: 1px solid rgb(127, 126, 126);
   vertical-align: 3%;
 }
 
-
 /* bottom section  */
 
 .bottom-section {
@@ -329,19 +341,26 @@ border: 1px solid rgb(127, 126, 126);
   margin-top: 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .cancel-btn {
   margin-left: 1rem;
-  width: 4.625rem;
-  padding: 0.75rem 0.9375rem;
+  padding: 7px 15px;
   border-radius: 0.3125rem;
   border: 1px solid #dcdcdc;
   background: #fff;
   color: #1e2224;
-  margin-right: 12.38rem;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.41px;
+  text-transform: capitalize;
 }
-.cancel-btn:hover, .add-btn:hover {
+.cancel-btn:hover,
+.add-btn:hover {
   cursor: pointer;
   border: 1px solid #077838;
   background: #077838;
@@ -351,21 +370,33 @@ border: 1px solid rgb(127, 126, 126);
 
 .add-btn {
   color: #1e2224;
-  width: 11.625rem;
-  padding: 0.75em;
+  padding: 7px 15px;
   border-radius: 0.3125rem;
   border: 1px solid #dcdcdc;
   background: #fff;
-  margin-right: 1rem;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
 }
 
 .create-lead-btn {
-  width: 6.875rem;
   background: #077838;
   color: #fff;
-  padding: 0.75rem;
+  padding: 5px 10px;
   border-radius: 0.3125rem;
-  border: none;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-family: "Lexend Deca", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 .create-lead-btn:hover {
   cursor: pointer;

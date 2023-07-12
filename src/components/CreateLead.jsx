@@ -75,7 +75,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           priority: "",
         });
         onLeadAdded(); // Call the onLeadAdded function from props
-         })
+      })
       .catch((error) => {
         console.error(error); // Handle the error as needed
       });
@@ -84,16 +84,16 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <span className="close-icon" onClick={onClose}>
-          &times;
-        </span>
         <div class="create-lead-top">
           <p>Create Lead</p>
+          <p className="close-icon" onClick={onClose}>
+            &times;
+          </p>
         </div>
         <div className="create-lead-form">
           {updateMessage && <p className="updateMsg">{updateMessage}</p>}
           <form>
-            <section>
+            <section class="form-area">
               <div className="form-section-1">
                 <div>
                   <p className="lead-label2">Lead Image</p>
@@ -144,6 +144,27 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   onChange={handleChange}
                   value={leadData.position} // Add value prop for controlled input
                 />
+
+                <label className="lead-label" htmlFor="value">
+                  Value
+                </label>
+                <div className="currency-section">
+                  <input
+                    id="value"
+                    type="text"
+                    className="currency-input"
+                    name="value"
+                    onChange={handleChange}
+                    value={leadData.value} // Add value prop for controlled input
+                  />
+                  <select name="" id="" className="currency-value">
+                    {worldCurrencies.map((currency, index) => (
+                      <option key={index} value={currency.code}>
+                        {`${currency.code} ${currency.currency}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="form-section-2">
@@ -215,32 +236,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   // onChange={handleChange}
                 />
               </div>
-
-              <br className="clear-both" />
             </section>
 
             <section>
-              <label className="lead-label" htmlFor="value">
-                Value
-              </label>
-              <div className="currency-section">
-                <input
-                  id="value"
-                  type="text"
-                  className="currency-input"
-                  name="value"
-                  onChange={handleChange}
-                  value={leadData.value} // Add value prop for controlled input
-                />
-                <select name="" id="" className="currency-value">
-                  {worldCurrencies.map((currency, index) => (
-                    <option key={index} value={currency.code}>
-                      {`${currency.code} ${currency.currency}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               <div className="lead-status">
                 <p>Lead Status</p>
                 <div className="elements">
@@ -278,14 +276,19 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
               </div>
             </section>
 
-            <section className="bottom-section">
-              <button className="cancel-btn" onClick={onClose}>
-                Cancel
-              </button>
-              <button className="add-btn">Create And Add another</button>
-              <button className="create-lead-btn" onClick={handleSubmit}>
-                Create Lead
-              </button>
+            <section className="bottom-section font-style">
+              <div>
+                <button className="cancel-btn" onClick={onClose}>
+                  Cancel
+                </button>
+              </div>
+
+              <div>
+                <button className="add-btn">Create And Add another</button>
+                <button className="create-lead-btn" onClick={handleSubmit}>
+                  Create Lead
+                </button>
+              </div>
             </section>
           </form>
         </div>
