@@ -742,7 +742,7 @@ background: #FFF;
 }
 
 .tab-content {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .email-tab-content,
@@ -797,4 +797,23 @@ padding-right: 0.5rem;
   cursor: pointer;
   background: #fff;
   border: none;
+}
+.colapedEditor{
+  cursor: pointer;
+  margin-right: 0.3rem;
+  height: 2.625rem;
+  border-radius: 0.3125rem;
+background: #F4F5F9;
+display: flex;
+align-items: center;
+padding: 0 1rem;
+}
+.colapedEditor p{
+color: #909DB0;
+font-family: Lexend Deca;
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
 }

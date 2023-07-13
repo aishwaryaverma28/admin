@@ -7,6 +7,7 @@ import axios from "axios";
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [notes, setNotes] = useState([]);
+  const [openEditor, setOpenEditor] = useState(0);
   const [isIndex, setIsIndex] = useState(-1);
 
   const handleDataTransfer = (data) => {
@@ -50,6 +51,9 @@ const AddNotes = ({ item }) => {
 
     setNotes(updatedNotes);
   };
+  function expandEditor(){
+    setOpenEditor(1);
+  }
 
   function accordianClick(id) {
     if (id === isIndex) {
@@ -71,6 +75,7 @@ const AddNotes = ({ item }) => {
 
   return (
     <>
+    <div className="colapedEditor" onClick={expandEditor}><p>Click here to add a note</p></div>
       <div className="notesEditor">
         <ReactEditor onDataTransfer={handleDataTransfer} />
       </div>
