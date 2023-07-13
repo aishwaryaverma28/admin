@@ -7,7 +7,7 @@ import axios from "axios";
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [notes, setNotes] = useState([]);
-  const [openEditor, setOpenEditor] = useState(0);
+  const [openEditor, setOpenEditor] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
 
   const handleDataTransfer = (data) => {
@@ -27,13 +27,15 @@ const AddNotes = ({ item }) => {
     const updatedFormData={
         source_id: item.id,
         type:"lead",
-        description:notes,
+        description: newNote.content,
     }
-      axios.post("http://core.leadplaner.com:3001/api/note/add" , updatedFormData)
-        .then((response) => {
-          console.log(response);
-        })
-    
+    // source_id, description, created_by, source_type, importance 
+    console.log(updatedFormData)
+    axios.post("http://core.leadplaner.com:3001/api/note/add" , updatedFormData)
+      .then((response) => {
+        console.log(response);
+      });
+    setOpenEditor(false);
   };
 
   const handleDeleteNote = (id) => {
@@ -51,9 +53,10 @@ const AddNotes = ({ item }) => {
 
     setNotes(updatedNotes);
   };
-  function expandEditor(){
-    setOpenEditor(1);
-  }
+
+  const expandEditor = () => {
+    setOpenEditor(true);
+  };
 
   function accordianClick(id) {
     if (id === isIndex) {
@@ -75,18 +78,25 @@ const AddNotes = ({ item }) => {
 
   return (
     <>
-    <div className="colapedEditor" onClick={expandEditor}><p>Click here to add a note</p></div>
-      <div className="notesEditor">
-        <ReactEditor onDataTransfer={handleDataTransfer} />
-      </div>
-      <div className="addNoteBtn">
-        <button className="convertToDeal" onClick={handleAddNote}>
-          Add Note
-        </button>
-      </div>
+      {!openEditor ? (
+        <div className="colapedEditor" onClick={expandEditor}>
+          <p>Click here to add a note</p>
+        </div>
+      ) : (
+        <>
+          <div className="notesEditor">
+            <ReactEditor onDataTransfer={handleDataTransfer} />
+          </div>
+          <div className="addNoteBtn">
+            <button className="convertToDeal" onClick={handleAddNote}>
+              Add Note
+            </button>
+          </div>
+        </>
+      )}
+
       {notes.length > 0 && (
         <div className="savedNotes">
-          <h3>Saved Notes:</h3>
           {notes.map((note) => (
             <div key={note.id} className="noteItem">
               <div
@@ -96,12 +106,7 @@ const AddNotes = ({ item }) => {
                 <span>Date: {note.date}</span>
                 <span>Time: {note.time}</span>
                 <span className="dropdownContent">
-                {isIndex === note.id ? (
-                 ""
-                  ) : (
-                    getShortenedContent(note.content)
-                  )}
-                 
+                  {isIndex === note.id ? "" : getShortenedContent(note.content)}
                 </span>
                 <span>
                   {isIndex === note.id ? (
@@ -110,7 +115,6 @@ const AddNotes = ({ item }) => {
                     <i className="fa-sharp fa-solid fa-plus"></i>
                   )}
                 </span>
-                
               </div>
               <div
                 className={
@@ -126,9 +130,12 @@ const AddNotes = ({ item }) => {
                   />
                 </div>
                 <div className="deleteNote">
-                <button onClick={() => handleDeleteNote(note.id)} className="noteDeleteBtn">
-                  <img src={trash} className="deleteIcon" alt="Delete" />
-                </button>
+                  <button
+                    onClick={() => handleDeleteNote(note.id)}
+                    className="noteDeleteBtn"
+                  >
+                    <img src={trash} className="deleteIcon" alt="Delete" />
+                  </button>
                 </div>
               </div>
             </div>

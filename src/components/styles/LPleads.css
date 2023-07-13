@@ -740,9 +740,11 @@ line-height: normal;
 background: #FFF;
   cursor: pointer;
 }
-
+.user-details--right{
+  width: 62.5%;
+}
 .tab-content {
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .email-tab-content,
@@ -752,23 +754,23 @@ background: #FFF;
 }
 
 .notesEditor{
-  /* border: 2px solid red; */
+  /* border: 2px solid aqua; */
   height: 14rem;
-padding-right: 0.5rem;
+padding-right: 0.6rem;
 }
 .addNoteBtn{
   padding-right: 0.6rem;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 8px;
 }
 .savedNotes{
-  height: 40vh;
   overflow-y: scroll;
   padding-bottom: 0.5rem;
 }
 .addNotesDropdown{
   /* border:2px solid red; */
-  margin-right: 0.3rem;
+  /* margin-right: 0.3rem; */
   border: 1px solid #dcdcdc;
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
@@ -779,17 +781,16 @@ padding-right: 0.5rem;
   color: #385083;
     background-color: transparent;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 16px;
 }
 
 .answer{
-  /* background-color:#2b74da; */
-  display: none;
+   display: none;
 }
 .display_answer{
   display: block;
 }
 .deleteNote{
-  border:2px solid red;
   display: flex;
   justify-content: flex-end;
 }
@@ -800,13 +801,14 @@ padding-right: 0.5rem;
 }
 .colapedEditor{
   cursor: pointer;
-  margin-right: 0.3rem;
+   /* margin-right: 0.3rem; */
   height: 2.625rem;
   border-radius: 0.3125rem;
 background: #F4F5F9;
 display: flex;
 align-items: center;
 padding: 0 1rem;
+margin-bottom:16px ;
 }
 .colapedEditor p{
 color: #909DB0;

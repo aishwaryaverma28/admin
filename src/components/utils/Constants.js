@@ -1,4 +1,7 @@
 const start = "http://core.leadplaner.com:3001/";
+//===============================================================login apis
+export const LOGIN = start+"api/user/login";
+//==============================================================blog apis
 export const BLOG_ADD = start+"api/blog/add"
 export const BLOG_EDIT = start+"api/blog/edit/";
 export const BLOG_GET = start+"api/blog/get";

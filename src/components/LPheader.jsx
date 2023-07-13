@@ -63,7 +63,7 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <Link to="/settings">
+              <Link to="/lp/settings">
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>
@@ -100,27 +100,27 @@ const LPheader = () => {
           </div>
           <ul className={`menuItems ${isMenuOpen ? "open" : ""}`}>
             <li onClick={() => handleNavigationClick("Home")}>
-              <NavLink exact to="/home" activeClassName="activeNav">
+              <NavLink exact to="/lp/home" activeClassName="activeNav">
                 Home
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Lead")}>
-              <NavLink exact to="/" activeClassName="activeNav">
+              <NavLink exact to="/lp/lead" activeClassName="activeNav">
                 Lead
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Deal")}>
-              <NavLink exact to="/deals" activeClassName="activeNav">
+              <NavLink exact to="/lp/deals" activeClassName="activeNav">
                 Deal
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Mail")}>
-              <NavLink exact to="/mail" activeClassName="activeNav">
+              <NavLink exact to="/lp/mail" activeClassName="activeNav">
                 Mail
               </NavLink>
             </li>
             <li onClick={() => handleNavigationClick("Contacts")}>
-              <NavLink exact to="/contacts" activeClassName="activeNav">
+              <NavLink exact to="/lp/contacts" activeClassName="activeNav">
                 Contacts
               </NavLink>
             </li>

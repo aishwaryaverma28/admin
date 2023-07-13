@@ -49,44 +49,93 @@ const [details, setDetails] = useState({
       return {...prev, [name]: value};
     })
  }
- function handleSubmit(event) {
+//  function handleSubmit(event) {
+//   event.preventDefault();
+//   const updatedFormData = {
+//     ...details,
+//     first_name:fname,
+//     last_name:lname,
+//   };
+//   // console.log(updatedFormData);
+//   axios.post(EMPLOYEE_ADD , updatedFormData)
+//         .then((response) => {
+//           console.log(response);
+//           setUpdateMessage("Employee data added successfully");
+//       setTimeout(() => {
+//         setUpdateMessage("");
+//       }, 30000); // Clear message after 1 minute (60000 milliseconds)
+//           setDetails({
+//             hire_date:"",
+//             emp_no: "",
+//             position:"",
+//             mobile:"",
+//             dob:"",
+//             gender:"",
+//             department:"",
+//             salary:"",
+//             personal_email:"",
+//             address1:"",
+//             address2:"",
+//             city:"",
+//             state:"",
+//             country:"",
+//             postcode:"",
+//             social1:"",
+//             social2:"",
+//             tax_id:"",
+//             aadhaar_no:""
+//           })
+//         })
+// }
+function handleSubmit(event) {
   event.preventDefault();
   const updatedFormData = {
     ...details,
-    first_name:fname,
-    last_name:lname,
+    first_name: fname,
+    last_name: lname,
   };
-  // console.log(updatedFormData);
-  axios.post(EMPLOYEE_ADD , updatedFormData)
-        .then((response) => {
-          console.log(response);
-          setUpdateMessage("Employee data added successfully");
+
+  const token = localStorage.getItem("jwtToken"); // Retrieve the token from local storage
+
+  axios
+    .post(EMPLOYEE_ADD, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the request headers
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      setUpdateMessage("Employee data added successfully");
       setTimeout(() => {
         setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
-          setDetails({
-            hire_date:"",
-            emp_no: "",
-            position:"",
-            mobile:"",
-            dob:"",
-            gender:"",
-            department:"",
-            salary:"",
-            personal_email:"",
-            address1:"",
-            address2:"",
-            city:"",
-            state:"",
-            country:"",
-            postcode:"",
-            social1:"",
-            social2:"",
-            tax_id:"",
-            aadhaar_no:""
-          })
-        })
+      }, 30000); // Clear message after 30 seconds (30000 milliseconds)
+      setDetails({
+        hire_date: "",
+        emp_no: "",
+        position: "",
+        mobile: "",
+        dob: "",
+        gender: "",
+        department: "",
+        salary: "",
+        personal_email: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        country: "",
+        postcode: "",
+        social1: "",
+        social2: "",
+        tax_id: "",
+        aadhaar_no: "",
+      });
+    })
+    .catch((error) => {
+      console.log(error.response);
+    });
 }
+
   return (
     <>
       <header className="headerEditor">

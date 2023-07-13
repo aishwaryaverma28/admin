@@ -30,36 +30,41 @@ import Contacts from "./components/Contacts";
 import Deals from "./components/Deals";
 import Mail from './components/Mail';
 import LPSetting from './components/LPSetting';
+import Login from './components/Login';
 
 
 const router = createBrowserRouter(
   [
     {
       path:"/",
+      element:<Login/>
+    },
+    {
+      path:"/lp",
       element: <Leadplaner/>,
       children: [
         {
-          path:"/",
+          path:"/lp/lead",
           element: <LPleads/>,
         },
         {
-          path:"/home",
+          path:"/lp/home",
           element:<Home/>,
         },
         {
-          path:"/mail",
+          path:"/lp/mail",
           element:<Mail/>,
         },
         {
-          path:"/contacts",
+          path:"/lp/contacts",
           element:<Contacts/>,
         },
         {
-          path:"/deals",
+          path:"/lp/deals",
           element:<Deals/>
         },
         {
-          path:"/settings",
+          path:"/lp/settings",
           element:<LPSetting/>
         }
       ]
