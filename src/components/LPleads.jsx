@@ -45,8 +45,14 @@ const LPleads = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
   
   const fetchLeadsData = () => {
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  
     axios
-      .get(GET_LEAD)
+      .get(GET_LEAD, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      })
       .then((response) => {
         const dataArray = Object.entries(response.data.data);
         setData(dataArray.map(([key, value]) => value));
@@ -92,14 +98,20 @@ const LPleads = () => {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-
+  
     if (file) {
+      const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("userId","121"); // Replace "yourUserId" with the actual user ID
-
+      formData.append("userId", "121"); // Replace "yourUserId" with the actual user ID
+  
       try {
-        await axios.post(IMPORT_CSV, formData);
+        await axios.post(IMPORT_CSV, formData, {
+          headers: {
+            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          }
+        });
         console.log("File uploaded successfully");
         // Handle the success case as needed
       } catch (error) {
@@ -109,7 +121,7 @@ const LPleads = () => {
     }
     fetchLeadsData();
   };
-
+  
 
   return (
     <div>

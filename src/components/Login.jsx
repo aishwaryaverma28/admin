@@ -1,3 +1,13 @@
+//for client
+// {
+//   "username": "admin@gmail.com",
+//   "password": "Mahi@3332"
+// }
+//for admin panel
+// {
+//   "username": "mahesh@gmail.com",
+//   "password": "Mahi@3332"
+// }
 import React, { useState } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
@@ -27,9 +37,10 @@ const Login = () => {
       .then((response) => {
         const token = response.data.token; // Assuming the token is in the response data
         localStorage.setItem("jwtToken", token); // Store the token in local storage
-        console.log(response.data);
-        navigate("/admin/employee/add");
-      })
+        console.log(response.data.landingurl);
+        let redirect = response.data.landingurl;
+        navigate(redirect);
+       })
       .catch((err) => {
         console.log(err.response);
       });

@@ -54,8 +54,15 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
       last_name: lname,
       status: status,
     };
+  
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  
     axios
-      .post(ADD_LEAD, updatedFormData)
+      .post(ADD_LEAD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      })
       .then((response) => {
         console.log(response.data); // Handle the response as needed
         setUpdateMessage("Lead data added successfully");
@@ -80,7 +87,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
         console.error(error); // Handle the error as needed
       });
   };
-
+  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
