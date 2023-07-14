@@ -11,11 +11,11 @@ import {
   UPLOAD_DOC,
   VIEW_IMG
 } from "./utils/Constants";
-
+const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-  
+   
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -28,17 +28,25 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("employeeDoc", file);
-
+ 
     if (imageUrl) {
       try {
-        await axios.delete(REMOVE_DOC + imageUrl);
+        await axios.delete(REMOVE_DOC + imageUrl,{
+          headers: {
+            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          }
+        });
       } catch (error) {
         console.error("Error deleting previous image:", error);
       }
     }
 
     try {
-      const response = await axios.post(UPLOAD_DOC, formData);
+      const response = await axios.post(UPLOAD_DOC, formData,{
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image uploaded successfully:", response.data);
       setImageUrl(response.data.data);
       // Perform any additional actions on successful upload
@@ -122,7 +130,11 @@ function EmployeeDocuments() {
 
   async function getEmployeeInfo() {
     try {
-      const response = await axios.get(EMPLOYEE_GETID);
+      const response = await axios.get(EMPLOYEE_GETID,{
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       const data = response.data.data;
       setEmpData(data[0]);
       setInitialEmpData(data[0]);
@@ -148,7 +160,11 @@ function EmployeeDocuments() {
       tax_image: panUrl,
       bank_image: checkUrl,
     };
-    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData).then((response) => {
+    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       console.log(response);
       setUploadMessage("Documents uploaded successfully");
       setTimeout(() => {

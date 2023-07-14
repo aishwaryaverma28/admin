@@ -12,7 +12,12 @@ const SitePagesView = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    axios.get(GET_SITEPGS).then((response) => {
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+    axios.get(GET_SITEPGS, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       setTableData(response.data.data);
       console.log(response.data.data);
     });

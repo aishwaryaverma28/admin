@@ -3,6 +3,7 @@ import "./styles/LPleads.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
+import {ADD_NOTES} from "./utils/Constants";
 
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
@@ -24,19 +25,32 @@ const AddNotes = ({ item }) => {
     };
     setNotes([...notes, newNote]);
     setDataFromChild("");
-    const updatedFormData={
-        source_id: item.id,
-        type:"lead",
-        description: newNote.content,
-    }
+  
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  
+    const updatedFormData = {
+      source_id: item.id,
+      type: "lead",
+      description: newNote.content,
+    };
+  
     // source_id, description, created_by, source_type, importance 
-    console.log(updatedFormData)
-    axios.post("http://core.leadplaner.com:3001/api/note/add" , updatedFormData)
+    console.log(updatedFormData);
+    axios.post(ADD_NOTES, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    })
       .then((response) => {
         console.log(response);
+      })
+      .catch((error) => {
+        console.error(error); // Handle the error as needed
       });
+  
     setOpenEditor(false);
   };
+  
 
   const handleDeleteNote = (id) => {
     const updatedNotes = notes.filter((note) => note.id !== id);

@@ -10,12 +10,17 @@ function ImageEditor({ parentProp, onDataTransfer }) {
   const [showEditButton, setShowEditButton] = useState(true);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const [hover, setHover] = useState(false);
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 
   // console.log(childData)
   const handleEdit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete(IMAGE_DEL + childData);
+      const response = await axios.delete(IMAGE_DEL + childData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
       setSelectedImage(null);
@@ -48,7 +53,11 @@ function ImageEditor({ parentProp, onDataTransfer }) {
     formData.append("blog_img", selectedImage);
 
     try {
-      const response = await axios.post(IMAGE_UP, formData);
+      const response = await axios.post(IMAGE_UP, formData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image uploaded successfully:", response.data);
       // Perform any additional actions on successful upload
       setShowUploadButton(false);

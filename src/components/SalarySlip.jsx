@@ -24,29 +24,38 @@ const SalarySlip = () => {
   }, []);
 
   async function getEmployeeInfo() {
-    const response = await axios.get(
-      SALARY_SLIP
-    );
-    const data = response.data.data;
-    setTableData(data);
-    setLoading(false);
-    setName(data.employee.first_name + " " + data.employee.last_name);
-    if (data.employee && data.employee.hire_date) {
-      setJoining(data.employee.hire_date.split("T")[0]);
-    }
-    setEmp_no(data.employee.emp_no);
-    setPlace(data.employee.country);
-    setDepartment(data.employee.department);
-    setPosition(data.employee.position);
-    if (data.employee && data.employee.bank_details) {
-      setJoining(
-        data.employee.bank_details.split(",")[0] +
-          " " +
-          data.employee.bank_details[1]
-      );
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  
+    try {
+      const response = await axios.get(SALARY_SLIP, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
+      const data = response.data.data;
+      // console.log(data.employee)
+      setTableData(data);
+      setLoading(false);
+      setName(data.employee.first_name + " " + data.employee.last_name);
+      if (data.employee && data.employee.hire_date) {
+        setJoining(data.employee.hire_date.split("T")[0]);
+      }
+      setEmp_no(data.payroll.employee_id);
+      setPlace(data.employee.country);
+      setDepartment(data.employee.department);
+      setPosition(data.employee.job_title);
+      if (data.employee && data.employee.bank_details) {
+        setJoining(
+          data.employee.bank_details.split(",")[0] +
+            " " +
+            data.employee.bank_details[1]
+        );
+      }
+    } catch (error) {
+      console.error(error); // Handle the error as needed
     }
   }
-
+  
   const handleYearChange = (event) => {
     setSelectedYear(Number(event.target.value)); // Parse the selected value to a number
   };
@@ -61,7 +70,7 @@ const SalarySlip = () => {
 
   const [filteredTableData, setFilteredTableData] = useState([]);
 
-  console.log(tableData.employee);
+  // console.log(tableData.employee);
 
   return (
     <div className="salary-slip-container">

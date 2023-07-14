@@ -9,12 +9,22 @@ const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
   useEffect(() => {
-    axios.get(BLOG_GET).then((response) => {
+    const token = localStorage.getItem("jwtToken"); // Retrieve the JWT token from local storage
+  
+    axios.get(BLOG_GET, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+      },
+    })
+    .then((response) => {
       setTableData(response.data.data);
+    })
+    .catch((error) => {
+      console.error(error);
     });
   }, []);
+  
 
   const selectRows = (e) => {
     setValue(e.target.value);

@@ -15,6 +15,7 @@ const EmployeeProfile = () => {
 const [pic, setPic] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [documentUrl, setDocumentUrl] = useState("");
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
   const [formData, setFormData] = useState({
    profile:"",
   })
@@ -31,7 +32,11 @@ const [pic, setPic] = useState("");
   }, [empData]); // Call ageCal whenever empData changes
 
   async function getEmployeeInfo() {
-    const response = await axios.get(EMPLOYEE_GETID);
+    const response = await axios.get(EMPLOYEE_GETID,{
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    });
     const data = response.data.data;
     setEmpData(data[0]);
     setInitialEmpData(data[0]); // Set the initial employee data
@@ -65,7 +70,11 @@ const [pic, setPic] = useState("");
       try {
         await axios.delete(
           REMOVE_DOC +
-            documentUrl
+            documentUrl,{
+              headers: {
+                Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+              }
+            }
         );
       } catch (error) {
         console.error("Error deleting previous image:", error);
@@ -75,7 +84,11 @@ const [pic, setPic] = useState("");
     try {
       const response = await axios.post(
         UPLOAD_DOC,
-        formData
+        formData,{
+          headers: {
+            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          }
+        }
       );
       console.log("Image uploaded successfully:", response.data);
       setSelectedImage(file);
@@ -94,7 +107,11 @@ const [pic, setPic] = useState("");
     const updatedFormData = {
       profile_image:documentUrl,
     }
-    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData).then((response) => {
+    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       console.log(response);
     });
   }

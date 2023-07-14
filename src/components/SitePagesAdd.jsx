@@ -25,7 +25,12 @@ const SitePagesAdd = () => {
       ...details,
     };
     console.log(updatedFormData);
-    axios.post(ADD_SITEPGS, updatedFormData).then((response) => {
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+    axios.post(ADD_SITEPGS, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       console.log(response);
       setUpdateMessage("Site Page data added successfully");
       setTimeout(() => {

@@ -19,13 +19,18 @@ const SitePagesUpdate = () => {
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 
   useEffect(() => {
     getEmployeeInfo();
   }, []);
 
   async function getEmployeeInfo() {
-    const response = await axios.get(GET_SITEPGS);
+    const response = await axios.get(GET_SITEPGS, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    });
     const data = response.data.data;
     setEmpData(data);
     searchData(data);
@@ -76,7 +81,11 @@ const SitePagesUpdate = () => {
       description: formData.description,
       sitemap: formData.sitemap,
     };
-    axios.put(PUT_SITEPGS + id, updatedFormData).then((response) => {
+    axios.put(PUT_SITEPGS + id, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       console.log(response);
       setUpdateMessage("Site Pages data updated successfully");
       setTimeout(() => {

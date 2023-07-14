@@ -305,29 +305,14 @@ const BlogUpdate = () => {
       tag: tagId,
       sections: sectionData,
     };
-    // axios.put(BLOG_EDIT+id, updatedFormData).then((response) => {
-    //   console.log(response);
-    // });
-    // fetch(BLOG_EDIT + id, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json", // Set the content type to JSON
-    //   },
-    //   body: JSON.stringify(updatedFormData), // Convert the data to JSON string
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
     console.log(JSON.stringify(updatedFormData));
     try {
+      const token = localStorage.getItem("jwtToken"); // Retrieve the JWT token from local storage
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON
+          "Authorization": `Bearer ${token}`, // Include the JWT token in the Authorization header
         },
         body: JSON.stringify(updatedFormData), // Convert the data to JSON string
       });

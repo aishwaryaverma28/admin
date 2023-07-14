@@ -37,12 +37,22 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const [updateMessage, setUpdateMessage] = useState("");
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 
   useEffect(() => {
-    axios.get(GET_TAG).then((response) => {
-      setTagApi(response);
-    });
+    axios.get(GET_TAG, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    })
+      .then((response) => {
+        setTagApi(response);
+      })
+      .catch((error) => {
+        console.error(error); // Handle the error as needed
+      });
   }, []);
+  
   // console.log(tagApi?.data?.data)
   const options = tagApi?.data?.data || [];
 
@@ -109,7 +119,11 @@ const BlogAdd = () => {
     formData.append("blog_img", selectedImage);
 
     try {
-      const response = await axios.post(IMAGE_UP, formData);
+      const response = await axios.post(IMAGE_UP, formData,{
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image uploaded successfully:", response.data);
       // Perform any additional actions on successful upload
       setShowUploadButton(false);
@@ -120,6 +134,7 @@ const BlogAdd = () => {
       // Handle error condition
     }
   };
+  
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -129,7 +144,11 @@ const BlogAdd = () => {
   const handleEdit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete(IMAGE_DEL + childData);
+      const response = await axios.delete(IMAGE_DEL + childData, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
       setSelectedImage(null);
@@ -235,8 +254,12 @@ const BlogAdd = () => {
       sections: sectionData,
       site: selectSite,
     };
-    // console.log(updatedFormData);
-    axios.post(BLOG_ADD, updatedFormData).then((response) => {
+     // console.log(updatedFormData);
+    axios.post(BLOG_ADD, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       console.log(response);
       setUpdateMessage("Blog data added successfully");
       setTimeout(() => {

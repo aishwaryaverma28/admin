@@ -9,9 +9,14 @@ const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 
   useEffect(() => {
-    axios.get(EMPLOYEE_GET).then((response) => {
+    axios.get(EMPLOYEE_GET, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       setTableData(response.data.data);
     });
   }, []);

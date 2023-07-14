@@ -49,44 +49,7 @@ const [details, setDetails] = useState({
       return {...prev, [name]: value};
     })
  }
-//  function handleSubmit(event) {
-//   event.preventDefault();
-//   const updatedFormData = {
-//     ...details,
-//     first_name:fname,
-//     last_name:lname,
-//   };
-//   // console.log(updatedFormData);
-//   axios.post(EMPLOYEE_ADD , updatedFormData)
-//         .then((response) => {
-//           console.log(response);
-//           setUpdateMessage("Employee data added successfully");
-//       setTimeout(() => {
-//         setUpdateMessage("");
-//       }, 30000); // Clear message after 1 minute (60000 milliseconds)
-//           setDetails({
-//             hire_date:"",
-//             emp_no: "",
-//             position:"",
-//             mobile:"",
-//             dob:"",
-//             gender:"",
-//             department:"",
-//             salary:"",
-//             personal_email:"",
-//             address1:"",
-//             address2:"",
-//             city:"",
-//             state:"",
-//             country:"",
-//             postcode:"",
-//             social1:"",
-//             social2:"",
-//             tax_id:"",
-//             aadhaar_no:""
-//           })
-//         })
-// }
+
 function handleSubmit(event) {
   event.preventDefault();
   const updatedFormData = {
