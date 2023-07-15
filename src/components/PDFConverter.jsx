@@ -1,12 +1,71 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import html2pdf from 'html2pdf.js';
 import ezukaLogo from '../assets/image/ezukaLogo.png';
+import axios from "axios";
+import {
+  PAYSLIP
+} from "./utils/Constants";
 
-const PDFConverter = ({item, position, department, joining,name,emp_no,place,bank}) => {
-  const amount = Number(item.salary); 
-const formattedAmount = amount.toLocaleString("en-IN");
+
+const PDFConverter = ({id}) => {
+  const [empdata, setEmpData] = useState(null);
+  const [payData, setPayData] = useState(null);
+  const [data,setData] = useState({
+    name:"",
+    month:"",
+    year:"",
+    hire_date:"",
+    emp_no:"",
+    country:"",
+    department:"",
+    working_days:"",
+    bank_details:"",
+    position:"",
+    salary:"",
+    tax:"",
+  })
+  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(PAYSLIP + id, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        }
+      });
+      setEmpData(response.data.data.employee);
+      setPayData(response.data.data.payroll);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (empdata && payData) {
+      setData({
+        name: empdata.first_name + " " + empdata.last_name,
+        month: payData.month,
+        year: payData.year,
+        hire_date: empdata.hire_date.split("T")[0],
+        emp_no: empdata.emp_no,
+        country: empdata.country,
+        department: empdata.department,
+        working_days: payData.working_days,
+        bank_details: empdata.bank_details,
+        position: empdata.position,
+        salary: payData.salary,
+        tax: payData.tax,
+      });
+    }
+  }, [empdata, payData]);
+
   const handleDownload = () => {    
-    const pdfName = `SalarySlip-${name} ${item.month},${item.year}.pdf`;
+    // console.log(typeof(data.salary));
+    const formattedSalary = parseFloat(data.salary).toLocaleString("en-IN");
+     const pdfName = `SalarySlip-${data.name} ${data.month},${data.year}.pdf`;
     // Get the HTML content as a string
     const htmlContent = `
     <!DOCTYPE html>
@@ -29,35 +88,35 @@ const formattedAmount = amount.toLocaleString("en-IN");
     </tr>
     <tr>
       <th style="border: 1px solid black;">Employee Name</th>
-      <td style="border: 1px solid black;">${name}</td>
+      <td style="border: 1px solid black;">${data.name}</td>
       <th style="border: 1px solid black;border-bottom: none;"></th>
       <th style="border: 1px solid black;">Date Of Joining</th>
-      <td style="border: 1px solid black;">${joining}</td>
+      <td style="border: 1px solid black;">${data.hire_date}</td>
     </tr>
     <tr>
       <th style="border: 1px solid black;">Employee Code</th>
-      <td style="border: 1px solid black;">${emp_no}</td>
+      <td style="border: 1px solid black;">${data.emp_no}</td>
       <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
       <th style="border: 1px solid black;">Place of Posting</th>
-      <td style="border: 1px solid black;">${place}</td>
+      <td style="border: 1px solid black;">${data.country}</td>
     </tr>
     <tr>
       <th style="border: 1px solid black;">Department</th>
-      <td style="border: 1px solid black;">${department}</td>
+      <td style="border: 1px solid black;">${data.department}</td>
       <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
       <th style="border: 1px solid black;">Working Days</th>
-      <td style="border: 1px solid black;">${item.working_days}</td>
+      <td style="border: 1px solid black;">${data.working_days}</td>
     </tr>
     <tr>
       <th style="border: 1px solid black;">Month</th>
-      <td style="border: 1px solid black;">${item.month+","+item.year}</td>
+      <td style="border: 1px solid black;">${data.month}</td>
       <th style="border: 1px solid black;border-bottom: none; border-top: none;"></th>
       <th style="border: 1px solid black;">Bank / Account Number</th>
-      <td style="border: 1px solid black;">${bank}</td>
+      <td style="border: 1px solid black;">${data.bank_details}</td>
     </tr>
     <tr>
       <th style="border: 1px solid black;">Position</th>
-      <td style="border: 1px solid black;">${position}</td>
+      <td style="border: 1px solid black;">${data.position}</td>
       <th style="border: 1px solid black; border-top: none;"></th>
       <th style="border: 1px solid black;">Sort Code</th>
       <td style="border: 1px solid black;">202464</td>
@@ -78,10 +137,10 @@ const formattedAmount = amount.toLocaleString("en-IN");
     </tr>
     <tr>
       <th style="border: 1px solid black;"><b>Basic Salary</b></th>
-      <td style="border: 1px solid black;">${formattedAmount}</td>
-      <td style="border: 1px solid black;">${formattedAmount}</td>
+      <td style="border: 1px solid black;">${formattedSalary}</td>
+      <td style="border: 1px solid black;">${formattedSalary}</td>
       <th style="border: 1px solid black;">Tax</th>
-      <td style="border: 1px solid black;">${item.tax}</td>
+      <td style="border: 1px solid black;">${data.tax}</td>
     </tr>
     <tr>
       <td colspan="3" style="border: 1px solid black;"></td>
@@ -102,15 +161,15 @@ const formattedAmount = amount.toLocaleString("en-IN");
     </tr>
     <tr>
       <th style="border: 1px solid black;">Total</th>
-      <td style="border: 1px solid black;">${formattedAmount}</td>
-      <td style="border: 1px solid black;">${formattedAmount}</td>
+      <td style="border: 1px solid black;">${formattedSalary}</td>
+      <td style="border: 1px solid black;">${formattedSalary}</td>
       <th style="border: 1px solid black;">Total Deductions</th>
       <td style="border: 1px solid black;">0</td>
     </tr>
     <tr>
       <td colspan="3" style="border: 1px solid black;"></td>
       <th style="border: 1px solid black;">Net Salary</th>
-      <td style="border: 1px solid black;">${formattedAmount}</td>
+      <td style="border: 1px solid black;">${formattedSalary}</td>
     </tr>
     <tr>
       <td colspan="5" style="border: 1px solid black;">

@@ -22,7 +22,8 @@ export const VIEW_IMG = start+"employee/doc/";
 export const GET_SITEPGS = start+"api/site/getAll";
 export const PUT_SITEPGS = start+"api/site/edit/";
 export const ADD_SITEPGS = start+"api/site/add";
-export const SALARY_SLIP = start+"api/employee/getpayslip/1";
+export const PAYSLIPS = start+"api/employee/getpayslips";
+export const PAYSLIP = start+"api/employee/getpayslip/";
 
 //===================================================================leadplaner
 export const GET_LEAD = start+"api/lead/getall";
