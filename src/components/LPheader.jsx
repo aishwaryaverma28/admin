@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
@@ -9,7 +9,31 @@ const LPheader = () => {
   const [pageTitle, setPageTitle] = useState("Lead");
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (option) => {
+    console.log('Selected option:', option);
+    setIsOpen(false);
+  };
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -20,7 +44,13 @@ const LPheader = () => {
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
-
+  const handleLogout = () => {
+    // Clear JWT token from local storage
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("landingUrl");
+    // Redirect to the home page or any other desired path
+    navigate("/");
+  };
   return (
     <>
       <div className="nav">
@@ -71,7 +101,8 @@ const LPheader = () => {
             </li>
           </ul>
         </div>
-        <div className="userImg">
+        <div className="userDropdownContainer" ref={dropdownRef}>
+        <div className="userImg" onClick={toggleDropdown}>
           <img className="borderLeft" src={line} alt="border-left" />
           <img src={user} alt="user" />
           <p>
@@ -79,6 +110,36 @@ const LPheader = () => {
             <br />
             <span>CEO, Admin</span>
           </p>
+        </div>
+        {isOpen && (
+        <div className="logoutDropdown">
+          <div className="logUserInfo">
+            <img src={user} alt="user" />
+            <div className="crmUserInfo">
+              <h5 className="crmUserInfoName">John Wick</h5>
+              <p>vaneetgupta@gmail.com</p>
+              <p>CEO, Admin</p>
+            </div>
+          </div>
+          <div className="profileNPref">
+            Profile & Preferences
+          </div>
+          <div className="userId">
+            User Id: 123456789 <i className="far fa-question-circle"></i>
+          </div>
+          <div className="userId">
+            <p>Invite & earn rewards</p>
+            <p>Account & Billing </p>
+            <p>Price & Features</p>
+            <p>Training & Services</p>
+            <p>About this application</p>
+          </div>
+          <div className="signOutDiv">
+            <p onClick={handleLogout}>Sign Out</p>
+            <p>Privacy policy</p>
+          </div>
+        </div>
+        )}
         </div>
       </div>
       {/* Top Navigation End  */}
