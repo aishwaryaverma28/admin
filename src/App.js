@@ -31,13 +31,17 @@ import Deals from "./components/Deals";
 import Mail from './components/Mail';
 import LPSetting from './components/LPSetting';
 import Login from './components/Login';
-
+import Registration from './components/Registration';
 
 const router = createBrowserRouter(
   [
     {
       path:"/",
       element:<Login/>
+    },
+    {
+path:"/registration",
+element:<Registration/>
     },
     {
       path:"/lp",

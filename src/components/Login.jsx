@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
-
+import "./styles/Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

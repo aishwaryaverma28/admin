@@ -20,7 +20,7 @@ const SalarySlip = () => {
     const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
   
     try {
-      const response = await axios.get("http://core.leadplaner.com:3001/api/employee/getpayslips", {
+      const response = await axios.get(PAYSLIPS, {
         headers: {
           Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
         }
