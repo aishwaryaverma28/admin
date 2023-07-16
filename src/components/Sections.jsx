@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,decryptedToken,handleApiError } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -22,7 +22,6 @@ const [showUploadButton, setShowUploadButton] = useState(false);
 const [showEditButton, setShowEditButton] = useState(false);
 const [showChooseButton, setShowChooseButton] = useState(false);
 // ========================================================================section image added/deleted
-const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 const handleImageSelect = (event) => {
   setSelectedImage(event.target.files[0]);
   setShowUploadButton(true);
@@ -42,7 +41,7 @@ const imageUpload = async (event) => {
   try {
     const response = await axios.post(IMAGE_UP, formData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     });
     console.log("Image uploaded successfully:", response.data);
@@ -66,7 +65,7 @@ const handleEdit = async (event) => {
   try {
     const response = await axios.delete( IMAGE_DEL+childData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     } );
     console.log("Image deleted successfully:", response);

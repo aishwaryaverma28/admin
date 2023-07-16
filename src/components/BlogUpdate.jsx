@@ -8,6 +8,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   GET_TAG,
+  decryptedToken,handleApiError
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -55,11 +56,19 @@ const BlogUpdate = () => {
   }, []);
 
   async function getBlogInfo() {
-    const response = await axios.get(BLOG_GET);
+    const response = await axios.get(BLOG_GET, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    });
     const data = response.data.data;
     setBlogData(data);
     searchData(data);
-    const secResponse = await axios.get(SEC_GET + id);
+    const secResponse = await axios.get(SEC_GET + id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    });
     const secData = secResponse.data.data;
     setSectionData(secData);
     tagData();
@@ -87,7 +96,11 @@ const BlogUpdate = () => {
 
   //==========================================================================tag part
   useEffect(() => {
-    axios.get(GET_TAG).then((response) => {
+    axios.get(GET_TAG, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
       setTagApi(response);
       tagData(); // Call tagData() after receiving the tag data
     });
@@ -158,7 +171,11 @@ const BlogUpdate = () => {
     formData.append("blog_img", selectedImage);
 
     try {
-      const response = await axios.post(IMAGE_UP, formData);
+      const response = await axios.post(IMAGE_UP, formData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image uploaded successfully:", response.data);
       // Perform any additional actions on successful upload
       setShowUploadButton(false);
@@ -178,7 +195,11 @@ const BlogUpdate = () => {
   const handleEdit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete(IMAGE_DEL + childData);
+      const response = await axios.delete(IMAGE_DEL + childData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        }
+      });
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
       setSelectedImage(null);
@@ -307,21 +328,20 @@ const BlogUpdate = () => {
     };
     console.log(JSON.stringify(updatedFormData));
     try {
-      const token = localStorage.getItem("jwtToken"); // Retrieve the JWT token from local storage
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON
-          "Authorization": `Bearer ${token}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         },
         body: JSON.stringify(updatedFormData), // Convert the data to JSON string
       });
 
       const data = await response.json();
       console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
+    }catch(error){
+      handleApiError(error);
+    };
   }
 
   return (

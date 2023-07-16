@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_SITEPGS, PUT_SITEPGS } from "./utils/Constants";
+import { GET_SITEPGS, PUT_SITEPGS,decryptedToken,handleApiError } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 
 const SitePagesUpdate = () => {
@@ -19,8 +19,6 @@ const SitePagesUpdate = () => {
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -28,7 +26,7 @@ const SitePagesUpdate = () => {
   async function getEmployeeInfo() {
     const response = await axios.get(GET_SITEPGS, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     });
     const data = response.data.data;
@@ -83,7 +81,7 @@ const SitePagesUpdate = () => {
     };
     axios.put(PUT_SITEPGS + id, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);

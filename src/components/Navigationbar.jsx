@@ -6,14 +6,14 @@ import userIcon from "../assets/image/user-img.png";
 import Sidebar from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID, VIEW_IMG } from "./utils/Constants";
+import { EMPLOYEE_GETID, VIEW_IMG,decryptedToken,handleApiError } from "./utils/Constants";
 
 const NavigationBar = () => {
   const { profileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState(null);
   const [pic, setPic] = useState("");
   const navigate = useNavigate();
-  const token = localStorage.getItem("jwtToken"); // Retrieve JWT token from local storage
+  
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -22,15 +22,15 @@ const NavigationBar = () => {
     try {
       const response = await axios.get(EMPLOYEE_GETID, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         },
       });
       const data = response.data.data;
       setEmpData(data[0]);
       setPic(VIEW_IMG + data[0].profile_image);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch(error){
+      handleApiError(error);
+    };
   }
   const handleLogout = () => {
     // Clear JWT token from local storage

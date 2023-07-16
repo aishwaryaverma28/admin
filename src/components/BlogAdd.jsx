@@ -6,6 +6,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   IMG_BASE,
+  decryptedToken,handleApiError
 } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ImageUploader from "./ImageUploader";
@@ -37,19 +38,18 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const [updateMessage, setUpdateMessage] = useState("");
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-
+  
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     })
       .then((response) => {
         setTagApi(response);
       })
       .catch((error) => {
-        console.error(error); // Handle the error as needed
+        handleApiError(error);
       });
   }, []);
   
@@ -121,7 +121,7 @@ const BlogAdd = () => {
     try {
       const response = await axios.post(IMAGE_UP, formData,{
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       console.log("Image uploaded successfully:", response.data);
@@ -146,7 +146,7 @@ const BlogAdd = () => {
     try {
       const response = await axios.delete(IMAGE_DEL + childData, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       console.log("Image deleted successfully:", response);
@@ -156,10 +156,9 @@ const BlogAdd = () => {
       setShowEditButton(false);
       setShowChooseButton(true);
       setChildData(response.data.data);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // Handle error condition
-    }
+    } catch(error){
+      handleApiError(error);
+    };
   };
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
@@ -257,7 +256,7 @@ const BlogAdd = () => {
      // console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);
@@ -265,6 +264,9 @@ const BlogAdd = () => {
       setTimeout(() => {
         setUpdateMessage("");
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
+    })
+    .catch((error) => {
+      handleApiError(error);
     });
   }
 

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
-import {EMPLOYEE_ADD } from './utils/Constants'
+import {EMPLOYEE_ADD,decryptedToken,handleApiError } from './utils/Constants'
 
 const EmployeeAdd = () => {
 const [name,setName] = useState("");
@@ -57,13 +57,10 @@ function handleSubmit(event) {
     first_name: fname,
     last_name: lname,
   };
-
-  const token = localStorage.getItem("jwtToken"); // Retrieve the token from local storage
-
   axios
     .post(EMPLOYEE_ADD, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}`, // Include the token in the request headers
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       },
     })
     .then((response) => {
@@ -95,7 +92,7 @@ function handleSubmit(event) {
       });
     })
     .catch((error) => {
-      console.log(error.response);
+      handleApiError(error);
     });
 }
 

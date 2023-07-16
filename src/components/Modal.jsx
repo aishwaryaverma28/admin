@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
-import {UPDATE_LEAD} from "./utils/Constants";
+import {UPDATE_LEAD,decryptedToken,handleApiError} from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 
@@ -40,15 +40,13 @@ const Modal = ({ selectedItem, closeModal }) => {
   };
   const handleUpdateClick = (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
     axios
       .put(
         UPDATE_LEAD + editedItem.id,
         editedItem,
         {
           headers: {
-            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
           }
         }
       )
@@ -60,7 +58,7 @@ const Modal = ({ selectedItem, closeModal }) => {
         }, 30000); // Clear message after 1 minute (60000 milliseconds)
       })
       .catch((error) => {
-        console.error(error); // Handle the error as needed
+        handleApiError(error);
       });
   
     console.log("Update clicked");

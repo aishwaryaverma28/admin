@@ -4,7 +4,8 @@ import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead"
-import {GET_LEAD,IMPORT_CSV} from "./utils/Constants"
+import {GET_LEAD,IMPORT_CSV,decryptedToken,handleApiError} from "./utils/Constants"
+import { AES, enc } from "crypto-js";
 
 const useDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -45,12 +46,11 @@ const LPleads = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
   
   const fetchLeadsData = () => {
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
+    
     axios
       .get(GET_LEAD, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       })
       .then((response) => {
@@ -59,7 +59,7 @@ const LPleads = () => {
         setKeys(dataArray.map(([key, value]) => key));
       })
       .catch((error) => {
-        console.error(error);
+        handleApiError(error);
       });
   };
   
@@ -100,22 +100,20 @@ const LPleads = () => {
     const file = event.target.files[0];
   
     if (file) {
-      const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("userId", "121"); // Replace "yourUserId" with the actual user ID
+      formData.append("userId", "125"); // Replace "yourUserId" with the actual user ID
   
       try {
         await axios.post(IMPORT_CSV, formData, {
           headers: {
-            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
           }
         });
-        console.log("File uploaded successfully");
+        alert("File uploaded successfully");
         // Handle the success case as needed
       } catch (error) {
-        console.error("File upload failed", error);
+        alert("File upload failed", error);
         // Handle the error case as needed
       }
     }

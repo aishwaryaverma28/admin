@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  PAYSLIPS
+  PAYSLIPS,decryptedToken,handleApiError
 } from "./utils/Constants";
 import ViewProfile from "./ViewProfile";
 import "./styles/EmployeeProfile.css";
@@ -17,12 +17,10 @@ const SalarySlip = () => {
   }, []);
 
   async function getEmployeeInfo() {
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
     try {
       const response = await axios.get(PAYSLIPS, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       const data = response.data.data;

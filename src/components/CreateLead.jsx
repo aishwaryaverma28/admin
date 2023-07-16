@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles/CreateLead.css";
 import axios from "axios";
-import { ADD_LEAD } from "./utils/Constants";
+import { ADD_LEAD,decryptedToken,handleApiError } from "./utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "./utils/CodeCurrency";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
@@ -55,12 +55,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
       status: status,
     };
   
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
     axios
       .post(ADD_LEAD, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       })
       .then((response) => {
@@ -84,7 +82,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
-        console.error(error); // Handle the error as needed
+        handleApiError(error);
       });
   };
   

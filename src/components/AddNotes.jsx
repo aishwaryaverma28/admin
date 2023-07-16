@@ -3,7 +3,7 @@ import "./styles/LPleads.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
-import {ADD_NOTES} from "./utils/Constants";
+import {ADD_NOTES,decryptedToken,handleApiError} from "./utils/Constants";
 
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
@@ -25,29 +25,26 @@ const AddNotes = ({ item }) => {
     };
     setNotes([...notes, newNote]);
     setDataFromChild("");
-  
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-  
     const updatedFormData = {
       source_id: item.id,
-      type: "lead",
+      source_type: "lead",
       description: newNote.content,
+      importance:1,
+      created_by:"aishwarya"
     };
-  
-    // source_id, description, created_by, source_type, importance 
+  // source_id, description, created_by, source_type, importance 
     console.log(updatedFormData);
     axios.post(ADD_NOTES, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     })
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
-        console.error(error); // Handle the error as needed
-      });
-  
+        handleApiError(error);
+      });  
     setOpenEditor(false);
   };
   

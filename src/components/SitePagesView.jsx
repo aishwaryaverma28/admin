@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Editor.css'
 import axios from 'axios';
-import { GET_SITEPGS } from './utils/Constants';
+import { GET_SITEPGS,decryptedToken } from './utils/Constants';
 import TableWithSitePages from './TableWithSitePages';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ const SitePagesView = () => {
     const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
     axios.get(GET_SITEPGS, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       setTableData(response.data.data);

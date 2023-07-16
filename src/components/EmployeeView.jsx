@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Editor.css';
 import axios from 'axios';
-import { EMPLOYEE_GET } from './utils/Constants';
+import { EMPLOYEE_GET,decryptedToken } from './utils/Constants';
 import TableWithPagination from './TableWithPagination';
 import { Link } from 'react-router-dom';
 
@@ -9,12 +9,11 @@ const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-
+  
   useEffect(() => {
     axios.get(EMPLOYEE_GET, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       setTableData(response.data.data);

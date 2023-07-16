@@ -4,7 +4,7 @@ import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG } from "./utils/Constants";
+import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,decryptedToken,handleApiError } from "./utils/Constants";
 
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
@@ -15,7 +15,6 @@ const EmployeeProfile = () => {
 const [pic, setPic] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [documentUrl, setDocumentUrl] = useState("");
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
   const [formData, setFormData] = useState({
    profile:"",
   })
@@ -34,7 +33,7 @@ const [pic, setPic] = useState("");
   async function getEmployeeInfo() {
     const response = await axios.get(EMPLOYEE_GETID,{
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     });
     const data = response.data.data;
@@ -72,7 +71,7 @@ const [pic, setPic] = useState("");
           REMOVE_DOC +
             documentUrl,{
               headers: {
-                Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
               }
             }
         );
@@ -86,7 +85,7 @@ const [pic, setPic] = useState("");
         UPLOAD_DOC,
         formData,{
           headers: {
-            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
           }
         }
       );
@@ -109,7 +108,7 @@ const [pic, setPic] = useState("");
     }
     axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL,IMG_BASE } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,IMG_BASE,decryptedToken,handleApiError } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 function ImageEditor({ parentProp, onDataTransfer }) {
   const fileInputRef = useRef(null);
@@ -18,7 +18,7 @@ function ImageEditor({ parentProp, onDataTransfer }) {
     try {
       const response = await axios.delete(IMAGE_DEL + childData, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       console.log("Image deleted successfully:", response);
@@ -55,7 +55,7 @@ function ImageEditor({ parentProp, onDataTransfer }) {
     try {
       const response = await axios.post(IMAGE_UP, formData, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       console.log("Image uploaded successfully:", response.data);

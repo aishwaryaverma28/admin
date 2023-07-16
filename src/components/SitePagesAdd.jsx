@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_SITEPGS } from "./utils/Constants";
+import { ADD_SITEPGS,decryptedToken,handleApiError } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 
 const SitePagesAdd = () => {
@@ -25,10 +25,10 @@ const SitePagesAdd = () => {
       ...details,
     };
     console.log(updatedFormData);
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+    
     axios.post(ADD_SITEPGS, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);

@@ -1,3 +1,29 @@
+import { AES, enc } from "crypto-js";
+import { useNavigate } from "react-router-dom";
+//================================================================decrpt token
+const secretKey = 'miyamura'; // Set your secret key here
+const encryptedToken = localStorage.getItem("jwtToken"); // Retrieve encrypted token from localStorage
+export const decryptedToken = AES.decrypt(encryptedToken, secretKey).toString(enc.Utf8); // Decrypt the token
+//=============================================================session time error handle
+export const handleApiError = (error) => {
+    const navigate = useNavigate;
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message === "Invalid or expired token."
+    ) {
+      // Display an alert to the user
+      alert("Your session has expired. Please login again.");
+      // Clear JWT token from localStorage
+      localStorage.removeItem("jwtToken");
+  
+      // Redirect to the login page
+      navigate("/");
+    } else {
+      console.log(error);
+    }
+  };
+// =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
 //===============================================================login apis
 export const LOGIN = start+"api/user/login";

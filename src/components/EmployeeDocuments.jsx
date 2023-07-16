@@ -9,9 +9,9 @@ import {
   EMPLOYEE_UPDATE,
   REMOVE_DOC,
   UPLOAD_DOC,
-  VIEW_IMG
+  VIEW_IMG,decryptedToken,handleApiError
 } from "./utils/Constants";
-const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
@@ -33,27 +33,26 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
       try {
         await axios.delete(REMOVE_DOC + imageUrl,{
           headers: {
-            Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
           }
         });
-      } catch (error) {
-        console.error("Error deleting previous image:", error);
-      }
+      } catch(error) {
+        handleApiError(error);
+      };
     }
 
     try {
       const response = await axios.post(UPLOAD_DOC, formData,{
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       console.log("Image uploaded successfully:", response.data);
       setImageUrl(response.data.data);
       // Perform any additional actions on successful upload
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // Handle error condition
-    }
+    } catch(error) {
+      handleApiError(error);
+    };
   };
 
   const handleViewDocument = () => {
@@ -132,16 +131,16 @@ function EmployeeDocuments() {
     try {
       const response = await axios.get(EMPLOYEE_GETID,{
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       const data = response.data.data;
       setEmpData(data[0]);
       setInitialEmpData(data[0]);
       setData(data[0]);
-    } catch (error) {
-      console.error("Error retrieving employee info:", error);
-    }
+    } catch(error){
+      handleApiError(error);
+    };
   }
 
   function setData(data) {
@@ -162,7 +161,7 @@ function EmployeeDocuments() {
     };
     axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);
@@ -172,8 +171,7 @@ function EmployeeDocuments() {
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
     })
     .catch((error) => {
-      console.error(error);
-      setUploadMessage("Error uploading documents");
+      handleApiError(error);
     });
   }
 

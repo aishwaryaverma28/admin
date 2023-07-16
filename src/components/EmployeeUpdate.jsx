@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GET, EMPLOYEE_UPDATE } from "./utils/Constants";
+import { EMPLOYEE_GET, EMPLOYEE_UPDATE,decryptedToken } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 
 const EmployeeUpdate = () => {
@@ -31,8 +31,7 @@ const EmployeeUpdate = () => {
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-
+  
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -40,7 +39,7 @@ const EmployeeUpdate = () => {
   async function getEmployeeInfo() {
     const response = await axios.get(EMPLOYEE_GET, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     });
     const data = response.data.data;
@@ -134,7 +133,7 @@ const EmployeeUpdate = () => {
     };
     axios.put(EMPLOYEE_UPDATE + id, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       console.log(response);

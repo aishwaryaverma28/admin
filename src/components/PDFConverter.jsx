@@ -4,6 +4,7 @@ import ezukaLogo from '../assets/image/ezukaLogo.png';
 import axios from "axios";
 import {
   PAYSLIP
+  ,decryptedToken,handleApiError
 } from "./utils/Constants";
 
 
@@ -24,12 +25,11 @@ const PDFConverter = ({id}) => {
     salary:"",
     tax:"",
   })
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
   const fetchData = async () => {
     try {
       const response = await axios.get(PAYSLIP + id, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         }
       });
       setEmpData(response.data.data.employee);
@@ -63,7 +63,7 @@ const PDFConverter = ({id}) => {
   }, [empdata, payData]);
 
   const handleDownload = () => {    
-    // console.log(typeof(data.salary));
+    console.log(decryptedToken);
     const formattedSalary = parseFloat(data.salary).toLocaleString("en-IN");
      const pdfName = `SalarySlip-${data.name} ${data.month},${data.year}.pdf`;
     // Get the HTML content as a string
