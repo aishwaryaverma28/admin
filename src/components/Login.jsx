@@ -14,8 +14,12 @@ import { LOGIN } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 import { AES } from "crypto-js"; // Import AES from crypto-js
 import "./styles/Login.css";
+import LoginHeader from "./LoginHeader";
+import LoginFooter from "./LoginFooter";
+import CRMImage from "../assets/image/crm.svg";
+import CryptoJS from "crypto-js";
 
-const secretKey = 'miyamura'; // Set your secret key here
+const secretKey = "miyamura"; // Set your secret key here
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -53,18 +57,27 @@ const Login = () => {
         const data = response.data;
         const status = response.data.status;
         console.log(data);
-        if(status === 0){
-          alert(data.message)
-        }
-        else if (status === 1){
+        if (status === 0) {
+          alert(data.message);
+        } else if (status === 1) {
           // alert(data.message)
-        const token = response.data.token; // Assuming the token is in the response data
-        // Encrypt the token
-        const encryptedToken = AES.encrypt(token, secretKey).toString();
-        localStorage.setItem("jwtToken", encryptedToken); // Store the encrypted token in localStorage
-        const landingUrl = response.data.landingurl;
-        localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
-        navigate(landingUrl);
+          const token = response.data.token; // Assuming the token is in the response data
+          // Encrypt the token
+          console.log(token);
+          const encryptedToken = CryptoJS.AES.encrypt(
+            token,
+            secretKey
+          ).toString();
+          console.log(encryptedToken);
+          localStorage.setItem("jwtToken", encryptedToken); // Store the encrypted token in localStorage
+          //code for decrypt token
+          // const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
+          // const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
+          // console.log(decryptedToken)
+
+          const landingUrl = response.data.landingurl;
+          localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
+          navigate(landingUrl);
         }
       })
       .catch((error) => {
@@ -91,14 +104,95 @@ const Login = () => {
     const encryptedToken = localStorage.getItem("jwtToken");
     return encryptedToken ? null : (
       <>
-        <div>Login</div>
-        <form onSubmit={handleSubmit}>
-          <label>Email</label>
-          <input type="text" value={email} onChange={handleUserName} />
-          <label>Password</label>
-          <input type="password" value={password} onChange={handlePassword} />
-          <input type="submit" value="Login" />
-        </form>
+        <LoginHeader />
+
+        <main className="main-registration">
+          <div className="free-trial-section">
+            <h2 className="free-trial-heading">Start Your Free Trial</h2>
+            <h3 className="no-credit">
+              No credit card required, no software to install.
+            </h3>
+            <p className="day-trial">With your 30-day trial, you get:</p>
+            <div className="data-load">
+              <ul>
+                <li>Pre-loaded data or upload your own</li>
+                <li>Pre-configured processes, reports, and dashboards</li>
+                <li>
+                  Guided experiences for sales reps, leaders, and administrators
+                </li>
+                <li>Online training and live onboarding webinars</li>
+              </ul>
+            </div>
+
+            <p className="looking-support">
+              Looking for support? Visit the{" "}
+              <span> LeadPlaner Support Center</span> or email
+            </p>
+            <p className="help-email">help@leadplaner.com</p>
+
+            <img src={CRMImage} alt="" />
+          </div>
+
+          <div className="login-form-section">
+            <h2 className="login-form-heading">
+              Login To <span>Lead</span>Planer
+            </h2>
+
+            <form onSubmit={handleSubmit}>
+              {/* <div className="login-page-fields">
+                      <label for="" className="login-labels">login As</label>
+                      <select className="login-form-input">
+                          <option value="">Job Title*</option>
+                      </select>
+  
+                  </div> */}
+
+              <div className="login-page-fields">
+                <label for="" className="login-labels">
+                  Work Email *
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={handleUserName}
+                  className="login-form-input"
+                  placeholder="Enter Email Address"
+                  id=""
+                />
+              </div>
+
+              <div className="login-page-fields">
+                <label for="" className="login-labels">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={handlePassword}
+                  className="login-form-input"
+                  placeholder="Enter Password"
+                />
+              </div>
+
+              <div>
+                <p className="login-forget-password">forget Password?</p>
+              </div>
+
+              <div className="login-checkbox">
+                <input type="checkbox" />
+                <label for="">Remember me?</label>
+              </div>
+
+              <input
+                type="submit"
+                value="Login"
+                className="login-continue-btn"
+              />
+            </form>
+          </div>
+        </main>
+
+        <LoginFooter />
       </>
     );
   };

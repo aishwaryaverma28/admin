@@ -6,7 +6,7 @@ import userIcon from "../assets/image/user-img.png";
 import Sidebar from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID, VIEW_IMG,decryptedToken,handleApiError } from "./utils/Constants";
+import { EMPLOYEE_GETID, VIEW_IMG,handleApiError,decryptedToken } from "./utils/Constants";
 
 const NavigationBar = () => {
   const { profileImage } = useContext(UserContext);
@@ -29,7 +29,7 @@ const NavigationBar = () => {
       setEmpData(data[0]);
       setPic(VIEW_IMG + data[0].profile_image);
     } catch(error){
-      handleApiError(error);
+      handleApiError(error,navigate);
     };
   }
   const handleLogout = () => {

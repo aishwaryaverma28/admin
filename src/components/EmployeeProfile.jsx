@@ -4,7 +4,7 @@ import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,decryptedToken,handleApiError } from "./utils/Constants";
+import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,decryptedToken } from "./utils/Constants";
 
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
@@ -20,8 +20,7 @@ const [pic, setPic] = useState("");
   })
   const fileInputRef = useRef(null);
     const [initialEmpData, setInitialEmpData] = useState({});
-
-  useEffect(() => {
+    useEffect(() => {
     getEmployeeInfo();
     setCurrentYear(new Date().getFullYear());
   }, []);

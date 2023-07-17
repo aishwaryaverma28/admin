@@ -3,14 +3,15 @@ import "./styles/LPleads.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
-import {ADD_NOTES,decryptedToken,handleApiError} from "./utils/Constants";
+import { useNavigate } from "react-router-dom";
+import {ADD_NOTES,handleApiError,decryptedToken} from "./utils/Constants";
 
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [notes, setNotes] = useState([]);
   const [openEditor, setOpenEditor] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
-
+  const navigate = useNavigate();
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
@@ -43,7 +44,7 @@ const AddNotes = ({ item }) => {
         console.log(response);
       })
       .catch((error) => {
-        handleApiError(error);
+        handleApiError(error,navigate);
       });  
     setOpenEditor(false);
   };

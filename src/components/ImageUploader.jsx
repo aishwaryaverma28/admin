@@ -10,7 +10,6 @@ function ImageUploader({ onDataTransfer }) {
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const [hover, setHover] = useState(false);
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
 
   const handleImageSelect = (event) => {
     setSelectedImage(event.target.files[0]);

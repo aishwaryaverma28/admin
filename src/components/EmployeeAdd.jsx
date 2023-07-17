@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
-import {EMPLOYEE_ADD,decryptedToken,handleApiError } from './utils/Constants'
+import {EMPLOYEE_ADD,handleApiError,decryptedToken } from './utils/Constants'
+import { useNavigate } from "react-router-dom";
 
 const EmployeeAdd = () => {
 const [name,setName] = useState("");
+const navigate = useNavigate();
 const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
 const [updateMessage, setUpdateMessage] = useState("");
@@ -29,8 +31,6 @@ const [details, setDetails] = useState({
   tax_id:"",
   aadhaar_no:"",
 })
-
-
   function handleNameChange(event) {
     const empName = event.target.value;
     setName(empName);
@@ -92,7 +92,7 @@ function handleSubmit(event) {
       });
     })
     .catch((error) => {
-      handleApiError(error);
+      handleApiError(error,navigate);
     });
 }
 

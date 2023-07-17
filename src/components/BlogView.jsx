@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Editor.css';
 import axios from 'axios';
-import { BLOG_GET,decryptedToken,handleApiError } from './utils/Constants';
+import { BLOG_GET,handleApiError,decryptedToken } from './utils/Constants';
 import { Link } from 'react-router-dom';
 import TablePaginationBlog from './TablePaginationBlog';
+import { useNavigate } from "react-router-dom";
 
 const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  
   useEffect(() => {
     axios.get(BLOG_GET, {
       headers: {
@@ -19,7 +22,7 @@ const EmployeeView = () => {
       setTableData(response.data.data);
     })
     .catch((error) => {
-      handleApiError(error);
+      handleApiError(error,navigate);
     });
   }, []);
   

@@ -5,15 +5,13 @@ import { GET_SITEPGS,decryptedToken } from './utils/Constants';
 import TableWithSitePages from './TableWithSitePages';
 import { Link } from 'react-router-dom';
 
-
 const SitePagesView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-    axios.get(GET_SITEPGS, {
+     axios.get(GET_SITEPGS, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }

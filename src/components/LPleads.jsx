@@ -3,9 +3,9 @@ import "./styles/LPleads.css";
 import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
-import CreateLead from "./CreateLead"
-import {GET_LEAD,IMPORT_CSV,decryptedToken,handleApiError} from "./utils/Constants"
-import { AES, enc } from "crypto-js";
+import CreateLead from "./CreateLead";
+import {GET_LEAD,IMPORT_CSV,handleApiError,decryptedToken} from "./utils/Constants"
+import { useNavigate } from "react-router-dom";
 
 const useDropdown = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -44,9 +44,9 @@ const LPleads = () => {
   const fileInputRef = useRef(null);
   const [totalValue,setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
-  
+  const navigate = useNavigate();
+   
   const fetchLeadsData = () => {
-    
     axios
       .get(GET_LEAD, {
         headers: {
@@ -59,7 +59,7 @@ const LPleads = () => {
         setKeys(dataArray.map(([key, value]) => key));
       })
       .catch((error) => {
-        handleApiError(error);
+        handleApiError(error,navigate);
       });
   };
   

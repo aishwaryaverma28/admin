@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL,IMG_BASE,decryptedToken,handleApiError } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,IMG_BASE,decryptedToken } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 function ImageEditor({ parentProp, onDataTransfer }) {
   const fileInputRef = useRef(null);
@@ -10,8 +10,6 @@ function ImageEditor({ parentProp, onDataTransfer }) {
   const [showEditButton, setShowEditButton] = useState(true);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const [hover, setHover] = useState(false);
-  const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-
   // console.log(childData)
   const handleEdit = async (event) => {
     event.preventDefault();

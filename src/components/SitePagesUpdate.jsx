@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_SITEPGS, PUT_SITEPGS,decryptedToken,handleApiError } from "./utils/Constants";
+import { GET_SITEPGS, PUT_SITEPGS,decryptedToken} from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 
 const SitePagesUpdate = () => {

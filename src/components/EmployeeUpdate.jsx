@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { EMPLOYEE_GET, EMPLOYEE_UPDATE,decryptedToken } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
-
 const EmployeeUpdate = () => {
   const { id } = useParams();
   const [empData, setEmpData] = useState([]);
@@ -31,7 +30,7 @@ const EmployeeUpdate = () => {
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
-  
+    
   useEffect(() => {
     getEmployeeInfo();
   }, []);

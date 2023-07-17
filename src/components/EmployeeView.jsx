@@ -9,7 +9,6 @@ const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  
   useEffect(() => {
     axios.get(EMPLOYEE_GET, {
       headers: {

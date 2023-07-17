@@ -8,16 +8,18 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   GET_TAG,
-  decryptedToken,handleApiError
+  handleApiError,decryptedToken
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
 import ImageUploader from "./ImageUploader";
+import { useNavigate } from "react-router-dom";
 import "./styles/BlogAdd.css";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states
+  const navigate = useNavigate();
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
@@ -34,7 +36,6 @@ const BlogUpdate = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
   const [tagApi, setTagApi] = useState([]);
-
   const [selectSite, setSelectSite] = useState("");
   const [blogData, setBlogData] = useState([]);
   const [currentBlog, setCurrentBlog] = useState({});
@@ -340,7 +341,7 @@ const BlogUpdate = () => {
       const data = await response.json();
       console.log(data);
     }catch(error){
-      handleApiError(error);
+      handleApiError(error,navigate);
     };
   }
 

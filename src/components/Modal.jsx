@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
-import {UPDATE_LEAD,decryptedToken,handleApiError} from "./utils/Constants";
+import {UPDATE_LEAD,handleApiError,decryptedToken} from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
+import { useNavigate } from "react-router-dom";
 
 const Modal = ({ selectedItem, closeModal }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState(selectedItem);
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
-
-  const getStatusBackgroundColor = () => {
+  const navigate = useNavigate();
+    const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
         return "#5181FF";
@@ -58,7 +59,7 @@ const Modal = ({ selectedItem, closeModal }) => {
         }, 30000); // Clear message after 1 minute (60000 milliseconds)
       })
       .catch((error) => {
-        handleApiError(error);
+        handleApiError(error,navigate);
       });
   
     console.log("Update clicked");

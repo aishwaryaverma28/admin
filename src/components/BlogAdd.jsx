@@ -6,8 +6,9 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   IMG_BASE,
-  decryptedToken,handleApiError
+  handleApiError,decryptedToken
 } from "./utils/Constants";
+import { useNavigate } from "react-router-dom";
 import "./styles/BlogAdd.css";
 import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
@@ -17,6 +18,7 @@ import ImageEditor from "./ImageEditor";
 const BlogAdd = () => {
   const [selectSite, setSelectSite] = useState("");
   const [hover, setHover] = useState(false);
+  const navigate = useNavigate();
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState("");
@@ -38,7 +40,6 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const [updateMessage, setUpdateMessage] = useState("");
-  
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {
@@ -49,7 +50,7 @@ const BlogAdd = () => {
         setTagApi(response);
       })
       .catch((error) => {
-        handleApiError(error);
+        handleApiError(error,navigate);
       });
   }, []);
   
@@ -157,7 +158,7 @@ const BlogAdd = () => {
       setShowChooseButton(true);
       setChildData(response.data.data);
     } catch(error){
-      handleApiError(error);
+      handleApiError(error,navigate);
     };
   };
   // ==========================================================accordion of sub sections
@@ -266,7 +267,7 @@ const BlogAdd = () => {
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
     })
     .catch((error) => {
-      handleApiError(error);
+      handleApiError(error,navigate);
     });
   }
 

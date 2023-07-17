@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  PAYSLIPS,decryptedToken,handleApiError
+  PAYSLIPS,decryptedToken
 } from "./utils/Constants";
 import ViewProfile from "./ViewProfile";
 import "./styles/EmployeeProfile.css";
 import PDFConverter from "./PDFConverter";
-
 const SalarySlip = () => {
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +16,7 @@ const SalarySlip = () => {
   }, []);
 
   async function getEmployeeInfo() {
+  
     try {
       const response = await axios.get(PAYSLIPS, {
         headers: {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL,decryptedToken,handleApiError } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,decryptedToken} from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -22,6 +22,7 @@ const [showUploadButton, setShowUploadButton] = useState(false);
 const [showEditButton, setShowEditButton] = useState(false);
 const [showChooseButton, setShowChooseButton] = useState(false);
 // ========================================================================section image added/deleted
+
 const handleImageSelect = (event) => {
   setSelectedImage(event.target.files[0]);
   setShowUploadButton(true);

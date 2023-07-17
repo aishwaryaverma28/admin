@@ -3,10 +3,8 @@ import html2pdf from 'html2pdf.js';
 import ezukaLogo from '../assets/image/ezukaLogo.png';
 import axios from "axios";
 import {
-  PAYSLIP
-  ,decryptedToken,handleApiError
-} from "./utils/Constants";
-
+  PAYSLIP,decryptedToken
+  } from "./utils/Constants";
 
 const PDFConverter = ({id}) => {
   const [empdata, setEmpData] = useState(null);
