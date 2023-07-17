@@ -1,10 +1,53 @@
-import React from 'react'
+import React, {useState} from 'react'
 import LoginHeader from './LoginHeader'
 import LoginFooter from './LoginFooter'
 import "./styles/Registration.css";
+import axios from 'axios';
 import CRMImage from "../assets/image/crm.svg";
-
+import {CREATE_ACC} from "./utils/Constants"
 const Registration = () => {
+    const [formData, setFormData] = useState({
+        first_name: '',
+        last_name: '',
+        email: '',
+        password: '',
+        phone: '',
+        address1: '',
+        city: '',
+        state: '',
+        country: '',
+        postcode: '',
+        company: '',
+        employee: '',
+        job_title: '',
+        role: ''
+      });
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: value
+        }));
+      };
+    
+      const handleSubmit = (e) => {
+        e.preventDefault();
+    console.log(formData);
+        // Make an API call to pass the form data
+        axios.post(CREATE_ACC, formData)
+          .then((response) => {
+            // Handle the response as needed
+            if (response.status === 200) {
+              console.log('Registration successful');
+            } else {
+              console.log('Registration failed');
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      };
+    
   return (
     <>
     <LoginHeader/>
@@ -42,31 +85,58 @@ const Registration = () => {
             <p className="welcome-planer">Welcome To LeadPlaner! Take The First Step Towards Revolutionizing Your Lead
                 Management And Driving Sales Success By Signing Up For Our Powerful Lead Management Platform.</p>
 
-            <form action="">
+            <form onSubmit={handleSubmit}>
                 <div className="form-division">
                     <div>
-                        <input type="text" className="registration-form-input" placeholder="First Name*"/>
-                        <input type="email" className="registration-form-input" placeholder="Work Email*"/>
-                        <input type="text" className="registration-form-input" placeholder="Phone No*"/>
-                        <input type="text" className="registration-form-input" placeholder="Company"/>
+                        <input type="text" className="registration-form-input" placeholder="First Name*"  name="first_name" value={formData.first_name}
+          onChange={handleChange}/>
+                        <input type="email" className="registration-form-input" placeholder="Work Email*"  name="email" value={formData.email}
+          onChange={handleChange}/>
+                        <input type="text" className="registration-form-input" placeholder="Phone No*"  name="phone" value={formData.phone}
+          onChange={handleChange}/>
+                        <input type="text" className="registration-form-input" placeholder="Company" name="company" value={formData.company}
+          onChange={handleChange}/>
                     </div>
                     <div>
-                        <input type="text" className="registration-form-input" placeholder="Last Name*"/>
-                        <input type="password" className="registration-form-input" placeholder="Password*"/>
-                        <select name="" id="" className="registration-form-input">
+                        <input type="text" className="registration-form-input" placeholder="Last Name*" name="last_name" value={formData.last_name}
+          onChange={handleChange}/>
+                        <input type="password" className="registration-form-input" placeholder="Password*" name="password" value={formData.password}
+          onChange={handleChange}/>
+                        <select className="registration-form-input" name="job_title" value={formData.job_title}
+          onChange={handleChange}>
                             <option value="">Job Title*</option>
+                            <option value="Sales Manager">Sales Manager</option>
+                            <option value="Marketing/ PR Manager">Marketing/ PR Manager</option>
+                            <option value="Customer Service Manager">Customer Service Manager</option>
+                            <option value="Cxo General Manager">Cxo General Manager</option>
                         </select>
-                        <select name="" id="" className="registration-form-input">
+                        <select className="registration-form-input" name="employee" value={formData.employee}
+          onChange={handleChange}>
                             <option value="">Employee*</option>
+                            <option value="15">1- 15 Employees</option>
+                            <option value="50">16 - 50 Employees</option>
+                            <option value="200">51 - 200 Employees</option>
+                            <option value="500">201 - 500 Employees</option>
                         </select>
                     </div>
                 </div>
                 <div className="two-select">
-                    <select name="" id="">
+                    <select name="country" value={formData.country}
+          onChange={handleChange}>
                         <option value="">Country/Region*</option>
+                        <option value="UK">UK</option>
+                        <option value="USA">USA</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="India">India</option>
+                        <option value="Others">Others</option>
                     </select>
-                    <select name="" id="">
+                    <select name="role" value={formData.role}
+          onChange={handleChange}>
                         <option value="">Role*</option>
+                        <option value="1">Client</option>
+                        <option value="3">Employee</option>
                     </select>
                 </div>
                 <div>

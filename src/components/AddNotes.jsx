@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./styles/LPleads.css";
 import CRMeditor from "./CRMeditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {ADD_NOTES,handleApiError,decryptedToken} from "./utils/Constants";
+import {ADD_NOTES,handleApiError,getDecryptedToken} from "./utils/Constants";
 
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [notes, setNotes] = useState([]);
   const [openEditor, setOpenEditor] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
+  const decryptedToken = getDecryptedToken();
   const navigate = useNavigate();
+  useEffect(() => {
+    console.log(decryptedToken)
+    axios.get("http://core.leadplaner.com:3001/api/note/getbysource/lead/"+item.id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      console.log(response)
+    });
+  }, []);
+
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
@@ -28,7 +40,7 @@ const AddNotes = ({ item }) => {
     setDataFromChild("");
     const updatedFormData = {
       source_id: item.id,
-      source_type: "lead",
+      type: "lead",
       description: newNote.content,
       importance:1,
       created_by:"aishwarya"

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL,IMG_BASE,decryptedToken } from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,IMG_BASE,getDecryptedToken } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 function ImageUploader({ onDataTransfer }) {
   const fileInputRef = useRef(null);
@@ -10,7 +10,7 @@ function ImageUploader({ onDataTransfer }) {
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const [hover, setHover] = useState(false);
-
+  const decryptedToken = getDecryptedToken();
   const handleImageSelect = (event) => {
     setSelectedImage(event.target.files[0]);
     setShowUploadButton(true);

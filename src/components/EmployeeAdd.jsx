@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
-import {EMPLOYEE_ADD,handleApiError,decryptedToken } from './utils/Constants'
+import {EMPLOYEE_ADD,handleApiError,getDecryptedToken } from './utils/Constants'
 import { useNavigate } from "react-router-dom";
 
 const EmployeeAdd = () => {
@@ -10,6 +10,7 @@ const navigate = useNavigate();
 const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
 const [updateMessage, setUpdateMessage] = useState("");
+const decryptedToken = getDecryptedToken();
 const [details, setDetails] = useState({
   hire_date:"",
   emp_no: "",

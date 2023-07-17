@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GET, EMPLOYEE_UPDATE,decryptedToken } from "./utils/Constants";
+import { EMPLOYEE_GET, EMPLOYEE_UPDATE,getDecryptedToken } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 const EmployeeUpdate = () => {
   const { id } = useParams();
   const [empData, setEmpData] = useState([]);
   const [currentEmp, setCurrentEmp] = useState({});
   const [originalFormData, setOriginalFormData] = useState({});
+  const decryptedToken = getDecryptedToken();
   const [formData, setFormData] = useState({
     name: "",
     address: "",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
-import {UPDATE_LEAD,handleApiError,decryptedToken} from "./utils/Constants";
+import {UPDATE_LEAD,handleApiError,getDecryptedToken} from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const Modal = ({ selectedItem, closeModal }) => {
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const navigate = useNavigate();
+  const decryptedToken = getDecryptedToken();
     const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Editor.css'
 import axios from 'axios';
-import { GET_SITEPGS,decryptedToken } from './utils/Constants';
+import { GET_SITEPGS,getDecryptedToken} from './utils/Constants';
 import TableWithSitePages from './TableWithSitePages';
 import { Link } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ const SitePagesView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const decryptedToken = getDecryptedToken();
   useEffect(() => {
      axios.get(GET_SITEPGS, {
       headers: {

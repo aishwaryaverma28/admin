@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_SITEPGS, PUT_SITEPGS,decryptedToken} from "./utils/Constants";
+import { GET_SITEPGS, PUT_SITEPGS,getDecryptedToken} from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
 
 const SitePagesUpdate = () => {
@@ -9,6 +9,7 @@ const SitePagesUpdate = () => {
   const [empData, setEmpData] = useState([]);
   const [currentEmp, setCurrentEmp] = useState({});
   const [originalFormData, setOriginalFormData] = useState({});
+  const decryptedToken = getDecryptedToken();
   const [formData, setFormData] = useState({
     site: "",
     route: "",

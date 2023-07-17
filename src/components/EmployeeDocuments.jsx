@@ -9,13 +9,14 @@ import {
   EMPLOYEE_UPDATE,
   REMOVE_DOC,
   UPLOAD_DOC,
-  VIEW_IMG,handleApiError,decryptedToken
+  VIEW_IMG,handleApiError,getDecryptedToken
 } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
+const decryptedToken = getDecryptedToken();
 
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();

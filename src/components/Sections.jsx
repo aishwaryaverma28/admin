@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import { IMAGE_UP, IMAGE_DEL,decryptedToken} from "./utils/Constants";
+import { IMAGE_UP, IMAGE_DEL,getDecryptedToken } from "./utils/Constants";
 import "./styles/BlogAdd.css";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import ImageUploader from "./ImageUploader";
 
 const Sections = () => {
+  const decryptedToken = getDecryptedToken();
 // section states
 const [sectionData, setSectionData] = useState([]);
 const [sectionTitle, setSectionTitle] = useState("");

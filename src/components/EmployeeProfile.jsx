@@ -4,7 +4,7 @@ import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,decryptedToken } from "./utils/Constants";
+import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken } from "./utils/Constants";
 
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
@@ -15,6 +15,7 @@ const EmployeeProfile = () => {
 const [pic, setPic] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [documentUrl, setDocumentUrl] = useState("");
+  const decryptedToken = getDecryptedToken();
   const [formData, setFormData] = useState({
    profile:"",
   })

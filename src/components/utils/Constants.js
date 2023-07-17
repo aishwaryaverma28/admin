@@ -24,27 +24,29 @@ const getDecryptedToken = () => {
 export { getDecryptedToken };
 //=============================================================session time error handle
 export const handleApiError = (error,navigate) => {
-    // const navigate = useNavigate();
-    // if (
-    //   error.response &&
-    //   error.response.data &&
-    //   error.response.data.message === "Invalid or expired token."
-    // ) {
-    //   // Display an alert to the user
-    //   alert("Your session has expired. Please login again.");
-    //   // Clear JWT token from localStorage
-    //   localStorage.removeItem("jwtToken");
+     if (
+      error.response &&
+      error.response.data &&
+      error.response.data.message === "Invalid or expired token."
+    ) {
+      // Display an alert to the user
+      alert(error.response.data.message);
+      // Clear JWT token from localStorage
+      localStorage.removeItem("jwtToken");
   
-    //   // Redirect to the login page
-    //   navigate("/");
-    // } else {
+      // Redirect to the login page
+      navigate("/");
+    } else {
       console.log(error.response);
-    // }
+    }
   };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
+const userId = localStorage.getItem('id');
+
 //===============================================================login apis
 export const LOGIN = start+"api/user/login";
+export const CREATE_ACC = start+"api/user/createaccount";
 //==============================================================blog apis
 export const BLOG_ADD = start+"api/blog/add"
 export const BLOG_EDIT = start+"api/blog/edit/";
@@ -58,6 +60,7 @@ export const IMG_BASE = start+"blog/";
 export const EMPLOYEE_UPDATE = start+"api/employee/edit/";
 export const EMPLOYEE_ADD = start+"api/employee/add";
 export const EMPLOYEE_GET = start+"api/employee/getall";
+// export const EMPLOYEE_GETID = start+"api/employee/get/"+userId;
 export const EMPLOYEE_GETID = start+"api/employee/get/1";
 export const REMOVE_DOC = start+"api/employee/removeDoc/";
 export const UPLOAD_DOC = start+"api/employee/uploadDoc";

@@ -6,7 +6,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   IMG_BASE,
-  handleApiError,decryptedToken
+  handleApiError,getDecryptedToken
 } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 import "./styles/BlogAdd.css";
@@ -40,6 +40,7 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const [updateMessage, setUpdateMessage] = useState("");
+  const decryptedToken = getDecryptedToken();
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {

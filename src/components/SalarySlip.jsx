@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  PAYSLIPS,decryptedToken
+  PAYSLIPS,getDecryptedToken
 } from "./utils/Constants";
 import ViewProfile from "./ViewProfile";
 import "./styles/EmployeeProfile.css";
@@ -11,6 +11,7 @@ const SalarySlip = () => {
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(2023);
   const [filteredTableData, setFilteredTableData] = useState([]);
+  const decryptedToken = getDecryptedToken();
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -37,11 +38,14 @@ const SalarySlip = () => {
 
   useEffect(() => {
     // Filter the table data based on the selected year whenever it changes
-    const filteredTableData = (tableData).filter(
-      (item) => item && item.year && item.year === selectedYear
-    );
-    setFilteredTableData(filteredTableData);
+    if (tableData) {
+      const filteredTableData = tableData.filter(
+        (item) => item && item.year && item.year === selectedYear
+      );
+      setFilteredTableData(filteredTableData);
+    }
   }, [tableData, selectedYear]);
+  
   
   return (
     <div className="salary-slip-container">

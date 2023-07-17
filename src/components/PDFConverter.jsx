@@ -3,12 +3,13 @@ import html2pdf from 'html2pdf.js';
 import ezukaLogo from '../assets/image/ezukaLogo.png';
 import axios from "axios";
 import {
-  PAYSLIP,decryptedToken
+  PAYSLIP,getDecryptedToken 
   } from "./utils/Constants";
 
 const PDFConverter = ({id}) => {
   const [empdata, setEmpData] = useState(null);
   const [payData, setPayData] = useState(null);
+  const decryptedToken = getDecryptedToken();
   const [data,setData] = useState({
     name:"",
     month:"",

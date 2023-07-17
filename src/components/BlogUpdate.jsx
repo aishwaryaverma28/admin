@@ -8,7 +8,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   GET_TAG,
-  handleApiError,decryptedToken
+  handleApiError,getDecryptedToken
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -31,7 +31,7 @@ const BlogUpdate = () => {
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
-
+  const decryptedToken = getDecryptedToken();
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");

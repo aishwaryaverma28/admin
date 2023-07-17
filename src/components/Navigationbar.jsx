@@ -6,14 +6,14 @@ import userIcon from "../assets/image/user-img.png";
 import Sidebar from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID, VIEW_IMG,handleApiError,decryptedToken } from "./utils/Constants";
+import { EMPLOYEE_GETID, VIEW_IMG,handleApiError,getDecryptedToken } from "./utils/Constants";
 
 const NavigationBar = () => {
   const { profileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState(null);
   const [pic, setPic] = useState("");
   const navigate = useNavigate();
-  
+  const decryptedToken = getDecryptedToken();
   useEffect(() => {
     getEmployeeInfo();
   }, []);

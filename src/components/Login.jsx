@@ -53,25 +53,26 @@ const Login = () => {
       .then((response) => {
         const data = response.data;
         const status = response.data.status;
-        console.log(data);
+        console.log(data.user[0].id);
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {
           // alert(data.message)
           const token = response.data.token; // Assuming the token is in the response data
           // Encrypt the token
-          console.log(token);
+          // console.log(token);
           const encryptedToken = CryptoJS.AES.encrypt(
             token,
             secretKey
           ).toString();
-          console.log(encryptedToken);
+          // console.log(encryptedToken);
           localStorage.setItem("jwtToken", encryptedToken); // Store the encrypted token in localStorage
-          //code for decrypt token
+          // code for decrypt token
           // const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
           // const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
           // console.log(decryptedToken)
-
+const userId = data.user[0].id;
+localStorage.setItem("id", userId); // Store the landing URL in localStorage
           const landingUrl = response.data.landingurl;
           localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
           navigate(landingUrl);
@@ -102,7 +103,6 @@ const Login = () => {
     return encryptedToken ? null : (
       <>
         <LoginHeader />
-
         <main className="main-registration">
           <div className="free-trial-section">
             <h2 className="free-trial-heading">Start Your Free Trial</h2>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_SITEPGS,decryptedToken} from "./utils/Constants";
+import { ADD_SITEPGS,getDecryptedToken} from "./utils/Constants";
 // import { AES } from "crypto-js"; // Import AES from crypto-js
 import "./styles/EmployeeUpdate.css";
 
 const SitePagesAdd = () => {
   const [updateMessage, setUpdateMessage] = useState("");
+  const decryptedToken = getDecryptedToken();
   const [details, setDetails] = useState({
     site: "",
     route: "",
