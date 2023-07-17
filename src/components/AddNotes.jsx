@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
-import ReactEditor from "./ReactEditor";
+import CRMeditor from "./CRMeditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,6 @@ const AddNotes = ({ item }) => {
       importance:1,
       created_by:"aishwarya"
     };
-  // source_id, description, created_by, source_type, importance 
     console.log(updatedFormData);
     axios.post(ADD_NOTES, updatedFormData, {
       headers: {
@@ -97,7 +96,7 @@ const AddNotes = ({ item }) => {
       ) : (
         <>
           <div className="notesEditor">
-            <ReactEditor onDataTransfer={handleDataTransfer} />
+            <CRMeditor onDataTransfer={handleDataTransfer} />
           </div>
           <div className="addNoteBtn">
             <button className="convertToDeal" onClick={handleAddNote}>
@@ -134,7 +133,7 @@ const AddNotes = ({ item }) => {
                 }
               >
                 <div className="formEditor">
-                  <ReactEditor
+                  <CRMeditor
                     onDataTransfer={(data) =>
                       handleEditorChange(data, note.id)
                     }

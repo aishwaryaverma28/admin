@@ -12,7 +12,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
-import { AES } from "crypto-js"; // Import AES from crypto-js
 import "./styles/Login.css";
 import LoginHeader from "./LoginHeader";
 import LoginFooter from "./LoginFooter";
@@ -30,8 +29,6 @@ const Login = () => {
     // Check if a JWT token is already stored in localStorage
     const encryptedToken = localStorage.getItem("jwtToken");
     if (encryptedToken) {
-      // Decrypt the token
-      const decryptedToken = AES.decrypt(encryptedToken, secretKey).toString();
       const landingUrl = localStorage.getItem("landingUrl");
       navigate(landingUrl);
     }

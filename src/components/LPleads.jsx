@@ -4,7 +4,7 @@ import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead";
-import {GET_LEAD,IMPORT_CSV,handleApiError,decryptedToken} from "./utils/Constants"
+import {GET_LEAD,IMPORT_CSV,handleApiError,getDecryptedToken} from "./utils/Constants"
 import { useNavigate } from "react-router-dom";
 
 const useDropdown = () => {
@@ -45,7 +45,7 @@ const LPleads = () => {
   const [totalValue,setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
   const navigate = useNavigate();
-   
+  const decryptedToken = getDecryptedToken();
   const fetchLeadsData = () => {
     axios
       .get(GET_LEAD, {

@@ -1,8 +1,27 @@
 import CryptoJS from 'crypto-js';
+
 const secretKey = 'miyamura';
-  const encryptedToken = localStorage.getItem('jwtToken'); // Assuming the encrypted token is stored in the 'token' key of the local storage
+const encryptedToken = localStorage.getItem('jwtToken');
+let decryptedToken = '';
+
+if (encryptedToken) {
   const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
-  export const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
+  decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
+}
+
+export { decryptedToken };
+const getDecryptedToken = () => {
+  const encryptedToken = localStorage.getItem('jwtToken');
+
+  if (encryptedToken) {
+    const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
+    return decryptedBytes.toString(CryptoJS.enc.Utf8);
+  }
+
+  return '';
+};
+
+export { getDecryptedToken };
 //=============================================================session time error handle
 export const handleApiError = (error,navigate) => {
     // const navigate = useNavigate();
