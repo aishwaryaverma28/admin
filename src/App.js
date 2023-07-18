@@ -32,7 +32,7 @@ import Mail from './components/Mail';
 import LPSetting from './components/LPSetting';
 import Login from './components/Login';
 import Registration from './components/Registration';
-
+import SecurePages from './components/SecurePages';
 const router = createBrowserRouter(
   [
     {
@@ -45,7 +45,7 @@ element:<Registration/>
     },
     {
       path:"/lp",
-      element: <Leadplaner/>,
+      element: <SecurePages Component={Leadplaner}/>,
       children: [
         {
           path:"/lp/lead",
@@ -75,7 +75,7 @@ element:<Registration/>
     },
     {
       path: "/admin",
-      element: <Admin/>,
+      element:  <SecurePages Component={Admin}/>,
       children:[
         {
           path: "/admin",

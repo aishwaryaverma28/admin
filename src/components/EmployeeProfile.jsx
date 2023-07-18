@@ -5,7 +5,7 @@ import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
 import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken } from "./utils/Constants";
-
+const userId = localStorage.getItem('id');
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState([]);
@@ -31,7 +31,7 @@ const [pic, setPic] = useState("");
   }, [empData]); // Call ageCal whenever empData changes
 
   async function getEmployeeInfo() {
-    const response = await axios.get(EMPLOYEE_GETID,{
+    const response = await axios.get("http://core.leadplaner.com:3001/api/employee/get/"+userId,{
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
@@ -40,17 +40,18 @@ const [pic, setPic] = useState("");
     setEmpData(data[0]);
     setInitialEmpData(data[0]); // Set the initial employee data
   }
-// console.log(empData);
-  function ageCal() {
+console.log(empData);
+function ageCal() {
+  if (empData && empData.creation_date) {
     let dob = empData.dob ? empData.dob.split("T")[0].split("-")[0] : "";
     let empAge = currentYear - dob;
     setAge(empAge);
     let add = empData.address1 + ", " + empData.city + ", " + empData.state;
     setAddress(add);
-    // console.log(add);
     setDocumentUrl(empData.profile_image);
-    setPic( VIEW_IMG + empData.profile_image);
+    setPic(VIEW_IMG + empData.profile_image);
   }
+}
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -106,7 +107,7 @@ const [pic, setPic] = useState("");
     const updatedFormData = {
       profile_image:documentUrl,
     }
-    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
+    axios.put(EMPLOYEE_UPDATE +userId, updatedFormData,{
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
@@ -142,7 +143,7 @@ const [pic, setPic] = useState("");
       <button onClick={handleButtonClick} className="browseBtn">change profile image</button>
       </div>
         <div className="dateTime">
-          <p>added on {empData.creation_date ? empData.creation_date.split("T")[0] : ""}</p>
+          <p>added on {empData && empData.creation_date ? empData.creation_date.split("T")[0] : "-"}</p>
         </div>
       </div>
 
@@ -150,17 +151,17 @@ const [pic, setPic] = useState("");
         <div className="detailsFirstSection">
           <p>employee details</p>
           <ul>
-            <li>
+          <li>
               <p>First Name</p>
-              <span>{empData.first_name}</span>
+              <span>{empData && empData.first_name !== undefined ? empData.first_name : "-"}</span>
             </li>
             <li>
-              <p>Middle Name </p>
+              <p>Middle Name</p>
               <span>-</span>
             </li>
             <li>
-              <p>Last Name </p>
-              <span>{empData.last_name}</span>
+              <p>Last Name</p>
+              <span>{empData && empData.last_name !== undefined ? empData.last_name : "-"}</span>
             </li>
             <li>
               <p>Age </p>
@@ -168,22 +169,22 @@ const [pic, setPic] = useState("");
             </li>
             <li>
               <p>DOB </p>
-              <span>{empData.dob ? empData.dob.split("T")[0] : ""}</span>
+              <span>{empData && empData.dob ? empData.dob.split("T")[0] : "-"}</span>
             </li>
             <li>
               <p>Working Since </p>
-              <span>{empData.hire_date ? empData.hire_date.split("T")[0] : ""}</span>
+              <span>{empData && empData.hire_date ? empData.hire_date.split("T")[0] : ""}</span>
             </li>
             <li>
               <p>Job Title </p>
-              <span>{empData.position}</span>
+              <span>{empData && empData.position !== undefined ? empData.position : "-"}</span>
             </li>
             <li>
               <p>Permanent Address </p>
               <span>{address}</span>
             </li>
             <li>
-              <p>Country</p> <span>{empData.country}</span>
+              <p>Country</p> <span>{empData && empData.country !== undefined ? empData.country : "-"}</span>
             </li>
           </ul>
         </div>
@@ -192,19 +193,19 @@ const [pic, setPic] = useState("");
           <ul>
             <li>
               <p>Personal Number </p>
-              <span>{empData.mobile}</span>
+              <span>{empData && empData.mobile !== undefined ? empData.mobile : "-"}</span>
             </li>
             <li>
               <p>Work Phone </p>
-              <span>{empData.mobile}</span>
+              <span>{empData && empData.mobile !== undefined ? empData.mobile : "-"}</span>
             </li>
             <li>
               <p>Work Email </p>
-              <span>{empData.personal_email}</span>
+              <span>{empData && empData.personal_email !== undefined ? empData.personal_email : "-"}</span>
             </li>
             <li>
               <p>Email </p>
-              <span>{empData.personal_email}</span>
+              <span>{empData && empData.personal_email !== undefined ? empData.personal_email : "-"}</span>
             </li>
           </ul>
           <p>manager details</p>
@@ -226,11 +227,11 @@ const [pic, setPic] = useState("");
           <ul>
             <li>
               <p>LinkedIn </p>
-              <span>{empData.social1}</span>
+              <span>{empData && empData.social1 !== undefined ? empData.social1 : "-"}</span>
             </li>
             <li>
               <p>Facebook </p>
-              <span>{empData.social2}</span>
+              <span>{empData && empData.social2 !== undefined ? empData.social2 : "-"}</span>
             </li>
           </ul>
         </div>
@@ -239,15 +240,15 @@ const [pic, setPic] = useState("");
           <ul>
             <li>
               <p>Bank Name </p>
-              <span>{empData.bank_details ? empData.bank_details.split(",")[0] : ""}</span>
+              <span>{empData && empData.bank_details ? empData.bank_details.split(",")[0] : ""}</span>
             </li>
             <li>
               <p>Account Number </p>
-              <span>{empData.bank_details ? empData.bank_details.split(",")[1] : ""}</span>
+              <span>{empData && empData.bank_details ? empData.bank_details.split(",")[1] : ""}</span>
             </li>
             <li>
               <p>IFSC Code</p>
-              <span>{empData.bank_details ? empData.bank_details.split(",")[2] : ""}</span>
+              <span>{empData && empData.bank_details ? empData.bank_details.split(",")[2] : ""}</span>
             </li>
           </ul>
         </div>
