@@ -31,7 +31,7 @@ const [pic, setPic] = useState("");
   }, [empData]); // Call ageCal whenever empData changes
 
   async function getEmployeeInfo() {
-    const response = await axios.get("http://core.leadplaner.com:3001/api/employee/get/"+userId,{
+    const response = await axios.get(EMPLOYEE_GETID+userId,{
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }

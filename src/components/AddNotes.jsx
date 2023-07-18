@@ -13,17 +13,17 @@ const AddNotes = ({ item }) => {
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log(decryptedToken)
-    axios.get("http://core.leadplaner.com:3001/api/note/getbysource/lead/"+item.id, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response)
-    });
-  }, []);
-
+  // useEffect(() => {
+  //   console.log(decryptedToken)
+  //   axios.get(ADD_NOTES + item.id, {
+  //     headers: {
+  //       Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+  //     }
+  //   }).then((response) => {
+  //     console.log(response)
+  //   });
+  // }, []);
+console.log(item.id);
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
@@ -41,8 +41,9 @@ const AddNotes = ({ item }) => {
     const updatedFormData = {
       source_id: item.id,
       type: "lead",
+      viewable: 1,
       description: newNote.content,
-      importance:1,
+      importance:"MMM",
       created_by:"aishwarya"
     };
     console.log(updatedFormData);
@@ -92,9 +93,9 @@ const AddNotes = ({ item }) => {
   const getShortenedContent = (content) => {
     // Remove HTML tags using regular expressions
     const strippedContent = content.replace(/<[^>]+>/g, '');
-    const words = strippedContent.split(" ");
-    if (words.length > 4) {
-      return words.slice(0, 4).join(" ") + "...";
+    const words = strippedContent.split("");
+    if (words.length > 10) {
+      return words.slice(0, 10).join("") + "...";
     }
     return strippedContent;
   };

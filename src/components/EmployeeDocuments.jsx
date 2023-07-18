@@ -13,6 +13,7 @@ import {
 } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 const decryptedToken = getDecryptedToken();
+const userId = localStorage.getItem('id');
 
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const navigate = useNavigate();
@@ -162,7 +163,7 @@ function EmployeeDocuments() {
       tax_image: panUrl,
       bank_image: checkUrl,
     };
-    axios.put(EMPLOYEE_UPDATE + "1", updatedFormData,{
+    axios.put(EMPLOYEE_UPDATE + userId, updatedFormData,{
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }

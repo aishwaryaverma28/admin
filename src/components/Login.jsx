@@ -8,6 +8,8 @@
 //   "username": "mahesh@gmail.com",
 //   "password": "Mahi@3332"
 // }
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjg5NjU5MTYwLCJleHAiOjE2OTA1MjMxNjB9.fKys0T4a5i0ZbK4b9O4vz4rhXSRIlVKdq4muZqtzOGQ
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjg5NjU5MTYwLCJleHAiOjE2OTA1MjMxNjB9.fKys0T4a5i0ZbK4b9O4vz4rhXSRIlVKdq4muZqtzOGQ
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
@@ -53,14 +55,13 @@ const Login = () => {
       .then((response) => {
         const data = response.data;
         const status = response.data.status;
-        console.log(data.user[0].id);
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {
           // alert(data.message)
           const token = response.data.token; // Assuming the token is in the response data
           // Encrypt the token
-          // console.log(token);
+          console.log(token);
           const encryptedToken = CryptoJS.AES.encrypt(
             token,
             secretKey
