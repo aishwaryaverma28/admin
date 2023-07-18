@@ -33,6 +33,7 @@ import LPSetting from './components/LPSetting';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import SecurePages from './components/SecurePages';
+import SecureRoutes from './components/SecureRoutes';
 const router = createBrowserRouter(
   [
     {
@@ -79,43 +80,43 @@ element:<Registration/>
       children:[
         {
           path: "/admin",
-          element: <Editor />,
+          element: <SecureRoutes Component={Editor}/>,
         },
         {
           path: "/admin/viewProfile/employeeProfile",
-          element: <EmployeeProfile/>,
+          element: <SecureRoutes Component={EmployeeProfile}/>,
         },
         {
           path: "/admin/viewProfile/timeSheet",
-          element: <TimeSheet />,
+          element: <SecureRoutes Component={TimeSheet}/>,
         },
         {
           path: "/admin/viewProfile/documents",
-          element: <EmployeeDocuments />,
+          element: <SecureRoutes Component={EmployeeDocuments}/>,
         },
         {
           path: "/admin/viewProfile/salarySlip",
-          element: <SalarySlip />,
+          element: <SecureRoutes Component={SalarySlip }/>,
         },
         {
           path: "/admin/blog/add",
-          element: <BlogAdd/>
+          element: <SecureRoutes Component={BlogAdd}/>,
         },
         {
           path: "/admin/blog/view",
-          element: <BlogView />,
-        },
+          element: <SecureRoutes Component={BlogView }/>,
+          },
         {
           path: "/admin/blog/view/:id",
           element: <BlogUpdate />,
         },
         {
           path: "/admin/sitePages/add",
-          element: <SitePagesAdd />,
+          element: <SecureRoutes Component={SitePagesAdd }/>,
         },
         {
           path: "/admin/sitePages/view",
-          element: <SitePagesView />,
+          element: <SecureRoutes Component={SitePagesView }/>,
         },
         {
           path: "/admin/sitePages/view/:id",
@@ -123,27 +124,27 @@ element:<Registration/>
         },
         {
           path: "/admin/helpSection/add",
-          element: <HelpAdd />,
+          element: <SecureRoutes Component={HelpAdd }/>,
         },
         {
           path: "/admin/helpSection/update",
-          element: <HelpUpdate />,
+          element: <SecureRoutes Component={HelpUpdate}/>,
         },
         {
           path: "/admin/userManagement/add",
-          element: <UserMangAdd />,
+          element: <SecureRoutes Component={UserMangAdd}/>,
         },
         {
           path: "/admin/userManagement/update",
-          element: <UserMangUpdate />,
+          element: <SecureRoutes Component={UserMangUpdate}/>,
         },
         {
           path: "/admin/employee/add",
-          element: <EmployeeAdd />,
+          element: <SecureRoutes Component={EmployeeAdd}/>,
         },
         {
           path: "/admin/employee/view",
-          element: <EmployeeView />,
+          element: <SecureRoutes Component={EmployeeView}/>,
         },
         {
           path: "/admin/employee/view/:id",
@@ -151,19 +152,19 @@ element:<Registration/>
         },
         {
           path: "/admin/accessManagement",
-          element: <AccessManagement />,
+          element: <SecureRoutes Component={AccessManagement}/>,
         },
         {
           path: "/admin/reportsAndAnalytics",
-          element: <ReportsandAnalytics />,
+          element: <SecureRoutes Component={ReportsandAnalytics}/>,
         },
         {
           path: "/admin/masterSettings/City",
-          element: <City />,
+          element: <SecureRoutes Component={City}/>,
         },
         {
           path: "/admin/system/state",
-          element: <State />,
+          element: <SecureRoutes Component={State}/>,
         },
       ]
     }
