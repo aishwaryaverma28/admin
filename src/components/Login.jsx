@@ -8,8 +8,6 @@
 //   "username": "mahesh@gmail.com",
 //   "password": "Mahi@3332"
 // }
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjg5NjU5MTYwLCJleHAiOjE2OTA1MjMxNjB9.fKys0T4a5i0ZbK4b9O4vz4rhXSRIlVKdq4muZqtzOGQ
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjg5NjU5MTYwLCJleHAiOjE2OTA1MjMxNjB9.fKys0T4a5i0ZbK4b9O4vz4rhXSRIlVKdq4muZqtzOGQ
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
@@ -58,22 +56,18 @@ const Login = () => {
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {
-          // alert(data.message)
           const token = response.data.token; // Assuming the token is in the response data
-          // Encrypt the token
-          console.log(token);
           const encryptedToken = CryptoJS.AES.encrypt(
             token,
             secretKey
           ).toString();
-          // console.log(encryptedToken);
           localStorage.setItem("jwtToken", encryptedToken); // Store the encrypted token in localStorage
           // code for decrypt token
           // const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
           // const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
           // console.log(decryptedToken)
-const userId = data.user[0].id;
-localStorage.setItem("id", userId); // Store the landing URL in localStorage
+          const userId = data.user[0].id;
+          localStorage.setItem("id", userId); // Store the landing URL in localStorage
           const landingUrl = response.data.landingurl;
           localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
           navigate(landingUrl);
@@ -97,7 +91,6 @@ localStorage.setItem("id", userId); // Store the landing URL in localStorage
         }
       });
   };
-
   // Conditionally render the login form or null based on the presence of the token
   const renderLoginForm = () => {
     const encryptedToken = localStorage.getItem("jwtToken");
@@ -137,14 +130,6 @@ localStorage.setItem("id", userId); // Store the landing URL in localStorage
             </h2>
 
             <form onSubmit={handleSubmit}>
-              {/* <div className="login-page-fields">
-                      <label for="" className="login-labels">login As</label>
-                      <select className="login-form-input">
-                          <option value="">Job Title*</option>
-                      </select>
-  
-                  </div> */}
-
               <div className="login-page-fields">
                 <label for="" className="login-labels">
                   Work Email *

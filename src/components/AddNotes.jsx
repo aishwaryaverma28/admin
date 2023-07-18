@@ -1,81 +1,115 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/LPleads.css";
 import CRMeditor from "./CRMeditor";
 import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {ADD_NOTES,handleApiError,getDecryptedToken} from "./utils/Constants";
+import {
+  ADD_NOTES,
+  GETNOTEBYSOURCE,
+  UPDATE_NOTE,
+  handleApiError,
+  getDecryptedToken,
+} from "./utils/Constants";
+import ThreeDots from "../assets/image/three-dots.svg";
+import GreaterArrow from "../assets/image/greater-arrow.svg";
 
 const AddNotes = ({ item }) => {
   const [dataFromChild, setDataFromChild] = useState("");
+  const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
   const [openEditor, setOpenEditor] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log(decryptedToken)
-  //   axios.get(ADD_NOTES + item.id, {
-  //     headers: {
-  //       Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-  //     }
-  //   }).then((response) => {
-  //     console.log(response)
-  //   });
-  // }, []);
-console.log(item.id);
+  useEffect(() => {
+    // console.log(decryptedToken);
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = () => {
+    axios
+      .get(GETNOTEBYSOURCE + item.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        // console.log(response.data.data);
+        setNotes(response.data.data);
+      })
+      .catch((error) => {
+        handleApiError(error, navigate);
+      });
+  };
+
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
 
   const handleAddNote = () => {
-    const currentDate = new Date();
-    const newNote = {
-      id: Date.now(),
-      content: dataFromChild,
-      date: currentDate.toLocaleDateString(),
-      time: currentDate.toLocaleTimeString(),
-    };
-    setNotes([...notes, newNote]);
-    setDataFromChild("");
     const updatedFormData = {
       source_id: item.id,
       type: "lead",
-      viewable: 1,
-      description: newNote.content,
-      importance:"MMM",
-      created_by:"aishwarya"
+      description: dataFromChild,
+      importance: 1,
+      created_by: "aishwarya",
     };
-    console.log(updatedFormData);
-    axios.post(ADD_NOTES, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    })
+    // console.log(updatedFormData);
+
+    axios
+      .post(ADD_NOTES, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
         console.log(response);
+        fetchNotes(); // Fetch the updated notes after adding a new note
       })
       .catch((error) => {
-        handleApiError(error,navigate);
-      });  
-    setOpenEditor(false);
-  };
-  
+        handleApiError(error, navigate);
+      });
 
-  const handleDeleteNote = (id) => {
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    setNotes(updatedNotes);
+    setDataFromChild("");
+    setOpenEditor(false);
   };
 
   const handleEditorChange = (content, id) => {
-    const updatedNotes = notes.map((note) => {
-      if (note.id === id) {
-        return { ...note, content: content };
-      }
-      return note;
-    });
+    setContent(content);
+  };
+  const handleSaveNote = (id) => {
+    const noteToUpdate = notes.find((note) => note.id === id);
+    if (noteToUpdate) {
+      const updatedNote = {
+        description: content,
+        status: "B",
+        sort: 1,
+        importance: "YESq",
+        urgency: "Noq",
+        viewable: 1,
+        source_type: "source -2",
+        type: "lead",
+        attr2: "attr2",
+      };
+      const updatedNotes = notes.map((note) =>
+        note.id === id ? updatedNote : note
+      );
+      setNotes(updatedNotes);
 
-    setNotes(updatedNotes);
+      axios
+        .put(UPDATE_NOTE + id, updatedNote, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          fetchNotes();
+        })
+        .catch((error) => {
+          handleApiError(error, navigate);
+        });
+    }
   };
 
   const expandEditor = () => {
@@ -91,11 +125,10 @@ console.log(item.id);
   }
 
   const getShortenedContent = (content) => {
-    // Remove HTML tags using regular expressions
-    const strippedContent = content.replace(/<[^>]+>/g, '');
-    const words = strippedContent.split("");
-    if (words.length > 10) {
-      return words.slice(0, 10).join("") + "...";
+    const strippedContent = content.replace(/<[^>]+>/g, "");
+    const words = strippedContent.split(" ");
+    if (words.length > 20) {
+      return words.slice(0, 20).join(" ") + "...";
     }
     return strippedContent;
   };
@@ -118,51 +151,82 @@ console.log(item.id);
           </div>
         </>
       )}
-
       {notes.length > 0 && (
         <div className="savedNotes">
           {notes.map((note) => (
-            <div key={note.id} className="noteItem">
-              <div
-                className="addNotesDropdown"
-                onClick={() => accordianClick(note.id)}
-              >
-                <span>Date: {note.date}</span>
-                <span>Time: {note.time}</span>
-                <span className="dropdownContent">
-                  {isIndex === note.id ? "" : getShortenedContent(note.content)}
-                </span>
-                <span>
-                  {isIndex === note.id ? (
-                    <i className="fa-sharp fa-solid fa-minus"></i>
-                  ) : (
-                    <i className="fa-sharp fa-solid fa-plus"></i>
-                  )}
-                </span>
-              </div>
+            <>
+              <section key={note.id} className="note-display">
+                <div
+                  className="note-content"
+                  onClick={() => accordianClick(note.id)}
+                >
+                  <div className="arrow-greater">
+                    <img src={GreaterArrow} alt="" />
+                  </div>
+
+                  <div className="notes-main">
+                    <div className="notes-by">
+                      <p>
+                        <span>Note</span> by {note.created_by}
+                      </p>
+                      <div className="notes-date">
+                        <p>
+                          {note.creation_date &&
+                          note.creation_date.includes("T") &&
+                          note.creation_date.includes(".")
+                            ? note.creation_date.split("T")[0] +
+                              " at " +
+                              note.creation_date.split("T")[1].split(".")[0]
+                            : "-"}
+                        </p>
+
+                        <div className="three-side-dots">
+                          <img src={ThreeDots} alt="ddd" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="notes-content">
+                      <p classNames="notes-content">
+                        {" "}
+                        {isIndex === note.id
+                          ? ""
+                          : getShortenedContent(note.description)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
               <div
                 className={
                   isIndex === note.id ? "answer display_answer" : "answer"
                 }
               >
-                <div className="formEditor">
+                <div className="formEditor2">
                   <CRMeditor
-                    onDataTransfer={(data) =>
-                      handleEditorChange(data, note.id)
-                    }
-                    initialContent={note.content}
+                    onDataTransfer={(data) => handleEditorChange(data, note.id)}
+                    initialContent={note.description}
                   />
                 </div>
-                <div className="deleteNote">
+
+                <div
+                  className="notes-btn"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <button className="note-discard-btn">Discard</button>
                   <button
-                    onClick={() => handleDeleteNote(note.id)}
-                    className="noteDeleteBtn"
+                    className="note-save-btn"
+                    onClick={() => handleSaveNote(note.id)}
                   >
-                    <img src={trash} className="deleteIcon" alt="Delete" />
+                    Save
                   </button>
                 </div>
               </div>
-            </div>
+            </>
           ))}
         </div>
       )}

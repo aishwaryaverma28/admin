@@ -185,11 +185,6 @@ const LPheader = () => {
                 Contacts
               </NavLink>
             </li>
-            <li onClick={() => handleNavigationClick("Admin")}>
-              <NavLink exact to="/admin" activeClassName="activeNav">
-                Admin
-              </NavLink>
-            </li>
           </ul>
           <span></span>
         </div>
