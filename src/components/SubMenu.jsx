@@ -3,7 +3,16 @@ import { Link } from 'react-router-dom';
 
 const SubMenu = (item) => {
   const [open, setOpen] = useState(false);
-  const allowed = [];
+  // const allowed = [];
+  const allowed = [
+    "/admin",
+    "/admin/viewProfile/employeeProfile",
+    "/admin/viewProfile/timeSheet",
+    "/admin/viewProfile/documents",
+    "/admin/viewProfile/salarySlip",
+    "/admin/blog/add",
+    "/admin/blog/view",
+  ];
 
   if (item.subNav) {
     // Filter subNav items based on allowed paths

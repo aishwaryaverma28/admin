@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
-import {UPDATE_LEAD,handleApiError,getDecryptedToken} from "./utils/Constants";
+import {
+  UPDATE_LEAD,
+  handleApiError,
+  getDecryptedToken,
+} from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +17,7 @@ const Modal = ({ selectedItem, closeModal }) => {
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const navigate = useNavigate();
   const decryptedToken = getDecryptedToken();
-    const getStatusBackgroundColor = () => {
+  const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
         return "#5181FF";
@@ -37,21 +41,61 @@ const Modal = ({ selectedItem, closeModal }) => {
     });
   };
 
-  const toggleEditable = () => {
+  const toggleEditable = (e) => {
+    e.preventDefault();
     setIsEditable(!isEditable);
   };
+  // const handleUpdateClick = (event) => {
+  //   event.preventDefault();
+  //   axios
+  //     .put(UPDATE_LEAD + editedItem.id, editedItem, {
+  //       headers: {
+  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       setUpdateMessage("Lead data updated successfully");
+  //       setTimeout(() => {
+  //         setUpdateMessage("");
+  //       }, 30000); // Clear message after 1 minute (60000 milliseconds)
+  //     })
+  //     .catch((error) => {
+  //       handleApiError(error, navigate);
+  //     });
+
+  //   console.log("Update clicked");
+  //   console.log(editedItem);
+  //   setIsEditable(false);
+  // };
   const handleUpdateClick = (event) => {
     event.preventDefault();
+  
+    const updatedLead = {
+      // Update only the desired properties
+      lead_name: editedItem.lead_name,
+      first_name: editedItem.first_name,
+      position: editedItem.position,
+      phone: editedItem.phone,
+      source: editedItem.source,
+      company_name: editedItem.company_name,
+      value: editedItem.value,
+      email: editedItem.email,
+      priority: editedItem.priority,
+      status: editedItem.status,
+      address1: editedItem.address1,
+      city: editedItem.city,
+      state: editedItem.state,
+      country: editedItem.country,
+      pin: editedItem.pin,
+    };
+  
     axios
-      .put(
-        UPDATE_LEAD + editedItem.id,
-        editedItem,
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-          }
-        }
-      )
+      .put(UPDATE_LEAD + editedItem.id, updatedLead, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
         console.log(response);
         setUpdateMessage("Lead data updated successfully");
@@ -60,14 +104,13 @@ const Modal = ({ selectedItem, closeModal }) => {
         }, 30000); // Clear message after 1 minute (60000 milliseconds)
       })
       .catch((error) => {
-        handleApiError(error,navigate);
+        handleApiError(error, navigate);
       });
   
-    console.log("Update clicked");
-    console.log(editedItem);
     setIsEditable(false);
   };
   
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -87,7 +130,7 @@ const Modal = ({ selectedItem, closeModal }) => {
                   <>
                     <input
                       type="text"
-                      name="company_name"
+                      name="lead_name"
                       value={editedItem.lead_name}
                       onChange={handleInputChange}
                     />
@@ -100,7 +143,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                   </>
                 )}
                 <span>
-                  ( Last Updated: {editedItem.update_date.split("T")[0]} )
+                  Last Updated:{" "}
+                  {editedItem && editedItem.update_date
+                    ? editedItem.update_date.split("T")[0]
+                    : ""}
                 </span>
               </p>
             </div>
@@ -244,7 +290,7 @@ const Modal = ({ selectedItem, closeModal }) => {
                       <span>-</span>
                     )}
                   </p>
-                  <p>
+                  {/* <p>
                     {isEditable ? (
                       <input
                         type="text"
@@ -274,9 +320,16 @@ const Modal = ({ selectedItem, closeModal }) => {
                     ) : (
                       <span>-</span>
                     )}
+                  </p> */}
+                  <p>
+                    {editedItem.priority ? (
+                      <span>{editedItem.priority}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
                   </p>
 
-                  <p
+                  {/* <p
                     className="detailsStatus"
                     style={{ backgroundColor: getStatusBackgroundColor() }}
                   >
@@ -288,6 +341,16 @@ const Modal = ({ selectedItem, closeModal }) => {
                         onChange={handleInputChange}
                       />
                     ) : editedItem.status ? (
+                      <span>{editedItem.status}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </p> */}
+                  <p
+                    className="detailsStatus"
+                    style={{ backgroundColor: getStatusBackgroundColor() }}
+                  >
+                    {editedItem.status ? (
                       <span>{editedItem.status}</span>
                     ) : (
                       <span>-</span>
@@ -454,7 +517,7 @@ const Modal = ({ selectedItem, closeModal }) => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={selectedItem}/>
+                <AddNotes item={selectedItem} />
               </div>
             )}
             {activeTab === "email" && (

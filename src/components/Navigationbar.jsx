@@ -36,6 +36,7 @@ const NavigationBar = () => {
     // Clear JWT token from local storage
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("landingUrl");
+    localStorage.removeItem("id");
     // Redirect to the home page or any other desired path
     navigate("/");
   };

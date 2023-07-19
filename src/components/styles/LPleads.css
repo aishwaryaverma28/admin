@@ -591,6 +591,13 @@ cursor: pointer;
   display: flex;
   gap: 2rem;
 }
+.detailsLeftContainer{
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
 .detailsLeftContainer p {
   color: #4b5054;
   font-family: "Lexend Deca";
@@ -599,7 +606,13 @@ cursor: pointer;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
-  margin-bottom: 1rem;
+}
+.detailsLeftContainer2{
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
 }
 .detailsLeftContainer2 p {
   color: #4b5054;
@@ -609,7 +622,12 @@ cursor: pointer;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
-  margin-bottom: 1.85rem;
+}
+.detailsRightContainer{
+  /* border: 2px solid aqua; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .detailsRightContainer p {
   color: #1e2224;
@@ -619,7 +637,6 @@ cursor: pointer;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
-  margin-bottom: 1rem;
 }
 .detailsStatus {
   border-radius: 0.1875rem;
@@ -666,12 +683,11 @@ cursor: pointer;
      border: 1px solid #dcdcdc;
     outline: rgb(59, 59, 59);
     background-color: #ffffff;
-     border-radius: 5px;
-    font-size: 12px;
+      font-size: 0.8rem;
     font-family: "Lexend Deca";
-    padding: 0.5rem;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-}
+    border-radius: 0.3125rem;
+    padding: 0.3rem;
+  }
 .detailsRightContainer input:focus{
   border: 1px solid #E2E9F2;
   box-shadow: none;
