@@ -163,7 +163,6 @@ const EmployeeUpdate = () => {
                 id="employeecode"
                 placeholder="Please Enter Code"
                 value={currentEmp.emp_no}
-                disabled
               />
             </div>
             <div className="fromFiled">
