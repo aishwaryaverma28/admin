@@ -9,6 +9,7 @@ import {
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import { useNavigate } from "react-router-dom";
+import LeadDocUp from "./LeadDocUp";
 
 const Modal = ({ selectedItem, closeModal }) => {
   const [isEditable, setIsEditable] = useState(false);
@@ -532,7 +533,7 @@ const Modal = ({ selectedItem, closeModal }) => {
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <p>Attachment</p>
+                <LeadDocUp item={selectedItem} />
               </div>
             )}
           </div>

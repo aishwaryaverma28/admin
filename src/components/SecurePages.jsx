@@ -23,7 +23,6 @@
 
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 function SecurePages(props) {
   const { Component } = props;
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ function SecurePages(props) {
   const currentPath = window.location.pathname;
   const isLandingUrlAdmin = landingUrl && landingUrl.startsWith("/admin");
   const isCurrentPathLP = currentPath.startsWith("/lp");
-
+  
   useEffect(() => {
     if ((isLandingUrlAdmin && isCurrentPathLP) || (!isLandingUrlAdmin && !isCurrentPathLP)) {
       navigate(landingUrl);

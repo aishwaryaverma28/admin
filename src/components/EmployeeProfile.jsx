@@ -31,16 +31,22 @@ const [pic, setPic] = useState("");
   }, [empData]); // Call ageCal whenever empData changes
 
   async function getEmployeeInfo() {
-    const response = await axios.get(EMPLOYEE_GETID+userId,{
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    });
-    const data = response.data.data;
-    setEmpData(data[0]);
-    setInitialEmpData(data[0]); // Set the initial employee data
+    try {
+      const response = await axios.get(EMPLOYEE_GETID + userId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      });
+      const data = response.data.data;
+      setEmpData(data[0]);
+      setInitialEmpData(data[0]);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+      setEmpData({}); // Set empData to an empty object in case of an error
+    }
   }
 console.log(empData);
+
 function ageCal() {
   if (empData && empData.creation_date) {
     let dob = empData.dob ? empData.dob.split("T")[0].split("-")[0] : "";

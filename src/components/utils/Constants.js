@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 
-const secretKey = 'miyamura';
+// const secretKey = 'mySecretKey123';
+const secretKey = "miyamura"; // Set your secret key here
 const encryptedToken = localStorage.getItem('jwtToken');
 let decryptedToken = '';
 
@@ -22,6 +23,16 @@ const getDecryptedToken = () => {
 };
 
 export { getDecryptedToken };
+const getDecryptedUserPath = () => {
+const encryptedUserPathTot = localStorage.getItem("encryptedUserPathTot");
+if (encryptedUserPathTot) {
+// Decrypt the userPathTot
+const decryptedBytes = CryptoJS.AES.decrypt(encryptedUserPathTot, secretKey);
+return decryptedBytes.toString(CryptoJS.enc.Utf8);
+}
+return '';
+}
+export {getDecryptedUserPath}
 //=============================================================session time error handle
 export const handleApiError = (error,navigate) => {
      if (

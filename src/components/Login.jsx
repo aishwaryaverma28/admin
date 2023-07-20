@@ -1,12 +1,14 @@
-//for client
 // {
-//   "username": "admin@gmail.com",
-//   "password": "Mahi@3332"
+//     "username": "client@gmail.com",
+//     "password": "Mahi@3332"
 // }
-//for admin panel
 // {
-//   "username": "mahesh@gmail.com",
-//   "password": "Mahi@3332"
+//     "username": "employee@gmail.com",
+//     "password": "Mahi@3332"
+// }
+// {
+//     "username": "hr@gmail.com",
+//     "password": "Mahi@3332"
 // }
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -17,14 +19,13 @@ import LoginHeader from "./LoginHeader";
 import LoginFooter from "./LoginFooter";
 import CRMImage from "../assets/image/crm.svg";
 import CryptoJS from "crypto-js";
-
 const secretKey = "miyamura"; // Set your secret key here
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+    
   useEffect(() => {
     // Check if a JWT token is already stored in localStorage
     const encryptedToken = localStorage.getItem("jwtToken");
@@ -70,6 +71,14 @@ const Login = () => {
           localStorage.setItem("id", userId); // Store the landing URL in localStorage
           const landingUrl = response.data.landingurl;
           localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
+          const userPath = data.user[0].permissions.split(",");
+          userPath.push(landingUrl);
+          const userPathTot = userPath.join(",");
+          const encryptedUserPathTot = CryptoJS.AES.encrypt(
+            userPathTot,
+            secretKey
+          ).toString();
+          localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
           navigate(landingUrl);
         }
       })
