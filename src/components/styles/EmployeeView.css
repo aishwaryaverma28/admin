@@ -121,3 +121,12 @@ cursor: pointer;
 .numBtn{
     padding: 0.5rem;
 }
+.addressTd{
+    padding: 0;
+}
+.address{
+    max-width: 7.5rem;
+    max-height: 3.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

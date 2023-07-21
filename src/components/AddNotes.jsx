@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./styles/LPleads.css";
 import CRMeditor from "./CRMeditor";
-import trash from "../assets/image/delete-icon.svg";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import {
   ADD_NOTES,
   GETNOTEBYSOURCE,
   UPDATE_NOTE,
-  handleApiError,
+  handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
@@ -21,8 +19,7 @@ const AddNotes = ({ item }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
-  const navigate = useNavigate();
-  useEffect(() => {
+    useEffect(() => {
     // console.log(decryptedToken);
     fetchNotes();
   }, []);
@@ -35,11 +32,19 @@ const AddNotes = ({ item }) => {
         },
       })
       .then((response) => {
+        if (response.data.status === 1) {
         // console.log(response.data.data);
         setNotes(response.data.data);
+        }
+        else {
+          if (response.data.message === "Token has expired") {
+            alert(response.data.message);
+           handleLogout() 
+          }
+        }
       })
       .catch((error) => {
-        handleApiError(error, navigate);
+        console.log(error);
       });
   };
 
@@ -68,7 +73,7 @@ const AddNotes = ({ item }) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
       })
       .catch((error) => {
-        handleApiError(error, navigate);
+        console.log(error);
       });
 
     setDataFromChild("");
@@ -107,7 +112,7 @@ const AddNotes = ({ item }) => {
           fetchNotes();
         })
         .catch((error) => {
-          handleApiError(error, navigate);
+          console.log(error)
         });
     }
   };

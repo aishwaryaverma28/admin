@@ -4,7 +4,7 @@ import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_GETID,EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken } from "./utils/Constants";
+import { EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken,handleLogout } from "./utils/Constants";
 const userId = localStorage.getItem('id');
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
@@ -22,8 +22,7 @@ const [pic, setPic] = useState("");
   const fileInputRef = useRef(null);
     const [initialEmpData, setInitialEmpData] = useState({});
     useEffect(() => {
-    getEmployeeInfo();
-    getUser();
+      getUser();
     setCurrentYear(new Date().getFullYear());
   }, []);
 
@@ -31,21 +30,7 @@ const [pic, setPic] = useState("");
     ageCal();
   }, [empData]); // Call ageCal whenever empData changes
 
-  async function getEmployeeInfo() {
-    try {
-      const response = await axios.get(EMPLOYEE_GETID + userId, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      });
-      const data = response.data.data;
-      setEmpData(data[0]);
-      setInitialEmpData(data[0]);
-    } catch (error) {
-      console.error("Error fetching employee data:", error);
-      setEmpData({}); // Set empData to an empty object in case of an error
-    }
-  }
+  
   async function getUser() {
     try {
       const response = await axios.get("http://core.leadplaner.com:3001/api/user/getuserinfo", {
@@ -54,9 +39,16 @@ const [pic, setPic] = useState("");
         },
       });
       const data = response.data.data;
-      console.log(data);
+      if (response.data.status === 1) {
       setEmpData(data[0]);
       setInitialEmpData(data[0]);
+      }
+      else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+         handleLogout() 
+        }
+      }
     } catch(error){
       console.log(error)
     };

@@ -9,15 +9,13 @@ import {
   EMPLOYEE_UPDATE,
   REMOVE_DOC,
   UPLOAD_DOC,
-  VIEW_IMG,handleApiError,getDecryptedToken
+  VIEW_IMG,getDecryptedToken
 } from "./utils/Constants";
-import { useNavigate } from "react-router-dom";
 const decryptedToken = getDecryptedToken();
 const userId = localStorage.getItem('id');
 
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
-  const navigate = useNavigate();
-    const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -40,7 +38,7 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
           }
         });
       } catch(error) {
-        handleApiError(error,navigate);
+        console.log(error)
       };
     }
 
@@ -54,7 +52,7 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
       setImageUrl(response.data.data);
       // Perform any additional actions on successful upload
     } catch(error) {
-      handleApiError(error,navigate);
+      console.log(error)
     };
   };
 
@@ -125,8 +123,7 @@ function EmployeeDocuments() {
   const [empData, setEmpData] = useState([]);
   const [initialEmpData, setInitialEmpData] = useState({});
   const [uploadMessage, setUploadMessage] = useState("");
-  const navigate = useNavigate();
-  
+    
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -143,7 +140,7 @@ function EmployeeDocuments() {
       setInitialEmpData(data[0]);
       setData(data[0]);
     } catch(error){
-      handleApiError(error,navigate);
+      console.log(error)
     };
   }
 
@@ -175,7 +172,7 @@ function EmployeeDocuments() {
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
     })
     .catch((error) => {
-      handleApiError(error,navigate);
+      console.log(error)
     });
   }
 

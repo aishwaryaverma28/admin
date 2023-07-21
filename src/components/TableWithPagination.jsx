@@ -80,7 +80,7 @@ const TableWithPagination = ({ data, rowsPerPage }) => {
               <td className="employeeDate">{row.dob ? row.dob.split("T")[0] : ""}</td>
               
               <td className="employeeDate">{row.mobile}</td>
-              <td className="address">{row.address1}</td>
+              <td className="addressTd"><div className="address">{row.address1}</div></td>
               <td>{}</td>
             </tr>
           ))}

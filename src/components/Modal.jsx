@@ -3,12 +3,10 @@ import "./styles/LPleads.css";
 import axios from "axios";
 import {
   UPDATE_LEAD,
-  handleApiError,
   getDecryptedToken,
 } from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
-import { useNavigate } from "react-router-dom";
 import LeadDocUp from "./LeadDocUp";
 
 const Modal = ({ selectedItem, closeModal }) => {
@@ -16,7 +14,6 @@ const Modal = ({ selectedItem, closeModal }) => {
   const [editedItem, setEditedItem] = useState(selectedItem);
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
-  const navigate = useNavigate();
   const decryptedToken = getDecryptedToken();
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
@@ -105,7 +102,7 @@ const Modal = ({ selectedItem, closeModal }) => {
         }, 30000); // Clear message after 1 minute (60000 milliseconds)
       })
       .catch((error) => {
-        handleApiError(error, navigate);
+        console.log(error)
       });
   
     setIsEditable(false);

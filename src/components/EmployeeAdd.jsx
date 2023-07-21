@@ -1,12 +1,10 @@
 import React, {useState} from "react";
 import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
-import {EMPLOYEE_ADD,handleApiError,getDecryptedToken } from './utils/Constants'
-import { useNavigate } from "react-router-dom";
+import {EMPLOYEE_ADD,getDecryptedToken } from './utils/Constants'
 
 const EmployeeAdd = () => {
 const [name,setName] = useState("");
-const navigate = useNavigate();
 const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
 const [updateMessage, setUpdateMessage] = useState("");
@@ -93,7 +91,7 @@ function handleSubmit(event) {
       });
     })
     .catch((error) => {
-      handleApiError(error,navigate);
+      console.log(error)
     });
 }
 

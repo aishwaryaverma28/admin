@@ -1,6 +1,7 @@
 .settings{
   border: 2px solid red;
   display:flex;
+  color: #1e2224;
 }
 .setting-font-style {
   color: #1e2224;
@@ -25,9 +26,7 @@ button {
   overflow-y: scroll;
   background: #f8fafb;
 }
-.setting-side-panel p{
-  
-}
+
 .go-back-btn button {
   color: #33475b;
   display: flex;

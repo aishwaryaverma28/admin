@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import "./styles/CreateLead.css";
 import axios from "axios";
-import { ADD_LEAD,handleApiError,getDecryptedToken } from "./utils/Constants";
+import { ADD_LEAD,getDecryptedToken } from "./utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "./utils/CodeCurrency";
-import { useNavigate } from "react-router-dom";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   const [status, setStatus] = useState("");
-  const navigate = useNavigate();
-  const [name, setName] = useState("");
+   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
   const [updateMessage, setUpdateMessage] = useState("");
@@ -85,7 +83,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
-        handleApiError(error,navigate);
+        console.log(error)
       });
   };
   

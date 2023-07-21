@@ -2,15 +2,7 @@ import CryptoJS from 'crypto-js';
 
 const secretKey = 'mySecretKey123';
 // const secretKey = "miyamura"; // Set your secret key for login
-const encryptedToken = localStorage.getItem('jwtToken');
-let decryptedToken = '';
 
-if (encryptedToken) {
-  const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
-  decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
-}
-
-export { decryptedToken };
 const getDecryptedToken = () => {
   const encryptedToken = localStorage.getItem('jwtToken');
 
@@ -33,37 +25,16 @@ return decryptedBytes.toString(CryptoJS.enc.Utf8);
 return '';
 }
 export {getDecryptedUserPath}
-//=============================================================session time error handle
-export const handleApiError = (error,navigate) => {
-     if (
-      error.response &&
-      error.response.data &&
-      error.response.data.message === "Invalid or expired token."
-    ) {
-      // Display an alert to the user
-      alert(error.response.data.message);
-      // Clear localStorage
-      localStorage.removeItem("jwtToken");
-      localStorage.removeItem("landingUrl");
-      localStorage.removeItem("id");
-      localStorage.removeItem("encryptedUserPathTot");
-      // Redirect to the login page
-      // navigate("/");
-      // window.location.href = "https://www.leadplaner.com/user/login";
-    } else {
-      console.log(error.response);
-    }
-  };
-  //=============================================================logout f
+  
+  //=============================================================logout function
   export const handleLogout = () => {
-    // Clear JWT token from local storage
+      // Clear JWT token from local storage
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("landingUrl");
     localStorage.removeItem("id");
     localStorage.removeItem("encryptedUserPathTot");
     // Redirect to the home page or any other desired path
-    // navigate("/");
-    window.location.href = "https://www.leadplaner.com/user/login";
+      window.location.href = "https://www.leadplaner.com/user/login";
   };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
