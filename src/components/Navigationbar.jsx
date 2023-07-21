@@ -6,7 +6,7 @@ import userIcon from "../assets/image/user-img.png";
 import Sidebar from "./Sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID, VIEW_IMG,handleApiError,getDecryptedToken } from "./utils/Constants";
+import { EMPLOYEE_GETID, VIEW_IMG,getDecryptedToken,handleLogout } from "./utils/Constants";
 
 const NavigationBar = () => {
   const { profileImage } = useContext(UserContext);
@@ -32,16 +32,16 @@ const NavigationBar = () => {
       console.log(error)
     };
   }
-    const handleLogout = () => {
+    // const handleLogout = () => {
     // Clear JWT token from local storage
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("landingUrl");
-    localStorage.removeItem("id");
-    localStorage.removeItem("encryptedUserPathTot");
+    // localStorage.removeItem("jwtToken");
+    // localStorage.removeItem("landingUrl");
+    // localStorage.removeItem("id");
+    // localStorage.removeItem("encryptedUserPathTot");
     // Redirect to the home page or any other desired path
     // navigate("/");
-    window.location.href = "https://www.leadplaner.com/user/login";
-  };
+    // window.location.href = "https://www.leadplaner.com/user/login";
+  // };
   return (
     <>
       <div className="sidebar-header">

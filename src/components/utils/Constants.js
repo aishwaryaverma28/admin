@@ -54,7 +54,7 @@ export const handleApiError = (error,navigate) => {
       console.log(error.response);
     }
   };
-  //=============================================================logout function
+  //=============================================================logout f
   export const handleLogout = () => {
     // Clear JWT token from local storage
     localStorage.removeItem("jwtToken");

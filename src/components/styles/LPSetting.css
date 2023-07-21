@@ -1,3 +1,7 @@
+.settings{
+  border: 2px solid red;
+  display:flex;
+}
 .setting-font-style {
   color: #1e2224;
   font-family: "Lexend Deca", sans-serif;
@@ -18,9 +22,12 @@ button {
 .setting-side-panel {
   width: 15rem;
   height: 56.81rem;
+  overflow-y: scroll;
   background: #f8fafb;
 }
-
+.setting-side-panel p{
+  
+}
 .go-back-btn button {
   color: #33475b;
   display: flex;

@@ -29,12 +29,14 @@ import Home from "./components/Home";
 import Contacts from "./components/Contacts";
 import Deals from "./components/Deals";
 import Mail from "./components/Mail";
-import LPSetting from "./components/LPSetting";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import SecurePages from "./components/SecurePages";
 import SecureRoutes from "./components/SecureRoutes";
 import Testing from "./components/Testing";
+import UserAndTeams from "./components/UserAndTeams";
+import LPSettingsGeneral from "./components/LPSettingsGeneral";
+import Error from "./components/Error";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/registration",
     element: <Registration />,
+  },
+  {
+    path:"/error",
+    element:<Error/>,
   },
   {
     path: "/lp",
@@ -74,9 +80,13 @@ const router = createBrowserRouter([
         element: <Deals />,
       },
       {
-        path: "/lp/settings",
-        element: <LPSetting />,
-      },
+            path: "/lp/settings/usernteams",
+            element: <UserAndTeams/>,
+          },
+          {
+            path: "/lp/settings/general",
+            element: <LPSettingsGeneral/>,
+          },
     ],
   },
   {

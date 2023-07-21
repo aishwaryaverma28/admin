@@ -4,6 +4,7 @@ import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
+import { handleLogout } from "./utils/Constants";
 
 const LPheader = () => {
   const [pageTitle, setPageTitle] = useState("Lead");
@@ -44,15 +45,7 @@ const LPheader = () => {
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
-  const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("landingUrl");
-    localStorage.removeItem("id");
-    localStorage.removeItem("encryptedUserPathTot");
-    // Redirect to the home page or any other desired path
-    // navigate("/");
-    window.location.href = "https://www.leadplaner.com/user/login";
-  };
+  
   return (
     <>
       <div className="nav">
@@ -95,7 +88,7 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <Link to="/lp/settings">
+              <Link to="/lp/settings/general">
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>

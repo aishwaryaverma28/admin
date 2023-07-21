@@ -4,7 +4,7 @@ import chart from "../assets/image/chart.svg"
 import axios from 'axios';
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead";
-import {GET_LEAD,IMPORT_CSV,handleApiError,getDecryptedToken} from "./utils/Constants"
+import {GET_LEAD,IMPORT_CSV,getDecryptedToken} from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 
 const useDropdown = () => {
@@ -59,7 +59,7 @@ const LPleads = () => {
         setKeys(dataArray.map(([key, value]) => key));
       })
       .catch((error) => {
-        handleApiError(error,navigate);
+       console.log(error);
       });
   };
   

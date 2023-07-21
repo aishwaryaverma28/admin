@@ -2,14 +2,13 @@ import React from 'react'
 import LPSettingSidebar from './LPSettingSidebar'
 import "./styles/LPSetting.css";
 
-const UserAndTeams = () => {
+const LPSettingsGeneral = () => {
   return (
     <div className='settings'>
     <LPSettingSidebar/>
-    <div className='mainPage'>UserAndTeams</div>
+    <div className='mainPage'>LPSettingsGeneral</div>
     </div>
-    
   )
 }
 
-export default UserAndTeams
+export default LPSettingsGeneral

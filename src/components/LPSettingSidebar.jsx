@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/LPSetting.css';
+import { NavLink } from "react-router-dom";
 import arrowLeft from "../assets/image/arrow-left.svg";
 
 const LPSettingSidebar = () => {
@@ -13,7 +14,9 @@ const LPSettingSidebar = () => {
     </div>
     <div className="setting-font-style">
       <p className="prefrence">Your Prefrences</p>
-      <p className="prefrence-options">General</p>
+      <p className="prefrence-options"> <NavLink
+            exact to="/lp/settings/general"       
+            >General</NavLink></p>
       <p className="prefrence-options">Notification</p>
       <p className="prefrence-options">Security</p>
     </div>
@@ -21,7 +24,10 @@ const LPSettingSidebar = () => {
     <div className="setting-font-style">
       <p className="account-setup">Account Setup</p>
       <p className="account-options">account defaults</p>
-      <p className="account-options">users & teams</p>
+      <p className="account-options"> <NavLink
+            exact to="/lp/settings/usernteams"
+            activeClassName="activeLink"
+            >users & teams</NavLink></p>
       <p className="account-options">privacy & consent</p>
     </div>
     <div className="setting-font-style">
