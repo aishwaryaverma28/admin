@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 
-// const secretKey = 'mySecretKey123';
-const secretKey = "miyamura"; // Set your secret key here
+const secretKey = 'mySecretKey123';
+// const secretKey = "miyamura"; // Set your secret key for login
 const encryptedToken = localStorage.getItem('jwtToken');
 let decryptedToken = '';
 
@@ -42,11 +42,14 @@ export const handleApiError = (error,navigate) => {
     ) {
       // Display an alert to the user
       alert(error.response.data.message);
-      // Clear JWT token from localStorage
+      // Clear localStorage
       localStorage.removeItem("jwtToken");
-  
+      localStorage.removeItem("landingUrl");
+      localStorage.removeItem("id");
+      localStorage.removeItem("encryptedUserPathTot");
       // Redirect to the login page
-      navigate("/");
+      // navigate("/");
+      // window.location.href = "https://www.leadplaner.com/user/login";
     } else {
       console.log(error.response);
     }

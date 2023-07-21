@@ -29,16 +29,18 @@ const NavigationBar = () => {
       setEmpData(data[0]);
       setPic(VIEW_IMG + data[0].profile_image);
     } catch(error){
-      handleApiError(error,navigate);
+      console.log(error)
     };
   }
-  const handleLogout = () => {
+    const handleLogout = () => {
     // Clear JWT token from local storage
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("landingUrl");
     localStorage.removeItem("id");
+    localStorage.removeItem("encryptedUserPathTot");
     // Redirect to the home page or any other desired path
-    navigate("/");
+    // navigate("/");
+    window.location.href = "https://www.leadplaner.com/user/login";
   };
   return (
     <>

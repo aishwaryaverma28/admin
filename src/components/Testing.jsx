@@ -46,14 +46,24 @@ function Testing() {
         var decryptedText = customDecrypt(auth, secretKey);
         setAuthData(decryptedText);
         let auth0 = decryptedText.split("$$");
-
+        console.log(auth0);
         const token = auth0[1];
-        const encryptedToken = CryptoJS.AES.encrypt(token, secretKey).toString();
+        const encryptedToken = CryptoJS.AES.encrypt(
+          token,
+          secretKey
+        ).toString();
         localStorage.setItem("jwtToken", encryptedToken);
 
         const landingUrl = auth0[0];
         localStorage.setItem("landingUrl", landingUrl);
-
+        const userPath = auth0[2].split(",");
+        userPath.push(landingUrl);
+        const userPathTot = userPath.join(",");
+        const encryptedUserPathTot = CryptoJS.AES.encrypt(
+          userPathTot,
+          secretKey
+        ).toString();
+        localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
         navigate(landingUrl);
       }
     }

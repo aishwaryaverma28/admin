@@ -6,6 +6,7 @@
 //     "username": "employee@gmail.com",
 //     "password": "Mahi@3332"
 // }
+// http://core.leadplaner.com:3000/auth=Qhg3CAocQVAuHDNZUHQOEBwMKTswDgJUN1h7QCQXAVAAMSxCAg4JaWRwJ0B9ABo4FS4ILE9_SHIeMD0vFRAiISIqE3hBegAVOwEgO1M5HzxNfmZYFDQpAlY_DAMiPyFZRXoHFisrCRkSOjECSn52WBQfAkspQCoaHF1JAmVbHAwSJzdKCzcZFCFmC1EaODAHESscASAuOlJcWgQcJikEVkFbKgEUWFwcGxA2EjMAChIiCRweV14dFTwcBhc1BiQDEF1XH0IYNwgKHEoCIgAOYUBcCxA_AEwGDBkuNhFUV0dBVjIBDhsLWz0MHEZiQQIfOgkGXQEbKBAUVFxHHlV8BAcfDBpkExBURWMfFjUMDxdKByoJGENLYAEQIw
 // {
 //     "username": "hr@gmail.com",
 //     "password": "Mahi@3332"
@@ -19,7 +20,7 @@ import LoginHeader from "./LoginHeader";
 import LoginFooter from "./LoginFooter";
 import CRMImage from "../assets/image/crm.svg";
 import CryptoJS from "crypto-js";
-const secretKey = "miyamura"; // Set your secret key here
+const secretKey = 'mySecretKey123';
 
 const Login = () => {
   const [email, setEmail] = useState("");

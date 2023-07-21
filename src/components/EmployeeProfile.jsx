@@ -23,6 +23,7 @@ const [pic, setPic] = useState("");
     const [initialEmpData, setInitialEmpData] = useState({});
     useEffect(() => {
     getEmployeeInfo();
+    getUser();
     setCurrentYear(new Date().getFullYear());
   }, []);
 
@@ -45,7 +46,23 @@ const [pic, setPic] = useState("");
       setEmpData({}); // Set empData to an empty object in case of an error
     }
   }
-console.log(empData);
+  async function getUser() {
+    try {
+      const response = await axios.get("http://core.leadplaner.com:3001/api/user/getuserinfo", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        },
+      });
+      const data = response.data.data;
+      console.log(data);
+      setEmpData(data[0]);
+      setInitialEmpData(data[0]);
+    } catch(error){
+      console.log(error)
+    };
+  }
+
+// console.log(empData);
 
 function ageCal() {
   if (empData && empData.creation_date) {

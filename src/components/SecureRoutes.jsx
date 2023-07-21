@@ -67,7 +67,6 @@ const SecureRoutes = (props) => {
   const landingUrl = localStorage.getItem('landingUrl');
   const [isLoading, setIsLoading] = useState(true);
     const decryptedUserPath = getDecryptedUserPath();
-  console.log(decryptedUserPath);
   
   
   useEffect(() => {
