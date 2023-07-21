@@ -54,6 +54,17 @@ export const handleApiError = (error,navigate) => {
       console.log(error.response);
     }
   };
+  //=============================================================logout function
+  export const handleLogout = () => {
+    // Clear JWT token from local storage
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("landingUrl");
+    localStorage.removeItem("id");
+    localStorage.removeItem("encryptedUserPathTot");
+    // Redirect to the home page or any other desired path
+    // navigate("/");
+    window.location.href = "https://www.leadplaner.com/user/login";
+  };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
 const userId = localStorage.getItem('id');
