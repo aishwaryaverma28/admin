@@ -39,8 +39,8 @@ const NavigationBar = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("encryptedUserPathTot");
     // Redirect to the home page or any other desired path
-    // navigate("/");
-    window.location.href = "https://www.leadplaner.com/user/login";
+    navigate("/");
+    // window.location.href = "https://www.leadplaner.com/user/login";
   };
   return (
     <>

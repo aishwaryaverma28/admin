@@ -45,11 +45,13 @@ const LPheader = () => {
     setIsNavOpen(!isNavOpen);
   };
   const handleLogout = () => {
-    // Clear JWT token from local storage
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("landingUrl");
+    localStorage.removeItem("id");
+    localStorage.removeItem("encryptedUserPathTot");
     // Redirect to the home page or any other desired path
-    navigate("/");
+    // navigate("/");
+    window.location.href = "https://www.leadplaner.com/user/login";
   };
   return (
     <>
