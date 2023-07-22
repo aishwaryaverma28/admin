@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
 import {
   UPDATE_LEAD,
+  GETNOTEBYSOURCE,
+  handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
@@ -14,6 +16,7 @@ const Modal = ({ selectedItem, closeModal }) => {
   const [editedItem, setEditedItem] = useState(selectedItem);
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
+  const [notes, setNotes] = useState();
   const decryptedToken = getDecryptedToken();
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
@@ -31,6 +34,34 @@ const Modal = ({ selectedItem, closeModal }) => {
         return ""; // Default background color
     }
   };
+  useEffect(() => {
+    // console.log(decryptedToken);
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = () => {
+    axios
+      .get(GETNOTEBYSOURCE + selectedItem.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+        console.log(response.data.data);
+        setNotes(response.data.data.length);
+        }
+        else {
+          if (response.data.message === "Token has expired") {
+            alert(response.data.message);
+           handleLogout() 
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleInputChange = (e) => {
     setEditedItem({
@@ -43,29 +74,7 @@ const Modal = ({ selectedItem, closeModal }) => {
     e.preventDefault();
     setIsEditable(!isEditable);
   };
-  // const handleUpdateClick = (event) => {
-  //   event.preventDefault();
-  //   axios
-  //     .put(UPDATE_LEAD + editedItem.id, editedItem, {
-  //       headers: {
-  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       setUpdateMessage("Lead data updated successfully");
-  //       setTimeout(() => {
-  //         setUpdateMessage("");
-  //       }, 30000); // Clear message after 1 minute (60000 milliseconds)
-  //     })
-  //     .catch((error) => {
-  //       handleApiError(error, navigate);
-  //     });
-
-  //   console.log("Update clicked");
-  //   console.log(editedItem);
-  //   setIsEditable(false);
-  // };
+  
   const handleUpdateClick = (event) => {
     event.preventDefault();
   
@@ -488,7 +497,7 @@ const Modal = ({ selectedItem, closeModal }) => {
               onClick={() => handleTabClick("notes")}
             >
               <i className="fa-sharp fa-regular fa-note-sticky"></i>
-              Notes
+              Notes ({notes})
             </button>
             <button
               className={activeTab === "email" ? "active" : ""}

@@ -985,3 +985,20 @@ letter-spacing: -0.02563rem;
   border: 1px solid #077838;
   transition: all 400ms ease-in-out;
 }
+.ql-editor p{
+  color: #1E2224;
+  font-family: Lexend Deca;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+.quill{
+border-radius: 0.3125rem;
+background: #F4F5F9;
+}
+.ql-container{
+  background: #F4F5F9;
+}

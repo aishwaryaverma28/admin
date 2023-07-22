@@ -1,5 +1,5 @@
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider,Navigate } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
 import LPleads from "./components/LPleads";
 import Admin from "./components/Admin";
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     element: <Testing />,
   },
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
   },
   {
@@ -59,6 +59,10 @@ const router = createBrowserRouter([
     path: "/lp",
     element: <SecurePages Component={Leadplaner} />,
     children: [
+      {
+        path: "/lp", // This is the new route for /lp
+        element: <Navigate to="/lp/home" replace />, // Redirect to /lp/home
+      },
       {
         path: "/lp/lead",
         element: <LPleads />,

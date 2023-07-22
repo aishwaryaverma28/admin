@@ -1,0 +1,201 @@
+.genral-setting-fonts {
+    color: #1E2224;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    text-transform: capitalize;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+input:focus {
+    border: 1px solid rgb(127, 126, 126);
+}
+
+
+.genral-setting-container {
+    width: 80vw;
+    height: 56.81rem;
+}
+
+.genral-setting-container .genral-heading {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.genral-active {
+    color: #2B74DA !important;
+    border: 1px solid #2B74DA !important;
+}
+
+.genral-setting-btn .genral-btn {
+    color: #33475B;
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    background-color: #fff;
+    border: 1px solid transparent;
+    font-family: "Lexend Deca", sans-serif;
+
+}
+
+.genral-setting-btn {
+    margin-left: 1rem;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    margin-bottom: 2rem;
+}
+
+
+.genral-user p {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    margin-left: 1rem;
+}
+
+.genral-image {
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100px;
+    background-color: #f3f6fa;
+    margin-left: 2.28rem;
+
+}
+
+.genral-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.25rem;
+    height: 2.25rem;
+
+}
+
+.genral-setting-form {
+    margin-top: 2rem;
+}
+
+.genral-form-division {
+    display: flex;
+}
+
+
+.genral-form-section1 {
+    margin-left: 1rem;
+    margin-right: 2.75rem;
+}
+
+.genral-form-division label {
+    color: #33475B;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+
+}
+
+.genral-form-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.genral-form-input,
+.genral-form-select {
+    margin-bottom: 2.12rem;
+    width: 28rem;
+    height: 2.6875rem;
+    flex-shrink: 0;
+    border-radius: 0.3125rem;
+    border: 1px solid #DCDCDC;
+    background: #F3F6FA;
+    padding: 1rem;
+    cursor: pointer;
+
+}
+
+.genral-form-select {
+    padding: 0;
+    padding-left: 1rem;
+}
+
+.genral-timezone {
+    margin-bottom: 0.5rem;
+}
+
+
+
+.timezone-note {
+    color: #909DB0;
+    font-family: Lexend Deca;
+    font-size: 0.75rem;
+
+}
+
+.genral-language {
+    margin-top: 2.12rem;
+}
+
+.general-page-btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.general-save-btn {
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    background: #077838;
+    border: 1px solid transparent;
+    color: #fff;
+    margin-right: 2rem;
+    margin-left: 0.81rem;
+    font-family: Lexend Deca;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    text-transform: capitalize;
+}
+.general-save-btn:hover{
+    background-color: #FFF;
+    color:#077838;
+    transition: all 0.5s ease-in-out;
+    border: 1px solid #077838;
+}
+
+.general-discard-btn {
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    background: #fff;
+    border: 1px solid transparent;
+    color: #fff;
+    border: 1px solid #DCDCDC;
+    background: #FFF;
+    color: #1E2224;
+    font-family: Lexend Deca;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    text-transform: capitalize;
+}
+
+.general-discard-btn:hover{
+    background-color: #077838;
+    color:#FFF;
+    transition: all 0.5s ease-in-out;
+    border: 1px solid #077838;
+}

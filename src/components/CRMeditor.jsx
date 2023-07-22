@@ -17,7 +17,6 @@ function CRMeditor({ onDataTransfer, initialContent }) {
   const modules = {
         toolbar: [
           ['bold', 'italic', 'underline'],
-          ['link'],
         ],
       };
     

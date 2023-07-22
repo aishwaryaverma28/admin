@@ -1,7 +1,5 @@
-.settings{
-  border: 2px solid red;
+.settings-container{
   display:flex;
-  color: #1e2224;
 }
 .setting-font-style {
   color: #1e2224;
@@ -21,12 +19,11 @@ button {
 /* side panel css  */
 
 .setting-side-panel {
-  width: 15rem;
-  height: 56.81rem;
-  overflow-y: scroll;
+  width: 20vw;
+  height: auto;
+  /* overflow-y: scroll; */
   background: #f8fafb;
 }
-
 .go-back-btn button {
   color: #33475b;
   display: flex;
@@ -52,15 +49,26 @@ button {
 .prefrence, .account-setup , .company-setup {
   margin-left: 2rem;
   margin-top: 2.25rem;
-  margin-bottom:1.5rem;
+  margin-bottom:0.88rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
 }
 
 .prefrence-options, .account-options, .company-options {
-  margin-left: 2rem;
-  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  padding-top:0.62rem;
+  padding-bottom: 0.62rem;
   cursor: pointer;
   font-size: 0.875rem;
+
 }
+
+.prefrence-options a,.account-options a, .company-options a{
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.875rem;
+    transition: color 0.3s ease-in-out;
+    padding: 10px 20px;
+    text-align: left;
+  }
