@@ -12,6 +12,8 @@ const SecureRoutes = (props) => {
   
   
   useEffect(() => {
+    // const allowed = ["/admin","/admin/blog/add","/admin/blog/view"]
+    // const allowed = ["/admin","/admin/employee/add","/admin/employee/view"]
     const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;
 

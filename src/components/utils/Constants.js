@@ -39,7 +39,7 @@ export {getDecryptedUserPath}
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
 const userId = localStorage.getItem('id');
-
+export const USER_INFO = start + "api/user/getuserinfo";
 //===============================================================login apis
 export const LOGIN = start+"api/user/login";
 export const CREATE_ACC = start+"api/user/createaccount";

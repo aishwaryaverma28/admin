@@ -4,7 +4,8 @@ import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
-import { handleLogout } from "./utils/Constants";
+import axios from "axios";
+import { USER_INFO,getDecryptedToken,handleLogout } from "./utils/Constants";
 
 const LPheader = () => {
   const [pageTitle, setPageTitle] = useState("Lead");
@@ -12,6 +13,37 @@ const LPheader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [clientData, setClientData] = useState(null);
+    const decryptedToken = getDecryptedToken();
+    useEffect(() => {
+        getUser()
+      }, []);
+    
+      async function getUser() {
+        try {
+          const response = await axios.get(
+            USER_INFO,
+            {
+              headers: {
+                Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+              },
+            }
+          );
+          const data = response.data.data;
+          if (response.data.status === 1) {
+            setClientData(data[0]);
+        //   setPic(VIEW_IMG + data[0].profile_image);
+        }
+          else {
+            if (response.data.message === "Token has expired") {
+              alert(response.data.message);
+             handleLogout() 
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
   
   useEffect(() => {
     const handleOutsideClick = (event) => {

@@ -9,6 +9,7 @@ const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
 const [updateMessage, setUpdateMessage] = useState("");
 const decryptedToken = getDecryptedToken();
+console.log(decryptedToken)
 const [details, setDetails] = useState({
   hire_date:"",
   emp_no: "",
@@ -275,17 +276,17 @@ function handleSubmit(event) {
               />
             </div>
             <div className="fromFiled">
-              <label for="">
-                Gender
+              <label htmlFor="gender">
+                Gender<span>*</span>
               </label>
-
-              <input
-                type="text"
+              <select
                 name="gender"
                 id="gender"
-                placeholder="Please Enter Gender"
                 onChange={handleChange}
-              />
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
             <div className="fromFiled">
               <label for="">
