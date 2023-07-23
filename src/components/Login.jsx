@@ -1,15 +1,21 @@
+// employee login
 // {
-//     "username": "client@gmail.com",
-//     "password": "Mahi@3332"
+//     "username": "employee",
+//     "password": "123"
 // }
+// =========================
+// hr login
 // {
-//     "username": "employee@gmail.com",
-//     "password": "Mahi@3332"
+//     "username": "hr",
+//     "password": "123"
 // }
+// ==================
+// client login
 // {
-//     "username": "hr@gmail.com",
-//     "password": "Mahi@3332"
+//     "username": "client",
+//     "password": "123"
 // }
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { LOGIN } from "./utils/Constants";
@@ -144,7 +150,7 @@ const Login = () => {
                   Work Email *
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={handleUserName}
                   className="login-form-input"

@@ -9,7 +9,6 @@ const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
 const [updateMessage, setUpdateMessage] = useState("");
 const decryptedToken = getDecryptedToken();
-console.log(decryptedToken)
 const [details, setDetails] = useState({
   hire_date:"",
   emp_no: "",
@@ -30,6 +29,7 @@ const [details, setDetails] = useState({
   social2:"",
   tax_id:"",
   aadhaar_no:"",
+  password:"",
 })
   function handleNameChange(event) {
     const empName = event.target.value;
@@ -42,8 +42,7 @@ const [details, setDetails] = useState({
     setfName(arr[0]);
     setlName(arr[arr.length-1]);
   }
-  // console.log(lname);
-  function handleChange (e) {
+    function handleChange (e) {
     const {name, value} = e.target;
     setDetails((prev) => {
       return {...prev, [name]: value};
@@ -89,6 +88,7 @@ function handleSubmit(event) {
         social2: "",
         tax_id: "",
         aadhaar_no: "",
+        password:"",
       });
     })
     .catch((error) => {
@@ -367,6 +367,7 @@ function handleSubmit(event) {
                 name="password"
                 id="password"
                 placeholder="Please Enter Password"
+                onChange={handleChange}
               />
             </div>
             <div className="fromFiled">
