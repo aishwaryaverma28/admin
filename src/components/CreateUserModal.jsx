@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { ADD_USER,getDecryptedToken } from "./utils/Constants";
 import "./styles/LPUserAndTeam.css";
 
-const CreateUserModal = ({ onClose }) => {
+const CreateUserModal = ({ onClose, onUserAdded }) => {
+    const decryptedToken = getDecryptedToken();
   const [details, setDetails] = useState({
     first_name: "",
     last_name: "",
+    contact:"",
     email: "",
   });
   function handleChange(e) {
@@ -15,9 +19,29 @@ const CreateUserModal = ({ onClose }) => {
   }
   function handleSubmit(e) {
     e.preventDefault();
+    axios
+    .post(ADD_USER, details, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    })
+    .then((response) => {
+        console.log(response);
+       setDetails({
+        first_name: "",
+    last_name: "",
+    contact:"",
+    email: "",
+      });
+      onUserAdded(); // Call the onLeadAdded function from props
+    onClose();
+     })
+    .catch((error) => {
+      console.log(error)
+    });
   }
   return (
-    <div className="modal-overlay">
+    <div className="modalUserOverlay">
       <div className="userModal">
         <div className="modalHeading">
           <p>Add User</p>
@@ -49,6 +73,17 @@ const CreateUserModal = ({ onClose }) => {
             />
           </div>
           <div className="inputDiv">
+            <label htmlFor="contact">Contact</label>
+            <br />
+            <input
+              type="text"
+              name="contact"
+              onChange={handleChange}
+              id="contact"
+              placeholder="Contact"
+            />
+          </div>
+          <div className="inputDiv">
             <label htmlFor="email">Email</label>
             <br />
             <input
@@ -72,7 +107,7 @@ const CreateUserModal = ({ onClose }) => {
           </div>
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
-            <input type="submit" className="userSubBtn"/>
+            <input type="submit" className="userSubBtn" value="Save"/>
           </div>
         </form>
       </div>

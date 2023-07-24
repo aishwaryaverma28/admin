@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import LPSettingSidebar from "./LPSettingSidebar";
 import "./styles/LPSetting.css";
 import "./styles/LPUserAndTeam.css";
+import axios from "axios";
+import { GET_TEAM_MEM,getDecryptedToken } from "./utils/Constants";
 import SearchIcon from "../assets/image/search.svg";
 import ExportIcon from "../assets/image/export.svg";
 import ExportIcon2 from "../assets/image/export2.svg";
@@ -15,6 +17,8 @@ const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [activeTab, setActiveTab] = useState("users");
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal
+  const decryptedToken = getDecryptedToken();
+  const [teamData, setTeamData] = useState([]);
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -31,6 +35,24 @@ const UserAndTeams = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const userAdded = () => {
+    axios
+    .get(GET_TEAM_MEM, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    })
+    .then((response) => {
+      console.log(response.data.data);
+      setTeamData(response.data.data);
+    })
+    .catch((error) => {
+     console.log(error);
+    });
+  }
+  useEffect(() => {
+    userAdded();
+  }, []);
   return (
     <div className="settings-container">
       <LPSettingSidebar />
@@ -181,6 +203,46 @@ const UserAndTeams = () => {
                     <td className="user-team-font">Super Admin</td>
                     <td className="user-team-font">3 hours ago</td>
                   </tr>
+                  {teamData.map((teamMember) => (
+          <tr key={teamMember.id}>
+            <td>
+              <label className="custom-checkbox">
+                <input type="checkbox" className="cb1" />
+                <span className="checkmark"></span>
+              </label>
+            </td>
+            <td>
+                      <div className="user-info">
+                        <div className="usericon-name-email">
+                          <div className="user-icon-round">
+                            <img src={User} alt="" />
+                          </div>
+
+                          <div className="user-name-info">
+                            <p className="user-name-value">
+                              {teamMember.first_name+" "+teamMember.last_name}
+                            </p>
+                            <p>{teamMember.email}</p>
+                          </div>
+                        </div>
+                        <div>
+                          <select
+                            name=""
+                            id=""
+                            className="select-action user-team-font"
+                          >
+                            <option value="">Action</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="user-team-font"></td>
+                    <td className="user-team-font"></td>
+                    <td className="user-team-font"></td>
+
+            </tr>
+                  )
+                  )}
                 </table>
               </section>
             </>
@@ -189,7 +251,7 @@ const UserAndTeams = () => {
           {activeTab === "teams" && <>teams</>}
         </main>
       </div>
-      {isModalOpen && <CreateUserModal onClose={closeModal} />}
+      {isModalOpen && <CreateUserModal onClose={closeModal} onUserAdded={userAdded} />}
     </div>
   );
 };

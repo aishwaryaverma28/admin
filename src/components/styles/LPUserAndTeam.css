@@ -385,7 +385,7 @@ input:focus {
 
 
 /* Sample modal styles */
-.modal-overlay {
+.modalUserOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -393,7 +393,7 @@ input:focus {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   font-family: "Lexend Deca";
 }
@@ -401,6 +401,7 @@ input:focus {
 .userModal {
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  height: fit-content;
 }
 
 .modal-close {
@@ -449,9 +450,45 @@ background: #FFF;
 }
 .submitBtnBox{
   padding: 10px 0;
+  display:flex;
+  justify-content: flex-end;
 }
 .userCancelBtn{
   border-radius: 0.3125rem;
 border: 1px solid #DCDCDC;
 background: #FFF;
+}
+.userSubBtn{
+  cursor: pointer;
+  padding: 7px 15px;
+    border-radius: 0.3125rem;
+    background: #077838;
+    border: 1px solid transparent;
+    color: #fff;
+    margin-left: 0.5rem;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    text-transform: capitalize;
+}
+.userSubBtn:hover{
+  border: 1px solid #077838;
+  color: #077838;
+  background-color: #fff;
+  transition: all 400ms ease-in-out;
+}
+.userCancelBtn {
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+  background-color: #fff;
+  border: 1px solid #DCDCDC;
+}
+
+.userCancelBtn:hover {
+   color: #fff;
+  background-color: #077838;
+  transition: all 400ms ease-in-out;
 }
