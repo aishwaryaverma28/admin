@@ -47,6 +47,7 @@ const BlogUpdate = () => {
     image: "",
     date: "",
     site: "",
+    route:"",
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
@@ -72,7 +73,6 @@ const BlogUpdate = () => {
     setSectionData(secData);
     tagData();
   }
-
   function searchData(data) {
     const blog = data.find((item) => item.id == id);
     if (blog) {
@@ -86,14 +86,13 @@ const BlogUpdate = () => {
         image: blog.image,
         date: blog.date.split("T")[0],
         site: blog.site,
+        route:blog.url,
       });
       setTagId(blog.tag);
       setSelectSite(blog.site);
     }
   }
-  //  console.log(sectionData);
-
-  //==========================================================================tag part
+    //==========================================================================tag part
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {
@@ -324,6 +323,7 @@ const BlogUpdate = () => {
       site: selectSite,
       tag: tagId,
       sections: sectionData,
+      route:formData.url,
     };
     console.log(JSON.stringify(updatedFormData));
     try {

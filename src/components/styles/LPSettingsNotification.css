@@ -1,0 +1,240 @@
+
+select,
+input {
+    outline: none;
+}
+
+.notification-setting-fonts {
+    color: #1E2224;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+
+
+
+}
+
+button {
+    cursor: pointer;
+}
+
+input:focus {
+    border: 1px solid rgb(127, 126, 126);
+}
+
+
+.notification-setting-container {
+    width: 80vw;
+    height: 56.81rem;
+    
+}
+
+.notification-heading {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.notification-active {
+    color: #2B74DA !important;
+    border: 1px solid #2B74DA !important;
+}
+
+.notification-setting-btn .notification-btn {
+    color: #33475B;
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    background-color: #fff;
+    border: 1px solid transparent;
+    font-family: "Lexend Deca", sans-serif;
+
+}
+
+.notification-setting-btn {
+    margin-left: 1rem;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    margin-bottom: 2rem;
+}
+
+
+.notification-email-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #DCDCDC;
+    background: #FFF;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.notification-email-section img {
+    margin-right: 1.25rem;
+}
+
+
+.envelope-section {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.notification-email-description p:last-child {
+    color: #33475B;
+    font-size: 0.75rem;
+
+}
+
+/* notification-slider  */
+
+.notification-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.notification-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.notification-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.notification-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.notification-slider {
+    background-color: #33c75a;
+}
+
+input:focus+.notification-slider {
+    box-shadow: 0 0 1px #33c75a;
+}
+
+input:checked+.notification-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.notification-slider.notification-round {
+    border-radius: 34px;
+}
+
+.notification-slider.notification-round:before {
+    border-radius: 50%;
+}
+
+/* notification-slider end  */
+
+
+.notification-list-section p:first-child {
+    font-size: 1.125rem;
+    margin-left: 1rem;
+    margin-top: 2.75rem;
+    margin-bottom: 1.25rem;
+}
+
+
+/* search box section */
+
+
+
+.search-box {
+    position: relative;
+    display: inline-block;
+    margin-left: 1rem;
+}
+
+.search-input {
+    padding: 0.94rem 1rem;
+    padding-right: 5rem;
+    width: 19rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 0.3125rem;
+    background: #fff;
+    border-radius: 0.3125rem;
+    background: #F3F6FA;
+}
+
+.search-input::placeholder {
+    color: #909db0;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    padding-top: 0.5rem ;
+    padding-bottom: 0.5rem;
+    padding-right: 0.94rem;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.81rem;
+}
+
+.search-icon object {
+    width: 100%;
+    height: 100%;
+}
+
+.search-user-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* search ends here  */
+
+.notification-list ul{
+    list-style: none;
+    margin-left: 1rem;
+    margin-top: 1.38rem;
+}
+
+.notification-list ul li{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 1.44rem;
+
+}

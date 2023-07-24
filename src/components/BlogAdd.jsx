@@ -61,7 +61,7 @@ const BlogAdd = () => {
     title: "",
     url: "",
     description: "",
-  });
+    });
 
   // ===================================================================functions for tags addition and removal
   const handleTagSelection = (event) => {
@@ -253,6 +253,7 @@ const BlogAdd = () => {
       date: selectedDate,
       sections: sectionData,
       site: selectSite,
+      route: formData.url,
     };
      // console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData, {

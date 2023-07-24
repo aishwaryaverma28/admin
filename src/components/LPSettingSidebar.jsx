@@ -21,7 +21,7 @@ const LPSettingSidebar = () => {
             exact to="/lp/settings/notification"       
             >Notification</NavLink></p>
       <p className="prefrence-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Security</NavLink></p>
     </div>
@@ -29,7 +29,7 @@ const LPSettingSidebar = () => {
     <div className="setting-font-style">
       <p className="account-setup">Account Setup</p>
       <p className="account-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >account defaults</NavLink></p>
       <p className="account-options"> <NavLink
@@ -37,30 +37,30 @@ const LPSettingSidebar = () => {
             activeClassName="activeLink"
             >users & teams</NavLink></p>
       <p className="account-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >privacy & consent</NavLink></p>
     </div>
     <div className="setting-font-style">
       <p className="company-setup">Company</p>
       <p className="company-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Company Settings</NavLink></p>
       <p className="company-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Leads</NavLink></p>
       <p className="company-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Deals</NavLink></p>
       <p className="company-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Usage</NavLink></p>
       <p className="company-options"><NavLink
-            exact to="/lp/settings/usernteams"
+            exact to="/lp/settings/"
             activeClassName="activeLink"
             >Import & Export</NavLink></p>
     </div>

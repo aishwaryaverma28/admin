@@ -37,7 +37,7 @@ import Testing from "./components/Testing";
 import UserAndTeams from "./components/UserAndTeams";
 import LPSettingsGeneral from "./components/LPSettingsGeneral";
 import Error from "./components/Error";
-import Notification from "./components/Notification";
+import LPSettingsNotification from "./components/LPSettingsNotification";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
     element: <Testing />,
   },
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
   },
   {
@@ -94,7 +94,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/notification",
-            element: <Notification/>,
+            element: <LPSettingsNotification/>,
           },
     ],
   },
