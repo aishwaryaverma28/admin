@@ -8,8 +8,9 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
   const [details, setDetails] = useState({
     first_name: "",
     last_name: "",
-    contact:"",
+    phone:"",
     email: "",
+    password:"",
   });
   function handleChange(e) {
     const { name, value } = e.target;
@@ -30,8 +31,9 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
        setDetails({
         first_name: "",
     last_name: "",
-    contact:"",
+    phone:"",
     email: "",
+    password:"",
       });
       onUserAdded(); // Call the onLeadAdded function from props
     onClose();
@@ -73,14 +75,14 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
             />
           </div>
           <div className="inputDiv">
-            <label htmlFor="contact">Contact</label>
+            <label htmlFor="phone">Contact</label>
             <br />
             <input
               type="text"
-              name="contact"
+              name="phone"
               onChange={handleChange}
-              id="contact"
-              placeholder="Contact"
+              id="phone"
+              placeholder="Phone"
             />
           </div>
           <div className="inputDiv">
@@ -103,6 +105,17 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
               // onChange={handleChange}
               id="profile"
               placeholder="profile"
+            />
+          </div>
+          <div className="inputDiv">
+            <label htmlFor="password">Password</label>
+            <br />
+            <input
+              type="text"
+              name="password"
+              onChange={handleChange}
+              id="password"
+              placeholder="password"
             />
           </div>
           <div className="submitBtnBox">
