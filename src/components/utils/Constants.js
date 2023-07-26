@@ -75,7 +75,7 @@ export const IMPORT_CSV = start+"api/lead/importcsv";
 export const UPDATE_LEAD = start+"api/lead/edit/";
 export const ADD_NOTES = start+"api/note/add";
 export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
-export const UPDATE_NOTE = start+"api/note/edit/"
-
+export const UPDATE_NOTE = start+"api/note/edit/";
+export const DELETE_NOTE = start+"api/note/delete/";
 export const ADD_USER = start+"api/user/addteammember";
 export const GET_TEAM_MEM = start+"api/user/getteammember";

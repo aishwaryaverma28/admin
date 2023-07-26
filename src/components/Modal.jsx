@@ -524,7 +524,7 @@ const Modal = ({ selectedItem, closeModal }) => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={selectedItem} />
+                <AddNotes item={selectedItem} onNotesNum={fetchNotes} />
               </div>
             )}
             {activeTab === "email" && (

@@ -99,8 +99,8 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
             <br />
             <input
               type="text"
-              name="profile"
-              onChange={handleChange}
+              name=""
+              // onChange={handleChange}
               id="profile"
               placeholder="profile"
             />

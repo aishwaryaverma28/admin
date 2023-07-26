@@ -6,13 +6,14 @@ import {
   ADD_NOTES,
   GETNOTEBYSOURCE,
   UPDATE_NOTE,
+  DELETE_NOTE,
   handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
 
-const AddNotes = ({ item }) => {
+const AddNotes = ({ item,onNotesNum }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -71,6 +72,7 @@ const AddNotes = ({ item }) => {
       .then((response) => {
         console.log(response);
         fetchNotes(); // Fetch the updated notes after adding a new note
+        onNotesNum();
       })
       .catch((error) => {
         console.log(error);
@@ -116,6 +118,25 @@ const AddNotes = ({ item }) => {
         });
     }
   };
+
+  const handleDeleteNote = (id) => {
+    axios
+      .delete(DELETE_NOTE + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        // Remove the deleted note from the notes list
+        const updatedNotes = notes.filter((note) => note.id !== id);
+        setNotes(updatedNotes);
+        onNotesNum();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
 
   const expandEditor = () => {
     setOpenEditor(true);
@@ -222,7 +243,9 @@ const AddNotes = ({ item }) => {
                     marginBottom: "1rem",
                   }}
                 >
-                  <button className="note-discard-btn">Discard</button>
+                  <button className="note-discard-btn" onClick={() => handleDeleteNote(note.id)}>
+          Discard
+        </button>
                   <button
                     className="note-save-btn"
                     onClick={() => handleSaveNote(note.id)}
