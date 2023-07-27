@@ -314,6 +314,7 @@
   color: #33475b;
 }
 .user-card {
+  cursor: pointer;
   padding: 10px;
   background: #ffffff;
   border: 1px solid #dcdcdc;
@@ -413,6 +414,17 @@ text-transform: capitalize;
 
 .avg {
   background: #ffb42e;
+  /* height: 32px; */
+  color: #ffffff !important;
+  font-size: 0.75rem;
+  font-family: "Lexend Deca", sans-serif;
+  font-weight: 400;
+  padding: 4px 6px;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+.cool {
+  background: #ff4040;
   /* height: 32px; */
   color: #ffffff !important;
   font-size: 0.75rem;
@@ -677,6 +689,20 @@ cursor: pointer;
   border: 1px solid #077838;
   transition: all 400ms ease-in-out;
 }
+.disabledBtn {
+  padding: 8px 20px;
+  font-family: "Lexend Deca", sans-serif;
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+  border: 1px solid #F3F6FA;
+  background: #F3F6FA;
+  color: #909DAF;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+
 .detailsRightContainer input{
   color: #1e2224;
     font-weight: 400;
@@ -697,8 +723,29 @@ cursor: pointer;
 transition: all .5s ease-in-out;
 cursor: pointer;
 }
+.detailsRightContainer select{
+  width: 100%;
+  color: #1e2224;
+    font-weight: 400;
+     border: 1px solid #dcdcdc;
+    outline: rgb(59, 59, 59);
+    background-color: #ffffff;
+      font-size: 0.8rem;
+    font-family: "Lexend Deca";
+    border-radius: 0.3125rem;
+    padding: 0.3rem;
+  }
+.detailsRightContainer select:focus{
+  border: 1px solid #E2E9F2;
+  box-shadow: none;
+}
+.detailsRightContainer select:hover{
+  background-color:rgb(227, 225, 225);
+transition: all .5s ease-in-out;
+cursor: pointer;
+}
 .updateMsg{
-  color: red;
+  color: #077838;
   font-size: 15px;
   font-family: "Work Sans";
   text-transform: capitalize;

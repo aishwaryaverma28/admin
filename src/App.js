@@ -1,5 +1,9 @@
 import "./index.css";
-import { createBrowserRouter, RouterProvider,Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
 import LPleads from "./components/LPleads";
 import Admin from "./components/Admin";
@@ -53,8 +57,8 @@ const router = createBrowserRouter([
     element: <Registration />,
   },
   {
-    path:"/error",
-    element:<Error/>,
+    path: "/error",
+    element: <Error />,
   },
   {
     path: "/lp",
@@ -85,17 +89,17 @@ const router = createBrowserRouter([
         element: <Deals />,
       },
       {
-            path: "/lp/settings/usernteams",
-            element: <UserAndTeams/>,
-          },
-          {
-            path: "/lp/settings/general",
-            element: <LPSettingsGeneral/>,
-          },
-          {
-            path: "/lp/settings/notification",
-            element: <LPSettingsNotification/>,
-          },
+        path: "/lp/settings/usernteams",
+        element: <UserAndTeams />,
+      },
+      {
+        path: "/lp/settings/general",
+        element: <LPSettingsGeneral />,
+      },
+      {
+        path: "/lp/settings/notification",
+        element: <LPSettingsNotification />,
+      },
     ],
   },
   {

@@ -70,7 +70,7 @@ const AddNotes = ({ item,onNotesNum }) => {
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
       })
@@ -193,7 +193,7 @@ const AddNotes = ({ item,onNotesNum }) => {
                   <div className="notes-main">
                     <div className="notes-by">
                       <p>
-                        <span>Note</span> by {note.created_by}
+                        <span>Note</span> by {note.ownerf_name+" "+note.ownerl_name}
                       </p>
                       <div className="notes-date">
                         <p>

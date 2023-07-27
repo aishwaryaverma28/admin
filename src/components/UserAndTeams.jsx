@@ -12,11 +12,13 @@ import DarkArrowUp from "../assets/image/dark-arrow-up.svg";
 import ArrowDown from "../assets/image/arrow-down.svg";
 import User from "../assets/image/user-icon.svg";
 import CreateUserModal from "./CreateUserModal";
+import CreateTeamModal from "./CreateTeamModal";
 
 const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [activeTab, setActiveTab] = useState("users");
   const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal
+  const [isTeamModalOpen, setIsTeamModalOpen] = useState(false); // New state for modal
   const decryptedToken = getDecryptedToken();
   const [teamData, setTeamData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,11 +34,18 @@ const UserAndTeams = () => {
   const openModal = () => {
     setIsModalOpen(true);
   };
+  const openTeamModal = () => {
+    setIsTeamModalOpen(true)
+  }
 
   // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const closeTeamModal  = () => {
+    setIsTeamModalOpen(false);
+  };
+
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -275,8 +284,12 @@ const UserAndTeams = () => {
                               </div>
                             </div>
                             <div>
-                              {/* <ul>
-                                <li>Action</li>
+                              {/* <div className="userActionDrop">
+                              <p>Action</p>
+                              <i className="fa-sharp fa-solid fa-angle-down"></i> */}
+                              {/* <i className="fa-sharp fa-solid fa-angle-up"></i> */}
+                              {/* </div>
+                              <ul>
                                 <li>Edit User</li>
                                 <li>Edit Permission</li>
                                 <li>Edit Team</li>
@@ -313,12 +326,38 @@ const UserAndTeams = () => {
             </>
           )}
 
-          {activeTab === "teams" && <>teams</>}
+{activeTab === "teams" && <>
+          
+          <main className="team-container">
+
+        <section className="top-msg-display">
+            <p className="user-team-font">Set up your team now for better management.</p>
+        </section>
+
+        <section>
+            <div className="search-user-section">
+                <div className="search-box">
+                    <input type="text" className="search-input font-style" placeholder="Search..."/>
+                    <span className="search-icon">
+                        <img src={SearchIcon} alt="" />
+                    </span>
+                </div>
+                <div className="user-export">
+                    <button className="create-user-btn user-team-font"  onClick={openTeamModal}>Create Team</button>
+                </div>
+                </div>
+        </section>
+        <section className="user-team-font no-team-added">
+            <p className="no-team-para">No Teams added yet</p>
+        </section>
+        </main>
+        </>}
         </main>
       </div>
       {isModalOpen && (
         <CreateUserModal onClose={closeModal} onUserAdded={userAdded} />
       )}
+      {isTeamModalOpen && <CreateTeamModal onCloseTeamModal={closeTeamModal}/>}
     </div>
   );
 };

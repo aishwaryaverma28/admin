@@ -70,6 +70,7 @@ export const PAYSLIP = start+"api/employee/getpayslip/";
 
 //===================================================================leadplaner
 export const GET_LEAD = start+"api/lead/getall";
+export const GET_LEAD_ID = start+"api/lead/get/";
 export const ADD_LEAD = start+"api/lead/add";
 export const IMPORT_CSV = start+"api/lead/importcsv";
 export const UPDATE_LEAD = start+"api/lead/edit/";

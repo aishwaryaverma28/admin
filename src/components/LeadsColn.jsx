@@ -3,7 +3,7 @@ import "./styles/LPleads.css";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 
-const LeadsColn = ({ leadArray, leadKey }) => {
+const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -48,11 +48,10 @@ const LeadsColn = ({ leadArray, leadKey }) => {
             <div
               key={item.id}
               className="user-card"
-              onClick={() => openModal(item)}
             >
               <div className="user-details">
                 <div>
-                  <p className="heading">
+                  <p className="heading" onClick={() => openModal(item)}>
                     {item.lead_name}
                     <br />
                     <span>
@@ -83,7 +82,7 @@ const LeadsColn = ({ leadArray, leadKey }) => {
         </div>
       </div>
       {modalVisible && (
-        <Modal selectedItem={selectedItem} closeModal={closeModal} />
+        <Modal selectedItem={selectedItem} closeModal={closeModal} onLeadAdded={onLeadAdded}/>
       )}
     </>
   );

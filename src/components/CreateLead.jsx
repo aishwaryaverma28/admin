@@ -21,7 +21,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
     phone: "",
     email: "",
     value: 0,
-    priority: "",
+    priority: "Imp",
+    source:"",
   });
   
   if (!isOpen) {
@@ -78,8 +79,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           phone: "",
           email: "",
           value: 0,
-          priority: "",
+          priority: "Imp",
+          source:"",
         });
+        setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
@@ -107,7 +110,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                 </div>
 
                 <label htmlFor="lead_name" className="lead-label">
-                  Lead Name
+                  Title
                 </label>
                 <input
                   id="lead_name"
@@ -150,7 +153,17 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   onChange={handleChange}
                   value={leadData.position} // Add value prop for controlled input
                 />
-
+<label className="lead-label" htmlFor="source">
+                  Lead source
+                </label>
+                <input
+                  id="source"
+                  type="text"
+                  className="lead-input"
+                  name="source"
+                  onChange={handleChange}
+                  value={leadData.source} // Add value prop for controlled input
+                />
                 <label className="lead-label" htmlFor="value">
                   Value
                 </label>
@@ -241,6 +254,17 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   className="lead-input"
                   // onChange={handleChange}
                 />
+                <label className="lead-label" htmlFor="priority">
+                  Lables
+                </label>
+                <select  name="priority"
+                id="priority"
+                className="lead-priority"
+                onChange={handleChange}>
+                  <option value="Imp">Imp</option>
+                  <option value="Avg">Avg</option>
+                  <option value="Cool">Cool</option>
+                </select>
               </div>
             </section>
 
@@ -290,7 +314,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
               </div>
 
               <div>
-                <button className="add-btn">Create And Add another</button>
+                {/* <button className="add-btn">Create And Add another</button> */}
                 <button className="create-lead-btn" onClick={handleSubmit}>
                   Create Lead
                 </button>

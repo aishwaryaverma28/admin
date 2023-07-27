@@ -152,7 +152,7 @@ cursor: pointer;
     justify-content: end;
   }
   .updateMsg{
-    color: red;
+    color: #077838;
     font-size: 15px;
     font-family: "Work Sans";
     text-transform: capitalize;

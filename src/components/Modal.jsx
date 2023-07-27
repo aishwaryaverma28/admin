@@ -1,9 +1,10 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/LPleads.css";
 import axios from "axios";
 import {
   UPDATE_LEAD,
   GETNOTEBYSOURCE,
+  GET_LEAD_ID,
   handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
@@ -11,13 +12,40 @@ import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import LeadDocUp from "./LeadDocUp";
 
-const Modal = ({ selectedItem, closeModal }) => {
+const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
-  const [editedItem, setEditedItem] = useState(selectedItem);
+  const [editedItem, setEditedItem] = useState();
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
-  const decryptedToken = getDecryptedToken();
+  const [stateBtn, setStateBtn] = useState(0);
+    const decryptedToken = getDecryptedToken();
+    const [name,setName] = useState("");
+    const [ owner,setOwner] = useState("");
+  const fetchLead = () => {
+    axios
+      .get(GET_LEAD_ID + selectedItem.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        }
+      })
+      .then((response) => {
+        console.log(response.data.data[0]);
+        setEditedItem(response.data.data[0]);
+        setName(response.data.data[0].first_name+" "+response.data.data[0].last_name);
+        setOwner(response.data.data[0].ownerf_name+" "+response.data.data[0].ownerl_name)
+        setIsLoading(false);
+      })
+      .catch((error) => {
+       console.log(error);
+       setIsLoading(false);
+      });
+  };
+  
+  useEffect(() => {
+    fetchLead();
+  }, []);
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
@@ -35,7 +63,6 @@ const Modal = ({ selectedItem, closeModal }) => {
     }
   };
   useEffect(() => {
-    // console.log(decryptedToken);
     fetchNotes();
   }, []);
 
@@ -48,13 +75,11 @@ const Modal = ({ selectedItem, closeModal }) => {
       })
       .then((response) => {
         if (response.data.status === 1) {
-        console.log(response.data.data);
-        setNotes(response.data.data.length);
-        }
-        else {
+          setNotes(response.data.data.length);
+        } else {
           if (response.data.message === "Token has expired") {
             alert(response.data.message);
-           handleLogout() 
+            handleLogout();
           }
         }
       })
@@ -68,26 +93,36 @@ const Modal = ({ selectedItem, closeModal }) => {
       ...editedItem,
       [e.target.name]: e.target.value,
     });
+    setStateBtn(1);
   };
-
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setStateBtn(1);
+  };
+  const handleOwnerChange = (e) => {
+    setOwner(e.target.value);
+    setStateBtn(1);
+  };
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
   };
-  
+
   const handleUpdateClick = (event) => {
     event.preventDefault();
-  
+
     const updatedLead = {
       // Update only the desired properties
       lead_name: editedItem.lead_name,
-      first_name: editedItem.first_name,
+      first_name: name.split(" ")[0],
+      last_name: name.split(" ")[1],
       position: editedItem.position,
       phone: editedItem.phone,
       source: editedItem.source,
       company_name: editedItem.company_name,
       value: editedItem.value,
       email: editedItem.email,
+      type: editedItem.type,
       priority: editedItem.priority,
       status: editedItem.status,
       address1: editedItem.address1,
@@ -95,28 +130,31 @@ const Modal = ({ selectedItem, closeModal }) => {
       state: editedItem.state,
       country: editedItem.country,
       pin: editedItem.pin,
+      // ownerf_name: owner.split(" ")[0],
+      // ownerl_name: owner.split(" ")[1],
+      // owner_email:editedItem.email,
+      // owner_phone:editedItem.phone,
     };
-  
+
     axios
-      .put(UPDATE_LEAD + editedItem.id, updatedLead, {
+      .put(UPDATE_LEAD + selectedItem.id, updatedLead, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        console.log(response);
         setUpdateMessage("Lead data updated successfully");
         setTimeout(() => {
           setUpdateMessage("");
         }, 30000); // Clear message after 1 minute (60000 milliseconds)
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
-  
+
     setIsEditable(false);
+    onLeadAdded();
   };
-  
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -125,6 +163,7 @@ const Modal = ({ selectedItem, closeModal }) => {
   return (
     <div className="modal">
       <div className="customization_popup_container">
+      
         <span className="close" onClick={closeModal}>
           <i className="fa-sharp fa-solid fa-xmark"></i>
         </span>
@@ -145,8 +184,9 @@ const Modal = ({ selectedItem, closeModal }) => {
                   </>
                 ) : (
                   <>
-                    {editedItem.lead_name}
-                    <br />
+                  {isLoading?(<span>-</span>):(<>{editedItem.lead_name}
+                    <br /></>)
+                    }                   
                   </>
                 )}
                 <span>
@@ -173,7 +213,7 @@ const Modal = ({ selectedItem, closeModal }) => {
                       : "detailsLeftContainer"
                   }
                 >
-                  <p>First Name</p>
+                  <p>Name</p>
                   <p>Title</p>
                   <p>Phone</p>
                   <p>Lead Source</p>
@@ -189,14 +229,14 @@ const Modal = ({ selectedItem, closeModal }) => {
                     {isEditable ? (
                       <input
                         type="text"
-                        name="first_name"
-                        value={editedItem.first_name}
-                        onChange={handleInputChange}
+
+                         value={name}
+                        onChange={handleNameChange}
                       />
-                    ) : editedItem.first_name ? (
-                      <span>{editedItem.first_name}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                     ) : (
+                      <span>{name}</span>
                     )}
                   </p>
                   <p>
@@ -207,10 +247,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.position}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.position ? (
-                      <span>{editedItem.position}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                    ) : (
+                      <span>{editedItem.position}</span>
                     )}
                   </p>
                   <p>
@@ -221,11 +261,11 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.phone}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.phone ? (
-                      <span>{editedItem.phone}</span>
+                    ) : isLoading ? (
+                      <span>-</span>        
                     ) : (
-                      <span>-</span>
-                    )}
+                      <span>{editedItem.phone}</span>
+              )}
                   </p>
                   <p>
                     {isEditable ? (
@@ -235,10 +275,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.source}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.source ? (
-                      <span>{editedItem.source}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                    ) : (
+                      <span>{editedItem.source}</span>
                     )}
                   </p>
                   <p>
@@ -249,10 +289,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.company_name}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.company_name ? (
-                      <span>{editedItem.company_name}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                    ) : (
+                      <span>{editedItem.company_name}</span>
                     )}
                   </p>
                   <p>
@@ -263,11 +303,11 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.value}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.value ? (
-                      <span>{editedItem.value}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
-                    )}
+                    ) : (
+                      <span>{editedItem.value}</span>
+                      )}
                   </p>
                   <p>
                     {isEditable ? (
@@ -277,92 +317,77 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.email}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.email ? (
-                      <span>{editedItem.email}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                    ) : (
+                      <span>{editedItem.email}</span>
                     )}
                   </p>
                   <p>
                     {isEditable ? (
                       <input
                         type="text"
-                        name="email"
-                        value={editedItem.email}
+                        name="type"
+                        value={editedItem.type}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.email ? (
-                      <span>{editedItem.email}</span>
-                    ) : (
+                    ) : isLoading ? (
                       <span>-</span>
+                    ) : (
+                      <span>{editedItem.type}</span>
                     )}
                   </p>
-                  {/* <p>
+                  <p>
                     {isEditable ? (
-                      <input
-                        type="text"
+                      <select
                         name="priority"
+                        id="priority"
                         value={editedItem.priority}
                         onChange={handleInputChange}
-                        className={
-                          editedItem.priority === "Imp"
-                            ? "imptnt"
-                            : editedItem.priority === "Avg"
-                            ? "avg"
-                            : ""
-                        }
-                      />
-                    ) : editedItem.priority ? (
-                      <span
-                        className={
-                          editedItem.priority === "Imp"
-                            ? "imptnt"
-                            : editedItem.priority === "Avg"
-                            ? "avg"
-                            : ""
-                        }
                       >
-                        {editedItem.priority}
-                      </span>
-                    ) : (
+                        <option value="Imp">Imp</option>
+                        <option value="Avg">Avg</option>
+                        <option value="Cool">Cool</option>
+                      </select>
+                    ) : isLoading ? (
                       <span>-</span>
-                    )}
-                  </p> */}
-                  <p>
-                    {editedItem.priority ? (
-                      <span>{editedItem.priority}</span>
                     ) : (
-                      <span>-</span>
-                    )}
-                  </p>
-
-                  {/* <p
-                    className="detailsStatus"
-                    style={{ backgroundColor: getStatusBackgroundColor() }}
-                  >
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="status"
-                        value={editedItem.status}
-                        onChange={handleInputChange}
-                      />
-                    ) : editedItem.status ? (
-                      <span>{editedItem.status}</span>
-                    ) : (
-                      <span>-</span>
-                    )}
-                  </p> */}
-                  <p
-                    className="detailsStatus"
-                    style={{ backgroundColor: getStatusBackgroundColor() }}
-                  >
-                    {editedItem.status ? (
-                      <span>{editedItem.status}</span>
-                    ) : (
-                      <span>-</span>
+                      <span
+                      className={
+                        editedItem.priority === "Imp"
+                          ? "imptnt"
+                          : editedItem.priority === "Avg"
+                          ? "avg"
+                          : ""
+                      }
+                    >
+                      {editedItem.priority}
+                    </span>
+                      
                     )}
                   </p>
+                  {isEditable ? (
+                    <select
+                      name="status"
+                      id="status"
+                      value={editedItem.status}
+                      onChange={handleInputChange}
+                    >
+                      <option value="New">New</option>
+                      <option value="Open">Open</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Unread">Unread</option>
+                    </select>
+                  ) : isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <p
+                      className="detailsStatus"
+                      style={{ backgroundColor: getStatusBackgroundColor() }}
+                    >
+                      <span>{editedItem.status}</span>
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -381,9 +406,49 @@ const Modal = ({ selectedItem, closeModal }) => {
                   <p>Contact</p>
                 </div>
                 <div className="detailsRightContainer">
-                  <p>-</p>
-                  <p>-</p>
-                  <p>-</p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        value={owner}
+                        onChange={handleOwnerChange}
+                      />
+                    ) : isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>{owner}</span>                      
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="email"
+                        name="owner_email"
+                        value={editedItem.owner_email
+                        }
+                        onChange={handleInputChange}
+                      />
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
+                      <span>{editedItem.owner_email
+                      }</span>
+                    )}
+                  </p>
+                  <p>
+                    {isEditable ? (
+                      <input
+                        type="text"
+                        name="owner_phone"
+                        value={editedItem.owner_phone}
+                        onChange={handleInputChange}
+                      />
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
+                      <span>{editedItem.owner_phone}</span>
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -412,10 +477,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.address1}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.address1 ? (
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
                       <span>{editedItem.address1}</span>
-                    ) : (
-                      <span>-</span>
                     )}
                   </p>
                   <p>
@@ -426,10 +491,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.city}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.city ? (
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
                       <span>{editedItem.city}</span>
-                    ) : (
-                      <span>-</span>
                     )}
                   </p>
                   <p>
@@ -440,10 +505,10 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.state}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.state ? (
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
                       <span>{editedItem.state}</span>
-                    ) : (
-                      <span>-</span>
                     )}
                   </p>
                   <p>
@@ -454,11 +519,11 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.country}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.country ? (
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
                       <span>{editedItem.country}</span>
-                    ) : (
-                      <span>-</span>
-                    )}
+                     )}
                   </p>
                   <p>
                     {isEditable ? (
@@ -468,27 +533,37 @@ const Modal = ({ selectedItem, closeModal }) => {
                         value={editedItem.pin}
                         onChange={handleInputChange}
                       />
-                    ) : editedItem.pin ? (
+                      ) : isLoading ? (
+                        <span>-</span>
+                      ) : (
                       <span>{editedItem.pin}</span>
-                    ) : (
-                      <span>-</span>
                     )}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="modalLeftBtnBox">
-            {isEditable ? (
-              <button onClick={handleUpdateClick} className="convertToDeal">
-                Update Lead
-              </button>
-            ) : (
+          {isEditable ? (
+            <div className="modalLeftBtnBox">
+              <button className="convertToDeal">Convert to deal</button>
+              {stateBtn === 0 ? (
+                <button disabled className="disabledBtn">
+                  Update Lead
+                </button>
+              ) : (
+                <button onClick={handleUpdateClick} className="convertToDeal">
+                  Update Lead
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="modalLeftBtnBox">
               <span></span>
-            )}
-            <button className="convertToDeal">Convert to deal</button>
-          </div>
+              <button className="convertToDeal">Convert to deal</button>
+            </div>
+          )}
         </div>
+        
         {/* left side of modal ends here */}
         <div className="user-details--right">
           <div className="tab-navigation">
@@ -544,6 +619,7 @@ const Modal = ({ selectedItem, closeModal }) => {
             )}
           </div>
         </div>
+        
       </div>
 
       {/* modal container ends here */}

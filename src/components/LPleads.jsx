@@ -192,7 +192,7 @@ const LPleads = () => {
       <section className="cards-body">
         {data.map((leadArray, index) => (
           <div key={keys[index]}>
-            <LeadsColn key={keys[index]} leadArray={leadArray} leadKey={keys[index]} />
+            <LeadsColn key={keys[index]} leadArray={leadArray} leadKey={keys[index]} onLeadAdded={fetchLeadsData}/>
           </div>
         ))}
       </section>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, Link} from "react-router-dom";
+import { NavLink, Link, useLocation} from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
@@ -15,6 +15,7 @@ const LPheader = () => {
   const dropdownRef = useRef(null);
   const [clientData, setClientData] = useState(null);
     const decryptedToken = getDecryptedToken();
+    const location = useLocation();
     useEffect(() => {
         getUser()
       }, []);
@@ -44,7 +45,7 @@ const LPheader = () => {
           console.log(error);
         }
       }
-  
+      // console.log(clientData);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -60,6 +61,9 @@ const LPheader = () => {
   }, []);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+  const handleRefresh = () => {
+    window.location.reload(); // Reloads the current page
   };
 
   const handleOptionClick = (option) => {
@@ -125,26 +129,40 @@ const LPheader = () => {
                 </button>
               </Link>
             </li>
+            <li>
+              <button type="button" className="helpBtn" title="Refresh" onClick={handleRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate"></i>
+              </button>
+            </li>
+            
           </ul>
         </div>
         <div className="userDropdownContainer" ref={dropdownRef}>
         <div className="userImg" onClick={toggleDropdown}>
           <img className="borderLeft" src={line} alt="border-left" />
           <img src={user} alt="user" />
+          {clientData ? (
           <p>
-            John Wick
+          {clientData.first_name+" "+clientData.last_name}
             <br />
-            <span>CEO, Admin</span>
+            <span>{clientData.job_title}</span>
           </p>
+          ) : (
+            <p>
+          John Wick
+            <br />
+            <span>admin</span>
+          </p>
+          )}
         </div>
         {isOpen && (
         <div className="logoutDropdown">
           <div className="logUserInfo">
             <img src={user} alt="user" />
             <div className="crmUserInfo">
-              <h5 className="crmUserInfoName">John Wick</h5>
-              <p>vaneetgupta@gmail.com</p>
-              <p>CEO, Admin</p>
+              <h5 className="crmUserInfoName">{clientData.first_name+" "+clientData.last_name}</h5>
+              <p>{clientData.email}</p>
+              <p>{clientData.job_title}</p>
             </div>
           </div>
           <div className="profileNPref">

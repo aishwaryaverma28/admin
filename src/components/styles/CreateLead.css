@@ -122,7 +122,27 @@
 .lead-input:focus {
   border: 1px solid rgb(127, 126, 126);
 }
-
+.lead-priority{
+  color: #1e2224;
+  width: 17rem;
+  height: 2.25rem;
+  font-weight: 600;
+  outline: rgb(59, 59, 59);
+  border-radius: 0.3125rem;
+  border: 1px solid #c0c6cc;
+  background: #fff;
+  font-size: 14px;
+  font-family: "Lexend Deca", sans-serif;
+  margin-bottom: 1rem; 
+}
+.lead-priority:hover {
+  background-color: rgb(227, 225, 225);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+.lead-priority:focus {
+  border: 1px solid rgb(127, 126, 126);
+}
 .phone-input-section {
   margin-bottom: 1rem;
 }

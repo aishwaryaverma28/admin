@@ -4,10 +4,13 @@ import { NavLink } from "react-router-dom";
 import arrowLeft from "../assets/image/arrow-left.svg";
 
 const LPSettingSidebar = () => {
+      const handleGoBack = () => {
+            window.history.back(); // Navigate back in the browser history
+          };
   return (
       <section className="setting-side-panel">
     <div className="go-back-btn ">
-      <button className="setting-font-style"><img src={arrowLeft} alt="" /><span>Go Back</span></button>
+      <button className="setting-font-style" onClick={handleGoBack}><img src={arrowLeft} alt="" /><span>Go Back</span></button>
     </div>
     <div>
       <p className="setting-heading setting-font-style">Settings</p>
