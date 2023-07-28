@@ -354,12 +354,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                     ) : (
                       <span
                       className={
-                        editedItem.priority === "Imp"
-                          ? "imptnt"
-                          : editedItem.priority === "Avg"
-                          ? "avg"
-                          : ""
-                      }
+                        editedItem.priority}
                     >
                       {editedItem.priority}
                     </span>
