@@ -39,7 +39,7 @@ button {
 }
 
 .setting-heading {
-  margin-top: 1.69rem;
+  margin-top: 1rem;
   margin-left: 2rem;
   font-size: 1.25rem;
   font-weight: 500;
@@ -49,7 +49,7 @@ button {
 .prefrence, .account-setup , .company-setup {
   margin-left: 2rem;
   margin-top: 1.7rem;
-  margin-bottom:0.88rem;
+  margin-bottom:1rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -58,9 +58,8 @@ button {
 .prefrence-options, .account-options, .company-options {
   margin-left: 1rem;
   /* padding-top:0.62rem; */
-  padding-bottom: 0.62rem;
+  /* padding-bottom: 0.62rem; */
   cursor: pointer;
-  font-size: 0.875rem;
 
 }
 
@@ -78,4 +77,5 @@ button {
     display: inline-block;
   width:15rem;
   font-family: "Lexend Deca", sans-serif;
+  color:#33475B;
 }

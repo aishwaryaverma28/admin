@@ -505,10 +505,7 @@ text-transform: capitalize;
   padding: 4px 6px;
   border-radius: 5px;
   text-transform: capitalize;
-}
-.Cool {
-  background: #2e75ff;
-  /* height: 32px; */
+} /* height: 32px; */
   color: #ffffff !important;
   font-size: 0.75rem;
   font-family: "Lexend Deca", sans-serif;
@@ -658,12 +655,12 @@ text-transform: capitalize;
 .user-details-imgBox input:focus{
   border: 1px solid #E2E9F2;
 }
-.user-details-imgBox input:hover{
+/* .user-details-imgBox input:hover{
   background-color:rgb(227, 225, 225);
 transition: all .5s ease-in-out;
 cursor: pointer;
 
-}
+} */
 .leadDetailsLeft{
   overflow: hidden;
   overflow-y: scroll;
@@ -691,25 +688,9 @@ cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1.2rem;
+  width:6.2rem;
 }
 .detailsLeftContainer p {
-  color: #4b5054;
-  font-family: "Lexend Deca";
-  font-size: 0.78rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: -0.02563rem;
-}
-.detailsLeftContainer2{
-  /* border: 2px solid red; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.2rem;
-}
-.detailsLeftContainer2 p {
   color: #4b5054;
   font-family: "Lexend Deca";
   font-size: 0.8rem;
@@ -717,12 +698,16 @@ cursor: pointer;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
 }
+
 .detailsRightContainer{
   /* border: 2px solid aqua; */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .detailsRightContainer p {
   color: #1e2224;
@@ -732,6 +717,7 @@ cursor: pointer;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
+  margin-bottom: 0.5rem;
 }
 .detailsStatus {
   border-radius: 0.1875rem;
@@ -786,7 +772,9 @@ cursor: pointer;
   text-transform: capitalize;
 }
 
-.detailsRightContainer input{
+
+
+/* .detailsRightContainer input{
   color: #1e2224;
     font-weight: 400;
      border: 1px solid #dcdcdc;
@@ -805,7 +793,7 @@ cursor: pointer;
   background-color:rgb(227, 225, 225);
 transition: all .5s ease-in-out;
 cursor: pointer;
-}
+} */
 .detailsRightContainer select{
   width: 100%;
   color: #1e2224;
