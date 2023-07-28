@@ -355,43 +355,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 <i className="fa-solid fa-pen"></i>
               </a>
             </div>
-            <div className="leadDetailsLeft">
-              {updateMessage && <p className="updateMsg">{updateMessage}</p>}
-              <div className="detailsBox">
-                <p className="detailHead">LEAD INFORMATION</p>
-                <div className="detailsContent">
-                  <div
-                    className="detailsLeftContainer"
-                    
-                  >
-                    <p>Name</p>
-                    <p>Title</p>
-                    <p>Phone</p>
-                    <p>Lead Source</p>
-                    <p>Company</p>
-                    <p>Annual Revenue</p>
-                    <p>Email</p>
-                    <p>Industry</p>
-                    <p>Lables</p>
-                    <p>Status</p>
-                  </div>
-                  <div className="detailsRightContainer">
-                    <p>
-
-                      {isLoading ? (
-                        <span>-</span>
-                      ) : (
-                        <span>
-                          <input
-                            type="text"
-                            value={name}
-                            onChange={handleNameChange}
-                            style={isEditable ? editStylingInput : normalStylingInput}
-                            disabled={isDisabled}
-                          />
-                        </span>
-                      )
-                      }
                     </p>
                     <p>
 
