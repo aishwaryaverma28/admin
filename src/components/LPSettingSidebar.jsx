@@ -15,54 +15,54 @@ const LPSettingSidebar = () => {
     <div>
       <p className="setting-heading setting-font-style">Settings</p>
     </div>
-    <div className="setting-font-style">
-      <p className="prefrence">Your Prefrences</p>
-      <p className="prefrence-options"> <NavLink
+    <div>
+      <p className="prefrence setting-font-style">Your Prefrences</p>
+      <p className="prefrence-options setting-font-style"> <NavLink
             exact to="/lp/settings/general" 
             >General</NavLink></p>
-      <p className="prefrence-options"><NavLink
+      <p className="prefrence-options setting-font-style"><NavLink
             exact to="/lp/settings/notification"       
             >Notification</NavLink></p>
-      <p className="prefrence-options"><NavLink
+      <p className="prefrence-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Security</NavLink></p>
     </div>
 
-    <div className="setting-font-style">
-      <p className="account-setup">Account Setup</p>
-      <p className="account-options"><NavLink
+    <div>
+      <p className="account-setup setting-font-style">Account Setup</p>
+      <p className="account-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >account defaults</NavLink></p>
-      <p className="account-options"> <NavLink
+      <p className="account-options setting-font-style"> <NavLink
             exact to="/lp/settings/usernteams"
             activeClassName="activeLink"
             >users & teams</NavLink></p>
-      <p className="account-options"><NavLink
+      <p className="account-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >privacy & consent</NavLink></p>
     </div>
-    <div className="setting-font-style">
-      <p className="company-setup">Company</p>
-      <p className="company-options"><NavLink
+    <div>
+      <p className="company-setup setting-font-style">Company</p>
+      <p className="company-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Company Settings</NavLink></p>
-      <p className="company-options"><NavLink
+      <p className="company-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Leads</NavLink></p>
-      <p className="company-options"><NavLink
+      <p className="company-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Deals</NavLink></p>
-      <p className="company-options"><NavLink
+      <p className="company-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Usage</NavLink></p>
-      <p className="company-options"><NavLink
+      <p className="company-options setting-font-style"><NavLink
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Import & Export</NavLink></p>
