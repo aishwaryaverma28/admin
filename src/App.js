@@ -47,22 +47,21 @@ const router = createBrowserRouter([
   {
     path: "/:auth",
     element: <Testing />,
+    errorElement:<Error/>,
   },
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
   },
   {
     path: "/registration",
     element: <Registration />,
   },
-  {
-    path: "/error",
-    element: <Error />,
-  },
+  
   {
     path: "/lp",
     element: <SecurePages Component={Leadplaner} />,
+    errorElement:<Error />,
     children: [
       {
         path: "/lp", // This is the new route for /lp
@@ -105,6 +104,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <SecurePages Component={Admin} />,
+    errorElement:<Error />,
     children: [
       {
         path: "/admin",

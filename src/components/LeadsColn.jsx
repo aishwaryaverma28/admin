@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
@@ -6,6 +6,8 @@ import Modal from "./Modal";
 const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const dropdownRefs = useRef([]);
+  const [isOpenState, setIsOpenState] = useState({});
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -18,6 +20,46 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   };
 
   const totalValue = leadArray.reduce((sum, item) => sum + item.value, 0);
+
+  const toggleDropdown = (itemId) => {
+    setIsOpenState((prevState) => ({
+      ...prevState,
+      [itemId]: !prevState[itemId],
+    }));
+  };
+
+  // Effect hook to initialize the isOpenState when the component mounts
+  useEffect(() => {
+    const initialIsOpenState = leadArray.reduce((acc, item) => {
+      acc[item.id] = false;
+      return acc;
+    }, {});
+    setIsOpenState(initialIsOpenState);
+  }, [leadArray]);
+
+  // Effect hook to add click event listener when the component mounts
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      for (const itemId in isOpenState) {
+        if (
+          dropdownRefs.current[itemId] &&
+          !dropdownRefs.current[itemId].contains(event.target)
+        ) {
+          setIsOpenState((prevState) => ({
+            ...prevState,
+            [itemId]: false,
+          }));
+        }
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isOpenState]);
 
   return (
     <>
@@ -44,11 +86,8 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
             <p className="leads">{leadArray.length} Leads</p>
           </div>
 
-          {leadArray.map((item) => (
-            <div
-              key={item.id}
-              className="user-card"
-            >
+          {leadArray.map((item, index) => (
+            <div key={item.id} className="user-card">
               <div className="user-details">
                 <div>
                   <p className="heading" onClick={() => openModal(item)}>
@@ -60,19 +99,32 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
                     </span>
                   </p>
                 </div>
-                <a href="#" className="user-setting--btn">
-                  <i className="fas fa-ellipsis-h"></i>
-                </a>
+                <button
+                  className="user-setting--btn"
+                  ref={(ref) => (dropdownRefs.current[item.id] = ref)}
+                >
+                  <i
+                    className="fas fa-ellipsis-h"
+                    onClick={() => toggleDropdown(item.id)}
+                  ></i>
+                  {isOpenState[item.id] && (
+                    <ul className="cardMenu">
+                      <li>Convert to deal</li>
+                      <li>Delete</li>
+                      <li>Item 3</li>
+                    </ul>
+                  )}
+                </button>
               </div>
-              <div className="lead-value">${item.value.toLocaleString("en-IN")}</div>
+              <div className="lead-value">
+                ${item.value.toLocaleString("en-IN")}
+              </div>
               <div className="contact-details">
                 <div className="mail">
                   <img src={user} alt="" />
                   <p>{item.first_name + " " + item.last_name}</p>
                 </div>
-                <p className={item.priority === "Imp" ? "imptnt" : "avg"}>
-                  {item.priority}
-                </p>
+                <p className={item.priority}>{item.priority}</p>
               </div>
             </div>
           ))}
@@ -82,7 +134,11 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
         </div>
       </div>
       {modalVisible && (
-        <Modal selectedItem={selectedItem} closeModal={closeModal} onLeadAdded={onLeadAdded}/>
+        <Modal
+          selectedItem={selectedItem}
+          closeModal={closeModal}
+          onLeadAdded={onLeadAdded}
+        />
       )}
     </>
   );
