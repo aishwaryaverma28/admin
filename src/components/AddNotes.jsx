@@ -13,14 +13,16 @@ import {
 import ThreeDots from "../assets/image/three-dots.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
 
-const AddNotes = ({ item,onNotesNum }) => {
+const AddNotes = ({ item, onNotesNum }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
   const [openEditor, setOpenEditor] = useState(false);
+  const [stateAdd, setStateAdd] = useState(0);
+  const [stateBtn, setStateBtn] = useState(0);
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
-    useEffect(() => {
+  useEffect(() => {
     // console.log(decryptedToken);
     fetchNotes();
   }, []);
@@ -34,13 +36,12 @@ const AddNotes = ({ item,onNotesNum }) => {
       })
       .then((response) => {
         if (response.data.status === 1) {
-        // console.log(response.data.data);
-        setNotes(response.data.data);
-        }
-        else {
+          // console.log(response.data.data);
+          setNotes(response.data.data);
+        } else {
           if (response.data.message === "Token has expired") {
             alert(response.data.message);
-           handleLogout() 
+            handleLogout();
           }
         }
       })
@@ -51,6 +52,7 @@ const AddNotes = ({ item,onNotesNum }) => {
 
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
+    setStateAdd(1);
   };
 
   const handleAddNote = () => {
@@ -61,7 +63,6 @@ const AddNotes = ({ item,onNotesNum }) => {
       importance: 1,
       created_by: "aishwarya",
     };
-    // console.log(updatedFormData);
 
     axios
       .post(ADD_NOTES, updatedFormData, {
@@ -70,7 +71,6 @@ const AddNotes = ({ item,onNotesNum }) => {
         },
       })
       .then((response) => {
-        // console.log(response);
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
       })
@@ -80,10 +80,12 @@ const AddNotes = ({ item,onNotesNum }) => {
 
     setDataFromChild("");
     setOpenEditor(false);
+    setStateAdd(0);
   };
 
   const handleEditorChange = (content, id) => {
     setContent(content);
+    setStateBtn(1);
   };
   const handleSaveNote = (id) => {
     const noteToUpdate = notes.find((note) => note.id === id);
@@ -114,7 +116,7 @@ const AddNotes = ({ item,onNotesNum }) => {
           fetchNotes();
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
         });
     }
   };
@@ -136,7 +138,6 @@ const AddNotes = ({ item,onNotesNum }) => {
         console.log(error);
       });
   };
-  
 
   const expandEditor = () => {
     setOpenEditor(true);
@@ -171,9 +172,15 @@ const AddNotes = ({ item,onNotesNum }) => {
             <CRMeditor onDataTransfer={handleDataTransfer} />
           </div>
           <div className="addNoteBtn">
-            <button className="convertToDeal" onClick={handleAddNote}>
-              Add Note
-            </button>
+            {stateAdd === 0 ? (
+              <button disabled className="disabledBtn">
+                Add Note
+              </button>
+            ) : (
+              <button onClick={handleAddNote} className="convertToDeal">
+                Add Note
+              </button>
+            )}
           </div>
         </>
       )}
@@ -193,7 +200,8 @@ const AddNotes = ({ item,onNotesNum }) => {
                   <div className="notes-main">
                     <div className="notes-by">
                       <p>
-                        <span>Note</span> by {note.ownerf_name+" "+note.ownerl_name}
+                        <span>Note</span> by{" "}
+                        {note.ownerf_name + " " + note.ownerl_name}
                       </p>
                       <div className="notes-date">
                         <p>
@@ -234,7 +242,6 @@ const AddNotes = ({ item,onNotesNum }) => {
                     initialContent={note.description}
                   />
                 </div>
-
                 <div
                   className="notes-btn"
                   style={{
@@ -243,15 +250,24 @@ const AddNotes = ({ item,onNotesNum }) => {
                     marginBottom: "1rem",
                   }}
                 >
-                  <button className="note-discard-btn" onClick={() => handleDeleteNote(note.id)}>
-          Discard
-        </button>
                   <button
-                    className="note-save-btn"
-                    onClick={() => handleSaveNote(note.id)}
+                    className="note-discard-btn"
+                    onClick={() => handleDeleteNote(note.id)}
                   >
-                    Save
+                    Delete
                   </button>
+                  {stateBtn === 0 ? (
+                    <button disabled className="disabledBtn">
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleSaveNote(note.id)}
+                      className="convertToDeal"
+                    >
+                      Save
+                    </button>
+                  )}
                 </div>
               </div>
             </>

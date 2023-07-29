@@ -42,6 +42,7 @@ import UserAndTeams from "./components/UserAndTeams";
 import LPSettingsGeneral from "./components/LPSettingsGeneral";
 import Error from "./components/Error";
 import LPSettingsNotification from "./components/LPSettingsNotification";
+import RecycleBin from "./components/RecycleBin";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/settings/notification",
         element: <LPSettingsNotification />,
+      },
+      {
+        path: "/lp/settings/recyclebin",
+        element: <RecycleBin/> ,
       },
     ],
   },

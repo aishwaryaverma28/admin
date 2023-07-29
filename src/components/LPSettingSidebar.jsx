@@ -66,6 +66,10 @@ const LPSettingSidebar = () => {
             exact to="/lp/settings/"
             activeClassName="activeLink"
             >Import & Export</NavLink></p>
+             <p className="company-options setting-font-style"><NavLink
+            exact to="/lp/settings/recyclebin"
+            activeClassName="activeLink"
+            >Recycle Bin</NavLink></p>
     </div>
   </section>
   )

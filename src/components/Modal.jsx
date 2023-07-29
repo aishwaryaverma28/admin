@@ -15,44 +15,70 @@ import LeadDocUp from "./LeadDocUp";
 const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
-  const [editedItem, setEditedItem] = useState();
+  const [editedItem, setEditedItem] = useState("");
   const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
   const [stateBtn, setStateBtn] = useState(0);
-    const decryptedToken = getDecryptedToken();
-    const [name,setName] = useState("");
-    const [ owner,setOwner] = useState("");
+  const decryptedToken = getDecryptedToken();
+  const [name, setName] = useState("");
+  const [owner, setOwner] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isHoverDisabled, setIsHoverDisabled] = useState(false);
+
   const fetchLead = () => {
     axios
       .get(GET_LEAD_ID + selectedItem.id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
       .then((response) => {
         console.log(response.data.data[0]);
         setEditedItem(response.data.data[0]);
-        setName(response.data.data[0].first_name+" "+response.data.data[0].last_name);
-        setOwner(response.data.data[0].ownerf_name+" "+response.data.data[0].ownerl_name)
+        setName(
+          response.data.data[0].first_name +
+            " " +
+            response.data.data[0].last_name
+        );
+        setOwner(
+          response.data.data[0].ownerf_name +
+            " " +
+            response.data.data[0].ownerl_name
+        );
         setIsLoading(false);
       })
       .catch((error) => {
-       console.log(error);
-       setIsLoading(false);
+        console.log(error);
+        setIsLoading(false);
       });
   };
-  
+
   useEffect(() => {
     fetchLead();
   }, []);
+
+  const getStatusBackgroundColor2 = () => {
+    switch (editedItem.priority) {
+      case "Imp":
+        return "#ff4040";
+      case "Avg":
+        return "#ffb42e";
+      case "Cool":
+        return "#2e75ff";
+
+      default:
+        return "";
+    }
+  };
+
   const getStatusBackgroundColor = () => {
     switch (editedItem.status) {
       case "New":
         return "#5181FF";
       case "Open":
         return "#B543EB";
-      case "In progress":
+      case "In Progress":
         return "#63C257";
       case "Open deal":
         return "#FD9802";
@@ -106,6 +132,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
+    setIsDisabled(!isDisabled);
   };
 
   const handleUpdateClick = (event) => {
@@ -160,10 +187,134 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setActiveTab(tab);
   };
 
+  const normalStyling = {
+    textAlign: "left",
+    fontFamily: "Lexend Deca",
+    fontSize: "1.125rem",
+    fontWeight: 500,
+    color: "#1e2224",
+    lineHeight: "17px",
+    border: "1px solid transparent",
+    width: "12rem",
+  };
+
+  const editStyling = {
+    border: "1px solid #dcdcdc",
+    textAlign: "left",
+    fontFamily: "Lexend Deca",
+    fontSize: "1.125rem",
+    fontWeight: 500,
+    color: "#1e2224",
+    lineHeight: "17px",
+    width: "12rem",
+
+    ":hover": {
+      backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
+      transition: isHoverDisabled ? "all .5s ease-in-out" : "",
+      cursor: isHoverDisabled ? "pointer" : "",
+    },
+  };
+
+  const normalStylingInput = {
+    color: "#1e2224",
+    fontWeight: 400,
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.3rem",
+    border: "1px solid transparent",
+    height: "2rem",
+  };
+
+  const editStylingInput = {
+    color: "#1e2224",
+    fontWeight: 400,
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.3rem",
+    border: "1px solid #dcdcdc",
+    height: "2rem",
+
+    ":hover": {
+      backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
+      transition: isHoverDisabled ? "all .5s ease-in-out" : "",
+      cursor: isHoverDisabled ? "pointer" : "",
+    },
+    ":focus": {
+      border: "1px solid #E2E9F2",
+      boxShadow: "none",
+    },
+  };
+
+  const normalStylingSelect1 = {
+    backgroundColor: editedItem.status && getStatusBackgroundColor2(),
+    /* height: 32px; */
+    color: " #ffffff !important",
+    fontSize: " 0.8rem",
+    fontFamily: '"Lexend Deca", sans-serif',
+    fontWeight: 400,
+    padding: "0.3rem",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+    appearance: "none",
+    border: "1px solid transparent",
+    height: "2rem",
+  };
+  const editStylingSelect1 = {
+    width: "100%",
+    color: " #1e2224",
+    fontWeight: 400,
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.1rem",
+    height: "2rem",
+  };
+  const normalStylingSelect2 = {
+    backgroundColor: editedItem.status && getStatusBackgroundColor(),
+    /* height: 32px; */
+    color: " #ffffff !important",
+    fontSize: " 0.8rem",
+    fontFamily: '"Lexend Deca", sans-serif',
+    fontWeight: 400,
+    padding: "0.3rem",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+    appearance: "none",
+    border: "1px solid transparent",
+    height: "2rem",
+  };
+  const editStylingSelect2 = {
+    width: "100%",
+    color: " #1e2224",
+    fontWeight: 400,
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.1rem",
+    height: "2rem",
+  };
+
   return (
     <div className="modal">
       <div className="customization_popup_container">
-      
         <span className="close" onClick={closeModal}>
           <i className="fa-sharp fa-solid fa-xmark"></i>
         </span>
@@ -172,29 +323,22 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             <div className="user-details-imgBox">
               <img src={userIcon} alt="user" />
               <p>
-                {isEditable ? (
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
                   <>
+                    {" "}
                     <input
                       type="text"
                       name="lead_name"
                       value={editedItem.lead_name}
                       onChange={handleInputChange}
+                      style={isEditable ? editStyling : normalStyling}
+                      disabled={isDisabled}
                     />
                     <br />
                   </>
-                ) : (
-                  <>
-                  {isLoading?(<span>-</span>):(<>{editedItem.lead_name}
-                    <br /></>)
-                    }                   
-                  </>
                 )}
-                <span>
-                  Last Updated:{" "}
-                  {editedItem && editedItem.update_date
-                    ? editedItem.update_date.split("T")[0]
-                    : ""}
-                </span>
               </p>
             </div>
             <a href="#" className="edit-details" onClick={toggleEditable}>
@@ -206,13 +350,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             <div className="detailsBox">
               <p className="detailHead">LEAD INFORMATION</p>
               <div className="detailsContent">
-                <div
-                  className={
-                    isEditable
-                      ? "detailsLeftContainer2"
-                      : "detailsLeftContainer"
-                  }
-                >
+                <div className="detailsLeftContainer">
                   <p>Name</p>
                   <p>Title</p>
                   <p>Phone</p>
@@ -226,167 +364,194 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
                 <div className="detailsRightContainer">
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-
-                         value={name}
-                        onChange={handleNameChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
-                     ) : (
-                      <span>{name}</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={handleNameChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="position"
-                        value={editedItem.position}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{editedItem.position}</span>
+                      <span>
+                        <input
+                          type="text"
+                          name="position"
+                          value={editedItem.position}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="phone"
-                        value={editedItem.phone}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
-                      <span>-</span>        
-                    ) : (
-                      <span>{editedItem.phone}</span>
-              )}
-                  </p>
-                  <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="source"
-                        value={editedItem.source}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{editedItem.source}</span>
+                      <span>
+                        <input
+                          type="text"
+                          name="phone"
+                          value={editedItem.phone}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="company_name"
-                        value={editedItem.company_name}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{editedItem.company_name}</span>
+                      <span>
+                        <input
+                          type="text"
+                          name="source"
+                          value={editedItem.source}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="value"
-                        value={editedItem.value}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{editedItem.value}</span>
-                      )}
-                  </p>
-                  <p>
-                    {isEditable ? (
-                      <input
-                        type="email"
-                        name="email"
-                        value={editedItem.email}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>{editedItem.email}</span>
+                      <span>
+                        <input
+                          type="text"
+                          name="company_name"
+                          value={editedItem.company_name}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="type"
-                        value={editedItem.type}
-                        onChange={handleInputChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{editedItem.type}</span>
+                      <span>
+                        <input
+                          type="text"
+                          name="value"
+                          value={editedItem.value}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <select
-                        name="priority"
-                        id="priority"
-                        value={editedItem.priority}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Imp">Imp</option>
-                        <option value="Avg">Avg</option>
-                        <option value="Cool">Cool</option>
-                      </select>
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span
-                      className={
-                        editedItem.priority === "Imp"
-                          ? "imptnt"
-                          : editedItem.priority === "Avg"
-                          ? "avg"
-                          : ""
-                      }
-                    >
-                      {editedItem.priority}
-                    </span>
-                      
+                      <span>
+                        <input
+                          type="email"
+                          name="email"
+                          value={editedItem.email}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
-                  {isEditable ? (
-                    <select
-                      name="status"
-                      id="status"
-                      value={editedItem.status}
-                      onChange={handleInputChange}
-                    >
-                      <option value="New">New</option>
-                      <option value="Open">Open</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Unread">Unread</option>
-                    </select>
-                  ) : isLoading ? (
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="type"
+                          value={editedItem.type}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <select
+                          name="priority"
+                          id="priority"
+                          value={editedItem.priority}
+                          onChange={handleInputChange}
+                          disabled={isDisabled}
+                          style={
+                            isEditable
+                              ? editStylingSelect1
+                              : normalStylingSelect1
+                          }
+                          className={isDisabled ? "disabled" : ""}
+                        >
+                          <option value="Imp">Imp</option>
+                          <option value="Avg">Avg</option>
+                          <option value="Cool">Cool</option>
+                        </select>
+                      </span>
+                    )}
+                  </p>
+                  {isLoading ? (
                     <span>-</span>
                   ) : (
-                    <p
-                      className="detailsStatus"
-                      style={{ backgroundColor: getStatusBackgroundColor() }}
-                    >
-                      <span>{editedItem.status}</span>
-                    </p>
+                    <span>
+                      <select
+                        name="status"
+                        id="status"
+                        value={editedItem.status}
+                        onChange={handleInputChange}
+                        disabled={isDisabled}
+                        style={
+                          isEditable ? editStylingSelect2 : normalStylingSelect2
+                        }
+                        className={isDisabled ? "disabled" : ""}
+                      >
+                        <option value="New">New</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Unread">Unread</option>
+                      </select>
+                    </span>
                   )}
                 </div>
               </div>
@@ -394,59 +559,61 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             <div className="detailsBox">
               <p className="detailHead">LEAD OWNER</p>
               <div className="detailsContent">
-                <div
-                  className={
-                    isEditable
-                      ? "detailsLeftContainer2"
-                      : "detailsLeftContainer"
-                  }
-                >
+                <div className="detailsLeftContainer">
                   <p>Lead Owner</p>
                   <p>Email</p>
                   <p>Contact</p>
                 </div>
                 <div className="detailsRightContainer">
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        value={owner}
-                        onChange={handleOwnerChange}
-                      />
-                    ) : isLoading ? (
+                    {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>{owner}</span>                      
+                      <span>
+                        <input
+                          type="text"
+                          value={owner}
+                          onChange={handleOwnerChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="email"
-                        name="owner_email"
-                        value={editedItem.owner_email
-                        }
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.owner_email
-                      }</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="email"
+                          name="owner_email"
+                          value={editedItem.owner_email}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="owner_phone"
-                        value={editedItem.owner_phone}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.owner_phone}</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="owner_phone"
+                          value={editedItem.owner_phone}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                 </div>
@@ -455,13 +622,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             <div className="detailsBox">
               <p className="detailHead">ADDRESS INFORMATION</p>
               <div className="detailsContent">
-                <div
-                  className={
-                    isEditable
-                      ? "detailsLeftContainer2"
-                      : "detailsLeftContainer"
-                  }
-                >
+                <div className="detailsLeftContainer">
                   <p>Street</p>
                   <p>City</p>
                   <p>State</p>
@@ -470,73 +631,93 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
                 <div className="detailsRightContainer">
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="address1"
-                        value={editedItem.address1}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.address1}</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="address1"
+                          value={editedItem.address1}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="city"
-                        value={editedItem.city}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.city}</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="city"
+                          value={editedItem.city}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="state"
-                        value={editedItem.state}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.state}</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem.state}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="country"
-                        value={editedItem.country}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.country}</span>
-                     )}
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="country"
+                          value={editedItem.country}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
                   </p>
                   <p>
-                    {isEditable ? (
-                      <input
-                        type="text"
-                        name="pin"
-                        value={editedItem.pin}
-                        onChange={handleInputChange}
-                      />
-                      ) : isLoading ? (
-                        <span>-</span>
-                      ) : (
-                      <span>{editedItem.pin}</span>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="pin"
+                          value={editedItem.pin}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
                     )}
                   </p>
                 </div>
@@ -548,11 +729,11 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
               <button className="convertToDeal">Convert to deal</button>
               {stateBtn === 0 ? (
                 <button disabled className="disabledBtn">
-                  Update Lead
+                  Save
                 </button>
               ) : (
                 <button onClick={handleUpdateClick} className="convertToDeal">
-                  Update Lead
+                  Save
                 </button>
               )}
             </div>
@@ -563,7 +744,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             </div>
           )}
         </div>
-        
+
         {/* left side of modal ends here */}
         <div className="user-details--right">
           <div className="tab-navigation">
@@ -619,7 +800,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
           </div>
         </div>
-        
       </div>
 
       {/* modal container ends here */}
