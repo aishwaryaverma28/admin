@@ -152,6 +152,25 @@ const UserAndTeams = () => {
                 </div>
               </section>
 
+              <section className="active-inactive">
+              <div className="user-team-setting-btn user-team-font">
+            <button
+              className="user-team-btn genral-active "
+            >
+              Active (2)
+            </button>
+            <button
+              className="user-team-btn">
+              Invited (1)
+            </button>
+            <button
+              className="user-team-btn">
+              Deactivated (1)
+            </button>
+           
+          </div>
+              </section>
+
               <section className="user-table">
                 {loading ? (
                   // Show a loading message or spinner while data is loading

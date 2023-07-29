@@ -60,7 +60,7 @@ input:focus {
 
 .top-msg-display {
   margin-left: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 /* top message display ends here  */
@@ -71,7 +71,7 @@ input:focus {
   position: relative;
   display: inline-block;
   margin-left: 1rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .search-input {
@@ -117,7 +117,6 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
 }
 
 .user-export p {
@@ -169,7 +168,7 @@ input:focus {
 .user-table {
   padding-left: 1rem;
   padding-right: 1rem;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
 }
 
 .user-table table {
@@ -796,3 +795,4 @@ input:focus {
   font-size: 0.875rem;
   text-transform: capitalize;
 }
+
