@@ -4,6 +4,9 @@ import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 
 const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
+  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const dropdownRefs = useRef([]);
@@ -21,11 +24,24 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
 
   const totalValue = leadArray.reduce((sum, item) => sum + item.value, 0);
 
-  const toggleDropdown = (itemId) => {
-    setIsOpenState((prevState) => ({
-      ...prevState,
-      [itemId]: !prevState[itemId],
-    }));
+  const toggleDropdown = (itemId, option) => {
+    if (option === "Delete") {
+      setItemToDelete(leadArray.find((item) => item.id === itemId));
+      setDeleteConfirmationVisible(true);
+    } else {
+      setIsOpenState((prevState) => ({
+        ...prevState,
+        [itemId]: !prevState[itemId],
+      }));
+    }
+  };
+  const deleteCard = (itemId) => {
+    // Make your API call here to delete the card with the given itemId
+    // After successful deletion, you may want to update the leadArray state with the updated data
+    // For example, if you are using onLeadAdded function to update the data, you can call it like this:
+    // onLeadAdded(itemId, "delete");
+    // You can also close the confirmation popup after successful deletion.
+    setDeleteConfirmationVisible(false);
   };
 
   // Effect hook to initialize the isOpenState when the component mounts
@@ -107,12 +123,42 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
                     className="fas fa-ellipsis-h"
                     onClick={() => toggleDropdown(item.id)}
                   ></i>
+
                   {isOpenState[item.id] && (
                     <ul className="cardMenu">
                       <li>Convert to deal</li>
-                      <li>Delete</li>
+                      <li onClick={() => toggleDropdown(item.id, "Delete")}>
+                        Delete
+                      </li>
                       <li>Item 3</li>
                     </ul>
+                  )}
+                  {deleteConfirmationVisible && (
+                    <div className="popup-container">
+                      <div className="popup">
+                        <p className="popupHead">
+                          Delete {itemToDelete.lead_name}
+                        </p>
+                        <p>Deleted leads will be in recycle bin for 90 days</p>
+                        <p className="deleteMsg">
+                          Are you sure you want to delete this lead?
+                        </p>
+                        <div className="popup-buttons">
+                          <button
+                            className="cancelBtn"
+                            onClick={() => setDeleteConfirmationVisible(false)}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="confirmBtn"
+                            onClick={() => deleteCard(itemToDelete.id)}
+                          >
+                            Delete Lead
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </button>
               </div>
