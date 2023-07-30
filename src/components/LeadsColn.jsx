@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
+import {
+  DELETE_LEAD,
+  handleLogout,
+  getDecryptedToken,
+} from "./utils/Constants";
+import axios from "axios";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 
@@ -11,6 +17,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
+  const decryptedToken = getDecryptedToken();
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -36,15 +43,28 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
     }
   };
   const deleteCard = (itemId) => {
-    // Make your API call here to delete the card with the given itemId
-    // After successful deletion, you may want to update the leadArray state with the updated data
-    // For example, if you are using onLeadAdded function to update the data, you can call it like this:
-    // onLeadAdded(itemId, "delete");
-    // You can also close the confirmation popup after successful deletion.
+    //   const body ={
+    //     "leadId":itemId
+    // }
+    const body = {
+      action: "delete",
+      leadId: itemId,
+    };
+    axios
+      .post(DELETE_LEAD, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setDeleteConfirmationVisible(false);
   };
 
-  // Effect hook to initialize the isOpenState when the component mounts
   useEffect(() => {
     const initialIsOpenState = leadArray.reduce((acc, item) => {
       acc[item.id] = false;
@@ -138,6 +158,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
                       <div className="popup">
                         <p className="popupHead">
                           Delete {itemToDelete.lead_name}
+                          {itemToDelete.id}
                         </p>
                         <p>Deleted leads will be in recycle bin for 90 days</p>
                         <p className="deleteMsg">
