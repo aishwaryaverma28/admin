@@ -83,45 +83,40 @@ const RecycleBin = () => {
     const leadName = recycleItem.lead_name?.toLowerCase() || "";
     const updateDate = formatDate(recycleItem?.update_date) || "";
     const searchRecycle = searchQuery.toLowerCase();
-    const itemDate = new Date(recycleItem.update_date);
 
-    const formattedItemDate = formatDate(itemDate);
-    const formattedStartDate = formatDate(startDate);
-    const formattedEndDate = formatDate(endDate);
+    const itemDate = new Date(recycleItem.update_date);
+    itemDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+
 
     // Check if the search query matches any of the fields
     const matchesSearchQuery =
       fullName.includes(searchRecycle) ||
       leadName.includes(searchRecycle) ||
       updateDate.includes(searchRecycle);
-
+  
     // Check if the item date falls within the specified date range
     const withinDateRange =
-      (!formattedStartDate || formattedItemDate >= formattedStartDate) &&
-      (!formattedEndDate || formattedItemDate <= formattedEndDate);
+      (!startDate || itemDate >= startDate) &&
+      (!endDate || itemDate <= endDate);
+  
 
-    // If the end date is today, include it in the filtered results
-    const isToday = endDate && endDate.toDateString() === new Date().toDateString();
-
+  
     // Show all data when both start and end dates are null, and search box is empty
     if (!startDate && !endDate && !searchQuery) {
       return true;
     }
-
+  
     // Show all data when start date and end date are null, and search query matches any field
     if (!startDate && !endDate && matchesSearchQuery) {
       return true;
     }
 
-    // Show all data when start date is null, end date is today, and search query matches any field
-    if (!startDate && isToday && matchesSearchQuery) {
-      return true;
-    }
 
+  
     // Filter based on regular conditions (search query and date range)
-    return matchesSearchQuery && (withinDateRange || isToday);
+    return matchesSearchQuery && withinDateRange;
   });
-
+  
 
   return (
     <div>
