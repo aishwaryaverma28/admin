@@ -11,6 +11,12 @@ const RecycleBin = () => {
   const [startDate, setStartDate] = useState(defaultDate);
   const [endDate, setEndDate] = useState(defaultDate);
 
+  const [activeTab, setActiveTab] = useState('Notes'); 
+
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+  };
+
 
   
   const handleInputClick = (e) => {
@@ -44,11 +50,27 @@ const RecycleBin = () => {
             </div>
 
             <div className="recycle-setting-btn ">
-              <button className="recycle-btn recycle-active recycle-fonts">Notes (20)</button>
-              <button className="recycle-btn recycle-fonts ">Deals (9)</button>
-              <button className="recycle-btn recycle-fonts ">Leads (6)</button>
-              <button className="recycle-btn recycle-fonts ">Company (12)</button>
-              <button className="recycle-btn recycle-fonts ">Contacts (10)</button>
+            <button
+          className={`recycle-btn recycle-fonts ${activeTab === 'Notes' ? 'recycle-active' : ''}`}
+          onClick={() => handleTabClick('Notes')}
+        >Notes (2)</button> 
+            <button
+          className={`recycle-btn recycle-fonts ${activeTab === 'Deals' ? 'recycle-active' : ''}`}
+          onClick={() => handleTabClick('Deals')}
+        >Deals (3)</button>
+            <button
+          className={`recycle-btn recycle-fonts ${activeTab === 'Leads' ? 'recycle-active' : ''}`}
+          onClick={() => handleTabClick('Leads')}
+        >Leads (4)</button>
+            <button
+          className={`recycle-btn recycle-fonts ${activeTab === 'Company' ? 'recycle-active' : ''}`}
+          onClick={() => handleTabClick('Company')}
+        >Company (5)</button>
+            <button
+          className={`recycle-btn recycle-fonts ${activeTab === 'Contacts' ? 'recycle-active' : ''}`}
+          onClick={() => handleTabClick('Contacts')}
+        >Contacts (6)</button>
+            
 
             </div>
 
@@ -116,7 +138,9 @@ const RecycleBin = () => {
 
             </div>
 
-            <div className="recycle-list-table recycle-fonts">
+            {activeTab === 'Notes' && 
+             
+             <div className="recycle-list-table recycle-fonts">
             <table className="recycle-table" id="recycle-border">
                   <thead>
                           <tr>
@@ -186,6 +210,549 @@ const RecycleBin = () => {
                   </tbody>
                 </table>
                 </div>
+            
+            
+            }
+      {activeTab === 'Deals' && 
+      
+      <div className="recycle-list-table recycle-fonts">
+      <table className="recycle-table" id="recycle-border">
+            <thead>
+                    <tr>
+                              <th>
+                                <label className="custom-checkbox">
+                                  <input type="checkbox" className="cb1" />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </th>
+                              <th>Subject</th>
+                              <th>Created By</th>
+                              <th>Deleted By</th>
+                              <th>Date Deleted</th>
+                            </tr>
+
+            </thead>
+            <tbody>
+            
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          </div>
+      
+      
+      }
+      {activeTab === 'Leads' && 
+      
+      <div className="recycle-list-table recycle-fonts">
+      <table className="recycle-table" id="recycle-border">
+            <thead>
+                    <tr>
+                              <th>
+                                <label className="custom-checkbox">
+                                  <input type="checkbox" className="cb1" />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </th>
+                              <th>Subject</th>
+                              <th>Created By</th>
+                              <th>Deleted By</th>
+                              <th>Date Deleted</th>
+                            </tr>
+
+            </thead>
+            <tbody>
+            
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          </div>
+
+      }
+      {activeTab === 'Company' && 
+      
+      <div className="recycle-list-table recycle-fonts">
+      <table className="recycle-table" id="recycle-border">
+            <thead>
+                    <tr>
+                              <th>
+                                <label className="custom-checkbox">
+                                  <input type="checkbox" className="cb1" />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </th>
+                              <th>Subject</th>
+                              <th>Created By</th>
+                              <th>Deleted By</th>
+                              <th>Date Deleted</th>
+                            </tr>
+
+            </thead>
+            <tbody>
+            
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          </div>
+      
+      }
+      {activeTab === 'Contacts' && 
+      
+      <div className="recycle-list-table recycle-fonts">
+      <table className="recycle-table" id="recycle-border">
+            <thead>
+                    <tr>
+                              <th>
+                                <label className="custom-checkbox">
+                                  <input type="checkbox" className="cb1" />
+                                  <span className="checkmark"></span>
+                                </label>
+                              </th>
+                              <th>Subject</th>
+                              <th>Created By</th>
+                              <th>Deleted By</th>
+                              <th>Date Deleted</th>
+                            </tr>
+
+            </thead>
+            <tbody>
+            
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label className="custom-checkbox">
+                      <input type="checkbox" className="cb1" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </td>
+                  <td>
+                  Lorem ipsum dolor sit amet consectetur. Porttitor.....
+                    <p></p>
+                  </td>
+
+                  <td>
+                    vaneet gupta
+                  </td>
+
+                  <td>
+                    anant singh
+                  </td>
+
+                  <td>
+                    08 august 2023
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          </div>
+      
+      
+      }
+
+            
           </section>
 
 
