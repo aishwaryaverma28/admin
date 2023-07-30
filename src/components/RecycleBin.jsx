@@ -160,7 +160,7 @@ const RecycleBin = () => {
               <button
                 className={`recycle-btn recycle-fonts ${activeTab === 'Leads' ? 'recycle-active' : ''}`}
                 onClick={() => handleTabClick('Leads')}
-              >Leads (4)</button>
+              >Leads ({recycleData.length})</button>
               <button
                 className={`recycle-btn recycle-fonts ${activeTab === 'Company' ? 'recycle-active' : ''}`}
                 onClick={() => handleTabClick('Company')}
