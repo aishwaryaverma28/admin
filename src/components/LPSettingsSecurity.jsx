@@ -41,7 +41,7 @@ const LPSettingsSecurity = () => {
               <div className="white-tick">
                 <img src={WhiteTick} alt=""/>
               </div>
-              <p>At least 8 characters long</p>
+              <p className="security-rule">At least 8 characters long</p>
             </div>
           </li>
           <li>
@@ -49,7 +49,7 @@ const LPSettingsSecurity = () => {
               <div className="white-tick">
                 <img src={WhiteTick} alt=""/>
               </div>
-              <p>One number, symbol, or whitespace character</p>
+              <p  className="security-rule">One number, symbol, or whitespace character</p>
             </div>
           </li>
           <li>
@@ -57,7 +57,7 @@ const LPSettingsSecurity = () => {
               <div className="white-tick">
                 <img src={WhiteTick} alt=""/>
               </div>
-              <p>One uppercase character</p>
+              <p  className="security-rule">One uppercase character</p>
             </div>
           </li>
           <li>
@@ -65,7 +65,7 @@ const LPSettingsSecurity = () => {
               <div className="white-tick">
                 <img src={WhiteTick} alt=""/>
               </div>
-              <p>One lowercase character</p>
+              <p  className="security-rule">One lowercase character</p>
             </div>
           </li>
         </ul>

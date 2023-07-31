@@ -94,6 +94,17 @@
     margin-bottom: 1.38rem;
 }
 
+.security-rule{
+    color:#33475B;
+    font-family: "Lexend Deca", sans-serif;
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.5625rem; /* 178.571% */
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+}
+
 .security-check {
     display: flex;
     align-items: center;
