@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoginHeader from "./LoginHeader";
 import LoginFooter from "./LoginFooter";
 import "./styles/Registration.css";
 import axios from "axios";
-import countryList from "country-list";
 import CRMImage from "../assets/image/crm.svg";
-import { CREATE_ACC } from "./utils/Constants";
+import { CREATE_ACC, COUNTRIES } from "./utils/Constants";
 const Registration = () => {
+  const [country, setCountry] = useState("");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -30,13 +30,20 @@ const Registration = () => {
       [name]: value,
     }));
   };
-  const getCountriesWithCodes = () => {
-    return countryList.getData().map((country) => ({
-      name: country.name,
-      code: country.code,
-    }));
-  };
-  const countriesWithCodes = getCountriesWithCodes();
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function getData() {
+    try {
+      const response = await axios.get(COUNTRIES);
+      const data = response.data.data;
+      console.log(data);
+      setCountry(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -193,11 +200,30 @@ const Registration = () => {
                 onChange={handleChange}
               >
                 <option value="">Select a country</option>
-                {countriesWithCodes.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
+                {country &&
+                  country.slice(0, 100).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
+                {country &&
+                  country.slice(100, 200).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
+                {country &&
+                  country.slice(200, 250).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
+                {/* {country.map((count) => (
+                  <option key={count.id} value={count.country_code}>
+                    {count.country_name}
                   </option>
-                ))}
+                ))} */}
+                {console.log(country[0])}
               </select>
               <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="">Role*</option>
