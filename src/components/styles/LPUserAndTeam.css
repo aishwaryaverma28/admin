@@ -796,3 +796,7 @@ input:focus {
   text-transform: capitalize;
 }
 
+
+.user-team-dropdown-position{
+  left: 0;
+}

@@ -43,6 +43,7 @@ import LPSettingsGeneral from "./components/LPSettingsGeneral";
 import Error from "./components/Error";
 import LPSettingsNotification from "./components/LPSettingsNotification";
 import RecycleBin from "./components/RecycleBin";
+import LPSettingsSecurity from "./components/LPSettingsSecurity";
 
 const router = createBrowserRouter([
   {
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/settings/general",
         element: <LPSettingsGeneral />,
+      },
+      {
+        path: "/lp/settings/security",
+        element: <LPSettingsSecurity/>,
       },
       {
         path: "/lp/settings/notification",
