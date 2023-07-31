@@ -5,6 +5,7 @@ import UserIcon from "../assets/image/user-icon.svg";
 import "./styles/LPGeneral.css";
 import axios from "axios";
 import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "./utils/Constants";
+import EmailSyncTick from '../assets/image/email-sync-tick.svg';
 const LPSettingsGeneral = () => {
   const [clientData, setClientData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
@@ -12,7 +13,7 @@ const LPSettingsGeneral = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
-  
+
   useEffect(() => {
     getUser();
   }, []);
@@ -51,7 +52,7 @@ const LPSettingsGeneral = () => {
     if (clientData[name] !== value) setStateBtn(1);
     setClientData({ ...clientData, [name]: value });
   }
-  
+
   function handleSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -85,25 +86,22 @@ const LPSettingsGeneral = () => {
 
           <div className="genral-setting-btn genral-setting-fonts">
             <button
-              className={`genral-btn ${
-                activeTab === "profile" ? "genral-active" : ""
-              }`}
+              className={`genral-btn ${activeTab === "profile" ? "genral-active" : ""
+                }`}
               onClick={() => handleTabClick("profile")}
             >
               Profile
             </button>
             <button
-              className={`genral-btn ${
-                activeTab === "email" ? "genral-active" : ""
-              }`}
+              className={`genral-btn ${activeTab === "email" ? "genral-active" : ""
+                }`}
               onClick={() => handleTabClick("email")}
             >
               Email Sync
             </button>
             <button
-              className={`genral-btn ${
-                activeTab === "contact" ? "genral-active" : ""
-              }`}
+              className={`genral-btn ${activeTab === "contact" ? "genral-active" : ""
+                }`}
               onClick={() => handleTabClick("contact")}
             >
               Contact Sync
@@ -132,7 +130,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="first_name"
                             onChange={handleChange}
-                            value={clientData.first_name || ""}
+                            value={clientData?.first_name || ""}
                           />
                         </div>
 
@@ -143,7 +141,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="last_name"
                             onChange={handleChange}
-                            value={clientData.last_name || ""}
+                            value={clientData?.last_name || ""}
                           />
                         </div>
 
@@ -154,7 +152,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="phone"
                             onChange={handleChange}
-                            value={clientData.phone || ""}
+                            value={clientData?.phone || ""}
                           />
                         </div>
 
@@ -200,14 +198,14 @@ const LPSettingsGeneral = () => {
                         </div>
                       </div>
                       <div className="genral-form-section2">
-                      <div className="genral-form-fields">
+                        <div className="genral-form-fields">
                           <label htmlFor="">Address</label>
                           <input
                             type="text"
                             className="genral-form-input genral-setting-fonts"
                             name="address1"
                             onChange={handleChange}
-                            value={clientData.address1 || ""}
+                            value={clientData?.address1 || ""}
                           />
                         </div>
 
@@ -218,7 +216,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="city"
                             onChange={handleChange}
-                            value={clientData.city || ""}
+                            value={clientData?.city || ""}
                           />
                         </div>
 
@@ -229,7 +227,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="state"
                             onChange={handleChange}
-                            value={clientData.state || ""}
+                            value={clientData?.state || ""}
                           />
                         </div>
 
@@ -240,7 +238,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="postcode"
                             onChange={handleChange}
-                            value={clientData.postcode || ""}
+                            value={clientData?.postcode || ""}
                           />
                         </div>
 
@@ -251,18 +249,57 @@ const LPSettingsGeneral = () => {
                       <button className="general-discard-btn">Discard</button>
                       {stateBtn === 0 ? (
                         <button className="disabledBtn">Save</button>
-                      ):(
-                       <button className="general-save-btn" onClick={handleSubmit}>Save</button> 
-                      )}                      
+                      ) : (
+                        <button className="general-save-btn" onClick={handleSubmit}>Save</button>
+                      )}
                     </div>
                   </form>
                 </div>
               )}
             </>
           )}
-          {activeTab === "email" && <>email</>}
+          {activeTab === "email" && <>
 
-          {activeTab === "contact" && <>contact</>}
+            <section className="genral-setting-container genral-setting-fonts">
+
+
+
+              <div className="email-sync-content genral-setting-fonts">
+                <p>Connect you personal email accounts to LeadPlaner to log, track, send and receive emails in LeadPlaner.</p>
+                <ul className="email-sync-list">
+                  <li><span><img src={EmailSyncTick} alt="" /></span><span>Send and schedule emails from LeadPlaner</span></li>
+                  <li><span><img src={EmailSyncTick} alt="" /></span><span>Sync with any major email provider</span></li>
+                  <li><span><img src={EmailSyncTick} alt="" /></span><span>Track email engagement</span></li>
+                </ul>
+
+                <button className="connect-email-btn genral-setting-fonts">Connect personal email</button>
+              </div>
+
+
+
+
+            </section>
+
+
+
+          </>}
+
+          {activeTab === "contact" && <>
+
+            <section className="genral-setting-container genral-setting-fonts">
+
+              <div className="contact-sync-para">
+                <p className="genral-setting-fonts general-sync-note">Sync your contacts in LeadPlaner with your Google or Outlook contact lists. To get started, add a new account below. After that, you can define your sync preferences.</p>
+              </div>
+              <div>
+                <button className="add-contact-sync-btn genral-setting-fonts">Add account</button>
+              </div>
+
+
+            </section>
+
+
+          </>}
         </section>
       </div>
     </div>
