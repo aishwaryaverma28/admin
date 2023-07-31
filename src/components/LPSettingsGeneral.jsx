@@ -10,6 +10,16 @@ const LPSettingsGeneral = () => {
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("profile");
+  const [stateBtn, setStateBtn] = useState(0);
+  const [formData, setFormData] = useState(
+    {
+      "first_name": "test",
+      "last_name": "client",
+      "phone": "+11111111",
+      "address1": "add_2",
+      "company": "Ezuka services",
+    })
+  
   useEffect(() => {
     getUser();
   }, []);
@@ -47,7 +57,7 @@ const LPSettingsGeneral = () => {
       <LPSettingSidebar />
       <div className="mainPage">
         <section className="genral-setting-container genral-setting-fonts">
-          <p className="genral-heading">general</p>
+          <p className="genral-heading">General</p>
 
           <div className="genral-setting-btn genral-setting-fonts">
             <button
@@ -174,7 +184,11 @@ const LPSettingsGeneral = () => {
 
                     <div className="general-page-btn">
                       <button className="general-discard-btn">Discard</button>
-                      <button className="general-save-btn">Save</button>
+                      {stateBtn === 0 ? (
+                        <button className="disabledBtn">Save</button>
+                      ):(
+                       <button className="general-save-btn">Save</button> 
+                      )}                      
                     </div>
                   </form>
                 </div>
