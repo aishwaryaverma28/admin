@@ -43,9 +43,6 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
     }
   };
   const deleteCard = (itemId) => {
-    //   const body ={
-    //     "leadId":itemId
-    // }
     const body = {
       leadId: itemId,
     };
