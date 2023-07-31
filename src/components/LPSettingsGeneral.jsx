@@ -4,12 +4,15 @@ import "./styles/LPSetting.css";
 import UserIcon from "../assets/image/user-icon.svg";
 import "./styles/LPGeneral.css";
 import axios from "axios";
-import { USER_INFO, getDecryptedToken, handleLogout } from "./utils/Constants";
+import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "./utils/Constants";
 const LPSettingsGeneral = () => {
   const [clientData, setClientData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("profile");
+  const [stateBtn, setStateBtn] = useState(0);
+  const [updateMessage, setUpdateMessage] = useState("");
+  
   useEffect(() => {
     getUser();
   }, []);
@@ -42,12 +45,43 @@ const LPSettingsGeneral = () => {
     setActiveTab(tab);
   };
 
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (clientData[name] !== value) setStateBtn(1);
+    setClientData({ ...clientData, [name]: value });
+  }
+  
+  function handleSubmit(event) {
+    event.preventDefault();
+    const updatedFormData = {
+      first_name: clientData.first_name,
+      last_name: clientData.last_name,
+      phone: clientData.phone,
+      address1: clientData.address1,
+      city: clientData.city,
+      state: clientData.state,
+      postcode: clientData.postcode,
+    };
+    axios.put(USER_UPDATE, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      console.log(response);
+      setUpdateMessage("User data is updated successfully");
+      setTimeout(() => {
+        setUpdateMessage("");
+      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+    });
+  }
+
   return (
     <div className="settings-container">
       <LPSettingSidebar />
       <div className="mainPage">
         <section className="genral-setting-container genral-setting-fonts">
-          <p className="genral-heading">general</p>
+          <p className="genral-heading">General</p>
 
           <div className="genral-setting-btn genral-setting-fonts">
             <button
@@ -77,6 +111,7 @@ const LPSettingsGeneral = () => {
           </div>
           {activeTab === "profile" && (
             <>
+              {updateMessage && <p className="updateMsg">{updateMessage}</p>}
               <div className="genral-user genral-setting-fonts">
                 <p>Profile Image</p>
                 <div className="genral-image">
@@ -95,6 +130,8 @@ const LPSettingsGeneral = () => {
                           <input
                             type="text"
                             className="genral-form-input genral-setting-fonts"
+                            name="first_name"
+                            onChange={handleChange}
                             value={clientData.first_name || ""}
                           />
                         </div>
@@ -104,16 +141,20 @@ const LPSettingsGeneral = () => {
                           <input
                             type="text"
                             className="genral-form-input genral-setting-fonts"
+                            name="last_name"
+                            onChange={handleChange}
                             value={clientData.last_name || ""}
                           />
                         </div>
 
                         <div className="genral-form-fields">
-                          <label htmlFor="">Email</label>
+                          <label htmlFor="">Phone Number</label>
                           <input
-                            type="email"
+                            type="text"
                             className="genral-form-input genral-setting-fonts"
-                            value={clientData.email || ""}
+                            name="phone"
+                            onChange={handleChange}
+                            value={clientData.phone || ""}
                           />
                         </div>
 
@@ -154,27 +195,65 @@ const LPSettingsGeneral = () => {
                             id=""
                             className="genral-form-select genral-setting-fonts genral-timezone"
                           >
-                            <option value="">english (united kingdom) </option>
+                            <option value="">English (united kingdom) </option>
                           </select>
                         </div>
                       </div>
                       <div className="genral-form-section2">
-                        <div className="genral-form-fields">
-                          <label htmlFor="">Currency </label>
-                          <select
-                            name=""
-                            id=""
-                            className="genral-form-select genral-setting-fonts genral-timezone"
-                          >
-                            <option value="">USD (US dollars) </option>
-                          </select>
+                      <div className="genral-form-fields">
+                          <label htmlFor="">Address</label>
+                          <input
+                            type="text"
+                            className="genral-form-input genral-setting-fonts"
+                            name="address1"
+                            onChange={handleChange}
+                            value={clientData.address1 || ""}
+                          />
                         </div>
+
+                        <div className="genral-form-fields">
+                          <label htmlFor="">City</label>
+                          <input
+                            type="text"
+                            className="genral-form-input genral-setting-fonts"
+                            name="city"
+                            onChange={handleChange}
+                            value={clientData.city || ""}
+                          />
+                        </div>
+
+                        <div className="genral-form-fields">
+                          <label htmlFor="">State</label>
+                          <input
+                            type="text"
+                            className="genral-form-input genral-setting-fonts"
+                            name="state"
+                            onChange={handleChange}
+                            value={clientData.state || ""}
+                          />
+                        </div>
+
+                        <div className="genral-form-fields">
+                          <label htmlFor="">Postcode</label>
+                          <input
+                            type="text"
+                            className="genral-form-input genral-setting-fonts"
+                            name="postcode"
+                            onChange={handleChange}
+                            value={clientData.postcode || ""}
+                          />
+                        </div>
+
                       </div>
                     </div>
 
                     <div className="general-page-btn">
                       <button className="general-discard-btn">Discard</button>
-                      <button className="general-save-btn">Save</button>
+                      {stateBtn === 0 ? (
+                        <button className="disabledBtn">Save</button>
+                      ):(
+                       <button className="general-save-btn" onClick={handleSubmit}>Save</button> 
+                      )}                      
                     </div>
                   </form>
                 </div>

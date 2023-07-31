@@ -198,3 +198,19 @@ input:focus {
     transition: all 0.5s ease-in-out;
     border: 1px solid #077838;
 }
+
+.disabledBtn {
+    padding: 8px 20px;
+    font-family: "Lexend Deca", sans-serif;
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    border: 1px solid #F3F6FA;
+    background: #F3F6FA;
+    color: #909DAF;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.02563rem;
+    text-transform: capitalize;
+    margin-left: 1rem;
+  }
+  

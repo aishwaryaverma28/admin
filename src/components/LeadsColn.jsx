@@ -43,19 +43,19 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
     }
   };
   const deleteCard = (itemId) => {
-    //   const body ={
-    //     "leadId":itemId
-    // }
     const body = {
-      action: "delete",
       leadId: itemId,
     };
     axios
-      .post(DELETE_LEAD, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .delete(
+        DELETE_LEAD,
+        {
+          data: body,
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
       })
@@ -63,6 +63,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
         console.log(error);
       });
     setDeleteConfirmationVisible(false);
+    onLeadAdded();
   };
 
   useEffect(() => {
