@@ -1,7 +1,6 @@
 .permission-container {
     width: 80vw;
-    border: 1px solid red;
-    height: 65rem;
+    height: auto;
     padding-right: 1rem;
     padding-left: 1rem;
 }
@@ -244,3 +243,50 @@
     font-size: 0.75rem;
 
 }
+
+.permission-table {
+    margin-top: 0.44rem;
+    margin-bottom: 3.81rem;
+}
+
+.permission-table th {
+
+    background: #F3F6FA;
+}
+
+.permission-table-heading th {
+    color: var(--primary, #1E2224);
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    width:25%;
+    text-align: left;
+}
+
+.permission-table-input {
+    border-radius: 0.3125rem;
+    border: none;
+    width:100%;
+    background: #Ffff;
+    cursor: pointer;
+
+}
+
+.permission-table-heading td{
+    padding-left:1rem;
+}
+
+.permission-table-heading td:nth-child(1), 
+.permission-table-heading td:nth-child(2), 
+.permission-table-heading td:nth-child(3)
+{
+    border-right:1px solid transparent;
+}
+
+
+
+
+
+
+

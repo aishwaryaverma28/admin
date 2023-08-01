@@ -112,24 +112,72 @@ const LPPermission = () => {
             <div>
               <button className='common-save-btn'>Add Role</button>
             </div>
+          </div>
 
-            <div className="permission-table">
-              <table>
+          <div>
+              <table className="permission-table" >
                 <thead>
-                  <tr>
-                    <th></th>
+                  <tr className="common-fonts permission-table-heading">
+                    <th>ROLE</th>
+                    <th>MODULE</th>
+                    <th>START DATE</th>
+                    <th>END DATE</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                <tr className="common-fonts permission-table-heading">
+                    <td>contacts edit</td>
+                    <td>contacts</td>
                     <td>
-                      
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                  </tr>
+                <tr className="common-fonts permission-table-heading">
+                    <td>deals view</td>
+                    <td>deals</td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                  </tr>
+                <tr className="common-fonts permission-table-heading">
+                    <td>deals edit</td>
+                    <td>deals</td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                  </tr>
+                <tr className="common-fonts permission-table-heading">
+                    <td>deals view</td>
+                    <td>deals</td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                  </tr>
+                <tr className="common-fonts permission-table-heading">
+                    <td>lead edit</td>
+                    <td>Leads</td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
+                    </td>
+                    <td>
+                    <input type="date" className="permission-table-input common-fonts" />
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
 
 
 
