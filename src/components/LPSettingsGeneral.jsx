@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
+import { LPContext } from "./LPContext";
 import LPSettingSidebar from "./LPSettingSidebar";
 import "./styles/LPSetting.css";
 import UserIcon from "../assets/image/user-icon.svg";
@@ -7,6 +8,7 @@ import axios from "axios";
 import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "./utils/Constants";
 import EmailSyncTick from '../assets/image/email-sync-tick.svg';
 const LPSettingsGeneral = () => {
+  const { setName } = useContext(LPContext);
   const [clientData, setClientData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const decryptedToken = getDecryptedToken();
@@ -64,6 +66,7 @@ const LPSettingsGeneral = () => {
       state: clientData.state,
       postcode: clientData.postcode,
     };
+    setName(clientData.first_name+" "+clientData.last_name);
     axios.put(USER_UPDATE, updatedFormData, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
@@ -75,6 +78,7 @@ const LPSettingsGeneral = () => {
         setUpdateMessage("");
       }, 30000); // Clear message after 1 minute (60000 milliseconds)
     });
+    setStateBtn(0);
   }
 
   return (

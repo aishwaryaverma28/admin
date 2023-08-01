@@ -364,6 +364,58 @@
   font-weight: 400;
   color: #33475b;
 }
+/* css for check box */
+/* Hide the default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Style the custom checkbox */
+.custom-checkbox .checkmark {
+  position: relative;
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #dcdcdc;
+  background-color: transparent;
+  border-radius: 0.125rem;
+  cursor: pointer;
+}
+
+/* Create the tick mark using the :after pseudo-element */
+.custom-checkbox .checkmark:after {
+  content: "✓";
+  /* Unicode character for a checkmark */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Center the tick mark */
+  font-size: 14px;
+  color: #2B74DA;
+  opacity: 0;
+}
+
+
+.custom-checkbox input:checked~.checkmark:after {
+  opacity: 1;
+}
+
+
+.custom-checkbox input:checked~.checkmark {
+  background-color: #f3f6fa;
+  border: 1px solid #2B74DA;
+
+}
+
+.custom-checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin: 0px !important;
+}
+
 .user-card {
   cursor: pointer;
   padding: 10px;
@@ -374,11 +426,17 @@
   height: 6.875rem;
   margin: 8px 0px;
 }
-
-.user-details {
+.user-card:hover{
+  background-color: #f4f5f9;
+}
+.card-container{
   display: flex;
   justify-content: space-between;
-  align-items: center;
+}
+.card-rightBox{
+  text-align: center;
+  }
+.user-details {
   margin-bottom: 0.2rem;
 }
 .lead-value{
@@ -387,10 +445,7 @@ font-family: "Lexend Deca";
 font-size: 0.875rem;
 font-weight: 500;
 text-transform: capitalize;
-}
-.user-details {
-  align-items: center;
-}
+  }
 
 .user-details img {
   width: 0.75rem;
@@ -414,13 +469,14 @@ text-transform: capitalize;
 .user-setting--btn {
   background: #ffffff;
   border: 1px solid #dcdcdc;
-  padding: 5px 5px;
+  padding: 0.5px 3px;
   border-radius: 5px;
   font-size: 18px;
-  max-height: 41px;
+  max-height: 30px;
   color: #1e2224;
   position: relative;
   display: inline-block;
+  margin-bottom: 0.2rem;
 }
 
 .user-setting--btn:hover {
@@ -458,12 +514,6 @@ text-transform: capitalize;
   border-radius: 5px;
   transition: all 500ms ease-in-out;
 }
-.contact-details {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
 .contact-details p {
   font-size: 0.87rem;
   color: #818181;
@@ -482,7 +532,16 @@ text-transform: capitalize;
   width: 0.875rem;
   height: 0.875rem;
 }
-
+.fa-ellipsis-h{
+  font-weight: 600;
+}
+.priorityBox{
+  margin-bottom: 0.2rem;
+}
+.priorityBox > .Avg{
+  padding: 2px 4px;
+  /* font-size: 8px; */
+}
 .Imp {
   background: #ff4040;
   /* height: 32px; */
@@ -492,7 +551,7 @@ text-transform: capitalize;
   font-weight: 400;
   padding: 4px 6px;
   border-radius: 5px;
-  text-transform: capitalize;
+  text-transform: capitalize; 
 }
 
 .Avg {
@@ -548,15 +607,6 @@ text-transform: capitalize;
   justify-content: center;
   z-index: 9;
 }
-/* 
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 4px;
-  max-width: 400px;
-  text-align: center;
-  position: relative;
-} */
 .customization_popup_container {
   position: absolute;
   width: 70%;
@@ -656,12 +706,6 @@ text-transform: capitalize;
 .user-details-imgBox input:focus{
   border: 1px solid #E2E9F2;
 }
-/* .user-details-imgBox input:hover{
-  background-color:rgb(227, 225, 225);
-transition: all .5s ease-in-out;
-cursor: pointer;
-
-} */
 .leadDetailsLeft{
   overflow: hidden;
   overflow-y: scroll;
@@ -773,28 +817,10 @@ cursor: pointer;
   text-transform: capitalize;
 }
 
-
-
-/* .detailsRightContainer input{
-  color: #1e2224;
-    font-weight: 400;
-     border: 1px solid #dcdcdc;
-    outline: rgb(59, 59, 59);
-    background-color: #ffffff;
-      font-size: 0.8rem;
-    font-family: "Lexend Deca";
-    border-radius: 0.3125rem;
-    padding: 0.3rem;
-  }
-.detailsRightContainer input:focus{
-  border: 1px solid #E2E9F2;
-  box-shadow: none;
+.selected{
+  background-color: #EFF6FF;
 }
-.detailsRightContainer input:hover{
-  background-color:rgb(227, 225, 225);
-transition: all .5s ease-in-out;
-cursor: pointer;
-} */
+
 .detailsRightContainer select{
   width: 100%;
   color: #1e2224;

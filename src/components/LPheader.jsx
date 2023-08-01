@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { LPContext } from "./LPContext";
 import { NavLink, Link, useLocation} from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
@@ -8,6 +9,7 @@ import axios from "axios";
 import { USER_INFO,getDecryptedToken,handleLogout } from "./utils/Constants";
 
 const LPheader = () => {
+  const { name } = useContext(LPContext);
   const [pageTitle, setPageTitle] = useState("Lead");
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -142,8 +144,7 @@ const LPheader = () => {
           <img className="borderLeft" src={line} alt="border-left" />
           <img src={user} alt="user" />
           {clientData ? (
-          <p>
-          {clientData.first_name+" "+clientData.last_name}
+          <p> {name ? name : `${clientData.first_name} ${clientData.last_name}`}
             <br />
             <span>{clientData.job_title}</span>
           </p>
