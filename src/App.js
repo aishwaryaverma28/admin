@@ -44,6 +44,7 @@ import Error from "./components/Error";
 import LPSettingsNotification from "./components/LPSettingsNotification";
 import RecycleBin from "./components/RecycleBin";
 import LPSettingsSecurity from "./components/LPSettingsSecurity";
+import LPPermission from "./components/LPPermission.jsx";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/settings/usernteams",
         element: <UserAndTeams />,
+      },
+      {
+        path: "/lp/settings/usernteams/permissions",
+        element: <LPPermission />,
       },
       {
         path: "/lp/settings/general",

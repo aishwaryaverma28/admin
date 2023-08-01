@@ -1,9 +1,10 @@
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   list-style: none;
 }
+
 *::-webkit-scrollbar {
   width: 6px;
 }
@@ -18,9 +19,10 @@
   border: 1px solid #ffffff;
 }
 
- html {
+html {
   scroll-behavior: smooth;
-} 
+}
+
 body {
   font-weight: 400;
   margin: 0;
@@ -28,13 +30,14 @@ body {
   font-size: 14px;
   font-family: "Work Sans", sans-serif;
   background-color: #fff;
-  -webkit-font-smoothing: antialiased; 
-  -moz-osx-font-smoothing: grayscale; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   color: #000;
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
+
 img {
   max-width: 100%;
   object-fit: cover;
@@ -88,7 +91,42 @@ ol {
 }
 
 input:focus {
-  outline: none; /* Removes the default focus outline */
+  outline: none;
+  /* Removes the default focus outline */
   border: 1px solid #dcdcdc;
-  box-shadow: 0 0 5px #dcdcdc; /* Adds a blue box shadow when input is focused */
+  box-shadow: 0 0 5px #dcdcdc;
+  /* Adds a blue box shadow when input is focused */
+}
+
+.common-fonts {
+  color: #1E2224;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+
+.common-save-btn {
+  border-radius: 0.3125rem;
+  background: #077838;
+  padding: 7px 15px;
+  color: #FFF;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  border:1px solid transparent;
+}
+
+.common-save-btn:hover{
+  border:1px solid #077838;
+  color: #077838;
+  background-color: #fff;
+  transition: all 0.5s ease-in-out;
 }
