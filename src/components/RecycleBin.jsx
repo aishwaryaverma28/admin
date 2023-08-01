@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import "./styles/RecycleBin.css";
+import axios from "axios";
 import LPSettingSidebar from "./LPSettingSidebar";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarIcon from '../assets/image/calendar.svg';
 import { format } from 'date-fns';
+import { getDecryptedToken, handleLogout } from "./utils/Constants";
 import DeleteLeads from './DeleteLeads';
 
 
@@ -14,9 +16,36 @@ const RecycleBin = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [activeTab, setActiveTab] = useState('Notes');
+  const [leadlen, setLeadlen] = useState(0);
+  const [activeTab, setActiveTab] = useState('Leads');
+  const decryptedToken = getDecryptedToken();
 
-
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+          const response = await axios.get('http://core.leadplaner.com:3001/api/lead/getallfromtrash', {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            },
+          });
+  
+          if (response.data.status === 1) {
+            console.log(response.data.data);
+            setLeadlen(response.data.data.length);
+            } else {
+            if (response.data.message === "Token has expired") {
+              alert(response.data.message);
+              handleLogout();
+            }
+          }
+           
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
@@ -58,7 +87,7 @@ const RecycleBin = () => {
               <button
                 className={`recycle-btn recycle-fonts ${activeTab === 'Leads' ? 'recycle-active' : ''}`}
                 onClick={() => handleTabClick('Leads')}
-              >Leads (0)</button>
+              >Leads ({leadlen})</button>
               <button
                 className={`recycle-btn recycle-fonts ${activeTab === 'Company' ? 'recycle-active' : ''}`}
                 onClick={() => handleTabClick('Company')}
