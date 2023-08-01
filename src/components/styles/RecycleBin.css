@@ -268,7 +268,7 @@ input.recycle-date-input {
 .recycle-table td {
     padding: 0 0.5rem;
     border: 1px solid #DCDCDC;
-    /* text-align: left; */
+    text-align: left;
 }
 
 
@@ -414,8 +414,6 @@ input.recycle-date-input {
     left:-2.5rem;
     color:#D83C38;
 }
-
-
 
 
 

@@ -13,6 +13,7 @@ import ArrowDown from "../assets/image/arrow-down.svg";
 import User from "../assets/image/user-icon.svg";
 import CreateUserModal from "./CreateUserModal";
 import CreateTeamModal from "./CreateTeamModal";
+import {Link} from "react-router-dom";
 
 
 const UserAndTeams = () => {
@@ -331,7 +332,10 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
-                                  Anant Sign Chauhan
+                                <Link to={"/lp/settings/usernteams/permissions"}>
+                                Anant Sign Chauhan
+                </Link>
+                          
                                 </p>
                                 <p>anantsingh@123@gmail.com</p>
                               </div>
