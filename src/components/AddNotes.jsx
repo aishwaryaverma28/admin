@@ -6,7 +6,7 @@ import {
   ADD_NOTES,
   GETNOTEBYSOURCE,
   UPDATE_NOTE,
-  DELETE_NOTE,
+  MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
@@ -36,7 +36,7 @@ const AddNotes = ({ item, onNotesNum }) => {
       })
       .then((response) => {
         if (response.data.status === 1) {
-          // console.log(response.data.data);
+          console.log(response.data.data);
           setNotes(response.data.data);
         } else {
           if (response.data.message === "Token has expired") {
@@ -118,18 +118,21 @@ const AddNotes = ({ item, onNotesNum }) => {
         .catch((error) => {
           console.log(error);
         });
+        setStateBtn(0);
     }
   };
-
   const handleDeleteNote = (id) => {
+    const updatedFormData = {
+      "notes": [id,],
+      "source_type": "lead"
+  }
     axios
-      .delete(DELETE_NOTE + id, {
+      .post(MOVENOTE_TO_TRASH, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`,
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        // Remove the deleted note from the notes list
         const updatedNotes = notes.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         onNotesNum();
@@ -137,6 +140,10 @@ const AddNotes = ({ item, onNotesNum }) => {
       .catch((error) => {
         console.log(error);
       });
+
+    setDataFromChild("");
+    setOpenEditor(false);
+    setStateAdd(0);
   };
 
   const expandEditor = () => {

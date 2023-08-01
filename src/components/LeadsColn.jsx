@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
 import {
-  DELETE_LEAD,
-  handleLogout,
+  MOVELEAD_TO_TRASH,
   getDecryptedToken,
 } from "./utils/Constants";
 import axios from "axios";
@@ -44,18 +43,15 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   };
   const deleteCard = (itemId) => {
     const body = {
-      leadId: itemId,
+      leadIds: [itemId,]
     };
     axios
-      .delete(
-        DELETE_LEAD,
-        {
-          data: body,
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      )
+      .delete(MOVELEAD_TO_TRASH, {
+        data: body,
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then((response) => {
         console.log(response);
       })
@@ -98,6 +94,11 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
     };
   }, [isOpenState]);
 
+  const handleCheckChange = (e) => {
+const {id, checked} = e.target;
+
+  }
+
   return (
     <>
       <div className="card-details">
@@ -118,81 +119,95 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
                   : ""
               }`}
             >
-              {leadKey}
+              {leadKey + "(" + leadArray.length + ")"}
             </p>
-            <p className="leads">{leadArray.length} Leads</p>
+            <label class="custom-checkbox">
+              <input type="checkbox" className="cb1" />
+              <span class="checkmark"></span>
+            </label>
           </div>
 
-          {leadArray.map((item, index) => (
+          {leadArray.map((item) => (
             <div key={item.id} className="user-card">
-              <div className="user-details">
-                <div>
-                  <p className="heading" onClick={() => openModal(item)}>
-                    {item.lead_name}
-                    <br />
-                    <span>
-                      <i className="far fa-clock"></i>{" "}
-                      {item.creation_date.split("T")[0]}
-                    </span>
-                  </p>
+              <div className="card-container">
+                <div className="card-leftBox">
+                  <div className="user-details">
+                    <p className="heading" onClick={() => openModal(item)}>
+                      {item.lead_name}
+                      <br />
+                      <span>
+                        <i className="far fa-clock"></i>{" "}
+                        {item.creation_date.split("T")[0]}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="lead-value">
+                    ${item.value.toLocaleString("en-IN")}
+                  </div>
+                  <div className="contact-details">
+                    <div className="mail">
+                      <img src={user} alt="" />
+                      <p>{item.first_name + " " + item.last_name}</p>
+                    </div>
+                  </div>
                 </div>
-                <button
-                  className="user-setting--btn"
-                  ref={(ref) => (dropdownRefs.current[item.id] = ref)}
-                >
-                  <i
-                    className="fas fa-ellipsis-h"
-                    onClick={() => toggleDropdown(item.id)}
-                  ></i>
+                <div className="card-rightBox">
+                  <button
+                    className="user-setting--btn"
+                    ref={(ref) => (dropdownRefs.current[item.id] = ref)}
+                  >
+                    <i
+                      className="fas fa-ellipsis-h"
+                      onClick={() => toggleDropdown(item.id)}
+                    ></i>
 
-                  {isOpenState[item.id] && (
-                    <ul className="cardMenu">
-                      <li>Convert to deal</li>
-                      <li onClick={() => toggleDropdown(item.id, "Delete")}>
-                        Delete
-                      </li>
-                      <li>Item 3</li>
-                    </ul>
-                  )}
-                  {deleteConfirmationVisible && (
-                    <div className="popup-container">
-                      <div className="popup">
-                        <p className="popupHead">
-                          Delete {itemToDelete.lead_name}
-                          {itemToDelete.id}
-                        </p>
-                        <p>Deleted leads will be in recycle bin for 90 days</p>
-                        <p className="deleteMsg">
-                          Are you sure you want to delete this lead?
-                        </p>
-                        <div className="popup-buttons">
-                          <button
-                            className="cancelBtn"
-                            onClick={() => setDeleteConfirmationVisible(false)}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="confirmBtn"
-                            onClick={() => deleteCard(itemToDelete.id)}
-                          >
-                            Delete Lead
-                          </button>
+                    {isOpenState[item.id] && (
+                      <ul className="cardMenu">
+                        <li>Convert to deal</li>
+                        <li onClick={() => toggleDropdown(item.id, "Delete")}>
+                          Delete
+                        </li>
+                        <li>Item 3</li>
+                      </ul>
+                    )}
+                    {deleteConfirmationVisible && (
+                      <div className="popup-container">
+                        <div className="popup">
+                          <p className="popupHead">Delete Lead</p>
+                          <p>
+                            Deleted leads will be in recycle bin for 90 days
+                          </p>
+                          <p className="deleteMsg">
+                            Are you sure you want to delete this lead?
+                          </p>
+                          <div className="popup-buttons">
+                            <button
+                              className="cancelBtn"
+                              onClick={() =>
+                                setDeleteConfirmationVisible(false)
+                              }
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="confirmBtn"
+                              onClick={() => deleteCard(itemToDelete.id)}
+                            >
+                              Delete Lead
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </button>
-              </div>
-              <div className="lead-value">
-                ${item.value.toLocaleString("en-IN")}
-              </div>
-              <div className="contact-details">
-                <div className="mail">
-                  <img src={user} alt="" />
-                  <p>{item.first_name + " " + item.last_name}</p>
+                    )}
+                  </button>
+                  <div className="priorityBox">
+                    <p className={item.priority}>{item.priority}</p>
+                  </div>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" className="cb1" name={item.id} onChange={handleCheckChange} />
+                    <span class="checkmark"></span>
+                  </label>
                 </div>
-                <p className={item.priority}>{item.priority}</p>
               </div>
             </div>
           ))}

@@ -181,6 +181,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
     setIsEditable(false);
     onLeadAdded();
+    setStateBtn(0);
   };
 
   const handleTabClick = (tab) => {
