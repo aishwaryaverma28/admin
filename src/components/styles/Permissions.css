@@ -99,6 +99,7 @@
 .permission-display {
     display: grid;
     grid-template-columns: auto auto;
+ 
 }
 
 .permission-user-info {
@@ -255,7 +256,7 @@
 }
 
 .permission-table-heading th {
-    color: var(--primary, #1E2224);
+    color: var(--font-dark);
     font-family: "Lexend Deca", sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
@@ -275,6 +276,7 @@
 
 .permission-table-heading td{
     padding-left:1rem;
+    background-color: #fff;
 }
 
 .permission-table-heading td:nth-child(1), 
@@ -283,6 +285,87 @@
 {
     border-right:1px solid transparent;
 }
+
+
+.custom-date-input {
+    position: relative;
+  }
+  
+  .permission-date-wrapper {
+    display: flex;
+    align-items: center;
+    width: 28rem; 
+    height: 2.6875rem; 
+    border-radius: 0.3125rem;
+    border: 1px solid #DCDCDC;
+    background: #F3F6FA;
+  }
+
+  
+  input.permission-date-input {
+    width: 28rem;
+    height: 100%;
+    padding: 0.75rem; /* Adjust padding to match other input fields */
+    font-size: 1rem;
+    font-family: "Lexend Deca", sans-serif;
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  
+  .permission-calender-icon {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+
+
+    input.permission-date-table {
+     width:100%;
+    height: 100%;
+    font-size: 1rem;
+    font-family: "Lexend Deca", sans-serif;
+    outline: none;
+    border: none;
+    background: #fff;
+    cursor: pointer; 
+    box-shadow: none;
+    font-weight: 400;
+    color: var(--font-light);
+  }
+
+  .permission-date {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+    height: 2.6875rem; 
+    border-radius: 0.3125rem;
+    border: 1px solid transparent;
+    background: #FFF;
+  }
+
+  .cal-icon{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    right:0rem;
+
+
+    
+  }
+
+  .permission-date-table::placeholder {
+    /* For modern browsers */
+    color: var(--font-dark); /* Change the placeholder text color to red */
+  }
+
 
 
 
