@@ -79,7 +79,9 @@ export const UPDATE_LEAD = start+"api/lead/edit/";
 export const ADD_USER = start+"api/user/addteammember";
 export const GET_TEAM_MEM = start+"api/user/getteammember";
 export const MOVELEAD_TO_TRASH = start+"api/lead/movetotrash"
-
+export const GET_ALL_LEAD_TRASH = start + "api/lead/getallfromtrash";
+export const RESTORE_LEAD_TRASH = start + "api/lead/restorefromtrash";
+export const DELETE_LEAD_TRASH = start + "api/lead/deletefromtrash";
 //=======================================================================notes
 export const ADD_NOTES = start+"api/note/add";
 export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
