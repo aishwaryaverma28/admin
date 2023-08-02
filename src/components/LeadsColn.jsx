@@ -17,8 +17,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
   const decryptedToken = getDecryptedToken();
-  console.log(leadArray);
-
+  
   const openModal = (item) => {
     setSelectedItem(item);
     setModalVisible(true);

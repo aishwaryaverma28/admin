@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./styles/CreateLead.css";
 import axios from "axios";
-import { ADD_LEAD,getDecryptedToken } from "./utils/Constants";
+import { ADD_LEAD, getDecryptedToken } from "./utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "./utils/CodeCurrency";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   const [status, setStatus] = useState("");
-   const [name, setName] = useState("");
+  const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
   const [updateMessage, setUpdateMessage] = useState("");
@@ -22,9 +22,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
     email: "",
     value: 0,
     priority: "Imp",
-    source:"",
+    source: "",
   });
-  
+
   if (!isOpen) {
     return null;
   }
@@ -56,12 +56,12 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
       last_name: lname,
       status: status,
     };
-  
+
     axios
       .post(ADD_LEAD, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
       .then((response) => {
         console.log(response.data); // Handle the response as needed
@@ -80,16 +80,16 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           email: "",
           value: 0,
           priority: "Imp",
-          source:"",
+          source: "",
         });
         setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
   };
-  
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -153,7 +153,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   onChange={handleChange}
                   value={leadData.position} // Add value prop for controlled input
                 />
-<label className="lead-label" htmlFor="source">
+                <label className="lead-label" htmlFor="source">
                   Lead source
                 </label>
                 <input
@@ -257,10 +257,12 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                 <label className="lead-label" htmlFor="priority">
                   Lables
                 </label>
-                <select  name="priority"
-                id="priority"
-                className="lead-priority"
-                onChange={handleChange}>
+                <select
+                  name="priority"
+                  id="priority"
+                  className="lead-priority"
+                  onChange={handleChange}
+                >
                   <option value="Imp">Imp</option>
                   <option value="Avg">Avg</option>
                   <option value="Cool">Cool</option>
@@ -286,9 +288,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   </span>
                   <span
                     className="status-value progress-element"
-                    onClick={() => handleStatus("InProgress")}
+                    onClick={() => handleStatus("In Progress")}
                   >
-                    <span>InProgress</span>
+                    <span>In Progress</span>
                   </span>
                   <span
                     className="status-value deal-element"

@@ -13,7 +13,7 @@ import {
 } from "./utils/Constants";
 import { format } from "date-fns";
 
-const DeleteNotes = () => {
+const DeleteNotes = ({ onDataLengthChange }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -34,7 +34,6 @@ const DeleteNotes = () => {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       });
-
       if (response.data.status === 1) {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
@@ -51,7 +50,7 @@ const DeleteNotes = () => {
       setIsLoading(false);
     }
   };
-
+  
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -136,8 +135,8 @@ const DeleteNotes = () => {
   };
   const handleRestoreNote = () => {
     const updatedFormData = {
-        "noteIds": selectedRows
-    }
+      noteIds: selectedRows,
+    };
     axios
       .post(RESTORE_NOTE_TRASH, updatedFormData, {
         headers: {
@@ -154,8 +153,8 @@ const DeleteNotes = () => {
   };
   const handleDeleteNote = () => {
     const updatedFormData = {
-        "noteIds": selectedRows
-    }
+      noteIds: selectedRows,
+    };
     axios
       .post(DELETE_NOTE_TRASH, updatedFormData, {
         headers: {
@@ -173,6 +172,10 @@ const DeleteNotes = () => {
 
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
+    
+    useEffect(() => {
+      onDataLengthChange(filteredRecycleData.length);
+    }, [filteredRecycleData]);
   return (
     <>
       <div className="recycle-search-user-section">
@@ -249,7 +252,7 @@ const DeleteNotes = () => {
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th>Lead Name</th>
+              <th>Note</th>
               <th>Created By</th>
               <th>Deleted By</th>
               <th>Date Deleted</th>
@@ -289,8 +292,11 @@ const DeleteNotes = () => {
                     </label>
                   </td>
                   <td>
-                    {item.lead_name}
-                    <p></p>
+                    {item.description.length > 15 ? (
+                      <>{item.description.slice(3, 15)}...</>
+                    ) : (
+                      <>{item.description.slice(3, item.description.length)}</>
+                    )}
                   </td>
                   <td>
                     {item.first_name} {item.last_name}

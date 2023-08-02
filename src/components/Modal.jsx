@@ -78,7 +78,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         return "#5181FF";
       case "Open":
         return "#B543EB";
-      case "InProgress":
+      case "In Progress":
         return "#63C257";
       case "Open deal":
         return "#FD9802";
@@ -548,7 +548,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       >
                         <option value="New">New</option>
                         <option value="Open">Open</option>
-                        <option value="InProgress">In Progress</option>
+                        <option value="In Progress">In Progress</option>
                         <option value="Unread">Unread</option>
                       </select>
                     </span>
