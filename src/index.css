@@ -5,6 +5,28 @@
   list-style: none;
 }
 
+/* css variables */
+
+:root {
+  --primary: #077838;
+  --secondary: #D83C38;
+  --ternary: #2b74da;
+  --font-dark: #1e2224;
+  --font-light: #33475B;
+  --border-color: #DCDCDC;
+  --input-background: #F3F6FA;
+  --white: #ffffff;
+
+  --font-family1: "Lexend Deca", sans-serif;
+  --font-family2: "Work Sans", sans-serif;
+
+  --font-medium: 1rem;
+  --font-normal: 0.875rem;
+  --font-small: 0.75rem;
+
+
+}
+
 *::-webkit-scrollbar {
   width: 6px;
 }
@@ -90,7 +112,8 @@ ol {
   font-family: "Work Sans", sans-serif;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
   /* Removes the default focus outline */
   border: 1px solid #dcdcdc;
@@ -121,12 +144,78 @@ input:focus {
   line-height: normal;
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
-  border:1px solid transparent;
+  border: 1px solid transparent;
 }
 
-.common-save-btn:hover{
-  border:1px solid #077838;
+.common-save-btn:hover {
+  border: 1px solid #077838;
   color: #077838;
   background-color: #fff;
   transition: all 0.5s ease-in-out;
 }
+
+.common-active {
+  color: #2B74DA;
+  border: 1px solid #2B74DA;
+  background-color: #fff;
+  border-radius: 0.3125rem;
+  padding: px 15px;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 1rem;
+}
+
+.common-input {
+  border-radius: 0.3125rem;
+  border: 1px solid #DCDCDC;
+  background: #F3F6FA;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.common-white-button {
+  border-radius: 0.3125rem;
+  border: 1px solid #DCDCDC;
+  background: #FFF;
+  padding: 7px 15px;
+  color: #1E2224;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+
+
+.common-white-button:hover{
+  color: #fff;
+  border: 1px solid #077838;
+  background-color: #077838;
+  transition: all 0.5s ease-in-out;
+}
+
+.common-delete-button{
+  border-radius: 0.3125rem;
+  background: #D83C38;
+  padding: 7px 15px;
+  color: #FFF;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+}
+
+.common-delete-button:hover{
+  border: 1px solid #D83C38;
+  color: #D83C38;
+  background-color: #fff;
+  transition: all 0.5s ease-in-out;
+
+}
+/* css for search input box starts  */
+/* css for search input box starts ends  */
