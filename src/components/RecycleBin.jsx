@@ -15,6 +15,7 @@ const RecycleBin = () => {
   const [endDate, setEndDate] = useState(null);
   const [leadlen, setLeadlen] = useState(0);
   const [activeTab, setActiveTab] = useState("Leads");
+  const [notesDataLength, setNotesDataLength] = useState(0); 
   const decryptedToken = getDecryptedToken();
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const RecycleBin = () => {
         );
 
         if (response.data.status === 1) {
-          console.log(response.data.data);
+          // console.log(response.data.data);
           setLeadlen(response.data.data.length);
         } else {
           if (response.data.message === "Token has expired") {
@@ -47,6 +48,9 @@ const RecycleBin = () => {
   }, []);
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+  };
+  const handleNotesDataLengthChange = (length) => {
+    setNotesDataLength(length);
   };
 
   return (
@@ -85,7 +89,7 @@ const RecycleBin = () => {
                 }`}
                 onClick={() => handleTabClick("Notes")}
               >
-                Notes (2)
+                Notes ({notesDataLength})
               </button>
               <button
                 className={`recycle-btn recycle-fonts ${
@@ -120,7 +124,7 @@ const RecycleBin = () => {
                 Contacts (6)
               </button>
             </div>
-            {activeTab === "Notes" && <DeleteNotes/>}
+            {activeTab === "Notes" && <DeleteNotes onDataLengthChange={handleNotesDataLengthChange} />}
             {activeTab === "Deals" && (
               <>
                 <div className="recycle-search-user-section">
