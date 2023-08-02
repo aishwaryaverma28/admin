@@ -23,18 +23,10 @@ const LPSettingSidebar = () => {
       <p className="prefrence-options setting-font-style"><NavLink
             exact to="/lp/settings/notification"       
             >Notification</NavLink></p>
-      <p className="prefrence-options setting-font-style"><NavLink
-            exact to="/lp/settings/security"
-            activeClassName="activeLink"
-            >Security</NavLink></p>
     </div>
 
     <div>
       <p className="account-setup setting-font-style">Account Setup</p>
-      <p className="account-options setting-font-style"><NavLink
-            exact to="/lp/settings/"
-            activeClassName="activeLink"
-            >account defaults</NavLink></p>
       <p className="account-options setting-font-style"> <NavLink
             exact to="/lp/settings/usernteams"
             activeClassName="activeLink"
@@ -47,7 +39,7 @@ const LPSettingSidebar = () => {
     <div>
       <p className="company-setup setting-font-style">Company</p>
       <p className="company-options setting-font-style"><NavLink
-            exact to="/lp/settings/"
+            exact to="/lp/settings/companysettings"
             activeClassName="activeLink"
             >Company Settings</NavLink></p>
       <p className="company-options setting-font-style"><NavLink

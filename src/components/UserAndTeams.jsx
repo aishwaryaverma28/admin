@@ -25,7 +25,7 @@ const UserAndTeams = () => {
   const [teamData, setTeamData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [activeTabName, setActiveTabName] = useState('Active');
+  const [activeTabName, setActiveTabName] = useState('All');
   const actionDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
   const [userActionOpen, setUserActionOpen] = useState({});
@@ -222,6 +222,12 @@ const UserAndTeams = () => {
               <section className="active-inactive">
                 <div className="user-team-setting-btn user-team-font">
                   <button
+                    className={`user-team-btn ${activeTabName === 'All' ? 'genral-active' : ''}`}
+                    onClick={() => handleTabChange('All')}
+                  >
+                    All (2)
+                  </button>
+                  <button
                     className={`user-team-btn ${activeTabName === 'Active' ? 'genral-active' : ''}`}
                     onClick={() => handleTabChange('Active')}
                   >
@@ -243,6 +249,211 @@ const UserAndTeams = () => {
                 </div>
               </section>
 
+              {activeTabName === 'All' &&
+
+                <section className="user-table">
+                  {loading ? (
+                    // Show a loading message or spinner while data is loading
+                    <p>Loading...</p>
+                  ) : (
+                    <table>
+                      <tr className="user-team-font">
+                        <th>
+                          <label class="custom-checkbox">
+                            <input type="checkbox" className="cb1" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </th>
+                        <th>
+                          <div className="name-info">
+                            <p>Name</p>
+                            <div className="arrow-icon">
+                              <img
+                                src={DarkArrowUp}
+                                className="arrow-up"
+                                alt=""
+                              />
+                              <img
+                                src={ArrowDown}
+                                className="arrow-down"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </th>
+
+                        <th>
+                          <div className="name-info">
+                            <p>Team</p>
+                            <div className="arrow-icon">
+                              <img src={ArrowUp} className="arrow-up" alt="" />
+                              <img
+                                src={ArrowDown}
+                                className="arrow-down"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </th>
+                        <th>
+                          <div className="name-info">
+                            <p>Access</p>
+                            <div className="arrow-icon">
+                              <img src={ArrowUp} className="arrow-up" alt="" />
+                              <img
+                                src={ArrowDown}
+                                className="arrow-down"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </th>
+                        <th>
+                          <div className="name-info">
+                            <p>Last Active</p>
+                            <div className="arrow-icon">
+                              <img src={ArrowUp} className="arrow-up" alt="" />
+                              <img
+                                src={ArrowDown}
+                                className="arrow-down"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label class="custom-checkbox">
+                            <input type="checkbox" className="cb1" />
+                            <span class="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <div className="user-info">
+                            <div className="usericon-name-email">
+                              <div className="user-icon-round">
+                                <img src={User} alt="" />
+                              </div>
+
+                              <div className="user-name-info">
+                                <p className="user-name-value">
+                                <Link to={"/lp/settings/usernteams/permissions"}>
+                                Anant Sign Chauhan
+                </Link>
+                          
+                                </p>
+                                <p>anantsingh@123@gmail.com</p>
+                              </div>
+                            </div>
+                            <div>
+
+                              <div className="select action-select">
+                                <div className="dropdown-container" ref={actionDropDownRef}>
+                                  <div className="dropdown-header2" onClick={toggleActionDropdownStatic}>
+                                    Actions <i
+                                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                                        }`}
+                                    ></i>
+                                  </div>
+                                  {actionopen && (
+                                    <ul className="dropdown-menu user-team-dropdown-position">
+                                      <li>
+                                        Edit user
+                                      </li>
+                                      <li>
+                                        Edit permissions
+                                      </li>
+                                      <li>
+                                        Edit team
+                                      </li>
+                                      <li>
+                                        Resend email invite
+                                      </li>
+                                      <li>
+                                        Make Super Admin
+                                      </li>
+                                      <li>
+                                        Deactivate user
+                                      </li>
+                                    </ul>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="user-team-font"></td>
+                        <td className="user-team-font">Super Admin</td>
+                        <td className="user-team-font">3 hours ago</td>
+                      </tr>
+                      {filteredTeamData.map((teamMember) => (
+                        <tr key={teamMember.id}>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input type="checkbox" className="cb1" />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td>
+                            <div className="user-info">
+                              <div className="usericon-name-email">
+                                <div className="user-icon-round">
+                                  <img src={User} alt="" />
+                                </div>
+
+                                <div className="user-name-info">
+                                  <p className="user-name-value">
+                                    {teamMember.first_name +
+                                      " " +
+                                      teamMember.last_name}
+                                  </p>
+                                  <p>{teamMember.email}</p>
+                                </div>
+                              </div>
+                              <div className="select action-select">
+                                <div
+                                  className="dropdown-container"
+                                  ref={(ref) => (actionDropDownRefs.current[teamMember.id] = ref)}
+                                  data-user-id={teamMember.id}
+                                >
+                                  {/* Pass the user ID to the toggleActionDropdown function */}
+                                  <div
+                                    className="dropdown-header2"
+                                    onClick={() => toggleActionDropdown(teamMember.id)}
+                                  >
+                                    Actions{" "}
+                                    <i
+                                      className={`fa-sharp fa-solid ${userActionOpen[teamMember.id] ? "fa-angle-up" : "fa-angle-down"
+                                        }`}
+                                    ></i>
+                                  </div>
+                                  {userActionOpen[teamMember.id] && (
+                                    <ul className="dropdown-menu user-team-dropdown-position">
+                                      <li>Edit user</li>
+                                      <li>Edit permissions</li>
+                                      <li>Edit team</li>
+                                      <li>Resend email invite</li>
+                                      <li>Make Super Admin</li>
+                                      <li>Deactivate user</li>
+                                    </ul>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="user-team-font"></td>
+                          <td className="user-team-font"></td>
+                          <td className="user-team-font"></td>
+                        </tr>
+                      ))}
+                    </table>
+                  )}
+                </section>
+
+
+
+              }
               {activeTabName === 'Active' &&
 
                 <section className="user-table">

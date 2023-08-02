@@ -15,6 +15,8 @@
   --font-light: #33475B;
   --border-color: #DCDCDC;
   --input-background: #F3F6FA;
+  --checkbox-background: #D9D9D9;
+  --th-background: #F8FAFB;
   --white: #ffffff;
 
   --font-family1: "Lexend Deca", sans-serif;
@@ -23,6 +25,8 @@
   --font-medium: 1rem;
   --font-normal: 0.875rem;
   --font-small: 0.75rem;
+  --font-big: 1.125rem;
+  --font-large:1.5rem;
 
 
 }
@@ -155,13 +159,12 @@ select:focus {
 }
 
 .common-active {
-  color: #2B74DA;
-  border: 1px solid #2B74DA;
+  color: #2B74DA !important;
+  border: 1px solid #2B74DA !important;
   background-color: #fff;
   border-radius: 0.3125rem;
   padding: px 15px;
   font-family: "Lexend Deca", sans-serif;
-  font-size: 1rem;
 }
 
 .common-input {
@@ -217,5 +220,5 @@ select:focus {
   transition: all 0.5s ease-in-out;
 
 }
-/* css for search input box starts  */
-/* css for search input box starts ends  */
+
+

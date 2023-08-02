@@ -1,0 +1,84 @@
+.cp-top{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+.cp-checkbox input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cp-table th{
+    padding: 0;
+    margin: 0;
+    background: var(--th-background);
+    text-align: left;
+    padding-left: 1rem;
+  }
+
+  .cp-table th:first-child{
+    width: 1%;
+  }
+
+  .cp-table td{
+    background-color: var(--white);
+  }
+  
+  /* Style the custom checkbox */
+  .cp-checkbox .checkmark {
+    position: relative;
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid #dcdcdc;
+    background-color: transparent;
+    border-radius: 0.125rem;
+    cursor: pointer;
+  }
+  
+  /* Create the tick mark using the :after pseudo-element */
+  .cp-checkbox .checkmark:after {
+    content: "✓";
+    /* Unicode character for a checkmark */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center the tick mark */
+    font-size: 14px;
+    color: #2B74DA;
+    opacity: 0;
+  }
+  
+  
+  .cp-checkbox input:checked~.checkmark:after {
+    opacity: 1;
+  }
+  
+  
+  .cp-checkbox input:checked~.checkmark {
+    background-color: #f3f6fa;
+    border: 1px solid #2B74DA;
+  
+  }
+  
+  .cp-checkbox {
+    display: inline-flex;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .cp-action{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cp-action p, .cp-code{
+    color: var(--ternary);
+  }
