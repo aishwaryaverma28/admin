@@ -78,7 +78,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         return "#5181FF";
       case "Open":
         return "#B543EB";
-      case "In Progress":
+      case "InProgress":
         return "#63C257";
       case "Open deal":
         return "#FD9802";
@@ -139,7 +139,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     event.preventDefault();
 
     const updatedLead = {
-      // Update only the desired properties
+      leadIds: [selectedItem.id],
       lead_name: editedItem.lead_name,
       first_name: name.split(" ")[0],
       last_name: name.split(" ")[1],
@@ -162,9 +162,8 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       // owner_email:editedItem.email,
       // owner_phone:editedItem.phone,
     };
-
     axios
-      .put(UPDATE_LEAD + selectedItem.id, updatedLead, {
+      .put(UPDATE_LEAD, updatedLead, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -549,7 +548,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       >
                         <option value="New">New</option>
                         <option value="Open">Open</option>
-                        <option value="In Progress">In Progress</option>
+                        <option value="InProgress">In Progress</option>
                         <option value="Unread">Unread</option>
                       </select>
                     </span>
