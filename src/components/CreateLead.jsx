@@ -286,7 +286,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   </span>
                   <span
                     className="status-value progress-element"
-                    onClick={() => handleStatus("In Progress")}
+                    onClick={() => handleStatus("InProgress")}
                   >
                     <span>InProgress</span>
                   </span>
