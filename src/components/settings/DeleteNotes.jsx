@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "./styles/RecycleBin.css";
+import "../styles/RecycleBin.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from "../assets/image/calendar.svg";
+import CalendarIcon from "../../assets/image/calendar.svg";
 import axios from "axios";
 import {
-  GET_ALL_LEAD_TRASH,
-  RESTORE_LEAD_TRASH,
-  DELETE_LEAD_TRASH,
+  GETNOTE_FROM_TRASH,
+  RESTORE_NOTE_TRASH,
+  DELETE_NOTE_TRASH,
   getDecryptedToken,
   handleLogout,
-} from "./utils/Constants";
+} from "../utils/Constants";
 import { format } from "date-fns";
 
-const DeleteLeads = () => {
+const DeleteNotes = ({ onDataLengthChange }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -29,12 +29,11 @@ const DeleteLeads = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(GET_ALL_LEAD_TRASH, {
+      const response = await axios.get(GETNOTE_FROM_TRASH, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       });
-
       if (response.data.status === 1) {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
@@ -51,7 +50,7 @@ const DeleteLeads = () => {
       setIsLoading(false);
     }
   };
-
+  
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -134,12 +133,12 @@ const DeleteLeads = () => {
         : prevSelectedRows.filter((id) => id !== itemId)
     );
   };
-  const handleRestoreLead = () => {
+  const handleRestoreNote = () => {
     const updatedFormData = {
-      leadIds: selectedRows,
+      noteIds: selectedRows,
     };
     axios
-      .post(RESTORE_LEAD_TRASH, updatedFormData, {
+      .post(RESTORE_NOTE_TRASH, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -152,13 +151,12 @@ const DeleteLeads = () => {
         console.log(error);
       });
   };
-  const handleDeleteLead = () => {
-    const body = {
-      leadIds: selectedRows,
+  const handleDeleteNote = () => {
+    const updatedFormData = {
+      noteIds: selectedRows,
     };
     axios
-      .delete(DELETE_LEAD_TRASH, {
-        data: body,
+      .post(DELETE_NOTE_TRASH, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -174,6 +172,10 @@ const DeleteLeads = () => {
 
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
+    
+    useEffect(() => {
+      onDataLengthChange(filteredRecycleData.length);
+    }, [filteredRecycleData]);
   return (
     <>
       <div className="recycle-search-user-section">
@@ -222,13 +224,13 @@ const DeleteLeads = () => {
         <div className="recycle-btn">
           <button
             className="recycle-delete recycle-fonts"
-            onClick={handleDeleteLead}
+            onClick={handleDeleteNote}
           >
             Delete
           </button>
           <button
             className="recycle-restore recycle-fonts"
-            onClick={handleRestoreLead}
+            onClick={handleRestoreNote}
           >
             Restore
           </button>
@@ -250,7 +252,7 @@ const DeleteLeads = () => {
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th>Lead Name</th>
+              <th>Note</th>
               <th>Created By</th>
               <th>Deleted By</th>
               <th>Date Deleted</th>
@@ -290,8 +292,11 @@ const DeleteLeads = () => {
                     </label>
                   </td>
                   <td>
-                    {item.lead_name}
-                    <p></p>
+                    {item.description.length > 15 ? (
+                      <>{item.description.slice(3, 15)}...</>
+                    ) : (
+                      <>{item.description.slice(3, item.description.length)}</>
+                    )}
                   </td>
                   <td>
                     {item.first_name} {item.last_name}
@@ -310,4 +315,4 @@ const DeleteLeads = () => {
   );
 };
 
-export default DeleteLeads;
+export default DeleteNotes;

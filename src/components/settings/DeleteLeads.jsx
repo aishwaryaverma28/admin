@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "./styles/RecycleBin.css";
+import "../styles/RecycleBin.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from "../assets/image/calendar.svg";
+import CalendarIcon from "../../assets/image/calendar.svg";
 import axios from "axios";
 import {
-  GETNOTE_FROM_TRASH,
-  RESTORE_NOTE_TRASH,
-  DELETE_NOTE_TRASH,
+  GET_ALL_LEAD_TRASH,
+  RESTORE_LEAD_TRASH,
+  DELETE_LEAD_TRASH,
   getDecryptedToken,
   handleLogout,
-} from "./utils/Constants";
+} from "../utils/Constants";
 import { format } from "date-fns";
 
-const DeleteNotes = ({ onDataLengthChange }) => {
+const DeleteLeads = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -29,11 +29,12 @@ const DeleteNotes = ({ onDataLengthChange }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(GETNOTE_FROM_TRASH, {
+      const response = await axios.get(GET_ALL_LEAD_TRASH, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       });
+
       if (response.data.status === 1) {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
@@ -50,7 +51,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
       setIsLoading(false);
     }
   };
-  
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -133,12 +134,12 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         : prevSelectedRows.filter((id) => id !== itemId)
     );
   };
-  const handleRestoreNote = () => {
+  const handleRestoreLead = () => {
     const updatedFormData = {
-      noteIds: selectedRows,
+      leadIds: selectedRows,
     };
     axios
-      .post(RESTORE_NOTE_TRASH, updatedFormData, {
+      .post(RESTORE_LEAD_TRASH, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -151,12 +152,13 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         console.log(error);
       });
   };
-  const handleDeleteNote = () => {
-    const updatedFormData = {
-      noteIds: selectedRows,
+  const handleDeleteLead = () => {
+    const body = {
+      leadIds: selectedRows,
     };
     axios
-      .post(DELETE_NOTE_TRASH, updatedFormData, {
+      .delete(DELETE_LEAD_TRASH, {
+        data: body,
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -172,10 +174,6 @@ const DeleteNotes = ({ onDataLengthChange }) => {
 
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
-    
-    useEffect(() => {
-      onDataLengthChange(filteredRecycleData.length);
-    }, [filteredRecycleData]);
   return (
     <>
       <div className="recycle-search-user-section">
@@ -224,13 +222,13 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         <div className="recycle-btn">
           <button
             className="recycle-delete recycle-fonts"
-            onClick={handleDeleteNote}
+            onClick={handleDeleteLead}
           >
             Delete
           </button>
           <button
             className="recycle-restore recycle-fonts"
-            onClick={handleRestoreNote}
+            onClick={handleRestoreLead}
           >
             Restore
           </button>
@@ -252,7 +250,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th>Note</th>
+              <th>Lead Name</th>
               <th>Created By</th>
               <th>Deleted By</th>
               <th>Date Deleted</th>
@@ -292,11 +290,8 @@ const DeleteNotes = ({ onDataLengthChange }) => {
                     </label>
                   </td>
                   <td>
-                    {item.description.length > 15 ? (
-                      <>{item.description.slice(3, 15)}...</>
-                    ) : (
-                      <>{item.description.slice(3, item.description.length)}</>
-                    )}
+                    {item.lead_name}
+                    <p></p>
                   </td>
                   <td>
                     {item.first_name} {item.last_name}
@@ -315,4 +310,4 @@ const DeleteNotes = ({ onDataLengthChange }) => {
   );
 };
 
-export default DeleteNotes;
+export default DeleteLeads;

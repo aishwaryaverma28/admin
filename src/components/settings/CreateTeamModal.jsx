@@ -1,5 +1,5 @@
 
-import "./styles/LPUserAndTeam.css";
+import "../styles/LPUserAndTeam.css";
 
 const CreateTeamModal = ({ onCloseTeamModal }) => {
    

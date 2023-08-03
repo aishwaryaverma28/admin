@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import './styles/CompanyProducts.css';
+import '../styles/CompanyProducts.css';
 
 
-const CompanyProducts = () => {
+const CPProducts = () => {
     const actionDropDownRef = useRef(null);
     const [actionopen, setActionOpen] = useState(false);
 
@@ -13,7 +13,7 @@ const CompanyProducts = () => {
   return (
     <section>
         <div className='cp-top'>
-            <button className='common-save-btn'>Add Product</button>
+            <button className='common-save-button'>Add Product</button>
         </div>
 
         <div className='cp-table'>
@@ -82,4 +82,4 @@ const CompanyProducts = () => {
   )
 }
 
-export default CompanyProducts
+export default CPProducts
