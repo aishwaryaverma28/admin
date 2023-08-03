@@ -161,10 +161,13 @@ const LPleads = () => {
       );
     }
   };
-console.log(selectedCardIds);
+  console.log(selectedCardIds);
 const deleteCard = () => {
+  const arrayOfNumbers = selectedCardIds.flatMap((array) =>
+  array.map((item) => (typeof item === "string" ? parseFloat(item) : item))
+);
   const body = {
-    leadIds: selectedCardIds,
+    leadIds: arrayOfNumbers,
   };
   axios
     .delete(MOVELEAD_TO_TRASH, {

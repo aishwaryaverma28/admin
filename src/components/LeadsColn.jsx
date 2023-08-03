@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
 import {
@@ -109,6 +110,14 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       updatedCheckedRows[item.id] = checked;
     });
     setCheckedRows(updatedCheckedRows);
+
+    // Update the selectedCardIds based on the header checkbox value
+    if (checked) {
+      const allIds = leadArray.map((item) => item.id);
+      onCardSelection(allIds, true);
+    } else {
+      onCardSelection([], false);
+    }
   };
 
   // Function to handle individual checkbox click
@@ -121,15 +130,17 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       [name]: checked,
     }));
 
-    // Call the onCardSelection function to update selected card IDs in the parent component
-    onCardSelection(name, checked);
+    // Update the selectedCardIds based on the checkbox value
+    if (checked) {
+      onCardSelection([name], true);
+    } else {
+      const updatedSelectedCardIds = selectedCardIds.filter((id) => id !== name);
+      onCardSelection(updatedSelectedCardIds, false);
+    }
   };
-
-  // Function to check whether all checkboxes in rows are checked
   const areAllRowsChecked = () => {
     return leadArray.every((item) => checkedRows[item.id]);
   };
-
   useEffect(() => {
     // Set the header checkbox state based on the checked state of all rows
     setIsHeaderCheckboxChecked(areAllRowsChecked());

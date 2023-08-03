@@ -14,7 +14,7 @@ const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [leadlen, setLeadlen] = useState(0);
-  const [activeTab, setActiveTab] = useState("Leads");
+  const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "Leads");
   const [notesDataLength, setNotesDataLength] = useState(0); 
   const decryptedToken = getDecryptedToken();
 
@@ -48,7 +48,9 @@ const RecycleBin = () => {
   }, []);
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+    localStorage.setItem("activeTab", tabName); // Store the active tab in localStorage
   };
+
   const handleNotesDataLengthChange = (length) => {
     setNotesDataLength(length);
   };
