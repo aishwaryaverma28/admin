@@ -94,6 +94,12 @@ const CPPasswordPolicy = () => {
       <div>
         <p className="password-bottom password-fonts">Protect your account ankitaschauhan96@gmail.com with two-factor authentication via email. Once enabled, then the next time you log in, you are asked to click the verification link in an email to access your account. You only need to verify yourself every 30 days on each device.</p>
       </div>
+
+      <div className='password-bottom-btn'>
+        <button className='common-white-button'>cancel</button>
+        <button className='common-save-button password-save'>save</button>
+
+      </div>
 </section>
 
 
