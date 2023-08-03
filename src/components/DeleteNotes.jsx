@@ -75,7 +75,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
   const filteredRecycleData = recycleData.filter((recycleItem) => {
     const fullName =
       `${recycleItem.first_name} ${recycleItem.last_name}`.toLowerCase();
-    const leadName = recycleItem.lead_name?.toLowerCase() || "";
+    const leadName = recycleItem.description?.toLowerCase() || "";
     const updateDate = formatDate(recycleItem?.update_date) || "";
     const searchRecycle = searchQuery.toLowerCase();
 
