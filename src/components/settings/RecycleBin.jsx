@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import { getDecryptedToken, handleLogout } from "../utils/Constants";
 import DeleteLeads from "./DeleteLeads";
 import DeleteNotes from "./DeleteNotes";
+import RecycleDeletePopUp from "./RecycleDeletePopUp";
+import RecycleRestorePopUp from "./RecycleRestorePopUp";
 
 const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
@@ -17,6 +19,75 @@ const RecycleBin = () => {
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "Leads");
   const [notesDataLength, setNotesDataLength] = useState(0); 
   const decryptedToken = getDecryptedToken();
+  const [isDeleteDealModalOpen, setIsDeleteDealModalOpen] = useState(false);
+  const [isRestoreDealModalOpen, setIsRestoreDealModalOpen] = useState(false);
+  const [isDeleteCompanyModalOpen, setIsDeleteCompanyModalOpen] = useState(false);
+  const [isRestoreCompanyModalOpen, setIsRestoreCompanyModalOpen] = useState(false);
+  const [isDeleteContactModalOpen, setIsDeleteContactModalOpen] = useState(false);
+  const [isRestoreContactModalOpen, setIsRestoreContactModalOpen] = useState(false);
+
+  // function to open delete popup and close delete pop up for deal tab 
+
+  const dealsDeletePopUp = () => {
+    setIsDeleteDealModalOpen(true);
+  }
+
+  const closeDealDeletePopUp = () => {
+    setIsDeleteDealModalOpen(false);
+  }
+
+   // function to open restore popup and close restore pop up for deal tab 
+  const dealsRestorePopUp = () => {
+    setIsRestoreDealModalOpen(true);
+  }
+
+  const closeDealRestorePopUp = () => {
+    setIsRestoreDealModalOpen(false);
+  }
+
+     // function to open delete popup and close delete pop up for company tab 
+
+  const companyDeletePopUp = () => {
+    setIsDeleteCompanyModalOpen(true);
+  }
+
+  const closeCompanyDeletePopUp = () => {
+    setIsDeleteCompanyModalOpen(false);
+  }
+
+
+     // function to open restore popup and close restore pop up for company tab 
+
+  const companyRestorePopUp = () => {
+    setIsRestoreCompanyModalOpen(true);
+  }
+
+  const closeCompanyRestorePopUp = () => {
+    setIsRestoreCompanyModalOpen(false);
+  }
+
+  
+     // function to open delete popup and close delete pop up for contact tab 
+
+  const contactDeletePopUp = () => {
+    setIsDeleteContactModalOpen(true);
+  }
+
+  const closeContactDeletePopUp = () => {
+    setIsDeleteContactModalOpen(false);
+  }
+
+  
+     // function to open restore popup and close restore pop up for contact tab 
+
+
+  const contactRestorePopUp = () => {
+    setIsRestoreContactModalOpen(true);
+  }
+
+  const closeContactRestorePopUp = () => {
+    setIsRestoreContactModalOpen(false);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -178,10 +249,10 @@ const RecycleBin = () => {
                     </div>
                   </div>
                   <div className="recycle-btn">
-                    <button className="recycle-delete recycle-fonts">
+                    <button className="recycle-delete recycle-fonts" onClick={dealsDeletePopUp}>
                       Delete
                     </button>
-                    <button className="recycle-restore recycle-fonts">
+                    <button className="recycle-restore recycle-fonts" onClick={dealsRestorePopUp}>
                       Restore
                     </button>
                   </div>
@@ -250,6 +321,18 @@ const RecycleBin = () => {
                       </tr>
                     </tbody>
                   </table>
+                  {
+          isDeleteDealModalOpen && (
+            <RecycleDeletePopUp onClose={closeDealDeletePopUp}/>
+            
+          )
+        }
+
+        {
+          isRestoreDealModalOpen && (
+            <RecycleRestorePopUp onClose={closeDealRestorePopUp} />
+          )
+        }
                 </div>
               </>
             )}
@@ -305,10 +388,10 @@ const RecycleBin = () => {
                     </div>
                   </div>
                   <div className="recycle-btn">
-                    <button className="recycle-delete recycle-fonts">
+                    <button className="recycle-delete recycle-fonts" onClick={companyDeletePopUp}>
                       Delete
                     </button>
-                    <button className="recycle-restore recycle-fonts">
+                    <button className="recycle-restore recycle-fonts" onClick={ companyRestorePopUp}>
                       Restore
                     </button>
                   </div>
@@ -407,6 +490,18 @@ const RecycleBin = () => {
                       </tr>
                     </tbody>
                   </table>
+
+                  {
+                    isDeleteCompanyModalOpen && (
+                      <RecycleDeletePopUp onClose={closeCompanyDeletePopUp}/>
+                    )
+                  }
+
+                  {
+                    isRestoreCompanyModalOpen && (
+                      <RecycleRestorePopUp onClose={closeCompanyRestorePopUp} />
+                    )
+                  }
                 </div>
               </>
             )}
@@ -461,10 +556,10 @@ const RecycleBin = () => {
                     </div>
                   </div>
                   <div className="recycle-btn">
-                    <button className="recycle-delete recycle-fonts">
+                    <button className="recycle-delete recycle-fonts" onClick={contactDeletePopUp}>
                       Delete
                     </button>
-                    <button className="recycle-restore recycle-fonts">
+                    <button className="recycle-restore recycle-fonts" onClick={contactRestorePopUp}>
                       Restore
                     </button>
                   </div>
@@ -581,6 +676,18 @@ const RecycleBin = () => {
                       </tr>
                     </tbody>
                   </table>
+
+                  {
+                    isDeleteContactModalOpen && (
+                      <RecycleDeletePopUp onClose={closeContactDeletePopUp}/>
+                    )
+                  }
+
+                  {
+                    isRestoreContactModalOpen && (
+                      <RecycleRestorePopUp onClose={closeContactRestorePopUp} />
+                    )
+                  }
                 </div>
               </>
             )}

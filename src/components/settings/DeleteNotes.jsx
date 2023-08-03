@@ -12,6 +12,8 @@ import {
   handleLogout,
 } from "../utils/Constants";
 import { format } from "date-fns";
+import RecycleDeletePopUp from "./RecycleDeletePopUp";
+import RecycleRestorePopUp from "./RecycleRestorePopUp";
 
 const DeleteNotes = ({ onDataLengthChange }) => {
   const [startDate, setStartDate] = useState(null);
@@ -22,6 +24,26 @@ const DeleteNotes = ({ onDataLengthChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const [selectedRows, setSelectedRows] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
+
+  const handleDeletePopUp = ()  => {
+    setIsDeleteModalOpen(true);
+  }
+
+  const handleRestorePopUp = () => {
+    setIsRestoreModalOpen(true);
+  }
+
+  const onCloseNoteDeletePopUp = () => {
+    setIsDeleteModalOpen(false);
+  }
+
+  const onCloseNoteRestorePopUP = () => {
+    setIsRestoreModalOpen(false);
+  }
+
+  
 
   useEffect(() => {
     fetchData();
@@ -224,13 +246,15 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         <div className="recycle-btn">
           <button
             className="recycle-delete recycle-fonts"
-            onClick={handleDeleteNote}
+            // onClick={handleDeleteNote}
+            onClick={handleDeletePopUp}
           >
             Delete
           </button>
           <button
             className="recycle-restore recycle-fonts"
-            onClick={handleRestoreNote}
+            // onClick={handleRestoreNote}
+            onClick={handleRestorePopUp}
           >
             Restore
           </button>
@@ -311,6 +335,15 @@ const DeleteNotes = ({ onDataLengthChange }) => {
           </tbody>
         </table>
       </div>
+      {isDeleteModalOpen && (
+        <RecycleDeletePopUp onClose={onCloseNoteDeletePopUp} />
+      )}
+
+      {
+        isRestoreModalOpen && (
+          <RecycleRestorePopUp onClose={onCloseNoteRestorePopUP}/>
+        )
+      }
     </>
   );
 };
