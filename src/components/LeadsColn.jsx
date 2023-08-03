@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
-import {
-  MOVELEAD_TO_TRASH,
-  getDecryptedToken,
-} from "./utils/Constants";
+import { MOVELEAD_TO_TRASH, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 
-const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
+const LeadsColn = ({
+  leadArray,
+  leadKey,
+  onLeadAdded,
+  onCardSelection, // Receive the handler function from the parent
+  selectedCardIds, // Receive the selected card IDs from the parent
+}) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -17,7 +20,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
   const decryptedToken = getDecryptedToken();
-  
+
   const openModal = (item) => {
     setSelectedItem(item);
     setModalVisible(true);
@@ -43,7 +46,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   };
   const deleteCard = (itemId) => {
     const body = {
-      leadIds: [itemId,]
+      leadIds: [itemId],
     };
     axios
       .delete(MOVELEAD_TO_TRASH, {
@@ -95,9 +98,9 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   }, [isOpenState]);
 
   const handleCheckChange = (e) => {
-const {id, checked} = e.target;
-
-  }
+    const { name, checked } = e.target;
+    onCardSelection(name, checked);
+  };
 
   return (
     <>
@@ -122,7 +125,7 @@ const {id, checked} = e.target;
               {leadKey + "(" + leadArray.length + ")"}
             </p>
             <label class="custom-checkbox">
-              <input type="checkbox" className="cb1" />
+              <input type="checkbox" className="cb1 headCheckBox" />
               <span class="checkmark"></span>
             </label>
           </div>
@@ -204,7 +207,12 @@ const {id, checked} = e.target;
                     <p className={item.priority}>{item.priority}</p>
                   </div>
                   <label class="custom-checkbox">
-                    <input type="checkbox" className="cb1" name={item.id} onChange={handleCheckChange} />
+                    <input
+                      type="checkbox"
+                      className="cb1 cardCheckBox"
+                      name={item.id}
+                      onChange={handleCheckChange}
+                    />
                     <span class="checkmark"></span>
                   </label>
                 </div>
