@@ -275,6 +275,3 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
 };
 
 export default LeadsColn;
-
-
-
