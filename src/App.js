@@ -47,14 +47,15 @@ import LPPermission from "./components/settings/LPPermission.jsx";
 import LPCompanySettings from "./components/settings/LPCompanySettings";
 
 const router = createBrowserRouter([
-  {
-    path: "/:auth",
-    element: <Testing />,
-    errorElement:<Error/>,
-  },
+  // {
+  //   path: "/:auth",
+  //   element: <Testing />,
+  //   errorElement:<Error/>,
+  // },
   {
     path: "/",
     element: <Login />,
+    errorElement:<Error/>,
   },
   {
     path: "/registration",

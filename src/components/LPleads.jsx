@@ -4,7 +4,7 @@ import chart from "../assets/image/chart.svg";
 import axios from "axios";
 import LeadsColn from "./LeadsColn";
 import CreateLead from "./CreateLead";
-import { GET_LEAD, IMPORT_CSV, getDecryptedToken } from "./utils/Constants";
+import { GET_LEAD, IMPORT_CSV, MOVELEAD_TO_TRASH, getDecryptedToken } from "./utils/Constants";
 const LPleads = () => {
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -16,8 +16,11 @@ const LPleads = () => {
   const [keys, setKeys] = useState([]);
   const fileInputRef = useRef(null);
   const [totalValue, setTotalValue] = useState(0);
+  const [selectedCardIds, setSelectedCardIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
+  const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
+  
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
     axios
@@ -99,7 +102,10 @@ const LPleads = () => {
   const togglePipeDropdown = () => {
     setPipeOpen(!pipeopen);
   };
-  const toggleActionDropdown = () => {
+  const toggleActionDropdown = (option) => {
+    if (option === "Delete") {
+      setDeleteConfirmationVisible(true);
+    } 
     setActionOpen(!actionopen);
   };
   // Effect hook to add click event listener when the component mounts
@@ -141,6 +147,41 @@ const LPleads = () => {
     };
   }, []);
 
+  const handleCardSelection = (cardId, isSelected) => {
+    if (isSelected) {
+      // Add the selected card ID to the array
+      setSelectedCardIds((prevSelectedCardIds) => [
+        ...prevSelectedCardIds,
+        cardId,
+      ]);
+    } else {
+      // Remove the selected card ID from the array
+      setSelectedCardIds((prevSelectedCardIds) =>
+        prevSelectedCardIds.filter((id) => id !== cardId)
+      );
+    }
+  };
+console.log(selectedCardIds);
+const deleteCard = () => {
+  const body = {
+    leadIds: selectedCardIds,
+  };
+  axios
+    .delete(MOVELEAD_TO_TRASH, {
+      data: body,
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  setDeleteConfirmationVisible(false);
+  fetchLeadsData();
+};
   return (
     <div>
       <section className="lead-body">
@@ -208,6 +249,7 @@ const LPleads = () => {
                     </li>
                    </ul>
                 )}
+                
               </div>
             </div>
             <div className="importDiv">
@@ -237,7 +279,7 @@ const LPleads = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu">
-                    <li>
+                    <li onClick={() => toggleActionDropdown("Delete")}>
                       Mass Delete
                     </li>
                     <li>
@@ -257,6 +299,35 @@ const LPleads = () => {
                     </li>
                   </ul>
                 )}
+                {deleteConfirmationVisible && (
+                      <div className="popup-container">
+                        <div className="popup">
+                          <p className="popupHead">Delete Lead</p>
+                          <p>
+                            Deleted leads will be in recycle bin for 90 days
+                          </p>
+                          <p className="deleteMsg">
+                            Are you sure you want to delete this lead?
+                          </p>
+                          <div className="popup-buttons">
+                            <button
+                              className="cancelBtn"
+                              onClick={() =>
+                                setDeleteConfirmationVisible(false)
+                              }
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="confirmBtn"
+                              onClick={() => deleteCard()}
+                            >
+                              Delete Lead
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
               </div>
             </div>
           </div>
@@ -265,12 +336,15 @@ const LPleads = () => {
       <section className="cards-body">
         {data.map((leadArray, index) => (
           <div key={keys[index]}>
-            <LeadsColn
+           <LeadsColn
               key={keys[index]}
               leadArray={leadArray}
               leadKey={keys[index]}
               onLeadAdded={fetchLeadsData}
+              onCardSelection={handleCardSelection} // Pass the handler function to the child component
+              selectedCardIds={selectedCardIds} // Pass the selected card IDs to the child component
             />
+
           </div>
         ))}
       </section>

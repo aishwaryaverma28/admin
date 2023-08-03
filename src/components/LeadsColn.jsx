@@ -8,7 +8,7 @@ import axios from "axios";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 
-const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
+const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection }) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -17,7 +17,10 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
   const decryptedToken = getDecryptedToken();
-  
+  const [isHeaderCheckboxChecked, setIsHeaderCheckboxChecked] =
+    useState(false);
+  const [checkedRows, setCheckedRows] = useState({});
+
   const openModal = (item) => {
     setSelectedItem(item);
     setModalVisible(true);
@@ -94,11 +97,43 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded }) => {
     };
   }, [isOpenState]);
 
+  
+  // Function to handle header checkbox click
+  const handleHeaderCheckboxChange = (e) => {
+    const { checked } = e.target;
+    setIsHeaderCheckboxChecked(checked);
+
+    // Set the checked state for all rows based on the header checkbox value
+    const updatedCheckedRows = {};
+    leadArray.forEach((item) => {
+      updatedCheckedRows[item.id] = checked;
+    });
+    setCheckedRows(updatedCheckedRows);
+  };
+
+  // Function to handle individual checkbox click
   const handleCheckChange = (e) => {
-const {id, checked} = e.target;
+    const { name, checked } = e.target;
 
-  }
+    // Update the checked state for the clicked row
+    setCheckedRows((prevCheckedRows) => ({
+      ...prevCheckedRows,
+      [name]: checked,
+    }));
 
+    // Call the onCardSelection function to update selected card IDs in the parent component
+    onCardSelection(name, checked);
+  };
+
+  // Function to check whether all checkboxes in rows are checked
+  const areAllRowsChecked = () => {
+    return leadArray.every((item) => checkedRows[item.id]);
+  };
+
+  useEffect(() => {
+    // Set the header checkbox state based on the checked state of all rows
+    setIsHeaderCheckboxChecked(areAllRowsChecked());
+  }, [checkedRows, leadArray]);
   return (
     <>
       <div className="card-details">
@@ -121,10 +156,16 @@ const {id, checked} = e.target;
             >
               {leadKey + "(" + leadArray.length + ")"}
             </p>
-            <label class="custom-checkbox">
-              <input type="checkbox" className="cb1" />
-              <span class="checkmark"></span>
-            </label>
+            <label className="custom-checkbox">
+            <input
+                type="checkbox"
+                className={`cb1 ${leadKey}-header-checkbox`}
+                name="headerCheckBox"
+                onChange={handleHeaderCheckboxChange}
+                checked={isHeaderCheckboxChecked}
+              />
+    <span className="checkmark"></span>
+  </label>
           </div>
 
           {leadArray.map((item) => (
@@ -204,7 +245,13 @@ const {id, checked} = e.target;
                     <p className={item.priority}>{item.priority}</p>
                   </div>
                   <label class="custom-checkbox">
-                    <input type="checkbox" className="cb1" name={item.id} onChange={handleCheckChange} />
+                  <input
+                    type="checkbox"
+                    className={`cb1 ${leadKey}-card-checkbox`}
+                    name={item.id}
+                    onChange={handleCheckChange}
+                    checked={checkedRows[item.id] || false}
+                  />
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -228,3 +275,6 @@ const {id, checked} = e.target;
 };
 
 export default LeadsColn;
+
+
+
