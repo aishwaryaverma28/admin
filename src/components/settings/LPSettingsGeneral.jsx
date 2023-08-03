@@ -1,12 +1,12 @@
 import React, { useState, useEffect,useContext } from "react";
-import { LPContext } from "./LPContext";
+import { LPContext } from "../LPContext";
 import LPSettingSidebar from "./LPSettingSidebar";
-import "./styles/LPSetting.css";
-import UserIcon from "../assets/image/user-icon.svg";
-import "./styles/LPGeneral.css";
+import "../styles/LPSetting.css";
+import UserIcon from "../../assets/image/user-icon.svg"
+import "../styles/LPGeneral.css";
 import axios from "axios";
-import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "./utils/Constants";
-import EmailSyncTick from '../assets/image/email-sync-tick.svg';
+import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "../utils/Constants";
+import EmailSyncTick from '../../assets/image/email-sync-tick.svg';
 const LPSettingsGeneral = () => {
   const { setName } = useContext(LPContext);
   const [clientData, setClientData] = useState(null);

@@ -1,7 +1,7 @@
 import React from 'react';
-import './styles/LPSetting.css';
+import '../styles/LPSetting.css';
 import { NavLink } from "react-router-dom";
-import arrowLeft from "../assets/image/arrow-left.svg";
+import arrowLeft from "../../assets/image/arrow-left.svg";
 
 const LPSettingSidebar = () => {
       const handleGoBack = () => {

@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import "./styles/LPSettingsNotification.css";
-import ArrowGreater from "../assets/image/greater-arrow.svg";
-import SearchIcon from "../assets/image/search.svg";
-import GreaterArrowDown from "../assets/image/greater-arrow-down.svg";
+import "../styles/LPSettingsNotification.css";
+import ArrowGreater from "../../assets/image/greater-arrow.svg";
+import SearchIcon from "../../assets/image/search.svg";
+import GreaterArrowDown from "../../assets/image/greater-arrow-down.svg";
 // import GreaterArrowDown from "../assets/image/arrow-down.svg";
 
 export default function LPNotificationContent() {

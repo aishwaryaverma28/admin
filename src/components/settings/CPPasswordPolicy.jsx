@@ -1,10 +1,33 @@
 import React from 'react';
-import './styles/Password.css';
+import '../styles/Password.css';
+import LockImage from '../../assets/image/lock.svg';
 
 
-const PasswordPolicy = () => {
+const CPPasswordPolicy = () => {
   return (
 <section>
+
+<div className="password-toggle">
+<div className="password-lock">
+<img src={LockImage} alt="" />
+<div>
+<p className='common-fonts password-policy'>Password Policy</p>
+<p className='common-fonts password-guideline'>Password Policy guidelines will be applied to enhance the security. </p>
+</div>
+
+</div>
+<div>
+    <label className="password-switch">
+      <input type="checkbox"/>
+      <span className="password-slider password-round"></span>
+    </label>
+  </div>
+
+
+
+</div>
+
+
 <p className="common-fonts password-heading">password policy</p>
 
 <div className='password-rules'>
@@ -31,6 +54,8 @@ const PasswordPolicy = () => {
         <input type="text" className='common-input password-input' name="" id="password-input" />
     </div>
 </div>
+
+
 <div className='password-rules'>
     <div>
         <label class="custom-checkbox password-checkbox">
@@ -81,4 +106,4 @@ const PasswordPolicy = () => {
   )
 }
 
-export default PasswordPolicy
+export default CPPasswordPolicy

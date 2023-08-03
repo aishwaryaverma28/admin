@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import LPSettingSidebar from "./LPSettingSidebar";
-import "./styles/LPSetting.css";
-import "./styles/LPUserAndTeam.css";
+import "../styles/LPSetting.css";
+import "../styles/LPUserAndTeam.css"
 import axios from "axios";
-import { GET_TEAM_MEM, getDecryptedToken } from "./utils/Constants";
-import SearchIcon from "../assets/image/search.svg";
-import ExportIcon from "../assets/image/export.svg";
-import ExportIcon2 from "../assets/image/export2.svg";
-import ArrowUp from "../assets/image/arrow-up.svg";
-import DarkArrowUp from "../assets/image/dark-arrow-up.svg";
-import ArrowDown from "../assets/image/arrow-down.svg";
-import User from "../assets/image/user-icon.svg";
-import CreateUserModal from "./CreateUserModal";
+import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants"
+import SearchIcon from "../../assets/image/search.svg";
+import ExportIcon from "../../assets/image/export.svg";
+import ExportIcon2 from "../../assets/image/export2.svg";
+import ArrowUp from "../../assets/image/arrow-up.svg";
+import DarkArrowUp from "../../assets/image/dark-arrow-up.svg";
+import ArrowDown from "../../assets/image/arrow-down.svg";
+import User from "../../assets/image/user-icon.svg";
+import CreateUserModal from "./CreateUserModal"
 import CreateTeamModal from "./CreateTeamModal";
 import {Link} from "react-router-dom";
 

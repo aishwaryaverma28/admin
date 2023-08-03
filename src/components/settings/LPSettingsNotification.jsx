@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import LPSettingSidebar from "./LPSettingSidebar";
-import "./styles/LPSettingsNotification.css";
-import ArrowGreater from "../assets/image/greater-arrow.svg";
-import SearchIcon from "../assets/image/search.svg";
-import Envelope from "../assets/image/envelope.svg";
-import GreaterArrowDown from "../assets/image/greater-arrow-down.svg";
+import "../styles/LPSettingsNotification.css";
+import ArrowGreater from "../../assets/image/greater-arrow.svg";
+import SearchIcon from "../../assets/image/search.svg";
+import Envelope from "../../assets/image/envelope.svg";
+import GreaterArrowDown from "../../assets/image/greater-arrow-down.svg";
 import LPNotificationContent from "./LPNotificationContent";
 
 const LPSettingsNotification = () => {
