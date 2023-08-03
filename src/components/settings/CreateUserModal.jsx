@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_USER,getDecryptedToken } from "./utils/Constants";
-import "./styles/LPUserAndTeam.css";
+import { ADD_USER,getDecryptedToken } from "../utils/Constants";
+import "../styles/LPUserAndTeam.css";
 
 const CreateUserModal = ({ onClose, onUserAdded }) => {
     const decryptedToken = getDecryptedToken();

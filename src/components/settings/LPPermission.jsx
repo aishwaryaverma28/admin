@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import LPSettingSidebar from './LPSettingSidebar';
-import './styles/Permissions.css';
-import User from '../assets/image/user-icon.svg';
-import LeftArrow from '../assets/image/arrow-left.svg';
-import TeamArrow from '../assets/image/team-arrow.svg';
+import '../styles/Permissions.css';
+import User from '../../assets/image/user-icon.svg';
+import LeftArrow from '../../assets/image/arrow-left.svg';
+import TeamArrow from '../../assets/image/team-arrow.svg';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from '../assets/image/calendar-edit.svg';
+import CalendarIcon from '../../assets/image/calendar-edit.svg';
 
 
 const LPPermission = () => {
@@ -138,7 +138,7 @@ const LPPermission = () => {
               <p className='common-fonts permission-line'>Permissions manage which tools are available to users.</p>
             </div>
             <div>
-              <button className='common-save-btn'>Add Role</button>
+              <button className='common-save-button'>Add Role</button>
             </div>
           </div>
 

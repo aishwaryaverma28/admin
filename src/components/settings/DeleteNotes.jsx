@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./styles/RecycleBin.css";
+import "../styles/RecycleBin.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from "../assets/image/calendar.svg";
+import CalendarIcon from "../../assets/image/calendar.svg";
 import axios from "axios";
 import {
   GETNOTE_FROM_TRASH,
@@ -10,7 +10,7 @@ import {
   DELETE_NOTE_TRASH,
   getDecryptedToken,
   handleLogout,
-} from "./utils/Constants";
+} from "../utils/Constants";
 import { format } from "date-fns";
 
 const DeleteNotes = ({ onDataLengthChange }) => {

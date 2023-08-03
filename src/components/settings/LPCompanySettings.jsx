@@ -1,9 +1,11 @@
 import React from 'react';
-import './styles/CompanySettings.css';
+import '../styles/CompanySettings.css';
 import LPSettingSidebar from './LPSettingSidebar';
 import { useState } from 'react';
-import PasswordPolicy from './PasswordPolicy';
-import CompanyProducts from './CompanyProducts';
+import CPPasswordPolicy from './CPPasswordPolicy';
+import CPProducts from './CPProducts';
+import CPBillings from './CPBillings';
+import CPGenral from './CPGenral';
 
 const LPCompanySettings = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -73,20 +75,20 @@ const LPCompanySettings = () => {
 
           {activeTab === "general" && (
             <>
-            <p>general</p>
+             <CPGenral/>
             </>
           )
          }
 
           {activeTab === "products" && (
             <>
-             <CompanyProducts/>
+             <CPProducts/>
             </>
           )
          }
           {activeTab === "billings" && (
             <>
-            <p>billings</p>
+            <CPBillings/>
             </>
           )
          }
@@ -98,7 +100,7 @@ const LPCompanySettings = () => {
          }
           {activeTab === "password-policy" && (
             <>
-          <PasswordPolicy/>
+          <CPPasswordPolicy/>
             </>
           )
          }

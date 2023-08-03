@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./styles/RecycleBin.css";
+import "../styles/RecycleBin.css";
 import axios from "axios";
 import LPSettingSidebar from "./LPSettingSidebar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CalendarIcon from "../assets/image/calendar.svg";
+import CalendarIcon from "../../assets/image/calendar.svg";
 import { format } from "date-fns";
-import { getDecryptedToken, handleLogout } from "./utils/Constants";
+import { getDecryptedToken, handleLogout } from "../utils/Constants";
 import DeleteLeads from "./DeleteLeads";
 import DeleteNotes from "./DeleteNotes";
 

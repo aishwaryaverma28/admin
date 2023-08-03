@@ -13,7 +13,9 @@
   --ternary: #2b74da;
   --font-dark: #1e2224;
   --font-light: #33475B;
+  --font-lighter: #909DB0;
   --border-color: #DCDCDC;
+  --card-color: #E6EBFF;
   --input-background: #F3F6FA;
   --checkbox-background: #D9D9D9;
   --th-background: #F8FAFB;
@@ -25,7 +27,9 @@
   --font-medium: 1rem;
   --font-normal: 0.875rem;
   --font-small: 0.75rem;
+  --font-smaller: 0.625rem;
   --font-big: 1.125rem;
+  --font-bigger: 1.25rem;
   --font-large:1.5rem;
 
 
@@ -136,7 +140,7 @@ select:focus {
   text-transform: capitalize;
 }
 
-.common-save-btn {
+.common-save-button {
   border-radius: 0.3125rem;
   background: #077838;
   padding: 7px 15px;
@@ -151,7 +155,7 @@ select:focus {
   border: 1px solid transparent;
 }
 
-.common-save-btn:hover {
+.common-save-button:hover {
   border: 1px solid #077838;
   color: #077838;
   background-color: #fff;
@@ -219,6 +223,21 @@ select:focus {
   background-color: #fff;
   transition: all 0.5s ease-in-out;
 
+}
+
+.common-inactive-button {
+  border-radius: 0.3125rem;
+  border: 1px solid #DCDCDC;
+  background: #FFF;
+  padding: 7px 15px;
+  color: #909DB0;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
 }
 
 

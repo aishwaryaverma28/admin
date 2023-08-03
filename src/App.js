@@ -38,13 +38,13 @@ import Registration from "./components/Registration";
 import SecurePages from "./components/SecurePages";
 import SecureRoutes from "./components/SecureRoutes";
 import Testing from "./components/Testing";
-import UserAndTeams from "./components/UserAndTeams";
-import LPSettingsGeneral from "./components/LPSettingsGeneral";
+import UserAndTeams from "./components/settings/UserAndTeams";
+import LPSettingsGeneral from "./components/settings/LPSettingsGeneral";
 import Error from "./components/Error";
-import LPSettingsNotification from "./components/LPSettingsNotification";
-import RecycleBin from "./components/RecycleBin";
-import LPPermission from "./components/LPPermission.jsx";
-import LPCompanySettings from "./components/LPCompanySettings";
+import LPSettingsNotification from "./components/settings/LPSettingsNotification";
+import RecycleBin from "./components/settings/RecycleBin";
+import LPPermission from "./components/settings/LPPermission.jsx";
+import LPCompanySettings from "./components/settings/LPCompanySettings";
 
 const router = createBrowserRouter([
   // {
