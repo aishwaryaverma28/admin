@@ -90,7 +90,7 @@ const router = createBrowserRouter([
       {
         path: "/lp/error",
         element:<Error/>,
-      }
+      },
       {
         path: "/lp/deals",
         element: <Deals />,
