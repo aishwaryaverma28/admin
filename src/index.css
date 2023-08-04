@@ -11,6 +11,7 @@
   --primary: #077838;
   --secondary: #D83C38;
   --ternary: #2b74da;
+  --quadrant: #FAE021;;
   --font-dark: #1e2224;
   --font-light: #33475B;
   --font-lighter: #909DB0;
@@ -177,6 +178,8 @@ select:focus {
   background: #F3F6FA;
   padding: 1rem;
   cursor: pointer;
+  width: 28rem;
+height: 2.6875rem;
 }
 
 .common-white-button {
@@ -239,5 +242,6 @@ select:focus {
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
 }
+
 
 

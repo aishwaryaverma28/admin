@@ -7,6 +7,7 @@ import CPProducts from './CPProducts';
 import CPBillings from './CPBillings';
 import CPGenral from './CPGenral';
 import MasterSetting from './MasterSetting';
+import SupportTab from './SupportTab';
 
 const LPCompanySettings = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -107,7 +108,7 @@ const LPCompanySettings = () => {
          }
           {activeTab === "support" && (
             <>
-            <p>Support</p>
+            <SupportTab/>
             </>
           )
          }
