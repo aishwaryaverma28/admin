@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
+import NotePopUp from "./NotePopUp";
 
 const DeleteNotes = ({ onDataLengthChange }) => {
   const [startDate, setStartDate] = useState(null);
@@ -26,6 +27,17 @@ const DeleteNotes = ({ onDataLengthChange }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
+  const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
+  const [selectedDescription, setSelectedDescription] = useState("");
+
+  const handleNotePopUp = (description) => {
+    setSelectedDescription(description);
+    setIsNotePopUpOpen(true);
+  }
+
+  const closeNotePopUp = () => {
+    setIsNotePopUpOpen(false);
+  }
 
   const handleDeletePopUp = ()  => {
     setIsDeleteModalOpen(true);
@@ -315,7 +327,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
                       <span className="checkmark"></span>
                     </label>
                   </td>
-                  <td>
+                  <td onClick={() => handleNotePopUp(item.description)}>
                     {item.description.length > 15 ? (
                       <>{item.description.slice(3, 15)}...</>
                     ) : (
@@ -342,6 +354,12 @@ const DeleteNotes = ({ onDataLengthChange }) => {
       {
         isRestoreModalOpen && (
           <RecycleRestorePopUp onClose={onCloseNoteRestorePopUP}/>
+        )
+      }
+
+      {
+        isNotePopUpOpen && (
+          <NotePopUp onClose={closeNotePopUp} description={selectedDescription}/>
         )
       }
     </>

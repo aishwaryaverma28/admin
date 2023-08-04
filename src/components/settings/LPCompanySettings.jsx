@@ -6,6 +6,7 @@ import CPPasswordPolicy from './CPPasswordPolicy';
 import CPProducts from './CPProducts';
 import CPBillings from './CPBillings';
 import CPGenral from './CPGenral';
+import MasterSetting from './MasterSetting';
 
 const LPCompanySettings = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -94,7 +95,7 @@ const LPCompanySettings = () => {
          }
           {activeTab === "master-settings" && (
             <>
-            <p>Master Settings</p>
+            <MasterSetting/>
             </>
           )
          }
