@@ -1147,10 +1147,17 @@ background: #F4F5F9;
   background: #F4F5F9;
 }
 
-select.disabled {
+#priority.disabled, #status.disabled {
   color: white !important;
   width: max-content !important;
 }
+
+#lp-main-owner.disabled{
+  color: #1e2224 !important;
+  font-weight: 600 !important;
+
+}
+
 
 
 

@@ -26,7 +26,8 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [owner, setOwner] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
-  const [userData,setUserData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchLead = () => {
     axios
@@ -40,13 +41,13 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         setEditedItem(response.data.data[0]);
         setName(
           response.data.data[0].first_name +
-            " " +
-            response.data.data[0].last_name
+          " " +
+          response.data.data[0].last_name
         );
         setOwner(
           response.data.data[0].ownerf_name +
-            " " +
-            response.data.data[0].ownerl_name
+          " " +
+          response.data.data[0].ownerl_name
         );
         setIsLoading(false);
       })
@@ -57,10 +58,20 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   useEffect(() => {
+    // Set the initial state to the first user in the userData array
+    if (userData.length > 0) {
+      setSelectedUser({
+        email: userData[0].email,
+        phone: userData[0].phone,
+      });
+    }
+  }, [userData]);
+
+  useEffect(() => {
     fetchLead();
     userAdded();
   }, []);
-  
+
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -73,7 +84,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .catch((error) => {
         console.log(error);
-       });
+      });
   };
   console.log(userData);
   const getStatusBackgroundColor2 = () => {
@@ -138,6 +149,20 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       [e.target.name]: e.target.value,
     });
     setStateBtn(1);
+
+    const selectedName = e.target.value;
+
+    // Find the selected user data from the userData array
+    const selectedUserData = userData.find(
+      (user) => user.first_name + " " + user.last_name === selectedName
+    );
+
+    console.log(selectedUserData.first_name)
+    console.log(selectedUserData.last_name)
+    console.log(selectedUserData.email)
+
+    // Update the state with the selected user
+    setSelectedUser(selectedUserData);
   };
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -329,6 +354,36 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     padding: "0.1rem",
     height: "2rem",
   };
+
+  const normalStylingSelect3 = {
+
+    /* height: 32px; */
+    fontSize: " 0.8rem",
+    fontFamily: '"Lexend Deca", sans-serif',
+    padding: "0.3rem",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+    appearance: "none",
+    border: "1px solid transparent",
+    height: "2rem",
+  };
+
+  const editStylingSelect3 = {
+    width: "100%",
+    color: " #1e2224",
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.1rem",
+    height: "2rem",
+  };
+
+
 
   return (
     <div className="modal">
@@ -588,15 +643,25 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        <input
-                          type="text"
-                          value={owner}
-                          onChange={handleOwnerChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
+                        <select
+                          id="lp-main-owner"
+                          onChange={handleInputChange}
                           disabled={isDisabled}
-                        />
+                          style={
+                            isEditable
+                              ? editStylingSelect3
+                              : normalStylingSelect3
+                          }
+                          className={isDisabled ? "disabled" : ""}
+                        >
+                          {userData.map((item) => (
+                            <option key={item.id} value={item.first_name + " " + item.last_name} className="owner-val">
+                             {`${item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1)} ${item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1)}`}
+                            </option>
+                          ))}
+                          {/* <option value="Imp">{owner}</option> */}
+
+                        </select>
                       </span>
                     )}
                   </p>
@@ -608,11 +673,11 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="email"
                           name="owner_email"
-                          value={editedItem.owner_email}
+                          value={selectedUser?.email}
                           style={
-                            isEditable ? editStylingInput : normalStylingInput
+                            normalStylingInput
                           }
-                          disabled={isDisabled}
+                          disabled={true}
                         />
                       </span>
                     )}
@@ -625,11 +690,11 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="owner_phone"
-                          value={editedItem.owner_phone}
+                          value={selectedUser?.phone}
                           style={
-                            isEditable ? editStylingInput : normalStylingInput
+                            normalStylingInput
                           }
-                          disabled={isDisabled}
+                          disabled={true}
                         />
                       </span>
                     )}
