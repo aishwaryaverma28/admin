@@ -162,30 +162,45 @@ const LPleads = () => {
     }
   };
   console.log(selectedCardIds);
-const deleteCard = () => {
-  const arrayOfNumbers = selectedCardIds.flatMap((array) =>
-  array.map((item) => (typeof item === "string" ? parseFloat(item) : item))
-);
-  const body = {
-    leadIds: arrayOfNumbers,
+  const deleteCard = () => {
+    const arrayOfNumbers = selectedCardIds.flatMap((array) =>
+      array.map((item) => (typeof item === "string" ? parseFloat(item) : item))
+    );
+  
+    // Step 1: Count the occurrences of each number
+    const occurrenceCount = arrayOfNumbers.reduce((count, num) => {
+      count[num] = (count[num] || 0) + 1;
+      return count;
+    }, {});
+  
+    // Step 2: Helper function to determine whether to keep or delete the number
+    const shouldKeepNumber = (num) => occurrenceCount[num] % 2 !== 0;
+  
+    // Step 3: Modify the arrayOfNumbers accordingly
+    const filteredNumbers = arrayOfNumbers.filter(shouldKeepNumber);
+  
+    const body = {
+      leadIds: filteredNumbers,
+    };
+  console.log(filteredNumbers)
+    // axios
+    //   .delete(MOVELEAD_TO_TRASH, {
+    //     data: body,
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  
+    // setDeleteConfirmationVisible(false);
+    // fetchLeadsData();
   };
-  axios
-    .delete(MOVELEAD_TO_TRASH, {
-      data: body,
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  setDeleteConfirmationVisible(false);
-  fetchLeadsData();
-};
-  return (
+    return (
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -305,12 +320,12 @@ const deleteCard = () => {
                 {deleteConfirmationVisible && (
                       <div className="popup-container">
                         <div className="popup">
-                          <p className="popupHead">Delete Lead</p>
+                          <p className="popupHead">Delete Selected Leads</p>
                           <p>
                             Deleted leads will be in recycle bin for 90 days
                           </p>
                           <p className="deleteMsg">
-                            Are you sure you want to delete this lead?
+                            Are you sure you want to delete all selected leads?
                           </p>
                           <div className="popup-buttons">
                             <button
