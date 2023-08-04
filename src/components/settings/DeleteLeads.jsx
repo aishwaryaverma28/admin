@@ -12,6 +12,8 @@ import {
   handleLogout,
 } from "../utils/Constants";
 import { format } from "date-fns";
+import RecycleDeletePopUp from "./RecycleDeletePopUp";
+import RecycleRestorePopUp from "./RecycleRestorePopUp";
 
 const DeleteLeads = () => {
   const [startDate, setStartDate] = useState(null);
@@ -22,6 +24,24 @@ const DeleteLeads = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const [selectedRows, setSelectedRows] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
+
+  const leadDeletePopUp = () => {
+    setIsDeleteModalOpen(true);
+  }
+
+  const closeLeadDeletePopUp = () => {
+   setIsDeleteModalOpen(false)
+  }
+  const leadRestorePopUp = () => {
+    setIsRestoreModalOpen(true);
+  }
+
+  const closeLeadRestorePopUp = () => {
+    setIsRestoreModalOpen(false)
+  }
+  
 
   useEffect(() => {
     fetchData();
@@ -222,13 +242,15 @@ const DeleteLeads = () => {
         <div className="recycle-btn">
           <button
             className="recycle-delete recycle-fonts"
-            onClick={handleDeleteLead}
+            // onClick={handleDeleteLead}
+            onClick={leadDeletePopUp}
           >
             Delete
           </button>
           <button
             className="recycle-restore recycle-fonts"
-            onClick={handleRestoreLead}
+            // onClick={handleRestoreLead}
+            onClick={leadRestorePopUp}
           >
             Restore
           </button>
@@ -305,6 +327,18 @@ const DeleteLeads = () => {
             )}
           </tbody>
         </table>
+
+        {
+          isDeleteModalOpen && (
+            <RecycleDeletePopUp onClose={closeLeadDeletePopUp}/>
+          )
+        }
+
+        {
+          isRestoreModalOpen && (
+            <RecycleRestorePopUp onClose={closeLeadRestorePopUp} />
+          )
+        }
       </div>
     </>
   );
