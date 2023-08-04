@@ -97,8 +97,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [isOpenState]);
-
-  
+ 
   // Function to handle header checkbox click
   const handleHeaderCheckboxChange = (e) => {
     const { checked } = e.target;
@@ -119,25 +118,20 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       onCardSelection([], false);
     }
   };
+// Function to handle individual checkbox click
+const handleCheckChange = (e) => {
+  const { name, checked } = e.target;
 
-  // Function to handle individual checkbox click
-  const handleCheckChange = (e) => {
-    const { name, checked } = e.target;
+  // Update the checked state for the clicked row
+  setCheckedRows((prevCheckedRows) => ({
+    ...prevCheckedRows,
+    [name]: checked,
+  }));
+  const cardId = parseInt(name);
+  // Update the selectedCardIds based on the checkbox value
+  onCardSelection(cardId, checked);
+};
 
-    // Update the checked state for the clicked row
-    setCheckedRows((prevCheckedRows) => ({
-      ...prevCheckedRows,
-      [name]: checked,
-    }));
-
-    // Update the selectedCardIds based on the checkbox value
-    if (checked) {
-      onCardSelection([name], true);
-    } else {
-      const updatedSelectedCardIds = selectedCardIds.filter((id) => id !== name);
-      onCardSelection(updatedSelectedCardIds, false);
-    }
-  };
   const areAllRowsChecked = () => {
     return leadArray.every((item) => checkedRows[item.id]);
   };
