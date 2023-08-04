@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../styles/RecycleBin.css";
 import axios from "axios";
+import {
+  GETNOTE_FROM_TRASH,
+  getDecryptedToken,
+  handleLogout,
+} from "../utils/Constants";
 import LPSettingSidebar from "./LPSettingSidebar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar.svg";
 import { format } from "date-fns";
-import { getDecryptedToken, handleLogout } from "../utils/Constants";
 import DeleteLeads from "./DeleteLeads";
 import DeleteNotes from "./DeleteNotes";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
@@ -16,8 +20,9 @@ const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [leadlen, setLeadlen] = useState(0);
+  const [noteslen, setNoteslen] = useState(0);
   const [activeTab, setActiveTab] = useState(localStorage.getItem("activeTab") || "Leads");
-  const [notesDataLength, setNotesDataLength] = useState(0); 
+  // const [notesDataLength, setNotesDataLength] = useState(0); 
   const decryptedToken = getDecryptedToken();
   const [isDeleteDealModalOpen, setIsDeleteDealModalOpen] = useState(false);
   const [isRestoreDealModalOpen, setIsRestoreDealModalOpen] = useState(false);
@@ -90,40 +95,58 @@ const RecycleBin = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://core.leadplaner.com:3001/api/lead/getallfromtrash",
-          {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-            },
-          }
-        );
-
-        if (response.data.status === 1) {
-          // console.log(response.data.data);
-          setLeadlen(response.data.data.length);
-        } else {
-          if (response.data.message === "Token has expired") {
-            alert(response.data.message);
-            handleLogout();
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
+    
     fetchData();
+    fetchNotesData();
   }, []);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://core.leadplaner.com:3001/api/lead/getallfromtrash",
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        // console.log(response.data.data);
+        setLeadlen(response.data.data.length);
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+          handleLogout();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetchNotesData = async () => {
+    try {
+      const response = await axios.get(GETNOTE_FROM_TRASH, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      if (response.data.status === 1) {
+        setNoteslen(response.data.data.length);
+        
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+          handleLogout();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
     localStorage.setItem("activeTab", tabName); // Store the active tab in localStorage
-  };
-
-  const handleNotesDataLengthChange = (length) => {
-    setNotesDataLength(length);
   };
 
   return (
@@ -162,7 +185,7 @@ const RecycleBin = () => {
                 }`}
                 onClick={() => handleTabClick("Notes")}
               >
-                Notes ({notesDataLength})
+                Notes ({noteslen})
               </button>
               <button
                 className={`recycle-btn recycle-fonts ${
@@ -197,7 +220,7 @@ const RecycleBin = () => {
                 Contacts (6)
               </button>
             </div>
-            {activeTab === "Notes" && <DeleteNotes onDataLengthChange={handleNotesDataLengthChange} />}
+            {activeTab === "Notes" && <DeleteNotes/>}
             {activeTab === "Deals" && (
               <>
                 <div className="recycle-search-user-section">

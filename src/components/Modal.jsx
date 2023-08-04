@@ -5,6 +5,7 @@ import {
   UPDATE_LEAD,
   GETNOTEBYSOURCE,
   GET_LEAD_ID,
+  GET_TEAM_MEM,
   handleLogout,
   getDecryptedToken,
 } from "./utils/Constants";
@@ -25,6 +26,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [owner, setOwner] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
+  const [userData,setUserData] = useState([]);
 
   const fetchLead = () => {
     axios
@@ -56,8 +58,24 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     fetchLead();
+    userAdded();
   }, []);
-
+  
+  const userAdded = () => {
+    axios
+      .get(GET_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setUserData(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+       });
+  };
+  console.log(userData);
   const getStatusBackgroundColor2 = () => {
     switch (editedItem.priority) {
       case "Imp":
