@@ -63,9 +63,9 @@ const ContactSupport = () => {
   <div className="contact-browse" >
     <span
       className='common-fonts common-input contact-tab-input'
-      style={{ position: 'relative', marginRight: '10px', color: 'blue', cursor: 'pointer' }}
+      style={{ position: 'relative', marginRight: '10px', cursor: 'pointer' }}
     >
-      <button onClick={handleBrowseClick}>Browse</button>
+      <button onClick={handleBrowseClick} className='contact-browse-btn common-fonts'>Browse</button>
       <input
         type="file"
         id="fileInput"
@@ -82,10 +82,15 @@ const ContactSupport = () => {
         ref={fileInputRef}
         onChange={handleFileChange}
       />
+      {fileName && <span className='common-fonts upload-file-name'>Selected File: {fileName}</span>}
     </span>
-    <span style={{ color: 'transparent' }}>No file chosen</span>
-    {fileName && <p>Selected File: {fileName}</p>}
+    
   </div>
+</div>
+
+<div className='contact-support-button'>
+  <button className='common-white-button'>Cancel</button>
+  <button className='common-save-button contact-tab-save-btn'>Save</button>
 </div>
                 </form>
 

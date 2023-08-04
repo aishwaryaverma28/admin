@@ -7,6 +7,7 @@ import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
 import axios from "axios";
 import { USER_INFO,getDecryptedToken,handleLogout } from "./utils/Constants";
+import HelpModal from './HelpModal';
 
 const LPheader = () => {
   const { name } = useContext(LPContext);
@@ -16,8 +17,14 @@ const LPheader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [clientData, setClientData] = useState(null);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
     const decryptedToken = getDecryptedToken();
     const location = useLocation();
+
+
+
+
+
     useEffect(() => {
         getUser()
       }, []);
@@ -82,6 +89,15 @@ const LPheader = () => {
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
+
+
+  const handleHelpModalOpen = () => {
+    setIsHelpModalOpen(true);
+  }
+
+  const closeHelpModal = () => {
+    setIsHelpModalOpen(false);
+  }
   
   return (
     <>
@@ -120,7 +136,7 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <button type="button" className="helpBtn" title="Help">
+              <button type="button" className="helpBtn" title="Help" onClick={handleHelpModalOpen}>
                 <i className="far fa-question-circle"></i>
               </button>
             </li>
@@ -235,6 +251,12 @@ const LPheader = () => {
         </div>
       </nav>
       {/* Bottom Navigation End */}
+
+      {
+        isHelpModalOpen && (
+          <HelpModal onClose={closeHelpModal}/>
+        )
+      }
     </>
   );
 };
