@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import '../styles/CPGenral.css';
 
 const ContactSupport = () => {
+  const fileInputRef = useRef(null);
+  const [fileName, setFileName] = useState('');
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name);
+      // You can upload the file to the server here using APIs, if needed.
+    }
+  };
+
+  const handleBrowseClick = () => {
+    fileInputRef.current.click();
+  };
+
+
     return (
 
         <div>
@@ -49,7 +65,7 @@ const ContactSupport = () => {
       className='common-fonts common-input contact-tab-input'
       style={{ position: 'relative', marginRight: '10px', color: 'blue', cursor: 'pointer' }}
     >
-      Browse
+      <button onClick={handleBrowseClick}>Browse</button>
       <input
         type="file"
         id="fileInput"
@@ -63,9 +79,12 @@ const ContactSupport = () => {
           width: '100%',
           cursor: 'pointer',
         }}
+        ref={fileInputRef}
+        onChange={handleFileChange}
       />
     </span>
     <span style={{ color: 'transparent' }}>No file chosen</span>
+    {fileName && <p>Selected File: {fileName}</p>}
   </div>
 </div>
                 </form>
