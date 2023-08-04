@@ -16,7 +16,7 @@ import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import NotePopUp from "./NotePopUp";
 
-const DeleteNotes = ({ onDataLengthChange }) => {
+const DeleteNotes = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -209,9 +209,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
     
-    useEffect(() => {
-      onDataLengthChange(filteredRecycleData.length);
-    }, [filteredRecycleData]);
+    
   return (
     <>
       <div className="recycle-search-user-section">
