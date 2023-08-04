@@ -348,3 +348,84 @@
 
 
 /* transaction section ends here  */
+
+/* currency tab section starts here  */
+
+.currency-btn{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.currency-tab-table table th{
+    text-align: start;
+    font-size: var(--font-small);
+    background-color: var(--th-background);
+}
+
+.currency-tab-table table td{
+    background-color: var(--white);
+
+}
+
+.currency-tab-table table th:nth-child(1), .currency-tab-table table th:nth-child(2),
+.currency-tab-table table td:nth-child(1), .currency-tab-table table td:nth-child(2)
+{
+    border-right:1px solid transparent;
+}
+
+.currency-tab-dollar{
+    margin-right: 10rem;
+}
+
+.currency-tab-default{
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    border: 1px solid var(--ternary);
+    background: var(--white);
+    cursor: pointer;
+}
+
+
+/* currency tab section ends here */
+
+/* label tabs starts  */
+
+.label-tab-leads{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.label-tab-leads img{
+    margin-right: 0.5rem;
+}
+
+.label-tab-leads p{
+    font-size: 1rem;
+}
+
+.label-tab-top{
+    display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-top: 1rem;
+     margin-bottom: 1rem;
+}
+
+.leads-tab-table th{
+    padding: 0;
+    margin: 0;
+}
+
+    .leads-tab-table th:nth-child(1){
+        width: 5%;
+    }
+
+    .lead-checkbox{
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+
+/* label tabs ends */
