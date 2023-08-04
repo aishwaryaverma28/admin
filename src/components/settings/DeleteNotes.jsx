@@ -180,6 +180,7 @@ const DeleteNotes = ({ onDataLengthChange }) => {
       .then((response) => {
         console.log(response);
         fetchData();
+        onCloseNoteRestorePopUP();
       })
       .catch((error) => {
         console.log(error);
@@ -198,12 +199,13 @@ const DeleteNotes = ({ onDataLengthChange }) => {
       .then((response) => {
         console.log(response);
         fetchData();
+        onCloseNoteDeletePopUp();
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
+  
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
     
@@ -258,14 +260,12 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         <div className="recycle-btn">
           <button
             className="recycle-delete recycle-fonts"
-            // onClick={handleDeleteNote}
             onClick={handleDeletePopUp}
           >
             Delete
           </button>
           <button
             className="recycle-restore recycle-fonts"
-            // onClick={handleRestoreNote}
             onClick={handleRestorePopUp}
           >
             Restore
@@ -328,10 +328,10 @@ const DeleteNotes = ({ onDataLengthChange }) => {
                     </label>
                   </td>
                   <td onClick={() => handleNotePopUp(item.description)}>
-                    {item.description.length > 15 ? (
-                      <>{item.description.slice(3, 15)}...</>
+                    {item.description.length > 60 ? (
+                      <>{item.description.slice(3, 60)}...</>
                     ) : (
-                      <>{item.description.slice(3, item.description.length)}</>
+                      <>{item.description.substring(3, item.description.length-4)}</>
                     )}
                   </td>
                   <td>
@@ -348,12 +348,12 @@ const DeleteNotes = ({ onDataLengthChange }) => {
         </table>
       </div>
       {isDeleteModalOpen && (
-        <RecycleDeletePopUp onClose={onCloseNoteDeletePopUp} />
+         <RecycleDeletePopUp onClose={onCloseNoteDeletePopUp} onDeleteConfirmed={handleDeleteNote} />
       )}
 
       {
         isRestoreModalOpen && (
-          <RecycleRestorePopUp onClose={onCloseNoteRestorePopUP}/>
+          <RecycleRestorePopUp onClose={onCloseNoteRestorePopUP} onRestoreConfirmed={handleRestoreNote} />
         )
       }
 

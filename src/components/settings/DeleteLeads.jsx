@@ -166,6 +166,7 @@ const DeleteLeads = () => {
       })
       .then((response) => {
         console.log(response);
+        closeLeadRestorePopUp();
         fetchData();
       })
       .catch((error) => {
@@ -185,6 +186,7 @@ const DeleteLeads = () => {
       })
       .then((response) => {
         console.log(response);
+        closeLeadDeletePopUp();
         fetchData();
       })
       .catch((error) => {
@@ -330,13 +332,13 @@ const DeleteLeads = () => {
 
         {
           isDeleteModalOpen && (
-            <RecycleDeletePopUp onClose={closeLeadDeletePopUp}/>
+            <RecycleDeletePopUp onClose={closeLeadDeletePopUp} onDeleteConfirmed={handleDeleteLead} />
           )
         }
 
         {
           isRestoreModalOpen && (
-            <RecycleRestorePopUp onClose={closeLeadRestorePopUp} />
+            <RecycleRestorePopUp onClose={closeLeadRestorePopUp} onRestoreConfirmed={handleRestoreLead} />
           )
         }
       </div>

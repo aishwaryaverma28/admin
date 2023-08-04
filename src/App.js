@@ -88,6 +88,10 @@ const router = createBrowserRouter([
         element: <Contacts />,
       },
       {
+        path: "/lp/error",
+        element:<Error/>,
+      }
+      {
         path: "/lp/deals",
         element: <Deals />,
       },
