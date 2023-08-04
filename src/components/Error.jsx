@@ -3,6 +3,9 @@ import './styles/Error.css';
 import ErrorImg from "../assets/image/404.jpg";
 
 const Error = () => {
+  const handleGoBack = () => {
+    window.history.back(); // Navigate back in the browser history
+  };
   return (
     <section className="lead-error-page">
     <div>
@@ -12,7 +15,7 @@ const Error = () => {
         <p>404</p>
         <p>page not found</p>
         <p>We’re sorry, the page you requested could not be found. Please go back to the homepage</p>
-        <button>Go back</button>
+        <button onClick={handleGoBack}>Go back</button>
     </div>
 </section>
   )
