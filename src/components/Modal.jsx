@@ -37,7 +37,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        console.log(response.data.data[0]);
         setEditedItem(response.data.data[0]);
         setName(
           response.data.data[0].first_name +
@@ -86,7 +85,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         console.log(error);
       });
   };
-  console.log(userData);
   const getStatusBackgroundColor2 = () => {
     switch (editedItem.priority) {
       case "Imp":
@@ -156,12 +154,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     const selectedUserData = userData.find(
       (user) => user.first_name + " " + user.last_name === selectedName
     );
-
-    console.log(selectedUserData.first_name)
-    console.log(selectedUserData.last_name)
-    console.log(selectedUserData.email)
-
-    // Update the state with the selected user
     setSelectedUser(selectedUserData);
   };
   const handleNameChange = (e) => {
@@ -180,7 +172,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
-
     const updatedLead = {
       leadIds: [selectedItem.id],
       lead_name: editedItem.lead_name,
@@ -200,10 +191,10 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       state: editedItem.state,
       country: editedItem.country,
       pin: editedItem.pin,
-      // ownerf_name: owner.split(" ")[0],
-      // ownerl_name: owner.split(" ")[1],
-      // owner_email:editedItem.email,
-      // owner_phone:editedItem.phone,
+      ownerf_name: selectedUser.first_name,
+      ownerl_name: selectedUser.last_name,
+      owner_email: selectedUser.email,
+      owner_phone: selectedUser.phone,
     };
     axios
       .put(UPDATE_LEAD, updatedLead, {

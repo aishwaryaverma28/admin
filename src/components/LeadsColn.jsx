@@ -160,16 +160,18 @@ const handleCheckChange = (e) => {
             >
               {leadKey + "(" + leadArray.length + ")"}
             </p>
-            <label className="custom-checkbox">
-            <input
-                type="checkbox"
-                className={`cb1 ${leadKey}-header-checkbox`}
-                name="headerCheckBox"
-                onChange={handleHeaderCheckboxChange}
-                checked={isHeaderCheckboxChecked}
-              />
-    <span className="checkmark"></span>
-  </label>
+            {leadArray.length > 0 && (
+              <label className="custom-checkbox">
+                <input
+                  type="checkbox"
+                  className={`cb1 ${leadKey}-header-checkbox`}
+                  name="headerCheckBox"
+                  onChange={handleHeaderCheckboxChange}
+                  checked={isHeaderCheckboxChecked}
+                />
+                <span className="checkmark"></span>
+              </label>
+            )}
           </div>
 
           {leadArray.map((item) => (
