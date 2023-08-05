@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import {getDecryptedUserPath} from "./utils/Constants"
 const SubMenu = (item) => {
   const [open, setOpen] = useState(false);
-const decryptedUserPath = getDecryptedUserPath();
-const allowed = decryptedUserPath.split(",");
+// const decryptedUserPath = getDecryptedUserPath();
+// const allowed = decryptedUserPath.split(",");
+const allowed = ["/admin","/admin/blog/add","/admin/blog/view"]
    if (item.subNav) {
     // Filter subNav items based on allowed paths
     const filteredSubNav = allowed.length === 0

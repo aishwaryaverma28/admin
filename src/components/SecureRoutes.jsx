@@ -12,9 +12,9 @@ const SecureRoutes = (props) => {
   
   
   useEffect(() => {
-    // const allowed = ["/admin","/admin/blog/add","/admin/blog/view"]
+    const allowed = ["/admin","/admin/blog/add","/admin/blog/view"]
     // const allowed = ["/admin","/admin/employee/add","/admin/employee/view"]
-    const allowed = decryptedUserPath.split(",");
+    // const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;
 
     if (allowed && !allowed.includes(currentPath)) { // Check if allowed is defined before using includes method

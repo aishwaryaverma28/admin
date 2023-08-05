@@ -191,10 +191,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       state: editedItem.state,
       country: editedItem.country,
       pin: editedItem.pin,
-      ownerf_name: selectedUser.first_name,
-      ownerl_name: selectedUser.last_name,
-      owner_email: selectedUser.email,
-      owner_phone: selectedUser.phone,
+      owner: selectedUser.id,
     };
     axios
       .put(UPDATE_LEAD, updatedLead, {
