@@ -230,10 +230,9 @@ height: 2.6875rem;
 
 .common-inactive-button {
   border-radius: 0.3125rem;
-  border: 1px solid #DCDCDC;
-  background: #FFF;
+  border: 1px solid #F3F6FA;
+  background: #f3f6fa;
   padding: 7px 15px;
-  color: #909DB0;
   font-family: "Lexend Deca", sans-serif;
   font-size: 0.875rem;
   font-style: normal;
@@ -241,6 +240,7 @@ height: 2.6875rem;
   line-height: normal;
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
+  color: #909DAF !important;
 }
 
 

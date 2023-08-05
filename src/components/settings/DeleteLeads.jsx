@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
+import SearchIcon from '../../assets/image/search.svg';
 
 const DeleteLeads = () => {
   const [startDate, setStartDate] = useState(null);
@@ -208,7 +209,7 @@ const DeleteLeads = () => {
             onChange={handleSearchChange}
           />
           <span className="recycle-search-icon">
-            <img src="../assets/image/search.svg" alt="" />
+            <img src={SearchIcon} alt="" />
           </span>
         </div>
 
@@ -243,15 +244,18 @@ const DeleteLeads = () => {
         </div>
         <div className="recycle-btn">
           <button
-            className="recycle-delete recycle-fonts"
+            className={recycleData.length > 0 ? 'recycle-delete recycle-fonts' : 'common-inactive-button inactive-delete  recycle-fonts '}
             // onClick={handleDeleteLead}
+            disabled={recycleData.length > 0  ? false : true}
             onClick={leadDeletePopUp}
           >
             Delete
           </button>
           <button
-            className="recycle-restore recycle-fonts"
+            className={recycleData.length > 0 ? 'recycle-restore recycle-fonts' : 'common-inactive-button recycle-fonts '}
             // onClick={handleRestoreLead}
+            disabled={recycleData.length > 0  ? false : true}
+
             onClick={leadRestorePopUp}
           >
             Restore

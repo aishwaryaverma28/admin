@@ -189,6 +189,12 @@
     height: 2rem;
 }
 
+.inactive-delete{
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+}
+
 .recycle-delete:hover {
     border: 1px solid #D83C38;
     color: #D83C38;
