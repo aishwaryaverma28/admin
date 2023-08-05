@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import NotePopUp from "./NotePopUp";
+import SearchIcon from '../../assets/image/search.svg';
 
 const DeleteNotes = () => {
   const [startDate, setStartDate] = useState(null);
@@ -29,6 +30,7 @@ const DeleteNotes = () => {
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
   const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
   const [selectedDescription, setSelectedDescription] = useState("");
+  
 
   const handleNotePopUp = (description) => {
     setSelectedDescription(description);
@@ -222,7 +224,7 @@ const DeleteNotes = () => {
             onChange={handleSearchChange}
           />
           <span className="recycle-search-icon">
-            <img src="../assets/image/search.svg" alt="" />
+            <img src={SearchIcon} alt="" />
           </span>
         </div>
 
@@ -257,13 +259,16 @@ const DeleteNotes = () => {
         </div>
         <div className="recycle-btn">
           <button
-            className="recycle-delete recycle-fonts"
+             className={recycleData.length > 0 ? 'recycle-delete recycle-fonts' : 'common-inactive-button inactive-delete  recycle-fonts '}
+             disabled={recycleData.length > 0  ? false : true}
             onClick={handleDeletePopUp}
+
           >
             Delete
           </button>
           <button
-            className="recycle-restore recycle-fonts"
+            className={recycleData.length > 0 ? 'recycle-restore recycle-fonts' : 'common-inactive-button recycle-fonts '}
+            disabled={recycleData.length > 0  ? false : true}
             onClick={handleRestorePopUp}
           >
             Restore

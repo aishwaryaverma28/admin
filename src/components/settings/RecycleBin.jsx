@@ -15,6 +15,7 @@ import DeleteLeads from "./DeleteLeads";
 import DeleteNotes from "./DeleteNotes";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
+import SearchIcon from "../../assets/image/search.svg";
 
 const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
@@ -231,7 +232,7 @@ const RecycleBin = () => {
                       placeholder="Search..."
                     />
                     <span className="recycle-search-icon">
-                      <img src="../assets/image/search.svg" alt="" />
+                      <img src={SearchIcon} alt="" />
                     </span>
                   </div>
                   <div className="recycle-date">
@@ -370,7 +371,7 @@ const RecycleBin = () => {
                       placeholder="Search..."
                     />
                     <span className="recycle-search-icon">
-                      <img src="../assets/image/search.svg" alt="" />
+                      <img src={SearchIcon} alt="" />
                     </span>
                   </div>
                   <div className="recycle-date">
@@ -538,7 +539,7 @@ const RecycleBin = () => {
                       placeholder="Search..."
                     />
                     <span className="recycle-search-icon">
-                      <img src="../assets/image/search.svg" alt="" />
+                      <img src={SearchIcon} alt="" />
                     </span>
                   </div>
                   <div className="recycle-date">
