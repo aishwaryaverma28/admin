@@ -40,6 +40,7 @@ const BlogAdd = () => {
   const [imageName, setImageName] = useState(null);
   const [updateMessage, setUpdateMessage] = useState("");
   const decryptedToken = getDecryptedToken();
+  console.log(decryptedToken);
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {
@@ -217,6 +218,8 @@ const BlogAdd = () => {
       sort: sectionSort,
       image: childData,
       section: dataFromChild,
+      site:"",
+      alt:"",
     };
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
@@ -236,7 +239,7 @@ const BlogAdd = () => {
     setSectionData(newSectionData);
   };
 
-  // console.log(sectionData);
+  console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -254,8 +257,9 @@ const BlogAdd = () => {
       sections: sectionData,
       site: selectSite,
       route: formData.url,
+      alt:"",
     };
-     // console.log(updatedFormData);
+     console.log(updatedFormData);
     axios.post(BLOG_ADD, updatedFormData, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header

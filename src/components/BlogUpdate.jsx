@@ -270,6 +270,8 @@ const BlogUpdate = () => {
       sort: sectionSort,
       image: childData,
       section: dataFromChild,
+      site:"",
+      alt:"",
     };
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state

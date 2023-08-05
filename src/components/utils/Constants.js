@@ -49,6 +49,7 @@ export const CREATE_ACC = start+"api/user/createaccount";
 export const BLOG_ADD = start+"api/blog/add"
 export const BLOG_EDIT = start+"api/blog/edit/";
 export const BLOG_GET = start+"api/blog/get";
+export const BLOG_GETID = start + "/api/blog/get/";
 export const GET_TAG = start+"api/blog/tag/getall";
 export const SEC_GET = start+"api/blog/section/getbyblog/";
 export const IMAGE_UP = start+"api/blog/addImg";
