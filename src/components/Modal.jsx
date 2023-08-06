@@ -12,6 +12,8 @@ import {
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import LeadDocUp from "./LeadDocUp";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +33,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const fetchLead = () => {
     axios
-      .get(GET_LEAD_ID + selectedItem.id, {
+      .get(GET_LEAD_ID + selectedItem?.id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -86,7 +88,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       });
   };
   const getStatusBackgroundColor2 = () => {
-    switch (editedItem.priority) {
+    switch (editedItem?.priority) {
       case "Imp":
         return "#ff4040";
       case "Avg":
@@ -100,7 +102,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const getStatusBackgroundColor = () => {
-    switch (editedItem.status) {
+    switch (editedItem?.status) {
       case "New":
         return "#5181FF";
       case "Open":
@@ -121,7 +123,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const fetchNotes = () => {
     axios
-      .get(GETNOTEBYSOURCE + selectedItem.id, {
+      .get(GETNOTEBYSOURCE + selectedItem?.id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -173,25 +175,25 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const handleUpdateClick = (event) => {
     event.preventDefault();
     const updatedLead = {
-      leadIds: [selectedItem.id],
-      lead_name: editedItem.lead_name,
+      leadIds: [selectedItem?.id],
+      lead_name: editedItem?.lead_name,
       first_name: name.split(" ")[0],
       last_name: name.split(" ")[1],
-      position: editedItem.position,
-      phone: editedItem.phone,
-      source: editedItem.source,
-      company_name: editedItem.company_name,
-      value: editedItem.value,
-      email: editedItem.email,
-      type: editedItem.type,
-      priority: editedItem.priority,
-      status: editedItem.status,
-      address1: editedItem.address1,
-      city: editedItem.city,
-      state: editedItem.state,
-      country: editedItem.country,
-      pin: editedItem.pin,
-      owner: selectedUser.id,
+      position: editedItem?.position,
+      phone: editedItem?.phone,
+      source: editedItem?.source,
+      company_name: editedItem?.company_name,
+      value: editedItem?.value,
+      email: editedItem?.email,
+      type: editedItem?.type,
+      priority: editedItem?.priority,
+      status: editedItem?.status,
+      address1: editedItem?.address1,
+      city: editedItem?.city,
+      state: editedItem?.state,
+      country: editedItem?.country,
+      pin: editedItem?.pin,
+      owner: selectedUser?.id,
     };
     axios
       .put(UPDATE_LEAD, updatedLead, {
@@ -200,10 +202,13 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        setUpdateMessage("Lead data updated successfully");
-        setTimeout(() => {
-          setUpdateMessage("");
-        }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        // setUpdateMessage("Lead data updated successfully");
+        // setTimeout(() => {
+        //   setUpdateMessage("");
+        // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        toast.success("Lead data updated successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -285,7 +290,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const normalStylingSelect1 = {
-    backgroundColor: editedItem.status && getStatusBackgroundColor2(),
+    backgroundColor: editedItem?.status && getStatusBackgroundColor2(),
     /* height: 32px; */
     color: " #ffffff !important",
     fontSize: " 0.8rem",
@@ -314,7 +319,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     height: "2rem",
   };
   const normalStylingSelect2 = {
-    backgroundColor: editedItem.status && getStatusBackgroundColor(),
+    backgroundColor: editedItem?.status && getStatusBackgroundColor(),
     /* height: 32px; */
     color: " #ffffff !important",
     fontSize: " 0.8rem",
@@ -392,7 +397,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                     <input
                       type="text"
                       name="lead_name"
-                      value={editedItem.lead_name}
+                      value={editedItem?.lead_name}
                       onChange={handleInputChange}
                       style={isEditable ? editStyling : normalStyling}
                       disabled={isDisabled}
@@ -449,7 +454,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="position"
-                          value={editedItem.position}
+                          value={editedItem?.position}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -467,7 +472,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="phone"
-                          value={editedItem.phone}
+                          value={editedItem?.phone}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -485,7 +490,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="source"
-                          value={editedItem.source}
+                          value={editedItem?.source}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -503,7 +508,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="company_name"
-                          value={editedItem.company_name}
+                          value={editedItem?.company_name}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -521,7 +526,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="value"
-                          value={editedItem.value}
+                          value={editedItem?.value}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -539,7 +544,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="email"
                           name="email"
-                          value={editedItem.email}
+                          value={editedItem?.email}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -557,7 +562,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="type"
-                          value={editedItem.type}
+                          value={editedItem?.type}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -575,7 +580,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <select
                           name="priority"
                           id="priority"
-                          value={editedItem.priority}
+                          value={editedItem?.priority}
                           onChange={handleInputChange}
                           disabled={isDisabled}
                           style={
@@ -599,7 +604,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <select
                         name="status"
                         id="status"
-                        value={editedItem.status}
+                        value={editedItem?.status}
                         onChange={handleInputChange}
                         disabled={isDisabled}
                         style={
@@ -643,8 +648,8 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                           className={isDisabled ? "disabled" : ""}
                         >
                           {userData.map((item) => (
-                            <option key={item.id} value={item.first_name + " " + item.last_name} className="owner-val">
-                             {`${item.first_name.charAt(0).toUpperCase() + item.first_name.slice(1)} ${item.last_name.charAt(0).toUpperCase() + item.last_name.slice(1)}`}
+                            <option key={item?.id} value={item?.first_name + " " + item?.last_name} className="owner-val">
+                             {`${item?.first_name.charAt(0).toUpperCase() + item?.first_name.slice(1)} ${item?.last_name.charAt(0).toUpperCase() + item?.last_name.slice(1)}`}
                             </option>
                           ))}
                           {/* <option value="Imp">{owner}</option> */}
@@ -709,7 +714,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="address1"
-                          value={editedItem.address1}
+                          value={editedItem?.address1}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -727,7 +732,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="city"
-                          value={editedItem.city}
+                          value={editedItem?.city}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -745,7 +750,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="state"
-                          value={editedItem.state}
+                          value={editedItem?.state}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -763,7 +768,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="country"
-                          value={editedItem.country}
+                          value={editedItem?.country}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -781,7 +786,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <input
                           type="text"
                           name="pin"
-                          value={editedItem.pin}
+                          value={editedItem?.pin}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -872,7 +877,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
           </div>
         </div>
       </div>
-
+       <ToastContainer/>
       {/* modal container ends here */}
     </div>
   );

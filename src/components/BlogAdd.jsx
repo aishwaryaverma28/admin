@@ -14,6 +14,8 @@ import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BlogAdd = () => {
   const [selectSite, setSelectSite] = useState("");
@@ -266,10 +268,13 @@ const BlogAdd = () => {
       }
     }).then((response) => {
       console.log(response);
-      setUpdateMessage("Blog data added successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      // setUpdateMessage("Blog data added successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      toast.success("Blog data updated successfully", {
+        position:"top-center"
+      })
     })
     .catch((error) => {
       console.log(error);
@@ -595,6 +600,7 @@ const BlogAdd = () => {
           {/*=============================================================right side of form ends here ============================================================*/}
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };

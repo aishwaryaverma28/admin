@@ -15,6 +15,8 @@ import trash from "../assets/image/delete-icon.svg";
 import ImageEditor from "./ImageEditor";
 import ImageUploader from "./ImageUploader";
 import "./styles/BlogAdd.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states
@@ -175,6 +177,7 @@ const BlogUpdate = () => {
         }
       });
       console.log("Image uploaded successfully:", response.data);
+      
       // Perform any additional actions on successful upload
       setShowUploadButton(false);
       setShowEditButton(true);
@@ -655,6 +658,7 @@ const BlogUpdate = () => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };

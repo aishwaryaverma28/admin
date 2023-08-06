@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ADD_SITEPGS,getDecryptedToken} from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SitePagesAdd = () => {
   const [updateMessage, setUpdateMessage] = useState("");
@@ -33,10 +35,13 @@ const SitePagesAdd = () => {
       }
     }).then((response) => {
       console.log(response);
-      setUpdateMessage("Site Page data added successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      // setUpdateMessage("Site Page data added successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      toast.success("Site Page data added successfully", {
+        position:"top-center"
+      })
       setDetails({
         site: "",
         route: "",
@@ -133,6 +138,7 @@ const SitePagesAdd = () => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };

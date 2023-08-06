@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { EMPLOYEE_GET, EMPLOYEE_UPDATE,getDecryptedToken } from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const EmployeeUpdate = () => {
   const { id } = useParams();
   const [empData, setEmpData] = useState([]);
@@ -137,10 +139,13 @@ const EmployeeUpdate = () => {
       }
     }).then((response) => {
       console.log(response);
-      setUpdateMessage("Employee data updated successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      // setUpdateMessage("Employee data updated successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      toast.success("Employee data updated successfully", {
+        position:"top-center"
+      })
     });
   }
 
@@ -490,6 +495,7 @@ const EmployeeUpdate = () => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };
