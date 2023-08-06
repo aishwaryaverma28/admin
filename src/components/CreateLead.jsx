@@ -11,7 +11,6 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
-  const [updateMessage, setUpdateMessage] = useState("");
   const decryptedToken = getDecryptedToken();
   const [leadData, setLeadData] = useState({
     position: "",
@@ -66,11 +65,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        console.log(response.data); // Handle the response as needed
-        // setUpdateMessage("Lead data added successfully");
-        // setTimeout(() => {
-        //   setUpdateMessage("");
-        // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        console.log(response.data); 
         toast.success("Lead data added successfully", {
           position:"top-center"
         })
@@ -105,8 +100,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           </p>
         </div>
         <div className="create-lead-form">
-          {updateMessage && <p className="updateMsg">{updateMessage}</p>}
-          <form>
+           <form>
             <section class="form-area">
               <div className="form-section-1">
                 <div>

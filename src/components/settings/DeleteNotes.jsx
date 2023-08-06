@@ -16,6 +16,8 @@ import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import NotePopUp from "./NotePopUp";
 import SearchIcon from '../../assets/image/search.svg';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteNotes = () => {
   const [startDate, setStartDate] = useState(null);
@@ -183,6 +185,9 @@ const DeleteNotes = () => {
         console.log(response);
         fetchData();
         onCloseNoteRestorePopUP();
+        toast.success("Note restored successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -202,6 +207,9 @@ const DeleteNotes = () => {
         console.log(response);
         fetchData();
         onCloseNoteDeletePopUp();
+        toast.error("Note delete successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -365,6 +373,7 @@ const DeleteNotes = () => {
           <NotePopUp onClose={closeNotePopUp} description={selectedDescription}/>
         )
       }
+      <ToastContainer/>
     </>
   );
 };

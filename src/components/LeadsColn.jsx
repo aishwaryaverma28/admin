@@ -7,6 +7,8 @@ import {
 import axios from "axios";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection }) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
@@ -57,6 +59,9 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       })
       .then((response) => {
         console.log(response);
+        toast.success("Lead moved to trash successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -276,6 +281,7 @@ const handleCheckChange = (e) => {
           onLeadAdded={onLeadAdded}
         />
       )}
+    <ToastContainer/>
     </>
   );
 };

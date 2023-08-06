@@ -9,7 +9,6 @@ const EmployeeAdd = () => {
 const [name,setName] = useState("");
 const [fname,setfName] = useState("");
 const [lname,setlName] = useState("");
-const [updateMessage, setUpdateMessage] = useState("");
 const decryptedToken = getDecryptedToken();
 const [details, setDetails] = useState({
   hire_date:"",
@@ -66,10 +65,6 @@ function handleSubmit(event) {
     })
     .then((response) => {
       console.log(response);
-      // setUpdateMessage("Employee data added successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 30 seconds (30000 milliseconds)
       toast.success("Employee data added successfully", {
         position:"top-center"
       })
@@ -106,7 +101,6 @@ function handleSubmit(event) {
       <header className="headerEditor">
         <h2>Add a new Employee</h2>
       </header>
-      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="addEmployeeFrom" onSubmit={handleSubmit} >
         <div className="formDiv">
           <div className="leftForm">

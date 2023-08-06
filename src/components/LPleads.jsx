@@ -10,6 +10,9 @@ import {
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
 } from "./utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const LPleads = () => {
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -90,7 +93,9 @@ const LPleads = () => {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
           },
         });
-        alert("File uploaded successfully");
+        toast.success("File uploaded successfully", {
+          position:"top-center"
+        })
         // Handle the success case as needed
       } catch (error) {
         alert("File upload failed", error);
@@ -189,6 +194,9 @@ const LPleads = () => {
       })
       .then((response) => {
         console.log(response);
+        toast.success("Leads are moved to trash successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -345,6 +353,7 @@ const LPleads = () => {
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
       />
+      <ToastContainer/>
     </div>
   );
 };

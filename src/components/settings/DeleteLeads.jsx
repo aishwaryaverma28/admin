@@ -15,6 +15,8 @@ import { format } from "date-fns";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import SearchIcon from '../../assets/image/search.svg';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteLeads = () => {
   const [startDate, setStartDate] = useState(null);
@@ -169,6 +171,9 @@ const DeleteLeads = () => {
         console.log(response);
         closeLeadRestorePopUp();
         fetchData();
+        toast.success("Lead restored successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -189,6 +194,9 @@ const DeleteLeads = () => {
         console.log(response);
         closeLeadDeletePopUp();
         fetchData();
+        toast.error("Lead deleted successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -346,6 +354,7 @@ const DeleteLeads = () => {
           )
         }
       </div>
+      <ToastContainer/>
     </>
   );
 };

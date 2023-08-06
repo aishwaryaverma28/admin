@@ -32,8 +32,7 @@ const EmployeeUpdate = () => {
     department: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
-  const [updateMessage, setUpdateMessage] = useState("");
-    
+     
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -139,10 +138,6 @@ const EmployeeUpdate = () => {
       }
     }).then((response) => {
       console.log(response);
-      // setUpdateMessage("Employee data updated successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("Employee data updated successfully", {
         position:"top-center"
       })
@@ -154,7 +149,6 @@ const EmployeeUpdate = () => {
       <header className="headerEditor">
         <h2>Update Employee Details</h2>
       </header>
-      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="addEmployeeFrom" onSubmit={handleSubmit}>
         <div className="formDiv">
           <div className="leftForm">

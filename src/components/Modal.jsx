@@ -19,7 +19,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
-  const [updateMessage, setUpdateMessage] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
   const [stateBtn, setStateBtn] = useState(0);
@@ -202,10 +201,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        // setUpdateMessage("Lead data updated successfully");
-        // setTimeout(() => {
-        //   setUpdateMessage("");
-        // }, 30000); // Clear message after 1 minute (60000 milliseconds)
         toast.success("Lead data updated successfully", {
           position:"top-center"
         })
@@ -412,7 +407,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
             </a>
           </div>
           <div className="leadDetailsLeft">
-            {updateMessage && <p className="updateMsg">{updateMessage}</p>}
             <div className="detailsBox">
               <p className="detailHead">LEAD INFORMATION</p>
               <div className="detailsContent">

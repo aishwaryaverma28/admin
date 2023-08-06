@@ -40,7 +40,6 @@ const BlogAdd = () => {
   const [selectedDate, setSelectedDate] = useState("");
   // image useStates
   const [imageName, setImageName] = useState(null);
-  const [updateMessage, setUpdateMessage] = useState("");
   const decryptedToken = getDecryptedToken();
   console.log(decryptedToken);
   useEffect(() => {
@@ -268,10 +267,6 @@ const BlogAdd = () => {
       }
     }).then((response) => {
       console.log(response);
-      // setUpdateMessage("Blog data added successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("Blog data updated successfully", {
         position:"top-center"
       })
@@ -291,7 +286,6 @@ const BlogAdd = () => {
       <header className="headerEditor">
         <h2> Add a new Blog</h2>
       </header>
-      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================left side of form starts here ============================================================*/}

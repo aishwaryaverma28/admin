@@ -52,7 +52,6 @@ const BlogUpdate = () => {
     route:"",
   });
   const [stateBtn, setStateBtn] = useState(0);
-  const [updateMessage, setUpdateMessage] = useState("");
   useEffect(() => {
     getBlogInfo();
   }, []);
@@ -353,7 +352,6 @@ const BlogUpdate = () => {
       <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
-      {updateMessage && <p className="updateMsg">{updateMessage}</p>}
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}

@@ -15,9 +15,7 @@ const LPSettingsGeneral = () => {
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("profile");
-  const [stateBtn, setStateBtn] = useState(0);
-  const [updateMessage, setUpdateMessage] = useState("");
-  
+  const [stateBtn, setStateBtn] = useState(0);  
 
   useEffect(() => {
     getUser();
@@ -76,10 +74,6 @@ const LPSettingsGeneral = () => {
       }
     }).then((response) => {
       console.log(response);
-      // setUpdateMessage("User data is updated successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("User data updated successfully", {
         position:"top-center"
       })
@@ -120,7 +114,6 @@ const LPSettingsGeneral = () => {
           </div>
           {activeTab === "profile" && (
             <>
-              {updateMessage && <p className="updateMsg">{updateMessage}</p>}
               <div className="genral-user genral-setting-fonts">
                 <p>Profile Image</p>
                 <div className="genral-image">

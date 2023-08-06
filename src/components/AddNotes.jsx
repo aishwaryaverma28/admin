@@ -12,6 +12,8 @@ import {
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddNotes = ({ item, onNotesNum }) => {
   const [dataFromChild, setDataFromChild] = useState("");
@@ -73,6 +75,9 @@ const AddNotes = ({ item, onNotesNum }) => {
       .then((response) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
+        toast.success("Notes added successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
@@ -114,6 +119,9 @@ const AddNotes = ({ item, onNotesNum }) => {
         })
         .then((response) => {
           fetchNotes();
+          toast.success("Note updated successfully", {
+            position:"top-center"
+          })
         })
         .catch((error) => {
           console.log(error);
@@ -136,6 +144,9 @@ const AddNotes = ({ item, onNotesNum }) => {
         const updatedNotes = notes.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         onNotesNum();
+        toast.success("Note moved to trash successfully", {
+          position:"top-center"
+        })
       })
       .catch((error) => {
         console.log(error);
