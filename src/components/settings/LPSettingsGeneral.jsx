@@ -7,6 +7,8 @@ import "../styles/LPGeneral.css";
 import axios from "axios";
 import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "../utils/Constants";
 import EmailSyncTick from '../../assets/image/email-sync-tick.svg';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LPSettingsGeneral = () => {
   const { setName } = useContext(LPContext);
   const [clientData, setClientData] = useState(null);
@@ -15,6 +17,7 @@ const LPSettingsGeneral = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [stateBtn, setStateBtn] = useState(0);
   const [updateMessage, setUpdateMessage] = useState("");
+  
 
   useEffect(() => {
     getUser();
@@ -73,10 +76,14 @@ const LPSettingsGeneral = () => {
       }
     }).then((response) => {
       console.log(response);
-      setUpdateMessage("User data is updated successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      // setUpdateMessage("User data is updated successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      toast.success("User data updated successfully", {
+        position:"top-center"
+      })
+      
     });
     setStateBtn(0);
   }
@@ -306,6 +313,7 @@ const LPSettingsGeneral = () => {
           </>}
         </section>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

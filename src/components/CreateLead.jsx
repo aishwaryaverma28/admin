@@ -3,6 +3,8 @@ import "./styles/CreateLead.css";
 import axios from "axios";
 import { ADD_LEAD, getDecryptedToken } from "./utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "./utils/CodeCurrency";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   const [status, setStatus] = useState("");
@@ -65,10 +67,13 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
       })
       .then((response) => {
         console.log(response.data); // Handle the response as needed
-        setUpdateMessage("Lead data added successfully");
-        setTimeout(() => {
-          setUpdateMessage("");
-        }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        // setUpdateMessage("Lead data added successfully");
+        // setTimeout(() => {
+        //   setUpdateMessage("");
+        // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        toast.success("Lead data added successfully", {
+          position:"top-center"
+        })
         setLeadData({
           position: "",
           lead_name: "",
@@ -325,6 +330,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           </form>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

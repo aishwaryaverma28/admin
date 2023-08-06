@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import "./styles/EmployeeUpdate.css";
 import axios from 'axios';
-import {EMPLOYEE_ADD,getDecryptedToken } from './utils/Constants'
+import {EMPLOYEE_ADD,getDecryptedToken } from './utils/Constants';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeAdd = () => {
 const [name,setName] = useState("");
@@ -64,10 +66,13 @@ function handleSubmit(event) {
     })
     .then((response) => {
       console.log(response);
-      setUpdateMessage("Employee data added successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 30 seconds (30000 milliseconds)
+      // setUpdateMessage("Employee data added successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 30 seconds (30000 milliseconds)
+      toast.success("Employee data added successfully", {
+        position:"top-center"
+      })
       setDetails({
         hire_date: "",
         emp_no: "",
@@ -394,6 +399,7 @@ function handleSubmit(event) {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };

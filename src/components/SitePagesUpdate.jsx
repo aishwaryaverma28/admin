@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { GET_SITEPGS, PUT_SITEPGS,getDecryptedToken} from "./utils/Constants";
 import "./styles/EmployeeUpdate.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SitePagesUpdate = () => {
   const { id } = useParams();
@@ -86,10 +88,13 @@ const SitePagesUpdate = () => {
       }
     }).then((response) => {
       console.log(response);
-      setUpdateMessage("Site Pages data updated successfully");
-      setTimeout(() => {
-        setUpdateMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      // setUpdateMessage("Site Pages data updated successfully");
+      // setTimeout(() => {
+      //   setUpdateMessage("");
+      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      toast.success("Site Pages data updated successfully", {
+        position:"top-center"
+      })
     });
   }
 
@@ -194,6 +199,7 @@ const SitePagesUpdate = () => {
           </div>
         </div>
       </form>
+      <ToastContainer/>
     </>
   );
 };
