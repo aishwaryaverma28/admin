@@ -381,7 +381,6 @@ const UserAndTeams = () => {
                         <td className="user-team-font">Super Admin</td>
                         <td className="user-team-font">3 hours ago</td>
                       </tr> */}
-                      
                       {filteredTeamData.map((teamMember) => (
                         <tr key={teamMember.id}>
                           <td>

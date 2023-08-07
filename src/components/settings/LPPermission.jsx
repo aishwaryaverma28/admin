@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
+import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import LPSettingSidebar from './LPSettingSidebar';
 import '../styles/Permissions.css';
 import User from '../../assets/image/user-icon.svg';
@@ -12,6 +15,7 @@ import ResetPassword from './ResetPassword';
 
 
 const LPPermission = () => {
+  const { id } = useParams();
   const [actionOpen, setActionOpen] = useState(false);
   const [isAssignRole, setisAssignRole] = useState(false);
   const [isResetPassowrd, setIsResetPassword] = useState(false);
@@ -27,12 +31,12 @@ const LPPermission = () => {
   const [endDate3, setEndDate3] = useState(null);
   const [endDate4, setEndDate4] = useState(null);
   const [endDate5, setEndDate5] = useState(null);
+  const decryptedToken = getDecryptedToken();
+  const [loading, setLoading] = useState(true);
+  const [teamData, setTeamData] = useState([]);
 
-
-
-
+//========================================================modal box functions
   function handleTeamDisplay() {
-
     setActionOpen(!actionOpen);
   }
 
@@ -51,15 +55,40 @@ const LPPermission = () => {
   const handleResetPasswordClose = () => {
     setIsResetPassword(false);
   }
+//===========================================================api calls
+const userAdded = () => {
+  axios
+    .get(GET_TEAM_MEM, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      // console.log(response.data.data); 
+      const data = response?.data?.data;
+      const filteredData = data.filter((item) => item.id == id);
+      console.log(filteredData);
+      setTeamData(filteredData);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+};
+useEffect(() => {
+  userAdded();
+}, []);
 
-
-  return (
+return (
     <div className="settings-container">
       <LPSettingSidebar />
       <div className="mainPage">
         <section className="permission-container">
           <div className="back-to-user">
+          <Link to={"/lp/settings/usernteams"}>
             <button className="common-fonts"><img src={LeftArrow} alt="" /><span>Back To User</span></button>
+            </Link>
           </div>
 
           <div className="permission-user-container">
@@ -68,7 +97,7 @@ const LPPermission = () => {
             </div>
 
             <div className="permission-user-details">
-              <p className="common-fonts permission-username">ameesha kapoor</p>
+              <p className="common-fonts permission-username">{teamData && teamData.first_name+" "+teamData.last_name}</p>
               <p className="common-fonts permission-email">ameeshak123@gmail.com</p>
             </div>
 
@@ -136,7 +165,7 @@ const LPPermission = () => {
             <p className='common-fonts permission-assign-note'>Assigned team member will have all the access to teams lead, deals, contacts & companies. They will be the part of team notification, tasks, notes, workflow.</p>
 
             <div className='permission-input team-angel' onClick={handleTeamDisplay}><i
-              className={`fa-sharp fa-solid ${actionOpen ? "fa-angle-down" : "fa-angle-up"
+              className={`fa-sharp fa-solid ${actionOpen ? "fa-angle-up" : "fa-angle-down"
                 }`}
             ></i></div>
           </div>
