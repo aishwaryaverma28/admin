@@ -442,7 +442,7 @@ input.recycle-date-input {
 .recycle-popup-container {
     background-color: #fff;
     width: 28.125rem;
-    height: fit-content;
+    height: auto;
     margin: 0 auto;
 }
    
