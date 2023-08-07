@@ -100,7 +100,7 @@ const router = createBrowserRouter([
         element: <UserAndTeams />,
       },
       {
-        path: "/lp/settings/usernteams/permissions",
+        path: "/lp/settings/usernteams/:id",
         element: <LPPermission />,
       },
       {

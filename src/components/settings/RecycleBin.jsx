@@ -221,7 +221,7 @@ const RecycleBin = () => {
                 Contacts (6)
               </button>
             </div>
-            {activeTab === "Notes" && <DeleteNotes/>}
+            {activeTab === "Notes" && <DeleteNotes deleteCount={fetchNotesData}/>}
             {activeTab === "Deals" && (
               <>
                 <div className="recycle-search-user-section">
@@ -360,7 +360,7 @@ const RecycleBin = () => {
                 </div>
               </>
             )}
-            {activeTab === "Leads" && <DeleteLeads />}
+            {activeTab === "Leads" && <DeleteLeads deleteCount={fetchData}/>}
             {activeTab === "Company" && (
               <>
                 <div className="recycle-search-user-section">

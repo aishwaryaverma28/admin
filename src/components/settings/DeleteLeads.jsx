@@ -18,7 +18,7 @@ import SearchIcon from '../../assets/image/search.svg';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DeleteLeads = () => {
+const DeleteLeads = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -171,6 +171,7 @@ const DeleteLeads = () => {
         console.log(response);
         closeLeadRestorePopUp();
         fetchData();
+        deleteCount();
         toast.success("Lead restored successfully", {
           position:"top-center"
         })
@@ -194,6 +195,7 @@ const DeleteLeads = () => {
         console.log(response);
         closeLeadDeletePopUp();
         fetchData();
+        deleteCount();
         toast.error("Lead deleted successfully", {
           position:"top-center"
         })

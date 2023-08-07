@@ -19,7 +19,7 @@ import SearchIcon from '../../assets/image/search.svg';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DeleteNotes = () => {
+const DeleteNotes = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Notes");
@@ -184,6 +184,7 @@ const DeleteNotes = () => {
       .then((response) => {
         console.log(response);
         fetchData();
+        deleteCount();
         onCloseNoteRestorePopUP();
         toast.success("Note restored successfully", {
           position:"top-center"
@@ -206,6 +207,7 @@ const DeleteNotes = () => {
       .then((response) => {
         console.log(response);
         fetchData();
+        deleteCount();
         onCloseNoteDeletePopUp();
         toast.error("Note delete successfully", {
           position:"top-center"

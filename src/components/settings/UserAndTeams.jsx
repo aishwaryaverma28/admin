@@ -319,6 +319,7 @@ const UserAndTeams = () => {
                           </div>
                         </th>
                       </tr>
+{/*                       
                       <tr>
                         <td>
                           <label class="custom-checkbox">
@@ -335,11 +336,9 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
-                                  <Link
-                                    to={"/lp/settings/usernteams/permissions"}
-                                  >
+                                  
                                     Anant Sign Chauhan
-                                  </Link>
+                                  
                                 </p>
                                 <p>anantsingh@123@gmail.com</p>
                               </div>
@@ -381,7 +380,8 @@ const UserAndTeams = () => {
                         <td className="user-team-font"></td>
                         <td className="user-team-font">Super Admin</td>
                         <td className="user-team-font">3 hours ago</td>
-                      </tr>
+                      </tr> */}
+                      
                       {filteredTeamData.map((teamMember) => (
                         <tr key={teamMember.id}>
                           <td>
@@ -433,7 +433,8 @@ const UserAndTeams = () => {
                                   </div>
                                   {userActionOpen[teamMember.id] && (
                                     <ul className="dropdown-menu user-team-dropdown-position">
-                                      <li>Edit user</li>
+                                      <li><Link to={"/lp/settings/usernteams/"+teamMember.id}
+                                  >Edit user</Link></li>
                                       <li>Edit permissions</li>
                                       <li>Edit team</li>
                                       <li>Resend email invite</li>
