@@ -7,10 +7,12 @@ import TeamArrow from '../../assets/image/team-arrow.svg';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from '../../assets/image/calendar-edit.svg';
+import AddRolePopUp from './AddRolePopUp';
 
 
 const LPPermission = () => {
-  const [actionOpen, setActionOpen] = useState(true);
+  const [actionOpen, setActionOpen] = useState(false);
+  const [isAssignRole, setisAssignRole] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [startDate1, setStartDate1] = useState(null);
   const [startDate2, setStartDate2] = useState(null);
@@ -28,6 +30,14 @@ const LPPermission = () => {
   function handleTeamDisplay() {
 
     setActionOpen(!actionOpen);
+  }
+
+  const handleAddRoleOpen = () => {
+    setisAssignRole(true);
+  }
+
+  const handleAddRoleClose = () => {
+    setisAssignRole(false);
   }
 
 
@@ -138,7 +148,7 @@ const LPPermission = () => {
               <p className='common-fonts permission-line'>Permissions manage which tools are available to users.</p>
             </div>
             <div>
-              <button className='common-save-button'>Add Role</button>
+              <button className='common-save-button' onClick={handleAddRoleOpen}>Assign Role</button>
             </div>
           </div>
 
@@ -372,6 +382,11 @@ const LPPermission = () => {
 
         </section>
       </div>
+      {
+        isAssignRole && (
+          <AddRolePopUp onClose={handleAddRoleClose}/>
+        )
+      }
     </div>
   )
 }
