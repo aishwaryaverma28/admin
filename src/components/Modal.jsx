@@ -176,8 +176,8 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     const updatedLead = {
       leadIds: [selectedItem?.id],
       lead_name: editedItem?.lead_name,
-      first_name: name.split(" ")[0],
-      last_name: name.split(" ")[1],
+      first_name: name?.split(" ")[0],
+      last_name: name?.split(" ")[1],
       position: editedItem?.position,
       phone: editedItem?.phone,
       source: editedItem?.source,
