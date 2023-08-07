@@ -14,6 +14,7 @@ import User from "../../assets/image/user-icon.svg";
 import CreateUserModal from "./CreateUserModal";
 import CreateTeamModal from "./CreateTeamModal";
 import { Link } from "react-router-dom";
+import DeactivateUser from "./DeactivateUser";
 
 const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -28,6 +29,19 @@ const UserAndTeams = () => {
   const actionDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
   const [userActionOpen, setUserActionOpen] = useState({});
+  const [isDeactivateOpen, setIsDeactivateOpen] = useState(false);
+  const [selectedFirstName, setSelectedFirstName] = useState("");
+  const [selectedLastName, setSelectedLastName] = useState("");
+
+
+  const HandleDeactivateUser = (firstName , lastName) => {
+    setIsDeactivateOpen(true);
+    setSelectedFirstName(firstName);
+    setSelectedLastName(lastName);
+  }
+  const HandleDeactivateClose =() => {
+    setIsDeactivateOpen(false);
+  }
 
   const handleTabChange = (tabName) => {
     setActiveTabName(tabName);
@@ -88,6 +102,8 @@ const UserAndTeams = () => {
 
     return fullName.includes(searchLower) || email.includes(searchLower);
   });
+
+
 
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
@@ -438,7 +454,7 @@ const UserAndTeams = () => {
                                       <li>Edit team</li>
                                       <li>Resend email invite</li>
                                       <li>Make Super Admin</li>
-                                      <li>Deactivate user</li>
+                                      <li onClick={()=>HandleDeactivateUser(teamMember.first_name,teamMember.last_name)}>Deactivate user</li>
                                     </ul>
                                   )}
                                 </div>
@@ -577,7 +593,7 @@ const UserAndTeams = () => {
                                       <li>Edit team</li>
                                       <li>Resend email invite</li>
                                       <li>Make Super Admin</li>
-                                      <li>Deactivate user</li>
+                                      <li onClick={()=>HandleDeactivateUser("Anant", "Singh Chauhan")}>Deactivate user</li>
                                     </ul>
                                   )}
                                 </div>
@@ -645,7 +661,7 @@ const UserAndTeams = () => {
                                       <li>Edit team</li>
                                       <li>Resend email invite</li>
                                       <li>Make Super Admin</li>
-                                      <li>Deactivate user</li>
+                                      <li onClick={()=>HandleDeactivateUser(teamMember.first_name,teamMember.last_name)}>Deactivate user</li>
                                     </ul>
                                   )}
                                 </div>
@@ -967,6 +983,12 @@ const UserAndTeams = () => {
         <CreateUserModal onClose={closeModal} onUserAdded={userAdded} />
       )}
       {isTeamModalOpen && <CreateTeamModal onCloseTeamModal={closeTeamModal} />}
+
+      {
+        isDeactivateOpen && (
+          <DeactivateUser onClose={HandleDeactivateClose} firstName={selectedFirstName} lastName={selectedLastName} teamData={teamData}/>
+        )
+      }
     </div>
   );
 };
