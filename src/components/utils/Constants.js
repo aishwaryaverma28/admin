@@ -76,6 +76,7 @@ export const GET_LEAD = start+"api/lead/getall";
 export const GET_LEAD_ID = start+"api/lead/get/";
 export const ADD_LEAD = start+"api/lead/add";
 export const IMPORT_CSV = start+"api/lead/importcsv";
+export const EXPORT_CSV = start+"api/lead/exporttocsv";
 export const UPDATE_LEAD = start+"api/lead/edit";
 export const ADD_USER = start+"api/user/addteammember";
 export const GET_TEAM_MEM = start+"api/user/getteammember";
@@ -92,3 +93,6 @@ export const MOVENOTE_TO_TRASH = start +"api/note/movetotrash";
 export const GETNOTE_FROM_TRASH = start +"api/note/getnotesfromtrash";
 export const RESTORE_NOTE_TRASH = start + "api/note/restorefromtrash";
 export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
+
+//========================================================================COMPANY settings
+export const ADD_TICKET = start + "api/user/ticket/raise";

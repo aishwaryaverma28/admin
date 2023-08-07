@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import LPSettingSidebar from "./LPSettingSidebar";
 import "../styles/LPSetting.css";
-import "../styles/LPUserAndTeam.css"
+import "../styles/LPUserAndTeam.css";
 import axios from "axios";
-import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants"
+import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import SearchIcon from "../../assets/image/search.svg";
 import ExportIcon from "../../assets/image/export.svg";
 import ExportIcon2 from "../../assets/image/export2.svg";
@@ -11,10 +11,9 @@ import ArrowUp from "../../assets/image/arrow-up.svg";
 import DarkArrowUp from "../../assets/image/dark-arrow-up.svg";
 import ArrowDown from "../../assets/image/arrow-down.svg";
 import User from "../../assets/image/user-icon.svg";
-import CreateUserModal from "./CreateUserModal"
+import CreateUserModal from "./CreateUserModal";
 import CreateTeamModal from "./CreateTeamModal";
-import {Link} from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -25,7 +24,7 @@ const UserAndTeams = () => {
   const [teamData, setTeamData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [activeTabName, setActiveTabName] = useState('All');
+  const [activeTabName, setActiveTabName] = useState("All");
   const actionDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
   const [userActionOpen, setUserActionOpen] = useState({});
@@ -45,8 +44,8 @@ const UserAndTeams = () => {
     setIsModalOpen(true);
   };
   const openTeamModal = () => {
-    setIsTeamModalOpen(true)
-  }
+    setIsTeamModalOpen(true);
+  };
 
   // Function to close the modal
   const closeModal = () => {
@@ -88,16 +87,11 @@ const UserAndTeams = () => {
     const searchLower = searchQuery.toLowerCase();
 
     return fullName.includes(searchLower) || email.includes(searchLower);
-
   });
-
-
 
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
   };
-
-
 
   // Function to toggle the dropdown for a specific user ID
   const toggleActionDropdown = (userId) => {
@@ -131,7 +125,7 @@ const UserAndTeams = () => {
       ) {
         setActionOpen(false);
       }
-  }
+    };
 
     // Add the event listener when the component mounts
     document.addEventListener("click", handleOutsideClick);
@@ -144,11 +138,6 @@ const UserAndTeams = () => {
     };
   }, []);
 
-
-
-
-
-
   return (
     <div className="settings-container">
       <LPSettingSidebar />
@@ -156,15 +145,17 @@ const UserAndTeams = () => {
         <main className="user-team-container">
           <div className="user-team-setting-btn user-team-font">
             <button
-              className={`user-team-btn ${activeTab === "users" ? "genral-active" : ""
-                }`}
+              className={`user-team-btn ${
+                activeTab === "users" ? "genral-active" : ""
+              }`}
               onClick={() => handleTabClick("users")}
             >
               Users
             </button>
             <button
-              className={`user-team-btn ${activeTab === "teams" ? "genral-active" : ""
-                }`}
+              className={`user-team-btn ${
+                activeTab === "teams" ? "genral-active" : ""
+              }`}
               onClick={() => handleTabClick("teams")}
             >
               Teams
@@ -222,35 +213,41 @@ const UserAndTeams = () => {
               <section className="active-inactive">
                 <div className="user-team-setting-btn user-team-font">
                   <button
-                    className={`user-team-btn ${activeTabName === 'All' ? 'genral-active' : ''}`}
-                    onClick={() => handleTabChange('All')}
+                    className={`user-team-btn ${
+                      activeTabName === "All" ? "genral-active" : ""
+                    }`}
+                    onClick={() => handleTabChange("All")}
                   >
                     All (2)
                   </button>
                   <button
-                    className={`user-team-btn ${activeTabName === 'Active' ? 'genral-active' : ''}`}
-                    onClick={() => handleTabChange('Active')}
+                    className={`user-team-btn ${
+                      activeTabName === "Active" ? "genral-active" : ""
+                    }`}
+                    onClick={() => handleTabChange("Active")}
                   >
                     Active (2)
                   </button>
                   <button
-                    className={`user-team-btn ${activeTabName === 'Invited' ? 'genral-active' : ''}`}
-                    onClick={() => handleTabChange('Invited')}
+                    className={`user-team-btn ${
+                      activeTabName === "Invited" ? "genral-active" : ""
+                    }`}
+                    onClick={() => handleTabChange("Invited")}
                   >
                     Invited (1)
                   </button>
                   <button
-                    className={`user-team-btn ${activeTabName === 'Deactivated' ? 'genral-active' : ''}`}
-                    onClick={() => handleTabChange('Deactivated')}
+                    className={`user-team-btn ${
+                      activeTabName === "Deactivated" ? "genral-active" : ""
+                    }`}
+                    onClick={() => handleTabChange("Deactivated")}
                   >
                     Deactivated (1)
                   </button>
-
                 </div>
               </section>
 
-              {activeTabName === 'All' &&
-
+              {activeTabName === "All" && (
                 <section className="user-table">
                   {loading ? (
                     // Show a loading message or spinner while data is loading
@@ -338,44 +335,42 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
-                                <Link to={"/lp/settings/usernteams/permissions"}>
-                                Anant Sign Chauhan
-                </Link>
-                          
+                                  <Link
+                                    to={"/lp/settings/usernteams/permissions"}
+                                  >
+                                    Anant Sign Chauhan
+                                  </Link>
                                 </p>
                                 <p>anantsingh@123@gmail.com</p>
                               </div>
                             </div>
                             <div>
-
                               <div className="select action-select">
-                                <div className="dropdown-container" ref={actionDropDownRef}>
-                                  <div className="dropdown-header2" onClick={toggleActionDropdownStatic}>
-                                    Actions <i
-                                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                                        }`}
+                                <div
+                                  className="dropdown-container"
+                                  ref={actionDropDownRef}
+                                >
+                                  <div
+                                    className="dropdown-header2"
+                                    onClick={toggleActionDropdownStatic}
+                                  >
+                                    Actions{" "}
+                                    <i
+                                      className={`fa-sharp fa-solid ${
+                                        actionopen
+                                          ? "fa-angle-up"
+                                          : "fa-angle-down"
+                                      }`}
                                     ></i>
                                   </div>
                                   {actionopen && (
                                     <ul className="dropdown-menu user-team-dropdown-position">
-                                      <li>
-                                        Edit user
-                                      </li>
-                                      <li>
-                                        Edit permissions
-                                      </li>
-                                      <li>
-                                        Edit team
-                                      </li>
-                                      <li>
-                                        Resend email invite
-                                      </li>
-                                      <li>
-                                        Make Super Admin
-                                      </li>
-                                      <li>
-                                        Deactivate user
-                                      </li>
+                                      <li>Edit user</li>
+                                      <li>Edit permissions</li>
+                                      <li>Edit team</li>
+                                      <li>Resend email invite</li>
+                                      <li>Make Super Admin</li>
+                                      <li>Deactivate user</li>
                                     </ul>
                                   )}
                                 </div>
@@ -414,18 +409,26 @@ const UserAndTeams = () => {
                               <div className="select action-select">
                                 <div
                                   className="dropdown-container"
-                                  ref={(ref) => (actionDropDownRefs.current[teamMember.id] = ref)}
+                                  ref={(ref) =>
+                                    (actionDropDownRefs.current[teamMember.id] =
+                                      ref)
+                                  }
                                   data-user-id={teamMember.id}
                                 >
                                   {/* Pass the user ID to the toggleActionDropdown function */}
                                   <div
                                     className="dropdown-header2"
-                                    onClick={() => toggleActionDropdown(teamMember.id)}
+                                    onClick={() =>
+                                      toggleActionDropdown(teamMember.id)
+                                    }
                                   >
                                     Actions{" "}
                                     <i
-                                      className={`fa-sharp fa-solid ${userActionOpen[teamMember.id] ? "fa-angle-up" : "fa-angle-down"
-                                        }`}
+                                      className={`fa-sharp fa-solid ${
+                                        userActionOpen[teamMember.id]
+                                          ? "fa-angle-up"
+                                          : "fa-angle-down"
+                                      }`}
                                     ></i>
                                   </div>
                                   {userActionOpen[teamMember.id] && (
@@ -450,12 +453,8 @@ const UserAndTeams = () => {
                     </table>
                   )}
                 </section>
-
-
-
-              }
-              {activeTabName === 'Active' &&
-
+              )}
+              {activeTabName === "Active" && (
                 <section className="user-table">
                   {loading ? (
                     // Show a loading message or spinner while data is loading
@@ -543,44 +542,42 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
-                                <Link to={"/lp/settings/usernteams/permissions"}>
-                                Anant Sign Chauhan
-                </Link>
-                          
+                                  <Link
+                                    to={"/lp/settings/usernteams/permissions"}
+                                  >
+                                    Anant Sign Chauhan
+                                  </Link>
                                 </p>
                                 <p>anantsingh@123@gmail.com</p>
                               </div>
                             </div>
                             <div>
-
                               <div className="select action-select">
-                                <div className="dropdown-container" ref={actionDropDownRef}>
-                                  <div className="dropdown-header2" onClick={toggleActionDropdownStatic}>
-                                    Actions <i
-                                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                                        }`}
+                                <div
+                                  className="dropdown-container"
+                                  ref={actionDropDownRef}
+                                >
+                                  <div
+                                    className="dropdown-header2"
+                                    onClick={toggleActionDropdownStatic}
+                                  >
+                                    Actions{" "}
+                                    <i
+                                      className={`fa-sharp fa-solid ${
+                                        actionopen
+                                          ? "fa-angle-up"
+                                          : "fa-angle-down"
+                                      }`}
                                     ></i>
                                   </div>
                                   {actionopen && (
                                     <ul className="dropdown-menu user-team-dropdown-position">
-                                      <li>
-                                        Edit user
-                                      </li>
-                                      <li>
-                                        Edit permissions
-                                      </li>
-                                      <li>
-                                        Edit team
-                                      </li>
-                                      <li>
-                                        Resend email invite
-                                      </li>
-                                      <li>
-                                        Make Super Admin
-                                      </li>
-                                      <li>
-                                        Deactivate user
-                                      </li>
+                                      <li>Edit user</li>
+                                      <li>Edit permissions</li>
+                                      <li>Edit team</li>
+                                      <li>Resend email invite</li>
+                                      <li>Make Super Admin</li>
+                                      <li>Deactivate user</li>
                                     </ul>
                                   )}
                                 </div>
@@ -619,18 +616,26 @@ const UserAndTeams = () => {
                               <div className="select action-select">
                                 <div
                                   className="dropdown-container"
-                                  ref={(ref) => (actionDropDownRefs.current[teamMember.id] = ref)}
+                                  ref={(ref) =>
+                                    (actionDropDownRefs.current[teamMember.id] =
+                                      ref)
+                                  }
                                   data-user-id={teamMember.id}
                                 >
                                   {/* Pass the user ID to the toggleActionDropdown function */}
                                   <div
                                     className="dropdown-header2"
-                                    onClick={() => toggleActionDropdown(teamMember.id)}
+                                    onClick={() =>
+                                      toggleActionDropdown(teamMember.id)
+                                    }
                                   >
                                     Actions{" "}
                                     <i
-                                      className={`fa-sharp fa-solid ${userActionOpen[teamMember.id] ? "fa-angle-up" : "fa-angle-down"
-                                        }`}
+                                      className={`fa-sharp fa-solid ${
+                                        userActionOpen[teamMember.id]
+                                          ? "fa-angle-up"
+                                          : "fa-angle-down"
+                                      }`}
                                     ></i>
                                   </div>
                                   {userActionOpen[teamMember.id] && (
@@ -655,12 +660,8 @@ const UserAndTeams = () => {
                     </table>
                   )}
                 </section>
-
-
-
-              }
-              {activeTabName === 'Invited' &&
-
+              )}
+              {activeTabName === "Invited" && (
                 <section className="user-table">
                   {loading ? (
                     // Show a loading message or spinner while data is loading
@@ -771,13 +772,8 @@ const UserAndTeams = () => {
                     </table>
                   )}
                 </section>
-
-
-
-
-              }
-              {activeTabName === 'Deactivated' &&
-
+              )}
+              {activeTabName === "Deactivated" && (
                 <section className="user-table">
                   {loading ? (
                     // Show a loading message or spinner while data is loading
@@ -921,44 +917,50 @@ const UserAndTeams = () => {
                         <td className="user-team-font">Super Admin</td>
                         <td className="user-team-font">3 hours ago</td>
                       </tr>
-
                     </table>
                   )}
                 </section>
-
-
-              }
-
-
+              )}
             </>
           )}
 
-          {activeTab === "teams" && <>
+          {activeTab === "teams" && (
+            <>
+              <main className="team-container">
+                <section className="top-msg-display">
+                  <p className="user-team-font">
+                    Set up your team now for better management.
+                  </p>
+                </section>
 
-            <main className="team-container">
-
-              <section className="top-msg-display">
-                <p className="user-team-font">Set up your team now for better management.</p>
-              </section>
-
-              <section>
-                <div className="search-user-section">
-                  <div className="search-box">
-                    <input type="text" className="search-input font-style" placeholder="Search..." />
-                    <span className="search-icon">
-                      <img src={SearchIcon} alt="" />
-                    </span>
+                <section>
+                  <div className="search-user-section">
+                    <div className="search-box">
+                      <input
+                        type="text"
+                        className="search-input font-style"
+                        placeholder="Search..."
+                      />
+                      <span className="search-icon">
+                        <img src={SearchIcon} alt="" />
+                      </span>
+                    </div>
+                    <div className="user-export">
+                      <button
+                        className="create-user-btn user-team-font"
+                        onClick={openTeamModal}
+                      >
+                        Create Team
+                      </button>
+                    </div>
                   </div>
-                  <div className="user-export">
-                    <button className="create-user-btn user-team-font" onClick={openTeamModal}>Create Team</button>
-                  </div>
-                </div>
-              </section>
-              <section className="user-team-font no-team-added">
-                <p className="no-team-para">No Teams added yet</p>
-              </section>
-            </main>
-          </>}
+                </section>
+                <section className="user-team-font no-team-added">
+                  <p className="no-team-para">No Teams added yet</p>
+                </section>
+              </main>
+            </>
+          )}
         </main>
       </div>
       {isModalOpen && (

@@ -7,6 +7,7 @@ import CreateLead from "./CreateLead";
 import {
   GET_LEAD,
   IMPORT_CSV,
+  EXPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
 } from "./utils/Constants";
@@ -105,6 +106,44 @@ const LPleads = () => {
     fetchLeadsData();
   };
 
+  const exportLeadsToCSV = async () => {
+    try {
+      const response = await axios.get(
+        EXPORT_CSV, // Replace with your GET API endpoint
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+          responseType: "blob", // Set response type to blob to handle binary data
+          params: {
+            leadIds: selectedCardIds.join(","), // Convert selected card IDs to a comma-separated string
+          },
+        }
+      );
+  
+      // Create a Blob object from the response data
+      const blob = new Blob([response.data], { type: "text/csv" });
+  
+      // Create a download link and trigger a click event to download the CSV file
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "leads.csv"; // Set the download attribute
+      link.style.display = "none"; // Hide the link
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      toast.success("Leads exported successfully", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.error("Error exporting leads:", error);
+      toast.error("Error exporting leads", {
+        position: "top-center",
+      });
+    }
+  };
+  
   // Function to toggle the dropdown menu
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
@@ -115,6 +154,9 @@ const LPleads = () => {
   const toggleActionDropdown = (option) => {
     if (option === "Delete") {
       setDeleteConfirmationVisible(true);
+    }
+    else if (option === "Export"){
+      exportLeadsToCSV();
     }
     setActionOpen(!actionopen);
   };
@@ -253,12 +295,12 @@ const LPleads = () => {
                 </div>
                 {pipeopen && (
                   <ul className="pipelineMenu">
-                    <li>Mass Delete</li>
-                    <li>Mass Update</li>
-                    <li>Mass Convert</li>
-                    <li>Drafts</li>
-                    <li>Mass Email</li>
-                    <li>Export Filter Results</li>
+                    <li>Pipeline 1</li>
+                    <li>Pipeline 2</li>
+                    <li>Pipeline 3</li>
+                    <li>Pipeline 4</li>
+                    <li>Pipeline 5</li>
+                    <li>Pipeline 6</li>
                   </ul>
                 )}
               </div>
@@ -301,7 +343,7 @@ const LPleads = () => {
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
-                    <li>Export Filter Results</li>
+                    <li onClick={() => toggleActionDropdown("Export")}>Export Leads</li>
                   </ul>
                 )}
                 {deleteConfirmationVisible && (
