@@ -487,6 +487,74 @@
   }
   /* reset password ends */
 
+  /* deactivate pop up  */
+
+  .deactivate-container{
+    width:max-content;
+  }
+
+  .deactivate-note{
+    color:var(--font-light);
+    font-size: var(--font-small);
+    margin-bottom: 1.5rem !important;
+  }
+
+  .deactivate-own{
+    margin-bottom: 1.25rem;
+  }
+
+  .deactivate-lead{
+    color:var(--font-light);
+    margin-bottom: 1.25rem;
+  }
+
+  .deactivate-delete{
+    margin-left: 1rem;
+  }
+
+  .deactivate-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items:center ;
+  }
+
+  .deactivate-note{
+    margin-bottom: 0;
+    font-size: var(--font-medium);
+  }
+
+
+  .reassign-members{
+    margin-left: 1.75rem;
+    margin-bottom: 2rem;
+    color: var(--font-light);
+    font-size: var(--font-medium);
+  }
+
+  .reassign-members label{
+    color: var(--font-light);
+    font-size: var(--font-medium);
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+  }
+
+  .reassign-members label input{
+    margin-right: 0.5rem;
+    cursor: pointer;
+  }
+
+  .reassign-label{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+
+  .reassign-save{
+    margin-left: 1rem;
+  }
+  /* deactivate pop up ends */
+
 
 
 
