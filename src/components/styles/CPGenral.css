@@ -658,3 +658,62 @@
   border-right:1px solid transparent;
 }
 /* service support ends */
+
+/* label pop up starts */
+
+.label-input{
+    width:100%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.genral-circle{
+        width: 1.375rem;
+        height: 1.375rem;
+        border-radius: 50%;
+        margin-right: 0.75rem;
+}
+
+.circle1{
+    background-color: #4164D4;
+}
+.circle2{
+    background-color: #7FD6B6;
+}
+.circle3{
+    background-color: #FAE021;
+}
+.circle4{
+    background-color: #D63033;
+}
+.circle5{
+    background-color: #A0419D;
+}
+.circle6{
+    background-color: #E4E5E5;
+}
+.circle7{
+    background-color:#9A592B;
+}
+.circle8{
+    background-color:#FFAD58;
+}
+.circle9{
+    background-color:#6B6E6F;
+}
+.circle10{
+    background-color:#F88FBE;
+}
+
+.circle-flex{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+
+
+
+/* label pop up ends */

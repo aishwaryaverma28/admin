@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/CPGenral.css';
 import GreaterArrowDown from '../../assets/image/greater-arrow-down.svg';
+import LabelModal from './LabelModal';
 
 const LabelsTab = () => {
+const [openLeadModal, setOpenLeadModal] = useState(false);
+
+const handleLabelSave = () => {
+
+}
+
+const handleOpenLabel = () => {
+    setOpenLeadModal(true);
+}
+
+const handleCloseLabel = () => {
+    setOpenLeadModal(false);
+}
     return (
         <section>
             <div className='label-tab-top'>
@@ -14,7 +28,7 @@ const LabelsTab = () => {
                 </div>
 
                 <div>
-                    <button className='common-save-button'>Add new button</button>
+                    <button className='common-save-button' onClick={handleOpenLabel}>Add new button</button>
                 </div>
 
             </div>
@@ -166,7 +180,14 @@ const LabelsTab = () => {
                 </table>
 
             </div>
+            {
+                openLeadModal && (
+                    <LabelModal onClose={handleCloseLabel} onSave={handleLabelSave}/>
+                )
+            }
+
         </section>
+
     )
 }
 
