@@ -432,8 +432,60 @@
     margin-bottom: 0.5rem;
   }
 
+  .assign-deal-edit{
+    margin-bottom: 0.5rem;
+  }
+
   /* assign role pop up ends */
 
+  /* reset password  */
+
+  .reset-password-box{
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+  }
+
+  .reset-password-heading{
+    font-size: var(--font-bigger);
+    font-weight: 600;
+    margin-left: -1.75rem;
+    margin-right: -1.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .pwd-label{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pwd-heading{
+    color: var(--font-light);
+    width:8rem;
+  }
+
+  .pwd-input{
+    width:15rem;
+  }
+ 
+  .pwd-rules{
+    margin-top: 2.75rem;
+    margin-bottom: 2.75rem;
+    padding-left: 1rem;
+  }
+
+  .pwd-notes{
+    margin-bottom: 0.75rem;
+    color: var(--ternary);
+  }
+
+  .pwd-policy{
+    margin-bottom: 0.75rem;
+  }
+  /* reset password ends */
 
 
 

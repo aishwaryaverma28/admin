@@ -21,7 +21,7 @@ const AddRolePopUp = ({onClose}) => {
             <div className='assign-search-details'>
              <div className='assign-deal-code'>
                 <p className='common-fonts assign-name assign-bottom'>Name</p>
-                <p className='common-fonts'>Deal edit</p>
+                <p className='common-fonts assign-deal-edit'>Deal edit</p>
              </div>
              <div className='assign-deal-code'>
                 <p className='common-fonts assign-name'>Code</p>
