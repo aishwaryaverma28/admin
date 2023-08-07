@@ -8,11 +8,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from '../../assets/image/calendar-edit.svg';
 import AddRolePopUp from './AddRolePopUp';
+import ResetPassword from './ResetPassword';
 
 
 const LPPermission = () => {
   const [actionOpen, setActionOpen] = useState(false);
   const [isAssignRole, setisAssignRole] = useState(false);
+  const [isResetPassowrd, setIsResetPassword] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [startDate1, setStartDate1] = useState(null);
   const [startDate2, setStartDate2] = useState(null);
@@ -27,6 +29,8 @@ const LPPermission = () => {
   const [endDate5, setEndDate5] = useState(null);
 
 
+
+
   function handleTeamDisplay() {
 
     setActionOpen(!actionOpen);
@@ -38,6 +42,14 @@ const LPPermission = () => {
 
   const handleAddRoleClose = () => {
     setisAssignRole(false);
+  }
+
+  const handleResetPasswordOpen = () => {
+    setIsResetPassword(true);
+  }
+
+  const handleResetPasswordClose = () => {
+    setIsResetPassword(false);
   }
 
 
@@ -61,7 +73,7 @@ const LPPermission = () => {
             </div>
 
             <div>
-              <button className="permission-reset-btn common-fonts">Reset Password</button>
+              <button className="permission-reset-btn common-fonts" onClick={handleResetPasswordOpen}>Reset Password</button>
             </div>
           </div>
 
@@ -385,6 +397,12 @@ const LPPermission = () => {
       {
         isAssignRole && (
           <AddRolePopUp onClose={handleAddRoleClose}/>
+        )
+      }
+
+      {
+        isResetPassowrd && (
+          <ResetPassword onClose={handleResetPasswordClose}/>
         )
       }
     </div>
