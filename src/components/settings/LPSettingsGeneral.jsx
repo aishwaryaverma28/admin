@@ -82,10 +82,20 @@ const LPSettingsGeneral = () => {
     setStateBtn(0);
   }
 
+  const resetClientData = () => {
+    getUser();
+  };
+
   return (
       <>
       <section className="genral-setting-container genral-setting-fonts">
-          <p className="genral-heading">General</p>
+        <div className="general-refresh">
+        <p className="genral-heading">General</p>
+        <button type="button" className="helpBtn" title="Refresh" onClick={resetClientData}>
+              <i class="fa-sharp fa-solid fa-rotate"></i>
+              </button>
+        </div>
+         
 
           <div className="genral-setting-btn genral-setting-fonts">
             <button
@@ -118,9 +128,7 @@ const LPSettingsGeneral = () => {
                   <img src={UserIcon} alt="" />
                 </div>
               </div>
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
+
                 <div className="genral-setting-form genral-setting-fonts">
                   <form action="">
                     <div className="genral-form-division">
@@ -132,7 +140,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="first_name"
                             onChange={handleChange}
-                            value={clientData?.first_name || ""}
+                            value={isLoading ? '-' :clientData?.first_name || ""}
                           />
                         </div>
 
@@ -143,7 +151,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="last_name"
                             onChange={handleChange}
-                            value={clientData?.last_name || ""}
+                            value={isLoading ? '-' : clientData?.last_name || ""}
                           />
                         </div>
 
@@ -154,7 +162,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="phone"
                             onChange={handleChange}
-                            value={clientData?.phone || ""}
+                            value={isLoading ? '-' : clientData?.phone || ""}
                           />
                         </div>
 
@@ -207,7 +215,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="address1"
                             onChange={handleChange}
-                            value={clientData?.address1 || ""}
+                            value={isLoading ? '-' : clientData?.address1 || ""}
                           />
                         </div>
 
@@ -218,7 +226,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="city"
                             onChange={handleChange}
-                            value={clientData?.city || ""}
+                            value={isLoading ? '-' : clientData?.city || ""}
                           />
                         </div>
 
@@ -229,7 +237,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="state"
                             onChange={handleChange}
-                            value={clientData?.state || ""}
+                            value={isLoading ? '-' : clientData?.state || ""}
                           />
                         </div>
 
@@ -240,7 +248,7 @@ const LPSettingsGeneral = () => {
                             className="genral-form-input genral-setting-fonts"
                             name="postcode"
                             onChange={handleChange}
-                            value={clientData?.postcode || ""}
+                            value={isLoading ? '-' : clientData?.postcode || ""}
                           />
                         </div>
 
@@ -257,7 +265,7 @@ const LPSettingsGeneral = () => {
                     </div>
                   </form>
                 </div>
-              )}
+
             </>
           )}
           {activeTab === "email" && <>

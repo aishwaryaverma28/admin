@@ -141,18 +141,12 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <Link to="/lp/settings/general">
+              <NavLink to="/lp/settings"> 
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>
-              </Link>
-            </li>
-            <li>
-              <button type="button" className="helpBtn" title="Refresh" onClick={handleRefresh}>
-              <i class="fa-sharp fa-solid fa-rotate"></i>
-              </button>
-            </li>
-            
+              </NavLink>
+            </li>  
           </ul>
         </div>
         <div className="userDropdownContainer" ref={dropdownRef}>
