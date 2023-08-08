@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
+import { GET_TEAM_MEM,GET_ALL_ROLES, getDecryptedToken } from "../utils/Constants";
 import "../styles/Permissions.css";
 import User from "../../assets/image/user-icon.svg";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -35,7 +35,7 @@ const LPPermission = () => {
   const [loading, setLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
   // const [stateBtn, setStateBtn] = useState(0);
-
+  const [roles,setRoles] = useState([]);
   //========================================================modal box functions
   function handleTeamDisplay() {
     setActionOpen(!actionOpen);
@@ -68,7 +68,6 @@ const LPPermission = () => {
         const filteredData = response?.data?.data?.filter(
           (item) => item.id == id
         );
-        console.log(filteredData);
         setTeamData(filteredData[0]);
         setLoading(false);
       })
@@ -77,8 +76,27 @@ const LPPermission = () => {
         setLoading(false);
       });
   };
+  
+//===========================================================================================================================================
+const getAllRoles = () => {
+  axios
+    .get(GET_ALL_ROLES, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      setRoles(response?.data?.data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+//==============================================================================================================================================
   useEffect(() => {
     userAdded();
+    getAllRoles();
   }, []);
 
   function handleChange(e) {
@@ -88,7 +106,8 @@ const LPPermission = () => {
     });
     // setStateBtn(1);
   }
-  console.log(teamData)
+  // console.log(teamData)
+
   return (
     <>
       {loading ? (
@@ -451,7 +470,7 @@ const LPPermission = () => {
           </div>
         </section>
       )}
-      {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose} />}
+      {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose}  roles={roles}/>}
       {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id} />}
       <ToastContainer />
     </>

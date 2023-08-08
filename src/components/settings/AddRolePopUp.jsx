@@ -1,6 +1,7 @@
 import React from 'react'
 
-const AddRolePopUp = ({onClose}) => {
+const AddRolePopUp = ({onClose,roles}) => {
+    console.log(roles);
   return (
     <div className="recycle-popup-wrapper">
         
@@ -10,7 +11,11 @@ const AddRolePopUp = ({onClose}) => {
             <div className='assign-role-dropdown'>
                 <label htmlFor="" className='common-fonts'>Search role</label>
                 <select name="" id="" className='common-input assign-role-select'>
-                    <option value="">Deals</option>
+                {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
+                </option>
+              ))}
                 </select>
             </div>
         </div>
