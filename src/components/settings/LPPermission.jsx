@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_TEAM_MEM,GET_ALL_ROLES, getDecryptedToken } from "../utils/Constants";
+import { GET_TEAM_MEM,GET_ALL_ROLES,UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import "../styles/Permissions.css";
 import User from "../../assets/image/user-icon.svg";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -34,7 +34,7 @@ const LPPermission = () => {
   const decryptedToken = getDecryptedToken();
   const [loading, setLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
-  // const [stateBtn, setStateBtn] = useState(0);
+  const [stateBtn, setStateBtn] = useState(0);
   const [roles,setRoles] = useState([]);
   //========================================================modal box functions
   function handleTeamDisplay() {
@@ -104,10 +104,34 @@ const getAllRoles = () => {
     setTeamData((prev) => {
       return { ...prev, [name]: value };
     });
-    // setStateBtn(1);
+    setStateBtn(1);
   }
-  // console.log(teamData)
-
+  console.log(teamData)
+  const handleSave = () => {
+    const updatedData={
+      first_name: teamData.first_name,
+      last_name:teamData.last_name,
+      email:teamData.email,
+    }
+    axios
+      .put(UPDATE_TEAM_MEM + teamData.id , updatedData , {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        toast.success('Roles saved successfully', {
+          position:"top-center"
+        });
+      })
+      .catch((error) => {
+        console.log(error)
+        toast.error('Error saving roles', {
+          position:"top-center"
+        })
+      });
+};
   return (
     <>
       {loading ? (
@@ -466,11 +490,16 @@ const getAllRoles = () => {
 
           <div className="permission-page-btn">
             <button className="common-delete-button">Discard</button>
-            <button className="common-save-button permission-save-btn">Save</button>
+            {stateBtn === 0 ? (
+                        <button className="disabledBtn" disabled>Save</button>
+                      ) : (
+                        <button className="common-save-button permission-save-btn" onClick={handleSave}>Save</button>
+                      )}
+           
           </div>
         </section>
       )}
-      {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose}  roles={roles}/>}
+      {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose}  roles={roles} user_id={id}/>}
       {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id} />}
       <ToastContainer />
     </>

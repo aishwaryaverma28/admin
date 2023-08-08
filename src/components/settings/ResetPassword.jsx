@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios library
-import { getDecryptedToken } from "../utils/Constants";
+import {UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = ({ onClose, user }) => {
-  console.log(user)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -44,7 +43,7 @@ const ResetPassword = ({ onClose, user }) => {
     if (passwordMatch) {
       if (minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter) {
         axios
-          .put("http://core.leadplaner.com:3001/api/user/updateteammember/"+user , { password: password }, {
+          .put(UPDATE_TEAM_MEM+user , { password: password }, {
             headers: {
               Authorization: `Bearer ${decryptedToken}`,
             },
