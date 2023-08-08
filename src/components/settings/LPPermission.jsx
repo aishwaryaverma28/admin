@@ -448,7 +448,7 @@ console.log(teamData)
         </section>
       )}
       {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose} />}
-      {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} />}
+      {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id}/>}
       <ToastContainer/>
     </>
   );

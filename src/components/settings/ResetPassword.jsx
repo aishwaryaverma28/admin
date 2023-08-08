@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import Axios library
+import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ResetPassword = ({ onClose }) => {
+const ResetPassword = ({ onClose, user }) => {
+  console.log(user)
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -11,13 +14,13 @@ const ResetPassword = ({ onClose }) => {
     useState(false);
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasSpecialCharacter, setHasSpecialCharacter] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Added state for password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Added state for confirm password visibility
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const decryptedToken = getDecryptedToken();
+  
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
-
     setMinLength(newPassword.length >= 8);
     setHasNumberSymbolWhitespace(/[0-9!@#$%^&*()_\s]/.test(newPassword));
     setHasUppercase(/[A-Z]/.test(newPassword));
@@ -34,20 +37,33 @@ const ResetPassword = ({ onClose }) => {
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
-
-    // Check if confirm password matches
     setPasswordMatch(newConfirmPassword === password);
   };
 
   const handleSave = () => {
     if (passwordMatch) {
-      // Perform the save operation
-      alert("Password saved successfully");
+      if (minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter) {
+        axios
+          .put("http://core.leadplaner.com:3001/api/user/updateteammember/"+user , { password: password }, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            // Handle successful response
+            alert("Password saved successfully");
+          })
+          .catch((error) => {
+            // Handle error
+            alert("Error saving password");
+          });
+      } else {
+        alert("Please fulfill all password criteria.");
+      }
     } else {
       alert("Passwords do not match");
     }
   };
-
   return (
     <div className="recycle-popup-wrapper">
       <div className="assign-role-popup-container">

@@ -21,10 +21,6 @@ const LPheader = () => {
     const decryptedToken = getDecryptedToken();
     const location = useLocation();
 
-
-
-
-
     useEffect(() => {
         getUser()
       }, []);
