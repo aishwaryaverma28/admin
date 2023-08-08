@@ -84,6 +84,7 @@ export const MOVELEAD_TO_TRASH = start+"api/lead/movetotrash"
 export const GET_ALL_LEAD_TRASH = start + "api/lead/getallfromtrash";
 export const RESTORE_LEAD_TRASH = start + "api/lead/restorefromtrash";
 export const DELETE_LEAD_TRASH = start + "api/lead/deletefromtrash";
+export const GET_ALL_ROLES = start + "api/user/getallroles";
 //=======================================================================notes
 export const ADD_NOTES = start+"api/note/add";
 export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
