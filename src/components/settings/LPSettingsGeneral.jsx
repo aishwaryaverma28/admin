@@ -83,10 +83,8 @@ const LPSettingsGeneral = () => {
   }
 
   return (
-    <div className="settings-container">
-      <LPSettingSidebar />
-      <div className="mainPage">
-        <section className="genral-setting-container genral-setting-fonts">
+      <>
+      <section className="genral-setting-container genral-setting-fonts">
           <p className="genral-heading">General</p>
 
           <div className="genral-setting-btn genral-setting-fonts">
@@ -305,9 +303,8 @@ const LPSettingsGeneral = () => {
 
           </>}
         </section>
-      </div>
       <ToastContainer/>
-    </div>
+    </>
   );
 };
 

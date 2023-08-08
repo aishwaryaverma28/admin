@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
-import LPSettingSidebar from "./LPSettingSidebar";
 import "../styles/Permissions.css";
 import User from "../../assets/image/user-icon.svg";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -96,9 +95,7 @@ const LPPermission = () => {
   }
 
   return (
-    <div className="settings-container">
-      <LPSettingSidebar />
-      <div className="mainPage">
+      <>
         {loading ? (
           // Show a loading message or spinner while data is loading
           <p>Loading...</p>
@@ -459,11 +456,11 @@ const LPPermission = () => {
             </div>
           </section>
         )}
-      </div>
+      
       {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose} />}
 
       {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} />}
-    </div>
+    </>
   );
 };
 

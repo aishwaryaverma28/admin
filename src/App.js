@@ -45,6 +45,7 @@ import LPSettingsNotification from "./components/settings/LPSettingsNotification
 import RecycleBin from "./components/settings/RecycleBin";
 import LPPermission from "./components/settings/LPPermission.jsx";
 import LPCompanySettings from "./components/settings/LPCompanySettings";
+import LPSettings from "./components/settings/LPSettings";
 
 const router = createBrowserRouter([
   // {
@@ -55,17 +56,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
-    errorElement:<Error/>,
+    errorElement: <Error />,
   },
   {
     path: "/registration",
     element: <Registration />,
   },
-  
+
   {
     path: "/lp",
     element: <SecurePages Component={Leadplaner} />,
-    errorElement:<Error />,
+    errorElement: <Error />,
     children: [
       {
         path: "/lp", // This is the new route for /lp
@@ -89,42 +90,49 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/error",
-        element:<Error/>,
+        element: <Error />,
       },
       {
         path: "/lp/deals",
         element: <Deals />,
       },
       {
-        path: "/lp/settings/usernteams",
-        element: <UserAndTeams />,
-      },
-      {
-        path: "/lp/settings/usernteams/:id",
-        element: <LPPermission />,
-      },
-      {
-        path: "/lp/settings/general",
-        element: <LPSettingsGeneral />,
-      },
-      {
-        path: "/lp/settings/notification",
-        element: <LPSettingsNotification />,
-      },
-      {
-        path: "/lp/settings/recyclebin",
-        element: <RecycleBin/> ,
-      },
-      {
-        path: "/lp/settings/companysettings",
-        element: <LPCompanySettings/> ,
+        path: "/lp/settings",
+        element: <LPSettings />,
+        errorElement: <Error />,
+        children: [
+          {
+            path: "/lp/settings",
+            element: <LPSettingsGeneral />,
+          },
+          {
+            path: "/lp/settings/notification",
+            element: <LPSettingsNotification />,
+          },
+          {
+            path: "/lp/settings/usernteams",
+            element: <UserAndTeams />,
+          },
+          {
+            path: "/lp/settings/usernteams/:id",
+            element: <LPPermission />,
+          },
+          {
+            path: "/lp/settings/companysettings",
+            element: <LPCompanySettings />,
+          },
+          {
+            path: "/lp/settings/recyclebin",
+            element: <RecycleBin />,
+          },
+        ],
       },
     ],
   },
   {
     path: "/admin",
     element: <SecurePages Component={Admin} />,
-    errorElement:<Error />,
+    errorElement: <Error />,
     children: [
       {
         path: "/admin",
