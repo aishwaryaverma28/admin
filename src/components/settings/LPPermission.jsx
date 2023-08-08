@@ -88,7 +88,7 @@ const LPPermission = () => {
     });
     // setStateBtn(1);
   }
-console.log(teamData)
+  console.log(teamData)
   return (
     <>
       {loading ? (
@@ -170,7 +170,7 @@ console.log(teamData)
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <p className="common-fonts permission-user-info">
                     Account Information
@@ -199,11 +199,11 @@ console.log(teamData)
                     </div>
                   </div>
                 </div>
-                
+
               </div>
             </form>
           </div>
-          
+
           <div>
             <p className="permission-team-heading common-fonts">teams</p>
             {/* <p className="permission-note common-fonts">
@@ -228,9 +228,8 @@ console.log(teamData)
               onClick={handleTeamDisplay}
             >
               <i
-                className={`fa-sharp fa-solid ${
-                  actionOpen ? "fa-angle-up" : "fa-angle-down"
-                }`}
+                className={`fa-sharp fa-solid ${actionOpen ? "fa-angle-up" : "fa-angle-down"
+                  }`}
               ></i>
             </div>
           </div>
@@ -445,11 +444,16 @@ console.log(teamData)
               </tbody>
             </table>
           </div>
+
+          <div className="permission-page-btn">
+            <button className="common-delete-button">Discard</button>
+            <button className="common-save-button permission-save-btn">Save</button>
+          </div>
         </section>
       )}
       {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose} />}
-      {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id}/>}
-      <ToastContainer/>
+      {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id} />}
+      <ToastContainer />
     </>
   );
 };

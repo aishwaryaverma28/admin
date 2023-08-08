@@ -555,6 +555,23 @@
   }
   /* deactivate pop up ends */
 
+  .assign-role-btn{
+    margin-left: 1rem;
+  }
+
+  .permission-page-btn{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: var(--th-background);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+  }
+
+  .permission-save-btn{
+    margin-left: 1rem;
+  }
 
 
 
