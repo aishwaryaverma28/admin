@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios library
 import { getDecryptedToken } from "../utils/Constants";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = ({ onClose, user }) => {
@@ -51,17 +51,27 @@ const ResetPassword = ({ onClose, user }) => {
           })
           .then((response) => {
             // Handle successful response
-            alert("Password saved successfully");
+            
+            toast.success('Password saved successfully', {
+              position:"top-center"
+            });
+            onClose();
           })
           .catch((error) => {
             // Handle error
-            alert("Error saving password");
+            toast.error('Error saving password', {
+              position:"top-center"
+            })
           });
       } else {
-        alert("Please fulfill all password criteria.");
+        toast.error('Please fulfill all password criteria.', {
+          position:"top-center"
+        })
       }
     } else {
-      alert("Passwords do not match");
+      toast.error('Passwords do not match', {
+        position:"top-center"
+      })
     }
   };
   return (
@@ -87,7 +97,7 @@ const ResetPassword = ({ onClose, user }) => {
                 className="password-toggle-button"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <i className="fa-sharp fa-solid fa-eye-slash"></i> : <i className="fa-sharp fa-solid fa-eye"></i>}
+                {showPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
               </button>
             </div>
           </div>
@@ -108,7 +118,7 @@ const ResetPassword = ({ onClose, user }) => {
                 className="password-toggle-button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? <i className="fa-sharp fa-solid fa-eye-slash"></i> : <i className="fa-sharp fa-solid fa-eye"></i>}
+                {showConfirmPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
               </button>
             </div>
           </div>
@@ -195,6 +205,7 @@ const ResetPassword = ({ onClose, user }) => {
         </button>
       </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };
