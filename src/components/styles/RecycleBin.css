@@ -530,3 +530,11 @@ cursor: pointer;
     transition: all 0.5s ease-in-out;
 }
 /* recycle pop up ends here  */
+
+/* refresh button   */
+
+.recycle-refresh-icon{
+    color:var(--font-dark);
+    margin-left: 0.5rem;
+}
+/* refresh button ends */

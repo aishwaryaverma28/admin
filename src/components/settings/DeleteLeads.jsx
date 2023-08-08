@@ -96,6 +96,10 @@ const DeleteLeads = ({deleteCount}) => {
     setActiveTab(tabName);
   };
 
+  const resetData = () => {
+    fetchData();
+  }
+
   const filteredRecycleData = recycleData.filter((recycleItem) => {
     const fullName =
       `${recycleItem.first_name} ${recycleItem.last_name}`.toLowerCase();
@@ -270,6 +274,9 @@ const DeleteLeads = ({deleteCount}) => {
           >
             Restore
           </button>
+          <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh" onClick={resetData}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
         </div>
       </div>
       <div className="recycle-list-table recycle-fonts">
