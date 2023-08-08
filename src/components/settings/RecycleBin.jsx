@@ -275,6 +275,9 @@ const RecycleBin = () => {
                 >
                   Restore
                 </button>
+                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
               </div>
             </div>
             <div className="recycle-list-table recycle-fonts">
@@ -415,6 +418,9 @@ const RecycleBin = () => {
                 >
                   Restore
                 </button>
+                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
               </div>
             </div>
             <div className="recycle-list-table recycle-fonts">
@@ -585,6 +591,9 @@ const RecycleBin = () => {
                 >
                   Restore
                 </button>
+                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
               </div>
             </div>
             <div className="recycle-list-table recycle-fonts">

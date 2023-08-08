@@ -217,6 +217,11 @@ const DeleteNotes = ({deleteCount}) => {
         console.log(error);
       });
   };
+
+  const resetData = () => {
+    fetchData();
+  }
+
   
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
@@ -283,6 +288,9 @@ const DeleteNotes = ({deleteCount}) => {
           >
             Restore
           </button>
+          <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh" onClick={resetData}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
         </div>
       </div>
       <div className="recycle-list-table recycle-fonts">
