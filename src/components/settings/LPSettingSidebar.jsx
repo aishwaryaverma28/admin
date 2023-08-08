@@ -18,7 +18,7 @@ const LPSettingSidebar = () => {
     <div>
       <p className="prefrence setting-font-style">Your Prefrences</p>
       <p className="prefrence-options setting-font-style"> <NavLink
-            exact to="/lp/settings" 
+            exact to="/lp/settings/general" 
             >General</NavLink></p>
       <p className="prefrence-options setting-font-style"><NavLink
             exact to="/lp/settings/notification"       

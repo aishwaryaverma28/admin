@@ -102,7 +102,11 @@ const router = createBrowserRouter([
         errorElement: <Error />,
         children: [
           {
-            path: "/lp/settings",
+            path: "/lp/settings", // This is the new route for /lp
+            element: <Navigate to="/lp/settings/general" replace />, // Redirect to /lp/home
+          },
+          {
+            path: "/lp/settings/general",
             element: <LPSettingsGeneral />,
           },
           {

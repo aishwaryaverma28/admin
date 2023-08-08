@@ -141,11 +141,11 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <NavLink to="/lp/settings"> 
+              <Link to="/lp/settings/general"> 
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>
-              </NavLink>
+              </Link>
             </li>  
           </ul>
         </div>
