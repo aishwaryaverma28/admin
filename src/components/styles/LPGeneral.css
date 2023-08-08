@@ -316,3 +316,11 @@ input:focus {
     background-color: #fff;
     transition: all 0.5s ease-in-out;
 }
+
+/* refresh button  */
+
+.general-refresh{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
