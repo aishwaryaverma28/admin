@@ -48,6 +48,10 @@ const LPleads = () => {
       });
   };
 
+  const resetData = () => {
+    fetchLeadsData();
+  }
+
   useEffect(() => {
     fetchLeadsData();
   }, []);
@@ -373,6 +377,9 @@ const LPleads = () => {
                 )}
               </div>
             </div>
+            <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh" onClick={resetData}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
           </div>
         </div>
       </section>

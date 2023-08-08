@@ -91,8 +91,8 @@ const LPSettingsGeneral = () => {
       <section className="genral-setting-container genral-setting-fonts">
         <div className="general-refresh">
         <p className="genral-heading">General</p>
-        <button type="button" className="helpBtn" title="Refresh" onClick={resetClientData}>
-              <i class="fa-sharp fa-solid fa-rotate"></i>
+        <button type="button" className="helpBtn genral-refresh-icon" title="Refresh" onClick={resetClientData}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
               </button>
         </div>
          

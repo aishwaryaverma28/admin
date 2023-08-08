@@ -324,3 +324,8 @@ input:focus {
     align-items: center;
     justify-content: space-between;
 }
+
+.genral-refresh-icon{
+    margin-right: 1rem;
+    color:var(--font-dark);
+}
