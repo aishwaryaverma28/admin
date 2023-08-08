@@ -34,6 +34,7 @@ const AddRolePopUp = ({onClose}) => {
 
     <div className="recycle-popup-btn">
         <button className="restore-no common-fonts" onClick={onClose}>Cancel</button>
+        <button className="common-white-button assign-role-btn common-fonts" onClick={onClose}>Assign Role</button>
         <button className="restore-yes common-fonts" >Save</button>
       </div>
 </div>
