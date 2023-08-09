@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_TEAM_MEM,GET_ALL_ROLES,UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
+import {
+  GET_TEAM_MEM,
+  GET_ALL_ROLES,
+  UPDATE_TEAM_MEM,
+  getDecryptedToken,
+} from "../utils/Constants";
 import "../styles/Permissions.css";
 import User from "../../assets/image/user-icon.svg";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -35,7 +40,7 @@ const LPPermission = () => {
   const [loading, setLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
-  const [roles,setRoles] = useState([]);
+  const [roles, setRoles] = useState([]);
   //========================================================modal box functions
   function handleTeamDisplay() {
     setActionOpen(!actionOpen);
@@ -76,24 +81,24 @@ const LPPermission = () => {
         setLoading(false);
       });
   };
-  
-//===========================================================================================================================================
-const getAllRoles = () => {
-  axios
-    .get(GET_ALL_ROLES, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      setRoles(response?.data?.data)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
 
-//==============================================================================================================================================
+  //===========================================================================================================================================
+  const getAllRoles = () => {
+    axios
+      .get(GET_ALL_ROLES, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setRoles(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //==============================================================================================================================================
   useEffect(() => {
     userAdded();
     getAllRoles();
@@ -106,32 +111,32 @@ const getAllRoles = () => {
     });
     setStateBtn(1);
   }
-  console.log(teamData)
+  console.log(teamData);
   const handleSave = () => {
-    const updatedData={
+    const updatedData = {
       first_name: teamData.first_name,
-      last_name:teamData.last_name,
-      email:teamData.email,
-    }
+      last_name: teamData.last_name,
+      email: teamData.email,
+    };
     axios
-      .put(UPDATE_TEAM_MEM + teamData.id , updatedData , {
+      .put(UPDATE_TEAM_MEM + teamData.id, updatedData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        console.log(response)
-        toast.success('Roles saved successfully', {
-          position:"top-center"
+        console.log(response);
+        toast.success("Roles saved successfully", {
+          position: "top-center",
         });
       })
       .catch((error) => {
-        console.log(error)
-        toast.error('Error saving roles', {
-          position:"top-center"
-        })
+        console.log(error);
+        toast.error("Error saving roles", {
+          position: "top-center",
+        });
       });
-};
+  };
   return (
     <>
       {loading ? (
@@ -242,7 +247,6 @@ const getAllRoles = () => {
                     </div>
                   </div>
                 </div>
-
               </div>
             </form>
           </div>
@@ -271,8 +275,9 @@ const getAllRoles = () => {
               onClick={handleTeamDisplay}
             >
               <i
-                className={`fa-sharp fa-solid ${actionOpen ? "fa-angle-up" : "fa-angle-down"
-                  }`}
+                className={`fa-sharp fa-solid ${
+                  actionOpen ? "fa-angle-up" : "fa-angle-down"
+                }`}
               ></i>
             </div>
           </div>
@@ -491,16 +496,31 @@ const getAllRoles = () => {
           <div className="permission-page-btn">
             <button className="common-delete-button">Discard</button>
             {stateBtn === 0 ? (
-                        <button className="disabledBtn" disabled>Save</button>
-                      ) : (
-                        <button className="common-save-button permission-save-btn" onClick={handleSave}>Save</button>
-                      )}
-           
+              <button className="disabledBtn" disabled>
+                Save
+              </button>
+            ) : (
+              <button
+                className="common-save-button permission-save-btn"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            )}
           </div>
         </section>
       )}
-      {isAssignRole && <AddRolePopUp onClose={handleAddRoleClose}  roles={roles} user_id={id}/>}
-      {isResetPassowrd && <ResetPassword onClose={handleResetPasswordClose} user={id} />}
+      {isAssignRole && (
+        <AddRolePopUp
+          onClose={handleAddRoleClose}
+          roles={roles}
+          user_id={id}
+          email={teamData.email}
+        />
+      )}
+      {isResetPassowrd && (
+        <ResetPassword onClose={handleResetPasswordClose} user={id} />
+      )}
       <ToastContainer />
     </>
   );

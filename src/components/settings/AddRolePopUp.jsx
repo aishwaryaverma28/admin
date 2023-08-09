@@ -4,7 +4,7 @@ import { UPDATE_TEAM_MEM,getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddRolePopUp = ({ onClose, roles, user_id }) => {
+const AddRolePopUp = ({ onClose, roles, user_id, email }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [selectedRoles, setSelectedRoles] = useState([]);
@@ -39,7 +39,7 @@ const AddRolePopUp = ({ onClose, roles, user_id }) => {
 
   const handleSave = () => {
         axios
-          .put(UPDATE_TEAM_MEM +user_id , { roles: selectedRoles }, {
+          .put(UPDATE_TEAM_MEM +user_id , { email:email, roles: selectedRoles }, {
             headers: {
               Authorization: `Bearer ${decryptedToken}`,
             },
