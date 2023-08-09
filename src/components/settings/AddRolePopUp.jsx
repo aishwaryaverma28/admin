@@ -4,7 +4,7 @@ import { UPDATE_TEAM_MEM,getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
+const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles, setData }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [selectedRoles, setSelectedRoles] = useState([]);
@@ -15,12 +15,12 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
 
   const filterRoles = roleNames.filter((roleName) => !assignArray.includes(roleName));
 
-  console.log("hello")
-  console.log(filterRoles)
-
-
-
-
+  const closePopUp =() => {
+    toast.error("Changes are not Saved", {
+      position:"top-center"
+    });
+    onClose();
+  }
 
   const handleAssignRole = () => {
     if (selectedRoleId) {
@@ -61,7 +61,8 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
             toast.success('Roles saved successfully', {
               position:"top-center"
             });
-            // onClose();
+            setData();
+            onClose();
           })
           .catch((error) => {
             console.log(error)
@@ -74,7 +75,11 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
     <div className="recycle-popup-wrapper">
       <div className="assign-role-popup-container">
         <div className="recycle-popup-box">
+          <div className="assign-role-clear">
           <p className="common-fonts assign-role-heading">assign role</p>
+          <div className="role-cross-btn" onClick={closePopUp}>&times;</div>
+          </div>
+          
           <div className="assign-role-dropdown">
             <label htmlFor="" className="common-fonts">
               Search role
@@ -119,17 +124,18 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
           </div>          
         </div>
 
-        <div className="recycle-popup-btn">
+        <div className="recycle-popup-btn add-role-popup-btn">
           {/* <button className="restore-no common-fonts" onClick={onClose}>
             Cancel
           </button> */}
           <button
-            className="common-white-button assign-role-btn common-fonts"
             onClick={handleAssignRole} // Call the new function on button click
+            disabled={selectedRoleId==="" ? true : false}
+            className={selectedRoleId==="" ? "common-inactive-button role-save-btn common-fonts": "common-white-button common-fonts"}
           >
             Assign Role
           </button>
-          <button className="restore-yes common-fonts"  onClick={handleSave}>Save</button>
+          <button disabled={roleName.length===0 ? true : false} className={roleName.length===0 ? "common-inactive-button role-save-btn common-fonts": "common-save-button role-save-btn common-fonts"} onClick={handleSave}>Save</button>
         </div>
       </div>
     </div>

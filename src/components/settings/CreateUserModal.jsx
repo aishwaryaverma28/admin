@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_USER,getDecryptedToken } from "../utils/Constants";
+import { ADD_USER, getDecryptedToken } from "../utils/Constants";
 import "../styles/LPUserAndTeam.css";
 
 const CreateUserModal = ({ onClose, onUserAdded }) => {
-    const decryptedToken = getDecryptedToken();
+  const decryptedToken = getDecryptedToken();
+  const [showPassword, setShowPassword] = useState(false);
   const [details, setDetails] = useState({
     first_name: "",
     last_name: "",
-    phone:"",
+    phone: "",
     email: "",
-    password:"",
+    password: "",
   });
   function handleChange(e) {
     const { name, value } = e.target;
@@ -18,29 +19,34 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
       return { ...prev, [name]: value };
     });
   }
+  function handlePasswordEye(e){
+    e.preventDefault();
+    setShowPassword(!showPassword);
+
+  }
   function handleSubmit(e) {
     e.preventDefault();
     axios
-    .post(ADD_USER, details, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    })
-    .then((response) => {
+      .post(ADD_USER, details, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        }
+      })
+      .then((response) => {
         console.log(response);
-       setDetails({
-        first_name: "",
-    last_name: "",
-    phone:"",
-    email: "",
-    password:"",
+        setDetails({
+          first_name: "",
+          last_name: "",
+          phone: "",
+          email: "",
+          password: "",
+        });
+        onUserAdded(); // Call the onLeadAdded function from props
+        onClose();
+      })
+      .catch((error) => {
+        console.log(error)
       });
-      onUserAdded(); // Call the onLeadAdded function from props
-    onClose();
-     })
-    .catch((error) => {
-      console.log(error)
-    });
   }
   return (
     <div className="modalUserOverlay">
@@ -110,17 +116,24 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           <div className="inputDiv">
             <label htmlFor="password">Password</label>
             <br />
-            <input
-              type="text"
-              name="password"
+            <div className="password-input-wrapper">
+          <input
+              type={showPassword ? "text" : "password"}
               onChange={handleChange}
               id="password"
-              placeholder="password"
+              className="create-user-pwd-input"
             />
+            <button
+              className="password-toggle-button"
+              onClick={handlePasswordEye}
+            >
+              {showPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
+            </button>
+            </div>
           </div>
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
-            <input type="submit" className="userSubBtn" value="Save"/>
+            <input type="submit" className="userSubBtn" value="Save" />
           </div>
         </form>
       </div>

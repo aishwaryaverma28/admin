@@ -413,8 +413,8 @@
     background-color: var(--th-background);
     margin-left: 1rem;
     margin-right: 1rem;
-    height: fit-content;
-    margin-bottom: 10rem;
+    height:8rem;
+    
   }
 
   .assign-deal-code{
@@ -434,6 +434,15 @@
 
   .assign-deal-edit{
     margin-bottom: 0.5rem;
+  }
+
+  .assign-role-btn{
+    margin-left: 1rem;
+  }
+
+  .role-cross-btn{
+    font-size: 2rem;
+    cursor: pointer;
   }
 
   /* assign role pop up ends */
@@ -573,9 +582,8 @@
   }
   /* deactivate pop up ends */
 
-  .assign-role-btn{
-    margin-left: 1rem;
-  }
+
+
 
   .permission-page-btn{
     display: flex;
@@ -594,6 +602,32 @@
   .permission-manage{
      margin-bottom: 2rem;
   }
+
+  .role-save-btn{
+    margin-left: 1rem;
+  }
+
+  .add-role-popup-btn{
+    background-color: #fff;
+    margin-top: 1rem;
+  }
+
+  .permission-refresh-icon{
+     color:var(--font-dark);
+
+}
+
+.permission-rotate-icon{
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+
+.assign-role-clear{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 
 

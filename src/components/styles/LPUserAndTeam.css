@@ -800,3 +800,7 @@ input:focus {
 .user-team-dropdown-position{
   left: 0;
 }
+
+.create-user-pwd-input{
+  padding-right: 2rem !important;
+}
