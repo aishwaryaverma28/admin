@@ -99,6 +99,11 @@ const RecycleBin = () => {
   useEffect(() => {
     fetchData();
     fetchNotesData();
+    const validTabs = ["Notes", "Deals", "Leads", "Company", "Contacts"];
+    if (!validTabs.includes(localStorage.getItem("activeTab"))) {
+      setActiveTab("Leads");
+      localStorage.setItem("activeTab", "Leads");
+    }
   }, []);
   const fetchData = async () => {
     try {

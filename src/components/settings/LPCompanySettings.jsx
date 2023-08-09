@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/CompanySettings.css";
 import { useState } from "react";
 import CPPasswordPolicy from "./CPPasswordPolicy";
@@ -9,10 +9,20 @@ import MasterSetting from "./MasterSetting";
 import SupportTab from "./SupportTab";
 
 const LPCompanySettings = () => {
-  const [activeTab, setActiveTab] = useState("general");
-
+  const [activeTab, setActiveTab] = useState(
+    localStorage.getItem("activeTab") || "general"
+  );
+  // const [activeTab, setActiveTab] = useState("general");
+useEffect(() => {
+  const validTabs = ["general", "products", "billings", "master-settings","password-policy", "support"];
+  if (!validTabs.includes(localStorage.getItem("activeTab"))) {
+    setActiveTab("general");
+    localStorage.setItem("activeTab", "general");
+  }
+},[])
   function handleTabChange(tabName) {
     setActiveTab(tabName);
+    localStorage.setItem("activeTab", tabName); // Store the active tab in localStorage
   }
   return (
     <>
