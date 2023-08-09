@@ -6,11 +6,12 @@ import {
   GET_ALL_ROLES,
   UPDATE_TEAM_MEM,
   getDecryptedToken,
+  GET_ROLES_BY_USER,
+  handleLogout
 } from "../utils/Constants";
 import "../styles/Permissions.css";
 import User from "../../assets/image/user-icon.svg";
 import LeftArrow from "../../assets/image/arrow-left.svg";
-import TeamArrow from "../../assets/image/team-arrow.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
@@ -19,11 +20,13 @@ import ResetPassword from "./ResetPassword";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const LPPermission = () => {
   const { id } = useParams();
   const [actionOpen, setActionOpen] = useState(false);
   const [isAssignRole, setisAssignRole] = useState(false);
   const [isResetPassowrd, setIsResetPassword] = useState(false);
+  const [initialTeamData, setInitialTeamData] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [startDate1, setStartDate1] = useState(null);
   const [startDate2, setStartDate2] = useState(null);
@@ -41,6 +44,39 @@ const LPPermission = () => {
   const [teamData, setTeamData] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [roles, setRoles] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [assignRolesArray, setAssignRoles] = useState([]);
+
+
+//===================================fetch data
+  useEffect(() => {
+    fetchData();
+}, [decryptedToken]);
+
+const fetchData = async () => {
+  try {
+      const response = await axios.get(GET_ROLES_BY_USER + id, {
+          headers: {
+              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+      });
+      if (response.data.status === 1) {
+        setTableData(response.data.data);
+        const extractedNames = response.data.data.map(item => item.name);
+        setAssignRoles(extractedNames);
+      } else {
+          if (response.data.message === "Token has expired") {
+              alert(response.data.message);
+              handleLogout();
+          }
+      }
+      setLoading(false);
+  } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+  }
+};
+
   //========================================================modal box functions
   function handleTeamDisplay() {
     setActionOpen(!actionOpen);
@@ -61,6 +97,12 @@ const LPPermission = () => {
   const handleResetPasswordClose = () => {
     setIsResetPassword(false);
   };
+
+  const resetForm = () => {
+    setTeamData(initialTeamData);
+    setStateBtn(0);
+    setStartDate(null);
+  }
   //===========================================================api calls
   const userAdded = () => {
     axios
@@ -74,6 +116,7 @@ const LPPermission = () => {
           (item) => item.id == id
         );
         setTeamData(filteredData[0]);
+        setInitialTeamData(filteredData[0]); // Store initial data here
         setLoading(false);
       })
       .catch((error) => {
@@ -114,12 +157,12 @@ const LPPermission = () => {
   console.log(teamData);
   const handleSave = () => {
     const updatedData = {
-      first_name: teamData.first_name,
-      last_name: teamData.last_name,
-      email: teamData.email,
+      first_name: teamData?.first_name,
+      last_name: teamData?.last_name,
+      email: teamData?.email,
     };
     axios
-      .put(UPDATE_TEAM_MEM + teamData.id, updatedData, {
+      .put(UPDATE_TEAM_MEM + teamData?.id, updatedData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -139,9 +182,7 @@ const LPPermission = () => {
   };
   return (
     <>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+
         <section className="permission-container">
           <div className="back-to-user">
             <Link to={"/lp/settings/usernteams"}>
@@ -153,14 +194,14 @@ const LPPermission = () => {
           </div>
           <div className="permission-user-container">
             <div className="permission-user-icon">
-              <img src={User} alt="" />
+              <img src={User} alt="loading..." />
             </div>
 
             <div className="permission-user-details">
               <p className="common-fonts permission-username">
-                {teamData.first_name + " " + teamData.last_name}
+                {loading ? "" :teamData?.first_name + " " + teamData?.last_name}
               </p>
-              <p className="common-fonts permission-email">{teamData.email}</p>
+              <p className="common-fonts permission-email">{loading ? "" :teamData?.email}</p>
             </div>
 
             <div>
@@ -189,7 +230,7 @@ const LPPermission = () => {
                       type="text"
                       name="first_name"
                       onChange={handleChange}
-                      value={teamData.first_name}
+                      value={loading ? "-" :teamData?.first_name}
                       className="permission-input common-fonts"
                     />
                   </div>
@@ -201,7 +242,7 @@ const LPPermission = () => {
                       type="text"
                       name="last_name"
                       onChange={handleChange}
-                      value={teamData.last_name}
+                      value={loading ? "-" :teamData?.last_name}
                       className="permission-input common-fonts"
                     />
                   </div>
@@ -213,7 +254,7 @@ const LPPermission = () => {
                       type="email"
                       name="email"
                       onChange={handleChange}
-                      value={teamData.email}
+                      value={loading ? "-" :teamData?.email}
                       className="permission-input common-fonts"
                     />
                   </div>
@@ -291,8 +332,8 @@ const LPPermission = () => {
             </div>
           )}
 
-          <div className="permission-table-info">
-            <div>
+          <div className={ loading ? 'permission-table-info permission-manage' : 'permission-table-info'}>
+            <div className={loading && 'permission-manage'}>
               <p className="common-fonts permission-name">permissions</p>
               <p className="common-fonts permission-line">
                 Permissions manage which tools are available to users.
@@ -300,15 +341,23 @@ const LPPermission = () => {
             </div>
             <div>
               <button
-                className="common-save-button"
                 onClick={handleAddRoleOpen}
+                disabled = {assignRolesArray.length === roles.length ? true : false }
+                className={assignRolesArray.length === roles.length ? "common-inactive-button" : "common-save-button"}
               >
                 Assign Role
               </button>
             </div>
           </div>
 
-          <div>
+          {
+            loading ? (
+              <>
+
+              </>
+            ) : (
+              <>
+              <div>
             <table className="permission-table">
               <thead>
                 <tr className="common-fonts permission-table-heading">
@@ -319,8 +368,11 @@ const LPPermission = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="common-fonts permission-table-heading">
-                  <td>contacts edit</td>
+              {
+                tableData.map((data)=>{
+                  return(
+                    <tr className="common-fonts permission-table-heading" key={data.id}>
+                  <td>{data.name}</td>
                   <td>contacts</td>
                   <td>
                     <div className="custom-date-input">
@@ -353,148 +405,17 @@ const LPPermission = () => {
                     </div>
                   </td>
                 </tr>
-                <tr className="common-fonts permission-table-heading">
-                  <td>deals view</td>
-                  <td>deals</td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={startDate2}
-                          onChange={(date) => setStartDate2(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={startDate2}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={endDate2}
-                          onChange={(date) => setEndDate2(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={endDate2}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="common-fonts permission-table-heading">
-                  <td>deals edit</td>
-                  <td>deals</td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={startDate3}
-                          onChange={(date) => setStartDate3(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={startDate3}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={endDate3}
-                          onChange={(date) => setEndDate3(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={endDate3}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="common-fonts permission-table-heading">
-                  <td>deals view</td>
-                  <td>deals</td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={startDate4}
-                          onChange={(date) => setStartDate4(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={startDate4}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={endDate4}
-                          onChange={(date) => setEndDate4(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={endDate4}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr className="common-fonts permission-table-heading">
-                  <td>lead edit</td>
-                  <td>Leads</td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={startDate5}
-                          onChange={(date) => setStartDate5(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={startDate5}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="custom-date-input">
-                      <div className="permission-date">
-                        <DatePicker
-                          selected={endDate5}
-                          onChange={(date) => setEndDate5(date)}
-                          className="permission-date-table"
-                          dateFormat="dd/MM/yyyy"
-                          value={endDate5}
-                          placeholderText="dd/mm/yyyy"
-                        />
-                        <img src={CalendarIcon} alt="" className="cal-icon" />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+
+                  )
+                })
+              }
+
               </tbody>
             </table>
           </div>
 
           <div className="permission-page-btn">
-            <button className="common-delete-button">Discard</button>
+            <button className="common-delete-button" onClick={resetForm}>Discard</button>
             {stateBtn === 0 ? (
               <button className="disabledBtn" disabled>
                 Save
@@ -508,14 +429,24 @@ const LPPermission = () => {
               </button>
             )}
           </div>
+
+              </>
+
+  
+
+            )
+          }
+
+
         </section>
-      )}
+
       {isAssignRole && (
         <AddRolePopUp
           onClose={handleAddRoleClose}
           roles={roles}
           user_id={id}
-          email={teamData.email}
+          email={teamData?.email}
+          assignRoles={assignRolesArray}
         />
       )}
       {isResetPassowrd && (

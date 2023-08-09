@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.ac5fe478.css",
-    "main.js": "/static/js/main.afbc5f69.js",
+    "main.css": "/static/css/main.10f5e93a.css",
+    "main.js": "/static/js/main.1165e3ed.js",
     "static/js/703.a467f9cc.chunk.js": "/static/js/703.a467f9cc.chunk.js",
     "static/js/598.bf62a11e.chunk.js": "/static/js/598.bf62a11e.chunk.js",
     "static/media/404.jpg": "/static/media/404.848d7a9bea70cb1616e0.jpg",
@@ -14,7 +14,6 @@
     "static/media/lock.svg": "/static/media/lock.c6323ba76ed8d88e71821c71f5bab1d8.svg",
     "static/media/time-blue.svg": "/static/media/time-blue.fbb92ac834a4c162dde60fef41b3ff32.svg",
     "static/media/time.svg": "/static/media/time.245fbc940075c22fbf2ceba5bbaff155.svg",
-    "static/media/team-arrow.svg": "/static/media/team-arrow.55b80fb33d11f8f2ecd1dbd5931d2365.svg",
     "static/media/envelope.svg": "/static/media/envelope.7db154f7c2105d4a69aa8cc0b334f3ae.svg",
     "static/media/headphone-blue.svg": "/static/media/headphone-blue.2aa4334668885ab80e9444f4ce559975.svg",
     "static/media/headphone.svg": "/static/media/headphone.039aae9e339c84ec06bd035c17a2311a.svg",
@@ -48,13 +47,13 @@
     "static/media/white-tick-mark.svg": "/static/media/white-tick-mark.610659a5e9a879c04edc9555d0cfd1ab.svg",
     "static/media/greater-arrow-down.svg": "/static/media/greater-arrow-down.b30bc8d119b2524aa2ce5a3e17745abc.svg",
     "static/media/greater-arrow.svg": "/static/media/greater-arrow.c22fdd72da9beca5e3f40a18bb66fdb7.svg",
-    "main.ac5fe478.css.map": "/static/css/main.ac5fe478.css.map",
-    "main.afbc5f69.js.map": "/static/js/main.afbc5f69.js.map",
+    "main.10f5e93a.css.map": "/static/css/main.10f5e93a.css.map",
+    "main.1165e3ed.js.map": "/static/js/main.1165e3ed.js.map",
     "703.a467f9cc.chunk.js.map": "/static/js/703.a467f9cc.chunk.js.map",
     "598.bf62a11e.chunk.js.map": "/static/js/598.bf62a11e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ac5fe478.css",
-    "static/js/main.afbc5f69.js"
+    "static/css/main.10f5e93a.css",
+    "static/js/main.1165e3ed.js"
   ]
 }

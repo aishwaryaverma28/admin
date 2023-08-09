@@ -4,11 +4,23 @@ import { UPDATE_TEAM_MEM,getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddRolePopUp = ({ onClose, roles, user_id, email }) => {
+const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [roleName, setRoleName] = useState([]);
+
+  const assignArray = assignRoles.map(item => item.toLowerCase());
+  const roleNames = roles.map(role => role.name.toLowerCase());
+
+  const filterRoles = roleNames.filter((roleName) => !assignArray.includes(roleName));
+
+  console.log("hello")
+  console.log(filterRoles)
+
+
+
+
 
   const handleAssignRole = () => {
     if (selectedRoleId) {
@@ -45,7 +57,7 @@ const AddRolePopUp = ({ onClose, roles, user_id, email }) => {
             },
           })
           .then((response) => {
-            console.log(response)
+             
             toast.success('Roles saved successfully', {
               position:"top-center"
             });
@@ -58,8 +70,6 @@ const AddRolePopUp = ({ onClose, roles, user_id, email }) => {
             })
           });
   };
-  console.log(selectedRoles);
-  console.log(roleName);
   return (
     <div className="recycle-popup-wrapper">
       <div className="assign-role-popup-container">
@@ -70,19 +80,24 @@ const AddRolePopUp = ({ onClose, roles, user_id, email }) => {
               Search role
             </label>
             <select
-              name=""
-              id=""
-              className="common-input assign-role-select"
-              value={selectedRoleId}
-              onChange={(e) => setSelectedRoleId(e.target.value)}
-            >
-              <option value="">Select a role</option>
-              {roles.map((role) => (
-                <option key={role.id} value={role.id}>
-                  {role.name}
-                </option>
-              ))}
-            </select>
+  name=""
+  id=""
+  className="common-input assign-role-select"
+  value={selectedRoleId}
+  onChange={(e) => setSelectedRoleId(e.target.value)}
+>
+  <option value="">Select a role</option>
+
+  {  roles
+    .filter((role) => filterRoles.includes(role.name.toLowerCase())).map((role) => (
+    // Check if the role is not already selected
+    !selectedRoles.some((selectedRole) => selectedRole.role_id === role.id) && (
+      <option key={role.id} value={role.id}>
+        {role.name}
+      </option>
+    )
+  ))}
+</select>
           </div>
         </div>
         <div>
