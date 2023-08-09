@@ -12,7 +12,7 @@ import {
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
 import LeadDocUp from "./LeadDocUp";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
@@ -871,8 +871,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
           </div>
         </div>
       </div>
-       <ToastContainer/>
-      {/* modal container ends here */}
+       {/* modal container ends here */}
     </div>
   );
 };

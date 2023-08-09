@@ -1,9 +1,10 @@
 import React from 'react';
 import '../styles/Password.css';
 import LockImage from '../../assets/image/lock.svg';
-
+import { getDecryptedToken } from "../utils/Constants";
 
 const CPPasswordPolicy = () => {
+  const decryptedToken = getDecryptedToken();
   return (
 <section>
 
@@ -98,17 +99,8 @@ const CPPasswordPolicy = () => {
       <div className='password-bottom-btn'>
         <button className='common-white-button'>cancel</button>
         <button className='common-save-button password-save'>save</button>
-
       </div>
 </section>
-
-
-
-
-
-   
-
-
   )
 }
 
