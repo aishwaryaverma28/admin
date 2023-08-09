@@ -63,21 +63,18 @@ const CPPasswordPolicy = () => {
           setStateBtn(1);
         }
       }
-      else{
-        const index = checkboxStates.findIndex((state) => state.id === 5);
-        if (index !== -1) {
-          const newState = [...checkboxStates];
-          newState[index] = {
-            ...newState[index],
-            active: 0,
-          };
-          setCheckboxStates(newState);
-          setStateBtn(1);
-        }
-      }
-      return !prevToggleChecked;
-    });
-  };
+       else {
+      const newState = checkboxStates.map(state => ({
+        ...state,
+        active: 0,
+        value: 0 // Set value to 0, adjust as needed
+      }));
+      setCheckboxStates(newState);
+      setStateBtn(1);
+    }
+    return !prevToggleChecked;
+  });
+};
 
   const handleCheckboxChange = (id, value) => {
     // Find the index of the checkboxStates array where id matches
