@@ -180,17 +180,26 @@ const fetchData = async () => {
         });
       });
   };
+
+  const refreshData = () => {
+    fetchData();
+    userAdded();
+    setStateBtn(0);
+  }
   return (
     <>
 
         <section className="permission-container">
-          <div className="back-to-user">
+          <div className="back-to-user general-refresh">
             <Link to={"/lp/settings/usernteams"}>
               <button className="common-fonts">
                 <img src={LeftArrow} alt="" />
                 <span>Back To User</span>
               </button>
             </Link>
+            <button type="button" className="permission-refresh-icon" title="Refresh" onClick={refreshData}>
+              <i class="fa-sharp fa-solid fa-rotate permission-rotate-icon "></i>
+              </button>
           </div>
           <div className="permission-user-container">
             <div className="permission-user-icon">
@@ -447,6 +456,7 @@ const fetchData = async () => {
           user_id={id}
           email={teamData?.email}
           assignRoles={assignRolesArray}
+          setData={fetchData}
         />
       )}
       {isResetPassowrd && (
