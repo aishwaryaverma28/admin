@@ -8,7 +8,8 @@ const CPPasswordPolicy = () => {
   const decryptedToken = getDecryptedToken();
   const [toggleChecked, setToggleChecked] = useState(false);
   const [passDes, setPassDes] = useState([]);
-
+  const [stateBtn, setStateBtn] = useState(0);
+  const [checkboxStates, setCheckboxStates] = useState([]);
   const passGet = () => {
     axios
       .get("http://core.leadplaner.com:3001/api/setting/password/get", {
@@ -23,40 +24,69 @@ const CPPasswordPolicy = () => {
         console.log(error);
       });
   };
-  console.log(passDes);
   useEffect(() => {
     passGet();
   }, []);
 
+  useEffect(() => {
+    setCheckboxStates(
+      passDes.map((condition) => ({
+        id: condition.id,
+        active: 0, // Default value
+        value: "", // Default value
+      }))
+    );
+  }, [passDes]);
+
   const handleCheckboxChange = (id, value) => {
     // Only update if the toggle button is enabled
     if (toggleChecked) {
-      // Prepare the request body
-      const requestBody = {
-        active: 1,
-        value: parseInt(value),
-      };
-
-      // Make the update API call
-      axios
-        .put(
-          `http://core.leadplaner.com:3001/api/setting/password/edit/${id}`,
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          }
+      // Update the checkboxStates array based on the checkbox that was changed
+      setCheckboxStates((prevStates) =>
+        prevStates.map((state) =>
+          state.id === id ? { ...state, active: 1, value: value } : state
         )
-        .then((response) => {
-          // Handle success if needed
-          console.log("Update success:", response.data);
-        })
-        .catch((error) => {
-          console.log("Update error:", error);
-        });
+      );
+      setStateBtn(1);
     }
   };
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    // Prepare the request body using the updated checkboxStates
+    const requestBody = checkboxStates
+      .filter((state) => state.active === 1)
+      .map((state) => ({
+        id: state.id,
+        active: state.active,
+        value: parseInt(state.value),
+      }));
+    const additionalObject1 = {
+      id: 5,
+      active: 1,
+      value: 0,
+    };
+
+    // Include the additional objects in the requestBody
+    requestBody.push(additionalObject1);
+    console.log(requestBody);
+    axios
+      .put(
+        "http://core.leadplaner.com:3001/api/setting/password/edit",{"data":requestBody},
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        // Handle success if needed
+        console.log("Update success:", response.data);
+      })
+      .catch((error) => {
+        console.log("Update error:", error);
+      });
+  }
 
   return (
     <section>
@@ -85,7 +115,7 @@ const CPPasswordPolicy = () => {
       <p className="common-fonts password-heading">password policy</p>
       {/* Mapping over the passDes array to render the checkboxes and input fields */}
       {passDes.map(
-        (condition) =>
+        (condition, index) =>
           // Skip mapping when condition.term === "is_enabled"
           condition.term !== "is_enabled" && (
             <div className="password-rules" key={condition.id}>
@@ -96,11 +126,15 @@ const CPPasswordPolicy = () => {
                     className="cb1"
                     onChange={(e) => {
                       const checked = e.target.checked;
-                      handleCheckboxChange(condition.id, checked ? 1 : 0);
+                      handleCheckboxChange(
+                        condition.id,
+                        checked
+                          ? parseInt(checkboxStates[index]?.value) || 0
+                          : 0
+                      );
                     }}
                     disabled={!toggleChecked} // Add this line
                   />
-
                   <span className="checkmark"></span>
                 </label>
               </div>
@@ -112,9 +146,14 @@ const CPPasswordPolicy = () => {
                   type="text"
                   className="common-input password-input"
                   name=""
+                  value={checkboxStates[index]?.value || ""}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    handleCheckboxChange(condition.id, value);
+                    const newValue = e.target.value;
+                    setCheckboxStates((prevStates) =>
+                      prevStates.map((state, i) =>
+                        i === index ? { ...state, value: newValue } : state
+                      )
+                    );
                   }}
                 />
               </div>
@@ -146,7 +185,18 @@ const CPPasswordPolicy = () => {
 
       <div className="password-bottom-btn">
         <button className="common-white-button">cancel</button>
-        <button className="common-save-button password-save">save</button>
+        {stateBtn === 0 ? (
+          <button className="disabledBtn" disabled>
+            Save
+          </button>
+        ) : (
+          <button
+            className="common-save-button permission-save-btn"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+        )}
       </div>
     </section>
   );
