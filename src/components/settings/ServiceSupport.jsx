@@ -4,10 +4,12 @@ import axios from "axios";
 import {
   getDecryptedToken,
 } from "../utils/Constants";
+import ServiceRequestTab from './ServiceRequestTab';
 
 const ServiceSupport = () => {
   const decryptedToken = getDecryptedToken();
   const[ticket,setTicket] = useState([]);
+  const [isServiceTabOpen, setIsServiceTabOpen] = useState(false);
   const getTicket = () => {
     axios
       .get("http://core.leadplaner.com:3001/api/user/ticket/getAll/all", {
@@ -25,7 +27,14 @@ const ServiceSupport = () => {
   useEffect(() => {
     getTicket();
   }, []);
-  console.log(ticket)
+
+const handleOpenServiceTab = () => {
+  setIsServiceTabOpen(true)
+}
+const handleCloseServiceTab = () => {
+  setIsServiceTabOpen(false)
+}
+
   return (
     <div>
       {(ticket.length===0) ? <p>No ticket found</p>:
@@ -49,7 +58,7 @@ const ServiceSupport = () => {
 
         <tbody>
           {ticket.map((item)=> <>
-            <tr key={item.id}>
+            <tr key={item.id} onClick={handleOpenServiceTab}>
             <td className="common-fonts">{item.id}</td>
             <td className="common-fonts">{item.title.slice(0,10)+"..."}</td>
             <td className="common-fonts">{item.description.slice(0,10)+"..."}</td>
@@ -65,6 +74,11 @@ const ServiceSupport = () => {
       </table>
     </div>
     </>
+}
+{
+  isServiceTabOpen && (
+    <ServiceRequestTab onClose={handleCloseServiceTab}/>
+  )
 }
     </div>
 
