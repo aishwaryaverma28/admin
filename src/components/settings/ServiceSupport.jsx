@@ -1,18 +1,42 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import '../styles/CPGenral.css';
+import axios from "axios";
+import {
+  getDecryptedToken,
+} from "../utils/Constants";
 
 const ServiceSupport = () => {
+  const decryptedToken = getDecryptedToken();
+  const[ticket,setTicket] = useState([]);
+  const getTicket = () => {
+    axios
+      .get("http://core.leadplaner.com:3001/api/user/ticket/getAll/all", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setTicket(response?.data?.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getTicket();
+  }, []);
+  console.log(ticket)
   return (
     <div>
-      <p className='common-fonts ss-heading'>Service request</p>
-
-      
+      {(ticket.length===0) ? <p>No ticket found</p>:
+      <>
+      <p className='common-fonts ss-heading'>Service request</p>      
     <div className="service-support-table">
       <table>
         <thead>
           <tr>
             <th className="common-fonts">s no</th>
-            <th className="common-fonts">contact</th>
+            <th className="common-fonts">Title</th>
             <th className="common-fonts">description</th>
             <th className="common-fonts">category</th>
             <th className="common-fonts">priority</th>
@@ -24,31 +48,24 @@ const ServiceSupport = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td className="common-fonts">inc0027899</td>
-            <td className="common-fonts">Anant Singh Cha...</td>
-            <td className="common-fonts">Unable to create deals </td>
-            <td className="common-fonts">Technical</td>
-            <td className="common-fonts">High</td>
-            <td className="common-fonts">Open</td>
+          {ticket.map((item)=> <>
+            <tr key={item.id}>
+            <td className="common-fonts">{item.id}</td>
+            <td className="common-fonts">{item.title.slice(0,10)+"..."}</td>
+            <td className="common-fonts">{item.description.slice(0,10)+"..."}</td>
+            <td className="common-fonts">{item.category}</td>
+            <td className="common-fonts">{item.priority}</td>
+            <td className="common-fonts">{item.status}</td>
             <td className="common-fonts">Uday Mishra</td>
-            <td className="common-fonts">August 3, 2023</td>
-            <td className="common-fonts">August 2, 2023</td>
+            <td className="common-fonts">{item.created_at.split("T")[0]}</td>
+            <td className="common-fonts">{item.updated_at.split("T")[0]}</td>
           </tr>
-          <tr>
-            <td className="common-fonts">inc0027899</td>
-            <td className="common-fonts">Anant Singh Cha...</td>
-            <td className="common-fonts">Unable to create deals </td>
-            <td className="common-fonts">Technical</td>
-            <td className="common-fonts">High</td>
-            <td className="common-fonts">Open</td>
-            <td className="common-fonts">Uday Mishra</td>
-            <td className="common-fonts">August 3, 2023</td>
-            <td className="common-fonts">August 2, 2023</td>
-          </tr>
+          </>)}
         </tbody>
       </table>
     </div>
+    </>
+}
     </div>
 
   )

@@ -12,14 +12,14 @@ const ContactSupport = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
-  // const [stateBtn, setStateBtn] = useState(0);
+  const [stateBtn, setStateBtn] = useState(0);
   const [details, setDetails] = useState({
     title: "",
     description: "",
     email: "",
     mobile: "",
-    category: "",
-    priority: "",
+    category: "Technical",
+    priority: "Low",
 })
 
   const handleFileChange = (event) => {
@@ -39,7 +39,7 @@ const ContactSupport = () => {
     setDetails((prev) => {
       return {...prev, [name]: value};
     })
-    // setStateBtn(1);
+    setStateBtn(1);
  }
 
  function handleSubmit(event) {
@@ -100,12 +100,9 @@ const ContactSupport = () => {
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Description
+              Moblie No.
             </label>
             <div>
-              {/* <select name="" id="" className="common-input contact-tab-select">
-                <option value="">+91</option>
-              </select>{" "} */}
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
@@ -203,10 +200,19 @@ const ContactSupport = () => {
 
           <div className="contact-support-button">
             <button className="common-white-button">Cancel</button>
-            <button className="common-save-button contact-tab-save-btn" onClick={handleSubmit}>
-              Save
-            </button>
-            
+            {stateBtn === 0 ? (
+              <button className="disabledBtn" disabled>
+                Save
+              </button>
+            ) : (
+              <button
+                className="common-save-button permission-save-btn"
+                onClick={handleSubmit}
+              >
+                Save
+              </button>
+            )}
+                       
           </div>
         </form>
       </div>
