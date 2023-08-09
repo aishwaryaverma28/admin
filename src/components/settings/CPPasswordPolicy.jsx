@@ -8,6 +8,7 @@ const CPPasswordPolicy = () => {
   const decryptedToken = getDecryptedToken();
   const [toggleChecked, setToggleChecked] = useState(false);
   const [passDes, setPassDes] = useState([]);
+  const [initial,setInitial]= useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [checkboxStates, setCheckboxStates] = useState([]);
   const passGet = () => {
@@ -19,6 +20,7 @@ const CPPasswordPolicy = () => {
       })
       .then((response) => {
         setPassDes(response?.data?.data);
+        setInitial(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -32,47 +34,88 @@ const CPPasswordPolicy = () => {
     setCheckboxStates(
       passDes.map((condition) => ({
         id: condition.id,
-        active: 0, // Default value
-        value: "", // Default value
+        active: condition.active, // Default value
+        value: condition.value, // Default value
       }))
     );
   }, [passDes]);
 
+  const toggleActive =
+    passDes.find((condition) => condition.id === 5)?.active === 1;
+
+  // Update the toggleChecked state based on the toggleActive value
+  useEffect(() => {
+    setToggleChecked(toggleActive);
+  }, [toggleActive]);
+
+  const handleToggleChange = () => {
+    setToggleChecked((prevToggleChecked) => {
+      // Update the active value for id=5 when turning the switch on
+      if (!prevToggleChecked) {
+        const index = checkboxStates.findIndex((state) => state.id === 5);
+        if (index !== -1) {
+          const newState = [...checkboxStates];
+          newState[index] = {
+            ...newState[index],
+            active: 1,
+          };
+          setCheckboxStates(newState);
+          setStateBtn(1);
+        }
+      }
+      else{
+        const index = checkboxStates.findIndex((state) => state.id === 5);
+        if (index !== -1) {
+          const newState = [...checkboxStates];
+          newState[index] = {
+            ...newState[index],
+            active: 0,
+          };
+          setCheckboxStates(newState);
+          setStateBtn(1);
+        }
+      }
+      return !prevToggleChecked;
+    });
+  };
+
   const handleCheckboxChange = (id, value) => {
+    // Find the index of the checkboxStates array where id matches
+    const index = checkboxStates.findIndex((state) => state.id === id);
+
     // Only update if the toggle button is enabled
     if (toggleChecked) {
       // Update the checkboxStates array based on the checkbox that was changed
-      setCheckboxStates((prevStates) =>
-        prevStates.map((state) =>
-          state.id === id ? { ...state, active: 1, value: value } : state
-        )
-      );
-      setStateBtn(1);
+      setCheckboxStates((prevStates) => {
+        const newState = [...prevStates];
+        newState[index] = {
+          ...newState[index],
+          active: newState[index].active === 1 ? 0 : 1, // Toggle active value
+          value: value,
+        };
+        setStateBtn(1);
+        console.log(newState);
+        return newState;
+      });
     }
   };
 
   function handleSubmit(event) {
     event.preventDefault();
-    // Prepare the request body using the updated checkboxStates
-    const requestBody = checkboxStates
-      .filter((state) => state.active === 1)
-      .map((state) => ({
-        id: state.id,
-        active: state.active,
-        value: parseInt(state.value),
-      }));
-    const additionalObject1 = {
-      id: 5,
-      active: 1,
-      value: 0,
-    };
-
-    // Include the additional objects in the requestBody
-    requestBody.push(additionalObject1);
-    console.log(requestBody);
+  
+    // Compare checkboxStates with initial to find changed objects
+    const changedStates = checkboxStates.filter(state => {
+      const initialState = initial.find(initialState => initialState.id === state.id);
+      return (
+        initialState &&
+        (initialState.active !== state.active || initialState.value !== state.value)
+      );
+    });
+      console.log("Changed states:", changedStates);
     axios
       .put(
-        "http://core.leadplaner.com:3001/api/setting/password/edit",{"data":requestBody},
+        "http://core.leadplaner.com:3001/api/setting/password/edit",
+        { data: changedStates },
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -87,7 +130,7 @@ const CPPasswordPolicy = () => {
         console.log("Update error:", error);
       });
   }
-
+  
   return (
     <section>
       <div className="password-toggle">
@@ -106,7 +149,7 @@ const CPPasswordPolicy = () => {
             <input
               type="checkbox"
               checked={toggleChecked}
-              onChange={() => setToggleChecked(!toggleChecked)}
+              onChange={handleToggleChange}
             />
             <span className="password-slider password-round"></span>
           </label>
@@ -124,6 +167,7 @@ const CPPasswordPolicy = () => {
                   <input
                     type="checkbox"
                     className="cb1"
+                    checked={checkboxStates[index]?.active === 1}
                     onChange={(e) => {
                       const checked = e.target.checked;
                       handleCheckboxChange(
