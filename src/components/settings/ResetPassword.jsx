@@ -54,8 +54,8 @@ const ResetPassword = ({ onClose, user }) => {
   useEffect(() => {
     passGet();
   }, []);
-
-   const handlePasswordChange = (event) => {
+console.log(passDes)
+  const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
     // Use the passDes array to dynamically update the password criteria
@@ -91,9 +91,9 @@ const ResetPassword = ({ onClose, user }) => {
       setPasswordMatch(newPassword === confirmPassword);
     }
   };
-const handleChange = (event) => {
-  setPassword(event.target.value)
-}
+  const handleChange = (event) => {
+    setPassword(event.target.value);
+  };
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -143,35 +143,35 @@ const handleChange = (event) => {
       });
     }
   };
-  const handleSave2 = ()=> {
+  const handleSave2 = () => {
     if (passwordMatch) {
-      console.log(password)
+      console.log(password);
       axios
-          .put(
-            UPDATE_TEAM_MEM + user,
-            { password: password },
-            {
-              headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-              },
-            }
-          )
-          .then((response) => {
-            // Handle successful response
+        .put(
+          UPDATE_TEAM_MEM + user,
+          { password: password },
+          {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          // Handle successful response
 
-            toast.success("Password saved successfully", {
-              position: "top-center",
-            });
-            onClose();
-          })
-          .catch((error) => {
-            // Handle error
-            toast.error("Error saving password", {
-              position: "top-center",
-            });
+          toast.success("Password saved successfully", {
+            position: "top-center",
           });
+          onClose();
+        })
+        .catch((error) => {
+          // Handle error
+          toast.error("Error saving password", {
+            position: "top-center",
+          });
+        });
     }
-  }
+  };
   return (
     <div className="recycle-popup-wrapper">
       <div className="assign-role-popup-container">
@@ -186,7 +186,9 @@ const handleChange = (event) => {
             </label>
             <div className="password-input-wrapper">
               {/* ========================================================================================================== */}
-              {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
+              {passDes.some(
+                (condition) => condition.id === 5 && condition.active === 1
+              ) ? (
                 <input
                   type={showPassword ? "text" : "password"}
                   className="common-fonts common-input pwd-input"
@@ -240,80 +242,111 @@ const handleChange = (event) => {
             </div>
           </div>
         </div>
-        {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
-        <div className="pwd-rules">
-          <p className="common-fonts pwd-policy">Password policy :</p>
-          {/* Minimum 8 characters long */}
-          <div className="password-rules">
-            <div>
-              <label className="custom-checkbox password-checkbox">
-                <input
-                  type="checkbox"
-                  className="cb1"
-                  checked={minLength}
-                  readOnly
-                />
-                <span className="checkmark"></span>
-              </label>
+        {passDes.some(
+          (condition) => condition.id === 5 && condition.active === 1
+        ) ? (
+          <div className="pwd-rules">
+            <p className="common-fonts pwd-policy">Password policy :</p>
+            {/* Minimum 8 characters long */}
+            {passDes.map((item) =>
+              item.id === 1 ? (
+                <p key={item.id} className="common-fonts password-text">
+                  <div className="password-rules">
+                    <div>
+                      <label className="custom-checkbox password-checkbox">
+                        <input
+                          type="checkbox"
+                          className="cb1"
+                          checked={minLength}
+                          readOnly
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                    <p className="common-fonts password-text">
+                      Minimum {item.value} characters long
+                    </p>
+                  </div>
+                </p>
+              ) : null
+            )}
+
+            {/* 1 number, symbol, or whitespace character */}
+            {passDes.map((item) =>
+              item.id === 2 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasNumberSymbolWhitespace}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+              <div>
+                <p className="common-fonts password-text">
+                {item.value} number, symbol, or whitespace character
+                </p>
+              </div>
             </div>
-            <p className="common-fonts password-text">
-              Minimum characters long
-            </p>
+                </p>
+              ) : null
+            )}
+
+            
+            {/* 1 uppercase letter */}
+            {passDes.map((item) =>
+              item.id === 3 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasUppercase}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+              <div>
+                <p className="common-fonts password-text">{item.value} uppercase letter</p>
+              </div>
+            </div>
+                </p>
+              ) : null
+            )}
+
+            {/* 1 special character */}
+            {passDes.map((item) =>
+              item.id === 4 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasSpecialCharacter}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+              <div>
+                <p className="common-fonts password-text">{item.value} special character</p>
+              </div>
+            </div>
+                </p>
+              ) : null
+            )}
+            
           </div>
-          {/* 1 number, symbol, or whitespace character */}
-          <div className="password-rules">
-            <div>
-              <label className="custom-checkbox password-checkbox">
-                <input
-                  type="checkbox"
-                  className="cb1"
-                  checked={hasNumberSymbolWhitespace}
-                  readOnly
-                />
-                <span className="checkmark"></span>
-              </label>
-            </div>
-            <div>
-              <p className="common-fonts password-text">
-                number, symbol, or whitespace character
-              </p>
-            </div>
-          </div>
-          {/* 1 uppercase letter */}
-          <div className="password-rules">
-            <div>
-              <label className="custom-checkbox password-checkbox">
-                <input
-                  type="checkbox"
-                  className="cb1"
-                  checked={hasUppercase}
-                  readOnly
-                />
-                <span className="checkmark"></span>
-              </label>
-            </div>
-            <div>
-              <p className="common-fonts password-text"> uppercase letter</p>
-            </div>
-          </div>
-          {/* 1 special character */}
-          <div className="password-rules">
-            <div>
-              <label className="custom-checkbox password-checkbox">
-                <input
-                  type="checkbox"
-                  className="cb1"
-                  checked={hasSpecialCharacter}
-                  readOnly
-                />
-                <span className="checkmark"></span>
-              </label>
-            </div>
-            <div>
-              <p className="common-fonts password-text"> special character</p>
-            </div>
-          </div>
-        </div>
         ) : (
           <></>
         )}
@@ -321,15 +354,17 @@ const handleChange = (event) => {
           <button className="restore-no common-fonts" onClick={onClose}>
             Cancel
           </button>
-          {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
-          <button className="restore-yes common-fonts" onClick={handleSave}>
-            Save
-          </button>
+          {passDes.some(
+            (condition) => condition.id === 5 && condition.active === 1
+          ) ? (
+            <button className="restore-yes common-fonts" onClick={handleSave}>
+              Save
+            </button>
           ) : (
             <button className="restore-yes common-fonts" onClick={handleSave2}>
-            Save2
-          </button>
-            )}
+              Save2
+            </button>
+          )}
         </div>
       </div>
       <ToastContainer />

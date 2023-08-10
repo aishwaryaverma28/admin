@@ -408,9 +408,16 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
+                                <Link
+                                        to={
+                                          "/lp/settings/usernteams/" +
+                                          teamMember.id
+                                        }
+                                      >
                                   {teamMember.first_name +
                                     " " +
                                     teamMember.last_name}
+                                    </Link>
                                 </p>
                                 <p>{teamMember.email}</p>
                               </div>

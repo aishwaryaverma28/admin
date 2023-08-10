@@ -438,17 +438,10 @@ const fetchData = async () => {
               </button>
             )}
           </div>
-
               </>
-
-  
-
-            )
+              )
           }
-
-
         </section>
-
       {isAssignRole && (
         <AddRolePopUp
           onClose={handleAddRoleClose}

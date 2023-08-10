@@ -255,90 +255,113 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           </div>
 
           {passDes.some(
-            (condition) => condition.id === 5 && condition.active === 1
-          ) ? (
-            <div className="pwd-rules">
-              <p className="common-fonts pwd-policy">Password policy :</p>
-              {/* Minimum 8 characters long */}
-              <div className="password-rules">
-                <div>
-                  <label className="custom-checkbox password-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      checked={minLength}
-                      readOnly
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                </div>
+          (condition) => condition.id === 5 && condition.active === 1
+        ) ? (
+          <div className="pwd-rules">
+            <p className="common-fonts pwd-policy">Password policy :</p>
+            {/* Minimum 8 characters long */}
+            {passDes.map((item) =>
+              item.id === 1 ? (
+                <p key={item.id} className="common-fonts password-text">
+                  <div className="password-rules">
+                    <div>
+                      <label className="custom-checkbox password-checkbox">
+                        <input
+                          type="checkbox"
+                          className="cb1"
+                          checked={minLength}
+                          readOnly
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                    <p className="common-fonts password-text">
+                      Minimum {item.value} characters long
+                    </p>
+                  </div>
+                </p>
+              ) : null
+            )}
+
+            {/* 1 number, symbol, or whitespace character */}
+            {passDes.map((item) =>
+              item.id === 2 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasNumberSymbolWhitespace}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+              <div>
                 <p className="common-fonts password-text">
-                  Minimum characters long
+                {item.value} number, symbol, or whitespace character
                 </p>
               </div>
-              {/* 1 number, symbol, or whitespace character */}
-              <div className="password-rules">
-                <div>
-                  <label className="custom-checkbox password-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      checked={hasNumberSymbolWhitespace}
-                      readOnly
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                </div>
-                <div>
-                  <p className="common-fonts password-text">
-                    number, symbol, or whitespace character
-                  </p>
-                </div>
+            </div>
+                </p>
+              ) : null
+            )}
+
+            
+            {/* 1 uppercase letter */}
+            {passDes.map((item) =>
+              item.id === 3 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasUppercase}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
               </div>
-              {/* 1 uppercase letter */}
-              <div className="password-rules">
-                <div>
-                  <label className="custom-checkbox password-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      checked={hasUppercase}
-                      readOnly
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                </div>
-                <div>
-                  <p className="common-fonts password-text">
-                    {" "}
-                    uppercase letter
-                  </p>
-                </div>
-              </div>
-              {/* 1 special character */}
-              <div className="password-rules">
-                <div>
-                  <label className="custom-checkbox password-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      checked={hasSpecialCharacter}
-                      readOnly
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                </div>
-                <div>
-                  <p className="common-fonts password-text">
-                    {" "}
-                    special character
-                  </p>
-                </div>
+              <div>
+                <p className="common-fonts password-text">{item.value} uppercase letter</p>
               </div>
             </div>
-          ) : (
-            <></>
-          )}
+                </p>
+              ) : null
+            )}
+
+            {/* 1 special character */}
+            {passDes.map((item) =>
+              item.id === 4 ? (
+                <p key={item.id} className="common-fonts password-text">
+            <div className="password-rules">
+              <div>
+                <label className="custom-checkbox password-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    checked={hasSpecialCharacter}
+                    readOnly
+                  />
+                  <span className="checkmark"></span>
+                </label>
+              </div>
+              <div>
+                <p className="common-fonts password-text">{item.value} special character</p>
+              </div>
+            </div>
+                </p>
+              ) : null
+            )}
+            
+          </div>
+        ) : (
+          <></>
+        )}
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
             {passDes.some(

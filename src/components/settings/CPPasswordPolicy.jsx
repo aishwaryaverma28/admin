@@ -3,6 +3,9 @@ import axios from "axios";
 import "../styles/Password.css";
 import LockImage from "../../assets/image/lock.svg";
 import { getDecryptedToken } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const CPPasswordPolicy = () => {
   const decryptedToken = getDecryptedToken();
@@ -122,6 +125,9 @@ const CPPasswordPolicy = () => {
       .then((response) => {
         // Handle success if needed
         console.log("Update success:", response.data);
+        toast.success("Password policy changed", {
+          position: "top-center",
+        });
       })
       .catch((error) => {
         console.log("Update error:", error);
@@ -239,6 +245,7 @@ const CPPasswordPolicy = () => {
           </button>
         )}
       </div>
+      <ToastContainer />
     </section>
   );
 };
