@@ -40,6 +40,8 @@ const LabelModal = ({onClose, fetchColor}) => {
       "colour_code":labelData.colour_code,
     };
 
+    console.log(updatedFormData);
+
     axios
       .post(ADD_LABEL, updatedFormData, {
         headers: {
@@ -50,11 +52,10 @@ const LabelModal = ({onClose, fetchColor}) => {
       
         toast.success("label added successfully", {
           position: "top-center",
-          onClose: () => {
+          autoClose: 2000,
+        })
             fetchColor();
             onClose();
-          }
-        })
       })
       .catch((error) => {
         console.log(error);
@@ -64,7 +65,6 @@ const LabelModal = ({onClose, fetchColor}) => {
   }
   return (
     <div className="recycle-popup-wrapper">
-        <ToastContainer/>
     <div className="recycle-popup-container">
         <div className="recycle-popup-box">
             <p className="common-fonts restore-records">add new label</p>
