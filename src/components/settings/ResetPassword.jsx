@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios library
 import {UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = ({ onClose, user }) => {
+  const [passDes,setPassDes] = useState([])
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -17,6 +18,44 @@ const ResetPassword = ({ onClose, user }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const decryptedToken = getDecryptedToken();
   
+  const passGet = () => {
+    axios
+      .get("http://core.leadplaner.com:3001/api/setting/password/get", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setPassDes(response?.data?.data);
+        response?.data?.data?.forEach(condition => {
+          switch (condition.id) {
+            case 1:
+              setMinLength(condition.active === 1);
+              break;
+            case 2:
+              setHasNumberSymbolWhitespace(condition.active === 1);
+              break;
+            case 3:
+              setHasUppercase(condition.active === 1);
+              break;
+            case 4:
+              setHasSpecialCharacter(condition.active === 1);
+              break;
+            // Add more cases for other conditions if needed
+            default:
+              break;
+          }
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    passGet();
+  }, []);
+
+console.log(passDes)
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
