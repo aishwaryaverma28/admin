@@ -45,6 +45,9 @@ const LabelsTab = () => {
         }
     };
 
+    console.log(labelData)
+    console.log("opq")
+
     const handleOpenLabel = () => {
         setOpenLeadModal(true);
     }
@@ -62,7 +65,7 @@ const LabelsTab = () => {
                 selectedContacts.includes(data?.id) ? 'contacts' : null,
             ].filter(entity => entity !== null);
         
-            const entityValue = entityParts.length > 0 ? entityParts.join(',') : data?.entity;
+            const entityValue = entityParts.length > 0 ? entityParts.join(',') : null;
         
             return {
                 id: data?.id,
@@ -78,13 +81,7 @@ const LabelsTab = () => {
             return updatedObj.entity !== initialObj.entity;
           });
 
-          console.log(changedEntities);
-          console.log("kkkddd")
-
-
-
-
-        axios.put(UPDATE_LABEL,changedEntities,{
+        axios.put(UPDATE_LABEL,{data:changedEntities},{
             headers: {
               Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
             }
