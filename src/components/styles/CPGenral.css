@@ -744,4 +744,8 @@
     overflow-y: auto;
 
 }
+
+.label-refresh-icon{
+    margin-left: 0.5rem;
+}
 /* service request container ends */

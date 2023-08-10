@@ -4,6 +4,7 @@ import GreaterArrowDown from '../../assets/image/greater-arrow-down.svg';
 import LabelModal from './LabelModal';
 import { getDecryptedToken, GET_LABEL, handleLogout, UPDATE_LABEL } from "../utils/Constants";
 import axios from "axios";
+import {toast, ToastContainer} from 'react-toastify';
 
 const LabelsTab = () => {
     const [openLeadModal, setOpenLeadModal] = useState(false);
@@ -15,8 +16,6 @@ const LabelsTab = () => {
     const [selectedDeals, setSelectedDeals] = useState([]);
     const [selectedContacts, setSelectedContacts] = useState([]);
     const [initialData, setInitialData] = useState([]);
-    
-
 
     useEffect(() => {
         fetchData();
@@ -26,28 +25,56 @@ const LabelsTab = () => {
         try {
             const response = await axios.get(GET_LABEL, {
                 headers: {
-                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+                    Authorization: `Bearer ${decryptedToken}`,
                 },
             });
             if (response.data.status === 1) {
                 setLabelData(response.data.data);
                 setInitialData(response.data.data);
+    
+                // Update selected checkboxes based on fetched entity values
+                const updatedNotes = [];
+                const updatedLeads = [];
+                const updatedDeals = [];
+                const updatedContacts = [];
+    
+                response.data.data.forEach(data => {
+                    if (data?.entity?.includes('notes')) {
+                        updatedNotes.push(data.id);
+
+                    }
+                    if (data?.entity?.includes('leads')) {
+                        updatedLeads.push(data.id);
+                    }
+                    if (data?.entity?.includes('deals')) {
+                        updatedDeals.push(data.id);
+                    }
+                    if (data?.entity?.includes('contacts')) {
+                        updatedContacts.push(data.id);
+                    }
+                });
+    
+                setSelectedNotes(updatedNotes);
+                setSelectedLeads(updatedLeads);
+                setSelectedDeals(updatedDeals);
+                setSelectedContacts(updatedContacts);
             } else {
-                if (response.data.message === "Token has expired") {
+                if (response.data.message === 'Token has expired') {
                     alert(response.data.message);
                     handleLogout();
                 }
             }
             setIsLoading(false);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error('Error fetching data:', error);
             setIsLoading(false);
         }
     };
 
-    console.log(labelData)
-    console.log("opq")
-
+    const labelRefresh = () => {
+        fetchData();
+    }
+    
     const handleOpenLabel = () => {
         setOpenLeadModal(true);
     }
@@ -87,6 +114,10 @@ const LabelsTab = () => {
             }
           }).then((response) => {
             console.log(response);
+            toast.success("label updated successfully", {
+                position: "top-center",
+                autoClose: 2000,
+              })
           })
           .catch((error) => {
             console.log(error)
@@ -123,6 +154,7 @@ const LabelsTab = () => {
     };
     return (
         <section>
+            <ToastContainer/>
             <div className='label-tab-top'>
                 <div className='label-tab-leads'>
                     <img src={GreaterArrowDown} alt="" />
@@ -134,6 +166,9 @@ const LabelsTab = () => {
                 <div>
                     <button className='common-white-button label-update-btn' onClick={handleUpdateLabel}>Update</button>
                     <button className='common-save-button' onClick={handleOpenLabel}>Add new button</button>
+                    <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={labelRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
                 </div>
 
             </div>
@@ -178,7 +213,7 @@ const LabelsTab = () => {
                                                 <td className='common-fonts'>
                                                     <div className='leads-table-td'>
                                                         <label className="cp-checkbox lead-checkbox">
-                                                            <input type="checkbox" className="cb1" onChange={() => handleNoteCheckboxChange(data.id)} />
+                                                            <input type="checkbox" className="cb1" onChange={() => handleNoteCheckboxChange(data.id)} checked={selectedNotes.includes(data.id)} />
                                                             <span className="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -186,7 +221,7 @@ const LabelsTab = () => {
                                                 <td className='common-fonts'>
                                                     <div className='leads-table-td'>
                                                         <label className="cp-checkbox lead-checkbox">
-                                                            <input type="checkbox" className="cb1" onChange={() => handleLeadCheckboxChange(data.id)} />
+                                                            <input type="checkbox" className="cb1" onChange={() => handleLeadCheckboxChange(data.id)} checked={selectedLeads.includes(data.id)} />
                                                             <span className="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -194,7 +229,7 @@ const LabelsTab = () => {
                                                 <td className='common-fonts'>
                                                     <div className='leads-table-td'>
                                                         <label className="cp-checkbox lead-checkbox">
-                                                            <input type="checkbox" className="cb1" onChange={() => handleDealCheckboxChange(data.id)} />
+                                                            <input type="checkbox" className="cb1" onChange={() => handleDealCheckboxChange(data.id)} checked={selectedDeals.includes(data.id)} />
                                                             <span className="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -202,7 +237,7 @@ const LabelsTab = () => {
                                                 <td className='common-fonts'>
                                                     <div className='leads-table-td'>
                                                         <label className="cp-checkbox lead-checkbox">
-                                                            <input type="checkbox" className="cb1" onChange={() => handleContactCheckboxChange(data.id)} />
+                                                            <input type="checkbox" className="cb1" onChange={() => handleContactCheckboxChange(data.id)} checked={selectedContacts.includes(data.id)} />
                                                             <span className="checkmark"></span>
                                                         </label>
                                                     </div>
