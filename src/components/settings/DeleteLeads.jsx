@@ -149,18 +149,20 @@ const DeleteLeads = ({deleteCount}) => {
   };
   const handleTableRowCheckboxChange = (event, itemId) => {
     const { checked } = event.target;
-    setRecycleData((prevState) =>
-      prevState.map((item) =>
+  
+    setRecycleData(prevState =>
+      prevState.map(item =>
         item.id === itemId ? { ...item, isChecked: checked } : item
       )
     );
-
-    setSelectedRows((prevSelectedRows) =>
+  
+    setSelectedRows(prevSelectedRows =>
       checked
         ? [...prevSelectedRows, itemId]
-        : prevSelectedRows.filter((id) => id !== itemId)
+        : prevSelectedRows.filter(id => id !== itemId)
     );
   };
+  
   const handleRestoreLead = () => {
     const updatedFormData = {
       leadIds: selectedRows,
@@ -258,17 +260,17 @@ const DeleteLeads = ({deleteCount}) => {
         </div>
         <div className="recycle-btn">
           <button
-            className={recycleData.length > 0 ? 'recycle-delete recycle-fonts' : 'common-inactive-button inactive-delete  recycle-fonts '}
+            className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button inactive-delete  recycle-fonts ' : 'recycle-delete recycle-fonts' }
             // onClick={handleDeleteLead}
-            disabled={recycleData.length > 0  ? false : true}
+            disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
             onClick={leadDeletePopUp}
           >
             Delete
           </button>
           <button
-            className={recycleData.length > 0 ? 'recycle-restore recycle-fonts' : 'common-inactive-button recycle-fonts '}
+            className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button recycle-fonts ' : 'recycle-restore recycle-fonts' }
             // onClick={handleRestoreLead}
-            disabled={recycleData.length > 0  ? false : true}
+            disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
 
             onClick={leadRestorePopUp}
           >
