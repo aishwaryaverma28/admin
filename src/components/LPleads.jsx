@@ -99,7 +99,8 @@ const LPleads = () => {
           },
         });
         toast.success("File uploaded successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
         // Handle the success case as needed
       } catch (error) {
@@ -139,11 +140,13 @@ const LPleads = () => {
   
       toast.success("Leads exported successfully", {
         position: "top-center",
+        autoClose:2000
       });
     } catch (error) {
       console.error("Error exporting leads:", error);
       toast.error("Error exporting leads", {
         position: "top-center",
+        autoClose:2000
       });
     }
   };
@@ -241,7 +244,8 @@ const LPleads = () => {
       .then((response) => {
         console.log(response);
         toast.success("Leads are moved to trash successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {

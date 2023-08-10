@@ -3,6 +3,7 @@ import '../styles/CPGenral.css';
 import axios from 'axios';
 import {
   getDecryptedToken,
+  SERVICE_SUPPORT
 } from '../utils/Constants';
 import ServiceRequestTab from './ServiceRequestTab';
 
@@ -14,7 +15,7 @@ const ServiceSupport = () => {
 
   const getTicket = () => {
     axios
-      .get('http://core.leadplaner.com:3001/api/user/ticket/getAll/all', {
+      .get(SERVICE_SUPPORT, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

@@ -53,7 +53,8 @@ const ContactSupport = () => {
     .then((response) => {
       console.log(response);
       toast.success("Ticket is added successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
       setDetails({
         title: "",

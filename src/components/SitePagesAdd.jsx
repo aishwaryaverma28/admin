@@ -40,7 +40,8 @@ const SitePagesAdd = () => {
       //   setUpdateMessage("");
       // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("Site Page data added successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
       setDetails({
         site: "",

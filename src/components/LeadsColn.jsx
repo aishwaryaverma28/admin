@@ -60,7 +60,8 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       .then((response) => {
         console.log(response);
         toast.success("Lead moved to trash successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {

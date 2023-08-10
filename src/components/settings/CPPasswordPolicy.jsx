@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Password.css";
 import LockImage from "../../assets/image/lock.svg";
-import { getDecryptedToken } from "../utils/Constants";
+import { getDecryptedToken, GET_PASSWORD, EDIT_PASSWORD } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,7 +16,7 @@ const CPPasswordPolicy = () => {
   const [checkboxStates, setCheckboxStates] = useState([]);
   const passGet = () => {
     axios
-      .get("http://core.leadplaner.com:3001/api/setting/password/get", {
+      .get(GET_PASSWORD, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -114,7 +114,7 @@ const CPPasswordPolicy = () => {
       console.log("Changed states:", changedStates);
     axios
       .put(
-        "http://core.leadplaner.com:3001/api/setting/password/edit",
+        EDIT_PASSWORD,
         { data: changedStates },
         {
           headers: {
@@ -127,6 +127,7 @@ const CPPasswordPolicy = () => {
         console.log("Update success:", response.data);
         toast.success("Password policy changed", {
           position: "top-center",
+          autoClose:2000
         });
       })
       .catch((error) => {

@@ -139,7 +139,8 @@ const EmployeeUpdate = () => {
     }).then((response) => {
       console.log(response);
       toast.success("Employee data updated successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
     });
   }

@@ -171,12 +171,14 @@ const fetchData = async () => {
         console.log(response);
         toast.success("Roles saved successfully", {
           position: "top-center",
+          autoClose:2000
         });
       })
       .catch((error) => {
         console.log(error);
         toast.error("Error saving roles", {
           position: "top-center",
+          autoClose:2000
         });
       });
   };

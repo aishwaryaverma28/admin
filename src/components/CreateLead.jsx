@@ -67,7 +67,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
       .then((response) => {
         console.log(response.data); 
         toast.success("Lead data added successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
         setLeadData({
           position: "",

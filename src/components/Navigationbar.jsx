@@ -6,7 +6,7 @@ import userIcon from "../assets/image/user-img.png";
 import Sidebar from "./Sidebar";
 import { Link} from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GETID, VIEW_IMG,getDecryptedToken,handleLogout } from "./utils/Constants";
+import { EMPLOYEE_GETID, VIEW_IMG,getDecryptedToken,handleLogout,GET_USER_EMPLOYEE } from "./utils/Constants";
 
 const NavigationBar = () => {
   const { profileImage } = useContext(UserContext);
@@ -20,7 +20,7 @@ const NavigationBar = () => {
   async function getUser() {
     try {
       const response = await axios.get(
-        "http://core.leadplaner.com:3001/api/user/getuserinfo",
+        GET_USER_EMPLOYEE,
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
