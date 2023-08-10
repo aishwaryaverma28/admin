@@ -272,18 +272,19 @@ const DeleteNotes = ({deleteCount}) => {
             </div>
           </div>
         </div>
+
         <div className="recycle-btn">
           <button
-             className={recycleData.length > 0 ? 'recycle-delete recycle-fonts' : 'common-inactive-button inactive-delete  recycle-fonts '}
-             disabled={recycleData.length > 0  ? false : true}
+              className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button inactive-delete  recycle-fonts ' : 'recycle-delete recycle-fonts' }
+             disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
             onClick={handleDeletePopUp}
 
           >
             Delete
           </button>
           <button
-            className={recycleData.length > 0 ? 'recycle-restore recycle-fonts' : 'common-inactive-button recycle-fonts '}
-            disabled={recycleData.length > 0  ? false : true}
+            className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button recycle-fonts ' : 'recycle-restore recycle-fonts' }
+            disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
             onClick={handleRestorePopUp}
           >
             Restore
