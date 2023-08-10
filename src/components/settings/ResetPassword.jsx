@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios library
-import {UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResetPassword = ({ onClose, user }) => {
-  const [passDes,setPassDes] = useState([])
+  const [passDes, setPassDes] = useState([]);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -17,7 +17,7 @@ const ResetPassword = ({ onClose, user }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const decryptedToken = getDecryptedToken();
-  
+
   const passGet = () => {
     axios
       .get("http://core.leadplaner.com:3001/api/setting/password/get", {
@@ -27,7 +27,7 @@ const ResetPassword = ({ onClose, user }) => {
       })
       .then((response) => {
         setPassDes(response?.data?.data);
-        response?.data?.data?.forEach(condition => {
+        response?.data?.data?.forEach((condition) => {
           switch (condition.id) {
             case 1:
               setMinLength(condition.active === 1);
@@ -45,7 +45,7 @@ const ResetPassword = ({ onClose, user }) => {
             default:
               break;
           }
-        })
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -55,23 +55,45 @@ const ResetPassword = ({ onClose, user }) => {
     passGet();
   }, []);
 
-console.log(passDes)
-  const handlePasswordChange = (event) => {
+   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
-    setMinLength(newPassword.length >= 8);
-    setHasNumberSymbolWhitespace(/[0-9!@#$%^&*()_\s]/.test(newPassword));
-    setHasUppercase(/[A-Z]/.test(newPassword));
-    setHasSpecialCharacter(
-      /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(newPassword)
-    );
+    // Use the passDes array to dynamically update the password criteria
+    passDes.forEach((condition) => {
+      switch (condition.id) {
+        case 1:
+          setMinLength(newPassword.length >= parseInt(condition.value));
+          break;
+        case 2:
+          setHasNumberSymbolWhitespace(
+            new RegExp(`[${condition.value}]`).test(newPassword)
+          );
+          break;
+        case 3:
+          setHasUppercase(
+            (newPassword.match(/[A-Z]/g) || []).length >=
+              parseInt(condition.value)
+          );
+          break;
+        case 4:
+          setHasSpecialCharacter(
+            (newPassword.match(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/g) || [])
+              .length >= parseInt(condition.value)
+          );
+          break;
+        // Add more cases for other conditions if needed
+        default:
+          break;
+      }
+    });
 
-    // Check if confirm password matches
     if (confirmPassword !== "") {
       setPasswordMatch(newPassword === confirmPassword);
     }
   };
-
+const handleChange = (event) => {
+  setPassword(event.target.value)
+}
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -80,38 +102,76 @@ console.log(passDes)
 
   const handleSave = () => {
     if (passwordMatch) {
-      if (minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter) {
+      if (
+        minLength &&
+        hasNumberSymbolWhitespace &&
+        hasUppercase &&
+        hasSpecialCharacter
+      ) {
         axios
-          .put(UPDATE_TEAM_MEM+user , { password: password }, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
+          .put(
+            UPDATE_TEAM_MEM + user,
+            { password: password },
+            {
+              headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+              },
+            }
+          )
           .then((response) => {
             // Handle successful response
-            
-            toast.success('Password saved successfully', {
-              position:"top-center"
+
+            toast.success("Password saved successfully", {
+              position: "top-center",
             });
             onClose();
           })
           .catch((error) => {
             // Handle error
-            toast.error('Error saving password', {
-              position:"top-center"
-            })
+            toast.error("Error saving password", {
+              position: "top-center",
+            });
           });
       } else {
-        toast.error('Please fulfill all password criteria.', {
-          position:"top-center"
-        })
+        toast.error("Please fulfill all password criteria.", {
+          position: "top-center",
+        });
       }
     } else {
-      toast.error('Passwords do not match', {
-        position:"top-center"
-      })
+      toast.error("Passwords do not match", {
+        position: "top-center",
+      });
     }
   };
+  const handleSave2 = ()=> {
+    if (passwordMatch) {
+      console.log(password)
+      axios
+          .put(
+            UPDATE_TEAM_MEM + user,
+            { password: password },
+            {
+              headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            // Handle successful response
+
+            toast.success("Password saved successfully", {
+              position: "top-center",
+            });
+            onClose();
+          })
+          .catch((error) => {
+            // Handle error
+            toast.error("Error saving password", {
+              position: "top-center",
+            });
+          });
+    }
+  }
   return (
     <div className="recycle-popup-wrapper">
       <div className="assign-role-popup-container">
@@ -125,17 +185,32 @@ console.log(passDes)
               New Password
             </label>
             <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                className="common-fonts common-input pwd-input"
-                onChange={handlePasswordChange}
-                value={password}
-              />
+              {/* ========================================================================================================== */}
+              {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="common-fonts common-input pwd-input"
+                  onChange={handlePasswordChange}
+                  value={password}
+                />
+              ) : (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  onChange={handleChange}
+                  className="common-fonts common-input pwd-input"
+                  value={password}
+                />
+              )}
+              {/* =================================================================================================================== */}
               <button
                 className="password-toggle-button"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
+                {showPassword ? (
+                  <i className="fa-sharp fa-solid fa-eye-slash "></i>
+                ) : (
+                  <i className="fa-sharp fa-solid fa-eye "></i>
+                )}
               </button>
             </div>
           </div>
@@ -156,11 +231,16 @@ console.log(passDes)
                 className="password-toggle-button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
+                {showConfirmPassword ? (
+                  <i className="fa-sharp fa-solid fa-eye-slash "></i>
+                ) : (
+                  <i className="fa-sharp fa-solid fa-eye "></i>
+                )}
               </button>
             </div>
           </div>
         </div>
+        {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
         <div className="pwd-rules">
           <p className="common-fonts pwd-policy">Password policy :</p>
           {/* Minimum 8 characters long */}
@@ -177,7 +257,7 @@ console.log(passDes)
               </label>
             </div>
             <p className="common-fonts password-text">
-              Minimum 8 characters long
+              Minimum characters long
             </p>
           </div>
           {/* 1 number, symbol, or whitespace character */}
@@ -195,7 +275,7 @@ console.log(passDes)
             </div>
             <div>
               <p className="common-fonts password-text">
-                1 number, symbol, or whitespace character
+                number, symbol, or whitespace character
               </p>
             </div>
           </div>
@@ -213,7 +293,7 @@ console.log(passDes)
               </label>
             </div>
             <div>
-              <p className="common-fonts password-text">1 uppercase letter</p>
+              <p className="common-fonts password-text"> uppercase letter</p>
             </div>
           </div>
           {/* 1 special character */}
@@ -230,20 +310,29 @@ console.log(passDes)
               </label>
             </div>
             <div>
-              <p className="common-fonts password-text">1 special character</p>
+              <p className="common-fonts password-text"> special character</p>
             </div>
           </div>
         </div>
+        ) : (
+          <></>
+        )}
         <div className="recycle-popup-btn">
-        <button className="restore-no common-fonts" onClick={onClose}>
-          Cancel
-        </button>
-        <button className="restore-yes common-fonts" onClick={handleSave}>
-          Save
-        </button>
+          <button className="restore-no common-fonts" onClick={onClose}>
+            Cancel
+          </button>
+          {passDes.some((condition) => condition.id === 5 && condition.active === 1) ? (
+          <button className="restore-yes common-fonts" onClick={handleSave}>
+            Save
+          </button>
+          ) : (
+            <button className="restore-yes common-fonts" onClick={handleSave2}>
+            Save2
+          </button>
+            )}
+        </div>
       </div>
-      </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

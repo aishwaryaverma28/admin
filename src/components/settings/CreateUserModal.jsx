@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ADD_USER, getDecryptedToken } from "../utils/Constants";
 import "../styles/LPUserAndTeam.css";
@@ -13,24 +13,131 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
     email: "",
     password: "",
   });
+
+  const [passDes, setPassDes] = useState([]);
+  const [password, setPassword] = useState("");
+  const [minLength, setMinLength] = useState(false);
+  const [hasNumberSymbolWhitespace, setHasNumberSymbolWhitespace] =
+    useState(false);
+  const [hasUppercase, setHasUppercase] = useState(false);
+  const [hasSpecialCharacter, setHasSpecialCharacter] = useState(false);
+
+  const passGet = () => {
+    axios
+      .get("http://core.leadplaner.com:3001/api/setting/password/get", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setPassDes(response?.data?.data);
+        response?.data?.data?.forEach((condition) => {
+          switch (condition.id) {
+            case 1:
+              setMinLength(condition.active === 1);
+              break;
+            case 2:
+              setHasNumberSymbolWhitespace(condition.active === 1);
+              break;
+            case 3:
+              setHasUppercase(condition.active === 1);
+              break;
+            case 4:
+              setHasSpecialCharacter(condition.active === 1);
+              break;
+            // Add more cases for other conditions if needed
+            default:
+              break;
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    passGet();
+  }, []);
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    // Use the passDes array to dynamically update the password criteria
+    passDes.forEach((condition) => {
+      switch (condition.id) {
+        case 1:
+          setMinLength(newPassword.length >= parseInt(condition.value));
+          break;
+        case 2:
+          setHasNumberSymbolWhitespace(
+            new RegExp(`[${condition.value}]`).test(newPassword)
+          );
+          break;
+        case 3:
+          setHasUppercase(
+            (newPassword.match(/[A-Z]/g) || []).length >=
+              parseInt(condition.value)
+          );
+          break;
+        case 4:
+          setHasSpecialCharacter(
+            (newPassword.match(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/g) || [])
+              .length >= parseInt(condition.value)
+          );
+          break;
+        // Add more cases for other conditions if needed
+        default:
+          break;
+      }
+    });
+  };
+
   function handleChange(e) {
     const { name, value } = e.target;
     setDetails((prev) => {
       return { ...prev, [name]: value };
     });
   }
-  function handlePasswordEye(e){
+  function handlePasswordEye(e) {
     e.preventDefault();
     setShowPassword(!showPassword);
-
   }
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (
+      minLength &&
+      hasNumberSymbolWhitespace &&
+      hasUppercase &&
+      hasSpecialCharacter
+    ) {
+      const updated = { ...details, password: password };
+      axios
+        .post(ADD_USER, updated, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          onUserAdded(); // Call the onLeadAdded function from props
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert("Please fulfill all password criteria.");
+    }
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
     axios
       .post(ADD_USER, details, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
       .then((response) => {
         console.log(response);
@@ -45,7 +152,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
         onClose();
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
   }
   return (
@@ -57,7 +164,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
             X
           </span>
         </div>
-        <form onSubmit={handleSubmit} className="createUserForm">
+        <form className="createUserForm">
           <div className="inputDiv">
             <label htmlFor="first_name">First Name</label>
             <br />
@@ -117,23 +224,137 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
             <label htmlFor="password">Password</label>
             <br />
             <div className="password-input-wrapper">
-          <input
-              type={showPassword ? "text" : "password"}
-              onChange={handleChange}
-              id="password"
-              className="create-user-pwd-input"
-            />
-            <button
-              className="password-toggle-button"
-              onClick={handlePasswordEye}
-            >
-              {showPassword ? <i className="fa-sharp fa-solid fa-eye-slash "></i> : <i className="fa-sharp fa-solid fa-eye "></i>}
-            </button>
+              {passDes.some(
+                (condition) => condition.id === 5 && condition.active === 1
+              ) ? (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="common-fonts common-input pwd-input"
+                  onChange={handlePasswordChange}
+                  value={password}
+                />
+              ) : (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  onChange={handleChange}
+                  className="common-fonts common-input pwd-input"
+                  value={password}
+                />
+              )}
+              <button
+                className="password-toggle-button"
+                onClick={handlePasswordEye}
+              >
+                {showPassword ? (
+                  <i className="fa-sharp fa-solid fa-eye-slash "></i>
+                ) : (
+                  <i className="fa-sharp fa-solid fa-eye "></i>
+                )}
+              </button>
             </div>
           </div>
+
+          {passDes.some(
+            (condition) => condition.id === 5 && condition.active === 1
+          ) ? (
+            <div className="pwd-rules">
+              <p className="common-fonts pwd-policy">Password policy :</p>
+              {/* Minimum 8 characters long */}
+              <div className="password-rules">
+                <div>
+                  <label className="custom-checkbox password-checkbox">
+                    <input
+                      type="checkbox"
+                      className="cb1"
+                      checked={minLength}
+                      readOnly
+                    />
+                    <span className="checkmark"></span>
+                  </label>
+                </div>
+                <p className="common-fonts password-text">
+                  Minimum characters long
+                </p>
+              </div>
+              {/* 1 number, symbol, or whitespace character */}
+              <div className="password-rules">
+                <div>
+                  <label className="custom-checkbox password-checkbox">
+                    <input
+                      type="checkbox"
+                      className="cb1"
+                      checked={hasNumberSymbolWhitespace}
+                      readOnly
+                    />
+                    <span className="checkmark"></span>
+                  </label>
+                </div>
+                <div>
+                  <p className="common-fonts password-text">
+                    number, symbol, or whitespace character
+                  </p>
+                </div>
+              </div>
+              {/* 1 uppercase letter */}
+              <div className="password-rules">
+                <div>
+                  <label className="custom-checkbox password-checkbox">
+                    <input
+                      type="checkbox"
+                      className="cb1"
+                      checked={hasUppercase}
+                      readOnly
+                    />
+                    <span className="checkmark"></span>
+                  </label>
+                </div>
+                <div>
+                  <p className="common-fonts password-text">
+                    {" "}
+                    uppercase letter
+                  </p>
+                </div>
+              </div>
+              {/* 1 special character */}
+              <div className="password-rules">
+                <div>
+                  <label className="custom-checkbox password-checkbox">
+                    <input
+                      type="checkbox"
+                      className="cb1"
+                      checked={hasSpecialCharacter}
+                      readOnly
+                    />
+                    <span className="checkmark"></span>
+                  </label>
+                </div>
+                <div>
+                  <p className="common-fonts password-text">
+                    {" "}
+                    special character
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
-            <input type="submit" className="userSubBtn" value="Save" />
+            {passDes.some(
+              (condition) => condition.id === 5 && condition.active === 1
+            ) ? (
+              <button className="restore-yes common-fonts" onClick={handleSave}>
+                Save
+              </button>
+            ) : (
+              <button
+                className="restore-yes common-fonts"
+                onClick={handleSubmit}
+              >
+                Save2
+              </button>
+            )}
           </div>
         </form>
       </div>
