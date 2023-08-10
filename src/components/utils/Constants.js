@@ -64,6 +64,7 @@ export const EMPLOYEE_GETID = start+"api/employee/get/"+userId;
 export const REMOVE_DOC = start+"api/employee/removeDoc/";
 export const UPLOAD_DOC = start+"api/employee/uploadDoc";
 export const VIEW_IMG = start+"employee/doc/";
+export const GET_USER_EMPLOYEE = start+"api/user/getuserinfo"; 
 //====================================================================site pages
 export const GET_SITEPGS = start+"api/site/getAll";
 export const PUT_SITEPGS = start+"api/site/edit/";
@@ -84,12 +85,15 @@ export const MOVELEAD_TO_TRASH = start+"api/lead/movetotrash"
 export const GET_ALL_LEAD_TRASH = start + "api/lead/getallfromtrash";
 export const RESTORE_LEAD_TRASH = start + "api/lead/restorefromtrash";
 export const DELETE_LEAD_TRASH = start + "api/lead/deletefromtrash";
+export const GET_ALL_FROM_TRASH = start + "api/lead/getallfromtrash";
 export const GET_ALL_ROLES = start + "api/user/getallroles";
 export const GET_LABEL = start + "api/setting/label/getAll";
 export const ADD_LABEL = start + "api/setting/label/add";
 export const UPDATE_TEAM_MEM = start + "api/user/updateteammember/";
 export const GET_ROLES_BY_USER = start +"api/user/getrolesByUser/";
 export const UPDATE_LABEL = start + "api/setting/label/edit/1";
+export const GET_PASSWORD = start + "api/setting/password/get";
+export const EDIT_PASSWORD = start + "api/setting/password/edit";
 //=======================================================================notes
 export const ADD_NOTES = start+"api/note/add";
 export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
@@ -102,3 +106,4 @@ export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
 
 //========================================================================COMPANY settings
 export const ADD_TICKET = start + "api/user/ticket/raise";
+export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";

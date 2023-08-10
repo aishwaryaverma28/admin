@@ -268,7 +268,8 @@ const BlogAdd = () => {
     }).then((response) => {
       console.log(response);
       toast.success("Blog data updated successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
     })
     .catch((error) => {

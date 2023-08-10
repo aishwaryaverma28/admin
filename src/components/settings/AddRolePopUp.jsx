@@ -17,7 +17,8 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles, setData }) 
 
   const closePopUp =() => {
     toast.error("Changes are not Saved", {
-      position:"top-center"
+      position:"top-center",
+      autoClose:2000
     });
     onClose();
   }
@@ -59,7 +60,8 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles, setData }) 
           .then((response) => {
              
             toast.success('Roles saved successfully', {
-              position:"top-center"
+              position:"top-center",
+              autoClose:2000
             });
             setData();
             onClose();
@@ -67,7 +69,8 @@ const AddRolePopUp = ({ onClose, roles, user_id, email, assignRoles, setData }) 
           .catch((error) => {
             console.log(error)
             toast.error('Error saving roles', {
-              position:"top-center"
+              position:"top-center",
+              autoClose:2000
             })
           });
   };

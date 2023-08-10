@@ -179,7 +179,8 @@ const DeleteLeads = ({deleteCount}) => {
         fetchData();
         deleteCount();
         toast.success("Lead restored successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {
@@ -203,7 +204,8 @@ const DeleteLeads = ({deleteCount}) => {
         fetchData();
         deleteCount();
         toast.error("Lead deleted successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {

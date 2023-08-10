@@ -5,6 +5,7 @@ import {
   GETNOTE_FROM_TRASH,
   getDecryptedToken,
   handleLogout,
+  GET_ALL_FROM_TRASH
 } from "../utils/Constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -108,7 +109,7 @@ const RecycleBin = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://core.leadplaner.com:3001/api/lead/getallfromtrash",
+        GET_ALL_FROM_TRASH,
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header

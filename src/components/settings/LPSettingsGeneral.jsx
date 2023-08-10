@@ -75,7 +75,8 @@ const LPSettingsGeneral = () => {
     }).then((response) => {
       console.log(response);
       toast.success("User data updated successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
       
     });

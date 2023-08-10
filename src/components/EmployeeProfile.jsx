@@ -4,7 +4,7 @@ import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
 import "./styles/EmployeeProfile.css";
-import { EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken,handleLogout } from "./utils/Constants";
+import { EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken,handleLogout,GET_USER_EMPLOYEE } from "./utils/Constants";
 const userId = localStorage.getItem('id');
 const EmployeeProfile = () => {
   const { setProfileImage } = useContext(UserContext);
@@ -33,7 +33,7 @@ const [pic, setPic] = useState("");
   
   async function getUser() {
     try {
-      const response = await axios.get("http://core.leadplaner.com:3001/api/user/getuserinfo", {
+      const response = await axios.get(GET_USER_EMPLOYEE, {
         headers: {
           Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
         },

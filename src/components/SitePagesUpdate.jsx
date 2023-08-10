@@ -93,7 +93,8 @@ const SitePagesUpdate = () => {
       //   setUpdateMessage("");
       // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("Site Pages data updated successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
     });
   }

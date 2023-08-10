@@ -76,7 +76,8 @@ const AddNotes = ({ item, onNotesNum }) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
         toast.success("Notes added successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {
@@ -120,7 +121,8 @@ const AddNotes = ({ item, onNotesNum }) => {
         .then((response) => {
           fetchNotes();
           toast.success("Note updated successfully", {
-            position:"top-center"
+            position:"top-center",
+            autoClose:2000
           })
         })
         .catch((error) => {
@@ -145,7 +147,8 @@ const AddNotes = ({ item, onNotesNum }) => {
         setNotes(updatedNotes);
         onNotesNum();
         toast.success("Note moved to trash successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {

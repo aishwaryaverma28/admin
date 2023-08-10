@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_USER, getDecryptedToken } from "../utils/Constants";
+import { ADD_USER, getDecryptedToken, GET_PASSWORD } from "../utils/Constants";
 import "../styles/LPUserAndTeam.css";
 
 const CreateUserModal = ({ onClose, onUserAdded }) => {
@@ -24,7 +24,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
 
   const passGet = () => {
     axios
-      .get("http://core.leadplaner.com:3001/api/setting/password/get", {
+      .get(GET_PASSWORD, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

@@ -187,7 +187,8 @@ const DeleteNotes = ({deleteCount}) => {
         deleteCount();
         onCloseNoteRestorePopUP();
         toast.success("Note restored successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {
@@ -210,7 +211,8 @@ const DeleteNotes = ({deleteCount}) => {
         deleteCount();
         onCloseNoteDeletePopUp();
         toast.error("Note delete successfully", {
-          position:"top-center"
+          position:"top-center",
+          autoClose:2000
         })
       })
       .catch((error) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios library
-import { UPDATE_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_TEAM_MEM, getDecryptedToken, GET_PASSWORD } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,7 +20,7 @@ const ResetPassword = ({ onClose, user }) => {
 
   const passGet = () => {
     axios
-      .get("http://core.leadplaner.com:3001/api/setting/password/get", {
+      .get(GET_PASSWORD, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -123,6 +123,7 @@ console.log(passDes)
 
             toast.success("Password saved successfully", {
               position: "top-center",
+              autoClose:2000
             });
             onClose();
           })
@@ -130,16 +131,19 @@ console.log(passDes)
             // Handle error
             toast.error("Error saving password", {
               position: "top-center",
+              autoClose:2000
             });
           });
       } else {
         toast.error("Please fulfill all password criteria.", {
           position: "top-center",
+          autoClose:2000
         });
       }
     } else {
       toast.error("Passwords do not match", {
         position: "top-center",
+        autoClose:2000
       });
     }
   };
@@ -161,6 +165,7 @@ console.log(passDes)
 
           toast.success("Password saved successfully", {
             position: "top-center",
+            autoClose:2000
           });
           onClose();
         })
@@ -168,6 +173,7 @@ console.log(passDes)
           // Handle error
           toast.error("Error saving password", {
             position: "top-center",
+            autoClose:2000
           });
         });
     }

@@ -66,7 +66,8 @@ function handleSubmit(event) {
     .then((response) => {
       console.log(response);
       toast.success("Employee data added successfully", {
-        position:"top-center"
+        position:"top-center",
+        autoClose:2000
       })
       setDetails({
         hire_date: "",
