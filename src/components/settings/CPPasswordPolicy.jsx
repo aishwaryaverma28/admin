@@ -189,7 +189,7 @@ const CPPasswordPolicy = () => {
                   {condition.description}
                 </p>
                 <input
-                  type="text"
+                  type="number" max='10'
                   className="common-input password-input"
                   name=""
                   value={checkboxStates[index]?.value || ""}
