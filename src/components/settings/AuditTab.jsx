@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import {
+    UPDATE_AUDIT,
     GET_AUDIT,
     getDecryptedToken,
 } from "../utils/Constants";
@@ -42,7 +43,7 @@ const AuditTab = () => {
             })
         );
         axios
-          .put(`http://core.leadplaner.com:3001/api/setting/audit/edit/${id}`, {
+          .put(UPDATE_AUDIT+id, {
             is_enabled: isChecked ? 1 : 0,
           }, {
             headers: {

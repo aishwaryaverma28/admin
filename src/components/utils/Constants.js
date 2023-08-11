@@ -108,3 +108,4 @@ export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
 export const ADD_TICKET = start + "api/user/ticket/raise";
 export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";
 export const GET_AUDIT = start + "api/setting/audit/getAll";
+export const UPDATE_AUDIT = start + "api/setting/audit/edit/";

@@ -15,7 +15,7 @@ const LPCompanySettings = () => {
   );
   // const [activeTab, setActiveTab] = useState("general");
 useEffect(() => {
-  const validTabs = ["general", "products", "billings", "master-settings","password-policy", "support"];
+  const validTabs = ["general", "products", "billings", "master-settings","password-policy", "support", "audit"];
   if (!validTabs.includes(localStorage.getItem("activeTab"))) {
     setActiveTab("general");
     localStorage.setItem("activeTab", "general");
