@@ -82,23 +82,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/home",
-        element: <Home />,
+        element: <SecureRoutes Component={Home} />,
       },
       {
         path: "/lp/mail",
-        element: <Mail />,
+        element: <SecureRoutes Component={Mail} />,
       },
       {
         path: "/lp/contacts",
-        element: <Contacts />,
+        element: <SecureRoutes Component={Contacts} />,
       },
       {
         path: "/lp/deals",
-        element: <Deals />,
+        element: <SecureRoutes Component={Deals} />,
       },
       {
         path: "/lp/settings",
-        element: <LPSettings />,
+        element: <SecureRoutes Component={LPSettings} />,
         errorElement: <Error />,
         children: [
           {
@@ -107,15 +107,15 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/general",
-            element: <LPSettingsGeneral />,
+            element: <SecureRoutes Component={LPSettingsGeneral} />,
           },
           {
             path: "/lp/settings/notification",
-            element: <LPSettingsNotification />,
+            element: <SecureRoutes Component={LPSettingsNotification} />,
           },
           {
             path: "/lp/settings/usernteams",
-            element: <UserAndTeams />,
+            element: <SecureRoutes Component={UserAndTeams} />,
           },
           {
             path: "/lp/settings/usernteams/:id",
@@ -123,31 +123,31 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/companysettings",
-            element: <LPCompanySettings />,
+            element: <SecureRoutes Component={LPCompanySettings} />,
           },
           {
             path: "/lp/settings/recyclebin",
-            element: <RecycleBin />,
+            element: <SecureRoutes Component={RecycleBin} />,
           },
           {
             path: "/lp/settings/privacyConcent",
-            element: <PrivacyNConsent/> ,
+            element: <SecureRoutes Component={PrivacyNConsent} />,
           },
           {
             path: "/lp/settings/settingLeads",
-            element: <SettingLeads/> ,
+            element: <SecureRoutes Component={SettingLeads} />,
           },
           {
             path: "/lp/settings/settingDeal",
-            element: <SettingDeal/> ,
+            element: <SecureRoutes Component={SettingDeal} />,
           },
           {
             path: "/lp/settings/settingUsage",
-            element: <SettingUsage/> ,
+            element: <SecureRoutes Component={SettingUsage} />,
           },
           {
             path: "/lp/settings/settingImpExp",
-            element: <SettingImpExp/> ,
+            element: <SecureRoutes Component={SettingImpExp} />,
           },
         ],
       },
