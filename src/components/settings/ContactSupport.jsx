@@ -8,7 +8,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ContactSupport = () => {
+const ContactSupport = ({isContactTabActive=false}) => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -29,6 +29,9 @@ const ContactSupport = () => {
       // You can upload the file to the server here using APIs, if needed.
     }
   };
+
+  console.log("hiiiiiii")
+  console.log(isContactTabActive)
 
   const handleBrowseClick = () => {
     fileInputRef.current.click();

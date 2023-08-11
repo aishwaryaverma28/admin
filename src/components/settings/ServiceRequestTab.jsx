@@ -34,7 +34,7 @@ const ServiceRequestTab = ({ ticket, onClose }) => {
             </div>
             <div className="service-user-details">
               <p className="common-fonts service-user-name">email</p>
-              <p className="common-fonts">{ticket.email}</p>
+              <p className="common-fonts email-case">{ticket.email}</p>
             </div>
             <div className="service-user-details">
               <p className="common-fonts service-user-name">priority</p>

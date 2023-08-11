@@ -168,7 +168,7 @@ const LPheader = () => {
             <img src={user} alt="user" />
             <div className="crmUserInfo">
               <h5 className="crmUserInfoName">{clientData.first_name+" "+clientData.last_name}</h5>
-              <p>{clientData.email}</p>
+              <p className='email-case'>{clientData.email}</p>
               <p>{clientData.job_title}</p>
             </div>
           </div>

@@ -13,21 +13,20 @@ const SupportTab = () => {
     
     <section>
         <div className="cp-billings-tabs">
+        <button className={`common-fonts ${activeTab === "service" ? "cp-active" : ""
+  }` }  onClick={() => handleTabChange('service')}
+    >Service Support</button>
+
     <button  
     className={`common-fonts ${activeTab === "contact" ? "cp-active" : ""
   }` }  onClick={() => handleTabChange('contact')}
     >Contact Support</button>
-
-
-    <button className={`common-fonts ${activeTab === "service" ? "cp-active" : ""
-  }` }  onClick={() => handleTabChange('service')}
-    >Service Support</button>
     </div>
 
     
   {activeTab === "contact" && 
     (
-        <ContactSupport/>
+        <ContactSupport />
     )
   
          }
