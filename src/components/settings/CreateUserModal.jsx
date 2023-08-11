@@ -223,13 +223,13 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           <div className="inputDiv">
             <label htmlFor="password">Password</label>
             <br />
-            <div className="password-input-wrapper">
+            <div className="create-user-input-wrapper">
               {passDes.some(
                 (condition) => condition.id === 5 && condition.active === 1
               ) ? (
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="common-fonts common-input pwd-input"
+                  className="common-fonts"
                   onChange={handlePasswordChange}
                   value={password}
                 />
@@ -237,12 +237,12 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
                 <input
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
-                  className="common-fonts common-input pwd-input"
+                  className="common-fonts common-input create-user-pwd-input"
                   value={password}
                 />
               )}
               <button
-                className="password-toggle-button"
+                className="create-user-toggle-button "
                 onClick={handlePasswordEye}
               >
                 {showPassword ? (
