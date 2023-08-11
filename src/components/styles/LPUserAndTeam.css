@@ -413,7 +413,10 @@ input:focus {
 .userModal {
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  height: fit-content;
+  width:28rem;
+  height: 35rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .modal-close {
@@ -804,3 +807,19 @@ input:focus {
 .create-user-pwd-input{
   padding-right: 2rem !important;
 }
+
+.create-user-input-wrapper{
+  position: relative;
+}
+
+.create-user-toggle-button{
+  position: absolute;
+top: 52%;
+transform: translateY(-50%);
+right:3rem;
+cursor: pointer;
+border:none;
+background-color: var(--th-background);
+}
+
+
