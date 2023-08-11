@@ -163,7 +163,6 @@ const CPPasswordPolicy = () => {
       {/* Mapping over the passDes array to render the checkboxes and input fields */}
       {passDes.map(
         (condition, index) =>
-          // Skip mapping when condition.term === "is_enabled"
           condition.term !== "is_enabled" && (
             <div className="password-rules" key={condition.id}>
               <div>
@@ -181,7 +180,6 @@ const CPPasswordPolicy = () => {
                           : 0
                       );
                     }}
-                    disabled={!toggleChecked} // Add this line
                   />
                   <span className="checkmark"></span>
                 </label>
@@ -203,6 +201,7 @@ const CPPasswordPolicy = () => {
                       )
                     );
                   }}
+                  disabled={checkboxStates[index]?.active !== 1}
                 />
               </div>
             </div>
