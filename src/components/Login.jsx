@@ -60,6 +60,7 @@ const Login = () => {
       .then((response) => {
         const data = response.data;
         const status = response.data.status;
+        console.log(data);
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {

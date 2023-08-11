@@ -22,8 +22,6 @@
 .back-to-user button span {
     margin-left: 0.31rem;
 }
-
-
 /* go back button ends */
 
 
@@ -118,16 +116,6 @@
 .permission-label {
     margin-bottom: 0.56rem;
 }
-
-.permission-input {
-    font-size: 1rem;
-    outline: none;
-    padding: 1rem;
-    border-radius: 0.3125rem;
-    border: 1px solid #DCDCDC;
-    background: #F3F6FA;
-}
-
 .permission-input {
     margin-bottom: 1.5rem;
     width: 28rem;
@@ -138,7 +126,8 @@
     background: #F3F6FA;
     padding: 1rem;
     cursor: pointer;
-
+    font-size: 1rem;
+    outline: none;
 }
 
 

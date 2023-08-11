@@ -4,7 +4,7 @@ import ServiceSupport from './ServiceSupport';
 
 const SupportTab = () => {
 
-    const [activeTab, setActiveTab] = useState('contact');
+    const [activeTab, setActiveTab] = useState('service');
 
     function handleTabChange(tabName){
       setActiveTab(tabName)
