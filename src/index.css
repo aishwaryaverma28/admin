@@ -243,5 +243,8 @@ height: 2.6875rem;
   color: #909DAF !important;
 }
 
+.email-case{
+  text-transform: lowercase;
+}
 
 

@@ -121,7 +121,7 @@ const Registration = () => {
                 />
                 <input
                   type="email"
-                  className="registration-form-input"
+                  className="registration-form-input email-case"
                   placeholder="Work Email*"
                   name="email"
                   value={formData.email}

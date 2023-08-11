@@ -218,7 +218,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   id="email"
                   type="email"
                   name="email"
-                  className="lead-input"
+                  className="lead-input email-case"
                   onChange={handleChange}
                   value={leadData.email} // Add value prop for controlled input
                 />

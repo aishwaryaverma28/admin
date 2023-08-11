@@ -119,7 +119,7 @@ const ContactSupport = () => {
             <input
               type="email" name="email"
               onChange={handleChange}
-              className="common-fonts common-input contact-tab-input"
+              className="common-fonts common-input contact-tab-input email-case"
             />
           </div>
 

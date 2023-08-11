@@ -207,6 +207,7 @@ function handleSubmit(event) {
                 name="personal_email"
                 id="personal_email"
                 placeholder="Please Enter Email"
+                className="email-case"
                 onChange={handleChange}
               />
             </div>

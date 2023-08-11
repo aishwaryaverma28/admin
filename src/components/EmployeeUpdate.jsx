@@ -258,6 +258,7 @@ const EmployeeUpdate = () => {
                 value={formData.personalEmail}
                 onChange={handleChange}
                 placeholder="Please Enter Email"
+                className="email-case"
               />
             </div>
             <div className="fromFiled">
