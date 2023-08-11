@@ -14,7 +14,7 @@ const ServiceSupport = () => {
   const [selectedTicket, setSelectedTicket] = useState(null); // State for selected ticket
   const [isServiceTabOpen, setIsServiceTabOpen] = useState(false);
   const [isContactTabOpen, setIsContactTabOpen] = useState(false);
-  const [isContactTabActive ,  setIsContactTabActive] = useState(false)
+  const [isEditContact ,  setIsEditContact] = useState(false)
 
   const getTicket = () => {
     axios
@@ -38,21 +38,24 @@ const ServiceSupport = () => {
   const handleOpenServiceTab = (item) => {
     setSelectedTicket(item); // Set the selected ticket item
     setIsServiceTabOpen(true);
+    
   };
 
   const handleCloseServiceTab = () => {
     setIsServiceTabOpen(false);
   };
 
-  const openContactTab = () => {
-    setIsContactTabActive(true);
+  const openContactTab = (item) => {
+    setIsEditContact(true);
     setIsContactTabOpen(true);
+    setSelectedTicket(item);
+  
     
   }
 
   if(isContactTabOpen){
     return(
-      <ContactSupport isContactTabActive={isContactTabActive}/>
+      <ContactSupport isEditContact={isEditContact} ticket={selectedTicket}/>
     )
   }
   else{
@@ -93,7 +96,7 @@ const ServiceSupport = () => {
                       <td className="common-fonts" onClick={() => handleOpenServiceTab(item)}>{item.assigned_to}</td>
                       <td className="common-fonts" onClick={() => handleOpenServiceTab(item)}>{item.created_at.split('T')[0]}</td>
                       <td className="common-fonts" onClick={() => handleOpenServiceTab(item)}>{item.updated_at.split('T')[0]}</td>
-                      <td onClick={openContactTab}><div><i className="fa-solid fa-pen"></i></div></td>
+                      <td onClick={() => openContactTab(item)}><div><i className="fa-solid fa-pen"></i></div></td>
                     </tr>
                   ))}
                 </tbody>

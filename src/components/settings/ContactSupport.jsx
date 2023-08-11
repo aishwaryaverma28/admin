@@ -7,12 +7,14 @@ import {
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ServiceSupport from './ServiceSupport';
 
-const ContactSupport = ({isContactTabActive=false}) => {
+const ContactSupport = ({isEditContact=false, ticket}) => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
+  const [ openServiceSupport, setOpenServiceSupport] = useState(false);
   const [details, setDetails] = useState({
     title: "",
     description: "",
@@ -22,6 +24,10 @@ const ContactSupport = ({isContactTabActive=false}) => {
     priority: "Low",
 })
 
+console.log(ticket)
+
+
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -30,8 +36,7 @@ const ContactSupport = ({isContactTabActive=false}) => {
     }
   };
 
-  console.log("hiiiiiii")
-  console.log(isContactTabActive)
+
 
   const handleBrowseClick = () => {
     fileInputRef.current.click();
@@ -73,10 +78,26 @@ const ContactSupport = ({isContactTabActive=false}) => {
     });
 }
 
-  return (
-    <div>
-      <p className="common-fonts contact-support-heading">Contact support</p>
 
+const handleCancelBtn = (e) => {
+e.preventDefault();
+setOpenServiceSupport(true);
+}
+
+if(openServiceSupport){
+  return (
+    <ServiceSupport/>
+  )
+ 
+}
+else{
+
+  return (
+    <div>{
+      !isEditContact && <p className="common-fonts contact-support-heading">Contact support</p>
+
+      }
+      
       <div>
         <form>
           <div className="contact-tab-fields">
@@ -87,6 +108,7 @@ const ContactSupport = ({isContactTabActive=false}) => {
               type="text" name="title"
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input"
+              value={isEditContact ? ticket?.title : ""}
             />
           </div>
 
@@ -99,6 +121,7 @@ const ContactSupport = ({isContactTabActive=false}) => {
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input contact-tab-textarea"
               placeholder="Describe your issue in detail"
+              value={isEditContact ? ticket.description : ""}
             ></textarea>
           </div>
 
@@ -110,7 +133,8 @@ const ContactSupport = ({isContactTabActive=false}) => {
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
-                className="common-input contact-tab-mobile contact-tab-input"
+                className="common-input contact-tab-input"
+                value={isEditContact ? ticket.mobile : ""}
               />
             </div>
           </div>
@@ -123,6 +147,7 @@ const ContactSupport = ({isContactTabActive=false}) => {
               type="email" name="email"
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input email-case"
+              value={isEditContact ? ticket.email : ""}
             />
           </div>
 
@@ -134,6 +159,7 @@ const ContactSupport = ({isContactTabActive=false}) => {
              name="category"
              onChange={handleChange}
               className="common-input contact-type-of-issue"
+              value={isEditContact ? ticket.category : ""}
             >
               <option value="technical">Technical</option>
               <option value="Non Technical">Non Technical</option>
@@ -148,10 +174,11 @@ const ContactSupport = ({isContactTabActive=false}) => {
                name="priority"
                onChange={handleChange}
               className="common-input contact-type-of-issue"
+              value={isEditContact ? ticket.priority : ""}
             >
               <option value="Low">Low</option>
               <option value="Average">Average</option>
-              <option value="Important">Important</option>
+              <option value="High">High</option>
             </select>
           </div>
 
@@ -201,28 +228,52 @@ const ContactSupport = ({isContactTabActive=false}) => {
               </span>
             </div>
           </div>
+          {
+            !isEditContact ? (
+              <div className="contact-support-button">
+              <button className="common-white-button" onClick={handleCancelBtn}>Cancel</button>
+              {stateBtn === 0 ? (
+                <button className="disabledBtn" disabled>
+                  Save
+                </button>
+              ) : (
+                <button
+                  className="common-save-button permission-save-btn"
+                  onClick={handleSubmit}
+                >
+                  Save
+                </button>
+              )}
+                         
+            </div>
 
-          <div className="contact-support-button">
-            <button className="common-white-button">Cancel</button>
-            {stateBtn === 0 ? (
-              <button className="disabledBtn" disabled>
-                Save
-              </button>
             ) : (
-              <button
-                className="common-save-button permission-save-btn"
-                onClick={handleSubmit}
-              >
-                Save
-              </button>
-            )}
-                       
-          </div>
+              <div className="contact-support-button">
+              <button className="common-white-button" onClick={handleCancelBtn}>Cancel</button>
+              {stateBtn === 0 ? (
+                <button className="disabledBtn" disabled>
+                  Update
+                </button>
+              ) : (
+                <button
+                  className="common-save-button permission-save-btn"
+                >
+                  Update
+                </button>
+              )}
+                         
+            </div>
+            )
+          }
+
         </form>
       </div>
       <ToastContainer/>
     </div>
   );
+
+}
+
 };
 
 export default ContactSupport;
