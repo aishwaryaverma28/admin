@@ -89,10 +89,6 @@ const router = createBrowserRouter([
         element: <Contacts />,
       },
       {
-        path: "/lp/error",
-        element: <Error />,
-      },
-      {
         path: "/lp/deals",
         element: <Deals />,
       },
@@ -104,6 +100,10 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings", // This is the new route for /lp
             element: <Navigate to="/lp/settings/general" replace />, // Redirect to /lp/home
+          },
+          {
+            path: "/lp/settings/error",
+            element: <Error />,
           },
           {
             path: "/lp/settings/general",

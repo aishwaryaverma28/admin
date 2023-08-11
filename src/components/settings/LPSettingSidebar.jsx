@@ -32,7 +32,7 @@ const LPSettingSidebar = () => {
             activeClassName="activeLink"
             >users & teams</NavLink></p>
       <p className="account-options setting-font-style"><NavLink
-            exact to="/lp/error"
+            exact to="/lp/settings/error"
             activeClassName="activeLink"
             >privacy & consent</NavLink></p>
     </div>
@@ -43,19 +43,19 @@ const LPSettingSidebar = () => {
             activeClassName="activeLink"
             >Company Settings</NavLink></p>
       <p className="company-options setting-font-style"><NavLink
-            exact to="/lp/error"
+            exact to="/lp/settings/error"
             activeClassName="activeLink"
             >Leads</NavLink></p>
       <p className="company-options setting-font-style"><NavLink
-            exact to="/lp/error"
+            exact to="/lp/settings/error"
             activeClassName="activeLink"
             >Deals</NavLink></p>
       <p className="company-options setting-font-style"><NavLink
-            exact to="/lp/error"
+            exact to="/lp/settings/error"
             activeClassName="activeLink"
             >Usage</NavLink></p>
       <p className="company-options setting-font-style"><NavLink
-            exact to="/lp/error"
+            exact to="/lp/settings/error"
             activeClassName="activeLink"
             >Import & Export</NavLink></p>
              <p className="company-options setting-font-style"><NavLink
