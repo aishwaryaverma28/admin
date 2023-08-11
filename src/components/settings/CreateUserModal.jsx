@@ -238,7 +238,8 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
                   className="common-fonts"
-                  value={password}
+                  // value={password}
+                  name="password"
                 />
               )}
               <button
