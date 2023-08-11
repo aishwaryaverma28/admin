@@ -419,7 +419,7 @@ const UserAndTeams = () => {
                                     teamMember.last_name}
                                     </Link>
                                 </p>
-                                <p>{teamMember.email}</p>
+                                <p className="email-case">{teamMember.email}</p>
                               </div>
                             </div>
                             <div className="select action-select">

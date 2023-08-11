@@ -628,7 +628,8 @@
 .service-support-table td:nth-child(1), .service-support-table td:nth-child(2),
 .service-support-table td:nth-child(3), .service-support-table td:nth-child(4),
 .service-support-table td:nth-child(5), .service-support-table td:nth-child(6),
-.service-support-table td:nth-child(7), .service-support-table td:nth-child(8){
+.service-support-table td:nth-child(7), .service-support-table td:nth-child(8),
+.service-support-table td:nth-child(9), .service-support-table th:nth-child(9){
   border-right:1px solid transparent;
 }
 /* service support ends */
@@ -749,3 +750,20 @@
     margin-left: 0.5rem;
 }
 /* service request container ends */
+
+/* audit table  */
+
+.audit-table{
+    margin-top: 2rem;
+}
+
+.audit-table table th{
+    background-color: var(--th-background);
+    text-align: left;
+    font-size: var(--font-small);
+}
+
+.audit-table table td:first-child{
+    border-right: 1px solid transparent;
+}
+/* audit table ends */

@@ -212,7 +212,7 @@ const fetchData = async () => {
               <p className="common-fonts permission-username">
                 {loading ? "" :teamData?.first_name + " " + teamData?.last_name}
               </p>
-              <p className="common-fonts permission-email">{loading ? "" :teamData?.email}</p>
+              <p className="common-fonts permission-email email-case">{loading ? "" :teamData?.email}</p>
             </div>
 
             <div>

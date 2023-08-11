@@ -7,6 +7,7 @@ import CPBillings from "./CPBillings";
 import CPGenral from "./CPGenral";
 import MasterSetting from "./MasterSetting";
 import SupportTab from "./SupportTab";
+import AuditTab from "./AuditTab";
 
 const LPCompanySettings = () => {
   const [activeTab, setActiveTab] = useState(
@@ -80,6 +81,14 @@ useEffect(() => {
           >
             Support
           </button>
+          <button
+            className={`user-team-btn ${
+              activeTab === "audit" ? "common-active" : ""
+            }`}
+            onClick={() => handleTabChange("audit")}
+          >
+            Audit
+          </button>
         </div>
 
         {activeTab === "general" && (
@@ -111,6 +120,11 @@ useEffect(() => {
         {activeTab === "support" && (
           <>
             <SupportTab />
+          </>
+        )}
+        {activeTab === "audit" && (
+          <>
+            <AuditTab/>
           </>
         )}
       </section>
