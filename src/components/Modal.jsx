@@ -545,6 +545,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             isEditable ? editStylingInput : normalStylingInput
                           }
                           disabled={isDisabled}
+                          className="email-case"
                         />
                       </span>
                     )}
@@ -666,6 +667,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             normalStylingInput
                           }
                           disabled={true}
+                          className="email-case"
                         />
                       </span>
                     )}

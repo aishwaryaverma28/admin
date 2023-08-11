@@ -266,7 +266,7 @@ const fetchData = async () => {
                       name="email"
                       onChange={handleChange}
                       value={loading ? "-" :teamData?.email}
-                      className="permission-input common-fonts"
+                      className="permission-input common-fonts email-case"
                     />
                   </div>
                 </div>

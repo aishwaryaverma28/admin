@@ -207,6 +207,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
               onChange={handleChange}
               id="email"
               placeholder="email"
+              className="email-case"
             />
           </div>
           <div className="inputDiv">

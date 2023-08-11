@@ -42,7 +42,7 @@ const HeadPhone = () => {
 
            <div className='contact-tab-fields'>
             <label htmlFor="" className='common-fonts contact-tab-label'>Confirm email address</label>
-            <input type="email" className='common-fonts common-input contact-tab-input' />
+            <input type="email" className='common-fonts common-input email-case contact-tab-input' />
            </div>
 
            <div className='contact-tab-fields'>
