@@ -237,7 +237,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
                 <input
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
-                  className="common-fonts common-input create-user-pwd-input"
+                  className="common-fonts"
                   value={password}
                 />
               )}
