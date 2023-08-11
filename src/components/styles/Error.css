@@ -1,4 +1,3 @@
-
 .error-font-style {
     color: #1E2224;
     font-family: "Lexend Deca", sans-serif;
@@ -10,21 +9,21 @@
 }
 
 .lead-error-page {
-    position: absolute;
+    /* position: absolute; */
     /* border: 1px solid red; */
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items:center;
-    width: 75%;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
 
 }
 
 .lead-error-page img {
-    width: 100%;
+    /* width: 100%; */
     height: 25rem;
 }
 

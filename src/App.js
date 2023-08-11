@@ -46,7 +46,11 @@ import RecycleBin from "./components/settings/RecycleBin";
 import LPPermission from "./components/settings/LPPermission.jsx";
 import LPCompanySettings from "./components/settings/LPCompanySettings";
 import LPSettings from "./components/settings/LPSettings";
-
+import PrivacyNConsent from "./components/settings/PrivacyNConsent";
+import SettingLeads from "./components/settings/SettingLeads";
+import SettingDeal from "./components/settings/SettingDeal";
+import SettingUsage from "./components/settings/SettingUsage";
+import SettingImpExp from "./components/settings/SettingImpExp";
 const router = createBrowserRouter([
   // {
   //   path: "/:auth",
@@ -102,10 +106,6 @@ const router = createBrowserRouter([
             element: <Navigate to="/lp/settings/general" replace />, // Redirect to /lp/home
           },
           {
-            path: "/lp/settings/error",
-            element: <Error />,
-          },
-          {
             path: "/lp/settings/general",
             element: <LPSettingsGeneral />,
           },
@@ -128,6 +128,26 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/recyclebin",
             element: <RecycleBin />,
+          },
+          {
+            path: "/lp/settings/privacyConcent",
+            element: <PrivacyNConsent/> ,
+          },
+          {
+            path: "/lp/settings/settingLeads",
+            element: <SettingLeads/> ,
+          },
+          {
+            path: "/lp/settings/settingDeal",
+            element: <SettingDeal/> ,
+          },
+          {
+            path: "/lp/settings/settingUsage",
+            element: <SettingUsage/> ,
+          },
+          {
+            path: "/lp/settings/settingImpExp",
+            element: <SettingImpExp/> ,
           },
         ],
       },
