@@ -1,19 +1,29 @@
 import React, { useRef, useState } from 'react';
 import '../styles/CompanyProducts.css';
+import ProductPopUp from './ProductPopUp';
 
 
 const CPProducts = () => {
     const actionDropDownRef = useRef(null);
     const [actionopen, setActionOpen] = useState(false);
+    const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
     const toggleActionDropdownStatic = () => {
         setActionOpen(!actionopen);
       };
+
+      const handleAddProduct = () => {
+        setIsProductModalOpen(true);
+      }
+
+      const handleCloseAddProduct = () => {
+        setIsProductModalOpen(false);
+      }
     
   return (
     <section>
         <div className='cp-top'>
-            <button className='common-save-button'>Add Product</button>
+            <button className='common-save-button' onClick={handleAddProduct}>Add Product</button>
         </div>
 
         <div className='cp-table'>
@@ -77,6 +87,11 @@ const CPProducts = () => {
             </table>
 
         </div>
+        {
+          isProductModalOpen && (
+            <ProductPopUp onClose={handleCloseAddProduct}/>
+          )
+        }
 
     </section>
   )
