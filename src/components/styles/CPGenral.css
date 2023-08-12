@@ -614,6 +614,12 @@
     margin-bottom: 1rem;
 }
 
+.service-req-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .service-support-table th{
     background-color: var(--th-background);
     text-align: left;
@@ -768,3 +774,9 @@
     border-right: 1px solid transparent;
 }
 /* audit table ends */
+
+.password-refresh{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

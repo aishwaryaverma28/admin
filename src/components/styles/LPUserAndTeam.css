@@ -822,4 +822,17 @@ border:none;
 background-color: var(--th-background);
 }
 
+.active-inactive{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.user-team-refresh-icon{
+  position: absolute;
+  top:40%;
+  right: 0;
+}
+
 
