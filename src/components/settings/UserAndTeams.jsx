@@ -150,6 +150,10 @@ const UserAndTeams = () => {
     };
   }, []);
 
+  const userTeamRefresh = () => {
+    userAdded();
+  }
+
   return (
     <>
       <main className="user-team-container">
@@ -228,7 +232,7 @@ const UserAndTeams = () => {
                   }`}
                   onClick={() => handleTabChange("All")}
                 >
-                  All (2)
+                  All ({filteredTeamData.length})
                 </button>
                 <button
                   className={`user-team-btn ${
@@ -255,10 +259,14 @@ const UserAndTeams = () => {
                   Deactivated (1)
                 </button>
               </div>
+              <button type="button" className="helpBtn genral-refresh-icon user-team-refresh-icon" title="Refresh" onClick={userTeamRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
             </section>
 
             {activeTabName === "All" && (
-              <section className="user-table">
+              
+                            <section className="user-table">
                 {loading ? (
                   // Show a loading message or spinner while data is loading
                   <p>Loading...</p>
@@ -487,6 +495,8 @@ const UserAndTeams = () => {
                   </table>
                 )}
               </section>
+
+
             )}
             {activeTabName === "Active" && (
               <section className="user-table">
