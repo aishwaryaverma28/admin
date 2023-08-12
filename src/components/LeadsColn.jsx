@@ -23,6 +23,8 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
     useState(false);
   const [checkedRows, setCheckedRows] = useState({});
 
+
+
   const openModal = (item) => {
     setSelectedItem(item);
     setModalVisible(true);
@@ -60,8 +62,8 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       .then((response) => {
         console.log(response);
         toast.success("Lead moved to trash successfully", {
-          position:"top-center",
-          autoClose:2000
+          position: "top-center",
+          autoClose: 2000
         })
       })
       .catch((error) => {
@@ -102,7 +104,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [isOpenState]);
- 
+
   // Function to handle header checkbox click
   const handleHeaderCheckboxChange = (e) => {
     const { checked } = e.target;
@@ -123,19 +125,19 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       onCardSelection([], false);
     }
   };
-// Function to handle individual checkbox click
-const handleCheckChange = (e) => {
-  const { name, checked } = e.target;
+  // Function to handle individual checkbox click
+  const handleCheckChange = (e) => {
+    const { name, checked } = e.target;
 
-  // Update the checked state for the clicked row
-  setCheckedRows((prevCheckedRows) => ({
-    ...prevCheckedRows,
-    [name]: checked,
-  }));
-  const cardId = parseInt(name);
-  // Update the selectedCardIds based on the checkbox value
-  onCardSelection(cardId, checked);
-};
+    // Update the checked state for the clicked row
+    setCheckedRows((prevCheckedRows) => ({
+      ...prevCheckedRows,
+      [name]: checked,
+    }));
+    const cardId = parseInt(name);
+    // Update the selectedCardIds based on the checkbox value
+    onCardSelection(cardId, checked);
+  };
 
   const areAllRowsChecked = () => {
     return leadArray.every((item) => checkedRows[item.id]);
@@ -144,30 +146,24 @@ const handleCheckChange = (e) => {
     // Set the header checkbox state based on the checked state of all rows
     setIsHeaderCheckboxChecked(areAllRowsChecked());
   }, [checkedRows, leadArray]);
-
-  const getMergeLabelColor = (priority) => {
-    const matchingLabel = mergedLabels.find(label => label.name === priority);
-    return matchingLabel ? matchingLabel.colour_code : null;
-  };
   return (
     <>
       <div className="card-details">
         <div className="main-cards">
           <div className="cards-new">
             <p
-              className={`new-leads ${
-                leadKey === "New"
+              className={`new-leads ${leadKey === "New"
                   ? "new-color"
                   : leadKey === "Open"
-                  ? "open-color"
-                  : leadKey === "InProgress"
-                  ? "progress-color"
-                  : leadKey === "Open deal"
-                  ? "deal-color"
-                  : leadKey === "Unread"
-                  ? "unread-color"
-                  : ""
-              }`}
+                    ? "open-color"
+                    : leadKey === "InProgress"
+                      ? "progress-color"
+                      : leadKey === "Open deal"
+                        ? "deal-color"
+                        : leadKey === "Unread"
+                          ? "unread-color"
+                          : ""
+                }`}
             >
               {leadKey + "(" + leadArray.length + ")"}
             </p>
@@ -259,16 +255,27 @@ const handleCheckChange = (e) => {
                     )}
                   </button>
                   <div className="priorityBox">
-                    <p className="leads-priority" style={{ backgroundColor: getMergeLabelColor(item.priority) }}>{item.priority}</p>
+                    {mergedLabels.map((label) => (
+                      label.id === item.label_id ? (
+                        <p
+                          key={label.id}
+                          className="leads-priority"
+                          style={{ backgroundColor: label.colour_code }}
+                        >
+                          {label.name}
+                        </p>
+                      ) : null
+                    ))}
                   </div>
+
                   <label class="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className={`cb1 ${leadKey}-card-checkbox`}
-                    name={item.id}
-                    onChange={handleCheckChange}
-                    checked={checkedRows[item.id] || false}
-                  />
+                    <input
+                      type="checkbox"
+                      className={`cb1 ${leadKey}-card-checkbox`}
+                      name={item.id}
+                      onChange={handleCheckChange}
+                      checked={checkedRows[item.id] || false}
+                    />
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -287,7 +294,7 @@ const handleCheckChange = (e) => {
           onLeadAdded={onLeadAdded}
         />
       )}
-    <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

@@ -27,9 +27,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     phone: "",
     email: "",
     value: 0,
-    priority: "Imp",
+    label_id:0,
     source: "",
   });
+
 
   if (!isOpen) {
     return null;
@@ -89,7 +90,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           phone: "",
           email: "",
           value: 0,
-          priority: "Imp",
+          label_id: 0,
           source: "",
         });
         setName("");
@@ -263,19 +264,19 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-input"
                 // onChange={handleChange}
                 />
-                <label className="lead-label" htmlFor="priority">
+                <label className="lead-label" htmlFor="label_id">
                   Lables
                 </label>
                 <select
-                  name="priority"
-                  id="priority"
+                  name="label_id"
+                  id="label_id"
                   className="lead-priority"
                   onChange={handleChange}
                 >
                   {
                     mergedLabels.map(item => {
                       return (
-                        <option key={item?.id} value={item?.name}>{item?.name}</option>
+                        <option key={item?.id} value={item?.id}>{item?.name}</option>
                       )
                     })
                   }
