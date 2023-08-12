@@ -98,7 +98,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/settings",
-        element: <SecureRoutes Component={LPSettings} />,
+        element: <LPSettings />,
         errorElement: <Error />,
         children: [
           {
