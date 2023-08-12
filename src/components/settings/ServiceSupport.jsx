@@ -53,6 +53,10 @@ const ServiceSupport = () => {
     
   }
 
+  const serviceRefresh = () => {
+    getTicket();
+  }
+
   if(isContactTabOpen){
     return(
       <ContactSupport isEditContact={isEditContact} ticket={selectedTicket}/>
@@ -66,7 +70,12 @@ const ServiceSupport = () => {
           <p>No ticket found</p>
         ) : (
           <>
+          <div className='service-req-top'>
             <p className="common-fonts ss-heading">Service request</p>
+            <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={serviceRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
+          </div>
             <div className="service-support-table">
               <table>
                 <thead>

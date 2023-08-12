@@ -134,6 +134,10 @@ const CPPasswordPolicy = () => {
         console.log("Update error:", error);
       });
   }
+
+  const passwordRefresh = () => {
+    passGet();
+  }
   
   return (
     <section>
@@ -159,7 +163,12 @@ const CPPasswordPolicy = () => {
           </label>
         </div>
       </div>
+      <div className="password-refresh">
       <p className="common-fonts password-heading">password policy</p>
+      <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={passwordRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
+      </div>
       {/* Mapping over the passDes array to render the checkboxes and input fields */}
       {passDes.map(
         (condition, index) =>
