@@ -49,10 +49,7 @@ const ServiceSupport = () => {
     setIsEditContact(true);
     setIsContactTabOpen(true);
     setSelectedTicket(item);
-  
-    
   }
-
   const serviceRefresh = () => {
     getTicket();
   }

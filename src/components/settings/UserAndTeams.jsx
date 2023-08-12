@@ -75,7 +75,6 @@ const UserAndTeams = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.data);
         setTeamData(response.data.data);
         setLoading(false);
       })

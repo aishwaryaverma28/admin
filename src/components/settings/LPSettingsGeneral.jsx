@@ -5,7 +5,7 @@ import "../styles/LPSetting.css";
 import UserIcon from "../../assets/image/user-icon.svg"
 import "../styles/LPGeneral.css";
 import axios from "axios";
-import { USER_INFO, USER_UPDATE, getDecryptedToken, handleLogout } from "../utils/Constants";
+import { USER_INFO, USER_UPDATE, COUNTRIES,getDecryptedToken, handleLogout } from "../utils/Constants";
 import EmailSyncTick from '../../assets/image/email-sync-tick.svg';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,9 +16,11 @@ const LPSettingsGeneral = () => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("profile");
   const [stateBtn, setStateBtn] = useState(0);  
+  const [country, setCountry] = useState("");
 
   useEffect(() => {
     getUser();
+    getData();
   }, []);
 
   async function getUser() {
@@ -44,7 +46,17 @@ const LPSettingsGeneral = () => {
       setIsLoading(false); // Set isLoading to false after data is fetched
     }
   }
-
+  async function getData() {
+    try {
+      const response = await axios.get(COUNTRIES);
+      const data = response.data.data;
+      console.log(data);
+      setCountry(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(country);
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -175,6 +187,24 @@ const LPSettingsGeneral = () => {
                             className="genral-form-select genral-setting-fonts genral-timezone"
                           >
                             <option value="">(+05:30) asia/kolkata</option>
+                            {country &&
+                  country.slice(0, 100).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
+                {country &&
+                  country.slice(100, 200).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
+                {country &&
+                  country.slice(200, 250).map((count) => (
+                    <option key={count.id} value={count.country_code}>
+                      {count.country_name}
+                    </option>
+                  ))}
                           </select>
                           <p className="timezone-note">
                             Timezone is updated automatically to match your
