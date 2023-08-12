@@ -6,12 +6,17 @@ import { countryPhoneCodes, worldCurrencies } from "./utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
+
+
+const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
+  const [isDisable, setIsDisable] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState("");
+
   const [leadData, setLeadData] = useState({
     position: "",
     lead_name: "",
@@ -31,6 +36,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
   }
 
   function handleChangeName(event) {
+    setIsDisable(false);
     const empName = event.target.value;
     setName(empName);
     let arr = empName.split(" ");
@@ -42,11 +48,14 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
 
   function handleStatus(status) {
     setStatus(status);
+    setIsDisable(false);
+    setSelectedStatus(status);
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
+    setIsDisable(false);
   };
 
   const handleSubmit = (e) => {
@@ -65,10 +74,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        console.log(response.data); 
+        console.log(response.data);
         toast.success("Lead data added successfully", {
-          position:"top-center",
-          autoClose:2000
+          position: "top-center",
+          autoClose: 2000
         })
         setLeadData({
           position: "",
@@ -101,7 +110,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           </p>
         </div>
         <div className="create-lead-form">
-           <form>
+          <form>
             <section class="form-area">
               <div className="form-section-1">
                 <div>
@@ -252,7 +261,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   type="text"
                   name=""
                   className="lead-input"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 />
                 <label className="lead-label" htmlFor="priority">
                   Lables
@@ -263,9 +272,13 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                  <option value="Imp">Imp</option>
-                  <option value="Avg">Avg</option>
-                  <option value="Cool">Cool</option>
+                  {
+                    mergedLabels.map(item => {
+                      return (
+                        <option key={item?.id} value={item?.name}>{item?.name}</option>
+                      )
+                    })
+                  }
                 </select>
               </div>
             </section>
@@ -275,31 +288,31 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
                 <p>Lead Status</p>
                 <div className="elements">
                   <span
-                    className="status-value new-element"
+                    className={`status-value new-element ${selectedStatus === "New" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("New")}
                   >
                     <span>New</span>
                   </span>
                   <span
-                    className="status-value open-element"
+                     className={`status-value open-element ${selectedStatus === "Open" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("Open")}
                   >
                     <span>Open</span>
                   </span>
                   <span
-                    className="status-value progress-element"
+                    className={`status-value progress-element ${selectedStatus === "In Progress" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("In Progress")}
                   >
                     <span>In Progress</span>
                   </span>
                   <span
-                    className="status-value deal-element"
+                     className={`status-value deal-element ${selectedStatus === "Open Deal" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("Open Deal")}
                   >
                     <span>Open Deal</span>
                   </span>
                   <span
-                    className="status-value unread-element"
+                    className={`status-value unread-element ${selectedStatus === "Unread" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("Unread")}
                   >
                     <span>unread</span>
@@ -317,7 +330,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
 
               <div>
                 {/* <button className="add-btn">Create And Add another</button> */}
-                <button className="create-lead-btn" onClick={handleSubmit}>
+                <button className={isDisable ? "common-inactive-button":"create-lead-btn"} onClick={handleSubmit} disabled={isDisable}>
                   Create Lead
                 </button>
               </div>
@@ -325,7 +338,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded }) => {
           </form>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

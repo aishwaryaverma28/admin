@@ -425,3 +425,7 @@
   border: 1px solid #077838;
   transition: all 400ms ease-in-out;
 }
+
+.selected-status{
+  border:2px solid var(--ternary);
+}
