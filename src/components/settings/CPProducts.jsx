@@ -1,12 +1,40 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../styles/CompanyProducts.css';
 import ProductPopUp from './ProductPopUp';
+import axios from "axios";
+import {
+  ADD_PRODUCT,
+  GET_ALL_PRODUCT,
+    getDecryptedToken,
+} from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const CPProducts = () => {
+  const decryptedToken = getDecryptedToken();
     const actionDropDownRef = useRef(null);
     const [actionopen, setActionOpen] = useState(false);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+
+    const getProduct = () => {
+      axios
+        .get(GET_ALL_PRODUCT, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+         console.log(response?.data?.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
 
     const toggleActionDropdownStatic = () => {
         setActionOpen(!actionopen);
@@ -92,7 +120,7 @@ const CPProducts = () => {
             <ProductPopUp onClose={handleCloseAddProduct}/>
           )
         }
-
+<ToastContainer/>
     </section>
   )
 }
