@@ -209,6 +209,7 @@ const CPPasswordPolicy = () => {
                         i === index ? { ...state, value: newValue } : state
                       )
                     );
+                    setStateBtn(1);
                   }}
                   disabled={checkboxStates[index]?.active !== 1}
                 />
