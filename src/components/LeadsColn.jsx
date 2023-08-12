@@ -10,7 +10,7 @@ import Modal from "./Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection }) => {
+const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection, mergedLabels }) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -144,6 +144,11 @@ const handleCheckChange = (e) => {
     // Set the header checkbox state based on the checked state of all rows
     setIsHeaderCheckboxChecked(areAllRowsChecked());
   }, [checkedRows, leadArray]);
+
+  const getMergeLabelColor = (priority) => {
+    const matchingLabel = mergedLabels.find(label => label.name === priority);
+    return matchingLabel ? matchingLabel.colour_code : null;
+  };
   return (
     <>
       <div className="card-details">
@@ -254,7 +259,7 @@ const handleCheckChange = (e) => {
                     )}
                   </button>
                   <div className="priorityBox">
-                    <p className={item.priority}>{item.priority}</p>
+                    <p className="leads-priority" style={{ backgroundColor: getMergeLabelColor(item.priority) }}>{item.priority}</p>
                   </div>
                   <label class="custom-checkbox">
                   <input

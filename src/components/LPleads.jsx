@@ -10,6 +10,7 @@ import {
   EXPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
+  GET_LABEL
 } from "./utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,6 +30,14 @@ const LPleads = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
+  const [labelData, setLabelData] = useState([]);
+  const [labelArray, setLabelArray] = useState([
+    { id: Date.now(), name: 'Avg', colour_code: '#ffb42e' },
+    { id: Date.now(), name: 'Imp', colour_code: '#ff4040' },
+    { id: Date.now(), name: 'Cool', colour_code: '#2e75ff' }
+  ]);
+
+
 
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
@@ -48,12 +57,35 @@ const LPleads = () => {
       });
   };
 
+  const fetchLabelData = async () => {
+    try {
+        const response = await axios.get(GET_LABEL, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        });
+        if (response.data.status === 1) {
+            setLabelData(response.data.data);
+        } else {
+            if (response.data.message === 'Token has expired') {
+                alert(response.data.message);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
   const resetData = () => {
     fetchLeadsData();
   }
 
   useEffect(() => {
     fetchLeadsData();
+  }, []);
+
+  useEffect(() => {
+    fetchLabelData();
   }, []);
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -255,6 +287,12 @@ const LPleads = () => {
     fetchLeadsData();
     setDeleteConfirmationVisible(false);
   };
+
+  const leadsLabels = labelData
+  .filter(item => item?.entity?.includes('leads'))
+  .map(item => ({ id: item?.id, name: item?.name, colour_code: item?.colour_code }));
+
+  const mergedLabels = [...labelArray, ...leadsLabels];
   return (
     <div>
       <section className="lead-body">
@@ -397,6 +435,7 @@ const LPleads = () => {
               onLeadAdded={fetchLeadsData}
               onCardSelection={handleCardSelection} // Pass the handler function to the child component
               selectedCardIds={selectedCardIds} // Pass the selected card IDs to the child component
+              mergedLabels={mergedLabels}
             />
           </div>
         ))}
@@ -405,6 +444,7 @@ const LPleads = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
+        mergedLabels={mergedLabels}
       />
       <ToastContainer/>
     </div>
