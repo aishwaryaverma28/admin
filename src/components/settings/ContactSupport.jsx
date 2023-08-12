@@ -24,10 +24,6 @@ const ContactSupport = ({isEditContact=false, ticket}) => {
     priority: "Low",
 })
 
-console.log(ticket)
-
-
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
