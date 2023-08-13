@@ -8,6 +8,7 @@ import {
   GET_TEAM_MEM,
   handleLogout,
   getDecryptedToken,
+  GET_LABEL
 } from "./utils/Constants";
 import userIcon from "../assets/image/user-img.png";
 import AddNotes from "./AddNotes";
@@ -29,6 +30,8 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
   const [userData, setUserData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [labelData, setLabelData] = useState([]);
+  const [labelArray, setLabelArray] = useState([]);
 
   const fetchLead = () => {
     axios
@@ -57,6 +60,25 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       });
   };
 
+  const fetchLabelData = async () => {
+    try {
+        const response = await axios.get(GET_LABEL, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        });
+        if (response.data.status === 1) {
+            setLabelData(response.data.data);
+        } else {
+            if (response.data.message === 'Token has expired') {
+                alert(response.data.message);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
   useEffect(() => {
     // Set the initial state to the first user in the userData array
     if (userData.length > 0) {
@@ -70,6 +92,10 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   useEffect(() => {
     fetchLead();
     userAdded();
+  }, []);
+
+  useEffect(() => {
+    fetchLabelData();
   }, []);
 
   const userAdded = () => {
@@ -143,20 +169,26 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const handleInputChange = (e) => {
-    setEditedItem({
-      ...editedItem,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+  
+    if (name === "label") {
+      const selectedLabelData = mergedLabels.find((label) => label.id === parseInt(value));
+      setEditedItem({
+        ...editedItem,
+        label_id: selectedLabelData.id,
+      });
+    } else {
+      setEditedItem({
+        ...editedItem,
+        [name]: value,
+      });
+    }
+  
     setStateBtn(1);
-
-    const selectedName = e.target.value;
-
-    // Find the selected user data from the userData array
-    const selectedUserData = userData.find(
-      (user) => user.first_name + " " + user.last_name === selectedName
-    );
-    setSelectedUser(selectedUserData);
   };
+  
+  
+  
   const handleNameChange = (e) => {
     setName(e.target.value);
     setStateBtn(1);
@@ -185,7 +217,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       value: editedItem?.value,
       email: editedItem?.email,
       type: editedItem?.type,
-      priority: editedItem?.priority,
+      label_id: editedItem?.label_id,
       status: editedItem?.status,
       address1: editedItem?.address1,
       city: editedItem?.city,
@@ -211,8 +243,10 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       });
 
     setIsEditable(false);
+    setIsDisabled(!isDisabled);
     onLeadAdded();
     setStateBtn(0);
+    fetchLead();
   };
 
   const handleTabClick = (tab) => {
@@ -284,23 +318,6 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       boxShadow: "none",
     },
   };
-
-  const normalStylingSelect1 = {
-    backgroundColor: editedItem?.status && getStatusBackgroundColor2(),
-    /* height: 32px; */
-    color: " #ffffff !important",
-    fontSize: " 0.8rem",
-    fontFamily: '"Lexend Deca", sans-serif',
-    fontWeight: 400,
-    padding: "0.3rem",
-    borderRadius: "5px",
-    textTransform: "capitalize",
-    WebkitAppearance: "none",
-    MozAppearance: "none",
-    appearance: "none",
-    border: "1px solid transparent",
-    height: "2rem",
-  };
   const editStylingSelect1 = {
     width: "100%",
     color: " #1e2224",
@@ -313,6 +330,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     borderRadius: "0.3125rem",
     padding: "0.1rem",
     height: "2rem",
+    backgroundColor:"#fff"
   };
   const normalStylingSelect2 = {
     backgroundColor: editedItem?.status && getStatusBackgroundColor(),
@@ -372,7 +390,29 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     height: "2rem",
   };
 
+  const mergedLabels = labelData
+  .filter(item => item?.entity?.includes('leads'))
+  .map(item => ({ id: item?.id, name: item?.name, colour_code: item?.colour_code }));
 
+  const normalStylingSelect1 = {
+    backgroundColor: editedItem?.label_id
+    ? mergedLabels.find((label) => label.id === editedItem?.label_id)?.colour_code
+    : '',
+    /* height: 32px; */
+    color: "white !important",
+    fontSize: " 0.8rem",
+    fontFamily: '"Lexend Deca", sans-serif',
+    fontWeight: 400,
+    padding: "0.3rem",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+    appearance: "none",
+    border: "1px solid transparent",
+    height: "2rem",
+    width:"fit-content"
+  };
 
   return (
     <div className="modal">
@@ -574,21 +614,25 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
                     ) : (
                       <span>
                         <select
-                          name="priority"
-                          id="priority"
-                          value={editedItem?.priority}
+                          name="label_id"
+                          id="label_id"
+                          value={editedItem?.label_id || ''}
                           onChange={handleInputChange}
                           disabled={isDisabled}
                           style={
                             isEditable
                               ? editStylingSelect1
-                              : normalStylingSelect1
-                          }
+                              : normalStylingSelect1 }
                           className={isDisabled ? "disabled" : ""}
+                        
                         >
-                          <option value="Imp">Imp</option>
-                          <option value="Avg">Avg</option>
-                          <option value="Cool">Cool</option>
+                         {
+                    mergedLabels.map(item => {
+                      return (
+                        <option key={item?.id} value={item?.id}>{item?.name}</option>
+                      )
+                    })
+                  }
                         </select>
                       </span>
                     )}
