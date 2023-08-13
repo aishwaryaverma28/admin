@@ -586,7 +586,6 @@
 }
 
 .contact-support-button{
-    background-color: var(--th-background);
     display: flex;
     align-items: center;
     justify-content: end;
@@ -779,4 +778,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.support-no-ticket-found{
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.edit-service-box{
+    padding: 1rem;
+    overflow-y: auto;
 }
