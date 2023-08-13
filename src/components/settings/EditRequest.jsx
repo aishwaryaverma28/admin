@@ -1,17 +1,11 @@
 import React, { useRef, useState } from "react";
 import "../styles/CPGenral.css";
-import axios from "axios";
-import {
-  ADD_TICKET,
-  getDecryptedToken,
-} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ContactSupport = () => {
+const EditRequest = ({onClose, ticket}) => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
-  const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
   const [details, setDetails] = useState({
     title: "",
@@ -22,68 +16,32 @@ const ContactSupport = () => {
     priority: "Low",
 })
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      // You can upload the file to the server here using APIs, if needed.
-    }
-  };
 
+    const handleBrowseClick = () => {
+        fileInputRef.current.click();
+      };
 
+      function handleChange (e) {
+        const {name, value} = e.target;
+        setDetails((prev) => {
+          return {...prev, [name]: value};
+        })
+        setStateBtn(1);
+     }
 
-  const handleBrowseClick = () => {
-    fileInputRef.current.click();
-  };
-
-  function handleChange (e) {
-    const {name, value} = e.target;
-    setDetails((prev) => {
-      return {...prev, [name]: value};
-    })
-    setStateBtn(1);
- }
-
- function handleSubmit(event) {
-  event.preventDefault();  
-  axios
-    .post(ADD_TICKET, details, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      },
-    })
-    .then((response) => {
-      console.log(response);
-      toast.success("Ticket is added successfully", {
-        position:"top-center",
-        autoClose:2000
-      })
-      setDetails({
-        title: "",
-        description: "",
-        email: "",
-        mobile: "",
-        category: "",
-        priority: "",
-      });
-    })
-    .catch((error) => {
-      console.log(error)
-    });
-}
-
-
-const handleCancelBtn = (e) => {
-e.preventDefault();
-setStateBtn(0);
-}
-
+     const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          setFileName(file.name);
+          // You can upload the file to the server here using APIs, if needed.
+        }
+      };
   return (
-    <div>{
-      <p className="common-fonts contact-support-heading">Contact support</p>
-
-      }
-      
+    <div className="popup-wrapper">
+    <div className="product-popup-container">
+      <div className="product-popup-box edit-service-box">
+      <div>
+      <p className="common-fonts contact-support-heading">Edit Service</p>
       <div>
         <form>
           <div className="contact-tab-fields">
@@ -94,6 +52,7 @@ setStateBtn(0);
               type="text" name="title"
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input"
+              value={ticket?.title}
             />
           </div>
 
@@ -106,6 +65,7 @@ setStateBtn(0);
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input contact-tab-textarea"
               placeholder="Describe your issue in detail"
+              value={ticket?.description}
             ></textarea>
           </div>
 
@@ -118,6 +78,7 @@ setStateBtn(0);
                 type="text" name="mobile"
                 onChange={handleChange}
                 className="common-input contact-tab-input"
+                value={ticket?.mobile}
               />
             </div>
           </div>
@@ -130,6 +91,7 @@ setStateBtn(0);
               type="email" name="email"
               onChange={handleChange}
               className="common-fonts common-input contact-tab-input email-case"
+              value={ticket?.email}
             />
           </div>
 
@@ -141,6 +103,7 @@ setStateBtn(0);
              name="category"
              onChange={handleChange}
               className="common-input contact-type-of-issue"
+              value={ticket?.category}
             >
               <option value="technical">Technical</option>
               <option value="Non Technical">Non Technical</option>
@@ -155,6 +118,7 @@ setStateBtn(0);
                name="priority"
                onChange={handleChange}
               className="common-input contact-type-of-issue"
+              value={ticket?.priority}
             >
               <option value="Low">Low</option>
               <option value="Average">Average</option>
@@ -209,17 +173,16 @@ setStateBtn(0);
             </div>
           </div>
               <div className="contact-support-button">
-              <button className="common-white-button" onClick={handleCancelBtn}>Cancel</button>
               {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>
-                  Save
+                  Update
                 </button>
               ) : (
                 <button
                   className="common-save-button permission-save-btn"
-                  onClick={handleSubmit}
+                   
                 >
-                  Save
+                  Update
                 </button>
               )}
                          
@@ -231,9 +194,14 @@ setStateBtn(0);
       </div>
       <ToastContainer/>
     </div>
-  );
+      </div>
+    </div>
+    <div className="help-cross" onClick={onClose}>
+      X
+    </div>
+  </div>
 
+  )
 }
 
-
-export default ContactSupport;
+export default EditRequest

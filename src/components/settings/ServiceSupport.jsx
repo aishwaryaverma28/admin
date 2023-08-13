@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/CPGenral.css';
 import axios from 'axios';
-import ContactSupport from './ContactSupport';
 import {
   getDecryptedToken,
   SERVICE_SUPPORT
 } from '../utils/Constants';
 import ServiceRequestTab from './ServiceRequestTab';
+import EditRequest from './EditRequest';
 
 const ServiceSupport = () => {
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null); // State for selected ticket
   const [isServiceTabOpen, setIsServiceTabOpen] = useState(false);
-  const [isContactTabOpen, setIsContactTabOpen] = useState(false);
-  const [isEditContact ,  setIsEditContact] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isLoading,setLoading] = useState(true);
 
   const getTicket = () => {
     axios
@@ -25,9 +25,11 @@ const ServiceSupport = () => {
       })
       .then((response) => {
         setTicket(response?.data?.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   };
 
@@ -46,25 +48,30 @@ const ServiceSupport = () => {
   };
 
   const openContactTab = (item) => {
-    setIsEditContact(true);
-    setIsContactTabOpen(true);
     setSelectedTicket(item);
+    setIsEditOpen(true);
   }
   const serviceRefresh = () => {
     getTicket();
   }
 
-  if(isContactTabOpen){
-    return(
-      <ContactSupport isEditContact={isEditContact} ticket={selectedTicket}/>
-    )
+  const handleEditClose = () => {
+    setIsEditOpen(false);
   }
-  else{
+
+
 
     return (
       <div>
-        {ticket.length === 0 ? (
-          <p>No ticket found</p>
+        {isLoading ? (
+           <div className='support-no-ticket-found'>
+           <p className='common-fonts'>Loading...</p>
+           </div>
+        ) :
+        ticket.length === 0 ? (
+           <div className='support-no-ticket-found'>
+          <p className='common-fonts'>No ticket found</p>
+          </div>
         ) : (
           <>
           <div className='service-req-top'>
@@ -111,12 +118,16 @@ const ServiceSupport = () => {
           </>
         )}
         {isServiceTabOpen && <ServiceRequestTab ticket={selectedTicket} onClose={handleCloseServiceTab} />}
+
+        {
+          isEditOpen && <EditRequest onClose={handleEditClose} ticket={selectedTicket}/>
+        }
       </div>
     );
 
   }
 
 
-};
+
 
 export default ServiceSupport;

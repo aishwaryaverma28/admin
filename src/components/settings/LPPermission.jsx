@@ -353,8 +353,8 @@ const fetchData = async () => {
             <div>
               <button
                 onClick={handleAddRoleOpen}
-                disabled = {assignRolesArray.length === roles.length ? true : false }
-                className={assignRolesArray.length === roles.length ? "common-inactive-button" : "common-save-button"}
+                disabled = {loading ? true : false }
+                className={loading ? "common-inactive-button" : "common-save-button"}
               >
                 Assign Role
               </button>

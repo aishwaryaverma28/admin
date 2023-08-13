@@ -268,7 +268,7 @@ const UserAndTeams = () => {
                             <section className="user-table">
                 {loading ? (
                   // Show a loading message or spinner while data is loading
-                  <p>Loading...</p>
+                  <p className="common-fonts">Loading...</p>
                 ) : (
                   <table>
                     <tr className="user-team-font">
