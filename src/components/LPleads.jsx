@@ -31,11 +31,7 @@ const LPleads = () => {
   const decryptedToken = getDecryptedToken();
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
   const [labelData, setLabelData] = useState([]);
-  const [labelArray, setLabelArray] = useState([
-    { id: Date.now(), name: 'Avg', colour_code: '#ffb42e' },
-    { id: Date.now(), name: 'Imp', colour_code: '#ff4040' },
-    { id: Date.now(), name: 'Cool', colour_code: '#2e75ff' }
-  ]);
+  const [labelArray, setLabelArray] = useState([]);
 
 
 
@@ -288,11 +284,9 @@ const LPleads = () => {
     setDeleteConfirmationVisible(false);
   };
 
-  const leadsLabels = labelData
+  const mergedLabels = labelData
   .filter(item => item?.entity?.includes('leads'))
   .map(item => ({ id: item?.id, name: item?.name, colour_code: item?.colour_code }));
-
-  const mergedLabels = [...labelArray, ...leadsLabels];
   return (
     <div>
       <section className="lead-body">

@@ -1127,7 +1127,7 @@ background: #F4F5F9;
   background: #F4F5F9;
 }
 
-#priority.disabled, #status.disabled {
+#priority.disabled, #status.disabled, #label_id.disabled {
   color: white !important;
   width: max-content !important;
 }
