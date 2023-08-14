@@ -112,4 +112,5 @@ export const GET_AUDIT = start + "api/setting/audit/getAll";
 export const UPDATE_AUDIT = start + "api/setting/audit/edit/";
 
 export const ADD_PRODUCT = start + "api/product/add";
+export const UPDATE_PRODUCT = start + "api/product/edit/";
 export const GET_ALL_PRODUCT = start + "api/product/getall";

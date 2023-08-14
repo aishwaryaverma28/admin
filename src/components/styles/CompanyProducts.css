@@ -167,3 +167,8 @@
 }
 
 /* product popup start ends */
+
+.product-dropdown-menu{
+  left:0;
+  width:8rem;
+}

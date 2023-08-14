@@ -8,14 +8,28 @@ import {
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditProductPopUp from "./EditProductPopUp";
 
 const CPProducts = () => {
   const decryptedToken = getDecryptedToken();
-  const actionDropDownRef = useRef(null);
-  const [actionopen, setActionOpen] = useState(false);
+  const actionDropDownRef = useRef({});
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userActionOpen, setUserActionOpen] = useState({});
+  const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleEditOpen = (item) => {
+    setSelectedProduct(item)
+    setIsEditPopUpOpen(true);
+  }
+
+  const handleEditPopUpClose = () => {
+    setIsEditPopUpOpen(false);
+
+  }
+
 
   const getProduct = () => {
     axios
@@ -37,9 +51,14 @@ const CPProducts = () => {
     getProduct();
   }, []);
 
-  const toggleActionDropdownStatic = () => {
-    setActionOpen(!actionopen);
+
+  const toggleActionDropdown = (userId) => {
+    setUserActionOpen((prevState) => ({
+      ...prevState,
+      [userId]: !prevState[userId],
+    }));
   };
+
 
   const handleAddProduct = () => {
     setIsProductModalOpen(true);
@@ -49,12 +68,43 @@ const CPProducts = () => {
     setIsProductModalOpen(false);
   };
 
+  useEffect(() => {
+    // Event listener callback for handling clicks outside the dropdown container
+    const handleOutsideClick = (event) => {
+      // Check each ref to see if the click occurred outside the corresponding dropdown
+      Object.values(actionDropDownRef.current).forEach((ref) => {
+        if (ref && !ref.contains(event.target)) {
+          // Clicked outside, close the dropdown
+          setUserActionOpen((prevState) => ({
+            ...prevState,
+            [ref.dataset.userId]: false,
+          }));
+        }
+      });
+    };
+
+    // Add the event listener when the component mounts
+    document.addEventListener("click", handleOutsideClick);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  const productRefresh = () => {
+    getProduct();
+  }
+
   return (
     <section>
       <div className="cp-top">
         <button className="common-save-button" onClick={handleAddProduct}>
           Add Product
         </button>
+        <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={productRefresh}>
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
       </div>
       {loading ? (
         // Show a loading message or spinner while data is loading
@@ -94,22 +144,26 @@ const CPProducts = () => {
                       <div className="select action-select">
                         <div
                           className="dropdown-container"
-                          ref={actionDropDownRef}
+                          ref={(ref) =>
+                            (actionDropDownRef.current[item.id] =
+                              ref)
+                          }
+                          data-user-id={item.id}
                         >
                           <div
                             className="dropdown-header2"
-                            onClick={toggleActionDropdownStatic}
+                            onClick={() => toggleActionDropdown(item.id)}
                           >
                             Actions{" "}
                             <i
                               className={`fa-sharp fa-solid ${
-                                actionopen ? "fa-angle-up" : "fa-angle-down"
+                                userActionOpen[item.id] ? "fa-angle-up" : "fa-angle-down"
                               }`}
                             ></i>
                           </div>
-                          {actionopen && (
-                            <ul className="dropdown-menu user-team-dropdown-position">
-                              <li>Edit</li>
+                          {userActionOpen[item.id] && (
+                            <ul className="dropdown-menu product-dropdown-menu">
+                              <li  onClick={() => handleEditOpen(item)}>Edit</li>
                               <li>Clone</li>
                               <li>Delete</li>
                             </ul>
@@ -130,6 +184,11 @@ const CPProducts = () => {
       )}
       {isProductModalOpen && <ProductPopUp onClose={handleCloseAddProduct} getCall={getProduct}/>}
       <ToastContainer />
+      {
+        isEditPopUpOpen && (
+          <EditProductPopUp onClose={handleEditPopUpClose} editData={selectedProduct} getProduct={getProduct}/>
+        )
+      }
     </section>
   );
 };

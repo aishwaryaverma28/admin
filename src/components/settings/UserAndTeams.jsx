@@ -26,6 +26,7 @@ const UserAndTeams = () => {
   const [loading, setLoading] = useState(true);
   const [activeTabName, setActiveTabName] = useState("All");
   const actionDropDownRef = useRef(null);
+  const actionDropDownRefs = useRef({});
   const [actionopen, setActionOpen] = useState(false);
   const [userActionOpen, setUserActionOpen] = useState({});
   const [isDeactivateOpen, setIsDeactivateOpen] = useState(false);
@@ -112,7 +113,7 @@ const UserAndTeams = () => {
     }));
   };
 
-  const actionDropDownRefs = useRef({});
+
 
   useEffect(() => {
     // Event listener callback for handling clicks outside the dropdown container
