@@ -28,13 +28,15 @@ export {getDecryptedUserPath}
   
   //=============================================================logout function
   export const handleLogout = () => {
-      // Clear JWT token from local storage
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("landingUrl");
-    localStorage.removeItem("id");
-    localStorage.removeItem("encryptedUserPathTot");
-    // Redirect to the home page or any other desired path
-      window.location.href = "https://www.leadplaner.com/user/login";
+    //   // Clear JWT token from local storage
+    // localStorage.removeItem("jwtToken");
+    // localStorage.removeItem("landingUrl");
+    // localStorage.removeItem("id");
+    // localStorage.removeItem("encryptedUserPathTot");
+    // // Redirect to the home page or any other desired path
+    //   window.location.href = "https://www.leadplaner.com/user/login";
+    localStorage.clear();
+    window.location.href = "http://core.leadplaner.com:3000/";
   };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
@@ -114,3 +116,6 @@ export const UPDATE_AUDIT = start + "api/setting/audit/edit/";
 export const ADD_PRODUCT = start + "api/product/add";
 export const UPDATE_PRODUCT = start + "api/product/edit/";
 export const GET_ALL_PRODUCT = start + "api/product/getall";
+
+//========================================================================Deals
+export const GET_ALL_DEAL = start + "api/deal/getall";

@@ -1207,3 +1207,35 @@ margin-bottom: 2rem;
 border: 1px solid #DCDCDC;
 background: #FFF;
 }
+
+.clouserDate{
+  color: #F14949;
+font-family: "Lexend Deca";
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+}
+.DealName{
+color:#1E2224;
+font-family: "Lexend Deca";
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: uppercase;
+}
+
+.DealpriorityBox{
+  border: 1px solid black;
+}
+.DealCard-rightBox{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}

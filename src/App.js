@@ -31,7 +31,7 @@ import SitePagesView from "./components/SitePagesView";
 import SitePagesUpdate from "./components/SitePagesUpdate";
 import Home from "./components/Home";
 import Contacts from "./components/Contacts";
-import Deals from "./components/Deals";
+import Deal from "./components/deal/Deal";
 import Mail from "./components/Mail";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
@@ -94,7 +94,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/deals",
-        element: <SecureRoutes Component={Deals} />,
+        element: <SecureRoutes Component={Deal} />,
       },
       {
         path: "/lp/settings",
