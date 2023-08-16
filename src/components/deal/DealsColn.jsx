@@ -23,7 +23,7 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
     useState(false);
   const [checkedRows, setCheckedRows] = useState({});
 
-console.log(leadArray);
+// console.log(leadArray);
 
   const openModal = (item) => {
     setSelectedItem(item);

@@ -1,131 +1,309 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
+import { ADD_LEAD, getDecryptedToken } from "../utils/Constants";
+import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import rectangleFill from "../../assets/image/Rectangle 70 Fill.svg";
+import rectangle from "../../assets/image/Rectangle 70.svg";
+import rectangle71 from "../../assets/image/Rectangle 71.svg";
+import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
-const CreateDeal = () => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
+  const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
+  const [fname, setfName] = useState("");
+  const [lname, setlName] = useState("");
+  const decryptedToken = getDecryptedToken();
+  const [isDisable, setIsDisable] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  const [leadData, setLeadData] = useState({
+    position: "",
+    lead_name: "",
+    company_name: "",
+    registration_no: "",
+    employees: "",
+    type: "",
+    phone: "",
+    email: "",
+    value: 0,
+    label_id: 0,
+    source: "",
+  });
+
+  if (!isOpen) {
+    return null;
+  }
+
+  function handleChangeName(event) {
+    setIsDisable(false);
+    const empName = event.target.value;
+    setName(empName);
+    let arr = empName.split(" ");
+    if (arr.length >= 1) {
+      setfName(arr[0]);
+      setlName(arr[arr.length - 1]);
+    }
+  }
+
+  function handleStatus(status) {
+    setStatus(status);
+    setIsDisable(false);
+    setSelectedStatus(status);
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLeadData((prevState) => ({ ...prevState, [name]: value }));
+    setIsDisable(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedFormData = {
+      ...leadData,
+      first_name: fname,
+      last_name: lname,
+      status: status,
+    };
+
+    axios
+      .post(ADD_LEAD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        toast.success("Lead data added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setLeadData({
+          position: "",
+          lead_name: "",
+          company_name: "",
+          registration_no: "",
+          employees: "",
+          type: "",
+          phone: "",
+          email: "",
+          value: 0,
+          label_id: 0,
+          source: "",
+        });
+        setName("");
+        onLeadAdded(); // Call the onLeadAdded function from props
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
-    <div>CreateDeal</div>
-  )
-}
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div class="create-lead-top">
+          <p>Create Deal</p>
+          <p className="close-icon" onClick={onClose}>
+            &times;
+          </p>
+        </div>
+        <div className="create-lead-form">
+          <form>
+            <section class="form-area">
+              <div className="form-section-1">
+                <label htmlFor="lead_name" className="lead-label">
+                  Title
+                </label>
+                <input
+                  id="lead_name"
+                  type="text"
+                  name="lead_name"
+                  className="lead-input"
+                  onChange={handleChange}
+                  value={leadData.lead_name} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="company_name">
+                  organization
+                </label>
+                <input
+                  id="company_name"
+                  type="text"
+                  name="company_name"
+                  className="lead-input"
+                  onChange={handleChange}
+                  value={leadData.company_name} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="name">
+                  Deal Owner
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="lead-input"
+                  placeholder="Please Enter Name"
+                  onChange={handleChangeName}
+                  value={name} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="value">
+                  Value
+                </label>
+                <div className="currency-section">
+                  <input
+                    id="value"
+                    type="text"
+                    className="currency-input"
+                    name="value"
+                    onChange={handleChange}
+                    value={leadData.value} // Add value prop for controlled input
+                  />
+                  <select name="" id="" className="currency-value">
+                    {worldCurrencies.map((currency, index) => (
+                      <option key={index} value={currency.code}>
+                        {`${currency.code} ${currency.currency}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <label className="lead-label" htmlFor="position">
+                  Probability
+                </label>
+                <input
+                  id="position"
+                  type="text"
+                  className="lead-input"
+                  name=""
+                  // onChange={handleChange}
+                />
+                <label className="lead-label" htmlFor="source">
+                  Expected Closing Date
+                </label>
+                <input
+                  id="source"
+                  type="date"
+                  className="lead-input"
+                  name="source"
+                  onChange={handleChange}
+                  value={leadData.source} // Add value prop for controlled input
+                />
+              </div>
 
-export default CreateDeal
+              <div className="form-section-2">
+                <label className="lead-label" htmlFor="phone">
+                  Phone Number
+                </label>
+                <div className="phone-input-section">
+                  {/* <select name="" id="" class="country-code">
+                  {countryPhoneCodes.map((countryPhoneCode) => (
+                    <option
+                      key={countryPhoneCode.code}
+                      value={countryPhoneCode.code}
+                    >
+                      {`${countryPhoneCode.code} ${countryPhoneCode.country}`}
+                    </option>
+                  ))}
+                </select> */}
+                  <input
+                    id="phone"
+                    className="phone-input"
+                    type="text"
+                    name="phone"
+                    onChange={handleChange}
+                    value={leadData.phone} // Add value prop for controlled input
+                  />
+                </div>
 
+                <label className="lead-label" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  className="lead-input email-case"
+                  onChange={handleChange}
+                  value={leadData.email} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="label_id">
+                  Lables
+                </label>
+                <select
+                  name="label_id"
+                  id="label_id"
+                  className="lead-priority"
+                  onChange={handleChange}
+                >
+                  {mergedLabels.map((item) => {
+                    return (
+                      <option key={item?.id} value={item?.id}>
+                        {item?.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </section>
 
-// import CryptoJS from 'crypto-js';
+            <section>
+              <div className="lead-status">
+                <p>Deal Stage</p>
+                <div className="elements">
+                <img
+                      src={rectangleFill}
+                      alt=""
+                    />
+                    <img
+                      src={rectangle71}
+                      alt=""
+                    />
+                    <img
+                      src={rectangle71}
+                      alt=""
+                    />
+                    <img
+                      src={rectangle71}
+                      alt=""
+                    />
+                    <img
+                      src={rectangle71}
+                      alt=""
+                    />
+                    <img
+                      src={rectangle74}
+                      alt=""
+                    />
+                </div>
+              </div>
+            </section>
 
-// const secretKey = 'mySecretKey123';
-// // const secretKey = "miyamura"; // Set your secret key for login
+            <section className="bottom-section font-style">
+              <div>
+                <button className="cancel-btn" onClick={onClose}>
+                  Cancel
+                </button>
+              </div>
 
-// const getDecryptedToken = () => {
-//   const encryptedToken = localStorage.getItem('jwtToken');
+              <div>
+                {/* <button className="add-btn">Create And Add another</button> */}
+                <button
+                  className={
+                    isDisable ? "common-inactive-button" : "create-lead-btn"
+                  }
+                  onClick={handleSubmit}
+                  disabled={isDisable}
+                >
+                  Create Deal
+                </button>
+              </div>
+            </section>
+          </form>
+        </div>
+      </div>
+      <ToastContainer />
+    </div>
+  );
+};
 
-//   if (encryptedToken) {
-//     const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
-//     return decryptedBytes.toString(CryptoJS.enc.Utf8);
-//   }
-
-//   return '';
-// };
-
-// export { getDecryptedToken };
-// const getDecryptedUserPath = () => {
-// const encryptedUserPathTot = localStorage.getItem("encryptedUserPathTot");
-// if (encryptedUserPathTot) {
-// // Decrypt the userPathTot
-// const decryptedBytes = CryptoJS.AES.decrypt(encryptedUserPathTot, secretKey);
-// return decryptedBytes.toString(CryptoJS.enc.Utf8);
-// }
-// return '';
-// }
-// export {getDecryptedUserPath}
-  
-//   //=============================================================logout function
-//   export const handleLogout = () => {
-//     //   // Clear JWT token from local storage
-//     // localStorage.removeItem("jwtToken");
-//     // localStorage.removeItem("landingUrl");
-//     // localStorage.removeItem("id");
-//     // localStorage.removeItem("encryptedUserPathTot");
-//     // // Redirect to the home page or any other desired path
-//       // window.location.href = "https://www.leadplaner.com/user/login";
-//       localStorage.clear();
-//       window.location.href = "http://core.leadplaner.com:3000/";      
-//   };
-// // =============================================================apis used  
-// const start = "http://core.leadplaner.com:3001/";
-// const userId = localStorage.getItem('id');
-// export const USER_INFO = start + "api/user/getuserinfo";
-// export const USER_UPDATE = start + "api/user/update";
-// export const COUNTRIES = start+"api/user/getcountries";
-// //===============================================================login apis
-// export const LOGIN = start+"api/user/login";
-// export const CREATE_ACC = start+"api/user/createaccount";
-// //==============================================================blog apis
-// export const BLOG_ADD = start+"api/blog/add"
-// export const BLOG_EDIT = start+"api/blog/edit/";
-// export const BLOG_GET = start+"api/blog/get";
-// export const BLOG_GETID = start + "/api/blog/get/";
-// export const GET_TAG = start+"api/blog/tag/getall";
-// export const SEC_GET = start+"api/blog/section/getbyblog/";
-// export const IMAGE_UP = start+"api/blog/addImg";
-// export const IMAGE_DEL = start+"api/blog/deleteImg/";
-// export const IMG_BASE = start+"blog/";
-// // ====================================================================employee apis
-// export const EMPLOYEE_UPDATE = start+"api/employee/edit/";
-// export const EMPLOYEE_ADD = start+"api/employee/add";
-// export const EMPLOYEE_GET = start+"api/employee/getall";
-// export const EMPLOYEE_GETID = start+"api/employee/get/"+userId;
-// // export const EMPLOYEE_GETID = start+"api/employee/get/1";
-// export const REMOVE_DOC = start+"api/employee/removeDoc/";
-// export const UPLOAD_DOC = start+"api/employee/uploadDoc";
-// export const VIEW_IMG = start+"employee/doc/";
-// export const GET_USER_EMPLOYEE = start+"api/user/getuserinfo"; 
-// //====================================================================site pages
-// export const GET_SITEPGS = start+"api/site/getAll";
-// export const PUT_SITEPGS = start+"api/site/edit/";
-// export const ADD_SITEPGS = start+"api/site/add";
-// export const PAYSLIPS = start+"api/employee/getpayslips";
-// export const PAYSLIP = start+"api/employee/getpayslip/";
-
-// //===================================================================leadplaner
-// export const GET_LEAD = start+"api/lead/getall";
-// export const GET_LEAD_ID = start+"api/lead/get/";
-// export const ADD_LEAD = start+"api/lead/add";
-// export const IMPORT_CSV = start+"api/lead/importcsv";
-// export const EXPORT_CSV = start+"api/lead/exporttocsv";
-// export const UPDATE_LEAD = start+"api/lead/edit";
-// export const ADD_USER = start+"api/user/addteammember";
-// export const GET_TEAM_MEM = start+"api/user/getteammember";
-// export const MOVELEAD_TO_TRASH = start+"api/lead/movetotrash"
-// export const GET_ALL_LEAD_TRASH = start + "api/lead/getallfromtrash";
-// export const RESTORE_LEAD_TRASH = start + "api/lead/restorefromtrash";
-// export const DELETE_LEAD_TRASH = start + "api/lead/deletefromtrash";
-// export const GET_ALL_FROM_TRASH = start + "api/lead/getallfromtrash";
-// export const GET_ALL_ROLES = start + "api/user/getallroles";
-// export const GET_LABEL = start + "api/setting/label/getAll";
-// export const ADD_LABEL = start + "api/setting/label/add";
-// export const UPDATE_TEAM_MEM = start + "api/user/updateteammember/";
-// export const GET_ROLES_BY_USER = start +"api/user/getrolesByUser/";
-// export const UPDATE_LABEL = start + "api/setting/label/edit/1";
-// export const GET_PASSWORD = start + "api/setting/password/get";
-// export const EDIT_PASSWORD = start + "api/setting/password/edit";
-// //=======================================================================notes
-// export const ADD_NOTES = start+"api/note/add";
-// export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
-// export const UPDATE_NOTE = start+"api/note/edit/";
-// export const DELETE_NOTE = start+"api/note/delete/";
-// export const MOVENOTE_TO_TRASH = start +"api/note/movetotrash";
-// export const GETNOTE_FROM_TRASH = start +"api/note/getnotesfromtrash";
-// export const RESTORE_NOTE_TRASH = start + "api/note/restorefromtrash";
-// export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
-
-// //========================================================================COMPANY settings
-// export const ADD_TICKET = start + "api/user/ticket/raise";
-// export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";
-// export const UPDATE_TICKET = start + "api/user/ticket/update/";
-// export const GET_AUDIT = start + "api/setting/audit/getAll";
-// export const UPDATE_AUDIT = start + "api/setting/audit/edit/";
-
-// export const ADD_PRODUCT = start + "api/product/add";
-// export const GET_ALL_PRODUCT = start + "api/product/getall";
-
-// //========================================================================Deal
-// export const GET_ALL_DEAL = start +"api/deal/getall";
+export default CreateDeal;
