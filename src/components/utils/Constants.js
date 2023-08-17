@@ -119,3 +119,4 @@ export const GET_ALL_PRODUCT = start + "api/product/getall";
 
 //========================================================================Deals
 export const GET_ALL_DEAL = start + "api/deal/getall";
+export const ADD_DEAL = start +"api/deal/add";

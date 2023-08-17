@@ -429,6 +429,18 @@
 .user-card:hover{
   background-color: #f4f5f9;
 }
+.user-card2 {
+  cursor: pointer;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.3125rem;
+  width: 16.6875rem;
+  margin: 8px 0px;
+}
+.user-card2:hover{
+  background-color: #f4f5f9;
+}
 .card-container{
   display: flex;
   justify-content: space-between;
@@ -537,13 +549,13 @@ text-transform: capitalize;
 }
 .priorityBox{
   margin-bottom: 0.2rem;
+  width: fit-content;
 }
 .priorityBox > .Avg{
   padding: 2px 4px;
   /* font-size: 8px; */
 }
 .leads-priority {
-  /* height: 32px; */
   color: #ffffff !important;
   font-size: 0.75rem;
   font-family: "Lexend Deca", sans-serif;
@@ -552,7 +564,6 @@ text-transform: capitalize;
   border-radius: 5px;
   text-transform: capitalize; 
 }
-
 
 
 .bottom-fixed {

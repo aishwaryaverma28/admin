@@ -52,8 +52,7 @@ const Deal = () => {
           console.log(error);
         });
     };
-    console.log(data);
-  
+          
     const fetchLabelData = async () => {
       try {
           const response = await axios.get(GET_LABEL, {

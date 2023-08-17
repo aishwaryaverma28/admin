@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection, mergedLabels }) => {
+const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection }) => {
     const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -22,8 +22,6 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
   const [isHeaderCheckboxChecked, setIsHeaderCheckboxChecked] =
     useState(false);
   const [checkedRows, setCheckedRows] = useState({});
-
-// console.log(leadArray);
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -187,12 +185,11 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
           </div>
 
           {leadArray.map((item) => (
-            <div key={item.id} className="user-card">
+            <div key={item.id} className="user-card2">
               <div className="card-container">
                 <div className="card-leftBox">
                   <div className="user-details">
                     <p className="heading" onClick={() => openModal(item)}>
-                      {/* {item.lead_name} */}
                       {item.deal_name}
                     </p>
                   </div>
@@ -202,25 +199,20 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
                   <div className="contact-details">
                     <div className="mail">
                       <img src={user} alt="" />
-                      <p>{item.first_name + " " + item.last_name}</p>
+                      <p>{item.ownerf_name + " " + item.ownerl_name}</p>
                     </div>
                   </div>
                   <div>
                     <p className="clouserDate">{item.closure_date?.split("T")[0]}</p>
                   </div>
                   <div className="priorityBox">
-                    {mergedLabels.map((label) => (
-                      label.id === item.label_id ? (
-                        console.log(label.name)
-                        // <p
-                        //   key={label.id}
-                        //   className="leads-priority"
-                        //   style={{ backgroundColor: label.colour_code }}
-                        // >
-                        //   {label.name}
-                        // </p>
-                      ) : null
-                    ))}
+                   <p
+                          key={item.label_id}
+                          className="leads-priority"
+                          style={{ backgroundColor: item.label_coloure }}
+                        >
+                          {item.label_name}
+                        </p>
                   </div>
                 </div>
                 <div className="DealCard-rightBox">

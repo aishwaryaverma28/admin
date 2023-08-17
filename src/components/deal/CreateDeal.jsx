@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_LEAD, getDecryptedToken } from "../utils/Constants";
+import { ADD_DEAL, getDecryptedToken } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,39 +19,38 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [leadData, setLeadData] = useState({
-    position: "",
-    lead_name: "",
-    company_name: "",
-    registration_no: "",
-    employees: "",
-    type: "",
-    phone: "",
+  probability: "",
+    deal_name: "",
+    organization: "",
+    mobile: "",
     email: "",
     value: 0,
     label_id: 0,
-    source: "",
+    closure_date: "",
+    status:"",
+    pipeline_id: 1,
   });
 
   if (!isOpen) {
     return null;
   }
 
-  function handleChangeName(event) {
-    setIsDisable(false);
-    const empName = event.target.value;
-    setName(empName);
-    let arr = empName.split(" ");
-    if (arr.length >= 1) {
-      setfName(arr[0]);
-      setlName(arr[arr.length - 1]);
-    }
-  }
+  // function handleChangeName(event) {
+  //   setIsDisable(false);
+  //   const empName = event.target.value;
+  //   setName(empName);
+  //   let arr = empName.split(" ");
+  //   if (arr.length >= 1) {
+  //     setfName(arr[0]);
+  //     setlName(arr[arr.length - 1]);
+  //   }
+  // }
 
-  function handleStatus(status) {
-    setStatus(status);
-    setIsDisable(false);
-    setSelectedStatus(status);
-  }
+  // function handleStatus(status) {
+  //   setStatus(status);
+  //   setIsDisable(false);
+  //   setSelectedStatus(status);
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,15 +60,9 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedFormData = {
-      ...leadData,
-      first_name: fname,
-      last_name: lname,
-      status: status,
-    };
-
+    console.log(leadData)
     axios
-      .post(ADD_LEAD, updatedFormData, {
+      .post(ADD_DEAL, leadData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -81,17 +74,16 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           autoClose: 2000,
         });
         setLeadData({
-          position: "",
-          lead_name: "",
-          company_name: "",
-          registration_no: "",
-          employees: "",
-          type: "",
-          phone: "",
+          probability: "",
+          deal_name: "",
+          organization: "",
+          mobile: "",
           email: "",
           value: 0,
           label_id: 0,
-          source: "",
+          closure_date: "",
+          status:"",
+          pipeline_id: 1,
         });
         setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
@@ -114,27 +106,27 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           <form>
             <section class="form-area">
               <div className="form-section-1">
-                <label htmlFor="lead_name" className="lead-label">
+                <label htmlFor="deal_name" className="lead-label">
                   Title
                 </label>
                 <input
-                  id="lead_name"
+                  id="deal_name"
                   type="text"
-                  name="lead_name"
+                  name="deal_name"
                   className="lead-input"
                   onChange={handleChange}
-                  value={leadData.lead_name} // Add value prop for controlled input
+                  value={leadData.deal_name} // Add value prop for controlled input
                 />
-                <label className="lead-label" htmlFor="company_name">
+                <label className="lead-label" htmlFor="organization">
                   organization
                 </label>
                 <input
-                  id="company_name"
+                  id="organization"
                   type="text"
-                  name="company_name"
+                  name="organization"
                   className="lead-input"
                   onChange={handleChange}
-                  value={leadData.company_name} // Add value prop for controlled input
+                  value={leadData.organization} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="name">
                   Deal Owner
@@ -144,8 +136,8 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   type="text"
                   className="lead-input"
                   placeholder="Please Enter Name"
-                  onChange={handleChangeName}
-                  value={name} // Add value prop for controlled input
+                  // onChange={handleChangeName}
+                  // value={name} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="value">
                   Value
@@ -167,31 +159,39 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                     ))}
                   </select>
                 </div>
-                <label className="lead-label" htmlFor="position">
+                <label className="lead-label" htmlFor="probability">
                   Probability
                 </label>
                 <input
-                  id="position"
+                  id="probability"
                   type="text"
                   className="lead-input"
-                  name=""
-                  // onChange={handleChange}
+                  name="probability"
+                  onChange={handleChange}
+                  value={leadData.probability} 
                 />
-                <label className="lead-label" htmlFor="source">
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Pipeline
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+                <label className="lead-label" htmlFor="closure_date">
                   Expected Closing Date
                 </label>
                 <input
-                  id="source"
+                  id="closure_date"
                   type="date"
                   className="lead-input"
-                  name="source"
+                  name="closure_date"
                   onChange={handleChange}
-                  value={leadData.source} // Add value prop for controlled input
+                  value={leadData.closure_date} // Add value prop for controlled input
                 />
               </div>
 
               <div className="form-section-2">
-                <label className="lead-label" htmlFor="phone">
+                <label className="lead-label" htmlFor="mobile">
                   Phone Number
                 </label>
                 <div className="phone-input-section">
@@ -206,12 +206,12 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   ))}
                 </select> */}
                   <input
-                    id="phone"
+                    id="mobile"
                     className="phone-input"
                     type="text"
-                    name="phone"
+                    name="mobile"
                     onChange={handleChange}
-                    value={leadData.phone} // Add value prop for controlled input
+                    value={leadData.mobile} // Add value prop for controlled input
                   />
                 </div>
 
@@ -225,6 +225,17 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-input email-case"
                   onChange={handleChange}
                   value={leadData.email} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="email">
+                  Status
+                </label>
+                <input
+                  id="status"
+                  type="text"
+                  name="status"
+                  className="lead-input email-case"
+                  onChange={handleChange}
+                  value={leadData.status} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
