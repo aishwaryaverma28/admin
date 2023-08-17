@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { ADD_DEAL, getDecryptedToken } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
@@ -30,7 +30,24 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
     closure_date: "",
     status:"",
     pipeline_id: 1,
+    lead_id:0,
   });
+
+  useEffect(() => {
+    if (selectedItem) {
+      setLeadData({
+        lead_id:selectedItem.id,
+        deal_name: selectedItem.lead_name,
+        organization: selectedItem.company_name,
+        mobile: selectedItem.phone,
+        email: selectedItem.email,
+        value: selectedItem.value,
+        label_id: selectedItem.label_id,
+        status: selectedItem.status,
+        pipeline_id: 1,
+      });
+    }
+  }, [selectedItem]);
 
   if (!isOpen) {
     return null;
@@ -88,6 +105,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
           closure_date: "",
           status:"",
           pipeline_id: 1,
+          lead_id:0,
         });
         // setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
