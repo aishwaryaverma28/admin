@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import rectangle71 from "../../assets/image/Rectangle 71.svg";
 // import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
-const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }) => {
   const [status, setStatus] = useState("");
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
@@ -17,6 +17,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
+  console.log(selectedItem)
 
   const [leadData, setLeadData] = useState({
   probability: "",

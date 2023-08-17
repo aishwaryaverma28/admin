@@ -1,16 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./styles/LPleads.css";
-import {
-  MOVELEAD_TO_TRASH,
-  getDecryptedToken,
-} from "./utils/Constants";
+import { MOVELEAD_TO_TRASH, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import user from "../assets/image/user.svg";
 import Modal from "./Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CreateDeal from "./deal/CreateDeal";
 
-const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection, mergedLabels }) => {
+const LeadsColn = ({
+  leadArray,
+  leadKey,
+  onLeadAdded,
+  selectedCardIds,
+  onCardSelection,
+  mergedLabels,
+}) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -19,11 +24,19 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
   const decryptedToken = getDecryptedToken();
-  const [isHeaderCheckboxChecked, setIsHeaderCheckboxChecked] =
-    useState(false);
+  const [isHeaderCheckboxChecked, setIsHeaderCheckboxChecked] = useState(false);
   const [checkedRows, setCheckedRows] = useState({});
+  const [selectedConvertItem, setSelectedConvertItem] = useState(null);
+  const [convertModalVisible, setConvertModalVisible] = useState(false);
 
-
+  const openConvertModal = (item) => {
+    setSelectedConvertItem(item); // Set the selected item
+    setConvertModalVisible(true); // Open the modal
+  };
+  const closeConvertModal = () => {
+    setSelectedConvertItem(null); // Clear the selected item
+    setConvertModalVisible(false); // Close the modal
+  };
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -50,7 +63,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
   };
   const deleteCard = (itemId) => {
     const body = {
-      leadIds: [itemId,]
+      leadIds: [itemId],
     };
     axios
       .delete(MOVELEAD_TO_TRASH, {
@@ -63,8 +76,8 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
         console.log(response);
         toast.success("Lead moved to trash successfully", {
           position: "top-center",
-          autoClose: 2000
-        })
+          autoClose: 2000,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -152,18 +165,19 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
         <div className="main-cards">
           <div className="cards-new">
             <p
-              className={`new-leads ${leadKey === "New"
+              className={`new-leads ${
+                leadKey === "New"
                   ? "new-color"
                   : leadKey === "Open"
-                    ? "open-color"
-                    : leadKey === "InProgress"
-                      ? "progress-color"
-                      : leadKey === "Open deal"
-                        ? "deal-color"
-                        : leadKey === "Unread"
-                          ? "unread-color"
-                          : ""
-                }`}
+                  ? "open-color"
+                  : leadKey === "InProgress"
+                  ? "progress-color"
+                  : leadKey === "Open deal"
+                  ? "deal-color"
+                  : leadKey === "Unread"
+                  ? "unread-color"
+                  : ""
+              }`}
             >
               {leadKey + "(" + leadArray.length + ")"}
             </p>
@@ -217,7 +231,9 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
 
                     {isOpenState[item.id] && (
                       <ul className="cardMenu">
-                        <li>Convert to deal</li>
+                        <li onClick={() => openConvertModal(item)}>
+                          Convert to deal
+                        </li>
                         <li onClick={() => toggleDropdown(item.id, "Delete")}>
                           Delete
                         </li>
@@ -255,7 +271,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
                     )}
                   </button>
                   <div className="priorityBox">
-                    {mergedLabels.map((label) => (
+                    {mergedLabels.map((label) =>
                       label.id === item.label_id ? (
                         <p
                           key={label.id}
@@ -265,7 +281,7 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
                           {label.name}
                         </p>
                       ) : null
-                    ))}
+                    )}
                   </div>
 
                   <label class="custom-checkbox">
@@ -294,6 +310,16 @@ const LeadsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
           onLeadAdded={onLeadAdded}
         />
       )}
+      {convertModalVisible && (
+        <CreateDeal
+          isOpen={true}
+          onClose={closeConvertModal}
+          onLeadAdded={onLeadAdded}
+          mergedLabels={mergedLabels}
+          selectedItem={selectedConvertItem} // Pass the selected item to modal
+        />
+      )}
+
       <ToastContainer />
     </>
   );
