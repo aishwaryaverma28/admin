@@ -8,30 +8,19 @@ import user from "../../assets/image/user.svg";
 import Modal from "../Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 
 const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSelection }) => {
     const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const dropdownRefs = useRef([]);
   const [isOpenState, setIsOpenState] = useState({});
   const decryptedToken = getDecryptedToken();
   const [isHeaderCheckboxChecked, setIsHeaderCheckboxChecked] =
     useState(false);
   const [checkedRows, setCheckedRows] = useState({});
-
-  const openModal = (item) => {
-    setSelectedItem(item);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setSelectedItem(null);
-    setModalVisible(false);
-  };
 
   const totalValue = leadArray.reduce((sum, item) => sum + item.value, 0);
 
@@ -114,7 +103,6 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       updatedCheckedRows[item.id] = checked;
     });
     setCheckedRows(updatedCheckedRows);
-
     // Update the selectedCardIds based on the header checkbox value
     if (checked) {
       const allIds = leadArray.map((item) => item.id);
@@ -189,8 +177,10 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
               <div className="card-container">
                 <div className="card-leftBox">
                   <div className="user-details">
-                    <p className="heading" onClick={() => openModal(item)}>
+                    <p className="heading">
+                    <Link to={"/lp/deals/" +item.id}>
                       {item.deal_name}
+                      </Link>
                     </p>
                   </div>
                   <div className="lead-value">
@@ -285,13 +275,6 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
           </div>
         </div>
       </div>
-      {modalVisible && (
-        <Modal
-          selectedItem={selectedItem}
-          closeModal={closeModal}
-          onLeadAdded={onLeadAdded}
-        />
-      )}
       <ToastContainer />
     </>
   );

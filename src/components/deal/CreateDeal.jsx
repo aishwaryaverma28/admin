@@ -4,16 +4,16 @@ import { ADD_DEAL, getDecryptedToken } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import rectangleFill from "../../assets/image/Rectangle 70 Fill.svg";
-import rectangle from "../../assets/image/Rectangle 70.svg";
-import rectangle71 from "../../assets/image/Rectangle 71.svg";
-import rectangle74 from "../../assets/image/Rectangle 74.svg";
+// import rectangleFill from "../../assets/image/Rectangle 70 Fill.svg";
+// import rectangle from "../../assets/image/Rectangle 70.svg";
+// import rectangle71 from "../../assets/image/Rectangle 71.svg";
+// import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [status, setStatus] = useState("");
-  const [name, setName] = useState("");
-  const [fname, setfName] = useState("");
-  const [lname, setlName] = useState("");
+  // const [name, setName] = useState("");
+  // const [fname, setfName] = useState("");
+  // const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -46,11 +46,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   //   }
   // }
 
-  // function handleStatus(status) {
-  //   setStatus(status);
-  //   setIsDisable(false);
-  //   setSelectedStatus(status);
-  // }
+  function handleStatus(status) {
+    setStatus(status);
+    setIsDisable(false);
+    setSelectedStatus(status);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,9 +60,12 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(leadData)
+    const updateData = {
+      ...leadData,
+      status: status,
+    };
     axios
-      .post(ADD_DEAL, leadData, {
+      .post(ADD_DEAL, updateData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -85,7 +88,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           status:"",
           pipeline_id: 1,
         });
-        setName("");
+        // setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
@@ -226,17 +229,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   onChange={handleChange}
                   value={leadData.email} // Add value prop for controlled input
                 />
-                <label className="lead-label" htmlFor="email">
-                  Status
-                </label>
-                <input
-                  id="status"
-                  type="text"
-                  name="status"
-                  className="lead-input email-case"
-                  onChange={handleChange}
-                  value={leadData.status} // Add value prop for controlled input
-                />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
                 </label>
@@ -260,7 +252,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
             <section>
               <div className="lead-status">
                 <p>Deal Stage</p>
-                <div className="elements">
+                {/* <div className="elements">
                 <img
                       src={rectangleFill}
                       alt=""
@@ -285,6 +277,38 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                       src={rectangle74}
                       alt=""
                     />
+                </div> */}
+                <div className="elements">
+                  <span
+                    className={`status-value new-element ${selectedStatus === "New" ? "selected-status" : ""}`}
+                    onClick={() => handleStatus("New")}
+                  >
+                    <span>New</span>
+                  </span>
+                  <span
+                     className={`status-value open-element ${selectedStatus === "Open" ? "selected-status" : ""}`}
+                    onClick={() => handleStatus("Open")}
+                  >
+                    <span>Open</span>
+                  </span>
+                  <span
+                    className={`status-value progress-element ${selectedStatus === "In Progress" ? "selected-status" : ""}`}
+                    onClick={() => handleStatus("In Progress")}
+                  >
+                    <span>In Progress</span>
+                  </span>
+                  <span
+                     className={`status-value deal-element ${selectedStatus === "Open Deal" ? "selected-status" : ""}`}
+                    onClick={() => handleStatus("Open Deal")}
+                  >
+                    <span>Open Deal</span>
+                  </span>
+                  <span
+                    className={`status-value unread-element ${selectedStatus === "Unread" ? "selected-status" : ""}`}
+                    onClick={() => handleStatus("Unread")}
+                  >
+                    <span>unread</span>
+                  </span>
                 </div>
               </div>
             </section>

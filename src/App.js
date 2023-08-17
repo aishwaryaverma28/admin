@@ -51,6 +51,7 @@ import SettingLeads from "./components/settings/SettingLeads";
 import SettingDeal from "./components/settings/SettingDeal";
 import SettingUsage from "./components/settings/SettingUsage";
 import SettingImpExp from "./components/settings/SettingImpExp";
+import DealUpdate from "./components/deal/DealUpdate";
 const router = createBrowserRouter([
   // {
   //   path: "/:auth",
@@ -66,7 +67,6 @@ const router = createBrowserRouter([
     path: "/registration",
     element: <Registration />,
   },
-
   {
     path: "/lp",
     element: <SecurePages Component={Leadplaner} />,
@@ -95,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/deals",
         element: <SecureRoutes Component={Deal} />,
+      },
+      {
+        path: "/lp/deals/:id",
+        element: <DealUpdate/>,
       },
       {
         path: "/lp/settings",
