@@ -52,6 +52,7 @@ const Deal = () => {
           console.log(error);
         });
     };
+    console.log(data);
   
     const fetchLabelData = async () => {
       try {

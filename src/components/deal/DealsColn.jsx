@@ -151,10 +151,26 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
       <div className="card-details">
         <div className="main-cards">
           <div className="cards-new">
-            <p
+            {/* <p
               className="DealName"
             >
               {leadKey + " (" + leadArray.length + ")"}
+            </p> */}
+              <p
+              className={`new-leads ${leadKey === "New"
+                  ? "new-color"
+                  : leadKey === "Open"
+                    ? "open-color"
+                    : leadKey === "InProgress"
+                      ? "progress-color"
+                      : leadKey === "Open deal"
+                        ? "deal-color"
+                        : leadKey === "Unread"
+                          ? "unread-color"
+                          : ""
+                }`}
+            >
+              {leadKey + "(" + leadArray.length + ")"}
             </p>
             {leadArray.length > 0 && (
               <label className="custom-checkbox">
@@ -177,7 +193,7 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
                   <div className="user-details">
                     <p className="heading" onClick={() => openModal(item)}>
                       {/* {item.lead_name} */}
-                      Deal Name
+                      {item.deal_name}
                     </p>
                   </div>
                   <div className="lead-value">
@@ -186,25 +202,23 @@ const DealsColn = ({ leadArray, leadKey, onLeadAdded, selectedCardIds, onCardSel
                   <div className="contact-details">
                     <div className="mail">
                       <img src={user} alt="" />
-                      <p>Deal Owner</p>
-                      {/* <p>{item.first_name + " " + item.last_name}</p> */}
+                      <p>{item.first_name + " " + item.last_name}</p>
                     </div>
                   </div>
                   <div>
                     <p className="clouserDate">{item.closure_date?.split("T")[0]}</p>
                   </div>
-                  {/* <div className="priorityBox"> */}
-                  <div className="DealpriorityBox">
-                    lables
+                  <div className="priorityBox">
                     {mergedLabels.map((label) => (
                       label.id === item.label_id ? (
-                        <p
-                          key={label.id}
-                          className="leads-priority"
-                          style={{ backgroundColor: label.colour_code }}
-                        >
-                          {label.name}
-                        </p>
+                        console.log(label.name)
+                        // <p
+                        //   key={label.id}
+                        //   className="leads-priority"
+                        //   style={{ backgroundColor: label.colour_code }}
+                        // >
+                        //   {label.name}
+                        // </p>
                       ) : null
                     ))}
                   </div>
