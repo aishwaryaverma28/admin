@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { LPContext } from "./LPContext";
-import { NavLink, Link, useLocation} from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
 import axios from "axios";
-import { USER_INFO,getDecryptedToken,handleLogout } from "./utils/Constants";
-import HelpModal from './HelpModal';
+import { USER_INFO, getDecryptedToken, handleLogout } from "./utils/Constants";
+import HelpModal from "./HelpModal";
 
 const LPheader = () => {
   const { name } = useContext(LPContext);
@@ -18,39 +18,34 @@ const LPheader = () => {
   const dropdownRef = useRef(null);
   const [clientData, setClientData] = useState(null);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-    const decryptedToken = getDecryptedToken();
-    const location = useLocation();
+  const decryptedToken = getDecryptedToken();
+  const location = useLocation();
 
-    useEffect(() => {
-        getUser()
-      }, []);
-    
-      async function getUser() {
-        try {
-          const response = await axios.get(
-            USER_INFO,
-            {
-              headers: {
-                Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-              },
-            }
-          );
-          const data = response.data.data;
-          if (response.data.status === 1) {
-            setClientData(data[0]);
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  async function getUser() {
+    try {
+      const response = await axios.get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      const data = response?.data?.data;
+      if (response.data.status === 1) {
+        setClientData(data[0]);
         //   setPic(VIEW_IMG + data[0].profile_image);
-        }
-          else {
-            if (response.data.message === "Token has expired") {
-              alert(response.data.message);
-             handleLogout() 
-            }
-          }
-        } catch (error) {
-          console.log(error);
-        }
       }
-      // console.log(clientData);
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  }
+  // console.log(clientData);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -58,10 +53,10 @@ const LPheader = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
   const toggleDropdown = () => {
@@ -72,7 +67,7 @@ const LPheader = () => {
   };
 
   const handleOptionClick = (option) => {
-    console.log('Selected option:', option);
+    console.log("Selected option:", option);
     setIsOpen(false);
   };
   const handleMenuToggle = () => {
@@ -86,15 +81,14 @@ const LPheader = () => {
     setIsNavOpen(!isNavOpen);
   };
 
-
   const handleHelpModalOpen = () => {
     setIsHelpModalOpen(true);
-  }
+  };
 
   const closeHelpModal = () => {
     setIsHelpModalOpen(false);
-  }
-  
+  };
+
   return (
     <>
       <div className="nav">
@@ -132,65 +126,74 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <button type="button" className="helpBtn" title="Help" onClick={handleHelpModalOpen}>
+              <button
+                type="button"
+                className="helpBtn"
+                title="Help"
+                onClick={handleHelpModalOpen}
+              >
                 <i className="far fa-question-circle"></i>
               </button>
             </li>
             <li>
-              <Link to="/lp/settings/general"> 
+              <Link to="/lp/settings/general">
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>
               </Link>
-            </li>  
+            </li>
           </ul>
         </div>
         <div className="userDropdownContainer" ref={dropdownRef}>
-        <div className="userImg" onClick={toggleDropdown}>
-          <img className="borderLeft" src={line} alt="border-left" />
-          <img src={user} alt="user" />
-          {clientData ? (
-          <p> {name ? name : `${clientData.first_name} ${clientData.last_name}`}
-            <br />
-            <span>{clientData.job_title}</span>
-          </p>
-          ) : (
-            <p>
-          John Wick
-            <br />
-            <span>admin</span>
-          </p>
-          )}
-        </div>
-        {isOpen && (
-        <div className="logoutDropdown">
-          <div className="logUserInfo">
+          <div className="userImg" onClick={toggleDropdown}>
+            <img className="borderLeft" src={line} alt="border-left" />
             <img src={user} alt="user" />
-            <div className="crmUserInfo">
-              <h5 className="crmUserInfoName">{clientData.first_name+" "+clientData.last_name}</h5>
-              <p className='email-case'>{clientData.email}</p>
-              <p>{clientData.job_title}</p>
+            {clientData ? (
+              <p>
+                {" "}
+                {name
+                  ? name
+                  : `${clientData.first_name} ${clientData.last_name}`}
+                <br />
+                <span>{clientData.job_title}</span>
+              </p>
+            ) : (
+              <p>
+                John Wick
+                <br />
+                <span>admin</span>
+              </p>
+            )}
+          </div>
+          {isOpen && (
+            <div className="logoutDropdown">
+              <div className="logUserInfo">
+                <img src={user} alt="user" />
+                <div className="crmUserInfo">
+                  <h5 className="crmUserInfoName">
+                    {clientData.first_name + " " + clientData.last_name}
+                  </h5>
+                  <p className="email-case">{clientData.email}</p>
+                  <p>{clientData.job_title}</p>
+                </div>
+              </div>
+              <div className="profileNPref">Profile & Preferences</div>
+              <div className="userId">
+                User Id: 123456789 <i className="far fa-question-circle"></i>
+              </div>
+              <div className="userId">
+                <p>Invite & earn rewards</p>
+                <p>Account & Billing </p>
+                <p>Price & Features</p>
+                <p>Training & Services</p>
+                <p>About this application</p>
+              </div>
+              <div className="signOutDiv">
+                <p onClick={handleLogout}>Sign Out</p>
+                <p>Privacy policy</p>
+              </div>
             </div>
-          </div>
-          <div className="profileNPref">
-            Profile & Preferences
-          </div>
-          <div className="userId">
-            User Id: 123456789 <i className="far fa-question-circle"></i>
-          </div>
-          <div className="userId">
-            <p>Invite & earn rewards</p>
-            <p>Account & Billing </p>
-            <p>Price & Features</p>
-            <p>Training & Services</p>
-            <p>About this application</p>
-          </div>
-          <div className="signOutDiv">
-            <p onClick={handleLogout}>Sign Out</p>
-            <p>Privacy policy</p>
-          </div>
-        </div>
-        )}
+          )}
         </div>
       </div>
       {/* Top Navigation End  */}
@@ -242,11 +245,7 @@ const LPheader = () => {
       </nav>
       {/* Bottom Navigation End */}
 
-      {
-        isHelpModalOpen && (
-          <HelpModal onClose={closeHelpModal}/>
-        )
-      }
+      {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}
     </>
   );
 };

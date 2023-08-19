@@ -99,6 +99,7 @@ export const EDIT_PASSWORD = start + "api/setting/password/edit";
 //=======================================================================notes
 export const ADD_NOTES = start+"api/note/add";
 export const GETNOTEBYSOURCE = start+"api/note/getbysource/lead/";
+export const GETNOTEDEAL = start+"api/note/getbysource/deal/";
 export const UPDATE_NOTE = start+"api/note/edit/";
 export const DELETE_NOTE = start+"api/note/delete/";
 export const MOVENOTE_TO_TRASH = start +"api/note/movetotrash";
@@ -120,3 +121,4 @@ export const GET_ALL_PRODUCT = start + "api/product/getall";
 //========================================================================Deals
 export const GET_ALL_DEAL = start + "api/deal/getall";
 export const ADD_DEAL = start +"api/deal/add";
+export const GET_DEAL_ID = start + "api/deal/get/";

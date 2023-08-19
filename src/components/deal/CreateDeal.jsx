@@ -17,8 +17,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
-  console.log(selectedItem)
-
+  
   const [leadData, setLeadData] = useState({
   probability: "",
     deal_name: "",
@@ -171,7 +170,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                     className="currency-input"
                     name="value"
                     onChange={handleChange}
-                    value={leadData.value} // Add value prop for controlled input
+                    value={leadData.value}
                   />
                   <select name="" id="" className="currency-value">
                     {worldCurrencies.map((currency, index) => (
@@ -208,7 +207,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                   className="lead-input"
                   name="closure_date"
                   onChange={handleChange}
-                  value={leadData.closure_date} // Add value prop for controlled input
+                  value={leadData.closure_date}
                 />
               </div>
 
@@ -233,7 +232,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                     type="text"
                     name="mobile"
                     onChange={handleChange}
-                    value={leadData.mobile} // Add value prop for controlled input
+                    value={leadData.mobile}
                   />
                 </div>
 
@@ -246,7 +245,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                   name="email"
                   className="lead-input email-case"
                   onChange={handleChange}
-                  value={leadData.email} // Add value prop for controlled input
+                  value={leadData.email}
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables

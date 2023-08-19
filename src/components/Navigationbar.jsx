@@ -13,6 +13,7 @@ const NavigationBar = () => {
   const [empData, setEmpData] = useState(null);
   const [pic, setPic] = useState("");
   const decryptedToken = getDecryptedToken();
+  
   useEffect(() => {
     getUser()
   }, []);
@@ -32,14 +33,12 @@ const NavigationBar = () => {
       setEmpData(data[0]);
       setPic(VIEW_IMG + data[0].profile_image);
     }
-      else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-         handleLogout() 
-        }
-      }
     } catch (error) {
       console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+           handleLogout() 
+          }
     }
   }
   return (

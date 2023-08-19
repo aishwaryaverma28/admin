@@ -1,0 +1,60 @@
+.backToDeal {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 10px 30px;
+}
+.backToDeal button {
+  color: #33475b;
+  display: flex;
+  align-items: center;
+  border: none;
+  font-size: 0.75rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+.dealName {
+  color: #1e2224;
+  font-family: "Lexend Deca";
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+.dealcontainer {
+  border: 2px solid red;
+  display: flex;
+  padding: 10px 30px;
+}
+.dealLeftSection {
+  width: 25%;
+  border: 2px solid aqua;
+  overflow-y: scroll;
+}
+.divRightSection {
+  width: 75%;
+}
+.summaryDiv {
+  display: flex;
+  justify-content: space-between;
+}
+.summaryDiv p {
+  font-family: "Lexend Deca";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: uppercase;
+}
+.dealSectionHead > i {
+  margin-right: 0.7rem;
+}
+.addProduct {
+  color: #2b74da;
+}
+.addProduct > i {
+  margin-right: 0.7rem;
+}

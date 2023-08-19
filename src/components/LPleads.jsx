@@ -255,8 +255,6 @@ const LPleads = () => {
       }
     }
   };
-
-  console.log(selectedCardIds);
   const deleteCard = () => {
     const body = {
       leadIds: selectedCardIds,

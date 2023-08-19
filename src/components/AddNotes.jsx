@@ -5,6 +5,7 @@ import axios from "axios";
 import {
   ADD_NOTES,
   GETNOTEBYSOURCE,
+  GETNOTEDEAL,
   UPDATE_NOTE,
   MOVENOTE_TO_TRASH,
   handleLogout,
@@ -15,7 +16,7 @@ import GreaterArrow from "../assets/image/greater-arrow.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddNotes = ({ item, onNotesNum }) => {
+const AddNotes = ({ item, onNotesNum, type }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -25,31 +26,40 @@ const AddNotes = ({ item, onNotesNum }) => {
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
   useEffect(() => {
-    // console.log(decryptedToken);
     fetchNotes();
   }, []);
 
   const fetchNotes = () => {
-    axios
-      .get(GETNOTEBYSOURCE + item.id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        if (response.data.status === 1) {
-          console.log(response.data.data);
-          setNotes(response.data.data);
-        } else {
-          if (response.data.message === "Token has expired") {
-            alert(response.data.message);
+    let apiEndpoint = "";
+    if (type === "lead") {
+      apiEndpoint = GETNOTEBYSOURCE;
+    } else if (type === "deal") {
+      apiEndpoint = GETNOTEDEAL;
+    }
+
+    if (apiEndpoint) {
+      axios
+        .get(apiEndpoint + item.id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.status === 1) {
+            console.log(response?.data?.data);
+            setNotes(response?.data?.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          if (
+            error?.response?.data?.message === "Invalid or expired token."
+          ) {
+            alert(error?.response?.data?.message);
             handleLogout();
           }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        });
+    }
   };
 
   const handleDataTransfer = (data) => {
@@ -60,7 +70,7 @@ const AddNotes = ({ item, onNotesNum }) => {
   const handleAddNote = () => {
     const updatedFormData = {
       source_id: item.id,
-      type: "lead",
+      type: type,
       description: dataFromChild,
       importance: 1,
       created_by: "aishwarya",
@@ -104,7 +114,7 @@ const AddNotes = ({ item, onNotesNum }) => {
         urgency: "Noq",
         viewable: 1,
         source_type: "source -2",
-        type: "lead",
+        type: type,
         attr2: "attr2",
       };
       const updatedNotes = notes.map((note) =>
@@ -134,7 +144,7 @@ const AddNotes = ({ item, onNotesNum }) => {
   const handleDeleteNote = (id) => {
     const updatedFormData = {
       "notes": [id,],
-      "source_type": "lead"
+      "source_type": type,
   }
     axios
       .post(MOVENOTE_TO_TRASH, updatedFormData, {

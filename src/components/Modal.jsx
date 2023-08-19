@@ -69,13 +69,13 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         });
         if (response.data.status === 1) {
             setLabelData(response.data.data);
-        } else {
-            if (response.data.message === 'Token has expired') {
-                alert(response.data.message);
-            }
-        }
+        } 
     } catch (error) {
-        console.error('Error fetching data:', error);
+      console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+           handleLogout() 
+          }
     }
 };
 
@@ -156,15 +156,14 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
       .then((response) => {
         if (response.data.status === 1) {
           setNotes(response.data.data.length);
-        } else {
-          if (response.data.message === "Token has expired") {
-            alert(response.data.message);
-            handleLogout();
-          }
-        }
+        } 
       })
       .catch((error) => {
         console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+         handleLogout() 
+        }
       });
   };
 
@@ -897,7 +896,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={selectedItem} onNotesNum={fetchNotes} />
+                <AddNotes item={selectedItem} onNotesNum={fetchNotes} type="lead"/>
               </div>
             )}
             {activeTab === "email" && (
