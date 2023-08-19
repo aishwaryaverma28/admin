@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-import {
-  GET_ALL_DEAL,
-  getDecryptedToken,
-  GET_LABEL,
-} from "../utils/Constants";
+import { GET_ALL_DEAL, getDecryptedToken, GET_LABEL } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
@@ -50,11 +46,10 @@ const Deal = () => {
   const [totalValue, setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
-  const [deleteConfirmationVisible, setDeleteConfirmationVisible] =
-    useState(false);
   const [labelData, setLabelData] = useState([]);
   const [statusCounts, setStatusCounts] = useState({});
-
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
 
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
@@ -66,11 +61,13 @@ const Deal = () => {
       })
       .then((response) => {
         setDeals(response?.data?.data);
-  
+
         // Calculate status counts
         const counts = {};
         status.forEach((status) => {
-          counts[status] = response?.data?.data.filter((obj) => obj.status === status).length;
+          counts[status] = response?.data?.data.filter(
+            (obj) => obj.status === status
+          ).length;
         });
         setStatusCounts(counts);
       })
@@ -78,7 +75,7 @@ const Deal = () => {
         console.log(error);
       });
   };
-  
+
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -133,7 +130,7 @@ const Deal = () => {
     fileInputRef.current.click();
   };
   //===========================================================for bulk import
-  
+
   // Function to toggle the dropdown menu
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
@@ -141,10 +138,7 @@ const Deal = () => {
   const togglePipeDropdown = () => {
     setPipeOpen(!pipeopen);
   };
-  const toggleActionDropdown = (option) => {
-    if (option === "Delete") {
-      setDeleteConfirmationVisible(true);
-    } 
+  const toggleActionDropdown = () => {
     setActionOpen(!actionopen);
   };
   // Effect hook to add click event listener when the component mounts
@@ -186,6 +180,38 @@ const Deal = () => {
     };
   }, []);
 
+  const handleChildCheckboxChange = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+console.log(selectedIds)
+  const areAllChildCheckboxesChecked = (status) => {
+    const idsWithStatus = deals
+      .filter((deal) => deal.status === status)
+      .map((deal) => deal.id);
+    return idsWithStatus.every((id) => selectedIds.includes(id));
+  };
+
+  const handleHeaderCheckboxChange = (status) => {
+    if (selectedStatus === status) {
+      setSelectedStatus("");
+      setSelectedIds([]);
+    } else {
+      setSelectedStatus(status);
+      
+      // Get the IDs of deals with the selected status
+      const ids = deals
+        .filter((deal) => deal.status === status)
+        .map((deal) => deal.id);
+      
+      // Merge the IDs with the current selectedIds array
+      setSelectedIds([...selectedIds, ...ids]);
+    }
+  };
+  
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
     .map((item) => ({
@@ -257,7 +283,7 @@ const Deal = () => {
                 accept=".csv"
                 ref={fileInputRef}
                 style={{ display: "none" }}
-                 />
+              />
               <button
                 type="button"
                 className="simple-btn"
@@ -293,8 +319,8 @@ const Deal = () => {
                     </li>
                   </ul>
                 )}
-                {deleteConfirmationVisible && (
-                  <div className="popup-container">
+
+                {/* <div className="popup-container">
                     <div className="popup">
                       <p className="popupHead">Delete Selected Deals</p>
                       <p>Deleted deals will be in recycle bin for 90 days</p>
@@ -304,7 +330,6 @@ const Deal = () => {
                       <div className="popup-buttons">
                         <button
                           className="cancelBtn"
-                          onClick={() => setDeleteConfirmationVisible(false)}
                         >
                           Cancel
                         </button>
@@ -315,44 +340,49 @@ const Deal = () => {
                         </button>
                       </div>
                     </div>
-                  </div>
-                )}
+                  </div> */}
               </div>
             </div>
-            <button
-              type="button"
-              className="helpBtn recycle-refresh-icon"
-              title="Refresh"
-              onClick={resetData}
-            >
-              <i class="fa-sharp fa-solid fa-rotate "></i>
-            </button>
           </div>
         </div>
       </section>
       <section className="cards-body">
-        {status.map((item,index) => 
-        deals.map((obj)=>
-        obj.status === item ? <div className="card-details">
-        <div className="main-cards">
-        <div className="cards-new"><p className="DealName">{stages[index]} ({statusCounts[item]})</p>
-        {statusCounts[item] > 0 && (
-              <label className="custom-checkbox">
-                <input
-                  type="checkbox"
-                  className={`cb1 ${item}-header-checkbox`}
-                  name="headerCheckBox"
-                />
-                <span className="checkmark"></span>
-              </label>
-            )}
-        </div>
-          <DealsColn object={obj}/>
-        </div>
-      </div> : null
-        )
-        )};
-        
+        {status.map((item, index) =>
+          deals.map((obj) =>
+            obj.status === item ? (
+              <div className="card-details">
+                <div className="main-cards">
+                  <div className="cards-new">
+                    <p className="DealName">
+                      {stages[index]} ({statusCounts[item]})
+                    </p>
+                    {statusCounts[item] > 0 && (
+                      <label className="custom-checkbox">
+                        <input
+                          type="checkbox"
+                          className={`cb1 ${item}-header-checkbox`}
+                          name="headerCheckBox"
+                          checked={
+                            selectedStatus === item &&
+                            areAllChildCheckboxesChecked(item)
+                          }
+                          onChange={() => handleHeaderCheckboxChange(item)}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    )}
+                  </div>
+                  <DealsColn
+                    object={obj}
+                    selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                  />
+                </div>
+              </div>
+            ) : null
+          )
+        )}
+        ;
       </section>
 
       <CreateDeal

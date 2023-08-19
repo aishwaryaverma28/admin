@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 
-const DealsColn = ({ object }) => {
+const DealsColn = ({ object, selectedIds, setSelectedIds }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
@@ -24,6 +24,15 @@ const DealsColn = ({ object }) => {
       document.removeEventListener("click", handleDocumentClick);
     };
   }, [isMenuOpen]);
+
+  const handleChildCheckboxChange = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+  
 
   return (
     <>
@@ -79,6 +88,8 @@ const DealsColn = ({ object }) => {
                 type="checkbox"
                 className={`cb1 ${object.status}-card-checkbox`}
                 name={object.id}
+                checked={selectedIds.includes(object.id)}
+                onChange={() => handleChildCheckboxChange(object.id)}
               />
               <span class="checkmark"></span>
             </label>
