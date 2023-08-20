@@ -50,6 +50,7 @@ const Deal = () => {
   const [statusCounts, setStatusCounts] = useState({});
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedStatusesData, setSelectedStatusesData] = useState({});
 
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
@@ -187,31 +188,45 @@ const Deal = () => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-console.log(selectedIds)
+  console.log(selectedIds);
+  
   const areAllChildCheckboxesChecked = (status) => {
-    const idsWithStatus = deals
-      .filter((deal) => deal.status === status)
-      .map((deal) => deal.id);
-    return idsWithStatus.every((id) => selectedIds.includes(id));
+    if (selectedStatusesData[status]) {
+      const idsWithStatus = deals
+        .filter((deal) => deal.status === status)
+        .map((deal) => deal.id);
+      return idsWithStatus.every((id) => selectedIds.includes(id));
+    }
+    return false;
   };
 
   const handleHeaderCheckboxChange = (status) => {
-    if (selectedStatus === status) {
-      setSelectedStatus("");
-      setSelectedIds([]);
+    if (selectedStatusesData[status]) {
+      setSelectedStatusesData((prevData) => ({
+        ...prevData,
+        [status]: false,
+      }));
+      setSelectedIds(
+        selectedIds.filter((id) =>
+          deals.find((deal) => deal.status === status && deal.id === id)
+        )
+      );
     } else {
-      setSelectedStatus(status);
-      
+      setSelectedStatusesData((prevData) => ({
+        ...prevData,
+        [status]: true,
+      }));
+
       // Get the IDs of deals with the selected status
       const ids = deals
         .filter((deal) => deal.status === status)
         .map((deal) => deal.id);
-      
+
       // Merge the IDs with the current selectedIds array
       setSelectedIds([...selectedIds, ...ids]);
     }
   };
-  
+
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
     .map((item) => ({
@@ -363,11 +378,12 @@ console.log(selectedIds)
                           className={`cb1 ${item}-header-checkbox`}
                           name="headerCheckBox"
                           checked={
-                            selectedStatus === item &&
+                            selectedStatusesData[item] &&
                             areAllChildCheckboxesChecked(item)
                           }
                           onChange={() => handleHeaderCheckboxChange(item)}
                         />
+
                         <span className="checkmark"></span>
                       </label>
                     )}
