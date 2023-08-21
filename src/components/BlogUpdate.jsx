@@ -71,10 +71,25 @@ const BlogUpdate = () => {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     });
+    // const secData = secResponse.data.data;
+    // setSectionData(secData);
     const secData = secResponse.data.data;
-    setSectionData(secData);
+  const sectionDataWithoutDate = removeDateFromSectionData(secData);
+  setSectionData(sectionDataWithoutDate);
     tagData();
+    
   }
+
+  const removeDateFromSectionData = (data) => {
+    return data.map((section) => {
+      // Create a copy of the section object without the 'date' property
+      const { date, ...newSection } = section;
+      return newSection;
+    });
+  };
+
+  console.log(sectionData);
+
   function searchData(data) {
     const blog = data.find((item) => item.id == id);
     if (blog) {
@@ -277,6 +292,7 @@ const BlogUpdate = () => {
     setDataFromChild(data);
   };
   //=========================================================handle section data in an array of objects
+  
   const handleAddSection = (e) => {
     e.preventDefault();
     const newSection = {
