@@ -390,7 +390,7 @@ const Deal = () => {
                     <p className="DealName">
                       {stages[index]} ({statusCounts[item]})
                     </p>
-                    
+
                     {statusCounts[item] > 0 && (
                       <label className="custom-checkbox">
                         <input
@@ -409,8 +409,11 @@ const Deal = () => {
                     )}
                   </div>
                   <div className="bottom-fixed">
-                    <p> Total Value: $
-      {statusTotalValues[item]?.toLocaleString("en-IN") || 0}</p>
+                    <p>
+                      {" "}
+                      Total Value: $
+                      {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
+                    </p>
                   </div>
                   <DealsColn
                     object={obj}

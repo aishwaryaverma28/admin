@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LeadModal from '../lead/LeadModal.jsx';
 
 
-const LeadCards = ({ object, selectedIds, setSelectedIds,onLeadAdded }) => {
+const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded }) => {
   
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
@@ -40,24 +40,26 @@ const LeadCards = ({ object, selectedIds, setSelectedIds,onLeadAdded }) => {
       };
     }, [isMenuOpen]);
   
-     // Function to handle checkbox change
-  const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  // Add a useEffect to update selectedIds when the status changes
-  useEffect(() => {
-    if (selectedIds.includes(object.id)) {
-      setSelectedIds((prevSelectedIds) =>
-        prevSelectedIds.filter((selectedId) => selectedId !== object.id)
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [object.status]);
+    const handleChildCheckboxChange = (id) => {
+      if (selectedIds.includes(id)) {
+        setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+      } else {
+        setSelectedIds([...selectedIds, id]);
+      }
+    };
+  
+    // Add a useEffect to update selectedIds when the status changes
+    useEffect(() => {
+      if (selectedIds.includes(object.id) && object.status !== status) {
+        setSelectedIds((prevSelectedIds) =>
+          prevSelectedIds.filter((selectedId) => selectedId !== object.id)
+        );
+      }
+      if (!selectedIds.includes(object.id) && object.status === status) {
+        setSelectedIds([...selectedIds, object.id]);
+      }
+    }, [object.status, status]);
+  
     
   
   return (
