@@ -449,7 +449,7 @@
   text-align: center;
   }
 .user-details {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
 }
 .lead-value{
   color: #1E2224;
@@ -457,6 +457,7 @@ font-family: "Lexend Deca";
 font-size: 0.875rem;
 font-weight: 500;
 text-transform: capitalize;
+margin-bottom: 0.5rem;
   }
 
 .user-details img {
@@ -537,6 +538,7 @@ text-transform: capitalize;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .mail img,

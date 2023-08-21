@@ -2,12 +2,26 @@ import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
+import LeadModal from '../lead/LeadModal.jsx';
 
 
-const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
+const LeadCards = ({ object, selectedIds, setSelectedIds,onLeadAdded }) => {
+  
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
     const menuRef = useRef(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedObj, setSelectedObj]= useState({});
+
+    const openModal = (object) => {
+      setModalVisible(true);
+      setSelectedObj(object);
+    };
+
+    const closeModal = () =>{
+      setModalVisible(false);
+    }
+
     useEffect(() => {
       const handleDocumentClick = (event) => {
         if (
@@ -52,8 +66,9 @@ const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
       <div className="card-container">
         <div className="card-leftBox">
           <div className="user-details">
-            <p className="heading">
-              <Link to={"/lp/deals/" + object.id}>{object.lead_name}</Link>
+            <p className="heading" onClick={() => openModal(object)}>
+              {/* <Link to={"/lp/deals/" + object.id}>{object.lead_name}</Link> */}
+              {object.lead_name}
             </p>
           </div>
           <div className="lead-value">
@@ -104,6 +119,13 @@ const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
         </div>
       </div>
     </div>
+    {
+      modalVisible && (
+        <LeadModal  selectedItem={selectedObj}
+        closeModal={closeModal}
+        onLeadAdded={onLeadAdded}/>
+      )
+    }
   </>
   )
 }
