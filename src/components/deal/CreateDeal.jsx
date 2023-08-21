@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }) => {
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("enquiry_received");
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
   // const [lname, setlName] = useState("");

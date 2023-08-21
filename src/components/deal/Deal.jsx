@@ -202,7 +202,7 @@ const Deal = () => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  // console.log(selectedIds);
+  console.log(selectedIds);
 
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
@@ -215,37 +215,25 @@ const Deal = () => {
   };
 
   const handleHeaderCheckboxChange = (status) => {
-    if (selectedStatusesData[status]) {
+    const idsWithStatus = deals
+      .filter((deal) => deal.status === status)
+      .map((deal) => deal.id);
+  
+    if (areAllChildCheckboxesChecked(status)) {
+      setSelectedIds(selectedIds.filter((id) => !idsWithStatus.includes(id)));
       setSelectedStatusesData((prevData) => ({
         ...prevData,
         [status]: false,
       }));
-      setSelectedIds(
-        selectedIds.filter((id) =>
-          deals.find((deal) => deal.status === status && deal.id === id)
-        )
-      );
     } else {
+      setSelectedIds([...selectedIds, ...idsWithStatus]);
       setSelectedStatusesData((prevData) => ({
         ...prevData,
         [status]: true,
       }));
-
-      // Get the IDs of deals with the selected status
-      const ids = deals
-        .filter((deal) => deal.status === status)
-        .map((deal) => deal.id);
-
-      // Merge the IDs with the current selectedIds array
-      setSelectedIds([...selectedIds, ...ids]);
     }
-
-    // Also handle child checkboxes for this status
-    deals
-      .filter((deal) => deal.status === status)
-      .forEach((deal) => handleChildCheckboxChange(deal.id));
   };
-
+  
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
     .map((item) => ({
