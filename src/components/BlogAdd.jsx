@@ -23,6 +23,7 @@ const BlogAdd = () => {
     // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState("");
+  const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
@@ -41,7 +42,7 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const decryptedToken = getDecryptedToken();
-  console.log(decryptedToken);
+
   useEffect(() => {
     axios.get(GET_TAG, {
       headers: {
@@ -183,6 +184,12 @@ const BlogAdd = () => {
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
   };
+
+  const handleimageChange = (event, index) => {
+    const newSectionData = [...sectionData];
+    newSectionData[index].image = event.target.value;
+    setSectionData(newSectionData);
+  };
   //==============================================================sub section image
   const subImageTrasfer = (data, index) => {
     const newSectionData = [...sectionData];
@@ -207,6 +214,10 @@ const BlogAdd = () => {
     const sort = event.target.value;
     setSectionSort(sort);
   };
+  const handleSecImageChange = (event) => {
+    const image = event.target.value;
+    setSectionImage(image);
+  };
   //=======================================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -217,7 +228,8 @@ const BlogAdd = () => {
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort,
-      image: childData,
+      // image: childData,
+      image: sectionImage,
       section: dataFromChild,
       site:"",
       alt:"",
@@ -231,7 +243,6 @@ const BlogAdd = () => {
     setShowEditButton(false);
     setSelectedImage("");
   };
-  // console.log(sectionData);
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
     // e.preventDefault();
@@ -253,7 +264,7 @@ const BlogAdd = () => {
     const updatedFormData = {
       ...formData,
       tag: tagId,
-      image: imageName,
+      // image: imageName,
       date: selectedDate,
       sections: sectionData,
       site: selectSite,
@@ -267,7 +278,7 @@ const BlogAdd = () => {
       }
     }).then((response) => {
       console.log(response);
-      toast.success("Blog data updated successfully", {
+      toast.success("Blog data added successfully", {
         position:"top-center",
         autoClose:2000
       })
@@ -309,7 +320,14 @@ const BlogAdd = () => {
                 onChange={handleChange}
               />
               <div>
-                <ImageUploader onDataTransfer={handleImageTransfer} />
+                {/* <ImageUploader onDataTransfer={handleImageTransfer} /> */}
+                <input
+                type="text"
+                name="image"
+                id="image"
+                placeholder="image"
+                onChange={handleChange}
+              />
               </div>
             </div>
             <div className="fromFiled">
@@ -344,7 +362,15 @@ const BlogAdd = () => {
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
-                    <div>
+                      <input
+                      type="text"
+                      name="image"
+                      id="image"
+                      value={sectionImage}
+                      placeholder="image"
+                      onChange={handleSecImageChange}
+                    />
+                    {/* <div>
                       <>
                         {!showUploadButton &&
                           !showEditButton &&
@@ -423,7 +449,7 @@ const BlogAdd = () => {
                           </>
                         )}
                       </>
-                    </div>
+                    </div> */}
 
                     <button
                       onClick={handleAddSection}
@@ -482,12 +508,21 @@ const BlogAdd = () => {
                       />
 
                       <div>
-                        <ImageEditor
+                      <input
+                        type="text"
+                        name="image"
+                        id="image"
+                        placeholder="image"
+                        className="sectionHead"
+                        value={section.image}
+                        onChange={(event) => handleimageChange(event, index)}
+                      />
+                        {/* <ImageEditor
                           parentProp={section.image}
                           onDataTransfer={(data) =>
                             subImageTrasfer(data, index)
                           }
-                        />
+                        /> */}
                       </div>
                     </div>
                     <div className="formEditor">

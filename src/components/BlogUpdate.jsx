@@ -21,7 +21,8 @@ const BlogUpdate = () => {
   const { id } = useParams();
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState("");
+  const [sectionSort, setSectionSort] = useState(0);
+  const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
@@ -227,6 +228,12 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     setStateBtn(1);
   };
+  const handleimageChange = (event, index) => {
+    const newSectionData = [...sectionData];
+    newSectionData[index].image = event.target.value;
+    setSectionData(newSectionData);
+    setStateBtn(1);
+  };
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
@@ -260,6 +267,11 @@ const BlogUpdate = () => {
     const sort = event.target.value;
     setSectionSort(sort);
   };
+
+  const handleSecImageChange = (event) => {
+    const image = event.target.value;
+    setSectionImage(image);
+  };
   //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -270,7 +282,8 @@ const BlogUpdate = () => {
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort,
-      image: childData,
+      // image: childData,
+      image: sectionImage,
       section: dataFromChild,
       site:"",
       alt:"",
@@ -278,7 +291,7 @@ const BlogUpdate = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort("");
+    setSectionSort(0);
     setChildData("");
     setDataFromChild("");
     setShowEditButton(false);
@@ -322,7 +335,8 @@ const BlogUpdate = () => {
       title: formData.title,
       url: formData.url,
       description: formData.description,
-      image: pic,
+      // image: pic,
+      image:formData.image,
       date: formData.date,
       site: selectSite,
       tag: tagId,
@@ -342,6 +356,10 @@ const BlogUpdate = () => {
 
       const data = await response.json();
       console.log(data);
+      toast.success("Blog data updated successfully", {
+        position:"top-center",
+        autoClose:2000
+      })
     }catch(error){
       console.log(error)
     };
@@ -375,7 +393,15 @@ const BlogUpdate = () => {
                 value={formData.url}
                 onChange={handleChange}
               />
-              <div>
+              <input
+                type="text"
+                name="image"
+                id="image"
+                placeholder="image"
+                value={formData.image}
+                onChange={handleChange}
+              />
+              {/* <div>
                 {formData.image ? (
                   <ImageEditor
                     parentProp={formData.image}
@@ -384,7 +410,7 @@ const BlogUpdate = () => {
                 ) : (
                   <ImageUploader onDataTransfer={handleImageTransfer} />
                 )}
-              </div>
+              </div> */}
             </div>
             <div className="fromFiled">
               <input
@@ -417,7 +443,15 @@ const BlogUpdate = () => {
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
-                    <div>
+                    <input
+                      type="text"
+                      name="image"
+                      id="image"
+                      value={sectionImage}
+                      placeholder="image"
+                      onChange={handleSecImageChange}
+                    />
+                    {/* <div>
                       <>
                         {!showUploadButton &&
                           !showEditButton &&
@@ -476,7 +510,7 @@ const BlogUpdate = () => {
                           </>
                         )}
                       </>
-                    </div>
+                    </div> */}
 
                     <button
                       onClick={handleAddSection}
@@ -533,11 +567,19 @@ const BlogUpdate = () => {
                         value={section.heading}
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
-
-                      <ImageEditor
+<input
+                        type="text"
+                        name="image"
+                        id="image"
+                        placeholder="image"
+                        className="sectionHead"
+                        value={section.image}
+                        onChange={(event) => handleimageChange(event, index)}
+                      />
+                      {/* <ImageEditor
                         parentProp={section.image}
                         onDataTransfer={(data) => subImageTrasfer(data, index)}
-                      />
+                      /> */}
                     </div>
 
                     <div className="formEditor">
