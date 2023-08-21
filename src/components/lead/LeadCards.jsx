@@ -53,7 +53,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
         <div className="card-leftBox">
           <div className="user-details">
             <p className="heading">
-              <Link to={"/lp/deals/" + object.id}>{object.deal_name}</Link>
+              <Link to={"/lp/deals/" + object.id}>{object.lead_name}</Link>
             </p>
           </div>
           <div className="lead-value">
@@ -65,11 +65,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
               <p>{object.ownerf_name + " " + object.ownerl_name}</p>
             </div>
           </div>
-          <div>
-            <p className="clouserDate">
-              {object.closure_date?.split("T")[0]}
-            </p>
-          </div>
+          
           <div className="priorityBox">
             <p
               key={object.label_id}
