@@ -18,7 +18,7 @@ const Deal = () => {
     "application received",
     "valuation",
     "formal offer",
-    "compliance check, legals",
+    "compliance check, legal",
     "completion",
   ];
   const status = [
@@ -61,14 +61,14 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        setDeals(response?.data?.data);
-
+        console.log(response.data.data)
+        const filteredDeals = response?.data?.data.filter((obj) => obj.status !== "");
+        setDeals(filteredDeals);
+  
         // Calculate status counts
         const counts = {};
         status.forEach((status) => {
-          counts[status] = response?.data?.data.filter(
-            (obj) => obj.status === status
-          ).length;
+          counts[status] = filteredDeals.filter((obj) => obj.status === status).length;
         });
         setStatusCounts(counts);
       })
@@ -76,6 +76,7 @@ const Deal = () => {
         console.log(error);
       });
   };
+  
 
   const fetchLabelData = async () => {
     try {
@@ -368,53 +369,57 @@ const Deal = () => {
           </div>
         </div>
       </section>
+
       <section className="cards-body">
-        {status.map((item, index) =>
-          deals.map((obj) =>
-            obj.status === item ? (
-              <div className="card-details">
-                <div className="main-cards">
-                  <div className="cards-new">
-                    <p className="DealName">
-                      {stages[index]} ({statusCounts[item]})
-                    </p>
+        {status.map((item, index) => (
+          <div className="card-column" key={index}>
+            <div className="card-details">
+              <div className="main-cards">
+                <div className="cards-new">
+                  <p className="DealName">
+                    {stages[index]} ({statusCounts[item]})
+                  </p>
+                  {statusCounts[item] > 0 && (
+                    <label className="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className={`cb1 ${item}-header-checkbox`}
+                      name="headerCheckBox"
+                      checked={
+                        selectedStatusesData[item] &&
+                        areAllChildCheckboxesChecked(item)
+                      }
+                      onChange={() => handleHeaderCheckboxChange(item)}
+                    />
 
-                    {statusCounts[item] > 0 && (
-                      <label className="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className={`cb1 ${item}-header-checkbox`}
-                          name="headerCheckBox"
-                          checked={
-                            selectedStatusesData[item] &&
-                            areAllChildCheckboxesChecked(item)
-                          }
-                          onChange={() => handleHeaderCheckboxChange(item)}
-                        />
-
-                        <span className="checkmark"></span>
-                      </label>
-                    )}
-                  </div>
-                  <div className="bottom-fixed">
-                    <p>
-                      {" "}
-                      Total Value: $
-                      {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
-                    </p>
-                  </div>
-                  <DealsColn
-                    object={obj}
-                    selectedIds={selectedIds}
-                    setSelectedIds={setSelectedIds}
-                    status={item} // Pass the status as a prop
-                  />
+                    <span className="checkmark"></span>
+                  </label>
+                  )}
                 </div>
+                {deals.map((obj) => {
+                  if (obj.status!=="" && obj.status === item) {
+                    return (
+                      <DealsColn
+                      object={obj}
+                      selectedIds={selectedIds}
+                      setSelectedIds={setSelectedIds}
+                      status={item} // Pass the status as a prop
+                      />
+                    );
+                  }
+                  return null;
+                })}
               </div>
-            ) : null
-          )
-        )}
-        ;
+              <div className="bottom-fixed">
+                <p>
+                  {" "}
+                  Total Value: $
+                  {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
       </section>
 
       <CreateDeal
@@ -422,6 +427,8 @@ const Deal = () => {
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
         mergedLabels={mergedLabels}
+        stages={stages}
+        newStatus={status}
       />
       <ToastContainer />
     </div>
