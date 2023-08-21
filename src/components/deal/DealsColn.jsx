@@ -32,6 +32,16 @@ const DealsColn = ({ object, selectedIds, setSelectedIds }) => {
       setSelectedIds([...selectedIds, id]);
     }
   };
+
+  // Add a useEffect to update selectedIds when the status changes
+  useEffect(() => {
+    if (selectedIds.includes(object.id)) {
+      setSelectedIds((prevSelectedIds) =>
+        prevSelectedIds.filter((selectedId) => selectedId !== object.id)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [object.status]);
   
 
   return (

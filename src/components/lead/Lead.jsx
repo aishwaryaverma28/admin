@@ -118,7 +118,34 @@ const Lead = () => {
       const handleButtonClick = async () => {
         fileInputRef.current.click();
       };
-      //===========================================================for bulk import
+    //===========================================================for bulk import
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("userId", "125"); // Replace "yourUserId" with the actual user ID
+
+      try {
+        await axios.post(IMPORT_CSV, formData, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        });
+        toast.success("File uploaded successfully", {
+          position:"top-center",
+          autoClose:2000
+        })
+        // Handle the success case as needed
+      } catch (error) {
+        alert("File upload failed", error);
+        // Handle the error case as needed
+      }
+    }
+    fetchLeadsData();
+  };
+
     
       // Function to toggle the dropdown menu
       const toggleDropdown = () => {
@@ -127,9 +154,52 @@ const Lead = () => {
       const togglePipeDropdown = () => {
         setPipeOpen(!pipeopen);
       };
-      const toggleActionDropdown = () => {
+      const toggleActionDropdown = (option) => {
+        if (option === "Export"){
+          exportLeadsToCSV();
+        }
         setActionOpen(!actionopen);
       };
+
+      const exportLeadsToCSV = async () => {
+        try {
+          const response = await axios.get(
+            EXPORT_CSV, // Replace with your GET API endpoint
+            {
+              headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+              },
+              responseType: "blob", // Set response type to blob to handle binary data
+              params: {
+                leadIds: selectedIds.join(","), // Convert selected card IDs to a comma-separated string
+              },
+            }
+          );
+      
+          // Create a Blob object from the response data
+          const blob = new Blob([response.data], { type: "text/csv" });
+      
+          // Create a download link and trigger a click event to download the CSV file
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "leads.csv"; // Set the download attribute
+          link.style.display = "none"; // Hide the link
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+      
+          toast.success("Leads exported successfully", {
+            position: "top-center",
+            autoClose:2000
+          });
+        } catch (error) {
+          console.error("Error exporting leads:", error);
+          toast.error("Error exporting leads", {
+            position: "top-center",
+            autoClose:2000
+          });
+        }
+      };      
       // Effect hook to add click event listener when the component mounts
       useEffect(() => {
         const handleOutsideClick = (event) => {
@@ -176,7 +246,7 @@ const Lead = () => {
           setSelectedIds([...selectedIds, id]);
         }
       };
-    //   console.log(selectedIds);
+      console.log(selectedIds);
       
       const areAllChildCheckboxesChecked = (status) => {
         if (selectedStatusesData[status]) {
@@ -204,17 +274,22 @@ const Lead = () => {
             ...prevData,
             [status]: true,
           }));
-    
+      
           // Get the IDs of deals with the selected status
           const ids = deals
             .filter((deal) => deal.status === status)
             .map((deal) => deal.id);
-    
+      
           // Merge the IDs with the current selectedIds array
           setSelectedIds([...selectedIds, ...ids]);
         }
+      
+        // Also handle child checkboxes for this status
+        deals
+          .filter((deal) => deal.status === status)
+          .forEach((deal) => handleChildCheckboxChange(deal.id));
       };
-    
+      
       const mergedLabels = labelData
         .filter((item) => item?.entity?.includes("leads"))
         .map((item) => ({
@@ -287,6 +362,7 @@ const Lead = () => {
                 accept=".csv"
                 ref={fileInputRef}
                 style={{ display: "none" }}
+                onChange={handleFileChange}
               />
               <button
                 type="button"
@@ -318,9 +394,7 @@ const Lead = () => {
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
-                    <li onClick={() => toggleActionDropdown("Export")}>
-                      Export Deals
-                    </li>
+                    <li onClick={() => toggleActionDropdown("Export")}>Export Leads</li>
                   </ul>
                 )}
 

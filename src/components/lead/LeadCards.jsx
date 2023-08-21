@@ -26,13 +26,24 @@ const LeadCards = ({ object, selectedIds, setSelectedIds }) => {
       };
     }, [isMenuOpen]);
   
-    const handleChildCheckboxChange = (id) => {
-      if (selectedIds.includes(id)) {
-        setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-      } else {
-        setSelectedIds([...selectedIds, id]);
-      }
-    };
+     // Function to handle checkbox change
+  const handleChildCheckboxChange = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  // Add a useEffect to update selectedIds when the status changes
+  useEffect(() => {
+    if (selectedIds.includes(object.id)) {
+      setSelectedIds((prevSelectedIds) =>
+        prevSelectedIds.filter((selectedId) => selectedId !== object.id)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [object.status]);
     
   
   return (
