@@ -27,7 +27,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
     value: 0,
     label_id: 0,
     closure_date: "",
-    status:"",
+    status:"enquiry_received",
     pipeline_id: 1,
     lead_id:0,
   });
@@ -102,7 +102,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
           value: 0,
           label_id: 0,
           closure_date: "",
-          status:"",
+          status:"enquiry_received",
           pipeline_id: 1,
           lead_id:0,
         });

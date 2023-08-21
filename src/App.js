@@ -5,7 +5,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
-import LPleads from "./components/LPleads";
+// import LPleads from "./components/LPleads";
+import Lead from "./components/lead/Lead";
 import Admin from "./components/Admin";
 import EmployeeProfile from "./components/EmployeeProfile";
 import Editor from "./components/Editor";
@@ -37,7 +38,7 @@ import Login from "./components/Login";
 import Registration from "./components/Registration";
 import SecurePages from "./components/SecurePages";
 import SecureRoutes from "./components/SecureRoutes";
-import Testing from "./components/Testing";
+// import Testing from "./components/Testing";
 import UserAndTeams from "./components/settings/UserAndTeams";
 import LPSettingsGeneral from "./components/settings/LPSettingsGeneral";
 import Error from "./components/Error";
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/lead",
-        element: <LPleads />,
+        element: <SecureRoutes Component={Lead} />,
       },
       {
         path: "/lp/home",
