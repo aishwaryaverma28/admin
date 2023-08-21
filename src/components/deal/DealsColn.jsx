@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 
-const DealsColn = ({ object, selectedIds, setSelectedIds }) => {
+const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
@@ -35,14 +35,15 @@ const DealsColn = ({ object, selectedIds, setSelectedIds }) => {
 
   // Add a useEffect to update selectedIds when the status changes
   useEffect(() => {
-    if (selectedIds.includes(object.id)) {
+    if (selectedIds.includes(object.id) && object.status !== status) {
       setSelectedIds((prevSelectedIds) =>
         prevSelectedIds.filter((selectedId) => selectedId !== object.id)
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [object.status]);
-  
+    if (!selectedIds.includes(object.id) && object.status === status) {
+      setSelectedIds([...selectedIds, object.id]);
+    }
+  }, [object.status, status]);
 
   return (
     <>
