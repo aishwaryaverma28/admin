@@ -16,7 +16,7 @@ import GreaterArrow from "../assets/image/greater-arrow.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddNotes = ({ item, onNotesNum, type }) => {
+const AddNotes = ({ item, onNotesNum, type, id }) => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -25,6 +25,7 @@ const AddNotes = ({ item, onNotesNum, type }) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [isIndex, setIsIndex] = useState(-1);
   const decryptedToken = getDecryptedToken();
+
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -37,18 +38,36 @@ const AddNotes = ({ item, onNotesNum, type }) => {
       apiEndpoint = GETNOTEDEAL;
     }
 
-    if (apiEndpoint) {
+    if (type === "lead") {
       axios
-        .get(apiEndpoint + item.id, {
+        .get(GETNOTEBYSOURCE + item.id, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
         })
         .then((response) => {
-          if (response.data.status === 1) {
-            console.log(response?.data?.data);
-            setNotes(response?.data?.data);
+          console.log(response?.data?.data);
+          setNotes(response?.data?.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (
+            error?.response?.data?.message === "Invalid or expired token."
+          ) {
+            alert(error?.response?.data?.message);
+            handleLogout();
           }
+        });
+    }else if (type === "deal") {
+      axios
+        .get(GETNOTEDEAL + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data);
+          setNotes(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -74,6 +93,7 @@ const AddNotes = ({ item, onNotesNum, type }) => {
       description: dataFromChild,
       importance: 1,
       created_by: "aishwarya",
+      label_id:1,
     };
 
     axios
@@ -116,6 +136,7 @@ const AddNotes = ({ item, onNotesNum, type }) => {
         source_type: "source -2",
         type: type,
         attr2: "attr2",
+        label_id:1,
       };
       const updatedNotes = notes.map((note) =>
         note.id === id ? updatedNote : note
@@ -143,7 +164,7 @@ const AddNotes = ({ item, onNotesNum, type }) => {
   };
   const handleDeleteNote = (id) => {
     const updatedFormData = {
-      "notes": [id,],
+      "notes": [id],
       "source_type": type,
   }
     axios

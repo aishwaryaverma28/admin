@@ -87,7 +87,7 @@ const DealUpdate = () => {
         }
       });
   };
-console.log(notes);
+// console.log(notes);
 
   const toggleEditable = (e) => {
     e.preventDefault();
@@ -202,7 +202,7 @@ console.log(notes);
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={dealDetails} onNotesNum={fetchNotes} type="deal"/>
+                <AddNotes item={dealDetails} onNotesNum={fetchNotes} type="deal" id={id}/>
               </div>
             )}
             {activeTab === "email" && (

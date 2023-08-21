@@ -51,7 +51,7 @@ const Deal = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
-
+  const [statusTotalValues, setStatusTotalValues] = useState({});
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
     axios
@@ -118,6 +118,20 @@ const Deal = () => {
       return sum;
     };
     setTotalValue(calculateTotalValue());
+  }, [deals]);
+
+  useEffect(() => {
+    const calculateStatusTotalValues = () => {
+      const statusTotals = {};
+      status.forEach((status) => {
+        const totalValueForStatus = deals
+          .filter((deal) => deal.status === status)
+          .reduce((sum, deal) => sum + Number(deal.value), 0);
+        statusTotals[status] = totalValueForStatus;
+      });
+      setStatusTotalValues(statusTotals);
+    };
+    calculateStatusTotalValues();
   }, [deals]);
   //======================================================modal box
   const openModal = () => {
@@ -188,7 +202,7 @@ const Deal = () => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  console.log(selectedIds);
+  // console.log(selectedIds);
 
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
@@ -376,6 +390,7 @@ const Deal = () => {
                     <p className="DealName">
                       {stages[index]} ({statusCounts[item]})
                     </p>
+                    
                     {statusCounts[item] > 0 && (
                       <label className="custom-checkbox">
                         <input
@@ -392,6 +407,10 @@ const Deal = () => {
                         <span className="checkmark"></span>
                       </label>
                     )}
+                  </div>
+                  <div className="bottom-fixed">
+                    <p> Total Value: $
+      {statusTotalValues[item]?.toLocaleString("en-IN") || 0}</p>
                   </div>
                   <DealsColn
                     object={obj}
