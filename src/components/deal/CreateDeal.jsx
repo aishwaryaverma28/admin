@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ADD_DEAL, getDecryptedToken } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import rectangle71 from "../../assets/image/Rectangle 71.svg";
 // import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
-const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }) => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, stages, newStatus }) => {
   const [status, setStatus] = useState("enquiry_received");
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
@@ -17,9 +17,9 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
-  
+
   const [leadData, setLeadData] = useState({
-  probability: "",
+    probability: "",
     deal_name: "",
     organization: "",
     mobile: "",
@@ -27,15 +27,15 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
     value: 0,
     label_id: 0,
     closure_date: "",
-    status:"enquiry_received",
+    status: "enquiry_received",
     pipeline_id: 1,
-    lead_id:0,
+    lead_id: 0,
   });
 
   useEffect(() => {
     if (selectedItem) {
       setLeadData({
-        lead_id:selectedItem.id,
+        lead_id: selectedItem.id,
         deal_name: selectedItem.lead_name,
         organization: selectedItem.company_name,
         mobile: selectedItem.phone,
@@ -102,9 +102,9 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
           value: 0,
           label_id: 0,
           closure_date: "",
-          status:"enquiry_received",
+          status: "enquiry_received",
           pipeline_id: 1,
-          lead_id:0,
+          lead_id: 0,
         });
         // setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
@@ -157,8 +157,8 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                   type="text"
                   className="lead-input"
                   placeholder="Please Enter Name"
-                  // onChange={handleChangeName}
-                  // value={name} // Add value prop for controlled input
+                // onChange={handleChangeName}
+                // value={name} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="value">
                   Value
@@ -189,7 +189,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                   className="lead-input"
                   name="probability"
                   onChange={handleChange}
-                  value={leadData.probability} 
+                  value={leadData.probability}
                 />
                 <label className="lead-label" htmlFor="pipeline_id">
                   Pipeline
@@ -264,6 +264,26 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                     );
                   })}
                 </select>
+                <label className="lead-label" htmlFor="label_id">
+                  Stages
+                </label>
+                <select
+                  name="label_id"
+                  id="label_id"
+                  className="lead-priority"
+                  onChange={handleChange}
+                >
+
+                  {stages?.map((item, index) => {
+                    return (
+                      <option key={index} value={newStatus?.[index]}>
+                        {item}
+                      </option>
+                    );
+                  })}
+
+                </select>
+
               </div>
             </section>
 
@@ -296,7 +316,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                       alt=""
                     />
                 </div> */}
-                <div className="elements">
+                {/* <div className="elements">
                   <span
                     className={`status-value new-element ${selectedStatus === "New" ? "selected-status" : ""}`}
                     onClick={() => handleStatus("New")}
@@ -327,7 +347,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem }
                   >
                     <span>unread</span>
                   </span>
-                </div>
+                </div> */}
               </div>
             </section>
 
