@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./styles/LPleads.css";
+import "./../styles/LPleads.css";
 import axios from "axios";
 import {
   UPDATE_LEAD,
@@ -9,10 +9,10 @@ import {
   handleLogout,
   getDecryptedToken,
   GET_LABEL
-} from "./utils/Constants";
-import userIcon from "../assets/image/user-img.png";
-import AddNotes from "./AddNotes";
-import LeadDocUp from "./LeadDocUp";
+} from "./../utils/Constants";
+import userIcon from "../../assets/image/user-img.png";
+import AddNotes from "./../AddNotes";
+import LeadDocUp from "./../LeadDocUp";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

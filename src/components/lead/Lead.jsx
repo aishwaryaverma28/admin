@@ -305,7 +305,7 @@ const Lead = () => {
           <div className="left-side--btns">
             <div className="dropdown-container" ref={leadDropDownRef}>
               <div className="dropdown-header" onClick={toggleDropdown}>
-                all Deals{" "}
+                all Leads{" "}
                 <i
                   className={`fa-sharp fa-solid ${
                     leadopen ? "fa-angle-up" : "fa-angle-down"
@@ -314,9 +314,9 @@ const Lead = () => {
               </div>
               {leadopen && (
                 <ul className="dropdown-menuLead">
-                  <li>Deal 1</li>
-                  <li>Deal 2</li>
-                  <li>Deal 3</li>
+                  <li>Lead 1</li>
+                  <li>Lead 2</li>
+                  <li>Lead 3</li>
                 </ul>
               )}
             </div>
@@ -332,7 +332,7 @@ const Lead = () => {
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
             <button type="button" className="secondary-btn" onClick={openModal}>
-              Create Deal
+              Create Lead
             </button>
             <div className="select action-select">
               <div className="dropdown-container" ref={pipeDropDownRef}>
@@ -414,7 +414,7 @@ const Lead = () => {
                         <button
                           className="confirmBtn"
                         >
-                          Delete Deal
+                          Delete Lead
                         </button>
                       </div>
                     </div>
@@ -425,44 +425,47 @@ const Lead = () => {
         </div>
       </section>
       <section className="cards-body">
-        {status.map((item, index) =>
-          deals.map((obj) =>
-            obj.status === item ? (
-              <div className="card-details">
-                <div className="main-cards">
-                  <div className="cards-new">
-                    <p className="DealName">
-                      {stages[index]} ({statusCounts[item]})
-                    </p>
-                    {statusCounts[item] > 0 && (
-                      <label className="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className={`cb1 ${item}-header-checkbox`}
-                          name="headerCheckBox"
-                          checked={
-                            selectedStatusesData[item] &&
-                            areAllChildCheckboxesChecked(item)
-                          }
-                          onChange={() => handleHeaderCheckboxChange(item)}
-                        />
-
-                        <span className="checkmark"></span>
-                      </label>
-                    )}
-                  </div>
-                  <LeadCards
-                    object={obj}
-                    selectedIds={selectedIds}
-                    setSelectedIds={setSelectedIds}
-                  />
-                </div>
-              </div>
-            ) : null
-          )
-        )}
-        ;
-      </section>
+  {status.map((item, index) => (
+    <div className="card-column" key={index}>
+      <div className="card-details">
+        <div className="main-cards">
+          <div className="cards-new">
+            <p className="DealName">{stages[index]} ({statusCounts[item]})</p>
+            {statusCounts[item] > 0 && (
+              <label className="custom-checkbox">
+                <input
+                  type="checkbox"
+                  className={`cb1 ${item}-header-checkbox`}
+                  name="headerCheckBox"
+                  checked={
+                    selectedStatusesData[item] &&
+                    areAllChildCheckboxesChecked(item)
+                  }
+                  onChange={() => handleHeaderCheckboxChange(item)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            )}
+          </div>
+          {deals.map((obj) => {
+            if (obj.status === item) {
+              return (
+                <LeadCards
+                  key={obj.id}
+                  object={obj}
+                  selectedIds={selectedIds}
+                  setSelectedIds={setSelectedIds}
+                  onLeadAdded={fetchLeadsData}
+                />
+              );
+            }
+            return null;
+          })}
+        </div>
+      </div>
+    </div>
+  ))}
+</section>
 
       <CreateLead
         isOpen={isModalOpen}
