@@ -31,13 +31,6 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
   }, []);
 
   const fetchNotes = () => {
-    let apiEndpoint = "";
-    if (type === "lead") {
-      apiEndpoint = GETNOTEBYSOURCE;
-    } else if (type === "deal") {
-      apiEndpoint = GETNOTEDEAL;
-    }
-
     if (type === "lead") {
       axios
         .get(GETNOTEBYSOURCE + item.id, {

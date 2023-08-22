@@ -17,11 +17,12 @@ import ImageUploader from "./ImageUploader";
 import "./styles/BlogAdd.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LeftArrow from "../assets/image/arrow-left.svg";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState(0);
+  const [sectionSort, setSectionSort] = useState(null);
   const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
@@ -53,6 +54,7 @@ const BlogUpdate = () => {
     route:"",
   });
   const [stateBtn, setStateBtn] = useState(0);
+  const editorRef = useRef();
   useEffect(() => {
     getBlogInfo();
   }, []);
@@ -307,12 +309,14 @@ const BlogUpdate = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort(0);
+    setSectionSort(parseInt(sectionSort) + 1);
     setChildData("");
     setDataFromChild("");
     setShowEditButton(false);
     setSelectedImage("");
     setStateBtn(1);
+     // Clear the editor content using the ref
+  editorRef.current.clearEditorContent(); // Add this line
   };
   // console.log(sectionData);
 
@@ -386,6 +390,14 @@ const BlogUpdate = () => {
       <header className="headerEditor">
         <h2>Update Blog</h2>
       </header>
+      <div className="back-to-user general-refresh">
+      <Link to={"/admin/blog/view"}>
+              <button className="common-fonts">
+                <img src={LeftArrow} alt="" />
+                <span>Back To Blog Table</span>
+              </button>
+            </Link>
+            </div>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
@@ -538,7 +550,10 @@ const BlogUpdate = () => {
                 </div>
 
                 <div className="formEditor">
-                  <ReactEditor onDataTransfer={handleDataTransfer} />
+                <ReactEditor
+        ref={editorRef} // Attach the ref here
+        onDataTransfer={handleDataTransfer}
+      />
                 </div>
               </div>
 
