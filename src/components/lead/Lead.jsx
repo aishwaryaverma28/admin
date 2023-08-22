@@ -18,8 +18,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Lead = () => {
-  const stages = ["New", "Unread", "Open", "InProgress"];
-  const status = ["New", "Unread", "Open", "InProgress"];
+  const stages = ["New", "Unread", "Open", "In Progress"];
+  const status = ["New", "Unread", "Open", "In Progress"];
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);

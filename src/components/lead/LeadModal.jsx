@@ -243,7 +243,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
     setIsEditable(false);
     setIsDisabled(!isDisabled);
-    onLeadAdded();
+    // onLeadAdded();
     setStateBtn(0);
     fetchLead();
   };
