@@ -48,8 +48,6 @@ const Lead = () => {
       })
       .then((response) => {
         setDeals(response?.data?.data);
-        console.log(response?.data?.data);
-        // Calculate status counts
         const counts = {};
         status.forEach((status) => {
           counts[status] = response?.data?.data.filter(
@@ -296,6 +294,34 @@ const Lead = () => {
     }
   };
 
+  const handleDeleteLead = () => {
+    if (selectedIds) {
+      const body = {
+        leadIds: [selectedIds], // Use the stored ID
+      };
+      axios
+        .delete(MOVELEAD_TO_TRASH, {
+          data: body,
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          toast.success("Lead moved to trash successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        fetchLeadsData();
+      setSelectedIds([]); // Reset the stored ID
+      handleMassDeletePopUpClose();
+    }
+  };
+
 
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
@@ -498,7 +524,7 @@ const Lead = () => {
       <ToastContainer />
       {
         isDelete && (
-          <LeadDeletePopUp onClose={handleMassDeletePopUpClose} />
+          <LeadDeletePopUp onClose={handleMassDeletePopUpClose} onDeleteConfirmed={handleDeleteLead}/>
         )
       }
     </div>
