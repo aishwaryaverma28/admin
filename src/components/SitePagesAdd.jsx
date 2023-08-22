@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const SitePagesAdd = () => {
   const [updateMessage, setUpdateMessage] = useState("");
   const decryptedToken = getDecryptedToken();
+  const [stateBtn, setStateBtn] = useState(0);
   const [details, setDetails] = useState({
     site: "",
     route: "",
@@ -21,6 +22,7 @@ const SitePagesAdd = () => {
     setDetails((prev) => {
       return { ...prev, [name]: value };
     });
+    setStateBtn(1);
   }
   function handleSubmit(event) {
     event.preventDefault();
@@ -51,6 +53,7 @@ const SitePagesAdd = () => {
         description: "",
         sitemap: 0,
       });
+      setStateBtn(0);
     });
   }
   return (
@@ -131,11 +134,18 @@ const SitePagesAdd = () => {
             </div>
           </div>
           <div className="saveBtnRight">
-            <input
-              type="submit"
-              value="Add Employee"
-              className="secondaryBtn saveBtn"
-            />
+          {stateBtn === 0 ? (
+                      <button className="closeBtn" disabled>
+                        Save
+                      </button>
+                    ) : (
+                      <input
+                        type="submit"
+                        value="Add Site"
+                        className="secondaryBtn"
+                      />
+                    )}
+            
           </div>
         </div>
       </form>

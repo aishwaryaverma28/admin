@@ -435,3 +435,8 @@ animation: blink 1s linear infinite;
   border-radius: 50%;
   margin: 0.5rem;
 }
+.accHead{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

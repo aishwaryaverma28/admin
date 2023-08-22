@@ -6,7 +6,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   IMG_BASE,
-  getDecryptedToken
+  getDecryptedToken,
 } from "./utils/Constants";
 
 import "./styles/BlogAdd.css";
@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 const BlogAdd = () => {
   const [selectSite, setSelectSite] = useState("");
   const [hover, setHover] = useState(false);
-    // section states
+  // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState("");
   const [sectionImage, setSectionImage] = useState("");
@@ -41,15 +41,17 @@ const BlogAdd = () => {
   const [selectedDate, setSelectedDate] = useState("");
   // image useStates
   const [imageName, setImageName] = useState(null);
+  const [stateBtn, setStateBtn] = useState(0);
   const decryptedToken = getDecryptedToken();
   const editorRef = useRef(); // Define the editorRef using useRef
 
   useEffect(() => {
-    axios.get(GET_TAG, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    })
+    axios
+      .get(GET_TAG, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
         setTagApi(response);
       })
@@ -57,7 +59,7 @@ const BlogAdd = () => {
         console.log(error);
       });
   }, []);
-  
+
   // console.log(tagApi?.data?.data)
   const options = tagApi?.data?.data || [];
 
@@ -65,11 +67,12 @@ const BlogAdd = () => {
     title: "",
     url: "",
     description: "",
-    });
+  });
 
   // ===================================================================functions for tags addition and removal
   const handleTagSelection = (event) => {
     const id = event.target.value;
+    setStateBtn(1);
     setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
     options.map((option) => {
       if (option.id == id) {
@@ -79,6 +82,7 @@ const BlogAdd = () => {
   };
 
   const handleTagRemoval = (index) => {
+    setStateBtn(1);
     const numbersArray = tagId.split(",");
     numbersArray.splice(index, 1);
     const updatedNumbersString = numbersArray.join(",");
@@ -89,12 +93,14 @@ const BlogAdd = () => {
   //==================================================================== get image name
   const handleImageTransfer = (data) => {
     setImageName(data);
+    setStateBtn(1);
   };
 
   //===================================================================== function to add date in the form data
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date);
+    setStateBtn(1);
     // console.log(date);
   };
 
@@ -104,6 +110,7 @@ const BlogAdd = () => {
     setFormData((prev) => {
       return { ...prev, [name]: value };
     });
+    setStateBtn(1);
   }
   // =====================================================================================section data trasfer
   // ========================================================================section image added/deleted
@@ -124,10 +131,10 @@ const BlogAdd = () => {
     formData.append("blog_img", selectedImage);
 
     try {
-      const response = await axios.post(IMAGE_UP, formData,{
+      const response = await axios.post(IMAGE_UP, formData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       console.log("Image uploaded successfully:", response.data);
       // Perform any additional actions on successful upload
@@ -139,7 +146,6 @@ const BlogAdd = () => {
       // Handle error condition
     }
   };
-  
 
   const handleClick = () => {
     fileInputRef.current.click();
@@ -151,8 +157,8 @@ const BlogAdd = () => {
     try {
       const response = await axios.delete(IMAGE_DEL + childData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
@@ -161,9 +167,9 @@ const BlogAdd = () => {
       setShowEditButton(false);
       setShowChooseButton(true);
       setChildData(response.data.data);
-    } catch(error){
+    } catch (error) {
       console.log(error);
-    };
+    }
   };
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
@@ -178,18 +184,21 @@ const BlogAdd = () => {
     const newSectionData = [...sectionData];
     newSectionData[index].title = event.target.value;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
 
   const handleimageChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].image = event.target.value;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
   //==============================================================sub section image
   const subImageTrasfer = (data, index) => {
@@ -197,31 +206,37 @@ const BlogAdd = () => {
     newSectionData[index].image = data;
     setSectionData(newSectionData);
     setHideImages(true);
+    setStateBtn(1);
   };
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].section = data;
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
 
   //======================================================================================= sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
     setSectionTitle(title);
+    setStateBtn(1);
   };
 
   const handleSecSortChange = (event) => {
     const sort = event.target.value;
     setSectionSort(sort);
+    setStateBtn(1);
   };
   const handleSecImageChange = (event) => {
     const image = event.target.value;
     setSectionImage(image);
+    setStateBtn(1);
   };
   //=======================================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
+    setStateBtn(1);
   };
   //====================================================================================== handle section data in an array of objects
   const handleAddSection = (e) => {
@@ -232,8 +247,8 @@ const BlogAdd = () => {
       // image: childData,
       image: sectionImage,
       section: dataFromChild,
-      site:"",
-      alt:"",
+      site: "",
+      alt: "",
     };
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
@@ -244,23 +259,24 @@ const BlogAdd = () => {
     setDataFromChild("");
     setShowEditButton(false);
     setSelectedImage("");
-     // Clear the editor content using the ref
-  editorRef.current.clearEditorContent(); // Add this line
+    setStateBtn(1);
+    // Clear the editor content using the ref
+    editorRef.current.clearEditorContent(); // Add this line
   };
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
-    // e.preventDefault();
     const newSectionData = [...sectionData];
     newSectionData.splice(index, 1);
     setSectionData(newSectionData);
+    setStateBtn(1);
   };
 
   console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
-    // console.log(event.target.value);
     setSelectSite(event.target.value);
+    setStateBtn(1);
   }
 
   function handleFormSubmit(event) {
@@ -273,23 +289,26 @@ const BlogAdd = () => {
       sections: sectionData,
       site: selectSite,
       route: formData.url,
-      alt:"",
+      alt: "",
     };
-     console.log(updatedFormData);
-    axios.post(BLOG_ADD, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      toast.success("Blog data added successfully", {
-        position:"top-center",
-        autoClose:2000
+    console.log(updatedFormData);
+    axios
+      .post(BLOG_ADD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        console.log(response);
+        toast.success("Blog data added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setStateBtn(0);
   }
 
   function AddTag(event) {
@@ -326,12 +345,12 @@ const BlogAdd = () => {
               <div>
                 {/* <ImageUploader onDataTransfer={handleImageTransfer} /> */}
                 <input
-                type="text"
-                name="image"
-                id="image"
-                placeholder="image"
-                onChange={handleChange}
-              />
+                  type="text"
+                  name="image"
+                  id="image"
+                  placeholder="image"
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <div className="fromFiled">
@@ -366,7 +385,7 @@ const BlogAdd = () => {
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
-                      <input
+                    <input
                       type="text"
                       name="image"
                       id="image"
@@ -465,10 +484,10 @@ const BlogAdd = () => {
                 </div>
 
                 <div className="formEditor">
-                <ReactEditor
-  ref={editorRef} // Add this line
-  onDataTransfer={handleDataTransfer}
-/>
+                  <ReactEditor
+                    ref={editorRef} // Add this line
+                    onDataTransfer={handleDataTransfer}
+                  />
                 </div>
               </div>
 
@@ -478,7 +497,10 @@ const BlogAdd = () => {
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
                   >
-                    <h3>{section.heading}</h3>
+                    <div className="accHead">
+                      <h3>{section.sort}</h3>
+                      <h3>{section.heading}</h3>
+                    </div>
                     {isIndex === index ? (
                       <span>
                         <i class="fa-sharp fa-solid fa-minus"></i>
@@ -515,15 +537,15 @@ const BlogAdd = () => {
                       />
 
                       <div>
-                      <input
-                        type="text"
-                        name="image"
-                        id="image"
-                        placeholder="image"
-                        className="sectionHead"
-                        value={section.image}
-                        onChange={(event) => handleimageChange(event, index)}
-                      />
+                        <input
+                          type="text"
+                          name="image"
+                          id="image"
+                          placeholder="image"
+                          className="sectionHead"
+                          value={section.image}
+                          onChange={(event) => handleimageChange(event, index)}
+                        />
                         {/* <ImageEditor
                           parentProp={section.image}
                           onDataTransfer={(data) =>
@@ -605,11 +627,24 @@ const BlogAdd = () => {
                     placeholder="please publish date"
                     onChange={handleDateChange}
                   />
-                  <input
+                  <div className="saveBtnRight">
+                    {stateBtn === 0 ? (
+                      <button className="closeBtn" disabled>
+                        Save
+                      </button>
+                    ) : (
+                      <input
+                        type="submit"
+                        value="Publish"
+                        className="secondaryBtn"
+                      />
+                    )}
+                  </div>
+                  {/* <input
                     type="submit"
                     value="Publish"
                     className="secondaryBtn"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -637,7 +672,7 @@ const BlogAdd = () => {
           {/*=============================================================right side of form ends here ============================================================*/}
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

@@ -383,6 +383,7 @@ const BlogUpdate = () => {
     }catch(error){
       console.log(error)
     };
+    setStateBtn(0);
   }
 
   return (
@@ -563,7 +564,10 @@ const BlogUpdate = () => {
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
                   >
-                    <h3>{section.heading}</h3>
+                   <div className="accHead">
+                      <h3>{section.sort}</h3>
+                      <h3>{section.heading}</h3>
+                    </div>
                     {isIndex === index ? (
                       <span>
                         <i class="fa-sharp fa-solid fa-minus"></i>

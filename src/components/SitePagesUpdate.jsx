@@ -88,15 +88,12 @@ const SitePagesUpdate = () => {
       }
     }).then((response) => {
       console.log(response);
-      // setUpdateMessage("Site Pages data updated successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
       toast.success("Site Pages data updated successfully", {
         position:"top-center",
         autoClose:2000
       })
     });
+    setStateBtn(0);
   }
 
   return (
@@ -188,7 +185,7 @@ const SitePagesUpdate = () => {
             </button>
             {stateBtn === 0 ? (
               <button className="closeBtn">
-                <Link to={"/admin/employee/view"}>Close</Link>
+                <Link to={"/admin/sitePages/view"}>Close</Link>
               </button>
             ) : (
               <input
