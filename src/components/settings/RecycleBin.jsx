@@ -16,6 +16,7 @@ import DeleteNotes from "./DeleteNotes";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import SearchIcon from "../../assets/image/search.svg";
+import DeleteDeal from "./DeleteDeal";
 
 const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
@@ -218,148 +219,7 @@ const RecycleBin = () => {
           </button>
         </div>
         {activeTab === "Notes" && <DeleteNotes deleteCount={fetchNotesData} />}
-        {activeTab === "Deals" && (
-          <>
-            <div className="recycle-search-user-section">
-              <div className="recycle-search-box">
-                <input
-                  type="text"
-                  className="recycle-search-input recycle-fonts"
-                  placeholder="Search..."
-                />
-                <span className="recycle-search-icon">
-                  <img src={SearchIcon} alt="" />
-                </span>
-              </div>
-              <div className="recycle-date">
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={startDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-                <span className="recycle-fonts date-to">To</span>
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={endDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="recycle-btn">
-                <button
-                  className="recycle-delete recycle-fonts"
-                  onClick={dealsDeletePopUp}
-                >
-                  Delete
-                </button>
-                <button
-                  className="recycle-restore recycle-fonts"
-                  onClick={dealsRestorePopUp}
-                >
-                  Restore
-                </button>
-                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
-              <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
-              </div>
-            </div>
-            <div className="recycle-list-table recycle-fonts">
-              <table className="recycle-table" id="recycle-border">
-                <thead>
-                  <tr>
-                    <th>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </th>
-                    <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Deleted By</th>
-                    <th>Date Deleted</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                </tbody>
-              </table>
-              {isDeleteDealModalOpen && (
-                <RecycleDeletePopUp onClose={closeDealDeletePopUp} />
-              )}
-
-              {isRestoreDealModalOpen && (
-                <RecycleRestorePopUp onClose={closeDealRestorePopUp} />
-              )}
-            </div>
-          </>
-        )}
+        {activeTab === "Deals" && <DeleteDeal/>}
         {activeTab === "Leads" && <DeleteLeads deleteCount={fetchData} />}
         {activeTab === "Company" && (
           <>
