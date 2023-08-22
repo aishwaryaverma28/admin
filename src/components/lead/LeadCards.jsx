@@ -3,6 +3,7 @@ import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 import LeadModal from '../lead/LeadModal.jsx';
+import LeadDeletePopUp from '../DeleteComponent.jsx';
 
 
 const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded }) => {
@@ -12,6 +13,14 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
     const menuRef = useRef(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedObj, setSelectedObj]= useState({});
+    const [isDelete, setIsDelete] = useState(false);
+
+    const handleLeadDelete = () => {
+      setIsDelete(true);
+    }
+    const handleLeadDeleteClose = () => {
+      setIsDelete(false);
+    }
 
     const openModal = (object) => {
       setModalVisible(true);
@@ -103,7 +112,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
             {isMenuOpen && (
               <ul className="cardMenu" ref={menuRef}>
                 <li>Convert to deal</li>
-                <li>Delete</li>
+                <li onClick={handleLeadDelete}>Delete</li>
                 <li>object 3</li>
               </ul>
             )}
@@ -126,6 +135,11 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
         <LeadModal  selectedItem={selectedObj}
         closeModal={closeModal}
         onLeadAdded={onLeadAdded}/>
+      )
+    }
+    {
+      isDelete && (
+        <LeadDeletePopUp onClose={handleLeadDeleteClose}/>
       )
     }
   </>

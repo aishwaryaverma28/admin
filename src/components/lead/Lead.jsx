@@ -5,6 +5,7 @@ import axios from "axios";
 // import LeadsColn from "../LeadsColn";
 import LeadCards from "./LeadCards";
 import CreateLead from "../CreateLead";
+import LeadDeletePopUp from "../DeleteComponent";
 import {
   GET_LEAD,
   IMPORT_CSV,
@@ -36,6 +37,7 @@ const Lead = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
+  const [isDelete, setIsDelete] = useState(false);
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
     axios
@@ -83,6 +85,13 @@ const Lead = () => {
   const resetData = () => {
     fetchLeadsData();
   };
+
+  const handleDeletePopUpOpen = () => {
+    setIsDelete(true);
+  }
+  const handleMassDeletePopUpClose = () => {
+    setIsDelete(false);
+  }
 
   useEffect(() => {
     fetchLeadsData();
@@ -385,7 +394,10 @@ const Lead = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu">
-                    <li onClick={() => toggleActionDropdown("Delete")}>
+                    {/* <li onClick={() => toggleActionDropdown("Delete")}>
+                      Mass Delete
+                    </li> */}
+                    <li onClick={handleDeletePopUpOpen}>
                       Mass Delete
                     </li>
                     <li>Mass Update</li>
@@ -484,6 +496,11 @@ const Lead = () => {
         mergedLabels={mergedLabels}
       />
       <ToastContainer />
+      {
+        isDelete && (
+          <LeadDeletePopUp onClose={handleMassDeletePopUpClose} />
+        )
+      }
     </div>
   );
 };
