@@ -4,19 +4,24 @@ import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 import LeadModal from '../lead/LeadModal.jsx';
 import LeadDeletePopUp from '../DeleteComponent.jsx';
-
+import axios from "axios";
+import { MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded }) => {
-  
+  const decryptedToken = getDecryptedToken();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
     const menuRef = useRef(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedObj, setSelectedObj]= useState({});
     const [isDelete, setIsDelete] = useState(false);
+    const [deleteLeadId, setDeleteLeadId] = useState(null);
 
-    const handleLeadDelete = () => {
+    const handleLeadDelete = (id) => {
       setIsDelete(true);
+      setDeleteLeadId(id);
     }
     const handleLeadDeleteClose = () => {
       setIsDelete(false);
@@ -69,8 +74,33 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
       }
     }, [object.status, status]);
   
-    
-  
+    const handleDeleteLead = () => {
+      if (deleteLeadId) {
+        const body = {
+          leadIds: [deleteLeadId], // Use the stored ID
+        };
+        axios
+          .delete(MOVELEAD_TO_TRASH, {
+            data: body,
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            toast.success("Lead moved to trash successfully", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        onLeadAdded();
+        setDeleteLeadId(null); // Reset the stored ID
+      }
+    };
+
   return (
     <>
     <div key={object.id} className="user-card2">
@@ -112,8 +142,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
             {isMenuOpen && (
               <ul className="cardMenu" ref={menuRef}>
                 <li>Convert to deal</li>
-                <li onClick={handleLeadDelete}>Delete</li>
-                <li>object 3</li>
+                <li onClick={() => handleLeadDelete(object.id)}>Delete</li>
               </ul>
             )}
           </button>
@@ -139,7 +168,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
     }
     {
       isDelete && (
-        <LeadDeletePopUp onClose={handleLeadDeleteClose}/>
+        <LeadDeletePopUp onClose={handleLeadDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
       )
     }
   </>

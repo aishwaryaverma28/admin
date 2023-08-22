@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RecycleDeletePopUp = ({onClose}) => {
+const RecycleDeletePopUp = ({onClose, onDeleteConfirmed }) => {
   return (
     <div className="recycle-popup-wrapper">
         
@@ -15,7 +15,7 @@ const RecycleDeletePopUp = ({onClose}) => {
 
     <div className="recycle-popup-btn">
         <button className="restore-no common-fonts" onClick={onClose} >Cancel</button>
-        <button className="restore-delete common-fonts" >Delete</button>
+        <button className="restore-delete common-fonts" onClick={onDeleteConfirmed}>Delete</button>
       </div>
 </div>
 </div>
