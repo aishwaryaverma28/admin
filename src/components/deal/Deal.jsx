@@ -12,20 +12,21 @@ const Deal = () => {
     "Enquiry received",
     "contact made",
     "illustration sent",
-    "alm docs received",
+    "all docs received",
     "compliance",
     "sourced",
     "application received",
     "valuation",
     "formal offer",
-    "compliance check, legal",
-    "completion",
+    "compliance check",
+    "legal",
+    "completion"
   ];
   const status = [
     "enquiry_received",
     "contact_made",
     "illustration_sent",
-    "ala_docs_received",
+    "all_docs_received",
     "compliance",
     "sourced",
     "application_received",
@@ -33,7 +34,7 @@ const Deal = () => {
     "formal_offer_sent",
     "compliance_check",
     "legals",
-    "completion",
+    "completion"
   ];
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -76,7 +77,7 @@ const Deal = () => {
         console.log(error);
       });
   };
-  
+  console.log(deals);
 
   const fetchLabelData = async () => {
     try {
@@ -397,7 +398,7 @@ const Deal = () => {
                   )}
                 </div>
                 {deals.map((obj) => {
-                  if (obj.status!=="" && obj.status === item) {
+                  if (obj.status === item) {
                     return (
                       <DealsColn
                       object={obj}
