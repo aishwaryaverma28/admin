@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
+import DealDeletePopUp from "../DeleteComponent";
 
 const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (
@@ -32,6 +34,14 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
       setSelectedIds([...selectedIds, id]);
     }
   };
+
+  const handleDeleteOpen = () => {
+    setIsDeleteOpen(true);
+  }
+
+  const handleDeleteClose = () => {
+    setIsDeleteOpen(false);
+  }
 
   // Add a useEffect to update selectedIds when the status changes
   useEffect(() => {
@@ -89,7 +99,7 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
                   <li>Convert to deal</li>
-                  <li>Delete</li>
+                  <li onClick={handleDeleteOpen}>Delete</li>
                   <li>object 3</li>
                 </ul>
               )}
@@ -107,6 +117,11 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
           </div>
         </div>
       </div>
+      {
+        isDeleteOpen && (
+          <DealDeletePopUp onClose={handleDeleteClose} />
+        )
+      }
     </>
   );
 };
