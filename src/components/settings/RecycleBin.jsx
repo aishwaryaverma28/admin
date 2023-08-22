@@ -3,6 +3,7 @@ import "../styles/RecycleBin.css";
 import axios from "axios";
 import {
   GETNOTE_FROM_TRASH,
+  GETDEAL_FROM_TRASH,
   getDecryptedToken,
   handleLogout,
   GET_ALL_FROM_TRASH
@@ -22,6 +23,7 @@ const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [leadlen, setLeadlen] = useState(0);
+  const [deallen, setDeallen] = useState(0);
   const [noteslen, setNoteslen] = useState(0);
   const [activeTab, setActiveTab] = useState(
     localStorage.getItem("activeTab") || "Leads"
@@ -101,6 +103,7 @@ const RecycleBin = () => {
   useEffect(() => {
     fetchData();
     fetchNotesData();
+    fetchDealData();
     const validTabs = ["Notes", "Deals", "Leads", "Company", "Contacts"];
     if (!validTabs.includes(localStorage.getItem("activeTab"))) {
       setActiveTab("Leads");
@@ -131,6 +134,32 @@ const RecycleBin = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const fetchDealData = async () => {
+    try {
+      const response = await axios.get(
+        GETDEAL_FROM_TRASH,
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        // console.log(response.data.data);
+        setDeallen(response.data.data.length);
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+          handleLogout();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const fetchNotesData = async () => {
     try {
       const response = await axios.get(GETNOTE_FROM_TRASH, {
@@ -191,7 +220,7 @@ const RecycleBin = () => {
             }`}
             onClick={() => handleTabClick("Deals")}
           >
-            Deals (3)
+            Deals ({deallen})
           </button>
           <button
             className={`recycle-btn recycle-fonts ${
@@ -219,7 +248,7 @@ const RecycleBin = () => {
           </button>
         </div>
         {activeTab === "Notes" && <DeleteNotes deleteCount={fetchNotesData} />}
-        {activeTab === "Deals" && <DeleteDeal/>}
+        {activeTab === "Deals" && <DeleteDeal deleteCount={fetchDealData}/>}
         {activeTab === "Leads" && <DeleteLeads deleteCount={fetchData} />}
         {activeTab === "Company" && (
           <>

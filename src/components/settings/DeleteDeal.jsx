@@ -5,9 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar.svg";
 import axios from "axios";
 import {
-  GET_ALL_LEAD_TRASH,
-  RESTORE_LEAD_TRASH,
-  DELETE_LEAD_TRASH,
+  GETDEAL_FROM_TRASH,
+  RESTORE_DEAL_TRASH,
+  DELETE_DEAL_TRASH,
   getDecryptedToken,
   handleLogout,
 } from "../utils/Constants";
@@ -52,7 +52,7 @@ const DeleteDeal = ({deleteCount}) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(GET_ALL_LEAD_TRASH, {
+      const response = await axios.get(GETDEAL_FROM_TRASH, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -168,7 +168,7 @@ const DeleteDeal = ({deleteCount}) => {
       leadIds: selectedRows,
     };
     axios
-      .post(RESTORE_LEAD_TRASH, updatedFormData, {
+      .post(RESTORE_DEAL_TRASH, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -192,7 +192,7 @@ const DeleteDeal = ({deleteCount}) => {
       leadIds: selectedRows,
     };
     axios
-      .delete(DELETE_LEAD_TRASH, {
+      .delete(DELETE_DEAL_TRASH, {
         data: body,
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
