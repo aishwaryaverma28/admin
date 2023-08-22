@@ -391,7 +391,7 @@ const BlogUpdate = () => {
         <h2>Update Blog</h2>
       </header>
       <div className="back-to-user general-refresh">
-      <Link to={"/admin/employee/view"}>
+      <Link to={"/admin/blog/view"}>
               <button className="common-fonts">
                 <img src={LeftArrow} alt="" />
                 <span>Back To Blog Table</span>
