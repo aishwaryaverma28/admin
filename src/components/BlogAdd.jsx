@@ -42,6 +42,7 @@ const BlogAdd = () => {
   // image useStates
   const [imageName, setImageName] = useState(null);
   const decryptedToken = getDecryptedToken();
+  const editorRef = useRef(); // Define the editorRef using useRef
 
   useEffect(() => {
     axios.get(GET_TAG, {
@@ -237,11 +238,14 @@ const BlogAdd = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort("");
+    setSectionSort(parseInt(sectionSort) + 1);
     setChildData("");
+    setSectionImage("");
     setDataFromChild("");
     setShowEditButton(false);
     setSelectedImage("");
+     // Clear the editor content using the ref
+  editorRef.current.clearEditorContent(); // Add this line
   };
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
@@ -461,7 +465,10 @@ const BlogAdd = () => {
                 </div>
 
                 <div className="formEditor">
-                  <ReactEditor onDataTransfer={handleDataTransfer} />
+                <ReactEditor
+  ref={editorRef} // Add this line
+  onDataTransfer={handleDataTransfer}
+/>
                 </div>
               </div>
 

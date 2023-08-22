@@ -79,6 +79,9 @@ background-color:rgb(238, 235, 235);
 transition: all .5s ease-in-out;
 cursor: pointer;
 }
+.sectionCount{
+    width: 2rem;
+}
 .routeRedirect a{
     color: #2b74da;
 }
@@ -129,4 +132,21 @@ cursor: pointer;
     max-height: 3.5rem;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+
+.back-to-user button {
+    color: #33475b;
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    border: none;
+    font-size: 0.75rem;
+    background-color: #fff;
+    cursor: pointer;
+
+}
+
+.back-to-user button span {
+    margin-left: 0.31rem;
 }
