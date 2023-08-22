@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/DealUpdate.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
+import GreaterLeft from "../../assets/image/greater-left.svg";
+import GreaterRight from "../../assets/image/greater-right.svg";
 import axios from "axios";
 import {
   GETNOTEDEAL,
@@ -77,17 +79,17 @@ const DealUpdate = () => {
       .then((response) => {
         if (response.data.status === 1) {
           setNotes(response?.data?.data?.length);
-        } 
+        }
       })
       .catch((error) => {
         console.log(error);
         if (error?.response?.data?.message === "Invalid or expired token.") {
           alert(error?.response?.data?.message);
-         handleLogout() 
+          handleLogout()
         }
       });
   };
-// console.log(notes);
+  // console.log(notes);
 
   const toggleEditable = (e) => {
     e.preventDefault();
@@ -107,6 +109,41 @@ const DealUpdate = () => {
         <i className="fas fa-ellipsis-h"></i>
       </div>
       <div className="dealHead"></div>
+
+      <div className="arrow-container">
+        <div className="arrow-section">
+          <div className="arrow-scroll-left">
+            <img src={GreaterLeft} alt="" class="deals-arrow-left" />
+          </div>
+
+          <div className="arrow-pointer">
+            <p className="common-fonts arrow-text">enquiry received (888 days)</p>
+          </div>
+          <div className="arrow-pointer arrow-pointer-2">
+            <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
+          </div>
+          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
+            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
+          </div>
+          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
+            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
+          </div>
+          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
+            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
+          </div>
+          <div className="arrow-scroll-right">
+            <img src={GreaterRight} alt="" class="deals-arrow-right" />
+          </div>
+          <div className="arrow-btn">
+          <button className="arrow-won common-fonts">Won</button>
+          <button className="arrow-lost common-fonts">Lost</button>
+        </div>
+        </div>
+
+      </div>
+
+
+
       <main className="dealcontainer">
         <div className="dealLeftSection">
           <section>
@@ -162,7 +199,7 @@ const DealUpdate = () => {
                   {isLoading ? (
                     <span>-</span>
                   ) : (
-                    <span>{dealDetails.ownerf_name+" "+dealDetails.ownerl_name}</span>
+                    <span>{dealDetails.ownerf_name + " " + dealDetails.ownerl_name}</span>
                   )}
                 </p>
               </div>
@@ -170,39 +207,39 @@ const DealUpdate = () => {
           </section>
         </div>
         <div className="divRightSection"><div className="tab-navigation">
-            <button
-              className={activeTab === "notes" ? "active" : ""}
-              onClick={() => handleTabClick("notes")}
-            >
-              <i className="fa-sharp fa-regular fa-note-sticky"></i>
-              Notes ({notes})
-            </button>
-            <button
-              className={activeTab === "email" ? "active" : ""}
-              onClick={() => handleTabClick("email")}
-            >
-              <i className="fa-sharp fa-regular fa-envelope-open"></i>
-              Email
-            </button>
-            <button
-              className={activeTab === "activity" ? "active" : ""}
-              onClick={() => handleTabClick("activity")}
-            >
-              <i className="fa-sharp fa-regular fa-calendar"></i>
-              Activity
-            </button>
-            <button
-              className={activeTab === "attachment" ? "active" : ""}
-              onClick={() => handleTabClick("attachment")}
-            >
-              <i className="fa-sharp fa-solid fa-paperclip"></i>
-              Attachment
-            </button>
-          </div>
+          <button
+            className={activeTab === "notes" ? "active" : ""}
+            onClick={() => handleTabClick("notes")}
+          >
+            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+            Notes ({notes})
+          </button>
+          <button
+            className={activeTab === "email" ? "active" : ""}
+            onClick={() => handleTabClick("email")}
+          >
+            <i className="fa-sharp fa-regular fa-envelope-open"></i>
+            Email
+          </button>
+          <button
+            className={activeTab === "activity" ? "active" : ""}
+            onClick={() => handleTabClick("activity")}
+          >
+            <i className="fa-sharp fa-regular fa-calendar"></i>
+            Activity
+          </button>
+          <button
+            className={activeTab === "attachment" ? "active" : ""}
+            onClick={() => handleTabClick("attachment")}
+          >
+            <i className="fa-sharp fa-solid fa-paperclip"></i>
+            Attachment
+          </button>
+        </div>
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={dealDetails} onNotesNum={fetchNotes} type="deal" id={id}/>
+                <AddNotes item={dealDetails} onNotesNum={fetchNotes} type="deal" id={id} />
               </div>
             )}
             {activeTab === "email" && (

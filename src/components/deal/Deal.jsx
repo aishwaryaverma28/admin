@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
 import CreateDeal from "./CreateDeal";
+import DealDeletePopUp from "../DeleteComponent";
 
 const Deal = () => {
   const stages = [
@@ -53,6 +54,7 @@ const Deal = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
     axios
@@ -77,7 +79,7 @@ const Deal = () => {
         console.log(error);
       });
   };
-  console.log(deals);
+
 
   const fetchLabelData = async () => {
     try {
@@ -97,6 +99,13 @@ const Deal = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleDeleteOpen = () => {
+    setIsDeleteOpen(true);
+  }
+  const handleDeleteClose = () => {
+    setIsDeleteOpen(false);
+  }
 
   const resetData = () => {
     fetchLeadsData();
@@ -331,7 +340,10 @@ const Deal = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu">
-                    <li onClick={() => toggleActionDropdown("Delete")}>
+                    {/* <li onClick={() => toggleActionDropdown("Delete")}>
+                      Mass Delete
+                    </li> */}
+                    <li onClick={handleDeleteOpen}>
                       Mass Delete
                     </li>
                     <li>Mass Update</li>
@@ -432,6 +444,11 @@ const Deal = () => {
         newStatus={status}
       />
       <ToastContainer />
+      {
+        isDeleteOpen && (
+          <DealDeletePopUp onClose={handleDeleteClose} />
+        )
+      }
     </div>
   );
 };
