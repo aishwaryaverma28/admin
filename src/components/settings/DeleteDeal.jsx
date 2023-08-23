@@ -57,21 +57,19 @@ const DeleteDeal = ({deleteCount}) => {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       });
-
       if (response.data.status === 1) {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
         );
-      } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-          handleLogout();
-        }
       }
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
     }
   };
 
@@ -165,7 +163,7 @@ const DeleteDeal = ({deleteCount}) => {
   
   const handleRestoreLead = () => {
     const updatedFormData = {
-      leadIds: selectedRows,
+      dealIds: selectedRows,
     };
     axios
       .post(RESTORE_DEAL_TRASH, updatedFormData, {
@@ -178,6 +176,7 @@ const DeleteDeal = ({deleteCount}) => {
         closeLeadRestorePopUp();
         fetchData();
         deleteCount();
+        setSelectedRows([]);
         toast.success("Lead restored successfully", {
           position:"top-center",
           autoClose:2000
@@ -189,7 +188,7 @@ const DeleteDeal = ({deleteCount}) => {
   };
   const handleDeleteLead = () => {
     const body = {
-      leadIds: selectedRows,
+      dealIds: selectedRows,
     };
     axios
       .delete(DELETE_DEAL_TRASH, {
@@ -203,6 +202,7 @@ const DeleteDeal = ({deleteCount}) => {
         closeLeadDeletePopUp();
         fetchData();
         deleteCount();
+        setSelectedRows([]);
         toast.error("Lead deleted successfully", {
           position:"top-center",
           autoClose:2000
@@ -299,8 +299,8 @@ const DeleteDeal = ({deleteCount}) => {
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th>Lead Name</th>
-              <th>Created By</th>
+              <th>Deal Name</th>
+              <th>Status</th>
               <th>Deleted By</th>
               <th>Date Deleted</th>
             </tr>
@@ -339,11 +339,11 @@ const DeleteDeal = ({deleteCount}) => {
                     </label>
                   </td>
                   <td>
-                    {item.lead_name}
+                    {item.deal_name}
                     <p></p>
                   </td>
                   <td>
-                    {item.first_name} {item.last_name}
+                    {item.status}
                   </td>
                   <td>
                     {item.first_name} {item.last_name}

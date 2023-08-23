@@ -62,15 +62,14 @@ const DeleteLeads = ({deleteCount}) => {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
         );
-      } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-          handleLogout();
-        }
       }
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
       setIsLoading(false);
     }
   };
@@ -178,6 +177,7 @@ const DeleteLeads = ({deleteCount}) => {
         closeLeadRestorePopUp();
         fetchData();
         deleteCount();
+        setSelectedRows([]);
         toast.success("Lead restored successfully", {
           position:"top-center",
           autoClose:2000
@@ -203,6 +203,7 @@ const DeleteLeads = ({deleteCount}) => {
         closeLeadDeletePopUp();
         fetchData();
         deleteCount();
+        setSelectedRows([]);
         toast.error("Lead deleted successfully", {
           position:"top-center",
           autoClose:2000

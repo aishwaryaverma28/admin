@@ -76,15 +76,14 @@ const DeleteNotes = ({deleteCount}) => {
         setRecycleData(
           response.data.data.map((item) => ({ ...item, isChecked: false }))
         );
-      } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-          handleLogout();
-        }
-      }
+      } 
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
       setIsLoading(false);
     }
   };
@@ -186,6 +185,7 @@ const DeleteNotes = ({deleteCount}) => {
         fetchData();
         deleteCount();
         onCloseNoteRestorePopUP();
+        setSelectedRows([]);
         toast.success("Note restored successfully", {
           position:"top-center",
           autoClose:2000
@@ -210,6 +210,7 @@ const DeleteNotes = ({deleteCount}) => {
         fetchData();
         deleteCount();
         onCloseNoteDeletePopUp();
+        setSelectedRows([]);
         toast.error("Note delete successfully", {
           position:"top-center",
           autoClose:2000

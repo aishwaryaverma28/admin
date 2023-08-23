@@ -3,12 +3,28 @@ import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 import DealDeletePopUp from "../DeleteComponent";
+import axios from "axios";
+import { MOVEDEAL_TO_TRASH, getDecryptedToken } from "../utils/Constants";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
+
+const DealsColn = ({ object, selectedIds, setSelectedIds, status, onLeadAdded  }) => {
+  const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+const [deleteLeadId, setDeleteLeadId] = useState(null);
+    
+  const handleDeleteOpen = (id) => {
+    setIsDeleteOpen(true);
+    setDeleteLeadId(id);
+  }
+
+  const handleDeleteClose = () => {
+    setIsDeleteOpen(false);
+  }
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (
@@ -35,15 +51,7 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
     }
   };
 
-  const handleDeleteOpen = () => {
-    setIsDeleteOpen(true);
-  }
-
-  const handleDeleteClose = () => {
-    setIsDeleteOpen(false);
-  }
-
-  // Add a useEffect to update selectedIds when the status changes
+// Add a useEffect to update selectedIds when the status changes
   useEffect(() => {
     if (selectedIds.includes(object.id) && object.status !== status) {
       setSelectedIds((prevSelectedIds) =>
@@ -54,6 +62,35 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
       setSelectedIds([...selectedIds, object.id]);
     }
   }, [object.status, status]);
+
+  const handleDeleteLead = () => {
+      if (deleteLeadId) {
+        const body = {
+          dealIds: [deleteLeadId], // Use the stored ID
+        };
+        axios
+          .delete(MOVEDEAL_TO_TRASH, {
+            data: body,
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            console.log(response);
+            toast.success("Lead moved to trash successfully", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+            onLeadAdded();
+        setDeleteLeadId(null); // Reset the stored ID
+        handleDeleteClose();
+          })
+          .catch((error) => {
+            console.log(error);
+          });        
+      }
+    };
+
 
   return (
     <>
@@ -99,7 +136,7 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
                   <li>Convert to deal</li>
-                  <li onClick={handleDeleteOpen}>Delete</li>
+                  <li onClick={() => handleDeleteOpen(object.id)}>Delete</li>
                   <li>object 3</li>
                 </ul>
               )}
@@ -119,7 +156,7 @@ const DealsColn = ({ object, selectedIds, setSelectedIds, status }) => {
       </div>
       {
         isDeleteOpen && (
-          <DealDeletePopUp onClose={handleDeleteClose} />
+          <DealDeletePopUp onClose={handleDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
         )
       }
     </>

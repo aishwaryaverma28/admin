@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-import { GET_ALL_DEAL, getDecryptedToken, GET_LABEL } from "../utils/Constants";
+import { GET_ALL_DEAL, MOVEDEAL_TO_TRASH,getDecryptedToken, GET_LABEL } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
@@ -245,6 +245,34 @@ const Deal = () => {
     }
   };
   
+ const handleDeleteLead = () => {
+    if (selectedIds) {
+      const body = {
+        dealIds: selectedIds, // Use the stored ID
+      };
+      axios
+        .delete(MOVEDEAL_TO_TRASH, {
+          data: body,
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          toast.success("Lead moved to trash successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          fetchLeadsData();
+      setSelectedIds([]); // Reset the stored ID
+      handleDeleteClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });        
+    }
+  };
+
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
     .map((item) => ({
@@ -413,10 +441,12 @@ const Deal = () => {
                   if (obj.status === item) {
                     return (
                       <DealsColn
+                      key={obj.id}
                       object={obj}
                       selectedIds={selectedIds}
                       setSelectedIds={setSelectedIds}
-                      status={item} // Pass the status as a prop
+                      // status={item} // Pass the status as a prop
+                      onLeadAdded={fetchLeadsData}
                       />
                     );
                   }
@@ -446,7 +476,7 @@ const Deal = () => {
       <ToastContainer />
       {
         isDeleteOpen && (
-          <DealDeletePopUp onClose={handleDeleteClose} />
+          <DealDeletePopUp onClose={handleDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
         )
       }
     </div>
