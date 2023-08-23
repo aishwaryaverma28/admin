@@ -36,7 +36,7 @@ const SettingDeal = () => {
        }
        {
         activeTab === "pipeline" && (
-          <div>div</div>
+          <div></div>
         )
        }
       
