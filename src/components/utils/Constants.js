@@ -118,6 +118,10 @@ export const ADD_PRODUCT = start + "api/product/add";
 export const UPDATE_PRODUCT = start + "api/product/edit/";
 export const GET_ALL_PRODUCT = start + "api/product/getall";
 
+export const REQ_DOCUMENT = start+ "api/setting/requireddocs";
+export const ADD_DOCUMENT = start+ "api/setting/adddocindocumentmaster";
+export const UPDATE_DOCUMENT = start+ "api/setting/updatedocmaster";
+
 //========================================================================Deals
 export const GET_ALL_DEAL = start + "api/deal/getall";
 export const ADD_DEAL = start +"api/deal/add";
@@ -126,3 +130,4 @@ export const MOVEDEAL_TO_TRASH = start + "api/deal/movetotrash";
 export const GETDEAL_FROM_TRASH = start +"api/deal/getallfromtrash";
 export const RESTORE_DEAL_TRASH = start + "api/deal/restorefromtrash";
 export const DELETE_DEAL_TRASH = start + "api/deal/deletefromtrash";
+
