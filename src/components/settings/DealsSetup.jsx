@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { REQ_DOCUMENT, getDecryptedToken } from "../utils/Constants";
+import {
+  REQ_DOCUMENT,
+  UPDATE_DOCUMENT,
+  getDecryptedToken,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddComponent from "../AddComponent.jsx";
+import AddComponent from "../AddComponent";
 import "../styles/DealUpdate.css";
 import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
@@ -27,7 +31,6 @@ const DealsSetup = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setDoc(response?.data?.data);
       })
       .catch((error) => {
@@ -39,16 +42,50 @@ const DealsSetup = () => {
     fetchDocs();
   }, []);
 
+  useEffect(() => {
+    const updatedSelectedIds = doc
+      .filter((item) => item.is_required === 1)
+      .map((item) => item.id);
+    setSelectedDocumentIds(updatedSelectedIds);
+  }, [doc]);
+
   const handleCheckboxChange = (id) => {
     setSelectedDocumentIds((prevIds) => {
-      if (prevIds.includes(id)) {
-        return prevIds.filter((prevId) => prevId !== id);
-      } else {
-        return [...prevIds, id];
-      }
+      const updatedIds = prevIds.includes(id)
+        ? prevIds.filter((prevId) => prevId !== id)
+        : [...prevIds, id];
+      // Determine the is_required value based on checkbox state
+      const isRequiredValue = updatedIds.includes(id) ? 1 : 0;
+      // Call the updateFields function here with the updated selectedDocumentIds and is_required value
+      updateFields(id, isRequiredValue);
+      return updatedIds;
     });
   };
-  console.log(selectedDocumentIds);
+
+  const updateFields = (updatedIds, isRequiredValue) => {
+    const dataToUpdate = {
+      docId: updatedIds,
+      is_required: isRequiredValue,
+    };
+
+    axios
+      .put(UPDATE_DOCUMENT, dataToUpdate, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        toast.success("Document updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .catch((error) => {
+        // Handle error (e.g., show an error message)
+        toast.error("Failed to update fields");
+      });
+  };
+
   const handleAddDocument = () => {
     setCustomDocuments([...customDocuments, ""]);
   };
@@ -67,10 +104,10 @@ const DealsSetup = () => {
 
   const handleOpenDocumentModal = () => {
     setIsDocumentModalOpen(true);
-  }
+  };
   const handleCloseDocumentModal = () => {
     setIsDocumentModalOpen(false);
-  }
+  };
 
   return (
     <div className="ds-setup-container">
@@ -163,7 +200,7 @@ const DealsSetup = () => {
                       className="common-save-button"
                       onClick={handleOpenDocumentModal}
                     >
-                      Add Document
+                      Add Field
                     </button>
                   </div>
                 </>
@@ -344,15 +381,14 @@ const DealsSetup = () => {
         </div>
       </div>
 
-      <div className="cp-bottom">
+      {/* <div className="cp-bottom">
         <button className="common-white-button">Cancel</button>
         <button className="common-save-button cp-save">Save</button>
-      </div>
-      {
-        isDocumentModalOpen && (
-          <AddComponent onClose={handleCloseDocumentModal}/>
-        )
-      }
+      </div> */}
+      {isDocumentModalOpen && (
+        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs}/>
+      )}
+      <ToastContainer />
     </div>
   );
 };
