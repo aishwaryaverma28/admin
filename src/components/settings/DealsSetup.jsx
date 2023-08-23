@@ -13,9 +13,10 @@ const DealsSetup = () => {
   const decryptedToken = getDecryptedToken();
   const [customDocuments, setCustomDocuments] = useState([]);
   const [showBasic, setShowBasic] = useState(false);
-  const [showClients, setShowClients] = useState(false);
+  // const [showClients, setShowClients] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
-
+  const [doc, setDoc] = useState([]);
+  const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
 
   const fetchDocs = () => {
     axios
@@ -25,19 +26,28 @@ const DealsSetup = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.data)
+        console.log(response?.data?.data);
+        setDoc(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-
   useEffect(() => {
     fetchDocs();
   }, []);
 
-
+  const handleCheckboxChange = (id) => {
+    setSelectedDocumentIds((prevIds) => {
+      if (prevIds.includes(id)) {
+        return prevIds.filter((prevId) => prevId !== id);
+      } else {
+        return [...prevIds, id];
+      }
+    });
+  };
+console.log(selectedDocumentIds);
   const handleAddDocument = () => {
     setCustomDocuments([...customDocuments, ""]);
   };
@@ -45,14 +55,15 @@ const DealsSetup = () => {
   const toggleBasic = () => {
     setShowBasic(!showBasic);
   };
-  
-  const toggleClients = () => {
-    setShowClients(!showClients);
-  };
-  
+
+  // const toggleClients = () => {
+  //   setShowClients(!showClients);
+  // };
+
   const toggleCustom = () => {
     setShowCustom(!showCustom);
   };
+
   return (
     <div className="ds-setup-container">
       <p className="common-fonts ds-setup-heading">creating deals</p>
@@ -105,63 +116,39 @@ const DealsSetup = () => {
             <p className="common-fonts ds-setup-doc">Documents</p>
 
             <div>
-              <div className="ds-setup-table-heading"  onClick={toggleBasic}>
+              <div className="ds-setup-table-heading" onClick={toggleBasic}>
                 <img src={showBasic ? GreaterUp : GreaterDown} alt="" />
                 <p className="common-fonts ds-setup-basic">basic documents</p>
               </div>
 
-              {
-                showBasic && (
-                  <div className="ds-setup-table">
-                <table>
-                  <thead>
-                  
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Pan Card</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Aadhar Card</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Photo</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Bank Approval Letter</td>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-
-                )
-              }
-
+              {showBasic && (
+                <div className="ds-setup-table">
+                  <table>
+                    <tbody>
+                      {doc.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                                onChange={() => handleCheckboxChange(item.id)}
+                                checked={selectedDocumentIds.includes(item.id)}
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">{item.document_name}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
-            <div>
+            {/* <div>
               <div className="ds-setup-table-heading"  onClick={toggleClients}>
                 <img src={showClients ? GreaterUp : GreaterDown} alt="" />
                 <p className="common-fonts ds-setup-basic">Client</p>
@@ -213,101 +200,123 @@ const DealsSetup = () => {
                 )
               }
 
-            </div>
+            </div> */}
+
             <div>
-              <div className="ds-setup-table-heading"  onClick={toggleCustom}>
+              <div className="ds-setup-table-heading" onClick={toggleCustom}>
                 <img src={showCustom ? GreaterUp : GreaterDown} alt="" />
                 <p className="common-fonts ds-setup-basic">Custom</p>
               </div>
-              {
-                showCustom && (
-                  <>
+              {showCustom && (
+                <>
                   <div className="ds-setup-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Pan Card</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Aadhar Card</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Photo</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label className="custom-checkbox">
-                          <input type="checkbox" className={`cb1`} name="" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </td>
-                      <td className="common-fonts">Bank Approval Letter</td>
-                    </tr>
-                    <tr>
-                        <td>
-                          <label className="custom-checkbox">
-                            <input type="checkbox" className={`cb1`} name="" />
-                            <span className="checkmark"></span>
-                          </label>
-                        </td>
-                        <td className="common-fonts">
-                          <input
-                            type="text"
-                            className="common-fonts ds-setup-input"
-                            placeholder="Enter bank approval letter"
-                          />
-                        </td>
-                      </tr>
-                    {customDocuments.map((_, index) => (
-                      <tr key={index}>
-                        <td>
-                          <label className="custom-checkbox">
-                            <input type="checkbox" className={`cb1`} name="" />
-                            <span className="checkmark"></span>
-                          </label>
-                        </td>
-                        <td className="common-fonts">
-                          <input
-                            type="text"
-                            className="common-fonts ds-setup-input"
-                            placeholder="Enter bank approval letter"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </thead>
-                </table>
-              </div>
-              <div className="ds-setup-add">
-                <button
-                  className="common-save-button"
-                  onClick={handleAddDocument}
-                >
-                  Add Document Feild
-                </button>
-              </div>
-                  </>
-                )
-              }
-
+                    <table>
+                      <thead>
+                        <tr>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">Pan Card</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">Aadhar Card</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">Photo</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">Bank Approval Letter</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label className="custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className={`cb1`}
+                                name=""
+                              />
+                              <span className="checkmark"></span>
+                            </label>
+                          </td>
+                          <td className="common-fonts">
+                            <input
+                              type="text"
+                              className="common-fonts ds-setup-input"
+                              placeholder="Enter bank approval letter"
+                            />
+                          </td>
+                        </tr>
+                        {customDocuments.map((_, index) => (
+                          <tr key={index}>
+                            <td>
+                              <label className="custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className={`cb1`}
+                                  name=""
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                            </td>
+                            <td className="common-fonts">
+                              <input
+                                type="text"
+                                className="common-fonts ds-setup-input"
+                                placeholder="Enter bank approval letter"
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </thead>
+                    </table>
+                  </div>
+                  <div className="ds-setup-add">
+                    <button
+                      className="common-save-button"
+                      onClick={handleAddDocument}
+                    >
+                      Add Document Feild
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
