@@ -453,4 +453,14 @@ width: 40%;
   font-size: 1.125rem;
   font-weight: 600;
 }
+
+.ds-setup-save-doc{
+  display:flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.ds-setup-save-doc button{
+  margin-left: 1rem;
+}
 /* setting deals css ends */

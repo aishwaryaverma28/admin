@@ -47,7 +47,7 @@ const DealsSetup = () => {
       }
     });
   };
-console.log(selectedDocumentIds);
+  console.log(selectedDocumentIds);
   const handleAddDocument = () => {
     setCustomDocuments([...customDocuments, ""]);
   };
@@ -122,29 +122,93 @@ console.log(selectedDocumentIds);
               </div>
 
               {showBasic && (
-                <div className="ds-setup-table">
-                  <table>
-                    <tbody>
-                      {doc.map((item) => (
-                        <tr key={item.id}>
+                <>
+                  <div className="ds-setup-table">
+                    <table>
+                      <tbody>
+                        {doc.map((item) => (
+                          <tr key={item.id}>
+                            <td>
+                              <label className="custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className={`cb1`}
+                                  name=""
+                                  onChange={() => handleCheckboxChange(item.id)}
+                                  checked={selectedDocumentIds.includes(
+                                    item.id
+                                  )}
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                            </td>
+                            <td className="common-fonts">
+                              {item.document_name}
+                            </td>
+                          </tr>
+                        ))}
+                        <tr>
                           <td>
                             <label className="custom-checkbox">
                               <input
                                 type="checkbox"
                                 className={`cb1`}
                                 name=""
-                                onChange={() => handleCheckboxChange(item.id)}
-                                checked={selectedDocumentIds.includes(item.id)}
                               />
                               <span className="checkmark"></span>
                             </label>
                           </td>
-                          <td className="common-fonts">{item.document_name}</td>
+                          <td className="common-fonts">
+                            <div className="ds-setup-save-doc">
+                              <input
+                                type="text"
+                                className="common-fonts ds-setup-input"
+                                placeholder="Enter bank approval letter"
+                              />
+                              <button className="common-save-button">
+                                Save
+                              </button>
+                            </div>
+                          </td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                        {customDocuments.map((_, index) => (
+                          <tr key={index}>
+                            <td>
+                              <label className="custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className={`cb1`}
+                                  name=""
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                            </td>
+                            <td className="common-fonts">
+                              <div className="ds-setup-save-doc">
+                                <input
+                                  type="text"
+                                  className="common-fonts ds-setup-input"
+                                  placeholder="Enter bank approval letter"
+                                />
+                                <button className="common-save-button">
+                                  Save
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="ds-setup-add">
+                    <button
+                      className="common-save-button"
+                      onClick={handleAddDocument}
+                    >
+                      Add Document Feild
+                    </button>
+                  </div>
+                </>
               )}
             </div>
 
@@ -201,7 +265,7 @@ console.log(selectedDocumentIds);
               }
 
             </div> */}
-
+            {/* 
             <div>
               <div className="ds-setup-table-heading" onClick={toggleCustom}>
                 <img src={showCustom ? GreaterUp : GreaterDown} alt="" />
@@ -317,7 +381,7 @@ console.log(selectedDocumentIds);
                   </div>
                 </>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
