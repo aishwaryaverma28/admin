@@ -24,6 +24,53 @@ const DealUpdate = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
+  const [selectedArrowIndex, setSelectedArrowIndex] = useState(0);
+
+  const stages = [
+    "Enquiry received",
+    "contact made",
+    "illustration sent",
+    "all docs received",
+    "compliance",
+    "sourced",
+    "application received",
+    "valuation",
+    "formal offer",
+    "compliance check",
+    "legal",
+    "completion",
+  ];
+  const status = [
+    "enquiry_received",
+    "contact_made",
+    "illustration_sent",
+    "all_docs_received",
+    "compliance",
+    "sourced",
+    "application_received",
+    "valuation",
+    "formal_offer_sent",
+    "compliance_check",
+    "legals",
+    "completion",
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const visibleStages = stages.slice(currentIndex, currentIndex + 4);
+
+  const handlePrevClick = () => {
+    setCurrentIndex((prevIndex) => prevIndex - 1);
+  };
+
+  const handleNextClick = () => {
+    setCurrentIndex((prevIndex) => prevIndex + 1);
+  };
+
+  const canShowPrev = currentIndex > 0;
+
+  const lastVisibleStageIndex = currentIndex + visibleStages.length - 1;
+  const lastStageIndex = stages.length - 1;
+  const canShowLeftScrollArrow = lastVisibleStageIndex < lastStageIndex;
 
   const fetchLead = () => {
     axios
@@ -85,7 +132,7 @@ const DealUpdate = () => {
         console.log(error);
         if (error?.response?.data?.message === "Invalid or expired token.") {
           alert(error?.response?.data?.message);
-          handleLogout()
+          handleLogout();
         }
       });
   };
@@ -112,37 +159,51 @@ const DealUpdate = () => {
 
       <div className="arrow-container">
         <div className="arrow-section">
-          <div className="arrow-scroll-left">
+          <button
+            className="arrow-scroll-left"
+            onClick={handlePrevClick}
+            disabled={!canShowPrev}
+          >
             <img src={GreaterLeft} alt="" class="deals-arrow-left" />
-          </div>
+          </button>
+          {visibleStages.map((stage, index) => (
+            <div
+              className={`arrow-pointer ${
+                selectedArrowIndex === index
+                  ? "arrow-blue"
+                  : selectedArrowIndex > index
+                  ? "arrow-green"
+                  : "arrow-white"
+              }`}
+              style={{
+                backgroundColor:
+                  selectedArrowIndex === index
+                    ? "blue"
+                    : selectedArrowIndex > index
+                    ? "green"
+                    : "#f3f3f3",
+              }}
+              onClick={() => setSelectedArrowIndex(index)}
+            >
+              <p className={`common-fonts arrow-text arrow-text-3`}>
+                {stage} (9999 days)
+              </p>
+            </div>
+          ))}
 
-          <div className="arrow-pointer">
-            <p className="common-fonts arrow-text">enquiry received (888 days)</p>
-          </div>
-          <div className="arrow-pointer arrow-pointer-2">
-            <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
-          </div>
-          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
-            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
-          </div>
-          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
-            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
-          </div>
-          <div className="arrow-pointer arrow-pointer-2 arrow-pointer-3">
-            <p className="common-fonts arrow-text arrow-text-3">Illustration sent (3 days)</p>
-          </div>
-          <div className="arrow-scroll-right">
+          <button
+            className="arrow-scroll-right"
+            onClick={handleNextClick}
+            disabled={!canShowLeftScrollArrow}
+          >
             <img src={GreaterRight} alt="" class="deals-arrow-right" />
-          </div>
+          </button>
           <div className="arrow-btn">
-          <button className="arrow-won common-fonts">Won</button>
-          <button className="arrow-lost common-fonts">Lost</button>
+            <button className="arrow-won common-fonts">Won</button>
+            <button className="arrow-lost common-fonts">Lost</button>
+          </div>
         </div>
-        </div>
-
       </div>
-
-
 
       <main className="dealcontainer">
         <div className="dealLeftSection">
@@ -199,47 +260,55 @@ const DealUpdate = () => {
                   {isLoading ? (
                     <span>-</span>
                   ) : (
-                    <span>{dealDetails.ownerf_name + " " + dealDetails.ownerl_name}</span>
+                    <span>
+                      {dealDetails.ownerf_name + " " + dealDetails.ownerl_name}
+                    </span>
                   )}
                 </p>
               </div>
             </div>
           </section>
         </div>
-        <div className="divRightSection"><div className="tab-navigation">
-          <button
-            className={activeTab === "notes" ? "active" : ""}
-            onClick={() => handleTabClick("notes")}
-          >
-            <i className="fa-sharp fa-regular fa-note-sticky"></i>
-            Notes ({notes})
-          </button>
-          <button
-            className={activeTab === "email" ? "active" : ""}
-            onClick={() => handleTabClick("email")}
-          >
-            <i className="fa-sharp fa-regular fa-envelope-open"></i>
-            Email
-          </button>
-          <button
-            className={activeTab === "activity" ? "active" : ""}
-            onClick={() => handleTabClick("activity")}
-          >
-            <i className="fa-sharp fa-regular fa-calendar"></i>
-            Activity
-          </button>
-          <button
-            className={activeTab === "attachment" ? "active" : ""}
-            onClick={() => handleTabClick("attachment")}
-          >
-            <i className="fa-sharp fa-solid fa-paperclip"></i>
-            Attachment
-          </button>
-        </div>
+        <div className="divRightSection">
+          <div className="tab-navigation">
+            <button
+              className={activeTab === "notes" ? "active" : ""}
+              onClick={() => handleTabClick("notes")}
+            >
+              <i className="fa-sharp fa-regular fa-note-sticky"></i>
+              Notes ({notes})
+            </button>
+            <button
+              className={activeTab === "email" ? "active" : ""}
+              onClick={() => handleTabClick("email")}
+            >
+              <i className="fa-sharp fa-regular fa-envelope-open"></i>
+              Email
+            </button>
+            <button
+              className={activeTab === "activity" ? "active" : ""}
+              onClick={() => handleTabClick("activity")}
+            >
+              <i className="fa-sharp fa-regular fa-calendar"></i>
+              Activity
+            </button>
+            <button
+              className={activeTab === "attachment" ? "active" : ""}
+              onClick={() => handleTabClick("attachment")}
+            >
+              <i className="fa-sharp fa-solid fa-paperclip"></i>
+              Attachment
+            </button>
+          </div>
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={dealDetails} onNotesNum={fetchNotes} type="deal" id={id} />
+                <AddNotes
+                  item={dealDetails}
+                  onNotesNum={fetchNotes}
+                  type="deal"
+                  id={id}
+                />
               </div>
             )}
             {activeTab === "email" && (
