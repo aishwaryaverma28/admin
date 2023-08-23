@@ -57,7 +57,7 @@
   text-transform: uppercase;
 }
 
-.dealSectionHead>i {
+.dealSectionHead > i {
   margin-right: 0.7rem;
 }
 
@@ -65,10 +65,9 @@
   color: #2b74da;
 }
 
-.addProduct>i {
+.addProduct > i {
   margin-right: 0.7rem;
 }
-
 
 /* arrow css starts  */
 
@@ -84,12 +83,11 @@
 }
 
 .arrow-pointer-3 {
-  background-color: #F3F3F3;
-
+  background-color: #f3f3f3;
 }
 
 .arrow-pointer:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -98,12 +96,10 @@
   border-left: 1rem solid #fff;
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
-
 }
 
-
 .arrow-pointer:before {
-  content: '';
+  content: "";
   position: absolute;
   right: -1rem;
   /* Adjusted border value */
@@ -121,7 +117,7 @@
 }
 
 .arrow-pointer-3:before {
-  border-left: 1rem solid #F3F3F3;
+  border-left: 1rem solid #f3f3f3;
 }
 
 .arrow-section {
@@ -142,9 +138,8 @@
   width: 100%;
 }
 
-
 .arrow-text-3 {
-  color: #1E2224;
+  color: #1e2224;
 }
 
 .arrow-pointer-2 {
@@ -156,14 +151,14 @@
   top: 50%;
   left: 40%;
   transform: translate(-50%, -50%);
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .arrow-scroll-left {
   position: relative;
   width: 2rem;
   height: 2.5rem;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,58 +170,56 @@
   position: relative;
   width: 2rem;
   height: 2.5rem;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 }
 
-
 .arrow-scroll-left::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -1rem;
   /* Adjusted border value */
   bottom: 0;
   width: 0;
   height: 0;
-  border-left: 1rem solid #F3F3F3;
+  border-left: 1rem solid #f3f3f3;
   /* Adjusted border value */
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
 }
 .arrow-scroll-left::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -1rem;
   /* Adjusted border value */
   bottom: 0;
   width: 0;
   height: 0;
-  border-right: 1rem solid #F3F3F3;
+  border-right: 1rem solid #f3f3f3;
   /* Adjusted border value */
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
 }
 
 .arrow-scroll-right::before {
-  content: '';
+  content: "";
   position: absolute;
   right: -1rem;
   /* Adjusted border value */
   bottom: 0;
   width: 0;
   height: 0;
-  border-left: 1rem solid #F3F3F3;
+  border-left: 1rem solid #f3f3f3;
   /* Adjusted border value */
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
-
 }
 
 .arrow-scroll-right:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -236,83 +229,205 @@
   /* Adjusted border values */
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
-
 }
 
-.deals-arrow-right{
+.deals-arrow-right {
   position: absolute;
-  top:50%;
-  left:80%;
-  transform: translate(-50%,-50%);
-
+  top: 50%;
+  left: 80%;
+  transform: translate(-50%, -50%);
 }
 
-
-.arrow-btn{
+.arrow-btn {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.arrow-won{
+.arrow-won {
   padding: 7px 15px;
   border-radius: 0.3125rem;
   background-color: var(--primary);
   border: 1px solid transparent;
-  color:#fff;
+  color: #fff;
   cursor: pointer;
   margin-right: 0.5rem;
   margin-left: 2rem;
 }
 
-.arrow-won:hover{
-  color:var(--primary);
+.arrow-won:hover {
+  color: var(--primary);
   background-color: #fff;
-  border:1px solid var(--primary);
+  border: 1px solid var(--primary);
   transition: all 0.5s ease-in-out;
 }
-.arrow-lost:hover{
-  color:var(--secondary);
+.arrow-lost:hover {
+  color: var(--secondary);
   background-color: #fff;
-  border:1px solid var(--secondary);
+  border: 1px solid var(--secondary);
   transition: all 0.5s ease-in-out;
 }
 
-.arrow-lost{
+.arrow-lost {
   padding: 7px 15px;
   border-radius: 0.3125rem;
   background-color: var(--secondary);
   border: 1px solid transparent;
-  color:#fff;
+  color: #fff;
   cursor: pointer;
-
 }
 /* arrow css starts ends */
 
-
 /* setting deals css starts  */
 
-
-
-.ds-name{
+.ds-name {
   font-size: 1.5rem;
   margin-left: 1rem;
   margin-top: 1rem;
-  margin-bottom: 1rem;  
+  margin-bottom: 1rem;
   font-weight: 600;
 }
 
-.ds-setup-heading{
+.ds-setup-heading {
   font-size: 1.125rem;
   margin-left: 1rem;
   font-weight: 600;
 }
 
-.ds-setup-flex{
+.ds-setup-flex {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 1rem;
+  margin-top: 1rem;
 }
 
+.ds-setup-blue-text {
+  color: var(--ternary);
+}
+
+.ds-setup-text {
+  color: var(--font-light);
+}
+
+.ds-setup-text-box {
+  margin-left: 0.5rem;
+}
+
+.ds-setup-check {
+  margin-left: 1rem;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.ds-setup-check-text {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.ds-setup-select-text {
+  margin-left: 2.7rem;
+  color: var(--font-lighter);
+  font-size: 0.75rem;
+}
+
+.ds-setup-radio {
+  margin-left: 2.7rem;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ds-setup-radio input {
+  cursor: pointer;
+}
+
+.ds-setup-radio label {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.ds-setup-select {
+  margin-left: 3.8rem;
+  margin-top: 0.5rem;
+  padding: 0.7rem 0.94rem;
+  border-radius: 0.3125rem;
+  border: 1px solid var(--border-color);
+  background: var(--input-background);
+  cursor: pointer;
+}
+
+.ds-setup-accordian {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.ds-setup-doc {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ds-setup-table-heading {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-left: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.ds-setup-basic {
+  margin-left: 0.5rem;
+}
+
+.ds-setup-table table {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 95%;
+  margin-top: 1rem;
+  border-radius: 0.3125rem 0.3125rem 0rem 0rem;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.ds-setup-table td{
+  background-color: var(--white);
+}
+
+.ds-setup-table td:first-child {
+  width: 2%;
+  border-right: 1px solid transparent;
+}
+
+.mainPage {
+  width: 100%;
+}
+
+.ds-setup-add{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 2rem;
+  margin-right: 2.4rem;
+  margin-bottom: 2rem;
+}
+
+.ds-setup-input{
+  border: none;
+  border-radius: 0.3125rem;
+background: var(--input-background);
+padding: 0.5rem;
+width: 40%;
+}
+
+.ds-setup-doc{
+  font-size: 1.125rem;
+  font-weight: 600;
+}
 /* setting deals css ends */
