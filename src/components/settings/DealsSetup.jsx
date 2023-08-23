@@ -1,14 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { REQ_DOCUMENT, getDecryptedToken } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "../styles/DealUpdate.css";
 import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 
 const DealsSetup = () => {
+  const decryptedToken = getDecryptedToken();
   const [customDocuments, setCustomDocuments] = useState([]);
   const [showBasic, setShowBasic] = useState(false);
   const [showClients, setShowClients] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
+
+
+  const fetchDocs = () => {
+    axios
+      .get(REQ_DOCUMENT, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+  useEffect(() => {
+    fetchDocs();
+  }, []);
+
 
   const handleAddDocument = () => {
     setCustomDocuments([...customDocuments, ""]);

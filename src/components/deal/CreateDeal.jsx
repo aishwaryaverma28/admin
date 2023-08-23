@@ -10,14 +10,12 @@ import "react-toastify/dist/ReactToastify.css";
 // import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, stages, newStatus }) => {
-  const [status, setStatus] = useState("enquiry_received");
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
   // const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState("");
-
+  
   const [leadData, setLeadData] = useState({
     probability: "",
     deal_name: "",
@@ -63,12 +61,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
   //   }
   // }
 
-  function handleStatus(status) {
-    setStatus(status);
-    setIsDisable(false);
-    setSelectedStatus(status);
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
@@ -77,12 +69,9 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updateData = {
-      ...leadData,
-      status: status,
-    };
+    
     axios
-      .post(ADD_DEAL, updateData, {
+      .post(ADD_DEAL, leadData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -166,7 +155,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
                 <div className="currency-section">
                   <input
                     id="value"
-                    type="text"
+                    type="number"
                     className="currency-input"
                     name="value"
                     onChange={handleChange}
@@ -264,12 +253,12 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
                     );
                   })}
                 </select>
-                <label className="lead-label" htmlFor="label_id">
+                <label className="lead-label" htmlFor="status">
                   Stages
                 </label>
                 <select
-                  name="label_id"
-                  id="label_id"
+                  name="status"
+                  id="status"
                   className="lead-priority"
                   onChange={handleChange}
                 >
@@ -287,70 +276,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
               </div>
             </section>
 
-            <section>
-              <div className="lead-status">
-                <p>Deal Stage</p>
-                {/* <div className="elements">
-                <img
-                      src={rectangleFill}
-                      alt=""
-                    />
-                    <img
-                      src={rectangle71}
-                      alt=""
-                    />
-                    <img
-                      src={rectangle71}
-                      alt=""
-                    />
-                    <img
-                      src={rectangle71}
-                      alt=""
-                    />
-                    <img
-                      src={rectangle71}
-                      alt=""
-                    />
-                    <img
-                      src={rectangle74}
-                      alt=""
-                    />
-                </div> */}
-                {/* <div className="elements">
-                  <span
-                    className={`status-value new-element ${selectedStatus === "New" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("New")}
-                  >
-                    <span>New</span>
-                  </span>
-                  <span
-                     className={`status-value open-element ${selectedStatus === "Open" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Open")}
-                  >
-                    <span>Open</span>
-                  </span>
-                  <span
-                    className={`status-value progress-element ${selectedStatus === "In Progress" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("In Progress")}
-                  >
-                    <span>In Progress</span>
-                  </span>
-                  <span
-                     className={`status-value deal-element ${selectedStatus === "Open Deal" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Open Deal")}
-                  >
-                    <span>Open Deal</span>
-                  </span>
-                  <span
-                    className={`status-value unread-element ${selectedStatus === "Unread" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Unread")}
-                  >
-                    <span>unread</span>
-                  </span>
-                </div> */}
-              </div>
-            </section>
-
+            
             <section className="bottom-section font-style">
               <div>
                 <button className="cancel-btn" onClick={onClose}>
