@@ -3,7 +3,7 @@ import axios from "axios";
 import { REQ_DOCUMENT, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import AddComponent from "../AddComponent.jsx";
 import "../styles/DealUpdate.css";
 import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
@@ -17,6 +17,7 @@ const DealsSetup = () => {
   const [showCustom, setShowCustom] = useState(false);
   const [doc, setDoc] = useState([]);
   const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
 
   const fetchDocs = () => {
     axios
@@ -47,7 +48,7 @@ const DealsSetup = () => {
       }
     });
   };
-console.log(selectedDocumentIds);
+  console.log(selectedDocumentIds);
   const handleAddDocument = () => {
     setCustomDocuments([...customDocuments, ""]);
   };
@@ -63,6 +64,13 @@ console.log(selectedDocumentIds);
   const toggleCustom = () => {
     setShowCustom(!showCustom);
   };
+
+  const handleOpenDocumentModal = () => {
+    setIsDocumentModalOpen(true);
+  }
+  const handleCloseDocumentModal = () => {
+    setIsDocumentModalOpen(false);
+  }
 
   return (
     <div className="ds-setup-container">
@@ -122,29 +130,43 @@ console.log(selectedDocumentIds);
               </div>
 
               {showBasic && (
-                <div className="ds-setup-table">
-                  <table>
-                    <tbody>
-                      {doc.map((item) => (
-                        <tr key={item.id}>
-                          <td>
-                            <label className="custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className={`cb1`}
-                                name=""
-                                onChange={() => handleCheckboxChange(item.id)}
-                                checked={selectedDocumentIds.includes(item.id)}
-                              />
-                              <span className="checkmark"></span>
-                            </label>
-                          </td>
-                          <td className="common-fonts">{item.document_name}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <>
+                  <div className="ds-setup-table">
+                    <table>
+                      <tbody>
+                        {doc.map((item) => (
+                          <tr key={item.id}>
+                            <td>
+                              <label className="custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className={`cb1`}
+                                  name=""
+                                  onChange={() => handleCheckboxChange(item.id)}
+                                  checked={selectedDocumentIds.includes(
+                                    item.id
+                                  )}
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                            </td>
+                            <td className="common-fonts">
+                              {item.document_name}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="ds-setup-add">
+                    <button
+                      className="common-save-button"
+                      onClick={handleOpenDocumentModal}
+                    >
+                      Add Document
+                    </button>
+                  </div>
+                </>
               )}
             </div>
 
@@ -201,7 +223,7 @@ console.log(selectedDocumentIds);
               }
 
             </div> */}
-
+            {/* 
             <div>
               <div className="ds-setup-table-heading" onClick={toggleCustom}>
                 <img src={showCustom ? GreaterUp : GreaterDown} alt="" />
@@ -317,7 +339,7 @@ console.log(selectedDocumentIds);
                   </div>
                 </>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -326,6 +348,11 @@ console.log(selectedDocumentIds);
         <button className="common-white-button">Cancel</button>
         <button className="common-save-button cp-save">Save</button>
       </div>
+      {
+        isDocumentModalOpen && (
+          <AddComponent onClose={handleCloseDocumentModal}/>
+        )
+      }
     </div>
   );
 };
