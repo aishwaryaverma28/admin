@@ -3,7 +3,7 @@ import axios from "axios";
 import { REQ_DOCUMENT, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import AddComponent from "../AddComponent.jsx";
 import "../styles/DealUpdate.css";
 import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
@@ -17,6 +17,7 @@ const DealsSetup = () => {
   const [showCustom, setShowCustom] = useState(false);
   const [doc, setDoc] = useState([]);
   const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
 
   const fetchDocs = () => {
     axios
@@ -63,6 +64,13 @@ const DealsSetup = () => {
   const toggleCustom = () => {
     setShowCustom(!showCustom);
   };
+
+  const handleOpenDocumentModal = () => {
+    setIsDocumentModalOpen(true);
+  }
+  const handleCloseDocumentModal = () => {
+    setIsDocumentModalOpen(false);
+  }
 
   return (
     <div className="ds-setup-container">
@@ -147,65 +155,15 @@ const DealsSetup = () => {
                             </td>
                           </tr>
                         ))}
-                        <tr>
-                          <td>
-                            <label className="custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className={`cb1`}
-                                name=""
-                              />
-                              <span className="checkmark"></span>
-                            </label>
-                          </td>
-                          <td className="common-fonts">
-                            <div className="ds-setup-save-doc">
-                              <input
-                                type="text"
-                                className="common-fonts ds-setup-input"
-                                placeholder="Enter bank approval letter"
-                              />
-                              <button className="common-save-button">
-                                Save
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        {customDocuments.map((_, index) => (
-                          <tr key={index}>
-                            <td>
-                              <label className="custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className={`cb1`}
-                                  name=""
-                                />
-                                <span className="checkmark"></span>
-                              </label>
-                            </td>
-                            <td className="common-fonts">
-                              <div className="ds-setup-save-doc">
-                                <input
-                                  type="text"
-                                  className="common-fonts ds-setup-input"
-                                  placeholder="Enter bank approval letter"
-                                />
-                                <button className="common-save-button">
-                                  Save
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
                       </tbody>
                     </table>
                   </div>
                   <div className="ds-setup-add">
                     <button
                       className="common-save-button"
-                      onClick={handleAddDocument}
+                      onClick={handleOpenDocumentModal}
                     >
-                      Add Document Feild
+                      Add Document
                     </button>
                   </div>
                 </>
@@ -390,6 +348,11 @@ const DealsSetup = () => {
         <button className="common-white-button">Cancel</button>
         <button className="common-save-button cp-save">Save</button>
       </div>
+      {
+        isDocumentModalOpen && (
+          <AddComponent onClose={handleCloseDocumentModal}/>
+        )
+      }
     </div>
   );
 };

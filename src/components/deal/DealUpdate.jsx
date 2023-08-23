@@ -24,7 +24,6 @@ const DealUpdate = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
-  const [selectedArrowIndex, setSelectedArrowIndex] = useState(0);
 
   const stages = [
     "Enquiry received",
@@ -166,30 +165,38 @@ const DealUpdate = () => {
           >
             <img src={GreaterLeft} alt="" class="deals-arrow-left" />
           </button>
-          {visibleStages.map((stage, index) => (
-            <div
-              className={`arrow-pointer ${
-                selectedArrowIndex === index
-                  ? "arrow-blue"
-                  : selectedArrowIndex > index
-                  ? "arrow-green"
-                  : "arrow-white"
-              }`}
-              style={{
-                backgroundColor:
-                  selectedArrowIndex === index
-                    ? "blue"
-                    : selectedArrowIndex > index
-                    ? "green"
-                    : "#f3f3f3",
-              }}
-              onClick={() => setSelectedArrowIndex(index)}
-            >
-              <p className={`common-fonts arrow-text arrow-text-3`}>
-                {stage} (9999 days)
-              </p>
-            </div>
-          ))}
+
+          {/* <div className="arrow-pointer">
+            <p className="common-fonts arrow-text">enquiry received (888 days)</p>
+          </div>
+          <div className="arrow-pointer arrow-pointer-2">
+            <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
+          </div> */}
+          {visibleStages.map((cards, index) => {
+            return (
+              <div
+                className={` arrow-pointer ${
+                  cards === "Enquiry received" ? "arrow-blue" : ""
+                }`}
+                style={{
+                  backgroundColor:
+                    cards === "Enquiry received" ? "#2b74da" : "#f3f3f3",
+                  color: cards === "Enquiry received" ? "green" : "#1e2224",
+                }}
+                key={index}
+              >
+                <p
+                  className="common-fonts arrow-text"
+                  style={{
+                    color: cards === "Enquiry received" ? "white" : "#1e2224",
+                  }}
+                >
+                  {" "}
+                  {cards} (3 days)
+                </p>
+              </div>
+            );
+          })}
 
           <button
             className="arrow-scroll-right"
