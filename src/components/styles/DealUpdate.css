@@ -46,13 +46,14 @@
 }
 
 .dealLeftSection {
-  width: 28%;
-  overflow: hidden;
+  width: 25%;
+  height: 70vh;
+  overflow-y: scroll;
   margin-right: 1rem;
 }
 
 .divRightSection {
-  width: 72%;
+  width: 73%;
   background-color: #F6F7F8;
 }
 
