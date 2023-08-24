@@ -2,6 +2,7 @@ import React from 'react'
 import "../styles/DealUpdate.css";
 import { useState } from 'react';
 import DealsSetup from './DealsSetup.jsx';
+import Pipeline from './PipelineWorkflow/Pipeline.jsx';
 
 
 const SettingDeal = () => {
@@ -36,7 +37,7 @@ const SettingDeal = () => {
        }
        {
         activeTab === "pipeline" && (
-          <div></div>
+          <Pipeline/>
         )
        }
       
