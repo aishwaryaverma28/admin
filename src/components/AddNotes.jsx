@@ -12,6 +12,8 @@ import {
   getDecryptedToken,
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
+import bin from "../assets/image/TrashFill.svg";
+import pin from "../assets/image/pin.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,6 +26,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
   const [stateAdd, setStateAdd] = useState(0);
   const [stateBtn, setStateBtn] = useState(0);
   const [isIndex, setIsIndex] = useState(-1);
+  const [originalContents, setOriginalContents] = useState([]);
   const decryptedToken = getDecryptedToken();
 
   useEffect(() => {
@@ -39,8 +42,8 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data);
           setNotes(response?.data?.data);
+          setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -59,8 +62,8 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data);
           setNotes(response?.data?.data);
+          setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -73,7 +76,6 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         });
     }
   };
-
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
     setStateAdd(1);
@@ -113,6 +115,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
   };
 
   const handleEditorChange = (content, id) => {
+    console.log(content, id)
     setContent(content);
     setStateBtn(1);
   };
@@ -260,7 +263,9 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                         </p>
 
                         <div className="three-side-dots">
-                          <img src={ThreeDots} alt="ddd" />
+                          {/* <img src={ThreeDots} alt="ddd" /> */}
+                          <img src={pin} alt="pin" title="Pin"/>
+                          <img src={bin} alt="trash" title="Delete" onClick={() => handleDeleteNote(note.id)}/>
                         </div>
                       </div>
                     </div>
@@ -296,10 +301,16 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                   }}
                 >
                   <button
-                    className="note-discard-btn"
-                    onClick={() => handleDeleteNote(note.id)}
+                    className="note-discard-btn"  
+                    onClick={() => {
+                      const originalNote = originalContents.find((originalNote) => originalNote.id === note.id);
+                      if (originalNote) {
+                        handleEditorChange(originalNote.description, note.id);
+                        setStateBtn(0); // Reset save button state
+                      }
+                    }}    
                   >
-                    Delete
+                    Discard
                   </button>
                   {stateBtn === 0 ? (
                     <button disabled className="disabledBtn">

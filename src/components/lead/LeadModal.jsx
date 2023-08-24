@@ -112,20 +112,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         console.log(error);
       });
   };
-  const getStatusBackgroundColor2 = () => {
-    switch (editedItem?.priority) {
-      case "Imp":
-        return "#ff4040";
-      case "Avg":
-        return "#ffb42e";
-      case "Cool":
-        return "#2e75ff";
-
-      default:
-        return "";
-    }
-  };
-
+  
   const getStatusBackgroundColor = () => {
     switch (editedItem?.status) {
       case "New":
