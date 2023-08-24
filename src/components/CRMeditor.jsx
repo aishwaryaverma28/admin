@@ -10,16 +10,15 @@ function CRMeditor({ onDataTransfer, initialContent }) {
     setValue(initialContent);
   }, [initialContent]);
 
-  const handleQuillChange = (newValue) => {
-    setValue(newValue);
-    onDataTransfer(newValue); 
+  const handleQuillChange = (value) => {
+    setValue(value);
+    onDataTransfer(value); 
   };
-
   const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-    ],
-  };
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+        ],
+      };
     
   return <ReactQuill theme="snow" value={value} onChange={handleQuillChange} modules={modules} className="quillEditor"/>;
 }
