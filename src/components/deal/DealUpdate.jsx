@@ -19,7 +19,26 @@ const DealUpdate = () => {
   const decryptedToken = getDecryptedToken();
   const [labelData, setLabelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dealDetails, setDealDetails] = useState({});
+  const [dealDetails, setDealDetails] = useState({
+    closure_date: "",
+contact: "",
+deal_name: "",
+doc_number: "",
+document_verified:0,
+email: "",
+is_deleted: 0,
+label_coloure: "",
+label_id: null,
+label_name: "",
+mobile: "",
+organization: "",
+ownerf_name: "",
+ownerl_name: "",
+pipeline_id: 1,
+probability: "",
+status: "",
+value: null,
+  });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
@@ -130,9 +149,29 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        setDealDetails(response?.data?.data[0]);
+        const details = response?.data?.data[0];
+setDealDetails({
+  ...dealDetails,
+  closure_date: details.closure_date,
+  contact: details.contact,
+  deal_name: details.deal_name,
+  doc_number: details.doc_number,
+  document_verified: details.document_verified,
+  email: details.email,
+  is_deleted: details.is_deleted,
+  label_coloure: details.label_coloure,
+  label_id: details.label_id,
+  label_name: details.label_name,
+  mobile: details.mobile,
+  organization: details.organization,
+  ownerf_name: details.ownerf_name,
+  ownerl_name: details.ownerl_name,
+  pipeline_id: 1,
+  probability: details.probability,
+  status: details.status,
+  value: details.value,
+})
         console.log(response.data.data[0]);
-        console.log("helo");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -140,6 +179,7 @@ const DealUpdate = () => {
         setIsLoading(false);
       });
   };
+  console.log(dealDetails);
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -196,11 +236,6 @@ const DealUpdate = () => {
     setIsDisabled(!isDisabled);
   };
 
-  const handleNameChange = (e) => {
-    setValue(e.target.value);
-    setStateBtn(1);
-  };
-
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("deals"))
     .map((item) => ({
@@ -247,17 +282,16 @@ const DealUpdate = () => {
       const selectedLabelData = mergedLabels.find(
         (label) => label.id === parseInt(value)
       );
-      setEditedItem({
-        ...editedItem,
+      setDealDetails({
+        ...dealDetails,
         label_id: selectedLabelData.id,
       });
     } else {
-      setEditedItem({
-        ...editedItem,
+      setDealDetails({
+        ...dealDetails,
         [name]: value,
       });
     }
-
     setStateBtn(1);
   };
   return (
@@ -379,6 +413,7 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
+                        name="value"
                         value={dealDetails?.value}
                         onChange={handleInputChange}
                         style={
@@ -446,6 +481,7 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
+                        name="organization"
                         value={dealDetails?.organization}
                         onChange={handleInputChange}
                         style={
@@ -491,6 +527,7 @@ const DealUpdate = () => {
                             ? formatDate(dealDetails.closure_date)
                             : ""
                         }
+                        name="closure_date"
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -552,7 +589,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -574,6 +610,7 @@ const DealUpdate = () => {
                         type="text"
                         value={dealDetails?.mobile}
                         onChange={handleInputChange}
+                        name="mobile"
                         style={
                           isEditable ? editStylingInput : normalStylingInput
                         }
@@ -633,7 +670,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -650,7 +686,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -667,7 +702,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -684,7 +718,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -701,7 +734,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -718,7 +750,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -735,7 +766,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -752,7 +782,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -769,7 +798,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -786,7 +814,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -803,7 +830,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -820,7 +846,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -837,7 +862,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -854,7 +878,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -871,7 +894,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -888,7 +910,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -905,7 +926,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -923,7 +943,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -940,7 +959,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -957,7 +975,6 @@ const DealUpdate = () => {
                     <span>
                       <input
                         type="text"
-                        value={"-"}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
