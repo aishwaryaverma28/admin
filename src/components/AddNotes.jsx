@@ -28,6 +28,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
   const [isIndex, setIsIndex] = useState(-1);
   const [originalContents, setOriginalContents] = useState([]);
   const decryptedToken = getDecryptedToken();
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
     fetchNotes();
@@ -44,17 +45,16 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         .then((response) => {
           setNotes(response?.data?.data);
           setOriginalContents(response?.data?.data);
-        })
+      })
+
         .catch((error) => {
           console.log(error);
-          if (
-            error?.response?.data?.message === "Invalid or expired token."
-          ) {
+          if (error?.response?.data?.message === "Invalid or expired token.") {
             alert(error?.response?.data?.message);
             handleLogout();
           }
         });
-    }else if (type === "deal") {
+    } else if (type === "deal") {
       axios
         .get(GETNOTEDEAL + id, {
           headers: {
@@ -67,9 +67,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         })
         .catch((error) => {
           console.log(error);
-          if (
-            error?.response?.data?.message === "Invalid or expired token."
-          ) {
+          if (error?.response?.data?.message === "Invalid or expired token.") {
             alert(error?.response?.data?.message);
             handleLogout();
           }
@@ -88,7 +86,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
       description: dataFromChild,
       importance: 1,
       created_by: "aishwarya",
-      label_id:1,
+      label_id: 1,
     };
 
     axios
@@ -101,9 +99,9 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
         toast.success("Notes added successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
+          position: "top-center",
+          autoClose: 2000,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -115,7 +113,6 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
   };
 
   const handleEditorChange = (content, id) => {
-    console.log(content, id)
     setContent(content);
     setStateBtn(1);
   };
@@ -132,7 +129,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         source_type: "source -2",
         type: type,
         attr2: "attr2",
-        label_id:1,
+        label_id: 1,
       };
       const updatedNotes = notes.map((note) =>
         note.id === id ? updatedNote : note
@@ -148,21 +145,21 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         .then((response) => {
           fetchNotes();
           toast.success("Note updated successfully", {
-            position:"top-center",
-            autoClose:2000
-          })
+            position: "top-center",
+            autoClose: 2000,
+          });
         })
         .catch((error) => {
           console.log(error);
         });
-        setStateBtn(0);
+      setStateBtn(0);
     }
   };
   const handleDeleteNote = (id) => {
     const updatedFormData = {
-      "notes": [id],
-      "source_type": type,
-  }
+      notes: [id],
+      source_type: type,
+    };
     axios
       .post(MOVENOTE_TO_TRASH, updatedFormData, {
         headers: {
@@ -174,9 +171,9 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         setNotes(updatedNotes);
         onNotesNum();
         toast.success("Note moved to trash successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
+          position: "top-center",
+          autoClose: 2000,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -264,8 +261,13 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
 
                         <div className="three-side-dots">
                           {/* <img src={ThreeDots} alt="ddd" /> */}
-                          <img src={pin} alt="pin" title="Pin"/>
-                          <img src={bin} alt="trash" title="Delete" onClick={() => handleDeleteNote(note.id)}/>
+                          <img src={pin} alt="pin" title="Pin" />
+                          <img
+                            src={bin}
+                            alt="trash"
+                            title="Delete"
+                            onClick={() => handleDeleteNote(note.id)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -287,10 +289,22 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                 }
               >
                 <div className="formEditor2">
-                  <CRMeditor
-                    onDataTransfer={(data) => handleEditorChange(data, note.id)}
-                    initialContent={note.description}
-                  />
+                  {number === 0 && (
+                    <CRMeditor
+                      onDataTransfer={(data) =>
+                        handleEditorChange(data, note.id)
+                      }
+                      initialContent={note.description}
+                    />
+                  )}
+                  {number === 1 && (
+                    <CRMeditor
+                      onDataTransfer={(data) =>
+                        handleEditorChange(data, note.id)
+                      }
+                      initialContent={note.description}
+                    />
+                  )}
                 </div>
                 <div
                   className="notes-btn"
@@ -301,14 +315,17 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                   }}
                 >
                   <button
-                    className="note-discard-btn"  
+                    className="note-discard-btn"
                     onClick={() => {
-                      const originalNote = originalContents.find((originalNote) => originalNote.id === note.id);
+                      const originalNote = originalContents.find(
+                        (originalNote) => originalNote.id === note.id
+                      );
                       if (originalNote) {
                         handleEditorChange(originalNote.description, note.id);
                         setStateBtn(0); // Reset save button state
+                        setNumber(number===0 ? 1 : 0);
                       }
-                    }}    
+                    }}
                   >
                     Discard
                   </button>
