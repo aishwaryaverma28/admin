@@ -15,6 +15,10 @@
   cursor: pointer;
 }
 
+.fa-pen{
+  cursor: pointer;
+}
+
 .dealName {
   color: #1e2224;
   font-family: "Lexend Deca";
@@ -27,24 +31,35 @@
 }
 
 .dealcontainer {
-  border: 2px solid red;
   display: flex;
-  padding: 10px 30px;
+  justify-content: start;
+  align-items: start;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  
+}
+
+.detailsContent {
+  margin-bottom: 10px;
 }
 
 .dealLeftSection {
-  width: 25%;
-  border: 2px solid aqua;
-  overflow-y: scroll;
+  width: 28%;
+  overflow: hidden;
+  margin-right: 1rem;
 }
 
 .divRightSection {
-  width: 75%;
+  width: 72%;
+  background-color: #F6F7F8;
 }
 
 .summaryDiv {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .summaryDiv p {
@@ -55,14 +70,39 @@
   line-height: normal;
   letter-spacing: -0.02563rem;
   text-transform: uppercase;
+  color: #33475B;
+}
+
+.dealsLeftContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width:10rem;
+}
+
+.dealsLeftContainer p {
+  color: #4b5054;
+  font-family: "Lexend Deca";
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .dealSectionHead > i {
   margin-right: 0.7rem;
 }
 
+.dealSectionHead{
+  cursor: pointer;
+}
+
 .addProduct {
-  color: #2b74da;
+  color: #2b74da !important;
 }
 
 .addProduct > i {
@@ -92,8 +132,6 @@
   border-bottom: 1.25rem solid transparent;
 }
 
-
-
 .arrow-pointer:before {
   content: "";
   position: absolute;
@@ -107,17 +145,13 @@
   border-bottom: 1.25rem solid transparent;
 }
 
-
-
-
-.arrow-blue::before{
-  border-left: 1rem solid  #2b74da;
+.arrow-blue::before {
+  border-left: 1rem solid #2b74da;
 }
 
-.arrow-green::before{
-  border-left: 1rem solid  green;
+.arrow-green::before {
+  border-left: 1rem solid green;
 }
-
 
 .arrow-section {
   padding: 10px 30px;
@@ -127,7 +161,6 @@
   align-items: center;
   color: #1e2224;
 }
-
 
 .arrow-text {
   font-size: 0.8125rem;
@@ -290,13 +323,7 @@
   border-bottom: 1.25rem solid transparent;
 }
 
-
-
-
-
 /* Rest of your CSS styles ... */
-
-
 
 /* arrow css starts ends */
 
@@ -418,7 +445,7 @@
   margin-bottom: 1.5rem;
 }
 
-.ds-setup-table td{
+.ds-setup-table td {
   background-color: var(--white);
 }
 
@@ -431,7 +458,7 @@
   width: 100%;
 }
 
-.ds-setup-add{
+.ds-setup-add {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -440,31 +467,51 @@
   margin-bottom: 2rem;
 }
 
-.ds-setup-input{
+.ds-setup-input {
   border: none;
   border-radius: 0.3125rem;
-background: var(--input-background);
-padding: 0.5rem;
-width: 40%;
+  background: var(--input-background);
+  padding: 0.5rem;
+  width: 40%;
 }
 
-.ds-setup-doc{
+.ds-setup-doc {
   font-size: 1.125rem;
   font-weight: 600;
 }
 
-.ds-setup-save-doc{
-  display:flex;
+.ds-setup-save-doc {
+  display: flex;
   justify-content: start;
   align-items: center;
 }
 
-.ds-setup-save-doc button{
+.ds-setup-save-doc button {
   margin-left: 1rem;
 }
 
 /* setting deals css ends */
 
-.add-component-input{
-  width:100%;
+.add-component-input {
+  width: 100%;
 }
+
+/* update deal select css  */
+.ud-stages {
+  padding: 10px 30px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.ud-stage-name {
+  margin-right: 0.5rem;
+}
+
+.ud-select {
+  color: var(--ternary);
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+}
+/* update deal select css ends */

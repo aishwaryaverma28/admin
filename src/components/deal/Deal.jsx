@@ -274,7 +274,7 @@ const Deal = () => {
   };
 
   const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("leads"))
+    .filter((item) => item?.entity?.includes("deals"))
     .map((item) => ({
       id: item?.id,
       name: item?.name,
