@@ -19,25 +19,27 @@ const DealUpdate = () => {
   const decryptedToken = getDecryptedToken();
   const [labelData, setLabelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedLabelColor, setSelectedLabelColor] = useState("");
+
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
-contact: "",
-deal_name: "",
-doc_number: "",
-document_verified:0,
-email: "",
-is_deleted: 0,
-label_coloure: "",
-label_id: null,
-label_name: "",
-mobile: "",
-organization: "",
-ownerf_name: "",
-ownerl_name: "",
-pipeline_id: 1,
-probability: "",
-status: "",
-value: null,
+    contact: "",
+    deal_name: "",
+    doc_number: "",
+    document_verified: 0,
+    email: "",
+    is_deleted: 0,
+    label_coloure: "",
+    label_id: null,
+    label_name: "",
+    mobile: "",
+    organization: "",
+    ownerf_name: "",
+    ownerl_name: "",
+    pipeline_id: 1,
+    probability: "",
+    status: "",
+    value: null,
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -52,13 +54,13 @@ value: null,
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
-  }
+  };
   const handleCompany = () => {
     setIsCompanyOpen(!isCompanyOpen);
-  }
+  };
   const handleDetails = () => {
     setIsDetailsOpen(!isDetailsOpen);
-  }
+  };
 
   const stages = [
     "Enquiry received",
@@ -115,14 +117,39 @@ value: null,
     height: "2rem",
   };
 
+  const normalStyling = {
+    textAlign: "left",
+    fontFamily: "Lexend Deca",
+    fontSize: "1.125rem",
+    fontWeight: 500,
+    color: "#1e2224",
+    lineHeight: "17px",
+    border: "1px solid transparent",
+    width: "100%",
+    backgroundColor: "white",
+    padding: "0.5rem",
+  };
+
+  const editStyling = {
+    border: "1px solid #dcdcdc",
+    textAlign: "left",
+    fontFamily: "Lexend Deca",
+    fontSize: "1.125rem",
+    fontWeight: 500,
+    color: "#1e2224",
+    lineHeight: "17px",
+    width: "100%",
+    padding: "0.5rem",
+  };
+
   const formatDate = (dateString) => {
     const dateObj = new Date(dateString);
     const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObj.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const visibleStages = stages.slice(currentIndex, currentIndex + 4);
@@ -150,27 +177,27 @@ value: null,
       })
       .then((response) => {
         const details = response?.data?.data[0];
-setDealDetails({
-  ...dealDetails,
-  closure_date: details.closure_date,
-  contact: details.contact,
-  deal_name: details.deal_name,
-  doc_number: details.doc_number,
-  document_verified: details.document_verified,
-  email: details.email,
-  is_deleted: details.is_deleted,
-  label_coloure: details.label_coloure,
-  label_id: details.label_id,
-  label_name: details.label_name,
-  mobile: details.mobile,
-  organization: details.organization,
-  ownerf_name: details.ownerf_name,
-  ownerl_name: details.ownerl_name,
-  pipeline_id: 1,
-  probability: details.probability,
-  status: details.status,
-  value: details.value,
-})
+        setDealDetails({
+          ...dealDetails,
+          closure_date: details.closure_date,
+          contact: details.contact,
+          deal_name: details.deal_name,
+          doc_number: details.doc_number,
+          document_verified: details.document_verified,
+          email: details.email,
+          is_deleted: details.is_deleted,
+          label_coloure: details.label_coloure,
+          label_id: details.label_id,
+          label_name: details.label_name,
+          mobile: details.mobile,
+          organization: details.organization,
+          ownerf_name: details.ownerf_name,
+          ownerl_name: details.ownerl_name,
+          pipeline_id: 1,
+          probability: details.probability,
+          status: details.status,
+          value: details.value,
+        });
         console.log(response.data.data[0]);
         setIsLoading(false);
       })
@@ -234,6 +261,7 @@ setDealDetails({
     e.preventDefault();
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
+    setStateBtn(0)
   };
 
   const mergedLabels = labelData
@@ -244,8 +272,17 @@ setDealDetails({
       colour_code: item?.colour_code,
     }));
 
+  console.log("kkjj");
+  console.log(mergedLabels);
+
   const normalStylingSelect1 = {
-    backgroundColor: dealDetails?.label_coloure,
+    backgroundColor:
+      selectedLabelColor === ""
+        ? dealDetails?.label_id
+          ? mergedLabels.find((label) => label.id === dealDetails?.label_id)
+              ?.colour_code
+          : ""
+        : selectedLabelColor,
     color: "white !important",
     fontSize: " 0.8rem",
     fontFamily: '"Lexend Deca", sans-serif',
@@ -278,22 +315,21 @@ setDealDetails({
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "label") {
-      const selectedLabelData = mergedLabels.find(
-        (label) => label.id === parseInt(value)
-      );
-      setDealDetails({
-        ...dealDetails,
-        label_id: selectedLabelData.id,
-      });
-    } else {
-      setDealDetails({
-        ...dealDetails,
-        [name]: value,
-      });
+    if (name === "label_name") {
+      const selectedLabel = mergedLabels.find((label) => label.name === value);
+      if (selectedLabel) {
+        setSelectedLabelColor(selectedLabel.colour_code);
+      }
     }
+
+    setDealDetails({
+      ...dealDetails,
+      [name]: value,
+    });
+
     setStateBtn(1);
   };
+
   return (
     <>
       <div className="backToDeal">
@@ -302,7 +338,24 @@ setDealDetails({
             <img src={LeftArrow} alt="" />
           </button>
         </Link>
-        <p className="dealName">{dealDetails.deal_name}</p>
+        <p>
+          {isLoading ? (
+            <span>-</span>
+          ) : (
+            <>
+              {" "}
+              <input
+                type="text"
+                name="deal_name"
+                value={dealDetails?.deal_name}
+                onChange={handleInputChange}
+                style={isEditable ? editStyling : normalStyling}
+                disabled={isDisabled}
+              />
+              <br />
+            </>
+          )}
+        </p>
         <i className="fa-solid fa-pen" onClick={toggleEditable}></i>
         <i className="fas fa-ellipsis-h"></i>
       </div>
@@ -382,613 +435,624 @@ setDealDetails({
           <section>
             <div className="summaryDiv">
               <p className="dealSectionHead" onClick={handleSummary}>
-              {
-                isSummaryOpen ? <i class="fa-sharp fa-solid fa-angle-up"></i> : <i class="fa-sharp fa-solid fa-angle-down"></i>
-              }
-    
+                {isSummaryOpen ? (
+                  <i class="fa-sharp fa-solid fa-angle-up"></i>
+                ) : (
+                  <i class="fa-sharp fa-solid fa-angle-down"></i>
+                )}
                 Summary
               </p>
               <p className="addProduct">
                 <i class="fa-sharp fa-solid fa-plus"></i>Add Product
               </p>
             </div>
-            {
-              isSummaryOpen && (
+            {isSummaryOpen && (
+              <div className="detailsContent">
+                <div className="dealsLeftContainer">
+                  <p>Value</p>
+                  <p>Lable</p>
+                  <p>Contact Person</p>
+                  <p>Organization</p>
+                  <p>Owner First Name</p>
+                  <p>Owner Last Name</p>
+                  <p>Closing Date</p>
+                </div>
 
-                <div className="detailsContent">
-              <div className="dealsLeftContainer">
-                <p>Value</p>
-                <p>Lable</p>
-                <p>Contact Person</p>
-                <p>Organization</p>
-                <p>Owner</p>
-                <p>Closing Date</p>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="value"
+                          value={dealDetails?.value}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <select
+                          name="label_name"
+                          id="label_name"
+                          value={dealDetails?.label_name || ""}
+                          onChange={handleInputChange}
+                          disabled={isDisabled}
+                          style={
+                            isEditable
+                              ? editStylingSelect1
+                              : normalStylingSelect1
+                          }
+                          className={isDisabled ? "disabled" : ""}
+                        >
+                          {mergedLabels.map((item) => (
+                            <option key={item?.id} value={item?.name}>
+                              {item?.name}
+                            </option>
+                          ))}
+                        </select>
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="organization"
+                          value={dealDetails?.organization}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="ownerf_name"
+                          value={dealDetails?.ownerf_name}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="ownerl_name"
+                          value={dealDetails?.ownerl_name}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="date"
+                          value={
+                            dealDetails?.closure_date
+                              ? formatDate(dealDetails.closure_date)
+                              : ""
+                          }
+                          name="closure_date"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
-
-              <div className="detailsRightContainer">
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="value"
-                        value={dealDetails?.value}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <select
-                        name="label_name"
-                        id="label_name"
-                        value={dealDetails?.label_name || ""}
-                        onChange={handleInputChange}
-                        disabled={isDisabled}
-                        style={
-                          isEditable ? editStylingSelect1 : normalStylingSelect1
-                        }
-                        className={isDisabled ? "disabled" : ""}
-                      >
-                        {dealDetails.label_name && (
-                          <option value={dealDetails.label_name}>
-                            {dealDetails.label_name}
-                          </option>
-                        )}
-                        {mergedLabels.map((item) => (
-                          <option key={item?.id} value={item?.id}>
-                            {item?.name}
-                          </option>
-                        ))}
-                      </select>
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        value={"-"}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="organization"
-                        value={dealDetails?.organization}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        value={
-                          dealDetails?.ownerf_name +
-                          " " +
-                          dealDetails?.ownerl_name
-                        }
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="date"
-                        value={
-                          dealDetails?.closure_date
-                            ? formatDate(dealDetails.closure_date)
-                            : ""
-                        }
-                        name="closure_date"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
-
-              )
-            }
-
+            )}
 
             <div className="summaryDiv">
               <p className="dealSectionHead" onClick={handleCompany}>
-              {
-                isCompanyOpen ? <i class="fa-sharp fa-solid fa-angle-up"></i> : <i class="fa-sharp fa-solid fa-angle-down"></i>
-              }
+                {isCompanyOpen ? (
+                  <i class="fa-sharp fa-solid fa-angle-up"></i>
+                ) : (
+                  <i class="fa-sharp fa-solid fa-angle-down"></i>
+                )}
                 Company
               </p>
             </div>
 
-            {
-              isCompanyOpen && (
+            {isCompanyOpen && (
+              <div className="detailsContent">
+                <div className="dealsLeftContainer">
+                  <p>Name</p>
+                  <p>Address</p>
+                  <p>Phone No</p>
+                </div>
 
-                
-            <div className="detailsContent">
-              <div className="dealsLeftContainer">
-                <p>Name</p>
-                <p>Address</p>
-                <p>Phone No</p>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="organization"
+                          value={dealDetails?.organization}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          value={dealDetails?.mobile}
+                          onChange={handleInputChange}
+                          name="mobile"
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
-
-              <div className="detailsRightContainer">
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        value={dealDetails?.organization}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-
-
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        value={dealDetails?.mobile}
-                        onChange={handleInputChange}
-                        name="mobile"
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
-
-              )
-            }
-
+            )}
 
             <div className="summaryDiv">
               <p className="dealSectionHead" onClick={handleDetails}>
-              {
-                isDetailsOpen ? <i class="fa-sharp fa-solid fa-angle-up"></i> : <i class="fa-sharp fa-solid fa-angle-down"></i>
-              }
+                {isDetailsOpen ? (
+                  <i class="fa-sharp fa-solid fa-angle-up"></i>
+                ) : (
+                  <i class="fa-sharp fa-solid fa-angle-down"></i>
+                )}
                 Details
               </p>
             </div>
 
-            {
-              isDetailsOpen && (
-                
-            <div className="detailsContent">
-              <div className="dealsLeftContainer">
-                <p>Introducer Name</p>
-                <p>Introducer Firm Name</p>
-                <p>Data Enquiry Recieve</p>
-                <p>Borrower Entry</p>
-                <p>Security Value</p>
-                <p>Loan Amount</p>
-                <p>Deposit</p>
-                <p>Type Of Security</p>
-                <p>Loan Type</p>
-                <p>Lender</p>
-                <p>Lead Source</p>
-                <p>Engagement Fee</p>
-                <p>Engagement Fee Paid</p>
-                <p>Broker Fee</p>
-                <p>Broker Fee Paid</p>
-                <p>Procuration Fee</p>
-                <p>Procuration Fee Paid</p>
-                <p>Deal Commission</p>
-                <p>Completion Date</p>
-                <p>Commercial Finance-File Completion Checklist</p>
-              </div>
+            {isDetailsOpen && (
+              <div className="detailsContent">
+                <div className="dealsLeftContainer">
+                  <p>Introducer Name</p>
+                  <p>Introducer Firm Name</p>
+                  <p>Data Enquiry Recieve</p>
+                  <p>Borrower Entry</p>
+                  <p>Security Value</p>
+                  <p>Loan Amount</p>
+                  <p>Deposit</p>
+                  <p>Type Of Security</p>
+                  <p>Loan Type</p>
+                  <p>Lender</p>
+                  <p>Lead Source</p>
+                  <p>Engagement Fee</p>
+                  <p>Engagement Fee Paid</p>
+                  <p>Broker Fee</p>
+                  <p>Broker Fee Paid</p>
+                  <p>Procuration Fee</p>
+                  <p>Procuration Fee Paid</p>
+                  <p>Deal Commission</p>
+                  <p>Completion Date</p>
+                  <p>Commercial Finance-File Completion Checklist</p>
+                </div>
 
-              <div className="detailsRightContainer">
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-               
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
-              )
-            }
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
 
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
+            <div className="deal-update-btn">
+            {stateBtn === 0 ? (
+              <button disabled className="disabledBtn ">
+                Update
+              </button>
+            ) : (
+              <button className="convertToDeal">Update</button>
+            )}
+           </div>
+  
           </section>
         </div>
         <div className="divRightSection">
