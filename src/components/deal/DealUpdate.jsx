@@ -209,27 +209,26 @@ const DealUpdate = () => {
           probability: details.probability,
           status: details.status,
           value: details.value,
-          introducer_name:details.introducer_name,
-          introducer_firm_name:details.introducer_firm_name,
+          introducer_name: details.introducer_name,
+          introducer_firm_name: details.introducer_firm_name,
           data_enquiry_receive: details.data_enquiry_receive,
-          borrower_entry:details.borrower_entry,
-          security_value:details.security_value,
-          loan_amount:details.loan_amount,
-          deposit:details.deposit,
-          type_of_security:details.type_of_security,
-          loan_type:details.loan_type,
-          lender:details.lender,
-          lead_source:details.lead_source,
-          engagement_fee:details.engagement_fee,
-          engagement_fee_paid:details.engagement_fee_paid,
-          broker_fee:details.broker_fee,
-          broker_fee_paid:details.broker_fee_paid,
-          procuration_fee:details.procuration_fee,
-          procuration_fee_paid:details.procuration_fee_paid,
-          deal_commission:details.deal_commission,
-          completion_date:details.completion_date,
+          borrower_entry: details.borrower_entry,
+          security_value: details.security_value,
+          loan_amount: details.loan_amount,
+          deposit: details.deposit,
+          type_of_security: details.type_of_security,
+          loan_type: details.loan_type,
+          lender: details.lender,
+          lead_source: details.lead_source,
+          engagement_fee: details.engagement_fee,
+          engagement_fee_paid: details.engagement_fee_paid,
+          broker_fee: details.broker_fee,
+          broker_fee_paid: details.broker_fee_paid,
+          procuration_fee: details.procuration_fee,
+          procuration_fee_paid: details.procuration_fee_paid,
+          deal_commission: details.deal_commission,
+          completion_date: details.completion_date,
         });
-        console.log(response.data.data[0]);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -237,7 +236,7 @@ const DealUpdate = () => {
         setIsLoading(false);
       });
   };
-  console.log(dealDetails);
+
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -286,13 +285,13 @@ const DealUpdate = () => {
         }
       });
   };
-  // console.log(notes);
+
 
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
-    setStateBtn(0)
+    setStateBtn(0);
   };
 
   const mergedLabels = labelData
@@ -302,9 +301,6 @@ const DealUpdate = () => {
       name: item?.name,
       colour_code: item?.colour_code,
     }));
-
-  console.log("kkjj");
-  console.log(mergedLabels);
 
   const normalStylingSelect1 = {
     backgroundColor:
@@ -408,28 +404,35 @@ const DealUpdate = () => {
           <div className="arrow-pointer arrow-pointer-2">
             <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
           </div> */}
-          {visibleStages.map((cards, index) => {
+          {visibleStages.map((stage, index) => {
+            const isActive =
+              status[currentIndex + index] === dealDetails.status;
+            const activeIndex = status.indexOf(dealDetails.status);
+
+            const backgroundColor = isActive
+              ? "#2b74da" 
+              : activeIndex >= currentIndex + index
+              ? "#077838" // 
+              : "#f3f3f3"; 
+            const textColor =
+              isActive ||
+              backgroundColor === "#077838" ||
+              backgroundColor === "#2b74da"
+                ? "white"
+                : "#1e2224";
+
+            const arrowClass = isActive
+              ? "arrow-blue"
+              : backgroundColor === "#077838"
+              ? "arrow-green"
+              : "";
             return (
               <div
-                className={` arrow-pointer ${
-                  cards === "Enquiry received" ? "arrow-blue" : ""
-                }`}
-                style={{
-                  backgroundColor:
-                    cards === "Enquiry received" ? "#2b74da" : "#f3f3f3",
-                  color: cards === "Enquiry received" ? "green" : "#1e2224",
-                }}
+                className={`arrow-pointer ${arrowClass}`}
+                style={{ backgroundColor, color: textColor }}
                 key={index}
               >
-                <p
-                  className="common-fonts arrow-text"
-                  style={{
-                    color: cards === "Enquiry received" ? "white" : "#1e2224",
-                  }}
-                >
-                  {" "}
-                  {cards} (3 days)
-                </p>
+                <p className="common-fonts arrow-text" style={{color:textColor}}>{stage} (3 days)</p>
               </div>
             );
           })}
@@ -1040,9 +1043,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                           type="number"
-                           name="procuration_fee_paid"
-                           value={dealDetails.procuration_fee_paid}
+                          type="number"
+                          name="procuration_fee_paid"
+                          value={dealDetails.procuration_fee_paid}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -1061,7 +1064,7 @@ const DealUpdate = () => {
                         <input
                           type="number"
                           name="deal_commission"
-                           value={dealDetails.deal_commission}
+                          value={dealDetails.deal_commission}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -1079,7 +1082,7 @@ const DealUpdate = () => {
                         <input
                           type="date"
                           name="completion_date"
-                           value={dealDetails.completion_date.split("T")[0]}
+                          value={dealDetails.completion_date.split("T")[0]}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -1109,15 +1112,14 @@ const DealUpdate = () => {
               </div>
             )}
             <div className="deal-update-btn">
-            {stateBtn === 0 ? (
-              <button disabled className="disabledBtn ">
-                Update
-              </button>
-            ) : (
-              <button className="convertToDeal">Update</button>
-            )}
-           </div>
-  
+              {stateBtn === 0 ? (
+                <button disabled className="disabledBtn ">
+                  Update
+                </button>
+              ) : (
+                <button className="convertToDeal">Update</button>
+              )}
+            </div>
           </section>
         </div>
         <div className="divRightSection">

@@ -151,7 +151,7 @@
 }
 
 .arrow-green::before {
-  border-left: 1rem solid green;
+  border-left: 1rem solid #077838;
 }
 
 .arrow-section {
