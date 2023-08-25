@@ -8,6 +8,7 @@ import axios from "axios";
 import {
   GETNOTEDEAL,
   GET_DEAL_ID,
+  UPDATE_DEAL,
   handleLogout,
   getDecryptedToken,
   GET_LABEL,
@@ -40,6 +41,25 @@ const DealUpdate = () => {
     probability: "",
     status: "",
     value: null,
+    introducer_name: "",
+    introducer_firm_name: "",
+    data_enquiry_receive: "",
+    borrower_entry: "",
+    security_value: null,
+    loan_amount: null,
+    deposit: null,
+    type_of_security: "",
+    loan_type: "",
+    lender: null,
+    lead_source: "",
+    engagement_fee: null,
+    engagement_fee_paid: null,
+    broker_fee: null,
+    broker_fee_paid: null,
+    procuration_fee: null,
+    procuration_fee_paid: null,
+    deal_commission: null,
+    completion_date: ""
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -142,14 +162,6 @@ const DealUpdate = () => {
     padding: "0.5rem",
   };
 
-  const formatDate = (dateString) => {
-    const dateObj = new Date(dateString);
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const visibleStages = stages.slice(currentIndex, currentIndex + 4);
@@ -197,6 +209,25 @@ const DealUpdate = () => {
           probability: details.probability,
           status: details.status,
           value: details.value,
+          introducer_name:details.introducer_name,
+          introducer_firm_name:details.introducer_firm_name,
+          data_enquiry_receive: details.data_enquiry_receive,
+          borrower_entry:details.borrower_entry,
+          security_value:details.security_value,
+          loan_amount:details.loan_amount,
+          deposit:details.deposit,
+          type_of_security:details.type_of_security,
+          loan_type:details.loan_type,
+          lender:details.lender,
+          lead_source:details.lead_source,
+          engagement_fee:details.engagement_fee,
+          engagement_fee_paid:details.engagement_fee_paid,
+          broker_fee:details.broker_fee,
+          broker_fee_paid:details.broker_fee_paid,
+          procuration_fee:details.procuration_fee,
+          procuration_fee_paid:details.procuration_fee_paid,
+          deal_commission:details.deal_commission,
+          completion_date:details.completion_date,
         });
         console.log(response.data.data[0]);
         setIsLoading(false);
@@ -586,11 +617,7 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="date"
-                          value={
-                            dealDetails?.closure_date
-                              ? formatDate(dealDetails.closure_date)
-                              : ""
-                          }
+                          value={dealDetails?.closure_date.split("T")[0]}
                           name="closure_date"
                           onChange={handleInputChange}
                           style={
@@ -726,6 +753,8 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="introducer_name"
+                          value={dealDetails.introducer_name}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -742,6 +771,8 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="introducer_name"
+                          value={dealDetails.introducer_firm_name}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -758,6 +789,8 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="data_enquiry_receive"
+                          value={dealDetails.data_enquiry_receive}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -774,6 +807,62 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="borrower_entry"
+                          value={dealDetails.borrower_entry}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="security_value"
+                          value={dealDetails.security_value}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="loan_amount"
+                          value={dealDetails.loan_amount}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="deposit"
+                          value={dealDetails.deposit}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -790,6 +879,8 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="type_of_security"
+                          value={dealDetails.type_of_security}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -806,6 +897,26 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="loan_type"
+                          value={dealDetails.loan_type}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="lender"
+                          value={dealDetails.lender}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -822,6 +933,8 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
+                          name="lead_source"
+                          value={dealDetails.lead_source}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -837,7 +950,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="engagement_fee"
+                          value={dealDetails.engagement_fee}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -853,7 +968,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="engagement_fee_paid"
+                          value={dealDetails.engagement_fee_paid}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -869,7 +986,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="broker_fee"
+                          value={dealDetails.broker_fee}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -885,7 +1004,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="broker_fee_paid"
+                          value={dealDetails.broker_fee_paid}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -901,7 +1022,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="procuration_fee"
+                          value={dealDetails.procuration_fee}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -917,71 +1040,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
+                           type="number"
+                           name="procuration_fee_paid"
+                           value={dealDetails.procuration_fee_paid}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -998,7 +1059,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="number"
+                          name="deal_commission"
+                           value={dealDetails.deal_commission}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -1014,7 +1077,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <input
-                          type="text"
+                          type="date"
+                          name="completion_date"
+                           value={dealDetails.completion_date.split("T")[0]}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
