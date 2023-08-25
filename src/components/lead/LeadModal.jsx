@@ -179,10 +179,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setName(e.target.value);
     setStateBtn(1);
   };
-  const handleOwnerChange = (e) => {
-    setOwner(e.target.value);
-    setStateBtn(1);
-  };
+  
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
