@@ -46,14 +46,14 @@
 }
 
 .dealLeftSection {
-  width: 25%;
+  width: 30%;
   height: 70vh;
   overflow-y: scroll;
   margin-right: 1rem;
 }
 
 .divRightSection {
-  width: 73%;
+  width: 70%;
   background-color: #F6F7F8;
 }
 
@@ -516,3 +516,14 @@
   cursor: pointer;
 }
 /* update deal select css ends */
+
+#label_name.disabled{
+  color:white !important;
+}
+
+.deal-update-btn{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-right: 0.5rem;
+}
