@@ -81,7 +81,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
 
   const handleAddNote = () => {
     const updatedFormData = {
-      source_id: item.id,
+      source_id: type === "lead" ? item.id : id,
       type: type,
       description: dataFromChild,
       importance: 1,
