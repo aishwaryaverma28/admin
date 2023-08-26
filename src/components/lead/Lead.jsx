@@ -2,9 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-// import LeadsColn from "../LeadsColn";
 import LeadCards from "./LeadCards";
-import CreateLead from "../CreateLead";
+import CreateLead from "./CreateLead";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
   GET_LEAD,
@@ -497,7 +496,6 @@ const Lead = () => {
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
                         onLeadAdded={fetchLeadsData}
-                        mergedLabels={mergedLabels}
                       />
                     );
                   }

@@ -15,8 +15,9 @@ import AddNotes from "./../AddNotes";
 import LeadDocUp from "./../LeadDocUp";
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CreateDeal from "../deal/CreateDeal";
 
-const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
+const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
@@ -32,6 +33,17 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [labelData, setLabelData] = useState([]);
   const [labelArray, setLabelArray] = useState([]);
+  const [selectedConvertItem, setSelectedConvertItem] = useState(null);
+  const [convertModalVisible, setConvertModalVisible] = useState(false);
+
+  const openConvertModal = (item) => {
+    setSelectedConvertItem(item); // Set the selected item
+    setConvertModalVisible(true); // Open the modal
+  };
+  const closeConvertModal = () => {
+    setSelectedConvertItem(null); // Clear the selected item
+    setConvertModalVisible(false); // Close the modal
+  };
 
   const fetchLead = () => {
     axios
@@ -92,11 +104,12 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
   useEffect(() => {
     fetchLead();
     userAdded();
-  }, []);
-
-  useEffect(() => {
     fetchLabelData();
   }, []);
+
+  // useEffect(() => {
+    
+  // }, []);
 
   const userAdded = () => {
     axios
@@ -826,7 +839,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
           </div>
           {isEditable ? (
             <div className="modalLeftBtnBox">
-              <button className="convertToDeal">Convert to deal</button>
+              <button className="convertToDeal" onClick={() => openConvertModal(selectedItem)}>Convert to deal</button>
               {stateBtn === 0 ? (
                 <button disabled className="disabledBtn">
                   Save
@@ -840,7 +853,7 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
           ) : (
             <div className="modalLeftBtnBox">
               <span></span>
-              <button className="convertToDeal">Convert to deal</button>
+              <button className="convertToDeal" onClick={() => openConvertModal(selectedItem)}>Convert to deal</button>
             </div>
           )}
         </div>
@@ -902,8 +915,16 @@ const Modal = ({ selectedItem, closeModal, onLeadAdded }) => {
         </div>
       </div>
        {/* modal container ends here */}
+       {convertModalVisible && (
+        <CreateDeal
+          isOpen={true}
+          onClose={closeConvertModal}
+          onLeadAdded={onLeadAdded}
+          selectedItem={selectedConvertItem} // Pass the selected item to modal
+        />
+      )}
     </div>
   );
 };
 
-export default Modal;
+export default LeadModal;

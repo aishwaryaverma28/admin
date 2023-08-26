@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 
-const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, mergedLabels }) => {
+const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded}) => {
   const decryptedToken = getDecryptedToken();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
@@ -188,7 +188,6 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, m
           isOpen={true}
           onClose={closeConvertModal}
           onLeadAdded={onLeadAdded}
-          mergedLabels={mergedLabels}
           selectedItem={selectedConvertItem} // Pass the selected item to modal
         />
       )}

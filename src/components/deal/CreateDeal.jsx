@@ -4,19 +4,45 @@ import { ADD_DEAL, getDecryptedToken, GET_LABEL } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import rectangleFill from "../../assets/image/Rectangle 70 Fill.svg";
-// import rectangle from "../../assets/image/Rectangle 70.svg";
-// import rectangle71 from "../../assets/image/Rectangle 71.svg";
-// import rectangle74 from "../../assets/image/Rectangle 74.svg";
+import { useNavigate } from "react-router-dom";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
+  const stages = [
+    "Enquiry received",
+    "contact made",
+    "illustration sent",
+    "all docs received",
+    "compliance",
+    "sourced",
+    "application received",
+    "valuation",
+    "formal offer",
+    "compliance check",
+    "legal",
+    "completion"
+  ];
+  const status = [
+    "enquiry_received",
+    "contact_made",
+    "illustration_sent",
+    "all_docs_received",
+    "compliance",
+    "sourced",
+    "application_received",
+    "valuation",
+    "formal_offer_sent",
+    "compliance_check",
+    "legals",
+    "completion"
+  ];
+
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
   // const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [labelData, setLabelData] = useState([]);
-  
+const navigate = useNavigate();
   const [leadData, setLeadData] = useState({
     probability: "",
     deal_name: "",
@@ -41,11 +67,29 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
         email: selectedItem.email,
         value: selectedItem.value,
         label_id: selectedItem.label_id,
-        status: selectedItem.status,
         pipeline_id: 1,
       });
     }
   }, [selectedItem]);
+
+  const fetchLabelData = async () => {
+    try {
+      const response = await axios.get(GET_LABEL, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      });
+      if (response.data.status === 1) {
+        setLabelData(response.data.data);
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     fetchLabelData();
@@ -72,26 +116,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
     setIsDisable(false);
   };
-
-  const fetchLabelData = async () => {
-    try {
-      const response = await axios.get(GET_LABEL, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      });
-      if (response.data.status === 1) {
-        setLabelData(response.data.data);
-      } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -122,7 +146,8 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
           lead_id: 0,
         });
         // setName("");
-        onLeadAdded(); // Call the onLeadAdded function from props
+        onLeadAdded();
+        navigate("/lp/deals");
       })
       .catch((error) => {
         console.log(error);
@@ -137,35 +162,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
     colour_code: item?.colour_code,
   }));
 
-  const stages = [
-    "Enquiry received",
-    "contact made",
-    "illustration sent",
-    "all docs received",
-    "compliance",
-    "sourced",
-    "application received",
-    "valuation",
-    "formal offer",
-    "compliance check",
-    "legal",
-    "completion"
-  ];
-  const status = [
-    "enquiry_received",
-    "contact_made",
-    "illustration_sent",
-    "all_docs_received",
-    "compliance",
-    "sourced",
-    "application_received",
-    "valuation",
-    "formal_offer_sent",
-    "compliance_check",
-    "legals",
-    "completion"
-  ];
-
+  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
