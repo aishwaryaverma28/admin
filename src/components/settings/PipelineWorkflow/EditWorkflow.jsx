@@ -11,11 +11,11 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 const initialNodes = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "Enquiry Recieved" } },
-  { id: "2", position: { x: 200, y: 0 }, data: { label: "Qualification" } },
-  { id: "3", position: { x: 400, y: 0 }, data: { label: "Site Visited" } },
-  { id: "4", position: { x: 600, y: 0 }, data: { label: "All docs Recieved" } },
-  { id: "5", position: { x: 800, y: 0 }, data: { label: "Compliance" } },
+  { id: "1", position: { x: 50, y: 50 }, data: { label: "Enquiry Recieved" } },
+  { id: "2", position: { x: 250, y: 50 }, data: { label: "Qualification" } },
+  { id: "3", position: { x: 450, y: 50 }, data: { label: "Site Visited" } },
+  { id: "4", position: { x: 650, y: 50 }, data: { label: "All docs Recieved" } },
+  { id: "5", position: { x: 850, y: 50 }, data: { label: "Compliance" } },
 ];
 const initialEdges = [{ id: "e1-2-3", source: "1", target: "2" }];
 
