@@ -272,13 +272,7 @@ const Deal = () => {
     }
   };
 
-  const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("deals"))
-    .map((item) => ({
-      id: item?.id,
-      name: item?.name,
-      colour_code: item?.colour_code,
-    }));
+
   return (
     <div>
       <section className="lead-body">
@@ -468,9 +462,6 @@ const Deal = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
-        mergedLabels={mergedLabels}
-        stages={stages}
-        newStatus={status}
       />
       <ToastContainer />
       {
