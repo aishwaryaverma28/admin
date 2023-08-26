@@ -8,8 +8,9 @@ import axios from "axios";
 import { MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CreateDeal from "../deal/CreateDeal";
 
-const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded }) => {
+const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, mergedLabels }) => {
   const decryptedToken = getDecryptedToken();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
@@ -18,6 +19,17 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
     const [selectedObj, setSelectedObj]= useState({});
     const [isDelete, setIsDelete] = useState(false);
     const [deleteLeadId, setDeleteLeadId] = useState(null);
+    const [selectedConvertItem, setSelectedConvertItem] = useState(null);
+  const [convertModalVisible, setConvertModalVisible] = useState(false);
+
+  const openConvertModal = (item) => {
+    setSelectedConvertItem(item); // Set the selected item
+    setConvertModalVisible(true); // Open the modal
+  };
+  const closeConvertModal = () => {
+    setSelectedConvertItem(null); // Clear the selected item
+    setConvertModalVisible(false); // Close the modal
+  };
 
     const handleLeadDelete = (id) => {
       setIsDelete(true);
@@ -141,7 +153,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
             <i className="fas fa-ellipsis-h"></i>
             {isMenuOpen && (
               <ul className="cardMenu" ref={menuRef}>
-                <li>Convert to deal</li>
+                <li onClick={() => openConvertModal(object)}>Convert to deal</li>
                 <li onClick={() => handleLeadDelete(object.id)}>Delete</li>
               </ul>
             )}
@@ -171,6 +183,15 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded })
         <LeadDeletePopUp onClose={handleLeadDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
       )
     }
+    {convertModalVisible && (
+        <CreateDeal
+          isOpen={true}
+          onClose={closeConvertModal}
+          onLeadAdded={onLeadAdded}
+          mergedLabels={mergedLabels}
+          selectedItem={selectedConvertItem} // Pass the selected item to modal
+        />
+      )}
   </>
   )
 }

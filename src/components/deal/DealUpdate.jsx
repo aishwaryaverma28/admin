@@ -14,6 +14,8 @@ import {
   GET_LABEL,
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
+import { toast,ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -261,6 +263,32 @@ const DealUpdate = () => {
     fetchNotes();
   }, []);
 
+  const handleUpdateClick = (event) => {
+    event.preventDefault();
+    console.log(dealDetails);
+    axios
+      .put(UPDATE_DEAL + id, dealDetails, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        toast.success("Deal data updated successfully", {
+          position:"top-center",
+          autoClose:2000
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setIsEditable(false);
+    setIsDisabled(!isDisabled);
+     setStateBtn(0);
+    fetchLead();
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -341,19 +369,16 @@ const DealUpdate = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "label_name") {
       const selectedLabel = mergedLabels.find((label) => label.name === value);
       if (selectedLabel) {
         setSelectedLabelColor(selectedLabel.colour_code);
       }
     }
-
     setDealDetails({
       ...dealDetails,
       [name]: value,
     });
-
     setStateBtn(1);
   };
 
@@ -774,7 +799,7 @@ const DealUpdate = () => {
                       <span>
                         <input
                           type="text"
-                          name="introducer_name"
+                          name="introducer_firm_name"
                           value={dealDetails.introducer_firm_name}
                           onChange={handleInputChange}
                           style={
@@ -1082,7 +1107,7 @@ const DealUpdate = () => {
                         <input
                           type="date"
                           name="completion_date"
-                          value={dealDetails.completion_date.split("T")[0]}
+                          value={dealDetails?.completion_date?.split("T")[0]}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
@@ -1117,7 +1142,7 @@ const DealUpdate = () => {
                   Update
                 </button>
               ) : (
-                <button className="convertToDeal">Update</button>
+                <button className="convertToDeal" onClick={handleUpdateClick}>Update</button>
               )}
             </div>
           </section>
@@ -1182,6 +1207,7 @@ const DealUpdate = () => {
           </div>
         </div>
       </main>
+      <ToastContainer/>
     </>
   );
 };

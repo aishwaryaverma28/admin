@@ -497,6 +497,7 @@ const Lead = () => {
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
                         onLeadAdded={fetchLeadsData}
+                        mergedLabels={mergedLabels}
                       />
                     );
                   }

@@ -64,7 +64,7 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        console.log(response.data.data)
+        // console.log(response.data.data)
         const filteredDeals = response?.data?.data.filter((obj) => obj.status !== "");
         setDeals(filteredDeals);
   
@@ -213,8 +213,7 @@ const Deal = () => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  console.log(selectedIds);
-
+  
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
       const idsWithStatus = deals
