@@ -6,6 +6,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   addEdge,
+  MarkerType
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -17,7 +18,9 @@ const initialNodes = [
   { id: "4", position: { x: 650, y: 50 }, data: { label: "All docs Recieved" } },
   { id: "5", position: { x: 850, y: 50 }, data: { label: "Compliance" } },
 ];
-const initialEdges = [{ id: "e1-2-3", source: "1", target: "2" }];
+const initialEdges = [{ id: "e1-2-3", source: "1", target: "2", type:"smoothstep" , markerEnd:{
+  type:MarkerType.ArrowClosed
+}, style: {stroke:'red'}, animated:true}];
 
 export default function EditWorkflow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);

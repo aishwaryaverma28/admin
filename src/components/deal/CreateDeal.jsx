@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_DEAL, getDecryptedToken } from "../utils/Constants";
+import { ADD_DEAL, getDecryptedToken, GET_LABEL } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,12 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 // import rectangle71 from "../../assets/image/Rectangle 71.svg";
 // import rectangle74 from "../../assets/image/Rectangle 74.svg";
 
-const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, stages, newStatus }) => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
   // const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
+  const [labelData, setLabelData] = useState([]);
   
   const [leadData, setLeadData] = useState({
     probability: "",
@@ -46,6 +47,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
     }
   }, [selectedItem]);
 
+  useEffect(() => {
+    fetchLabelData();
+  }, []);
+
+
   if (!isOpen) {
     return null;
   }
@@ -66,6 +72,26 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
     setIsDisable(false);
   };
+
+  const fetchLabelData = async () => {
+    try {
+      const response = await axios.get(GET_LABEL, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      });
+      if (response.data.status === 1) {
+        setLabelData(response.data.data);
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -102,6 +128,43 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
         console.log(error);
       });
   };
+
+  const mergedLabels = labelData
+  .filter((item) => item?.entity?.includes("deals"))
+  .map((item) => ({
+    id: item?.id,
+    name: item?.name,
+    colour_code: item?.colour_code,
+  }));
+
+  const stages = [
+    "Enquiry received",
+    "contact made",
+    "illustration sent",
+    "all docs received",
+    "compliance",
+    "sourced",
+    "application received",
+    "valuation",
+    "formal offer",
+    "compliance check",
+    "legal",
+    "completion"
+  ];
+  const status = [
+    "enquiry_received",
+    "contact_made",
+    "illustration_sent",
+    "all_docs_received",
+    "compliance",
+    "sourced",
+    "application_received",
+    "valuation",
+    "formal_offer_sent",
+    "compliance_check",
+    "legals",
+    "completion"
+  ];
 
   return (
     <div className="modal-overlay">
@@ -265,7 +328,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, mergedLabels, selectedItem, 
 
                   {stages?.map((item, index) => {
                     return (
-                      <option key={index} value={newStatus?.[index]}>
+                      <option key={index} value={status?.[index]}>
                         {item}
                       </option>
                     );
