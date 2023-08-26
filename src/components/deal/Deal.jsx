@@ -9,34 +9,8 @@ import CreateDeal from "./CreateDeal";
 import DealDeletePopUp from "../DeleteComponent";
 
 const Deal = () => {
-  const stages = [
-    "Enquiry received",
-    "contact made",
-    "illustration sent",
-    "all docs received",
-    "compliance",
-    "sourced",
-    "application received",
-    "valuation",
-    "formal offer",
-    "compliance check",
-    "legal",
-    "completion"
-  ];
-  const status = [
-    "enquiry_received",
-    "contact_made",
-    "illustration_sent",
-    "all_docs_received",
-    "compliance",
-    "sourced",
-    "application_received",
-    "valuation",
-    "formal_offer_sent",
-    "compliance_check",
-    "legals",
-    "completion"
-  ];
+  const [stages, setStages] = useState([]);
+  const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);
@@ -56,6 +30,28 @@ const Deal = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   //======================================================================fetch lead data from api
+  const fetchStatus = () => {
+    axios
+      .get("http://core.leadplaner.com:3001/api/deal/getAllStages", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const stageNames = response?.data?.message?.map((item) => item.display_name);
+        if (stageNames && stageNames.length > 0) {
+          setStages(stageNames.reverse());
+        }
+        const statusNames = response?.data?.message?.map((item) => item.stage_name);
+          if (statusNames && statusNames.length > 0) {
+            setStatus(statusNames.reverse());
+          }
+        })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
   const fetchLeadsData = () => {
     axios
       .get(GET_ALL_DEAL, {
@@ -114,6 +110,7 @@ const Deal = () => {
   useEffect(() => {
     fetchLeadsData();
     fetchLabelData();
+    fetchStatus();
   }, []);
 
   // ======================================================================calculate total value of all leads
