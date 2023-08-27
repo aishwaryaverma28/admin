@@ -131,3 +131,4 @@ export const GETDEAL_FROM_TRASH = start + "api/deal/getallfromtrash";
 export const RESTORE_DEAL_TRASH = start + "api/deal/restorefromtrash";
 export const DELETE_DEAL_TRASH = start + "api/deal/deletefromtrash";
 export const UPDATE_DEAL = start + "api/deal/edit/";
+export const GET_ALL_STAGE = start + "api/deal/getAllStages";
