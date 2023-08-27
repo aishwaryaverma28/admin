@@ -528,3 +528,19 @@
   align-items: center;
   margin-right: 0.5rem;
 }
+
+
+.stage-position{
+  left:0rem;
+}
+
+.stage-save-btn{
+  width: 100%;
+  margin: 0;
+}
+
+.active-stage{
+  background-color: var(--ternary);
+  color:var(--white);
+  border-radius: 0.3125rem;
+}
