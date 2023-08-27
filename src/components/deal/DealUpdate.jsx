@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/DealUpdate.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -12,9 +12,10 @@ import {
   handleLogout,
   getDecryptedToken,
   GET_LABEL,
+  GET_ALL_STAGE,
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
-import { toast,ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DealUpdate = () => {
@@ -23,6 +24,65 @@ const DealUpdate = () => {
   const [labelData, setLabelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLabelColor, setSelectedLabelColor] = useState("");
+  const [stages, setStages] = useState([]);
+  const [actionopen, setActionOpen] = useState(false);
+  const actionDropDownRef = useRef(null);
+
+  const toggleActionDropdownStatic = () => {
+    setActionOpen(!actionopen);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        actionDropDownRef.current &&
+        !actionDropDownRef.current.contains(event.target)
+      ) {
+        setActionOpen(false);
+      }
+    };
+
+    // Add the event listener when the component mounts
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  const fetchStages = () => {
+    axios
+      .get(GET_ALL_STAGE, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const displayNames = response.data.message.map(
+          (item) => item.display_name
+        );
+
+        // Sort displayNames based on item.id in ascending order
+        const sortedDisplayNamesAsc = [...displayNames].sort((a, b) => {
+          const itemA = response.data.message.find(
+            (item) => item.display_name === a
+          );
+          const itemB = response.data.message.find(
+            (item) => item.display_name === b
+          );
+          return itemA.id - itemB.id;
+        });
+
+        setStages(sortedDisplayNamesAsc);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchStages();
+  }, []);
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -61,7 +121,7 @@ const DealUpdate = () => {
     procuration_fee: null,
     procuration_fee_paid: null,
     deal_commission: null,
-    completion_date: ""
+    completion_date: "",
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -84,20 +144,6 @@ const DealUpdate = () => {
     setIsDetailsOpen(!isDetailsOpen);
   };
 
-  const stages = [
-    "Enquiry received",
-    "contact made",
-    "illustration sent",
-    "all docs received",
-    "compliance",
-    "sourced",
-    "application received",
-    "valuation",
-    "formal offer",
-    "compliance check",
-    "legal",
-    "completion",
-  ];
   const status = [
     "enquiry_received",
     "contact_made",
@@ -166,7 +212,7 @@ const DealUpdate = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const visibleStages = stages.slice(currentIndex, currentIndex + 4);
+  const visibleStages = stages?.slice(currentIndex, currentIndex + 4);
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) => prevIndex - 1);
@@ -178,8 +224,8 @@ const DealUpdate = () => {
 
   const canShowPrev = currentIndex > 0;
 
-  const lastVisibleStageIndex = currentIndex + visibleStages.length - 1;
-  const lastStageIndex = stages.length - 1;
+  const lastVisibleStageIndex = currentIndex + visibleStages?.length - 1;
+  const lastStageIndex = stages?.length - 1;
   const canShowLeftScrollArrow = lastVisibleStageIndex < lastStageIndex;
 
   const fetchLead = () => {
@@ -275,9 +321,9 @@ const DealUpdate = () => {
       .then((response) => {
         console.log(response?.data);
         toast.success("Deal data updated successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
+          position: "top-center",
+          autoClose: 2000,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -285,7 +331,7 @@ const DealUpdate = () => {
 
     setIsEditable(false);
     setIsDisabled(!isDisabled);
-     setStateBtn(0);
+    setStateBtn(0);
     fetchLead();
   };
 
@@ -314,7 +360,6 @@ const DealUpdate = () => {
       });
   };
 
-
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
@@ -323,8 +368,8 @@ const DealUpdate = () => {
   };
 
   const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("deals"))
-    .map((item) => ({
+    ?.filter((item) => item?.entity?.includes("deals"))
+    ?.map((item) => ({
       id: item?.id,
       name: item?.name,
       colour_code: item?.colour_code,
@@ -382,6 +427,17 @@ const DealUpdate = () => {
     setStateBtn(1);
   };
 
+  const handleStageClick = (event) => {
+    // Remove active class from all li elements
+    const liElements = document.querySelectorAll('.dropdown-menu li');
+    liElements.forEach((li) => {
+      li.classList.remove('active-stage');
+    });
+
+    // Add active class to the clicked li element
+    event.target.classList.add('active-stage');
+  };
+
   return (
     <>
       <div className="backToDeal">
@@ -429,16 +485,16 @@ const DealUpdate = () => {
           <div className="arrow-pointer arrow-pointer-2">
             <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
           </div> */}
-          {visibleStages.map((stage, index) => {
+          {visibleStages?.map((stage, index) => {
             const isActive =
               status[currentIndex + index] === dealDetails.status;
             const activeIndex = status.indexOf(dealDetails.status);
 
             const backgroundColor = isActive
-              ? "#2b74da" 
+              ? "#2b74da"
               : activeIndex >= currentIndex + index
-              ? "#077838" // 
-              : "#f3f3f3"; 
+              ? "#077838" //
+              : "#f3f3f3";
             const textColor =
               isActive ||
               backgroundColor === "#077838" ||
@@ -457,7 +513,12 @@ const DealUpdate = () => {
                 style={{ backgroundColor, color: textColor }}
                 key={index}
               >
-                <p className="common-fonts arrow-text" style={{color:textColor}}>{stage} (3 days)</p>
+                <p
+                  className="common-fonts arrow-text"
+                  style={{ color: textColor }}
+                >
+                  {stage} (3 days)
+                </p>
               </div>
             );
           })}
@@ -478,15 +539,33 @@ const DealUpdate = () => {
 
       <div className="ud-stages">
         <p className="common-fonts ud-stage-name">Stage: </p>
-        <select name="" id="" className="common-fonts ud-select">
-          {stages.map((stages, index) => {
-            return (
-              <option value={status[index]} key={index}>
-                {stages}
-              </option>
-            );
-          })}
-        </select>
+        <div className="select action-select">
+          <div className="dropdown-container" ref={actionDropDownRef}>
+            <div
+              className="dropdown-header2 pipeline-dropdown"
+              onClick={toggleActionDropdownStatic}
+            >
+              Select Stages
+              <i
+                className={`fa-sharp fa-solid ${
+                  actionopen ? "fa-angle-up" : "fa-angle-down"
+                }`}
+              ></i>
+            </div>
+            {actionopen && (
+          <ul className="dropdown-menu stage-position" id="stage-list">
+            {stages?.map((stage, index) => (
+              <li key={index} onClick={handleStageClick}>{stage}</li>
+            ))}
+            <li>
+              <button className="common-save-button stage-save-btn">
+                Change Status
+              </button>
+            </li>
+          </ul>
+        )}
+          </div>
+        </div>
       </div>
 
       <main className="dealcontainer">
@@ -555,7 +634,7 @@ const DealUpdate = () => {
                           }
                           className={isDisabled ? "disabled" : ""}
                         >
-                          {mergedLabels.map((item) => (
+                          {mergedLabels?.map((item) => (
                             <option key={item?.id} value={item?.name}>
                               {item?.name}
                             </option>
@@ -1142,7 +1221,9 @@ const DealUpdate = () => {
                   Update
                 </button>
               ) : (
-                <button className="convertToDeal" onClick={handleUpdateClick}>Update</button>
+                <button className="convertToDeal" onClick={handleUpdateClick}>
+                  Update
+                </button>
               )}
             </div>
           </section>
@@ -1207,7 +1288,7 @@ const DealUpdate = () => {
           </div>
         </div>
       </main>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };
