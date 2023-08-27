@@ -13,6 +13,7 @@ import {
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
 import bin from "../assets/image/TrashFill.svg";
+import unpin from "../assets/image/unpin.svg";
 import pin from "../assets/image/pin.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
 import { toast, ToastContainer } from "react-toastify";
@@ -43,9 +44,23 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
           },
         })
         .then((response) => {
-          setNotes(response?.data?.data);
-          setOriginalContents(response?.data?.data);
-      })
+          const notesWithImportance = response?.data?.data.filter(
+            (note) => note.importance === "1"
+          );
+          const notesWithoutImportance = response?.data?.data.filter(
+            (note) => note.importance !== "1"
+          );
+
+          const sortedNotes = [
+            ...notesWithImportance,
+            ...notesWithoutImportance,
+          ];
+
+          setNotes(sortedNotes);
+          setOriginalContents(sortedNotes);
+          // setNotes(response?.data?.data);
+          // setOriginalContents(response?.data?.data);
+        })
 
         .catch((error) => {
           console.log(error);
@@ -62,8 +77,22 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
           },
         })
         .then((response) => {
-          setNotes(response?.data?.data);
-          setOriginalContents(response?.data?.data);
+          const notesWithImportance = response?.data?.data.filter(
+            (note) => note.importance === "1"
+          );
+          const notesWithoutImportance = response?.data?.data.filter(
+            (note) => note.importance !== "1"
+          );
+
+          const sortedNotes = [
+            ...notesWithImportance,
+            ...notesWithoutImportance,
+          ];
+
+          setNotes(sortedNotes);
+          setOriginalContents(sortedNotes);
+          // setNotes(response?.data?.data);
+          // setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -74,6 +103,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         });
     }
   };
+
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
     setStateAdd(1);
@@ -84,7 +114,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
       source_id: type === "lead" ? item.id : id,
       type: type,
       description: dataFromChild,
-      importance: 1,
+      importance: "1",
       created_by: "aishwarya",
       label_id: 1,
     };
@@ -123,8 +153,8 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         description: content,
         status: "B",
         sort: 1,
-        importance: "YESq",
-        urgency: "Noq",
+        importance: "1",
+        urgency: "No",
         viewable: 1,
         source_type: "source -2",
         type: type,
@@ -205,6 +235,68 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
     return strippedContent;
   };
 
+  const handlePinNote = (id) => {
+    const noteToPin = notes.find((note) => note.id === id);
+    if (noteToPin) {
+      const updatedNote = {
+        ...noteToPin,
+        importance: "1",
+      };
+      const updatedNotes = notes.map((note) =>
+        note.id === id ? updatedNote : note
+      );
+      setNotes(updatedNotes);
+console.log(updatedNotes)
+      axios
+        .put(UPDATE_NOTE + id, updatedNote, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          fetchNotes();
+          toast.success("Note pinned successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const handleUnpinNote = (id) => {
+    const noteToUnpin = notes.find((note) => note.id === id);
+    if (noteToUnpin) {
+      const updatedNote = {
+        ...noteToUnpin,
+        importance: "0",
+      };
+      const updatedNotes = notes.map((note) =>
+        note.id === id ? updatedNote : note
+      );
+      setNotes(updatedNotes);
+
+      axios
+        .put(UPDATE_NOTE + id, updatedNote, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          fetchNotes();
+          toast.success("Note unpinned successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <>
       {!openEditor ? (
@@ -233,6 +325,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         <div className="savedNotes">
           {notes.map((note) => (
             <>
+              {console.log(note)}
               <section key={note.id} className="note-display">
                 <div
                   className="note-content"
@@ -260,8 +353,21 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                         </p>
 
                         <div className="three-side-dots">
-                          {/* <img src={ThreeDots} alt="ddd" /> */}
-                          <img src={pin} alt="pin" title="Pin" />
+                          {note.importance === "1" ? (
+                            <img
+                              src={pin}
+                              alt="pin"
+                              title="Pin"
+                              onClick={() => handleUnpinNote(note.id)}
+                            />
+                          ) : (
+                            <img
+                              src={unpin}
+                              alt="unpin"
+                              title="UnPin"
+                              onClick={() => handlePinNote(note.id)}
+                            />
+                          )}
                           <img
                             src={bin}
                             alt="trash"
@@ -323,7 +429,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                       if (originalNote) {
                         handleEditorChange(originalNote.description, note.id);
                         setStateBtn(0); // Reset save button state
-                        setNumber(number===0 ? 1 : 0);
+                        setNumber(number === 0 ? 1 : 0);
                       }
                     }}
                   >
