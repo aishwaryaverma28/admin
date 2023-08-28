@@ -11,6 +11,7 @@ import ReactFlow, {
 
 import "reactflow/dist/style.css";
 
+
 const initialNodes = [
   { id: "1", position: { x: 50, y: 50 }, data: { label: "Enquiry Recieved" } },
   { id: "2", position: { x: 250, y: 50 }, data: { label: "Qualification" } },
@@ -32,7 +33,7 @@ export default function EditWorkflow() {
   );
 
   return (
-    <div style={{ width: "100%", height: "100vh"}}>
+    <div className="workflow-container">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -44,6 +45,29 @@ export default function EditWorkflow() {
         <MiniMap />
         <Background variant="dots" gap={12} size={1} />
       </ReactFlow>
+
+      <div className="workflow-modal">
+      <div className="workflow-cross">
+        <p>X</p>
+      </div>
+      <p className="common-fonts workflow-action-heading">Choose an action</p>
+      <div className="workflow-status">
+        <label htmlFor="">From Status</label>
+        <select name="" id="">
+          <option value="">Select from status</option>
+        </select>
+      </div>
+      <div className="workflow-status">
+        <label htmlFor="">To Status</label>
+        <select name="" id="">
+          <option value="">Select from status</option>
+        </select>
+      </div>
+      <div className="workflow-status">
+        <p>Recommended</p>
+      </div>
+      </div>
+
     </div>
   );
 }
