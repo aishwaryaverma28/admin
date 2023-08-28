@@ -76,7 +76,6 @@ const Deal = () => {
       });
   };
 
-
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -373,28 +372,6 @@ const Deal = () => {
                     </li>
                   </ul>
                 )}
-
-                {/* <div className="popup-container">
-                    <div className="popup">
-                      <p className="popupHead">Delete Selected Deals</p>
-                      <p>Deleted deals will be in recycle bin for 90 days</p>
-                      <p className="deleteMsg">
-                        Are you sure you want to delete all selected deals?
-                      </p>
-                      <div className="popup-buttons">
-                        <button
-                          className="cancelBtn"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="confirmBtn"
-                        >
-                          Delete Deal
-                        </button>
-                      </div>
-                    </div>
-                  </div> */}
               </div>
             </div>
           </div>
