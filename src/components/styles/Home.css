@@ -1,0 +1,67 @@
+.homeHeader{
+    display: flex;
+}
+.homeSecOne{
+    border-right: 1px solid #DCDCDC;
+    width: 21rem;
+    height: 6.5rem;
+    margin: 1rem 0;
+    padding: 0.6rem 2rem;
+}
+.greyHead{
+    display: flex;
+    align-items: center;
+}
+.greyHead img{
+    width: 1rem;
+    margin-right: 0.5rem;
+}
+.fa-calendar, .fa-phone{
+    color: #909DB0;
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+margin-right: 0.5rem;
+}
+.home{
+    color: #909DB0;
+font-family: "Lexend Deca";
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-transform: capitalize;
+}
+.homeNum{
+    margin-right: 0.5rem;
+    color: #1E2224;
+font-family: "Lexend Deca";
+font-size: 1.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+}
+.colorOval{
+    color: #81C079;
+font-family: "Lexend Deca";
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-transform: capitalize;
+border-radius: 2.5rem;
+background: #DEFDDA;
+}
+.colorRedOval{
+    color: #E76D56;
+    font-family: "Lexend Deca";
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: capitalize;
+    border-radius: 2.5rem;
+    background:#FCD8D1;
+}
