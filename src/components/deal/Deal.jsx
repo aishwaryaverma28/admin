@@ -29,6 +29,7 @@ const Deal = () => {
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
     axios
@@ -63,18 +64,20 @@ const Deal = () => {
         // console.log(response.data.data)
         const filteredDeals = response?.data?.data.filter((obj) => obj.status !== "");
         setDeals(filteredDeals);
-  
-        // Calculate status counts
-        const counts = {};
-        status.forEach((status) => {
-          counts[status] = filteredDeals.filter((obj) => obj.status === status).length;
-        });
-        setStatusCounts(counts);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+useEffect(() => {    
+       // Calculate status counts
+       const counts = {};
+       status.forEach((status) => {
+         counts[status] = deals.filter((obj) => obj.status === status).length;
+       });
+       setStatusCounts(counts);
+  }, [deals,status]);
 
   const fetchLabelData = async () => {
     try {
@@ -139,7 +142,7 @@ const Deal = () => {
       setStatusTotalValues(statusTotals);
     };
     calculateStatusTotalValues();
-  }, [deals]);
+  }, [deals,status]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -267,7 +270,7 @@ const Deal = () => {
         });        
     }
   };
-
+console.log(statusCounts);
 
   return (
     <div>
