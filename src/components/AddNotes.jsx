@@ -237,16 +237,21 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
 
   const handlePinNote = (id) => {
     const noteToPin = notes.find((note) => note.id === id);
+    console.log("pin")
+    console.log(noteToPin)
     if (noteToPin) {
       const updatedNote = {
-        ...noteToPin,
+        description: noteToPin.description,
+        status: "B",
+        sort: 1,
         importance: "1",
+        urgency: "No",
+        viewable: 1,
+        source_type: "source -2",
+        type: type,
+        attr2: "attr2",
+        label_id: 1,
       };
-      const updatedNotes = notes.map((note) =>
-        note.id === id ? updatedNote : note
-      );
-      setNotes(updatedNotes);
-console.log(updatedNotes)
       axios
         .put(UPDATE_NOTE + id, updatedNote, {
           headers: {
@@ -268,16 +273,21 @@ console.log(updatedNotes)
 
   const handleUnpinNote = (id) => {
     const noteToUnpin = notes.find((note) => note.id === id);
+    console.log("un pin")
+    console.log(noteToUnpin)
     if (noteToUnpin) {
       const updatedNote = {
-        ...noteToUnpin,
+        description: noteToUnpin.description,
+        status: "B",
+        sort: 1,
         importance: "0",
+        urgency: "No",
+        viewable: 1,
+        source_type: "source -2",
+        type: type,
+        attr2: "attr2",
+        label_id: 1,
       };
-      const updatedNotes = notes.map((note) =>
-        note.id === id ? updatedNote : note
-      );
-      setNotes(updatedNotes);
-
       axios
         .put(UPDATE_NOTE + id, updatedNote, {
           headers: {
@@ -325,7 +335,6 @@ console.log(updatedNotes)
         <div className="savedNotes">
           {notes.map((note) => (
             <>
-              {console.log(note)}
               <section key={note.id} className="note-display">
                 <div
                   className="note-content"
