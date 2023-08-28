@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_DEAL, getDecryptedToken, GET_LABEL } from "../utils/Constants";
+import { ADD_DEAL, getDecryptedToken, GET_LABEL, GET_ALL_STAGE } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
-  const stages = [
-    "Enquiry received",
-    "contact made",
-    "illustration sent",
-    "all docs received",
-    "compliance",
-    "sourced",
-    "application received",
-    "valuation",
-    "formal offer",
-    "compliance check",
-    "legal",
-    "completion"
-  ];
+  const [stages, setStages] = useState([]);
   const status = [
     "enquiry_received",
     "contact_made",
@@ -35,6 +22,42 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
     "legals",
     "completion"
   ];
+
+  const fetchStages = () => {
+    axios
+      .get(GET_ALL_STAGE, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const displayNames = response.data.message.map(
+          (item) => item.display_name
+        );
+
+        // Sort displayNames based on item.id in ascending order
+        const sortedDisplayNamesAsc = [...displayNames].sort((a, b) => {
+          const itemA = response.data.message.find(
+            (item) => item.display_name === a
+          );
+          const itemB = response.data.message.find(
+            (item) => item.display_name === b
+          );
+          return itemA.id - itemB.id;
+        });
+
+        setStages(sortedDisplayNamesAsc);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchStages();
+  }, []);
+
+
 
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
