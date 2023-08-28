@@ -50,6 +50,7 @@ import LPSettings from "./components/settings/LPSettings";
 import PrivacyNConsent from "./components/settings/PrivacyNConsent";
 import SettingLeads from "./components/settings/SettingLeads";
 import SettingDeal from "./components/settings/SettingDeal";
+import WorkFlow from "./components/settings/PipelineWorkflow/EditWorkflow";
 import SettingUsage from "./components/settings/SettingUsage";
 import SettingImpExp from "./components/settings/SettingImpExp";
 import DealUpdate from "./components/deal/DealUpdate";
@@ -145,6 +146,10 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/settingDeal",
             element: <SecureRoutes Component={SettingDeal} />,
+          },
+          {
+            path: "/lp/settings/workflow",
+            element: <WorkFlow/>,
           },
           {
             path: "/lp/settings/settingUsage",

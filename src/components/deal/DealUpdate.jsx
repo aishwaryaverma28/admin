@@ -27,6 +27,27 @@ const DealUpdate = () => {
   const [stages, setStages] = useState([]);
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
+  const [selectedStageId, setSelectedStageId] = useState(null);
+  const [similarStage, setSimilarStage] = useState("");
+
+  const handleStageClickFromList = (event, stageId) => {
+    setSelectedStageId(stageId);
+
+    const liElements = document.querySelectorAll(".dropdown-menu li");
+    liElements.forEach((li) => {
+      li.classList.remove("active-stage");
+    });
+
+    // Add active class to the clicked li element
+    event.target.classList.add("active-stage");
+  };
+
+  const handleChangeStatusClick = () => {
+    if (selectedStageId !== null) {
+      console.log("Selected Stage ID:", selectedStageId);
+    }
+    setActionOpen(!actionopen);
+  };
 
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
@@ -74,6 +95,11 @@ const DealUpdate = () => {
         });
 
         setStages(sortedDisplayNamesAsc);
+
+        const statusNames = response?.data?.message?.map((item) => item.stage_name);
+        if (statusNames && statusNames.length > 0) {
+          setStatus(statusNames.reverse());
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -133,6 +159,7 @@ const DealUpdate = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [status, setStatus] = useState([]);
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
@@ -144,20 +171,20 @@ const DealUpdate = () => {
     setIsDetailsOpen(!isDetailsOpen);
   };
 
-  const status = [
-    "enquiry_received",
-    "contact_made",
-    "illustration_sent",
-    "all_docs_received",
-    "compliance",
-    "sourced",
-    "application_received",
-    "valuation",
-    "formal_offer_sent",
-    "compliance_check",
-    "legals",
-    "completion",
-  ];
+  // const status = [
+  //   "enquiry_received",
+  //   "contact_made",
+  //   "illustration_sent",
+  //   "all_docs_received",
+  //   "compliance",
+  //   "sourced",
+  //   "application_received",
+  //   "valuation",
+  //   "formal_offer_sent",
+  //   "compliance_check",
+  //   "legals",
+  //   "completion",
+  // ];
 
   const normalStylingInput = {
     color: "#1e2224",
@@ -228,7 +255,7 @@ const DealUpdate = () => {
   const lastStageIndex = stages?.length - 1;
   const canShowLeftScrollArrow = lastVisibleStageIndex < lastStageIndex;
 
-  const fetchLead = () => {
+  const fetchDeal = () => {
     axios
       .get(GET_DEAL_ID + id, {
         headers: {
@@ -304,7 +331,7 @@ const DealUpdate = () => {
     }
   };
   useEffect(() => {
-    fetchLead();
+    fetchDeal();
     fetchLabelData();
     fetchNotes();
   }, []);
@@ -332,7 +359,7 @@ const DealUpdate = () => {
     setIsEditable(false);
     setIsDisabled(!isDisabled);
     setStateBtn(0);
-    fetchLead();
+    fetchDeal();
   };
 
   const handleTabClick = (tab) => {
@@ -425,17 +452,6 @@ const DealUpdate = () => {
       [name]: value,
     });
     setStateBtn(1);
-  };
-
-  const handleStageClick = (event) => {
-    // Remove active class from all li elements
-    const liElements = document.querySelectorAll('.dropdown-menu li');
-    liElements.forEach((li) => {
-      li.classList.remove('active-stage');
-    });
-
-    // Add active class to the clicked li element
-    event.target.classList.add('active-stage');
   };
 
   return (
@@ -552,18 +568,34 @@ const DealUpdate = () => {
                 }`}
               ></i>
             </div>
-            {actionopen && (
-          <ul className="dropdown-menu stage-position" id="stage-list">
-            {stages?.map((stage, index) => (
-              <li key={index} onClick={handleStageClick}>{stage}</li>
-            ))}
-            <li>
-              <button className="common-save-button stage-save-btn">
-                Change Status
-              </button>
-            </li>
-          </ul>
-        )}
+
+
+{actionopen && (
+  <ul className="dropdown-menu stage-position" id="stage-list">
+    {stages?.map((stage, index) => (
+      // Check if the stage is not equal to the current dealDetails.status
+      dealDetails.status !== stage && (
+        <li
+          key={index}
+          onClick={(e) => handleStageClickFromList(e, index + 1)}
+          className={dealDetails.status === stage ? "active-stage" : ""}
+        >
+          {stage}
+        </li>
+      )
+    ))}
+    <li>
+      <button
+        className="common-save-button stage-save-btn"
+        onClick={handleChangeStatusClick}
+      >
+        Change Status
+      </button>
+    </li>
+  </ul>
+)}
+
+
           </div>
         </div>
       </div>
