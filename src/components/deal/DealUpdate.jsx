@@ -27,6 +27,17 @@ const DealUpdate = () => {
   const [stages, setStages] = useState([]);
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
+  const [selectedStageId, setSelectedStageId] = useState(null);
+
+  const handleStageClickFromList = (event, stageId) => {
+    setSelectedStageId(stageId);
+  };
+
+  const handleChangeStatusClick = () => {
+    if (selectedStageId !== null) {
+      console.log("Selected Stage ID:", selectedStageId);
+    }
+  };
 
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
@@ -83,6 +94,8 @@ const DealUpdate = () => {
   useEffect(() => {
     fetchStages();
   }, []);
+
+
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -555,10 +568,10 @@ const DealUpdate = () => {
             {actionopen && (
           <ul className="dropdown-menu stage-position" id="stage-list">
             {stages?.map((stage, index) => (
-              <li key={index} onClick={handleStageClick}>{stage}</li>
+              <li key={index} onClick={(e) => handleStageClickFromList(e, index + 1)}>{stage}</li>
             ))}
             <li>
-              <button className="common-save-button stage-save-btn">
+              <button className="common-save-button stage-save-btn" onClick={handleChangeStatusClick}>
                 Change Status
               </button>
             </li>

@@ -100,111 +100,104 @@
   outline: none;
 }
 
-.stages-addition{
-    color: var(--ternary);
-    font-weight: 500;
+.stages-addition {
+  color: var(--ternary);
+  font-weight: 500;
 }
 
-.manage-note{
-    font-size: 0.75rem;
-    margin-top: 1.5rem;
+.manage-note {
+  font-size: 0.75rem;
+  margin-top: 1.5rem;
 }
 
-.manage-content{
-    margin-left: 1rem;
-    margin-right: 1rem;
+.manage-content {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
-
-.manage-input{
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    margin-bottom: 1.5rem;
+.manage-input {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.manage-input input{
-    cursor: pointer;
+.manage-input input {
+  cursor: pointer;
 }
 
-.manage-radio-section{
-    margin-top: 1.25rem;
-    cursor: pointer;
-    
+.manage-radio-section {
+  margin-top: 1.25rem;
+  cursor: pointer;
 }
 
-.manage-radio-label{
-    margin-left: 0.5rem;
-    text-transform: none;
-    cursor: pointer;
+.manage-radio-label {
+  margin-left: 0.5rem;
+  text-transform: none;
+  cursor: pointer;
 }
 
-.manage-check-team{
-    margin-left: 1rem;
+.manage-check-team {
+  margin-left: 1rem;
 }
 
-.manage-team-flex{
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    margin-bottom: 1rem;
+.manage-team-flex {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.manage-team-flex p{
-    margin-left: 0.5rem;
+.manage-team-flex p {
+  margin-left: 0.5rem;
 }
 
 .manage-icon-round {
-    border-radius: 50%;
-    background-color: #e2e9f2;
-    padding: 0.2rem 0.4rem;
-    margin-left: 0.5rem;
-  }
-  
-  .manage-icon-round img {
-    width: 1rem;
-    height: 1rem;
-    margin: 0 auto;
-  
-  }
+  border-radius: 50%;
+  background-color: #e2e9f2;
+  padding: 0.2rem 0.4rem;
+  margin-left: 0.5rem;
+}
 
+.manage-icon-round img {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 auto;
+}
 
+.manage-btn-box {
+  background-color: var(--th-background);
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 25%;
+  margin-left: -1rem;
+}
 
- 
+.manage-btn-box button:first-child {
+  margin-right: 1rem;
+}
 
-  .manage-btn-box{
-    background-color: var(--th-background);
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    padding: 1rem;
-    margin-top: 25%;
-    margin-left: -1rem;
-  }
+.manage-name {
+  font-weight: 500;
+}
 
-  .manage-btn-box button:first-child{
-    margin-right: 1rem;
-  }
+.manage-name span {
+  font-weight: 400;
+  text-transform: lowercase;
+  color: var(--font-light);
+}
 
-  .manage-name{
-    font-weight: 500;
-  }
-
-  .manage-name span{
-    font-weight: 400;
-    text-transform: lowercase;
-    color:var(--font-light);
-  }
-
- .edit-workflow-btn{
+.edit-workflow-btn {
   display: flex;
   justify-content: end;
   align-items: center;
   margin-right: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
- }
- .view-workflow {
+}
+.view-workflow {
   display: flex;
   align-items: flex-start;
   margin-left: 1rem;
@@ -218,4 +211,62 @@
   border: 1px solid var(--border-color);
   width: 100%;
   box-sizing: border-box;
+}
+
+.workflow-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.workflow-modal {
+  position: absolute;
+  width: 25%;
+  height: 100vh;
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  top: 0;
+  right: 0;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
+}
+
+.workflow-action-heading {
+  font-size: 1.125rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.workflow-cross {
+  background-color: #fff;
+  border-radius: 0.3125rem;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  left: -50px;
+  top: 2%;
+}
+
+.workflow-status {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.workflow-status select {
+  margin-top: 0.5rem;
+  border-radius: 0.3125rem;
+  border: 1px solid var(--stroke, #dcdcdc);
+  background: var(--white, #fff);
+  padding: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+}
+
+.workflow-status label, .workflow-status p{
+ font-size: 1rem;
+ font-weight: 500;
 }
