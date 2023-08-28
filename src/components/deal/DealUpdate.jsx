@@ -29,6 +29,54 @@ const DealUpdate = () => {
   const actionDropDownRef = useRef(null);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [similarStage, setSimilarStage] = useState("");
+  const [dealDetails, setDealDetails] = useState({
+    closure_date: "",
+    contact: "",
+    deal_name: "",
+    doc_number: "",
+    document_verified: 0,
+    email: "",
+    is_deleted: 0,
+    label_id: null,
+    mobile: "",
+    organization: "",
+    // ownerf_name: "",
+    // ownerl_name: "",
+    pipeline_id: 1,
+    probability: "",
+    status: "",
+    value: null,
+    introducer_name: "",
+    introducer_firm_name: "",
+    data_enquiry_receive: "",
+    borrower_entry: "",
+    security_value: null,
+    loan_amount: null,
+    deposit: null,
+    type_of_security: "",
+    loan_type: "",
+    lender: null,
+    lead_source: "",
+    engagement_fee: null,
+    engagement_fee_paid: null,
+    broker_fee: null,
+    broker_fee_paid: null,
+    procuration_fee: null,
+    procuration_fee_paid: null,
+    deal_commission: null,
+    completion_date: "",
+  });
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
+  const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
+  const [notes, setNotes] = useState();
+  const [value, setValue] = useState("");
+  const [stateBtn, setStateBtn] = useState(0);
+  const [editedItem, setEditedItem] = useState("");
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isCompanyOpen, setIsCompanyOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [status, setStatus] = useState([]);
 
   const handleStageClickFromList = (event, stageId) => {
     setSelectedStageId(stageId);
@@ -45,6 +93,22 @@ const DealUpdate = () => {
   const handleChangeStatusClick = () => {
     if (selectedStageId !== null) {
       console.log("Selected Stage ID:", selectedStageId);
+      const updateForm = {
+       stage_id: selectedStageId,
+    }
+      axios
+      .put(UPDATE_DEAL + id, updateForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        alert(response?.data.message);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     }
     setActionOpen(!actionopen);
   };
@@ -110,56 +174,7 @@ const DealUpdate = () => {
     fetchStages();
   }, []);
 
-  const [dealDetails, setDealDetails] = useState({
-    closure_date: "",
-    contact: "",
-    deal_name: "",
-    doc_number: "",
-    document_verified: 0,
-    email: "",
-    is_deleted: 0,
-    // label_coloure: "",
-    label_id: null,
-    // label_name: "",
-    mobile: "",
-    organization: "",
-    // ownerf_name: "",
-    // ownerl_name: "",
-    pipeline_id: 1,
-    probability: "",
-    status: "",
-    value: null,
-    introducer_name: "",
-    introducer_firm_name: "",
-    data_enquiry_receive: "",
-    borrower_entry: "",
-    security_value: null,
-    loan_amount: null,
-    deposit: null,
-    type_of_security: "",
-    loan_type: "",
-    lender: null,
-    lead_source: "",
-    engagement_fee: null,
-    engagement_fee_paid: null,
-    broker_fee: null,
-    broker_fee_paid: null,
-    procuration_fee: null,
-    procuration_fee_paid: null,
-    deal_commission: null,
-    completion_date: "",
-  });
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [isEditable, setIsEditable] = useState(false);
-  const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
-  const [notes, setNotes] = useState();
-  const [value, setValue] = useState("");
-  const [stateBtn, setStateBtn] = useState(0);
-  const [editedItem, setEditedItem] = useState("");
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
-  const [isCompanyOpen, setIsCompanyOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [status, setStatus] = useState([]);
+ 
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
@@ -273,9 +288,7 @@ const DealUpdate = () => {
           document_verified: details.document_verified,
           email: details.email,
           is_deleted: details.is_deleted,
-          // label_coloure: details.label_coloure,
           label_id: details.label_id,
-          // label_name: details.label_name,
           mobile: details.mobile,
           organization: details.organization,
           // ownerf_name: details.ownerf_name,
