@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-import { GET_ALL_DEAL, MOVEDEAL_TO_TRASH,getDecryptedToken, GET_LABEL } from "../utils/Constants";
+import { GET_ALL_DEAL, MOVEDEAL_TO_TRASH,GET_ALL_STAGE,getDecryptedToken, GET_LABEL } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
@@ -33,7 +33,7 @@ const Deal = () => {
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
     axios
-      .get("http://core.leadplaner.com:3001/api/deal/getAllStages", {
+      .get(GET_ALL_STAGE, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

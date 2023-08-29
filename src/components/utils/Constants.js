@@ -115,6 +115,9 @@ export const GET_AUDIT = start + "api/setting/audit/getAll";
 export const UPDATE_AUDIT = start + "api/setting/audit/edit/";
 export const GET_SERVICE = start + "api/user/ticket/getmytickets";
 
+export const GET_ALL_SEARCH = start + "api/user/help/searchquestion/";
+export const GET_SEARCH_ID = start + "api/user/help/getbyid/";
+
 export const ADD_PRODUCT = start + "api/product/add";
 export const UPDATE_PRODUCT = start + "api/product/edit/";
 export const GET_ALL_PRODUCT = start + "api/product/getall";
