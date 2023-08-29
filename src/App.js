@@ -149,7 +149,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/workflow",
-            element: <WorkFlow/>,
+            element:  <SecureRoutes Component={WorkFlow} />,
           },
           {
             path: "/lp/settings/settingUsage",

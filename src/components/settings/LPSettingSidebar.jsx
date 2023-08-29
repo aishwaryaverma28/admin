@@ -124,6 +124,17 @@ const LPSettingSidebar = () => {
           </NavLink>
         </p>
         )}
+        {isPathAllowed("/lp/settings/workflow") && (
+        <p className="company-options setting-font-style">
+          <NavLink
+            exact
+            to="/lp/settings/workflow"
+            activeClassName="activeLink"
+          >
+            WorkFlow
+          </NavLink>
+        </p>
+        )}
         {isPathAllowed("/lp/settings/recyclebin") && (
         <p className="company-options setting-font-style">
           <NavLink
