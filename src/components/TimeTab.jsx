@@ -23,9 +23,7 @@ const TickIcon = () => {
         },
       })
       .then((response) => {
-        setTicket(response?.data?.data);
-        console.log("hyiy")
-        console.log(response.data.data)
+        setTicket(response?.data?.data[0]);
         setLoading(false);
       })
       .catch((error) => {
@@ -53,20 +51,45 @@ getTicket();
 
       <div>
         <div className="service-user-details">
-          <p className="common-fonts service-user-name">Name</p>
-          <p className="common-fonts">anant singh chauhan</p>
+          <p className="common-fonts service-user-name">Title</p>
+          {
+            isLoading ? (
+              <p>-</p>
+            ): (
+              <p className="common-fonts">{ticket.description}</p>
+            )
+          }
+          
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">phone</p>
-          <p className="common-fonts">7456982315</p>
+          {
+            isLoading ? (
+              <p>-</p>
+            ): (
+              <p className="common-fonts">{ticket.mobile}</p>
+            )
+          }
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">email</p>
-          <p className="common-fonts">anantsingh@gmail.com</p>
+          {
+            isLoading ? (
+              <p>-</p>
+            ): (
+              <p className="common-fonts" style={{textTransform:"lowercase"}}>{ticket.email}</p>
+            )
+          }
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">priority</p>
-          <p className="common-fonts">High</p>
+          {
+            isLoading ? (
+              <p>-</p>
+            ): (
+              <p className="common-fonts">{ticket.priority}</p>
+            )
+          }
         </div>
       </div>
 
