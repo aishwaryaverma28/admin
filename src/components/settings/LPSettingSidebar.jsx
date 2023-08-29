@@ -6,8 +6,8 @@ import { getDecryptedUserPath } from "../utils/Constants";
 
 const LPSettingSidebar = () => {
   const decryptedUserPath = getDecryptedUserPath();
-  // const allowed = decryptedUserPath.split(",");
-  const allowed = ["/lp/lead","/lp/home","/lp/mail","/lp/contacts","/lp/deals","/lp/settings","/lp/settings/general","/lp/settings/notification","/lp/settings/usernteams","/lp/settings/companysettings","/lp/settings/recyclebin","/lp/settings/privacyConcent","/lp/settings/settingLeads","/lp/settings/settingDeal","/lp/settings/settingUsage","/lp/settings/settingImpExp"];
+  const allowed = decryptedUserPath.split(",");
+  // const allowed = ["/lp/lead","/lp/home","/lp/mail","/lp/contacts","/lp/deals","/lp/settings","/lp/settings/general","/lp/settings/notification","/lp/settings/usernteams","/lp/settings/companysettings","/lp/settings/recyclebin","/lp/settings/privacyConcent","/lp/settings/settingLeads","/lp/settings/settingDeal","/lp/settings/settingUsage","/lp/settings/settingImpExp"];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
       return true; // All paths are allowed when allowed array is empty

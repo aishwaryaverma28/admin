@@ -15,7 +15,7 @@ const SecureRoutes = (props) => {
     // const allowed = ["/lp/lead","/lp/home","/lp/mail","/lp/contacts","/lp/deals","/lp/settings","/lp/settings/general","/lp/settings/notification","/lp/settings/usernteams","/lp/settings/companysettings","/lp/settings/recyclebin","/lp/settings/privacyConcent","/lp/settings/settingLeads","/lp/settings/settingDeal","/lp/settings/settingUsage","/lp/settings/settingImpExp"];
      const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;
-// console.log(allowed);
+console.log(allowed);
     if (allowed && !allowed.includes(currentPath)) { // Check if allowed is defined before using includes method
       navigate(landingUrl);
     } else {
