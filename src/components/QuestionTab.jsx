@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SearchIcon from '../assets/image/search.svg';
+import SearchIcon from "../assets/image/search.svg";
 import axios from "axios";
 import {
   GET_ALL_SEARCH,
@@ -10,16 +10,20 @@ import {
 
 const QuestionTab = () => {
   const decryptedToken = getDecryptedToken();
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchResult, setShowSearchResult] = useState(false);
   const [data, setData] = useState([]);
 
-   useEffect(() => {
-    fetchData();
-  }, [searchQuery]);
+  const handleSearchInputChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    setShowSearchResult(query.length > 0);
+  };
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(GET_ALL_SEARCH + searchQuery, { // Use searchQuery in the API call
+      const response = await axios.get(GET_ALL_SEARCH, {
+        params: { query: searchQuery }, // Pass query as a parameter
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -37,42 +41,48 @@ const QuestionTab = () => {
     }
   };
 
-  const handleSearchInputChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-  
+  useEffect(() => {
+    fetchData();
+  }, [searchQuery]);
+
+  const data2 = ["hello", "hiii"];
 
   return (
-    <div className='question-tab'>
-      <p className='common-fonts question-tab-top'>How can we help you?</p>
-      <p className='common-fonts question-tab-note'>Tell us your problem so we can get you the right help and support.</p>
+    <div className="question-tab">
+      <p className="common-fonts question-tab-top">How can we help you?</p>
+      <p className="common-fonts question-tab-note">
+        Tell us your problem so we can get you the right help and support.
+      </p>
 
       <div className="recycle-search-box">
-    <span className="question-search-icon">
-        <img src={SearchIcon} alt="" />
-    </span>
-    <input
+        <span className="question-search-icon">
+          <img src={SearchIcon} alt="" />
+        </span>
+        <input
           type="text"
           className="question-search-input recycle-fonts"
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchInputChange}
         />
-</div>
-{data && data.map((item) => {
-  console.log(item.title);
-  <>
-  <div className="searchSection" key={item.id}></div>
-  </>
-})}
-<p className='common-fonts question-para'>Lorem  ipsum dolor sit amet consectetur. Aenean sit pulvinar at libero pellentesque massa dictum euismod rhoncus. Quis eget dolor turpis nec integer odio lectus. Nec consectetur urna pretium sit eleifend facilisis facilisi a et. Blandit massa sollicitudin proin adipiscing enim feugiat ornare at. In ipsum orci iaculis sed convallis ac tempus turpis. 
-</p>
-<p className='common-fonts question-para'>Lorem  ipsum dolor sit amet consectetur. Aenean sit pulvinar at libero pellentesque massa dictum euismod rhoncus. Quis eget dolor turpis nec integer odio lectus. Nec consectetur urna pretium sit eleifend facilisis facilisi a et. Blandit massa sollicitudin proin adipiscing enim feugiat ornare at. In ipsum orci iaculis sed convallis ac tempus turpis. 
-</p>
+      </div>
 
+      {showSearchResult && (
+        <div className="search_result">
+          {data2?.map((item, index) => (
+            <p className="common-fonts" key={index}>{item}</p>
+          ))}
+        </div>
+      )}
 
+      <p className="common-fonts question-para">
+        Lorem ipsum dolor sit amet consectetur...
+      </p>
+      <p className="common-fonts question-para">
+        Lorem ipsum dolor sit amet consectetur...
+      </p>
     </div>
-  )
-}
+  );
+};
 
-export default QuestionTab; 
+export default QuestionTab;
