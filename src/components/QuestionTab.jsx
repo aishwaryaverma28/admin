@@ -3,7 +3,6 @@ import SearchIcon from "../assets/image/search.svg";
 import axios from "axios";
 import {
   GET_ALL_SEARCH,
-  GET_SEARCH_ID,
   getDecryptedToken,
   handleLogout,
 } from "./utils/Constants";
@@ -13,6 +12,7 @@ const QuestionTab = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [data, setData] = useState([]);
+  const [selectedItemDetails, setSelectedItemDetails] = useState("");
 
   const handleSearchInputChange = (event) => {
     const query = event.target.value;
@@ -22,8 +22,7 @@ const QuestionTab = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(GET_ALL_SEARCH, {
-        params: { query: searchQuery }, // Pass query as a parameter
+      const response = await axios.get(GET_ALL_SEARCH + searchQuery, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -45,7 +44,10 @@ const QuestionTab = () => {
     fetchData();
   }, [searchQuery]);
 
-  const data2 = ["hello", "hiii"];
+  const handleTitleClick = (details) => {
+    setSelectedItemDetails(details);
+    setData([]);
+  };
 
   return (
     <div className="question-tab">
@@ -69,18 +71,27 @@ const QuestionTab = () => {
 
       {showSearchResult && (
         <div className="search_result">
-          {data2?.map((item, index) => (
-            <p className="common-fonts" key={index}>{item}</p>
+          {data?.map((item, index) => (
+            <>
+              <p
+                className="common-fonts searchTitle"
+                key={item.id}
+                onClick={() => handleTitleClick(item.details)}
+              >
+                {item.title}
+              </p>
+              {console.log(item)}
+            </>
           ))}
         </div>
       )}
-
-      <p className="common-fonts question-para">
-        Lorem ipsum dolor sit amet consectetur...
-      </p>
-      <p className="common-fonts question-para">
-        Lorem ipsum dolor sit amet consectetur...
-      </p>
+      {selectedItemDetails === "" ? (
+        <p className="common-fonts question-para">
+          Please Search for title in search bar
+        </p>
+      ) : (
+        <p className="common-fonts question-para">{selectedItemDetails}</p>
+      )}
     </div>
   );
 };

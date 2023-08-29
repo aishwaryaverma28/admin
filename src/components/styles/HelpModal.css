@@ -274,12 +274,18 @@ color:var(--font-lighter);
 
 .search_result{
     width: 28rem;
-    height: 10rem;
+    max-height: 40vh;
+    overflow-y: scroll;
     background-color: var(--white);
     border-radius: 0.3125rem;
     border: 1px solid var(--border-color);
+    /* border: 10px solid black; */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     margin-top: 0.5rem;
+}
+.searchTitle{
+    border-bottom:1px solid var(--border-color);
+    padding: 0.5rem 1rem;
 }
 
 /* search section ends */
