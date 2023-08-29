@@ -113,6 +113,7 @@ export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";
 export const UPDATE_TICKET = start + "api/user/ticket/update/";
 export const GET_AUDIT = start + "api/setting/audit/getAll";
 export const UPDATE_AUDIT = start + "api/setting/audit/edit/";
+export const GET_SERVICE = start + "api/user/ticket/getmytickets";
 
 export const ADD_PRODUCT = start + "api/product/add";
 export const UPDATE_PRODUCT = start + "api/product/edit/";
