@@ -61,7 +61,6 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        // console.log(response.data.data)
         const filteredDeals = response?.data?.data.filter((obj) => obj.status !== "");
         setDeals(filteredDeals);
       })
@@ -256,7 +255,6 @@ useEffect(() => {
           },
         })
         .then((response) => {
-          console.log(response);
           toast.success("Lead moved to trash successfully", {
             position: "top-center",
             autoClose: 2000,
@@ -270,7 +268,6 @@ useEffect(() => {
         });        
     }
   };
-console.log(statusCounts);
 
   return (
     <div>
