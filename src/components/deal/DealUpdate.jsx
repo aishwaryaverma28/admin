@@ -28,7 +28,8 @@ const DealUpdate = () => {
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const [selectedStageId, setSelectedStageId] = useState(null);
-  const [similarStage, setSimilarStage] = useState("");
+  const [similarStage, setSimilarStage] = useState([]);
+
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
     contact: "",
@@ -65,6 +66,7 @@ const DealUpdate = () => {
     procuration_fee_paid: null,
     deal_commission: null,
     completion_date: "",
+    stage_id: null,
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -92,23 +94,21 @@ const DealUpdate = () => {
 
   const handleChangeStatusClick = () => {
     if (selectedStageId !== null) {
-      console.log("Selected Stage ID:", selectedStageId);
       const updateForm = {
-       stage_id: selectedStageId,
-    }
+        stage_id: selectedStageId,
+      };
       axios
-      .put(UPDATE_DEAL + id, updateForm, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        alert(response?.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+        .put(UPDATE_DEAL + id, updateForm, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        })
+        .then((response) => {
+          alert(response?.data.message);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     setActionOpen(!actionopen);
   };
@@ -143,9 +143,11 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        const displayNames = response.data.message.map(
+        const displayNames = response?.data?.message?.map(
           (item) => item.display_name
         );
+
+        setSimilarStage(response?.data?.message.reverse());
 
         // Sort displayNames based on item.id in ascending order
         const sortedDisplayNamesAsc = [...displayNames].sort((a, b) => {
@@ -160,7 +162,9 @@ const DealUpdate = () => {
 
         setStages(sortedDisplayNamesAsc);
 
-        const statusNames = response?.data?.message?.map((item) => item.stage_name);
+        const statusNames = response?.data?.message?.map(
+          (item) => item.stage_name
+        );
         if (statusNames && statusNames.length > 0) {
           setStatus(statusNames.reverse());
         }
@@ -174,7 +178,6 @@ const DealUpdate = () => {
     fetchStages();
   }, []);
 
- 
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
@@ -316,6 +319,7 @@ const DealUpdate = () => {
           procuration_fee_paid: details.procuration_fee_paid,
           deal_commission: details.deal_commission,
           completion_date: details.completion_date?.split("T")[0],
+          stage_id: details.stage_id,
         });
         setIsLoading(false);
       })
@@ -351,7 +355,6 @@ const DealUpdate = () => {
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
-    console.log(dealDetails);
     axios
       .put(UPDATE_DEAL + id, dealDetails, {
         headers: {
@@ -359,7 +362,6 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data);
         toast.success("Deal data updated successfully", {
           position: "top-center",
           autoClose: 2000,
@@ -515,13 +517,11 @@ const DealUpdate = () => {
             <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
           </div> */}
           {visibleStages?.map((stage, index) => {
-            const isActive =
-              status[currentIndex + index] === dealDetails.status;
-            const activeIndex = status.indexOf(dealDetails.status);
-
+            const isActive = currentIndex + index + 1 === dealDetails.stage_id;
+            const activeIndex = dealDetails.stage_id;
             const backgroundColor = isActive
               ? "#2b74da"
-              : activeIndex >= currentIndex + index
+              : activeIndex > currentIndex + index + 1
               ? "#077838" //
               : "#f3f3f3";
             const textColor =
@@ -582,33 +582,30 @@ const DealUpdate = () => {
               ></i>
             </div>
 
-
-{actionopen && (
-  <ul className="dropdown-menu stage-position" id="stage-list">
-    {stages?.map((stage, index) => (
-      // Check if the stage is not equal to the current dealDetails.status
-      dealDetails.status !== stage && (
-        <li
-          key={index}
-          onClick={(e) => handleStageClickFromList(e, index + 1)}
-          className={dealDetails.status === stage ? "active-stage" : ""}
-        >
-          {stage}
-        </li>
-      )
-    ))}
-    <li>
-      <button
-        className="common-save-button stage-save-btn"
-        onClick={handleChangeStatusClick}
-      >
-        Change Status
-      </button>
-    </li>
-  </ul>
-)}
-
-
+            {actionopen && (
+              <ul className="dropdown-menu stage-position" id="stage-list">
+                {similarStage?.map(
+                  (stage, index) =>
+                    dealDetails?.stage_id !== stage.id && (
+                      <li
+                        key={index}
+                        onClick={(e) => handleStageClickFromList(e, index + 1)}
+                        className=""
+                      >
+                        {stage.display_name}
+                      </li>
+                    )
+                )}
+                <li>
+                  <button
+                    className="common-save-button stage-save-btn"
+                    onClick={handleChangeStatusClick}
+                  >
+                    Change Status
+                  </button>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </div>
