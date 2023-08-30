@@ -3,6 +3,8 @@ import "../assets/image/email-sync-tick.svg";
 import TickMark from "../assets/image/white-tick-mark.svg";
 import UserIcon from "../assets/image/user-icon.svg";
 import Download from "../assets/image/download.svg";
+import GreaterDown from "../assets/image/greater-arrow-down.svg";
+import GreaterUp from "../assets/image/greater-up.svg";
 import axios from "axios";
 import { getDecryptedToken, GET_SERVICE } from "./utils/Constants";
 
@@ -11,6 +13,24 @@ const TickIcon = () => {
   const [ticket, setTicket] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleTicket = (index) => {
+    if (openIndex === index) {
+      setOpenIndex(null);
+    } else {
+      setOpenIndex(index);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day} ${month}, ${year}`;
+  };
+  
 
   const getTicket = () => {
     axios
@@ -20,7 +40,7 @@ const TickIcon = () => {
         },
       })
       .then((response) => {
-        setTicket(response?.data?.data[0]);
+        setTicket(response?.data?.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -40,20 +60,61 @@ const TickIcon = () => {
 
   return (
     <div className="time-container">
-      <p className="common-fonts time-request-heading">Service request</p>
-      <p className="common-fonts time-request-note">
-        {ticket.title} {ticket.id}
-      </p>
-
+    {
+      isLoading ? (
+        <p className="common-fonts ticket-loading">Loading...</p>
+      )
+      :
+      ticket.map((ticket,index)=>{
+        return (
+          <div className="time-box" key={index}>
       <div>
-        <div className="service-user-details">
+      <div className="time-ticket-top">
+      <div className="service-user-details">
           <p className="common-fonts service-user-name">Title</p>
           {isLoading ? (
             <p>-</p>
           ) : (
-            <p className="common-fonts">{ticket.description}</p>
+            <p className="common-fonts">{ticket.title}</p>
           )}
         </div>
+      <div className="service-user-details">
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts ticket-date">{formatDate(ticket.created_at.split("T")[0])}</p>
+          )}
+        </div>
+
+      </div>
+      <div className="time-ticket-top">
+      <div className="service-user-details">
+          <p className="common-fonts service-user-name">Support Request No</p>
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts">{ticket.id}</p>
+          )}
+        </div>
+        {
+          openIndex !== index && (
+
+            <div className="service-user-details ticket-img" onClick={() => toggleTicket(index)}>
+          <img src={GreaterDown} alt="" />
+        </div>
+
+          )
+        }
+
+
+      </div>
+
+
+        {
+          openIndex === index && (
+            <>
+
+                                
         <div className="service-user-details">
           <p className="common-fonts service-user-name">phone</p>
           {isLoading ? (
@@ -67,11 +128,13 @@ const TickIcon = () => {
           {isLoading ? (
             <p>-</p>
           ) : (
+
             <p className="common-fonts" style={{ textTransform: "lowercase" }}>
               {ticket.email}
             </p>
           )}
         </div>
+        
         <div className="service-user-details">
           <p className="common-fonts service-user-name">priority</p>
           {isLoading ? (
@@ -80,8 +143,17 @@ const TickIcon = () => {
             <p className="common-fonts">{ticket.priority}</p>
           )}
         </div>
-      </div>
 
+            </>
+
+          )
+        }
+        </div>
+
+        {
+          openIndex === index && (
+            <>
+            
       {ticket.status === "Open" ? (
         <div className="time-progress-section1">
           <div className="green-color-tick">
@@ -157,12 +229,38 @@ const TickIcon = () => {
         <div className="white-line"></div>
       </div>
 
-      <div className="attachments-section">
+
+
+      <div className="time-ticket-top attachments-section">
+      <div>
         <p className="common-fonts time-attachments">Attachments</p>
         <p className="common-fonts time-screenshot">
           screenshot_deals_2023 <img src={Download} alt="" />
         </p>
       </div>
+      <div className="service-user-details ticket-img" onClick={() => toggleTicket(index)}>
+          <img src={GreaterUp} alt="" />
+        </div>
+
+      </div>
+
+            </>
+          )
+
+        }
+
+
+
+
+    </div>
+        )
+      })
+    }
+
+    {/* <div className="time-bottom-btn">
+      <button className="common-delete-button">Cancel</button>
+      <button className="common-save-button time-save">Save</button>
+    </div> */}
     </div>
   );
 };
