@@ -29,6 +29,7 @@ const DealUpdate = () => {
   const actionDropDownRef = useRef(null);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [similarStage, setSimilarStage] = useState([]);
+  const [ShowUpdateButton, setShowUpdateButton] = useState(false);
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -75,13 +76,15 @@ const DealUpdate = () => {
   const [value, setValue] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [editedItem, setEditedItem] = useState("");
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
 
   const handleStageClickFromList = (event, stageId) => {
     setSelectedStageId(stageId);
+    setIsStageButton(false);
 
     const liElements = document.querySelectorAll(".dropdown-menu li");
     liElements.forEach((li) => {
@@ -93,6 +96,7 @@ const DealUpdate = () => {
   };
 
   const handleChangeStatusClick = () => {
+    setIsStageButton(true);
     if (selectedStageId !== null) {
       const updateForm = {
         stage_id: selectedStageId,
@@ -104,6 +108,7 @@ const DealUpdate = () => {
           },
         })
         .then((response) => {
+          fetchDeal();
           alert(response?.data.message);
         })
         .catch((error) => {
@@ -174,9 +179,7 @@ const DealUpdate = () => {
       });
   };
 
-  useEffect(() => {
-    fetchStages();
-  }, []);
+
 
 
   const handleSummary = () => {
@@ -273,6 +276,10 @@ const DealUpdate = () => {
   const lastStageIndex = stages?.length - 1;
   const canShowLeftScrollArrow = lastVisibleStageIndex < lastStageIndex;
 
+  useEffect(() => {
+    fetchStages();
+  }, []);
+
   const fetchDeal = () => {
     axios
       .get(GET_DEAL_ID + id, {
@@ -366,9 +373,13 @@ const DealUpdate = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        setShowUpdateButton(false);
+        setStateBtn(0);
       })
       .catch((error) => {
         console.log(error);
+        setShowUpdateButton(false);
+        setStateBtn(0);
       });
 
     setIsEditable(false);
@@ -406,6 +417,7 @@ const DealUpdate = () => {
     e.preventDefault();
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
+    setShowUpdateButton(!ShowUpdateButton);
     setStateBtn(0);
   };
 
@@ -516,41 +528,48 @@ const DealUpdate = () => {
           <div className="arrow-pointer arrow-pointer-2">
             <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
           </div> */}
-          {visibleStages?.map((stage, index) => {
-            const isActive = currentIndex + index + 1 === dealDetails.stage_id;
-            const activeIndex = dealDetails.stage_id;
-            const backgroundColor = isActive
-              ? "#2b74da"
-              : activeIndex > currentIndex + index + 1
-              ? "#077838" //
-              : "#f3f3f3";
-            const textColor =
-              isActive ||
-              backgroundColor === "#077838" ||
-              backgroundColor === "#2b74da"
-                ? "white"
-                : "#1e2224";
 
-            const arrowClass = isActive
-              ? "arrow-blue"
-              : backgroundColor === "#077838"
-              ? "arrow-green"
-              : "";
-            return (
-              <div
-                className={`arrow-pointer ${arrowClass}`}
-                style={{ backgroundColor, color: textColor }}
-                key={index}
-              >
-                <p
-                  className="common-fonts arrow-text"
-                  style={{ color: textColor }}
-                >
-                  {stage} (3 days)
-                </p>
-              </div>
-            );
-          })}
+          {
+  isLoading ? (
+    <p className="deal-loading">loading...</p>
+  ) : (
+    <>
+      {visibleStages?.map((stage, index) => {
+        const isActive = currentIndex + index + 1 === dealDetails.stage_id;
+        const activeIndex = dealDetails.stage_id;
+        const backgroundColor = isActive
+          ? "#2b74da"
+          : activeIndex > currentIndex + index + 1
+          ? "#077838"
+          : "#f3f3f3";
+        const textColor =
+          isActive ||
+          backgroundColor === "#077838" ||
+          backgroundColor === "#2b74da"
+            ? "white"
+            : "#1e2224";
+
+        const arrowClass = isActive
+          ? "arrow-blue"
+          : backgroundColor === "#077838"
+          ? "arrow-green"
+          : "";
+
+        return (
+          <div
+            className={`arrow-pointer ${arrowClass}`}
+            style={{ backgroundColor, color: textColor }}
+            key={index}
+          >
+            <p className="common-fonts arrow-text" style={{color:textColor}}>
+              {stage} (3 days)
+            </p>
+          </div>
+        );
+      })}
+    </>
+  )
+}
 
           <button
             className="arrow-scroll-right"
@@ -559,6 +578,8 @@ const DealUpdate = () => {
           >
             <img src={GreaterRight} alt="" class="deals-arrow-right" />
           </button>
+
+
           <div className="arrow-btn">
             <button className="arrow-won common-fonts">Won</button>
             <button className="arrow-lost common-fonts">Lost</button>
@@ -598,8 +619,8 @@ const DealUpdate = () => {
                 )}
                 <li>
                   <button
-                    className="common-save-button stage-save-btn"
-                    onClick={handleChangeStatusClick}
+                    className={isStageButton ? `common-inactive-button stage-save-btn` :`common-save-button stage-save-btn`}
+                    onClick={handleChangeStatusClick} disabled={isStageButton}
                   >
                     Change Status
                   </button>
@@ -610,7 +631,7 @@ const DealUpdate = () => {
         </div>
       </div>
 
-      <main className="dealcontainer">
+      <section className="dealcontainer">
         <div className="dealLeftSection">
           <section>
             <div className="summaryDiv">
@@ -1257,7 +1278,9 @@ const DealUpdate = () => {
                 </div>
               </div>
             )}
-            <div className="deal-update-btn">
+            {
+              ShowUpdateButton && (
+                <div className="deal-update-btn">
               {stateBtn === 0 ? (
                 <button disabled className="disabledBtn ">
                   Update
@@ -1268,6 +1291,10 @@ const DealUpdate = () => {
                 </button>
               )}
             </div>
+
+              )
+            }
+
           </section>
         </div>
         <div className="divRightSection">
@@ -1329,7 +1356,7 @@ const DealUpdate = () => {
             )}
           </div>
         </div>
-      </main>
+      </section>
       <ToastContainer />
     </>
   );
