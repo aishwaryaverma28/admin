@@ -251,12 +251,15 @@ color:var(--font-lighter);
 
 .time-attachments{
     margin-bottom: 0.3rem;
-    margin-top: 4rem;
+}
+
+.attachments-section{
+    margin-top: 3.5rem;
 }
 
 .time-screenshot{
     color:var(--ternary);
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .time-screenshot img{
@@ -293,3 +296,48 @@ color:var(--font-lighter);
     background: #e8e7e7;
 }
 /* search section ends */
+
+.time-ticket-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.time-box{
+    border:1px solid var(--border-color);
+    border-radius: 0.3125rem;
+    padding: 1rem;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+}
+
+.time-bottom-btn{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: var(--th-background);
+    padding: 1rem;
+    margin: -1rem;
+    margin-top: 1rem;
+}
+
+.time-save{
+    margin-left: 1rem;
+}
+
+.ticket-date{
+    width:100%;
+    color:var(--font-color);
+}
+
+.ticket-img{
+    padding: 0.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--th-background);
+    cursor: pointer;
+    background-color: var(--input-background);
+}
+
+.ticket-loading{
+    font-size: 1.5rem;
+}
