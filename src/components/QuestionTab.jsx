@@ -12,6 +12,7 @@ const QuestionTab = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [data, setData] = useState([]);
+  const [selectedItemTitle, setSelectedItemTitle] = useState("");
   const [selectedItemDetails, setSelectedItemDetails] = useState("");
 
   const handleSearchInputChange = (event) => {
@@ -44,7 +45,8 @@ const QuestionTab = () => {
     fetchData();
   }, [searchQuery]);
 
-  const handleTitleClick = (details) => {
+  const handleTitleClick = (title, details) => {
+    setSelectedItemTitle(title);
     setSelectedItemDetails(details);
     setData([]);
   };
@@ -76,11 +78,10 @@ const QuestionTab = () => {
               <p
                 className="common-fonts searchTitle"
                 key={item.id}
-                onClick={() => handleTitleClick(item.details)}
+                onClick={() => handleTitleClick(item.title, item.details)}
               >
                 {item.title}
               </p>
-              {console.log(item)}
             </>
           ))}
         </div>
@@ -90,7 +91,10 @@ const QuestionTab = () => {
           Please Search for title in search bar
         </p>
       ) : (
-        <p className="common-fonts question-para">{selectedItemDetails}</p>
+        <>
+          <p className="common-fonts question-para">{selectedItemTitle}</p>
+          <p className="common-fonts answer-para">{selectedItemDetails}</p>
+        </>
       )}
     </div>
   );

@@ -113,6 +113,7 @@
     color: var(--font-light);
     margin-top: 1.5rem;
     line-height: 1.25rem;
+    font-weight: bold;
     /* 142.857% */
 
 }
@@ -286,6 +287,9 @@ color:var(--font-lighter);
 .searchTitle{
     border-bottom:1px solid var(--border-color);
     padding: 0.5rem 1rem;
+    cursor: pointer;
 }
-
+.searchTitle:hover{
+    background: #e8e7e7;
+}
 /* search section ends */
