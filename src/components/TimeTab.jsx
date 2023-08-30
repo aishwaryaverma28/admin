@@ -3,16 +3,13 @@ import "../assets/image/email-sync-tick.svg";
 import TickMark from "../assets/image/white-tick-mark.svg";
 import UserIcon from "../assets/image/user-icon.svg";
 import Download from "../assets/image/download.svg";
-import axios from 'axios';
-import {
-  getDecryptedToken,
-  GET_SERVICE
-} from './utils/Constants';
+import axios from "axios";
+import { getDecryptedToken, GET_SERVICE } from "./utils/Constants";
 
 const TickIcon = () => {
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
-  const [isLoading,setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const getTicket = () => {
@@ -32,10 +29,9 @@ const TickIcon = () => {
       });
   };
 
-useEffect(()=>{
-getTicket();
-},[])
-
+  useEffect(() => {
+    getTicket();
+  }, []);
 
   const handleSuccess = () => {
     setIsSuccess(true);
@@ -46,82 +42,109 @@ getTicket();
     <div className="time-container">
       <p className="common-fonts time-request-heading">Service request</p>
       <p className="common-fonts time-request-note">
-        Unable to create deals (INC0027899)
+        {ticket.title} {ticket.id}
       </p>
 
       <div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">Title</p>
-          {
-            isLoading ? (
-              <p>-</p>
-            ): (
-              <p className="common-fonts">{ticket.description}</p>
-            )
-          }
-          
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts">{ticket.description}</p>
+          )}
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">phone</p>
-          {
-            isLoading ? (
-              <p>-</p>
-            ): (
-              <p className="common-fonts">{ticket.mobile}</p>
-            )
-          }
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts">{ticket.mobile}</p>
+          )}
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">email</p>
-          {
-            isLoading ? (
-              <p>-</p>
-            ): (
-              <p className="common-fonts" style={{textTransform:"lowercase"}}>{ticket.email}</p>
-            )
-          }
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts" style={{ textTransform: "lowercase" }}>
+              {ticket.email}
+            </p>
+          )}
         </div>
         <div className="service-user-details">
           <p className="common-fonts service-user-name">priority</p>
-          {
-            isLoading ? (
-              <p>-</p>
-            ): (
-              <p className="common-fonts">{ticket.priority}</p>
-            )
-          }
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts">{ticket.priority}</p>
+          )}
         </div>
       </div>
 
-      <div className="time-progress-section1">
-        <div className="green-color-tick">
-          <img src={TickMark} alt="" />
-        </div>
-
-        <div className="service-request-open">
-          <p className="common-fonts">Service request open</p>
-          <p className="common-fonts service-date">August 3, 2023</p>
-        </div>
-        <div className="green-line"></div>
-      </div>
-
-      <div className="time-progress-section2">
-        <div className="green-color-tick">
-          <img src={TickMark} alt="" />
-        </div>
-
-        <div className="service-request-open">
-          <p className="common-fonts">Agent assigned</p>
-          <p className="common-fonts service-date">August 3, 2023</p>
-          <div className="time-user-name">
-            <div className="time-user-icon">
-              <img src={UserIcon} alt="" />
-            </div>
-            <p className="common-fonts">Uday Misra</p>
+      {ticket.status === "Open" ? (
+        <div className="time-progress-section1">
+          <div className="green-color-tick">
+            <img src={TickMark} alt="" />
           </div>
+          <div className="service-request-open">
+            <p className="common-fonts">Service request open</p>
+            {isLoading ? (
+              <p>-</p>
+            ) : (
+              <p className="common-fonts service-date">
+                {ticket.updated_at.split("T")[0]}
+              </p>
+            )}
+          </div>
+          <div className="green-line"></div>
         </div>
-        <div className="white-line"></div>
-      </div>
+      ) : (
+        <div className="time-progress-section1">
+          <div className="white-color-tick">
+            <img src={TickMark} alt="" />
+          </div>
+          <div className="service-request-open">
+            <p className="common-fonts issue-resolved">Service request open</p>
+          </div>
+          <div className="white-line"></div>
+        </div>
+      )}
+      {ticket.assigned_to !== null ? (
+        <div className="time-progress-section2">
+          <div className="green-color-tick">
+            <img src={TickMark} alt="" />
+          </div>
+
+          <div className="service-request-open">
+            <p className="common-fonts">Agent assigned</p>
+            {isLoading ? (
+              <p>-</p>
+            ) : (
+              <p className="common-fonts service-date">
+                {ticket.updated_at.split("T")[0]}
+              </p>
+            )}
+            <div className="time-user-name">
+              <div className="time-user-icon">
+                <img src={UserIcon} alt="" />
+              </div>
+              <p className="common-fonts">{ticket.assigned_to}</p>
+            </div>
+          </div>
+          <div className="white-line"></div>
+        </div>
+      ) : (
+        <div className="time-progress-section1">
+          <div className="white-color-tick">
+            <img src={TickMark} alt="" />
+          </div>
+          <div className="service-request-open">
+            <p className="common-fonts issue-resolved">Agent assigned</p>
+          </div>
+          <div className="white-line"></div>
+        </div>
+      )}
 
       <div className="time-progress-section1">
         <div className="white-color-tick">

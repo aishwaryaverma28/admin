@@ -20,7 +20,7 @@ const ServiceRequestTab = ({ ticket, onClose }) => {
           </div>
 
           <p className="common-fonts time-request-note">
-            Unable to create deals {ticket.id}
+          {ticket.title} {ticket.id}
           </p>
 
           <div>
