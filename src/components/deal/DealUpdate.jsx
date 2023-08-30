@@ -375,6 +375,7 @@ const DealUpdate = () => {
         });
         setShowUpdateButton(false);
         setStateBtn(0);
+        fetchDeal();
       })
       .catch((error) => {
         console.log(error);
@@ -466,10 +467,16 @@ const DealUpdate = () => {
     height: "2rem",
   };
 
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "label_name") {
-      const selectedLabel = mergedLabels.find((label) => label.name === value);
+    if (name === "label_id") {
+      const selectedLabel = mergedLabels.find((label) => label.id === parseInt(value));
+      setDealDetails({
+        ...dealDetails,
+        label_id: selectedLabel.id,
+      });
       if (selectedLabel) {
         setSelectedLabelColor(selectedLabel.colour_code);
       }
@@ -685,9 +692,9 @@ const DealUpdate = () => {
                     ) : (
                       <span>
                         <select
-                          name="label_name"
-                          id="label_name"
-                          value={dealDetails?.label_name || ""}
+                          name="label_id"
+                          id="label_id"
+                          value={dealDetails?.label_id || ""}
                           onChange={handleInputChange}
                           disabled={isDisabled}
                           style={
@@ -698,7 +705,7 @@ const DealUpdate = () => {
                           className={isDisabled ? "disabled" : ""}
                         >
                           {mergedLabels?.map((item) => (
-                            <option key={item?.id} value={item?.name}>
+                            <option key={item?.id} value={item?.id}>
                               {item?.name}
                             </option>
                           ))}
