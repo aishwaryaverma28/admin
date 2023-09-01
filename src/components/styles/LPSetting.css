@@ -19,10 +19,11 @@ button {
 /* side panel css  */
 
 .setting-side-panel {
-  width: 20vw;
+  min-width:20vw;
   height: auto;
   /* overflow-y: scroll; */
-  background: #f8fafb;
+  background: #f8fbf8;
+
 }
 .go-back-btn button {
   color: #33475b;
@@ -64,7 +65,7 @@ button {
 }
 
 
-.prefrence-options a,.account-options a, .company-options a{
+.prefrence-options a,.account-options a, .company-options a, .master-settings-options{
   text-decoration: none;
   font-weight: 400;
   font-size: 0.875rem;
@@ -78,4 +79,44 @@ button {
   width:15rem;
   font-family: "Lexend Deca", sans-serif;
   color:#33475B;
+}
+
+.setting-arrow{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-arrow img{
+  margin-top: 1.7rem;
+  margin-bottom:1rem;
+  margin-right: 1rem;
+  max-width: none;
+  width: 1.5rem;
+  height:1.5rem;
+  cursor: pointer;
+}
+
+.master-arrow{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.master-arrow img{
+  margin-right: 1rem;
+  max-width: none;
+  width: 1.5rem;
+  height:1.5rem;
+  cursor: pointer;
+
+}
+
+.sub-sub-menu{
+  padding-left: 1.5rem;
+  background-color: #e2e9f2;
+}
+
+.sub-menu-open{
+background-color: #e2e9f2;
 }
