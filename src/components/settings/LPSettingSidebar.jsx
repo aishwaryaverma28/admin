@@ -227,7 +227,7 @@ const LPSettingSidebar = () => {
             onClick={() => toggleMasterSubMenu("blog")}
           >
             <p className="company-options master-settings-options setting-font-style">
-              BLog
+              Blog
             </p>
             <img
               src={masterSubMenu === "blog" ? GreaterUp : GreaterDown}
