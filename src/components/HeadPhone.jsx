@@ -17,7 +17,7 @@ const HeadPhone = () => {
     category: "Technical",
     priority: "Low",
   });
-  const [clientData, setClientData] = useState(null);
+  // const [clientData, setClientData] = useState(null);
 
 
   async function getUser() {
@@ -33,7 +33,7 @@ const HeadPhone = () => {
           email: data[0]?.email,
           mobile: data[0]?.phone,
         })
-        setClientData(data[0]);
+        // setClientData(data[0]);
       }
     } catch (error) {
       console.log(error);
@@ -141,7 +141,7 @@ const HeadPhone = () => {
                 type="text" name="mobile"
                 onChange={handleChange}
                 className="common-input contact-tab-input"
-                value={clientData?.phone}
+                value={details?.mobile}
               />
             </div>
           </div>
@@ -154,7 +154,7 @@ const HeadPhone = () => {
               type="email" name="email"
               onChange={handleChange}
               className="common-fonts common-input email-case contact-tab-input"
-              value={clientData?.email}
+              value={details?.email}
             />
           </div>
 
