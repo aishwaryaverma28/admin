@@ -29,8 +29,11 @@ const HeadPhone = () => {
       });
       const data = response?.data?.data;
       if (response.data.status === 1) {
+        setDetails({
+          email: data[0]?.email,
+          mobile: data[0]?.phone,
+        })
         setClientData(data[0]);
-        //   setPic(VIEW_IMG + data[0].profile_image);
       }
     } catch (error) {
       console.log(error);
@@ -81,8 +84,6 @@ const HeadPhone = () => {
         setDetails({
           title: "",
           description: "",
-          email: "",
-          mobile: "",
           category: "",
           priority: "",
         });
