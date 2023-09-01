@@ -11,6 +11,7 @@ import { getDecryptedToken, GET_SERVICE } from "./utils/Constants";
 const TickIcon = () => {
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
+
   const [isLoading, setLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
@@ -25,12 +26,18 @@ const TickIcon = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = date.getDate();
+    const day = String(date.getDate()).padStart(2, '0');
     const month = date.toLocaleString('default', { month: 'short' });
     const year = date.getFullYear();
-    return `${day} ${month}, ${year}`;
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+    return `${day} ${month}, ${year} ${formattedTime}`;
   };
   
+ 
 
   const getTicket = () => {
     axios
@@ -69,7 +76,48 @@ const TickIcon = () => {
         return (
           <div className="time-box" key={index}>
       <div>
-      <div className="time-ticket-top">
+
+    
+      <div >
+
+        {
+          openIndex !== index && (
+            <div className="time-ticket-top-2">
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts ticket-title"> {ticket.title.length > 15 ? `${ticket.title.slice(0, 15)}...` : ticket.title}</p>
+          )}
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts ticket-id">{ticket.id}</p>
+          )}
+
+          {isLoading ? (
+            <p>-</p>
+          ) : (
+            <p className="common-fonts ticket-date ticket-date-2">{formatDate(ticket.created_at)}</p>
+          )}
+
+          <div className="ticket-img" onClick={() => toggleTicket(index)}>
+          <img src={GreaterDown} alt="" />
+        </div>
+
+        </div>
+
+          )
+        }
+
+      </div>
+
+
+        {
+          openIndex === index && (
+            <>
+
+            
+            <div className="time-ticket-top">
       <div className="service-user-details">
           <p className="common-fonts service-user-name">Title</p>
           {isLoading ? (
@@ -82,13 +130,13 @@ const TickIcon = () => {
           {isLoading ? (
             <p>-</p>
           ) : (
-            <p className="common-fonts ticket-date">{formatDate(ticket.created_at.split("T")[0])}</p>
+            <p className="common-fonts ticket-date">{formatDate(ticket.created_at)}</p>
           )}
         </div>
 
       </div>
-      <div className="time-ticket-top">
-      <div className="service-user-details">
+
+            <div className="service-user-details">
           <p className="common-fonts service-user-name">Support Request No</p>
           {isLoading ? (
             <p>-</p>
@@ -96,24 +144,6 @@ const TickIcon = () => {
             <p className="common-fonts">{ticket.id}</p>
           )}
         </div>
-        {
-          openIndex !== index && (
-
-            <div className="service-user-details ticket-img" onClick={() => toggleTicket(index)}>
-          <img src={GreaterDown} alt="" />
-        </div>
-
-          )
-        }
-
-
-      </div>
-
-
-        {
-          openIndex === index && (
-            <>
-
                                 
         <div className="service-user-details">
           <p className="common-fonts service-user-name">phone</p>

@@ -113,7 +113,7 @@ const HeadPhone = () => {
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
-                className="common-input contact-tab-mobile contact-tab-input headphone-input"
+                className="common-input contact-tab-input headphone-input"
               />
             </div>
           </div>

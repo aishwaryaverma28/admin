@@ -176,10 +176,10 @@ select:focus {
   border-radius: 0.3125rem;
   border: 1px solid #DCDCDC;
   background: #F3F6FA;
-  padding: 1rem;
+  padding: 0.7rem;
   cursor: pointer;
   width: 28rem;
-height: 2.5rem;
+height: 2rem;
 }
 
 .common-white-button {
