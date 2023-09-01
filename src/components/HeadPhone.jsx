@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_TICKET, getDecryptedToken } from "./utils/Constants";
+import { ADD_TICKET, getDecryptedToken, USER_INFO } from "./utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,6 +17,32 @@ const HeadPhone = () => {
     category: "Technical",
     priority: "Low",
   });
+  const [clientData, setClientData] = useState(null);
+
+
+  async function getUser() {
+    try {
+      const response = await axios.get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      const data = response?.data?.data;
+      if (response.data.status === 1) {
+        setClientData(data[0]);
+        //   setPic(VIEW_IMG + data[0].profile_image);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -113,7 +139,8 @@ const HeadPhone = () => {
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
-                className="common-input contact-tab-input headphone-input"
+                className="common-input contact-tab-input"
+                value={clientData?.phone}
               />
             </div>
           </div>
@@ -126,6 +153,7 @@ const HeadPhone = () => {
               type="email" name="email"
               onChange={handleChange}
               className="common-fonts common-input email-case contact-tab-input"
+              value={clientData?.email}
             />
           </div>
 
