@@ -117,7 +117,7 @@ setStateBtn(0);
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
-                className="common-input contact-tab-input"
+                className="common-fonts common-input contact-tab-input"
               />
             </div>
           </div>
