@@ -49,8 +49,7 @@ button {
 
 .prefrence, .account-setup , .company-setup {
   margin-left: 2rem;
-  margin-top: 1.7rem;
-  margin-bottom:1rem;
+  margin-top: 1.5rem;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -79,6 +78,7 @@ button {
   width:15rem;
   font-family: "Lexend Deca", sans-serif;
   color:#33475B;
+  margin-top: 0.5rem;
 }
 
 .setting-arrow{
@@ -88,8 +88,7 @@ button {
 }
 
 .setting-arrow img{
-  margin-top: 1.7rem;
-  margin-bottom:1rem;
+  margin-top: 1.5rem;
   margin-right: 1rem;
   max-width: none;
   width: 1.5rem;
