@@ -81,6 +81,7 @@ const Lead = () => {
 
   const resetData = () => {
     fetchLeadsData();
+    fetchLabelData();
   };
 
   const handleDeletePopUpOpen = () => {
@@ -94,6 +95,7 @@ const Lead = () => {
     fetchLeadsData();
     fetchLabelData();
   }, []);
+
 
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -458,6 +460,9 @@ const Lead = () => {
                   </div> */}
               </div>
             </div>
+            <button type="button" className="helpBtn genral-refresh-icon" title="Refresh" onClick={resetData} >
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
           </div>
         </div>
       </section>
