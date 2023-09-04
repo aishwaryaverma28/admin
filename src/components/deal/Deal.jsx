@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
 import CreateDeal from "./CreateDeal";
 import DealDeletePopUp from "../DeleteComponent";
+import ExcelJS from "exceljs";
 
 const Deal = () => {
   const [stages, setStages] = useState([]);
@@ -29,6 +30,8 @@ const Deal = () => {
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+
   
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
@@ -165,7 +168,146 @@ useEffect(() => {
   const togglePipeDropdown = () => {
     setPipeOpen(!pipeopen);
   };
-  const toggleActionDropdown = () => {
+
+  const exportToExcel = async () => {
+    // Check if you have data to export
+    if (!deals || deals.length === 0) {
+      console.log("No data to export.");
+      return;
+    }
+
+    console.log(deals);
+    console.log("bye")
+
+    // Create a new workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Deals");
+
+    // Add data to the worksheet
+    worksheet.columns = [
+      { header: "Id", key: "id", width: 20 },
+      { header: "Borrower Entry", key: "borrower_entry", width: 30 },
+      { header: "Broker Fee", key: "broker_fee", width: 20 },
+      { header: "Broker Fee Paid", key: "broker_fee_paid", width: 20 },
+      { header: "Closure Date", key: "closure_date", width: 30 },
+      { header: "Completion Date", key: "completion_date", width: 30 },
+      { header: "Contact", key: "contact", width: 20 },
+      { header: "Creation Date", key: "creation_date", width: 30 },
+      { header: "Currency", key: "currency", width: 20 },
+      { header: "Data Enquiry Recieve", key: "data_enquiry_receive", width: 30 },
+      { header: "Deal Comission", key: "deal_commission", width: 20 },
+      { header: "Deal Name", key: "deal_name", width: 20 },
+      { header: "Deposite", key: "deposit", width: 20 },
+      { header: "Doc Number", key: "doc_number", width: 20 },
+      { header: "Document Verified", key: "document_verified", width: 20 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Engagement Fee", key: "engagement_fee", width: 20 },
+      { header: "Engagement Fee Paid", key: "engagement_fee_paid", width: 20 },
+      { header: "Introducer Firm Name", key: "introducer_firm_name", width: 20 },
+      { header: "Introducer Name", key: "introducer_name", width: 20 },
+      { header: "Is Deleted", key: "is_deleted", width: 20 },
+      { header: "Label Colour", key: "label_coloure", width: 20 },
+      { header: "Label Id", key: "label_id", width: 20 },
+      { header: "Label Name", key: "label_name", width: 20 },
+      { header: "Lead Id", key: "lead_id", width: 20 },
+      { header: "Lead Source", key: "lead_source", width: 20 },
+      { header: "Lender", key: "lender", width: 20 },
+      { header: "Loan Amount", key: "loan_amount", width: 20 },
+      { header: "Loan Type", key: "loan_type", width: 20 },
+      { header: "Mobile", key: "mobile", width: 20 },
+      { header: "Organization", key: "organization", width: 20 },
+      { header: "Owner", key: "owner", width: 20 },
+      { header: "Owner First Name", key: "ownerf_name", width: 20 },
+      { header: "Owner Last Name", key: "ownerl_name", width: 20 },
+      { header: "Pipeline Id", key: "pipeline_id", width: 20 },
+      { header: "Probability", key: "probability", width: 20 },
+      { header: "Procuration Fee", key: "procuration_fee", width: 20 },
+      { header: "Procuration Fee Paid", key: "procuration_fee_paid", width: 20 },
+      { header: "Security Value", key: "security_value", width: 20 },
+      { header: "Stage Id", key: "stage_id", width: 20 },
+      { header: "Stage Name", key: "stage_name", width: 20 },
+      { header: "Status", key: "status", width: 20 },
+      { header: "Type Of Security", key: "type_of_security", width: 20 },
+      { header: "Update Date", key: "update_date", width: 30 },
+      { header: "Value", key: "value", width: 20 },
+     
+    ];
+
+    deals.forEach((deal) => {
+      worksheet.addRow({
+        id: deal.id,
+        borrower_entry: deal.borrower_entry,
+        broker_fee: deal.broker_fee,
+        broker_fee_paid: deal.broker_fee_paid,
+        closure_date: deal.closure_date,
+        completion_date: deal.completion_date,
+        contact: deal.contact,
+        creation_date: deal.creation_date,
+        currency: deal.currency,
+        data_enquiry_receive: deal.data_enquiry_receive,
+        deal_commission: deal.deal_commission,
+        deal_name: deal.deal_name,
+        deposit: deal.deposit,
+        doc_number: deal.doc_number,
+        document_verified: deal.document_verified,
+        email: deal.email,
+        engagement_fee: deal.engagement_fee,
+        engagement_fee_paid: deal.engagement_fee_paid,
+        introducer_firm_name: deal.introducer_firm_name,
+        introducer_name: deal.introducer_name,
+        is_deleted: deal.is_deleted,
+        label_coloure: deal.label_coloure,
+        label_id: deal.label_id,
+        label_name: deal.label_name,
+        lead_id: deal.lead_id,
+        lead_source: deal.lead_source,
+        lender: deal.lender,
+        loan_amount: deal.loan_amount,
+        loan_type: deal.loan_type,
+        mobile: deal.mobile,
+        organization: deal.organization,
+        owner: deal.owner,
+        ownerf_name: deal.ownerf_name,
+        ownerl_name: deal.ownerl_name,
+        pipeline_id: deal.pipeline_id,
+        probability: deal.probability,
+        procuration_fee: deal.procuration_fee,
+        procuration_fee_paid: deal.procuration_fee_paid,
+        security_value: deal.security_value,
+        stage_id: deal.stage_id,
+        stage_name: deal.stage_name,
+        status: deal.status,
+        type_of_security: deal.type_of_security,
+        update_date: deal.update_date,
+        value: deal.value,
+        
+      });
+    });
+
+    // Generate a blob containing the Excel file
+    const blob = await workbook.xlsx.writeBuffer();
+
+    // Create a download link
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "deals.xlsx";
+    a.style.display = "none";
+
+    // Trigger the download
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  const toggleActionDropdown = (option) => {
+    if (option === "Export") {
+      // exportLeadsToCSV();
+      exportToExcel();
+    }
     setActionOpen(!actionopen);
   };
   // Effect hook to add click event listener when the component mounts
