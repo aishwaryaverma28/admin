@@ -30,6 +30,7 @@ const SecureRoutes = (props) => {
       "/lp/settings/settingImpExp",
       "/lp/settings/workflow",
       "/lp/settings/blog/add",
+      "/lp/settings/blog/view",
     ];
     //  const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;

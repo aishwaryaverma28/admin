@@ -69,7 +69,7 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
           {currentRows.map((row, index) => (
             <tr key={index}>
               <td className="employeeId">{row.id}</td>
-              <td className="employeeName"><Link to={"/admin/blog/view/"+row.id}>{row.title}</Link></td>
+              <td className="employeeName"><Link to={"/lp/settings/blog/view/"+row.id}>{row.title}</Link></td>
               <td className="sectionCount">{row.section_count}</td>
               <td className="sectionCount">{row.site}</td>              
               <td className="employeeDate">{row.date ? row.date.split("T")[0] : ""}</td>              

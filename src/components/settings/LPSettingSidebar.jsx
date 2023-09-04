@@ -29,6 +29,7 @@ const LPSettingSidebar = () => {
     "/lp/settings/settingUsage",
     "/lp/settings/settingImpExp",
     "/lp/settings/blog/add",
+    "/lp/settings/blog/view",
   ];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
@@ -269,9 +270,17 @@ const LPSettingSidebar = () => {
               </p>
               </NavLink>
               )}
+              {isPathAllowed("/lp/settings/blog/view") && (
+                <NavLink
+                exact
+                to="/lp/settings/blog/view"
+                activeClassName="activeLink"
+              >
               <p className="company-options master-settings-options setting-font-style">
                 View
               </p>
+              </NavLink>
+              )}
             </div>
           )}
 
