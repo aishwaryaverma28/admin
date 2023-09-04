@@ -15,6 +15,7 @@ import {
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ExcelJS from "exceljs";
 
 const Lead = () => {
   const stages = ["New", "Unread", "Open", "In Progress"];
@@ -60,6 +61,112 @@ const Lead = () => {
       });
   };
 
+  const exportToExcel = async () => {
+    // Check if you have data to export
+    if (!deals || deals.length === 0) {
+      console.log("No data to export.");
+      return;
+    }
+
+    // Create a new workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Leads");
+
+    // Add data to the worksheet
+    worksheet.columns = [
+      { header: "Id", key: "id", width: 20, bold: true, alignment: { horizontal: 'center' } },
+      { header: "Address 1", key: "address1", width: 20 },
+      { header: "Address 2", key: "address2", width: 20 },
+      { header: "City", key: "city", width: 20 },
+      { header: "Company Name", key: "company_name", width: 20 },
+      { header: "Country", key: "country", width: 20 },
+      { header: "Date Created", key: "creation_date", width: 30 },
+      { header: "Doc Number", key: "doc_number", width: 20 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Employees", key: "employees", width: 20 },
+      { header: "First Name", key: "first_name", width: 20 },
+      { header: "Last Name", key: "last_name", width: 20 },
+      { header: "Is Deleted", key: "is_deleted", width: 20 },
+      { header: "Label Colour", key: "label_coloure", width: 20 },
+      { header: "Label Id", key: "label_id", width: 20 },
+      { header: "Label Name", key: "label_name", width: 20 },
+      { header: "Lead Name", key: "lead_name", width: 20 },
+      { header: "Owner", key: "owner", width: 20 },
+      { header: "Owner Email", key: "owner_email", width: 20 },
+      { header: "Owner Phone", key: "owner_phone", width: 20 },
+      { header: "Owner First Name", key: "ownerf_name", width: 20 },
+      { header: "Owner Last Name", key: "ownerl_name", width: 20 },
+      { header: "Phone", key: "phone", width: 20 },
+      { header: "Pin", key: "pin", width: 20 },
+      { header: "Position", key: "position", width: 20 },
+      { header: "Registration Number", key: "registration_no", width: 20 },
+      { header: "Source", key: "source", width: 20 },
+      { header: "State", key: "state", width: 20 },
+      { header: "Status", key: "status", width: 20 },
+      { header: "Type", key: "type", width: 20 },
+      { header: "Update Date", key: "update_date", width: 30 },
+      { header: "Value", key: "value", width: 20 },
+      { header: "Website", key: "website", width: 20 },
+      // Add more columns as needed
+    ];
+
+    deals.forEach((deal) => {
+      worksheet.addRow({
+        id: deal.id,
+        address1: deal.address1,
+        address2: deal.address2,
+        city: deal.city,
+        company_name: deal.company_name,
+        country: deal.country,
+        creation_date: deal.creation_date,
+        doc_number: deal.doc_number,
+        email: deal.email,
+        employees: deal.employees,
+        first_name: deal.first_name,
+        last_name: deal.last_name,
+        is_deleted: deal.is_deleted,
+        label_coloure: deal.label_coloure,
+        label_id: deal.label_id,
+        label_name: deal.label_name,
+        lead_name: deal.lead_name,
+        owner: deal.owner,
+        owner_email: deal.owner_email,
+        owner_phone: deal.owner_phone,
+        ownerf_name: deal.ownerf_name,
+        ownerl_name: deal.ownerl_name,
+        phone: deal.phone,
+        pin: deal.pin,
+        position: deal.position,
+        registration_no: deal.registration_no,
+        source: deal.source,
+        state: deal.state,
+        status: deal.status,
+        update_date: deal.update_date,
+        value: deal.value,
+        website: deal.website,
+        // Add more columns as needed
+      });
+    });
+
+    // Generate a blob containing the Excel file
+    const blob = await workbook.xlsx.writeBuffer();
+
+    // Create a download link
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "leads.xlsx";
+    a.style.display = "none";
+
+    // Trigger the download
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -86,16 +193,15 @@ const Lead = () => {
 
   const handleDeletePopUpOpen = () => {
     setIsDelete(true);
-  }
+  };
   const handleMassDeletePopUpClose = () => {
     setIsDelete(false);
-  }
+  };
 
   useEffect(() => {
     fetchLeadsData();
     fetchLabelData();
   }, []);
-
 
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -173,7 +279,8 @@ const Lead = () => {
   };
   const toggleActionDropdown = (option) => {
     if (option === "Export") {
-      exportLeadsToCSV();
+      // exportLeadsToCSV();
+      exportToExcel();
     }
     setActionOpen(!actionopen);
   };
@@ -263,7 +370,6 @@ const Lead = () => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  console.log(selectedIds);
 
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
@@ -279,7 +385,7 @@ const Lead = () => {
     const idsWithStatus = deals
       .filter((deal) => deal.status === status)
       .map((deal) => deal.id);
-  
+
     if (areAllChildCheckboxesChecked(status)) {
       setSelectedIds(selectedIds.filter((id) => !idsWithStatus.includes(id)));
       setSelectedStatusesData((prevData) => ({
@@ -317,12 +423,11 @@ const Lead = () => {
         .catch((error) => {
           console.log(error);
         });
-        fetchLeadsData();
+      fetchLeadsData();
       setSelectedIds([]); // Reset the stored ID
       handleMassDeletePopUpClose();
     }
   };
-
 
   const mergedLabels = labelData
     .filter((item) => item?.entity?.includes("leads"))
@@ -424,9 +529,7 @@ const Lead = () => {
                     {/* <li onClick={() => toggleActionDropdown("Delete")}>
                       Mass Delete
                     </li> */}
-                    <li onClick={handleDeletePopUpOpen}>
-                      Mass Delete
-                    </li>
+                    <li onClick={handleDeletePopUpOpen}>Mass Delete</li>
                     <li>Mass Update</li>
                     <li>Mass Convert</li>
                     <li>Drafts</li>
@@ -460,9 +563,14 @@ const Lead = () => {
                   </div> */}
               </div>
             </div>
-            <button type="button" className="helpBtn genral-refresh-icon" title="Refresh" onClick={resetData} >
+            <button
+              type="button"
+              className="helpBtn genral-refresh-icon"
+              title="Refresh"
+              onClick={resetData}
+            >
               <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
+            </button>
           </div>
         </div>
       </section>
@@ -477,19 +585,19 @@ const Lead = () => {
                   </p>
                   {statusCounts[item] > 0 && (
                     <label className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className={`cb1 ${item}-header-checkbox`}
-                      name="headerCheckBox"
-                      checked={
-                        selectedStatusesData[item] &&
-                        areAllChildCheckboxesChecked(item)
-                      }
-                      onChange={() => handleHeaderCheckboxChange(item)}
-                    />
+                      <input
+                        type="checkbox"
+                        className={`cb1 ${item}-header-checkbox`}
+                        name="headerCheckBox"
+                        checked={
+                          selectedStatusesData[item] &&
+                          areAllChildCheckboxesChecked(item)
+                        }
+                        onChange={() => handleHeaderCheckboxChange(item)}
+                      />
 
-                    <span className="checkmark"></span>
-                  </label>
+                      <span className="checkmark"></span>
+                    </label>
                   )}
                 </div>
                 {deals.map((obj) => {
@@ -526,11 +634,12 @@ const Lead = () => {
         mergedLabels={mergedLabels}
       />
       <ToastContainer />
-      {
-        isDelete && (
-          <LeadDeletePopUp onClose={handleMassDeletePopUpClose} onDeleteConfirmed={handleDeleteLead}/>
-        )
-      }
+      {isDelete && (
+        <LeadDeletePopUp
+          onClose={handleMassDeletePopUpClose}
+          onDeleteConfirmed={handleDeleteLead}
+        />
+      )}
     </div>
   );
 };
