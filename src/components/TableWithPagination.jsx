@@ -72,7 +72,7 @@ const TableWithPagination = ({ data, rowsPerPage }) => {
               <td className="employeeId">{row.emp_no}</td>
               <td className="employeePosition">{row.position}</td>
               <td className="employeeName">
-                <Link to={"/admin/employee/view/"+row.id} key={row.id}>
+                <Link to={"/lp/settings/employee/view/"+row.id} key={row.id}>
                 {row.first_name} {row.last_name}
                 </Link>
               </td>

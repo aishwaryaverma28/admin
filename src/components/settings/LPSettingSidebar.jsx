@@ -42,6 +42,10 @@ const LPSettingSidebar = () => {
     "/lp/settings/reportsAndAnalytics",
     "/lp/settings/masterSettings/City",
     "/lp/settings/system/state",
+    "/lp/settings/viewProfile/employeeProfile",
+      "/lp/settings/viewProfile/timeSheet",
+      "/lp/settings/viewProfile/documents",
+      "/lp/settings/viewProfile/salarySlip",
   ];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
@@ -248,8 +252,13 @@ const LPSettingSidebar = () => {
       {openSubMenu === "master" && (
         <>
           <p className="company-options master-settings-options setting-font-style">
-            {" "}
+          <NavLink
+                exact
+                to="/lp/settings/viewProfile/employeeProfile"
+                activeClassName="activeLink"
+              >
             View Profile
+            </NavLink>
           </p>
 
           <div className="setting-arrow" onClick={() => toggleMasterSubMenu("blog")}>

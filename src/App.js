@@ -160,6 +160,22 @@ const router = createBrowserRouter([
             element: <SecureRoutes Component={SettingImpExp} />,
           },
           {
+            path: "/lp/settings/viewProfile/employeeProfile",
+            element: <SecureRoutes Component={EmployeeProfile} />,
+          },
+          {
+            path: "/lp/settings/viewProfile/timeSheet",
+            element: <SecureRoutes Component={TimeSheet} />,
+          },
+          {
+            path: "/lp/settings/viewProfile/documents",
+            element: <SecureRoutes Component={EmployeeDocuments} />,
+          },
+          {
+            path: "/lp/settings/viewProfile/salarySlip",
+            element: <SecureRoutes Component={SalarySlip} />,
+          },
+          {
             path: "/lp/settings/blog/add",
             element: <SecureRoutes Component={BlogAdd} />,
           },

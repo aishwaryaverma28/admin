@@ -43,6 +43,10 @@ const SecureRoutes = (props) => {
       "/lp/settings/reportsAndAnalytics",
       "/lp/settings/masterSettings/City",
       "/lp/settings/system/state",
+      "/lp/settings/viewProfile/employeeProfile",
+      "/lp/settings/viewProfile/timeSheet",
+      "/lp/settings/viewProfile/documents",
+      "/lp/settings/viewProfile/salarySlip",
     ];
     //  const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;
