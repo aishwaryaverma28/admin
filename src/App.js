@@ -256,22 +256,6 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <SecureRoutes Component={Editor} />,
       },
-      {
-        path: "/admin/viewProfile/employeeProfile",
-        element: <SecureRoutes Component={EmployeeProfile} />,
-      },
-      {
-        path: "/admin/viewProfile/timeSheet",
-        element: <SecureRoutes Component={TimeSheet} />,
-      },
-      {
-        path: "/admin/viewProfile/documents",
-        element: <SecureRoutes Component={EmployeeDocuments} />,
-      },
-      {
-        path: "/admin/viewProfile/salarySlip",
-        element: <SecureRoutes Component={SalarySlip} />,
-      },
     ],
   },
 ]);
