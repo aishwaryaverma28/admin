@@ -430,9 +430,9 @@ useEffect(() => {
               </div>
               {leadopen && (
                 <ul className="dropdown-menuLead">
-                  <li>Deal 1</li>
-                  <li>Deal 2</li>
-                  <li>Deal 3</li>
+                  <li>All Won Deals</li>
+                  <li>All Lost Deals</li>
+                  <li>All Open Deals</li>
                 </ul>
               )}
             </div>
