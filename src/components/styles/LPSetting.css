@@ -19,10 +19,10 @@ button {
 /* side panel css  */
 
 .setting-side-panel {
-  width: 21.5vw;
+  width: 20vw;
   height: auto;
-  /* overflow-y: scroll; */
   background: #f8fbf8;
+
 
 }
 .go-back-btn button {
@@ -103,6 +103,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width:17.5rem;
 }
 
 .master-arrow img{
@@ -111,11 +112,10 @@ button {
   width: 1.5rem;
   height:1.5rem;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
 
-.sub-sub-menu{
-  /* padding-left: 1.5rem; */
-  margin-left: 1.5rem;
-
+.sub-sub-menu a{
+  padding-left: 2rem;
 }
 
