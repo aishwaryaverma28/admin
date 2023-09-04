@@ -19,7 +19,7 @@ button {
 /* side panel css  */
 
 .setting-side-panel {
-  min-width:20vw;
+  width: 21.5vw;
   height: auto;
   /* overflow-y: scroll; */
   background: #f8fbf8;
@@ -64,7 +64,7 @@ button {
 }
 
 
-.prefrence-options a,.account-options a, .company-options a, .master-settings-options{
+.prefrence-options a,.account-options a, .company-options a, .master-settings-options a, .master-settings-options{
   text-decoration: none;
   font-weight: 400;
   font-size: 0.875rem;
@@ -81,10 +81,13 @@ button {
   margin-top: 0.5rem;
 }
 
+
+
 .setting-arrow{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width:17.5rem;
 }
 
 .setting-arrow img{
@@ -98,7 +101,7 @@ button {
 
 .master-arrow{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -108,15 +111,11 @@ button {
   width: 1.5rem;
   height:1.5rem;
   cursor: pointer;
-  margin-top: 0.5rem;
-
 }
 
 .sub-sub-menu{
-  padding-left: 1.5rem;
-  background-color: #e2e9f2;
+  /* padding-left: 1.5rem; */
+  margin-left: 1.5rem;
+
 }
 
-.sub-menu-open{
-background-color: #e2e9f2;
-}
