@@ -98,8 +98,8 @@ button {
 
 .master-arrow{
   display: flex;
-  justify-content: start;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
 }
 
 .master-arrow img{
@@ -108,6 +108,7 @@ button {
   width: 1.5rem;
   height:1.5rem;
   cursor: pointer;
+  margin-top: 0.5rem;
 
 }
 
