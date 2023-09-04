@@ -21,35 +21,36 @@ const QuestionTab = () => {
     setShowSearchResult(query.length > 0);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(GET_ALL_SEARCH + searchQuery, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      });
-      if (response.data.status === 1) {
-        console.log(response?.data?.data);
-        setData(response?.data?.data);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      if (error?.response?.data?.message === "Invalid or expired token.") {
-        alert(error?.response?.data?.message);
-        handleLogout();
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [searchQuery]);
-
   const handleTitleClick = (title, details) => {
     setSelectedItemTitle(title);
     setSelectedItemDetails(details);
     setData([]);
   };
+
+  function handleFormSubmit() {
+    const updatedFormData = {
+      // condition: "all",
+      help_title: searchQuery,
+    };
+    console.log(updatedFormData);
+    axios
+      .post( GET_ALL_SEARCH, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data);
+        setData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    handleFormSubmit();
+  }, [searchQuery]);
 
   return (
     <div className="question-tab">
