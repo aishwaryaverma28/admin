@@ -159,6 +159,10 @@ const router = createBrowserRouter([
             path: "/lp/settings/settingImpExp",
             element: <SecureRoutes Component={SettingImpExp} />,
           },
+          {
+            path: "/lp/settings/blog/add",
+            element: <SecureRoutes Component={BlogAdd} />,
+          },
         ],
       },
     ],

@@ -10,8 +10,26 @@ const LPSettingSidebar = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [masterSubMenu, setMasterSubMenu] = useState(null);
   const decryptedUserPath = getDecryptedUserPath();
-  const allowed = decryptedUserPath.split(",");
-  // const allowed = ["/lp/lead","/lp/home","/lp/mail","/lp/contacts","/lp/deals","/lp/settings","/lp/settings/general","/lp/settings/notification","/lp/settings/usernteams","/lp/settings/companysettings","/lp/settings/recyclebin","/lp/settings/privacyConcent","/lp/settings/settingLeads","/lp/settings/settingDeal","/lp/settings/settingUsage","/lp/settings/settingImpExp"];
+  // const allowed = decryptedUserPath.split(",");
+  const allowed = [
+    "/lp/lead",
+    "/lp/home",
+    "/lp/mail",
+    "/lp/contacts",
+    "/lp/deals",
+    "/lp/settings",
+    "/lp/settings/general",
+    "/lp/settings/notification",
+    "/lp/settings/usernteams",
+    "/lp/settings/companysettings",
+    "/lp/settings/recyclebin",
+    "/lp/settings/privacyConcent",
+    "/lp/settings/settingLeads",
+    "/lp/settings/settingDeal",
+    "/lp/settings/settingUsage",
+    "/lp/settings/settingImpExp",
+    "/lp/settings/blog/add",
+  ];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
       return true; // All paths are allowed when allowed array is empty
@@ -223,7 +241,11 @@ const LPSettingSidebar = () => {
           </p>
 
           <div
-           className={masterSubMenu === "blog" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "blog"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("blog")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -234,26 +256,33 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "blog"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              Add
-            </p>
-            <p className="company-options master-settings-options setting-font-style">
-              View
-            </p>
-          </div>
+          {masterSubMenu === "blog" && (
+            <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/blog/add") && (
+                <NavLink
+                exact
+                to="/lp/settings/blog/add"
+                activeClassName="activeLink"
+              >
+              <p className="company-options master-settings-options setting-font-style">
+                Add
+              </p>
+              </NavLink>
+              )}
+              <p className="company-options master-settings-options setting-font-style">
+                View
+              </p>
+            </div>
+          )}
 
-            )
-          }
-
-          <div>
-
-          </div>
+          <div></div>
 
           <div
-            className={masterSubMenu === "site" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "site"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("site")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -264,22 +293,23 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "site"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              Add
-            </p>
-            <p className="company-options master-settings-options setting-font-style">
-              View
-            </p>
-          </div>
-
-            )
-          }
+          {masterSubMenu === "site" && (
+            <div className="sub-sub-menu">
+              <p className="company-options master-settings-options setting-font-style">
+                Add
+              </p>
+              <p className="company-options master-settings-options setting-font-style">
+                View
+              </p>
+            </div>
+          )}
 
           <div
-           className={masterSubMenu === "help" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "help"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("help")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -290,22 +320,23 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "help"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              Add
-            </p>
-            <p className="company-options master-settings-options setting-font-style">
-              Update
-            </p>
-          </div>
-
-            )
-          }
+          {masterSubMenu === "help" && (
+            <div className="sub-sub-menu">
+              <p className="company-options master-settings-options setting-font-style">
+                Add
+              </p>
+              <p className="company-options master-settings-options setting-font-style">
+                Update
+              </p>
+            </div>
+          )}
 
           <div
-            className={masterSubMenu === "user" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "user"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("user")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -316,22 +347,23 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "user"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              Add
-            </p>
-            <p className="company-options master-settings-options setting-font-style">
-              Update
-            </p>
-          </div>
-
-            )
-          }
+          {masterSubMenu === "user" && (
+            <div className="sub-sub-menu">
+              <p className="company-options master-settings-options setting-font-style">
+                Add
+              </p>
+              <p className="company-options master-settings-options setting-font-style">
+                Update
+              </p>
+            </div>
+          )}
 
           <div
-            className={masterSubMenu === "employee" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "employee"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("employee")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -342,19 +374,16 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "employee"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              Add
-            </p>
-            <p className="company-options master-settings-options setting-font-style">
-              View
-            </p>
-          </div>
-
-            )
-          }
+          {masterSubMenu === "employee" && (
+            <div className="sub-sub-menu">
+              <p className="company-options master-settings-options setting-font-style">
+                Add
+              </p>
+              <p className="company-options master-settings-options setting-font-style">
+                View
+              </p>
+            </div>
+          )}
 
           <p className="company-options master-settings-options setting-font-style">
             Access Management
@@ -365,7 +394,11 @@ const LPSettingSidebar = () => {
           </p>
 
           <div
-            className={masterSubMenu === "master-setting" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "master-setting"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("master-setting")}
           >
             <p className="company-options master-settings-options setting-font-style">
@@ -376,20 +409,20 @@ const LPSettingSidebar = () => {
               alt=""
             />
           </div>
-          {
-            masterSubMenu === "master-setting"  && (
-              <div className="sub-sub-menu">
-          <p className="company-options master-settings-options setting-font-style">
-              City
-            </p>
-
-          </div>
-
-            )
-          }
+          {masterSubMenu === "master-setting" && (
+            <div className="sub-sub-menu">
+              <p className="company-options master-settings-options setting-font-style">
+                City
+              </p>
+            </div>
+          )}
 
           <div
-           className={masterSubMenu === "system" ? 'sub-menu-open master-arrow' : `master-arrow`}
+            className={
+              masterSubMenu === "system"
+                ? "sub-menu-open master-arrow"
+                : `master-arrow`
+            }
             onClick={() => toggleMasterSubMenu("system")}
           >
             <p className="company-options master-settings-options setting-font-style">
