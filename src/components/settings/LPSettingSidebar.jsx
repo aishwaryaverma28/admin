@@ -345,7 +345,7 @@ const LPSettingSidebar = () => {
           <div className="setting-arrow" onClick={() => toggleMasterSubMenu("user")}>
           <p className="company-options master-settings-options setting-font-style">User Management</p>
           <img
-            src={openSubMenu === "master" ? GreaterUp : GreaterDown}
+            src={masterSubMenu === "user" ? GreaterUp : GreaterDown}
             alt=""
           />
         </div>
