@@ -53,7 +53,7 @@ const SitePagesView = () => {
           </label>
         </div>
         <div>
-          <Link to="/admin/sitePages/add">
+          <Link to= "/lp/settings/sitePages/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
             </button>

@@ -30,6 +30,18 @@ const LPSettingSidebar = () => {
     "/lp/settings/settingImpExp",
     "/lp/settings/blog/add",
     "/lp/settings/blog/view",
+    "/lp/settings/sitePages/add",
+    "/lp/settings/sitePages/view",
+    "/lp/settings/helpSection/add",
+    "/lp/settings/helpSection/update",
+    "/lp/settings/userManagement/add",
+    "/lp/settings/userManagement/update",
+    "/lp/settings/employee/add",
+    "/lp/settings/employee/view",
+    "/lp/settings/accessManagement",
+    "/lp/settings/reportsAndAnalytics",
+    "/lp/settings/masterSettings/City",
+    "/lp/settings/system/state",
   ];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
@@ -296,7 +308,7 @@ const LPSettingSidebar = () => {
               <p className="company-options  setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/sitePages/add"
                 activeClassName="activeLink"
               >
                 Add
@@ -305,7 +317,7 @@ const LPSettingSidebar = () => {
               <p className="company-options  setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/sitePages/view"
                 activeClassName="activeLink"
               >
                 View
@@ -325,7 +337,7 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/helpSection/add"
                 activeClassName="activeLink"
               >
                 Add
@@ -334,7 +346,7 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/helpSection/update"
                 activeClassName="activeLink"
               >
                 Update
@@ -354,7 +366,7 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/userManagement/add"
                 activeClassName="activeLink"
               >
                 Add
@@ -363,7 +375,7 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/userManagement/update"
                 activeClassName="activeLink"
               >
                 Update
@@ -384,24 +396,38 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/employee/add"
                 activeClassName="activeLink"
               >
                 Add
                 </NavLink>
               </p>
               <p className="company-options setting-font-style">
-                View
+              <NavLink
+                exact
+                to="/lp/settings/employee/view"
+                activeClassName="activeLink"
+              >
+              View
+              </NavLink>
               </p>
             </div>
           )}
 
           <div className="setting-arrow">
-          <p className="company-options master-settings-options setting-font-style">Access Management</p>
+          <p className="company-options master-settings-options setting-font-style"><NavLink
+                exact
+                to="/lp/settings/accessManagement"
+                activeClassName="activeLink"
+              >Access Management</NavLink></p>
         </div>
 
         <div className="setting-arrow">
-          <p className="company-options master-settings-options setting-font-style">Reports And Analytics</p>
+          <p className="company-options master-settings-options setting-font-style"><NavLink
+                exact
+                to="/lp/settings/reportsAndAnalytics"
+                activeClassName="activeLink"
+              >Reports And Analytics</NavLink></p>
         </div>
         <div className="setting-arrow" onClick={() => toggleMasterSubMenu("master-setting")}>
           <p className="company-options master-settings-options setting-font-style">Master Settings</p>
@@ -415,7 +441,7 @@ const LPSettingSidebar = () => {
               <p className="company-options setting-font-style">
               <NavLink
                 exact
-                to="/lp/settings/blog/view"
+                to="/lp/settings/masterSettings/City"
                 activeClassName="activeLink"
               >
                 City

@@ -56,7 +56,7 @@ const EmployeeView = () => {
           </label>
         </div>
         <div>
-          <Link to="/admin/blog/add">
+          <Link to="/lp/settings/blog/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
             </button>

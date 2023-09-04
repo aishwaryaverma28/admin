@@ -171,6 +171,62 @@ const router = createBrowserRouter([
             path: "/lp/settings/blog/view/:id",
             element: <BlogUpdate />,
           },
+          {
+            path: "/lp/settings/sitePages/add",
+            element: <SecureRoutes Component={SitePagesAdd} />,
+          },
+          {
+            path: "/lp/settings/sitePages/view",
+            element: <SecureRoutes Component={SitePagesView} />,
+          },
+          {
+            path: "/lp/settings/sitePages/view/:id",
+            element: <SitePagesUpdate />,
+          },
+          {
+            path: "/lp/settings/helpSection/add",
+            element: <SecureRoutes Component={HelpAdd} />,
+          },
+          {
+            path: "/lp/settings/helpSection/update",
+            element: <SecureRoutes Component={HelpUpdate} />,
+          },
+          {
+            path: "/lp/settings/userManagement/add",
+            element: <SecureRoutes Component={UserMangAdd} />,
+          },
+          {
+            path: "/lp/settings/userManagement/update",
+            element: <SecureRoutes Component={UserMangUpdate} />,
+          },
+          {
+            path: "/lp/settings/employee/add",
+            element: <SecureRoutes Component={EmployeeAdd} />,
+          },
+          {
+            path: "/lp/settings/employee/view",
+            element: <SecureRoutes Component={EmployeeView} />,
+          },
+          {
+            path: "/lp/settings/employee/view/:id",
+            element: <EmployeeUpdate />,
+          },
+          {
+            path: "/lp/settings/accessManagement",
+            element: <SecureRoutes Component={AccessManagement} />,
+          },
+          {
+            path: "/lp/settings/reportsAndAnalytics",
+            element: <SecureRoutes Component={ReportsandAnalytics} />,
+          },
+          {
+            path: "/lp/settings/masterSettings/City",
+            element: <SecureRoutes Component={City} />,
+          },
+          {
+            path: "/lp/settings/system/state",
+            element: <SecureRoutes Component={State} />,
+          },
         ],
       },
     ],
@@ -199,74 +255,6 @@ const router = createBrowserRouter([
       {
         path: "/admin/viewProfile/salarySlip",
         element: <SecureRoutes Component={SalarySlip} />,
-      },
-      {
-        path: "/admin/blog/add",
-        element: <SecureRoutes Component={BlogAdd} />,
-      },
-      {
-        path: "/admin/blog/view",
-        element: <SecureRoutes Component={BlogView} />,
-      },
-      {
-        path: "/admin/blog/view/:id",
-        element: <BlogUpdate />,
-      },
-      {
-        path: "/admin/sitePages/add",
-        element: <SecureRoutes Component={SitePagesAdd} />,
-      },
-      {
-        path: "/admin/sitePages/view",
-        element: <SecureRoutes Component={SitePagesView} />,
-      },
-      {
-        path: "/admin/sitePages/view/:id",
-        element: <SitePagesUpdate />,
-      },
-      {
-        path: "/admin/helpSection/add",
-        element: <SecureRoutes Component={HelpAdd} />,
-      },
-      {
-        path: "/admin/helpSection/update",
-        element: <SecureRoutes Component={HelpUpdate} />,
-      },
-      {
-        path: "/admin/userManagement/add",
-        element: <SecureRoutes Component={UserMangAdd} />,
-      },
-      {
-        path: "/admin/userManagement/update",
-        element: <SecureRoutes Component={UserMangUpdate} />,
-      },
-      {
-        path: "/admin/employee/add",
-        element: <SecureRoutes Component={EmployeeAdd} />,
-      },
-      {
-        path: "/admin/employee/view",
-        element: <SecureRoutes Component={EmployeeView} />,
-      },
-      {
-        path: "/admin/employee/view/:id",
-        element: <EmployeeUpdate />,
-      },
-      {
-        path: "/admin/accessManagement",
-        element: <SecureRoutes Component={AccessManagement} />,
-      },
-      {
-        path: "/admin/reportsAndAnalytics",
-        element: <SecureRoutes Component={ReportsandAnalytics} />,
-      },
-      {
-        path: "/admin/masterSettings/City",
-        element: <SecureRoutes Component={City} />,
-      },
-      {
-        path: "/admin/system/state",
-        element: <SecureRoutes Component={State} />,
       },
     ],
   },
