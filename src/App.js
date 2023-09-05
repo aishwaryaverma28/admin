@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
-// import LPleads from "./components/LPleads";
 import Lead from "./components/lead/Lead";
 import Admin from "./components/Admin";
 import EmployeeProfile from "./components/EmployeeProfile";
@@ -36,7 +35,6 @@ import Deal from "./components/deal/Deal";
 import Mail from "./components/Mail";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
-import SecurePages from "./components/SecurePages";
 import SecureRoutes from "./components/SecureRoutes";
 // import Testing from "./components/Testing";
 import UserAndTeams from "./components/settings/UserAndTeams";
@@ -71,7 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/lp",
-    element: <SecurePages Component={Leadplaner} />,
+    element: <Leadplaner/>,
     errorElement: <Error />,
     children: [
       {
@@ -85,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/home",
         element: <SecureRoutes Component={Home} />,
+      },
+      {
+        path: "/lp/admin",
+        element: <SecureRoutes Component={Editor} />,
       },
       {
         path: "/lp/mail",
@@ -244,17 +246,6 @@ const router = createBrowserRouter([
             element: <SecureRoutes Component={State} />,
           },
         ],
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: <SecurePages Component={Admin} />,
-    errorElement: <Error />,
-    children: [
-      {
-        path: "/admin",
-        element: <SecureRoutes Component={Editor} />,
       },
     ],
   },

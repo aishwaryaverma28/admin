@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
 import "../components/styles/Sidebar.css";
 import companyLogo from "../assets/image/logo.svg";
 import userIcon from "../assets/image/user-img.png";
@@ -9,7 +8,6 @@ import axios from "axios";
 import { EMPLOYEE_GETID, VIEW_IMG,getDecryptedToken,handleLogout,GET_USER_EMPLOYEE } from "./utils/Constants";
 
 const NavigationBar = () => {
-  const { profileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState(null);
   const [pic, setPic] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -52,7 +50,7 @@ const NavigationBar = () => {
         <Link to={"/admin"}>
           <div className="userLogoContainer">
             {empData ? (
-              <img src={profileImage || pic} alt="user-img" />
+              <img src={pic} alt="user-img" />
             ) : (
               <img src={userIcon} alt="user-img" />
             )}

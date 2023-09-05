@@ -1,5 +1,4 @@
-import React, { useState, useEffect,useRef,useContext } from "react";
-import { UserContext } from "./UserContext";
+import React, { useState, useEffect,useRef} from "react";
 import axios from "axios";
 import ViewProfile from "./ViewProfile";
 import profile from "../assets/image/profile.png";
@@ -7,7 +6,6 @@ import "./styles/EmployeeProfile.css";
 import { EMPLOYEE_UPDATE,REMOVE_DOC,UPLOAD_DOC,VIEW_IMG,getDecryptedToken,handleLogout,GET_USER_EMPLOYEE } from "./utils/Constants";
 const userId = localStorage.getItem('id');
 const EmployeeProfile = () => {
-  // const { setProfileImage } = useContext(UserContext);
   const [empData, setEmpData] = useState([]);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [address, setAddress] = useState("");

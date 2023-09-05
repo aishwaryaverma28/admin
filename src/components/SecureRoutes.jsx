@@ -14,6 +14,7 @@ const SecureRoutes = (props) => {
     const allowed = [
       "/lp/lead",
       "/lp/home",
+      "/lp/admin",
       "/lp/mail",
       "/lp/contacts",
       "/lp/deals",

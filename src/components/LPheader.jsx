@@ -6,7 +6,12 @@ import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
 import axios from "axios";
-import { USER_INFO, getDecryptedToken, handleLogout } from "./utils/Constants";
+import {
+  USER_INFO,
+  getDecryptedToken,
+  handleLogout,
+  getDecryptedUserPath,
+} from "./utils/Constants";
 import HelpModal from "./HelpModal";
 
 const LPheader = () => {
@@ -20,6 +25,51 @@ const LPheader = () => {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
+  const decryptedUserPath = getDecryptedUserPath();
+  // const allowed = decryptedUserPath.split(",");
+  const allowed = [
+    "/lp/lead",
+    "/lp/admin",
+    "/lp/home",
+    "/lp/mail",
+    "/lp/contacts",
+    "/lp/deals",
+    "/lp/settings",
+    "/lp/settings/general",
+    "/lp/settings/notification",
+    "/lp/settings/usernteams",
+    "/lp/settings/companysettings",
+    "/lp/settings/recyclebin",
+    "/lp/settings/privacyConcent",
+    "/lp/settings/settingLeads",
+    "/lp/settings/settingDeal",
+    "/lp/settings/settingUsage",
+    "/lp/settings/settingImpExp",
+    "/lp/settings/blog/add",
+    "/lp/settings/blog/view",
+    "/lp/settings/sitePages/add",
+    "/lp/settings/sitePages/view",
+    "/lp/settings/helpSection/add",
+    "/lp/settings/helpSection/update",
+    "/lp/settings/userManagement/add",
+    "/lp/settings/userManagement/update",
+    "/lp/settings/employee/add",
+    "/lp/settings/employee/view",
+    "/lp/settings/accessManagement",
+    "/lp/settings/reportsAndAnalytics",
+    "/lp/settings/masterSettings/City",
+    "/lp/settings/system/state",
+    "/lp/settings/viewProfile/employeeProfile",
+    "/lp/settings/viewProfile/timeSheet",
+    "/lp/settings/viewProfile/documents",
+    "/lp/settings/viewProfile/salarySlip",
+  ];
+  const isPathAllowed = (path) => {
+    if (allowed.length === 0) {
+      return true; // All paths are allowed when allowed array is empty
+    }
+    return allowed.includes(path);
+  };
 
   useEffect(() => {
     getUser();
@@ -214,31 +264,48 @@ const LPheader = () => {
             <span className="line line3"></span>
           </div>
           <ul className={`menuItems ${isMenuOpen ? "open" : ""}`}>
-            <li onClick={() => handleNavigationClick("Home")}>
-              <NavLink exact to="/lp/home" activeClassName="activeNav">
-                Home
-              </NavLink>
-            </li>
-            <li onClick={() => handleNavigationClick("Lead")}>
-              <NavLink exact to="/lp/lead" activeClassName="activeNav">
-                Lead
-              </NavLink>
-            </li>
-            <li onClick={() => handleNavigationClick("Deal")}>
-              <NavLink exact to="/lp/deals" activeClassName="activeNav">
-                Deal
-              </NavLink>
-            </li>
-            <li onClick={() => handleNavigationClick("Mail")}>
-              <NavLink exact to="/lp/mail" activeClassName="activeNav">
-                Mail
-              </NavLink>
-            </li>
-            <li onClick={() => handleNavigationClick("Contacts")}>
-              <NavLink exact to="/lp/contacts" activeClassName="activeNav">
-                Contacts
-              </NavLink>
-            </li>
+            {isPathAllowed("/lp/home") && (
+              <li onClick={() => handleNavigationClick("Home")}>
+                <NavLink exact to="/lp/home" activeClassName="activeNav">
+                  Home
+                </NavLink>
+              </li>
+            )}
+            {isPathAllowed("/lp/admin") && (
+              <li onClick={() => handleNavigationClick("Admin")}>
+                <NavLink exact to="/lp/admin" activeClassName="activeNav">
+                  Home
+                </NavLink>
+              </li>
+            )}
+            {isPathAllowed("/lp/lead") && (
+              <li onClick={() => handleNavigationClick("Lead")}>
+                <NavLink exact to="/lp/lead" activeClassName="activeNav">
+                  Lead
+                </NavLink>
+              </li>
+            )}
+            {isPathAllowed("/lp/deals") && (
+              <li onClick={() => handleNavigationClick("Deal")}>
+                <NavLink exact to="/lp/deals" activeClassName="activeNav">
+                  Deal
+                </NavLink>
+              </li>
+            )}
+            {isPathAllowed("/lp/mail") && (
+              <li onClick={() => handleNavigationClick("Mail")}>
+                <NavLink exact to="/lp/mail" activeClassName="activeNav">
+                  Mail
+                </NavLink>
+              </li>
+            )}
+            {isPathAllowed("/lp/contacts") && (
+              <li onClick={() => handleNavigationClick("Contacts")}>
+                <NavLink exact to="/lp/contacts" activeClassName="activeNav">
+                  Contacts
+                </NavLink>
+              </li>
+            )}
           </ul>
           <span></span>
         </div>

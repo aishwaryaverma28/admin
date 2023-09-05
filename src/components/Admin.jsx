@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './styles/Sidebar.css';
 import './styles/Admin.css';
 import NavigationBar from './Navigationbar';
-import { UserProvider } from './UserContext';
 import { Outlet } from 'react-router-dom';
 
 function Admin() {
@@ -14,7 +13,6 @@ function Admin() {
 
   return (
     <div className={`main ${isSidebarOpen ? 'open' : ''}`}>
-      <UserProvider>
         <div className={`sidebar ${isSidebarOpen ? 'sidebarOpen' : ''}`}>
           <NavigationBar />
         </div>
@@ -26,7 +24,6 @@ function Admin() {
           <span></span>
           <span></span>
         </div>
-      </UserProvider>
     </div>
   );
 }
