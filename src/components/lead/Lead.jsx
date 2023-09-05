@@ -673,7 +673,7 @@ const Lead = () => {
                     <li onClick={() => { setSortOption("LeadName"); setSortOrder("asc"); setSortOpen(false); }}>Lead Name</li>
                     <li onClick={() => { setSortOption("Amount"); setSortOrder("asc"); setSortOpen(false); }}>Amount</li>
                     <li onClick={() => { setSortOption("Label"); setSortOrder("asc"); setSortOpen(false); }}>Label</li>
-                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Deal Owner</li>
+                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Lead Owner</li>
                   </ul>
                 )}
               </div>
