@@ -251,17 +251,16 @@ const LPSettingSidebar = () => {
 
       {openSubMenu === "master" && (
         <>
-          <p className="company-options master-settings-options setting-font-style">
-          <NavLink
-                exact
-                to="/lp/settings/viewProfile/employeeProfile"
-                activeClassName="activeLink"
-              >
-            View Profile
-            </NavLink>
-          </p>
 
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("blog")}>
+
+              <p className="prefrence-options setting-font-style">
+                <NavLink exact to="/lp/settings/viewProfile/employeeProfile">
+                  View Profile
+                </NavLink>
+              </p>
+
+
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("blog")}>
           <p className="company-options master-settings-options setting-font-style">Blog</p>
           <img
             src={masterSubMenu === "blog" ? GreaterUp : GreaterDown}
@@ -305,7 +304,7 @@ const LPSettingSidebar = () => {
 
           <div></div>
 
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("site")}>
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("site")}>
           <p className="company-options master-settings-options setting-font-style">Site</p>
           <img
             src={masterSubMenu === "site" ? GreaterUp : GreaterDown}
@@ -334,7 +333,7 @@ const LPSettingSidebar = () => {
               </p>
             </div>
           )}
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("help")}>
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("help")}>
           <p className="company-options master-settings-options setting-font-style">Help</p>
           <img
             src={masterSubMenu === "help" ? GreaterUp : GreaterDown}
@@ -363,7 +362,7 @@ const LPSettingSidebar = () => {
               </p>
             </div>
           )}
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("user")}>
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("user")}>
           <p className="company-options master-settings-options setting-font-style">User Management</p>
           <img
             src={masterSubMenu === "user" ? GreaterUp : GreaterDown}
@@ -393,7 +392,7 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("employee")}>
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("employee")}>
           <p className="company-options master-settings-options setting-font-style">Employee</p>
           <img
             src={masterSubMenu === "employee" ? GreaterUp : GreaterDown}
@@ -423,22 +422,23 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
-          <div className="setting-arrow">
-          <p className="company-options master-settings-options setting-font-style"><NavLink
-                exact
-                to="/lp/settings/accessManagement"
-                activeClassName="activeLink"
-              >Access Management</NavLink></p>
-        </div>
 
-        <div className="setting-arrow">
-          <p className="company-options master-settings-options setting-font-style"><NavLink
-                exact
-                to="/lp/settings/reportsAndAnalytics"
-                activeClassName="activeLink"
-              >Reports And Analytics</NavLink></p>
-        </div>
-        <div className="setting-arrow" onClick={() => toggleMasterSubMenu("master-setting")}>
+
+        <p className="prefrence-options setting-font-style">
+                <NavLink exact to="/lp/settings/accessManagement">
+                  Access Management
+                </NavLink>
+              </p>
+
+
+        <p className="prefrence-options setting-font-style">
+                <NavLink exact to="/lp/settings/reportsAndAnalytics">
+                  Report Anad Analytics
+                </NavLink>
+              </p>
+
+        
+        <div className="master-arrow" onClick={() => toggleMasterSubMenu("master-setting")}>
           <p className="company-options master-settings-options setting-font-style">Master Settings</p>
           <img
             src={masterSubMenu === "master-setting" ? GreaterUp : GreaterDown}
@@ -459,13 +459,28 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
-          <div className="setting-arrow" onClick={() => toggleMasterSubMenu("system")}>
+          <div className="master-arrow" onClick={() => toggleMasterSubMenu("system")}>
           <p className="company-options master-settings-options setting-font-style">System</p>
           <img
             src={masterSubMenu === "system" ? GreaterUp : GreaterDown}
             alt=""
           />
         </div>
+
+        {masterSubMenu === "system" && (
+            <div className="sub-sub-menu">
+              <p className="company-options setting-font-style">
+              <NavLink
+                exact
+                to="/lp/settings/masterSettings/City"
+                activeClassName="activeLink"
+              >
+                State
+                </NavLink>
+              </p>
+            </div>
+          )}
+        
         </>
       )}
     </section>
