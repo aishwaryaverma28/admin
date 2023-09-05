@@ -51,7 +51,7 @@ const SecureRoutes = (props) => {
     // ];
      const allowed = decryptedUserPath.split(",");
     const currentPath = location.pathname;
-    console.log(allowed);
+    // console.log(allowed);
     if (allowed && !allowed.includes(currentPath)) {
       navigate(landingUrl);
     } else {

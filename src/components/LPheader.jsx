@@ -24,6 +24,7 @@ const LPheader = () => {
   const dropdownRef = useRef(null);
   const [clientData, setClientData] = useState(null);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [pathAddress, setPathAddress] = useState(null);
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
@@ -65,6 +66,19 @@ const LPheader = () => {
   //   "/lp/settings/viewProfile/documents",
   //   "/lp/settings/viewProfile/salarySlip",
   // ];
+
+  useEffect(()=>{
+    if(landingUrl === "/lp/admin"){
+      setPathAddress("/lp/settings/viewProfile/employeeProfile")
+    }else{
+      setPathAddress("/lp/settings/general")
+    }
+
+  },[])
+
+
+
+
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
       return true; // All paths are allowed when allowed array is empty
@@ -72,7 +86,7 @@ const LPheader = () => {
     return allowed.includes(path);
   };
 
- async function getUser() {
+  async function getUser() {
     try {
       const response = await axios.get(USER_INFO, {
         headers: {
@@ -188,7 +202,7 @@ const LPheader = () => {
               </button>
             </li>
             <li>
-              <Link to="/lp/settings/general">
+              <Link to={pathAddress}>
                 <button type="button" className="settingBtn" title="Settings">
                   <i className="fa-sharp fa-solid fa-gear"></i>
                 </button>
