@@ -247,8 +247,26 @@ const Lead = () => {
           const result = a.value - b.value;
           return order === "asc" ? result : -result; // Toggle sorting order
         });
+      case "LeadName":
+        return data.slice().sort((a, b) => {
+          const result =a.lead_name.toLowerCase().localeCompare(b.lead_name.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Label":
+        return data.slice().sort((a, b) => {
+          const result =a.label_name.toLowerCase().localeCompare(b.label_name.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Owner":
+        return data.slice().sort((a, b) => {
+          const result =a.ownerf_name.toLowerCase().localeCompare(b.lead_name.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
       default:
-        return data; // No sorting or "None" selected
+        return data.slice().sort(() => {
+          
+          return order === "asc" ? 1 : -1; // Toggle sorting order
+        }); 
     }
   };
   
@@ -651,15 +669,11 @@ const Lead = () => {
                 {sortOpen && (
                   <ul className="dropdown-menu">
 
-                    <li onClick={() => { setSortOption("None"); setSortOpen(false); }}>None</li>
-                    <li onClick={() => { setSortOption("Amount"); setSortOpen(false); }}>Amount</li>
-                    <li>Closing Date</li>
-                    <li>Contact Name</li>
-                    <li>Created By</li>
-                    <li>Deal Name</li>
-                    <li>Deal Owner</li>
-                    <li>Lead Source</li>
-                    <li>Probability</li>
+                    <li onClick={() => { setSortOption("None"); setSortOrder("asc"); setSortOpen(false); }}>None</li>
+                    <li onClick={() => { setSortOption("LeadName"); setSortOrder("asc"); setSortOpen(false); }}>Lead Name</li>
+                    <li onClick={() => { setSortOption("Amount"); setSortOrder("asc"); setSortOpen(false); }}>Amount</li>
+                    <li onClick={() => { setSortOption("Label"); setSortOrder("asc"); setSortOpen(false); }}>Label</li>
+                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Deal Owner</li>
                   </ul>
                 )}
               </div>
