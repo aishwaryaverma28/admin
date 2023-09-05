@@ -40,10 +40,17 @@ const Deal = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("None"); 
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
 
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
@@ -139,20 +146,56 @@ const Deal = () => {
 
   const filterDealData = deals?.filter((item)=>{
     
-    const dealName= `${item?.deal_name}`.toLowerCase() || "";
-    const dealValue= `${item?.value}`.toLowerCase() || "";
-    const dealValue2= `$${item?.value}`.toLowerCase() || "";
-    const ownerFirstName= `${item?.ownerf_name}`.toLowerCase() || "";
-    const ownerLastName= `${item?.ownerl_name}`.toLowerCase() || "";
-    const ownerFullName= `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
-    const closureDate= `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
-    const labelName= `${item?.label_name}`.toLowerCase() || "";
-    const searchDeal = searchQuery.toLowerCase();
+    const dealName= `${item?.deal_name}`?.toLowerCase() || "";
+    const dealValue= `${item?.value}`?.toLowerCase() || "";
+    const dealValue2= `$${item?.value}`?.toLowerCase() || "";
+    const ownerFirstName= `${item?.ownerf_name}`?.toLowerCase() || "";
+    const ownerLastName= `${item?.ownerl_name}`?.toLowerCase() || "";
+    const ownerFullName= `${item?.ownerf_name} ${item?.ownerl_name}`?.toLowerCase() || "";
+    const closureDate= `${item?.closure_date}`.split("T")[0]?.toLowerCase() || "";
+    const labelName= `${item?.label_name}`?.toLowerCase() || "";
+    const searchDeal = searchQuery?.toLowerCase();
 
     const matchQuery = dealName.includes(searchDeal) || dealValue.includes(searchDeal) || dealValue2.includes(searchDeal) || ownerFirstName.includes(searchDeal) || ownerLastName.includes(searchDeal) || ownerFullName.includes(searchDeal) || closureDate.includes(searchDeal) || labelName.includes(searchDeal) ;
     return matchQuery; 
   });
-
+  
+  const sortData = (data, option, order) => {
+    switch (option) {
+      case "Amount":
+        return data.slice().sort((a, b) => {
+          const result = a.value - b.value;
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "LeadName":
+        return data.slice().sort((a, b) => {
+          const result =a.deal_name?.toLowerCase().localeCompare(b?.deal_name?.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Label":
+        return data.slice().sort((a, b) => {
+          const result =a?.label_name?.toLowerCase().localeCompare(b?.label_name?.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Owner":
+        return data.slice().sort((a, b) => {
+          const result =a?.ownerf_name?.toLowerCase().localeCompare(b?.lead_name?.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Closure":
+        return data.slice().sort((a, b) => {
+          const result =a?.closure_date?.toLowerCase().localeCompare(b?.closure_date?.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      default:
+        return data.slice().sort(() => {
+          
+          return order === "asc" ? 1 : -1; // Toggle sorting order
+        }); 
+    }
+  };
+  
+  const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
 
 
   // ======================================================================calculate total value of all leads
@@ -578,7 +621,7 @@ const Deal = () => {
                 )}
               </div>
             </div>
-            <div className="deal-sort">
+            <div className="deal-sort" onClick={toggleSortOrder}>
               <img src={Sort} alt="" />
             </div>
             <div className="select action-select">
@@ -597,15 +640,12 @@ const Deal = () => {
                 {sortOpen && (
                   <ul className="dropdown-menu">
 
-                    <li >None</li>
-                    <li>Amount</li>
-                    <li>Closing Date</li>
-                    <li>Contact Name</li>
-                    <li>Created By</li>
-                    <li>Deal Name</li>
-                    <li>Deal Owner</li>
-                    <li>Lead Source</li>
-                    <li>Probability</li>
+                  <li onClick={() => { setSortOption("None"); setSortOrder("asc"); setSortOpen(false); }}>None</li>
+                  <li onClick={() => { setSortOption("LeadName"); setSortOrder("asc"); setSortOpen(false); }}>Deal Name</li>
+                    <li onClick={() => { setSortOption("Amount"); setSortOrder("asc"); setSortOpen(false); }}>Amount</li>
+                    <li onClick={() => { setSortOption("Label"); setSortOrder("asc"); setSortOpen(false); }}>Label</li>
+                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Deal Owner</li>
+                    <li onClick={() => { setSortOption("Closure"); setSortOrder("asc"); setSortOpen(false); }}>Closure Date</li>
                   </ul>
                 )}
               </div>
@@ -648,7 +688,7 @@ const Deal = () => {
                     </label>
                   )}
                 </div>
-                {filterDealData.map((obj) => {
+                {sortedDealData.map((obj) => {
                   if (obj.status === item) {
                     return (
                       <DealsColn
