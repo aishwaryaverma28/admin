@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
+import Search from "../../assets/image/search.svg";
+import Sort from "../../assets/image/sort.svg";
 import axios from "axios";
 import LeadCards from "./LeadCards";
 import CreateLead from "./CreateLead";
@@ -25,7 +27,9 @@ const Lead = () => {
   const [pipeopen, setPipeOpen] = useState(false);
   const pipeDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
   const actionDropDownRef = useRef(null);
+  const actionSortRef = useRef(null);
   const [deals, setDeals] = useState([]);
   const fileInputRef = useRef(null);
   const [totalValue, setTotalValue] = useState(0);
@@ -33,11 +37,19 @@ const Lead = () => {
   const decryptedToken = getDecryptedToken();
   const [labelData, setLabelData] = useState([]);
   const [statusCounts, setStatusCounts] = useState({});
-  const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDelete, setIsDelete] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const toggleSortDropdown = () => {
+    setSortOpen(!sortOpen);
+  };
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
     axios
@@ -203,6 +215,22 @@ const Lead = () => {
     fetchLabelData();
   }, []);
 
+  const filterDealData = deals?.filter((item)=>{
+    
+    const dealName= `${item?.lead_name}`.toLowerCase() || "";
+    const dealValue= `${item?.value}`.toLowerCase() || "";
+    const dealValue2= `$${item?.value}`.toLowerCase() || "";
+    const ownerFirstName= `${item?.ownerf_name}`.toLowerCase() || "";
+    const ownerLastName= `${item?.ownerl_name}`.toLowerCase() || "";
+    const ownerFullName= `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
+    const closureDate= `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
+    const labelName= `${item?.label_name}`.toLowerCase() || "";
+    const searchDeal = searchQuery.toLowerCase();
+
+    const matchQuery = dealName.includes(searchDeal) || dealValue.includes(searchDeal) || dealValue2.includes(searchDeal) || ownerFirstName.includes(searchDeal) || ownerLastName.includes(searchDeal) || ownerFullName.includes(searchDeal) || closureDate.includes(searchDeal) || labelName.includes(searchDeal) ;
+    return matchQuery; 
+  });
+
   // ======================================================================calculate total value of all leads
   useEffect(() => {
     const calculateTotalValue = () => {
@@ -351,15 +379,26 @@ const Lead = () => {
       }
     };
 
+    const handleOutsideClick4 = (event) => {
+      if (
+        actionSortRef.current &&
+        !actionSortRef.current.contains(event.target)
+      ) {
+        setSortOpen(false);
+      }
+    };
+
     document.addEventListener("click", handleOutsideClick);
     document.addEventListener("click", handleOutsideClick2);
     document.addEventListener("click", handleOutsideClick3);
+    document.addEventListener("click", handleOutsideClick4);
 
     // Clean up the event listener when the component unmounts
     return () => {
       document.removeEventListener("click", handleOutsideClick);
       document.removeEventListener("click", handleOutsideClick2);
       document.removeEventListener("click", handleOutsideClick3);
+      document.removeEventListener("click", handleOutsideClick4);
     };
   }, []);
 
@@ -467,6 +506,18 @@ const Lead = () => {
                 <i className="fas fa-list-ul"></i>
               </a>
             </div>
+            <div className="recycle-search-box">
+          <input
+            type="text"
+            className="recycle-search-input recycle-fonts"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <span className="recycle-search-icon">
+            <img src={Search} alt="" />
+          </span>
+        </div>
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
@@ -503,13 +554,6 @@ const Lead = () => {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
               />
-              <button
-                type="button"
-                className="simple-btn"
-                onClick={handleButtonClick}
-              >
-                import
-              </button>
             </div>
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
@@ -534,6 +578,7 @@ const Lead = () => {
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
+                    <li onClick={handleButtonClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Leads
                     </li>
@@ -561,6 +606,38 @@ const Lead = () => {
                       </div>
                     </div>
                   </div> */}
+              </div>
+            </div>
+            <div className="deal-sort">
+              <img src={Sort} alt="" />
+            </div>
+            <div className="select action-select">
+              <div className="dropdown-container" ref={actionSortRef}>
+                <div
+                  className="dropdown-header2"
+                  onClick={toggleSortDropdown}
+                >
+                  Sort By
+                  <i
+                    className={`fa-sharp fa-solid ${
+                      actionopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
+                </div>
+                {sortOpen && (
+                  <ul className="dropdown-menu">
+
+                    <li >None</li>
+                    <li>Amount</li>
+                    <li>Closing Date</li>
+                    <li>Contact Name</li>
+                    <li>Created By</li>
+                    <li>Deal Name</li>
+                    <li>Deal Owner</li>
+                    <li>Lead Source</li>
+                    <li>Probability</li>
+                  </ul>
+                )}
               </div>
             </div>
             <button
@@ -600,7 +677,7 @@ const Lead = () => {
                     </label>
                   )}
                 </div>
-                {deals.map((obj) => {
+                {filterDealData.map((obj) => {
                   if (obj.status === item) {
                     return (
                       <LeadCards
