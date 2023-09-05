@@ -251,13 +251,13 @@ const LPSettingSidebar = () => {
 
       {openSubMenu === "master" && (
         <>
-
-
+        {isPathAllowed("/lp/settings/viewProfile/employeeProfile") && (
               <p className="prefrence-options setting-font-style">
                 <NavLink exact to="/lp/settings/viewProfile/employeeProfile">
                   View Profile
                 </NavLink>
               </p>
+        )}
 
 
           <div className="master-arrow" onClick={() => toggleMasterSubMenu("blog")}>
@@ -272,7 +272,6 @@ const LPSettingSidebar = () => {
           {masterSubMenu === "blog" && (
             <div className="sub-sub-menu">
               {isPathAllowed("/lp/settings/blog/add") && (
-               
               <p className="company-options setting-font-style blog-options">
               <NavLink
                 exact
@@ -282,12 +281,8 @@ const LPSettingSidebar = () => {
                 Add
                 </NavLink>
               </p>
-
               )}
-
-              
               {isPathAllowed("/lp/settings/blog/view") && (
-               
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -295,15 +290,12 @@ const LPSettingSidebar = () => {
                 activeClassName="activeLink"
               >
                 View
-
               </NavLink>
               </p>
               )}
             </div>
           )}
-
           <div></div>
-
           <div className="master-arrow" onClick={() => toggleMasterSubMenu("site")}>
           <p className="company-options master-settings-options setting-font-style">Site</p>
           <img
@@ -313,6 +305,7 @@ const LPSettingSidebar = () => {
         </div>
           {masterSubMenu === "site" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/sitePages/add") && (
               <p className="company-options  setting-font-style">
               <NavLink
                 exact
@@ -322,6 +315,8 @@ const LPSettingSidebar = () => {
                 Add
                 </NavLink>
               </p>
+              )}
+              {isPathAllowed("/lp/settings/sitePages/view") && (
               <p className="company-options  setting-font-style">
               <NavLink
                 exact
@@ -331,6 +326,7 @@ const LPSettingSidebar = () => {
                 View
                 </NavLink>
               </p>
+              )}
             </div>
           )}
           <div className="master-arrow" onClick={() => toggleMasterSubMenu("help")}>
@@ -342,6 +338,7 @@ const LPSettingSidebar = () => {
         </div>
           {masterSubMenu === "help" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/helpSection/add") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -351,6 +348,8 @@ const LPSettingSidebar = () => {
                 Add
                 </NavLink>
               </p>
+              )}
+              {isPathAllowed("/lp/settings/helpSection/update") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -360,6 +359,7 @@ const LPSettingSidebar = () => {
                 Update
                 </NavLink>
               </p>
+              )}
             </div>
           )}
           <div className="master-arrow" onClick={() => toggleMasterSubMenu("user")}>
@@ -371,6 +371,7 @@ const LPSettingSidebar = () => {
         </div>
           {masterSubMenu === "user" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/userManagement/add") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -380,6 +381,8 @@ const LPSettingSidebar = () => {
                 Add
                 </NavLink>
               </p>
+              )}
+              {isPathAllowed("/lp/settings/userManagement/update") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -389,6 +392,7 @@ const LPSettingSidebar = () => {
                 Update
                 </NavLink>
               </p>
+              )}
             </div>
           )}
 
@@ -401,6 +405,7 @@ const LPSettingSidebar = () => {
         </div>
           {masterSubMenu === "employee" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/employee/add") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -410,6 +415,8 @@ const LPSettingSidebar = () => {
                 Add
                 </NavLink>
               </p>
+              )}
+              {isPathAllowed("/lp/settings/employee/view") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -419,24 +426,23 @@ const LPSettingSidebar = () => {
               View
               </NavLink>
               </p>
+              )}
             </div>
           )}
-
-
-
+          {isPathAllowed("/lp/settings/accessManagement") && (
         <p className="prefrence-options setting-font-style">
                 <NavLink exact to="/lp/settings/accessManagement">
                   Access Management
                 </NavLink>
               </p>
-
-
+          )}
+{isPathAllowed("/lp/settings/reportsAndAnalytics") && (
         <p className="prefrence-options setting-font-style">
                 <NavLink exact to="/lp/settings/reportsAndAnalytics">
                   Report Anad Analytics
                 </NavLink>
               </p>
-
+)}
         
         <div className="master-arrow" onClick={() => toggleMasterSubMenu("master-setting")}>
           <p className="company-options master-settings-options setting-font-style">Master Settings</p>
@@ -447,6 +453,7 @@ const LPSettingSidebar = () => {
         </div>
           {masterSubMenu === "master-setting" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/masterSettings/City") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -456,6 +463,7 @@ const LPSettingSidebar = () => {
                 City
                 </NavLink>
               </p>
+              )}
             </div>
           )}
 
@@ -469,6 +477,7 @@ const LPSettingSidebar = () => {
 
         {masterSubMenu === "system" && (
             <div className="sub-sub-menu">
+              {isPathAllowed("/lp/settings/masterSettings/City") && (
               <p className="company-options setting-font-style">
               <NavLink
                 exact
@@ -478,6 +487,7 @@ const LPSettingSidebar = () => {
                 State
                 </NavLink>
               </p>
+              )}
             </div>
           )}
         
