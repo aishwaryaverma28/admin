@@ -42,6 +42,11 @@ const Lead = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDelete, setIsDelete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("None"); 
+  const [sortOrder, setSortOrder] = useState("asc");
+
+
+  
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -215,6 +220,10 @@ const Lead = () => {
     fetchLabelData();
   }, []);
 
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
   const filterDealData = deals?.filter((item)=>{
     
     const dealName= `${item?.lead_name}`.toLowerCase() || "";
@@ -230,6 +239,21 @@ const Lead = () => {
     const matchQuery = dealName.includes(searchDeal) || dealValue.includes(searchDeal) || dealValue2.includes(searchDeal) || ownerFirstName.includes(searchDeal) || ownerLastName.includes(searchDeal) || ownerFullName.includes(searchDeal) || closureDate.includes(searchDeal) || labelName.includes(searchDeal) ;
     return matchQuery; 
   });
+
+  const sortData = (data, option, order) => {
+    switch (option) {
+      case "Amount":
+        return data.slice().sort((a, b) => {
+          const result = a.value - b.value;
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      default:
+        return data; // No sorting or "None" selected
+    }
+  };
+  
+  const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
+  
 
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -608,7 +632,7 @@ const Lead = () => {
                   </div> */}
               </div>
             </div>
-            <div className="deal-sort">
+            <div className="deal-sort" onClick={toggleSortOrder}>
               <img src={Sort} alt="" />
             </div>
             <div className="select action-select">
@@ -627,8 +651,8 @@ const Lead = () => {
                 {sortOpen && (
                   <ul className="dropdown-menu">
 
-                    <li >None</li>
-                    <li>Amount</li>
+                    <li onClick={() => { setSortOption("None"); setSortOpen(false); }}>None</li>
+                    <li onClick={() => { setSortOption("Amount"); setSortOpen(false); }}>Amount</li>
                     <li>Closing Date</li>
                     <li>Contact Name</li>
                     <li>Created By</li>
@@ -677,7 +701,7 @@ const Lead = () => {
                     </label>
                   )}
                 </div>
-                {filterDealData.map((obj) => {
+                {sortedDealData.map((obj) => {
                   if (obj.status === item) {
                     return (
                       <LeadCards
