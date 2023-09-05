@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import chart from "../../assets/image/chart.svg";
+import Search from "../../assets/image/search.svg";
 import axios from "axios";
-import { GET_ALL_DEAL, MOVEDEAL_TO_TRASH,GET_ALL_STAGE,getDecryptedToken, GET_LABEL } from "../utils/Constants";
+import {
+  GET_ALL_DEAL,
+  MOVEDEAL_TO_TRASH,
+  GET_ALL_STAGE,
+  getDecryptedToken,
+  GET_LABEL,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealsColn from "./DealsColn";
@@ -31,8 +38,6 @@ const Deal = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-
-  
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
     axios
@@ -42,20 +47,24 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        const stageNames = response?.data?.message?.map((item) => item.display_name);
+        const stageNames = response?.data?.message?.map(
+          (item) => item.display_name
+        );
         if (stageNames && stageNames.length > 0) {
           setStages(stageNames.reverse());
         }
-        const statusNames = response?.data?.message?.map((item) => item.stage_name);
-          if (statusNames && statusNames.length > 0) {
-            setStatus(statusNames.reverse());
-          }
-        })
+        const statusNames = response?.data?.message?.map(
+          (item) => item.stage_name
+        );
+        if (statusNames && statusNames.length > 0) {
+          setStatus(statusNames.reverse());
+        }
+      })
       .catch((error) => {
         console.log(error);
       });
   };
-  
+
   const fetchLeadsData = () => {
     axios
       .get(GET_ALL_DEAL, {
@@ -64,7 +73,9 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        const filteredDeals = response?.data?.data.filter((obj) => obj.status !== "");
+        const filteredDeals = response?.data?.data.filter(
+          (obj) => obj.status !== ""
+        );
         setDeals(filteredDeals);
       })
       .catch((error) => {
@@ -72,14 +83,14 @@ const Deal = () => {
       });
   };
 
-useEffect(() => {    
-       // Calculate status counts
-       const counts = {};
-       status.forEach((status) => {
-         counts[status] = deals.filter((obj) => obj.status === status).length;
-       });
-       setStatusCounts(counts);
-  }, [deals,status]);
+  useEffect(() => {
+    // Calculate status counts
+    const counts = {};
+    status.forEach((status) => {
+      counts[status] = deals.filter((obj) => obj.status === status).length;
+    });
+    setStatusCounts(counts);
+  }, [deals, status]);
 
   const fetchLabelData = async () => {
     try {
@@ -102,16 +113,15 @@ useEffect(() => {
 
   const handleDeleteOpen = () => {
     setIsDeleteOpen(true);
-  }
+  };
   const handleDeleteClose = () => {
     setIsDeleteOpen(false);
-  }
+  };
 
   const resetData = () => {
     fetchLeadsData();
     fetchLabelData();
     fetchStatus();
-  
   };
 
   useEffect(() => {
@@ -147,7 +157,7 @@ useEffect(() => {
       setStatusTotalValues(statusTotals);
     };
     calculateStatusTotalValues();
-  }, [deals,status]);
+  }, [deals, status]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -177,7 +187,7 @@ useEffect(() => {
     }
 
     console.log(deals);
-    console.log("bye")
+    console.log("bye");
 
     // Create a new workbook and worksheet
     const workbook = new ExcelJS.Workbook();
@@ -194,7 +204,11 @@ useEffect(() => {
       { header: "Contact", key: "contact", width: 20 },
       { header: "Creation Date", key: "creation_date", width: 30 },
       { header: "Currency", key: "currency", width: 20 },
-      { header: "Data Enquiry Recieve", key: "data_enquiry_receive", width: 30 },
+      {
+        header: "Data Enquiry Recieve",
+        key: "data_enquiry_receive",
+        width: 30,
+      },
       { header: "Deal Comission", key: "deal_commission", width: 20 },
       { header: "Deal Name", key: "deal_name", width: 20 },
       { header: "Deposite", key: "deposit", width: 20 },
@@ -203,7 +217,11 @@ useEffect(() => {
       { header: "Email", key: "email", width: 30 },
       { header: "Engagement Fee", key: "engagement_fee", width: 20 },
       { header: "Engagement Fee Paid", key: "engagement_fee_paid", width: 20 },
-      { header: "Introducer Firm Name", key: "introducer_firm_name", width: 20 },
+      {
+        header: "Introducer Firm Name",
+        key: "introducer_firm_name",
+        width: 20,
+      },
       { header: "Introducer Name", key: "introducer_name", width: 20 },
       { header: "Is Deleted", key: "is_deleted", width: 20 },
       { header: "Label Colour", key: "label_coloure", width: 20 },
@@ -222,7 +240,11 @@ useEffect(() => {
       { header: "Pipeline Id", key: "pipeline_id", width: 20 },
       { header: "Probability", key: "probability", width: 20 },
       { header: "Procuration Fee", key: "procuration_fee", width: 20 },
-      { header: "Procuration Fee Paid", key: "procuration_fee_paid", width: 20 },
+      {
+        header: "Procuration Fee Paid",
+        key: "procuration_fee_paid",
+        width: 20,
+      },
       { header: "Security Value", key: "security_value", width: 20 },
       { header: "Stage Id", key: "stage_id", width: 20 },
       { header: "Stage Name", key: "stage_name", width: 20 },
@@ -230,7 +252,6 @@ useEffect(() => {
       { header: "Type Of Security", key: "type_of_security", width: 20 },
       { header: "Update Date", key: "update_date", width: 30 },
       { header: "Value", key: "value", width: 20 },
-     
     ];
 
     deals.forEach((deal) => {
@@ -280,7 +301,6 @@ useEffect(() => {
         type_of_security: deal.type_of_security,
         update_date: deal.update_date,
         value: deal.value,
-        
       });
     });
 
@@ -356,7 +376,7 @@ useEffect(() => {
       setSelectedIds([...selectedIds, id]);
     }
   };
-  
+
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
       const idsWithStatus = deals
@@ -371,7 +391,7 @@ useEffect(() => {
     const idsWithStatus = deals
       .filter((deal) => deal.status === status)
       .map((deal) => deal.id);
-  
+
     if (areAllChildCheckboxesChecked(status)) {
       setSelectedIds(selectedIds.filter((id) => !idsWithStatus.includes(id)));
       setSelectedStatusesData((prevData) => ({
@@ -386,8 +406,8 @@ useEffect(() => {
       }));
     }
   };
-  
- const handleDeleteLead = () => {
+
+  const handleDeleteLead = () => {
     if (selectedIds) {
       const body = {
         dealIds: selectedIds, // Use the stored ID
@@ -405,12 +425,12 @@ useEffect(() => {
             autoClose: 2000,
           });
           fetchLeadsData();
-      setSelectedIds([]); // Reset the stored ID
-      handleDeleteClose();
+          setSelectedIds([]); // Reset the stored ID
+          handleDeleteClose();
         })
         .catch((error) => {
           console.log(error);
-        });        
+        });
     }
   };
 
@@ -444,6 +464,16 @@ useEffect(() => {
                 <i className="fas fa-list-ul"></i>
               </a>
             </div>
+            <div className="recycle-search-box">
+          <input
+            type="text"
+            className="recycle-search-input recycle-fonts"
+            placeholder="Search..."
+          />
+          <span className="recycle-search-icon">
+            <img src={Search} alt="" />
+          </span>
+        </div>
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
@@ -479,13 +509,6 @@ useEffect(() => {
                 ref={fileInputRef}
                 style={{ display: "none" }}
               />
-              <button
-                type="button"
-                className="simple-btn"
-                onClick={handleButtonClick}
-              >
-                import
-              </button>
             </div>
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
@@ -505,13 +528,12 @@ useEffect(() => {
                     {/* <li onClick={() => toggleActionDropdown("Delete")}>
                       Mass Delete
                     </li> */}
-                    <li onClick={handleDeleteOpen}>
-                      Mass Delete
-                    </li>
+                    <li onClick={handleDeleteOpen}>Mass Delete</li>
                     <li>Mass Update</li>
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
+                    <li onClick={handleButtonClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Deals
                     </li>
@@ -519,9 +541,14 @@ useEffect(() => {
                 )}
               </div>
             </div>
-            <button type="button" className="helpBtn genral-refresh-icon" title="Refresh" onClick={resetData} >
+            <button
+              type="button"
+              className="helpBtn genral-refresh-icon"
+              title="Refresh"
+              onClick={resetData}
+            >
               <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
+            </button>
           </div>
         </div>
       </section>
@@ -537,31 +564,31 @@ useEffect(() => {
                   </p>
                   {statusCounts[item] > 0 && (
                     <label className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className={`cb1 ${item}-header-checkbox`}
-                      name="headerCheckBox"
-                      checked={
-                        selectedStatusesData[item] &&
-                        areAllChildCheckboxesChecked(item)
-                      }
-                      onChange={() => handleHeaderCheckboxChange(item)}
-                    />
+                      <input
+                        type="checkbox"
+                        className={`cb1 ${item}-header-checkbox`}
+                        name="headerCheckBox"
+                        checked={
+                          selectedStatusesData[item] &&
+                          areAllChildCheckboxesChecked(item)
+                        }
+                        onChange={() => handleHeaderCheckboxChange(item)}
+                      />
 
-                    <span className="checkmark"></span>
-                  </label>
+                      <span className="checkmark"></span>
+                    </label>
                   )}
                 </div>
                 {deals.map((obj) => {
                   if (obj.status === item) {
                     return (
                       <DealsColn
-                      key={obj.id}
-                      object={obj}
-                      selectedIds={selectedIds}
-                      setSelectedIds={setSelectedIds}
-                      // status={item} // Pass the status as a prop
-                      onLeadAdded={fetchLeadsData}
+                        key={obj.id}
+                        object={obj}
+                        selectedIds={selectedIds}
+                        setSelectedIds={setSelectedIds}
+                        // status={item} // Pass the status as a prop
+                        onLeadAdded={fetchLeadsData}
                       />
                     );
                   }
@@ -586,11 +613,12 @@ useEffect(() => {
         onLeadAdded={fetchLeadsData}
       />
       <ToastContainer />
-      {
-        isDeleteOpen && (
-          <DealDeletePopUp onClose={handleDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
-        )
-      }
+      {isDeleteOpen && (
+        <DealDeletePopUp
+          onClose={handleDeleteClose}
+          onDeleteConfirmed={handleDeleteLead}
+        />
+      )}
     </div>
   );
 };
