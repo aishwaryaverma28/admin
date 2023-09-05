@@ -58,26 +58,26 @@ const Login = () => {
     axios
       .post(LOGIN, updateForm)
       .then((response) => {
-        const data = response.data;
-        const status = response.data.status;
+        const data = response?.data;
+        const status = response?.data?.status;
         console.log(data);
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {
-          const token = response.data.token; // Assuming the token is in the response data
+          const token = response.data.token;
           const encryptedToken = CryptoJS.AES.encrypt(
             token,
             secretKey
           ).toString();
-          localStorage.setItem("jwtToken", encryptedToken); // Store the encrypted token in localStorage
+          localStorage.setItem("jwtToken", encryptedToken);
           // code for decrypt token
           // const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
           // const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
           // console.log(decryptedToken)
           const userId = data.user[0].id;
-          localStorage.setItem("id", userId); // Store the landing URL in localStorage
+          localStorage.setItem("id", userId);
           const landingUrl = response.data.landingurl;
-          localStorage.setItem("landingUrl", landingUrl); // Store the landing URL in localStorage
+          localStorage.setItem("landingUrl", landingUrl);
           const userPath = data.user[0].permissions.split(",");
           userPath.push(landingUrl);
           const userPathTot = userPath.join(",");

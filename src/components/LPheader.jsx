@@ -16,6 +16,7 @@ import HelpModal from "./HelpModal";
 
 const LPheader = () => {
   const { name } = useContext(LPContext);
+  const landingUrl = localStorage.getItem("landingUrl");
   const [pageTitle, setPageTitle] = useState("Lead");
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,44 +27,44 @@ const LPheader = () => {
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
-  // const allowed = decryptedUserPath.split(",");
-  const allowed = [
-    "/lp/lead",
-    "/lp/admin",
-    "/lp/home",
-    "/lp/mail",
-    "/lp/contacts",
-    "/lp/deals",
-    "/lp/settings",
-    "/lp/settings/general",
-    "/lp/settings/notification",
-    "/lp/settings/usernteams",
-    "/lp/settings/companysettings",
-    "/lp/settings/recyclebin",
-    "/lp/settings/privacyConcent",
-    "/lp/settings/settingLeads",
-    "/lp/settings/settingDeal",
-    "/lp/settings/settingUsage",
-    "/lp/settings/settingImpExp",
-    "/lp/settings/blog/add",
-    "/lp/settings/blog/view",
-    "/lp/settings/sitePages/add",
-    "/lp/settings/sitePages/view",
-    "/lp/settings/helpSection/add",
-    "/lp/settings/helpSection/update",
-    "/lp/settings/userManagement/add",
-    "/lp/settings/userManagement/update",
-    "/lp/settings/employee/add",
-    "/lp/settings/employee/view",
-    "/lp/settings/accessManagement",
-    "/lp/settings/reportsAndAnalytics",
-    "/lp/settings/masterSettings/City",
-    "/lp/settings/system/state",
-    "/lp/settings/viewProfile/employeeProfile",
-    "/lp/settings/viewProfile/timeSheet",
-    "/lp/settings/viewProfile/documents",
-    "/lp/settings/viewProfile/salarySlip",
-  ];
+  const allowed = decryptedUserPath.split(",");
+  // const allowed = [
+  //   "/lp/lead",
+  //   "/lp/admin",
+  //   "/lp/home",
+  //   "/lp/mail",
+  //   "/lp/contacts",
+  //   "/lp/deals",
+  //   "/lp/settings",
+  //   "/lp/settings/general",
+  //   "/lp/settings/notification",
+  //   "/lp/settings/usernteams",
+  //   "/lp/settings/companysettings",
+  //   "/lp/settings/recyclebin",
+  //   "/lp/settings/privacyConcent",
+  //   "/lp/settings/settingLeads",
+  //   "/lp/settings/settingDeal",
+  //   "/lp/settings/settingUsage",
+  //   "/lp/settings/settingImpExp",
+  //   "/lp/settings/blog/add",
+  //   "/lp/settings/blog/view",
+  //   "/lp/settings/sitePages/add",
+  //   "/lp/settings/sitePages/view",
+  //   "/lp/settings/helpSection/add",
+  //   "/lp/settings/helpSection/update",
+  //   "/lp/settings/userManagement/add",
+  //   "/lp/settings/userManagement/update",
+  //   "/lp/settings/employee/add",
+  //   "/lp/settings/employee/view",
+  //   "/lp/settings/accessManagement",
+  //   "/lp/settings/reportsAndAnalytics",
+  //   "/lp/settings/masterSettings/City",
+  //   "/lp/settings/system/state",
+  //   "/lp/settings/viewProfile/employeeProfile",
+  //   "/lp/settings/viewProfile/timeSheet",
+  //   "/lp/settings/viewProfile/documents",
+  //   "/lp/settings/viewProfile/salarySlip",
+  // ];
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
       return true; // All paths are allowed when allowed array is empty
@@ -71,11 +72,7 @@ const LPheader = () => {
     return allowed.includes(path);
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  async function getUser() {
+ async function getUser() {
     try {
       const response = await axios.get(USER_INFO, {
         headers: {
@@ -95,6 +92,11 @@ const LPheader = () => {
       }
     }
   }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   // console.log(clientData);
   useEffect(() => {
     const handleOutsideClick = (event) => {
