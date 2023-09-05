@@ -526,7 +526,7 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
-          {isPathAllowed("/lp/settings/masterSettings/City") && (
+          {isPathAllowed("/lp/settings/system/state") && (
             <div
             className="master-arrow"
             onClick={() => toggleMasterSubMenu("system")}
@@ -543,11 +543,11 @@ const LPSettingSidebar = () => {
           )}
           {masterSubMenu === "system" && (
             <div className="sub-sub-menu">
-              {isPathAllowed("/lp/settings/masterSettings/City") && (
+              {isPathAllowed("/lp/settings/system/state") && (
                 <p className="company-options setting-font-style">
                   <NavLink
                     exact
-                    to="/lp/settings/masterSettings/City"
+                    to="/lp/settings/system/state"
                     activeClassName="activeLink"
                   >
                     State
