@@ -17,6 +17,7 @@ letter-spacing: -0.02563rem;
 .helpRight{
     padding: 0.5rem 1rem;
     width: 35%;
+    margin-top: 0.5rem;
 }
 .helpContainer{
     display: flex;
