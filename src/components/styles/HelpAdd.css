@@ -72,3 +72,20 @@ text-transform: capitalize;
     font-family: "Lexend Deca";
 background: #F3F6FA;
 }
+
+.help-bottom-btn{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* or justify-content: space-between; if you have multiple elements */
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--th-background);
+    z-index:-1;
+}
+
+.help-save{
+    margin-left: 1rem;
+}
