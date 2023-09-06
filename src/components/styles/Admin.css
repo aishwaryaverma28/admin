@@ -10,7 +10,7 @@
   color: #1e2224;
   transition: all 0.3s;
   /* border-right: 1px solid #dcdcdc; */
-  font-family: 'Work Sans';
+  font-family: "Lexend Deca";
   height: 100vh;
 }
 
@@ -39,10 +39,10 @@
   .main {
     flex-direction: column;
   }
-.sidebar{
-  width: 95%;
-  padding: 0 2rem;
-}
+  .sidebar {
+    width: 95%;
+    padding: 0 2rem;
+  }
   .sidebarOpen {
     width: 100%;
     height: auto;
@@ -69,8 +69,7 @@
   }
 }
 
-
-.headerEditor{
+.headerEditor {
   /* backdrop-filter: blur(6px); */
   background: #1e2224;
   padding: 16px;
@@ -78,8 +77,8 @@
   top: 0;
   z-index: 1;
 }
-.headerEditor h2{
-  font-family: "Work Sans";
+.headerEditor h2 {
+  font-family: "Lexend Deca";
   color: #ffffff;
   font-weight: 600;
   font-size: 18px;

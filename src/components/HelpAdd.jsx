@@ -34,6 +34,10 @@ const HelpAdd = () => {
               </div>
       </div>
       </div>
+      <div className="help-bottom-btn">
+        <button className="common-fonts common-delete-button">Cancel</button>
+        <button className="common-fonts common-save-button help-save">Save</button>
+      </div>
     </>
   );
 };

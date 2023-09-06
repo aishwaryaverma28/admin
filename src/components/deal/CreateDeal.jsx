@@ -8,20 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
   const [stages, setStages] = useState([]);
-  const status = [
-    "enquiry_received",
-    "contact_made",
-    "illustration_sent",
-    "all_docs_received",
-    "compliance",
-    "sourced",
-    "application_received",
-    "valuation",
-    "formal_offer_sent",
-    "compliance_check",
-    "legals",
-    "completion"
-  ];
+  const [status, setStatus] = useState([]);
+  const [stageId, setStageId] = useState([]);
+
 
   const fetchStages = () => {
     axios
@@ -31,31 +20,36 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
         },
       })
       .then((response) => {
-        const displayNames = response.data.message.map(
+        const stageNames = response?.data?.message?.map(
           (item) => item.display_name
         );
+        const stageIdArray = response?.data?.message?.map(
+          (item) => item.id
+        );
 
-        // Sort displayNames based on item.id in ascending order
-        const sortedDisplayNamesAsc = [...displayNames].sort((a, b) => {
-          const itemA = response.data.message.find(
-            (item) => item.display_name === a
-          );
-          const itemB = response.data.message.find(
-            (item) => item.display_name === b
-          );
-          return itemA.id - itemB.id;
-        });
-
-        setStages(sortedDisplayNamesAsc);
+        if (stageNames && stageNames.length > 0) {
+          setStages(stageNames.reverse());
+          setStageId(stageIdArray.reverse());
+        }
+        const statusNames = response?.data?.message?.map(
+          (item) => item.stage_name
+        );
+        if (statusNames && statusNames.length > 0) {
+          setStatus(statusNames.reverse());
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+
+
   useEffect(() => {
     fetchStages();
   }, []);
+
+
 
 
 
@@ -73,9 +67,9 @@ const navigate = useNavigate();
     mobile: "",
     email: "",
     value: 0,
-    label_id: 0,
+    label_id: 36,
     closure_date: "",
-    status: "enquiry_received",
+    stage_id:1,
     pipeline_id: 1,
     lead_id: 0,
   });
@@ -91,6 +85,7 @@ const navigate = useNavigate();
         value: selectedItem.value,
         label_id: selectedItem.label_id,
         pipeline_id: 1,
+        stage_id: selectedItem.stage_id
       });
     }
   }, [selectedItem]);
@@ -103,6 +98,8 @@ const navigate = useNavigate();
         },
       });
       if (response.data.status === 1) {
+        console.log(response.data)
+        console.log("kk")
         setLabelData(response.data.data);
       } else {
         if (response.data.message === "Token has expired") {
@@ -150,7 +147,6 @@ const navigate = useNavigate();
         },
       })
       .then((response) => {
-        console.log(response.data);
         toast.success("Lead data added successfully", {
           position: "top-center",
           autoClose: 2000,
@@ -162,9 +158,9 @@ const navigate = useNavigate();
           mobile: "",
           email: "",
           value: 0,
-          label_id: 0,
+          label_id: 36,
           closure_date: "",
-          status: "enquiry_received",
+          stage_id:1,
           pipeline_id: 1,
           lead_id: 0,
         });
@@ -340,15 +336,15 @@ const navigate = useNavigate();
                   Stages
                 </label>
                 <select
-                  name="status"
-                  id="status"
+                  name="stage_id"
+                  id="stage_id"
                   className="lead-priority"
                   onChange={handleChange}
                 >
 
                   {stages?.map((item, index) => {
                     return (
-                      <option key={index} value={status?.[index]}>
+                      <option key={index} value={stageId[index]}>
                         {item}
                       </option>
                     );
