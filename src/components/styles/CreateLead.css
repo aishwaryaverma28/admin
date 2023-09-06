@@ -104,7 +104,7 @@
   color: #1e2224;
   width: 17rem;
   height: 2.25rem;
-  font-weight: 600;
+  font-weight: 400;
   outline: rgb(59, 59, 59);
   border-radius: 0.3125rem;
   border: 1px solid #c0c6cc;
@@ -126,7 +126,7 @@
   color: #1e2224;
   width: 17rem;
   height: 2.25rem;
-  font-weight: 600;
+  font-weight: 400;
   outline: rgb(59, 59, 59);
   border-radius: 0.3125rem;
   border: 1px solid #c0c6cc;
@@ -182,7 +182,7 @@
   color: #1e2224;
   height: 2.25rem;
   width: 12.5rem;
-  font-weight: 600;
+  font-weight: 400;
   outline: rgb(59, 59, 59);
   border-radius: 0.3125rem;
   border: 1px solid #c0c6cc;
@@ -353,6 +353,10 @@
 
 /* bottom section  */
 
+.form-section-2 {
+  position: relative;
+}
+
 .bottom-section {
   width: auto;
   margin-left: -1rem;
@@ -363,6 +367,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
 
 .cancel-btn {
   margin-left: 1rem;

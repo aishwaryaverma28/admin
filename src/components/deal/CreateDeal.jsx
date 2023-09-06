@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_DEAL, getDecryptedToken, GET_LABEL, GET_ALL_STAGE } from "../utils/Constants";
+import {
+  ADD_DEAL,
+  getDecryptedToken,
+  GET_LABEL,
+  GET_ALL_STAGE,
+} from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const [stages, setStages] = useState([]);
   const [status, setStatus] = useState([]);
   const [stageId, setStageId] = useState([]);
-
 
   const fetchStages = () => {
     axios
@@ -23,9 +27,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
         const stageNames = response?.data?.message?.map(
           (item) => item.display_name
         );
-        const stageIdArray = response?.data?.message?.map(
-          (item) => item.id
-        );
+        const stageIdArray = response?.data?.message?.map((item) => item.id);
 
         if (stageNames && stageNames.length > 0) {
           setStages(stageNames.reverse());
@@ -43,15 +45,9 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
       });
   };
 
-
-
   useEffect(() => {
     fetchStages();
   }, []);
-
-
-
-
 
   // const [name, setName] = useState("");
   // const [fname, setfName] = useState("");
@@ -59,7 +55,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem}) => {
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [labelData, setLabelData] = useState([]);
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [leadData, setLeadData] = useState({
     probability: "",
     deal_name: "",
@@ -69,7 +65,7 @@ const navigate = useNavigate();
     value: 0,
     label_id: 36,
     closure_date: "",
-    stage_id:1,
+    stage_id: 1,
     pipeline_id: 1,
     lead_id: 0,
   });
@@ -85,7 +81,7 @@ const navigate = useNavigate();
         value: selectedItem.value,
         label_id: selectedItem.label_id,
         pipeline_id: 1,
-        stage_id: selectedItem.stage_id
+        stage_id: selectedItem.stage_id,
       });
     }
   }, [selectedItem]);
@@ -98,8 +94,6 @@ const navigate = useNavigate();
         },
       });
       if (response.data.status === 1) {
-        console.log(response.data)
-        console.log("kk")
         setLabelData(response.data.data);
       } else {
         if (response.data.message === "Token has expired") {
@@ -114,7 +108,6 @@ const navigate = useNavigate();
   useEffect(() => {
     fetchLabelData();
   }, []);
-
 
   if (!isOpen) {
     return null;
@@ -139,7 +132,7 @@ const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     axios
       .post(ADD_DEAL, leadData, {
         headers: {
@@ -160,7 +153,7 @@ const navigate = useNavigate();
           value: 0,
           label_id: 36,
           closure_date: "",
-          stage_id:1,
+          stage_id: 1,
           pipeline_id: 1,
           lead_id: 0,
         });
@@ -174,21 +167,20 @@ const navigate = useNavigate();
   };
 
   const mergedLabels = labelData
-  .filter((item) => item?.entity?.includes("deals"))
-  .map((item) => ({
-    id: item?.id,
-    name: item?.name,
-    colour_code: item?.colour_code,
-  }));
+    .filter((item) => item?.entity?.includes("deals"))
+    .map((item) => ({
+      id: item?.id,
+      name: item?.name,
+      colour_code: item?.colour_code,
+    }));
 
-  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <div class="create-lead-top">
           <p>Create Deal</p>
           <p className="close-icon" onClick={onClose}>
-            &times;
+            X
           </p>
         </div>
         <div className="create-lead-form">
@@ -225,8 +217,8 @@ const navigate = useNavigate();
                   type="text"
                   className="lead-input"
                   placeholder="Please Enter Name"
-                // onChange={handleChangeName}
-                // value={name} // Add value prop for controlled input
+                  // onChange={handleChangeName}
+                  // value={name} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="value">
                   Value
@@ -277,6 +269,56 @@ const navigate = useNavigate();
                   onChange={handleChange}
                   value={leadData.closure_date}
                 />
+                <label className="lead-label" htmlFor="status">
+                  Stages
+                </label>
+                <select
+                  name="stage_id"
+                  id="stage_id"
+                  className="lead-priority"
+                  onChange={handleChange}
+                >
+                  {stages?.map((item, index) => {
+                    return (
+                      <option key={index} value={stageId[index]}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Loan Type
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+
+                <div className="deal-bottom-radio">
+                  <div className="deal-radio-input">
+                    <input
+                      type="radio"
+                      id="individual"
+                      name="radioOption"
+                      value="individual"
+                    />
+                    <label className="deal-label" htmlFor="individual">
+                      Individual
+                    </label>
+                  </div>
+                  <div className="deal-radio-input">
+                    <input
+                      type="radio"
+                      id="company"
+                      name="radioOption"
+                      value="company"
+                    />
+                    <label className="deal-label" htmlFor="company">
+                      Company
+                    </label>
+                  </div>
+                </div>
               </div>
 
               <div className="form-section-2">
@@ -332,30 +374,57 @@ const navigate = useNavigate();
                     );
                   })}
                 </select>
-                <label className="lead-label" htmlFor="status">
-                  Stages
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Company Type
                 </label>
-                <select
-                  name="stage_id"
-                  id="stage_id"
-                  className="lead-priority"
-                  onChange={handleChange}
-                >
-
-                  {stages?.map((item, index) => {
-                    return (
-                      <option key={index} value={stageId[index]}>
-                        {item}
-                      </option>
-                    );
-                  })}
-
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
                 </select>
 
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Duration
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Location of Company/Individual
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Age of Business
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Turnover
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
+
+                <label className="lead-label" htmlFor="pipeline_id">
+                  Industry Type
+                </label>
+                <select className="lead-input">
+                  <option value=""></option>
+                  <option value=""></option>
+                </select>
               </div>
             </section>
 
-            
             <section className="bottom-section font-style">
               <div>
                 <button className="cancel-btn" onClick={onClose}>

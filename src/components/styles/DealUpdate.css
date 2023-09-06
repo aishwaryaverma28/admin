@@ -553,3 +553,34 @@
 .deal-loading{
   margin-left: 0.5rem;
 }
+
+.deal-bottom-radio{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.deal-bottom-radio div:nth-child(1){
+margin-right: 2.5rem;
+}
+
+.deal-radio-input{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.deal-radio-input input{
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.deal-label {
+  font-weight: 400;
+  color: #1e2224; 
+  font-size: 0.875rem;
+  display: block;
+  cursor: pointer;
+  
+}
