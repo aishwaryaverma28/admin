@@ -82,7 +82,6 @@ background: #F3F6FA;
     justify-content: flex-end; /* or justify-content: space-between; if you have multiple elements */
     align-items: center;
     padding: 1rem;
-    background-color: var(--th-background);
     z-index:-1;
 }
 
