@@ -1,0 +1,74 @@
+.helpHead{
+    padding: 0.5rem 1rem;
+}
+.helpHead>h2{
+    color: #1E2224;
+font-family: "Lexend Deca";
+font-size: 1.4rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
+}
+.helpBody{
+    padding: 0.5rem 1rem;
+    width: 65%;
+}
+.helpRight{
+    padding: 0.5rem 1rem;
+    width: 35%;
+}
+.helpContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.helpTitle{
+    padding: 0.5rem 0;
+    color: #33475B;
+font-family: "Lexend Deca";
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+}
+.helpBody input{
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #F3F6FA;
+}
+.helpBody textarea{
+    font-family: "Lexend Deca";
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #F3F6FA;
+}
+.siteBox{
+    border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #FFF;
+}
+.siteHead{
+    border-bottom: 1px solid #DCDCDC;
+padding: 0.5rem 1rem;
+}
+.siteHead h3{
+    color: #1E2224;
+font-family: "Lexend Deca";
+font-size: 1rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+}
+.SiteSelectBox{
+   font-size: 14px; 
+    font-family: "Lexend Deca";
+background: #F3F6FA;
+}
