@@ -140,3 +140,5 @@ export const GET_ALL_STAGE = start + "api/deal/getAllStages";
 //========================================================================= master settings
 
 export const ADD_HELP = start+"api/user/help/addquation";
+export const GET_HELP_ID = start+"api/user/help/getbyid/";
+export const UPDATE_HELP = start+"api/user/help/update/";
