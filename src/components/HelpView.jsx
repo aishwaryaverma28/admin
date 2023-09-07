@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { GET_ALL_SEARCH,getDecryptedToken } from './utils/Constants';
-
+import TableHelp from './TableHelp';
+import { Link } from 'react-router-dom';
 
 const HelpView = () => {
     const [value, setValue] = useState(10);
@@ -22,6 +23,7 @@ const HelpView = () => {
       })
       .then((response) => {
         console.log(response?.data?.data);
+        setTableData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -32,9 +34,59 @@ const HelpView = () => {
     handleFormSubmit();
   }, []);
 
+  const selectRows = (e) => {
+    setValue(e.target.value);
+  };
+
+  const handleSearchTermChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredItems = (tableData || []).filter((item) => {
+    const values = Object.values(item);
+    for (let i = 0; i < values.length; i++) {
+      if (values[i] && values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
+  });
+
 
   return (
-    <div>HelpView</div>
+  <>
+    <header className="headerEditor">
+      <h2>View Help Details</h2>
+    </header>
+    <div className="buttonBox">
+      <div className="searchBar">
+        <label>
+          Search: <input type="text" onChange={handleSearchTermChange} />
+        </label>
+      </div>
+      <div>
+        <Link to="/lp/settings/blog/add">
+          <button type="button" className="addBtn">
+            add <i className="fas fa-plus"></i>
+          </button>
+        </Link>
+        <label className="entriesLable">
+          Show
+          <select onChange={selectRows} className="entries">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+          </select>
+          Entries
+        </label>
+      </div>
+    </div>
+
+    <div className="tableContainer">
+      <TableHelp data={filteredItems} rowsPerPage={value} />
+    </div>
+  </>
   )
 }
 
