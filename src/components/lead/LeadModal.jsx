@@ -17,6 +17,7 @@ import LeadDocUp from "./../LeadDocUp";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
+import LeadActivity from "./LeadActivity.jsx";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -952,7 +953,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <p>Activity</p>
+                <LeadActivity/>
               </div>
             )}
             {activeTab === "attachment" && (
