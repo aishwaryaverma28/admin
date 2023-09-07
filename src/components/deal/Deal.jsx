@@ -55,7 +55,7 @@ const Deal = () => {
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
     axios
-      .get(GET_ALL_STAGE, {
+      .get(GET_ALL_STAGE+"/deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

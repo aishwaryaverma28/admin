@@ -13,6 +13,7 @@ import {
   EXPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
+  GET_ALL_STAGE,
   GET_LABEL,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,8 +21,10 @@ import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
 
 const Lead = () => {
-  const stages = ["New", "Unread", "Open", "In Progress"];
-  const status = ["New", "Unread", "Open", "In Progress"];
+  // const stages = ["New", "Unread", "Open", "In Progress"];
+  // const status = ["New", "Unread", "Open", "In Progress"];
+  const [stages, setStages] = useState([]);
+  const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);
@@ -42,12 +45,44 @@ const Lead = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDelete, setIsDelete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("None"); 
+  const [sortOption, setSortOption] = useState("None");
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const fetchStatus = () => {
+    axios
+      .get(GET_ALL_STAGE + "/lead", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const stageNames = response?.data?.message?.map(
+          (item) => item.display_name
+        );
+        if (stageNames && stageNames.length > 0) {
+          setStages(stageNames.reverse());
+        }
+        const statusNames = response?.data?.message?.map(
+          (item) => item.stage_name
+        );
+        if (statusNames && statusNames.length > 0) {
+          setStatus(statusNames.reverse());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
+  useEffect(() => {
+    // Calculate status counts
+    const counts = {};
+    status.forEach((status) => {
+      counts[status] = deals.filter((obj) => obj.status === status).length;
+    });
+    setStatusCounts(counts);
+  }, [deals, status]);
   
-
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -91,7 +126,13 @@ const Lead = () => {
 
     // Add data to the worksheet
     worksheet.columns = [
-      { header: "Id", key: "id", width: 20, bold: true, alignment: { horizontal: 'center' } },
+      {
+        header: "Id",
+        key: "id",
+        width: 20,
+        bold: true,
+        alignment: { horizontal: "center" },
+      },
       { header: "Address 1", key: "address1", width: 20 },
       { header: "Address 2", key: "address2", width: 20 },
       { header: "City", key: "city", width: 20 },
@@ -218,26 +259,36 @@ const Lead = () => {
   useEffect(() => {
     fetchLeadsData();
     fetchLabelData();
+    fetchStatus();
   }, []);
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  const filterDealData = deals?.filter((item)=>{
-    
-    const dealName= `${item?.lead_name}`.toLowerCase() || "";
-    const dealValue= `${item?.value}`.toLowerCase() || "";
-    const dealValue2= `$${item?.value}`.toLowerCase() || "";
-    const ownerFirstName= `${item?.ownerf_name}`.toLowerCase() || "";
-    const ownerLastName= `${item?.ownerl_name}`.toLowerCase() || "";
-    const ownerFullName= `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
-    const closureDate= `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
-    const labelName= `${item?.label_name}`.toLowerCase() || "";
+  const filterDealData = deals?.filter((item) => {
+    const dealName = `${item?.lead_name}`.toLowerCase() || "";
+    const dealValue = `${item?.value}`.toLowerCase() || "";
+    const dealValue2 = `$${item?.value}`.toLowerCase() || "";
+    const ownerFirstName = `${item?.ownerf_name}`.toLowerCase() || "";
+    const ownerLastName = `${item?.ownerl_name}`.toLowerCase() || "";
+    const ownerFullName =
+      `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
+    const closureDate =
+      `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
+    const labelName = `${item?.label_name}`.toLowerCase() || "";
     const searchDeal = searchQuery.toLowerCase();
 
-    const matchQuery = dealName.includes(searchDeal) || dealValue.includes(searchDeal) || dealValue2.includes(searchDeal) || ownerFirstName.includes(searchDeal) || ownerLastName.includes(searchDeal) || ownerFullName.includes(searchDeal) || closureDate.includes(searchDeal) || labelName.includes(searchDeal) ;
-    return matchQuery; 
+    const matchQuery =
+      dealName.includes(searchDeal) ||
+      dealValue.includes(searchDeal) ||
+      dealValue2.includes(searchDeal) ||
+      ownerFirstName.includes(searchDeal) ||
+      ownerLastName.includes(searchDeal) ||
+      ownerFullName.includes(searchDeal) ||
+      closureDate.includes(searchDeal) ||
+      labelName.includes(searchDeal);
+    return matchQuery;
   });
 
   const sortData = (data, option, order) => {
@@ -249,29 +300,33 @@ const Lead = () => {
         });
       case "LeadName":
         return data.slice().sort((a, b) => {
-          const result =a.lead_name.toLowerCase().localeCompare(b.lead_name.toLowerCase());
+          const result = a.lead_name
+            .toLowerCase()
+            .localeCompare(b.lead_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
         return data.slice().sort((a, b) => {
-          const result =a.label_name.toLowerCase().localeCompare(b.label_name.toLowerCase());
+          const result = a.label_name
+            .toLowerCase()
+            .localeCompare(b.label_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
         return data.slice().sort((a, b) => {
-          const result =a.ownerf_name.toLowerCase().localeCompare(b.lead_name.toLowerCase());
+          const result = a.ownerf_name
+            .toLowerCase()
+            .localeCompare(b.lead_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
         return data.slice().sort(() => {
-          
           return order === "asc" ? 1 : -1; // Toggle sorting order
-        }); 
+        });
     }
   };
-  
+
   const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
-  
 
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -549,17 +604,17 @@ const Lead = () => {
               </a>
             </div>
             <div className="recycle-search-box">
-          <input
-            type="text"
-            className="recycle-search-input recycle-fonts"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <span className="recycle-search-icon">
-            <img src={Search} alt="" />
-          </span>
-        </div>
+              <input
+                type="text"
+                className="recycle-search-input recycle-fonts"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <span className="recycle-search-icon">
+                <img src={Search} alt="" />
+              </span>
+            </div>
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
@@ -655,10 +710,7 @@ const Lead = () => {
             </div>
             <div className="select action-select">
               <div className="dropdown-container" ref={actionSortRef}>
-                <div
-                  className="dropdown-header2"
-                  onClick={toggleSortDropdown}
-                >
+                <div className="dropdown-header2" onClick={toggleSortDropdown}>
                   Sort By
                   <i
                     className={`fa-sharp fa-solid ${
@@ -668,12 +720,51 @@ const Lead = () => {
                 </div>
                 {sortOpen && (
                   <ul className="dropdown-menu">
-
-                    <li onClick={() => { setSortOption("None"); setSortOrder("asc"); setSortOpen(false); }}>None</li>
-                    <li onClick={() => { setSortOption("LeadName"); setSortOrder("asc"); setSortOpen(false); }}>Lead Name</li>
-                    <li onClick={() => { setSortOption("Amount"); setSortOrder("asc"); setSortOpen(false); }}>Amount</li>
-                    <li onClick={() => { setSortOption("Label"); setSortOrder("asc"); setSortOpen(false); }}>Label</li>
-                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Lead Owner</li>
+                    <li
+                      onClick={() => {
+                        setSortOption("None");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      None
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("LeadName");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Lead Name
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Amount");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Amount
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Label");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Label
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Owner");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Lead Owner
+                    </li>
                   </ul>
                 )}
               </div>
