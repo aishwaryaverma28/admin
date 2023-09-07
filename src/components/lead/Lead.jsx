@@ -21,8 +21,6 @@ import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
 
 const Lead = () => {
-  // const stages = ["New", "Unread", "Open", "In Progress"];
-  // const status = ["New", "Unread", "Open", "In Progress"];
   const [stages, setStages] = useState([]);
   const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
@@ -355,7 +353,7 @@ const Lead = () => {
       setStatusTotalValues(statusTotals);
     };
     calculateStatusTotalValues();
-  }, [deals]);
+  }, [deals, status]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);

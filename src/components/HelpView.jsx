@@ -55,9 +55,9 @@ const HelpView = () => {
 
   return (
   <>
-    <header className="headerEditor">
-      <h2>View Help Details</h2>
-    </header>
+  <header className="helpHead">
+  <h2>View Help Details</h2>
+      </header>
     <div className="buttonBox">
       <div className="searchBar">
         <label>
@@ -65,7 +65,7 @@ const HelpView = () => {
         </label>
       </div>
       <div>
-        <Link to="/lp/settings/blog/add">
+        <Link to="/lp/settings/helpSection/add">
           <button type="button" className="addBtn">
             add <i className="fas fa-plus"></i>
           </button>
