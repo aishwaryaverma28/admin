@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { ADD_LEAD, getDecryptedToken } from "../utils/Constants";
+import { ADD_LEAD, getDecryptedToken, GET_ALL_STAGE } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [status, setStatus] = useState("");
@@ -16,6 +14,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [stages, setStages] = useState([]);
+  const [stageId, setStageId] = useState([]);
+  const [selectedStageName, setSelectedStageName] = useState("");
 
   const [leadData, setLeadData] = useState({
     position: "",
@@ -27,10 +28,49 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     phone: "",
     email: "",
     value: 0,
-    label_id:0,
+    label_id: 0,
     source: "",
+    stage_id: 1,
   });
 
+  function handleStatus(status) {
+    setStatus(status);
+    setIsDisable(false);
+    setSelectedStatus(status);
+  }
+
+  const fetchStages = () => {
+    axios
+      .get(GET_ALL_STAGE + "/lead", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const stageNames = response?.data?.message?.map(
+          (item) => item.display_name
+        );
+        const stageIdArray = response?.data?.message?.map((item) => item.id);
+
+        if (stageNames && stageNames.length > 0) {
+          setStages(stageNames.reverse());
+          setStageId(stageIdArray.reverse());
+        }
+        // const statusNames = response?.data?.message?.map(
+        //   (item) => item.stage_name
+        // );
+        // if (statusNames && statusNames.length > 0) {
+        //   setStatus(statusNames.reverse());
+        // }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchStages();
+  }, []);
 
   if (!isOpen) {
     return null;
@@ -47,12 +87,6 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     }
   }
 
-  function handleStatus(status) {
-    setStatus(status);
-    setIsDisable(false);
-    setSelectedStatus(status);
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
@@ -65,7 +99,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       ...leadData,
       first_name: fname,
       last_name: lname,
-      status: status,
+      status:"New"
     };
 
     axios
@@ -78,8 +112,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
         console.log(response.data);
         toast.success("Lead data added successfully", {
           position: "top-center",
-          autoClose: 2000
-        })
+          autoClose: 2000,
+        });
         setLeadData({
           position: "",
           lead_name: "",
@@ -92,6 +126,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           value: 0,
           label_id: 0,
           source: "",
+          stage_id: 1,
         });
         setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
@@ -262,7 +297,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   type="text"
                   name=""
                   className="lead-input"
-                // onChange={handleChange}
+                  // onChange={handleChange}
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
@@ -273,52 +308,38 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                  {
-                    mergedLabels.map(item => {
-                      return (
-                        <option key={item?.id} value={item?.id}>{item?.name}</option>
-                      )
-                    })
-                  }
+                  {mergedLabels.map((item) => {
+                    return (
+                      <option key={item?.id} value={item?.id}>
+                        {item?.name}
+                      </option>
+                    );
+                  })}
                 </select>
-              </div>
-            </section>
-
-            <section>
-              <div className="lead-status">
-                <p>Lead Status</p>
-                <div className="elements">
-                  <span
-                    className={`status-value new-element ${selectedStatus === "New" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("New")}
-                  >
-                    <span>New</span>
-                  </span>
-                  <span
-                     className={`status-value open-element ${selectedStatus === "Open" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Open")}
-                  >
-                    <span>Open</span>
-                  </span>
-                  <span
-                    className={`status-value progress-element ${selectedStatus === "In Progress" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("In Progress")}
-                  >
-                    <span>In Progress</span>
-                  </span>
-                  <span
-                     className={`status-value deal-element ${selectedStatus === "Open Deal" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Open Deal")}
-                  >
-                    <span>Open Deal</span>
-                  </span>
-                  <span
-                    className={`status-value unread-element ${selectedStatus === "Unread" ? "selected-status" : ""}`}
-                    onClick={() => handleStatus("Unread")}
-                  >
-                    <span>unread</span>
-                  </span>
-                </div>
+                <label className="lead-label" htmlFor="label_id">
+                  Stages
+                </label>
+                <select
+                  name="stage_id"
+                  id="stage_id"
+                  className="lead-priority"
+                  onChange={(e) => {
+                    handleChange(e);
+                    const selectedId = e.target.value;
+                    const selectedName = stages.find(
+                      (stage, index) => stageId[index] === selectedId
+                    );
+                    setSelectedStageName(selectedName || "");
+                  }}
+                >
+                  {stages?.map((item, index) => {
+                    return (
+                      <option key={index} value={stageId[index]} onClick={() => handleStatus(item)}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </section>
 
@@ -331,7 +352,13 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
               <div>
                 {/* <button className="add-btn">Create And Add another</button> */}
-                <button className={isDisable ? "common-inactive-button":"create-lead-btn"} onClick={handleSubmit} disabled={isDisable}>
+                <button
+                  className={
+                    isDisable ? "common-inactive-button" : "create-lead-btn"
+                  }
+                  onClick={handleSubmit}
+                  disabled={isDisable}
+                >
                   Create Lead
                 </button>
               </div>
