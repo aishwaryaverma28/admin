@@ -68,9 +68,9 @@ const TableHelp = ({ data, rowsPerPage }) => {
           {currentRows.map((row, index) => (
             <tr key={index}>
               <td className="employeeId">{row.id}</td>
-              <td className="employeeName"><Link to={"/lp/settings/helpSection/update/"+row.id}>{row.title}</Link></td>
-              <td className="sectionCount">{row.site}</td>              
-              <td className="employeeDate">{row.date ? row.date.split("T")[0] : ""}</td>              
+              <td className="employeeName"><Link to={"/lp/settings/helpSection/update/"+row.id}>{row?.title}</Link></td>
+              <td className="sectionCount">{row?.site}</td>              
+              <td className="employeeDate">{row?.update_date ? row?.update_date.split("T")[0] : ""}</td>              
             </tr>
           ))}
         </tbody>
