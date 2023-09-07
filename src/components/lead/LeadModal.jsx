@@ -8,12 +8,13 @@ import {
   GET_TEAM_MEM,
   handleLogout,
   getDecryptedToken,
-  GET_LABEL
+  GET_LABEL,
+  GET_ALL_STAGE,
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
 import LeadDocUp from "./../LeadDocUp";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 
@@ -35,6 +36,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [labelArray, setLabelArray] = useState([]);
   const [selectedConvertItem, setSelectedConvertItem] = useState(null);
   const [convertModalVisible, setConvertModalVisible] = useState(false);
+  const [stages, setStages] = useState([]);
+  const [stageId, setStageId] = useState([]);
+  const [selectedStageId, setSelectedStageId] = useState(
+    editedItem?.stage_id || ""
+  );
 
   const openConvertModal = (item) => {
     setSelectedConvertItem(item); // Set the selected item
@@ -44,6 +50,33 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setSelectedConvertItem(null); // Clear the selected item
     setConvertModalVisible(false); // Close the modal
   };
+
+  const fetchStages = () => {
+    axios
+      .get(GET_ALL_STAGE + "/lead", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const stageNames = response?.data?.message?.map(
+          (item) => item.display_name
+        );
+        const stageIdArray = response?.data?.message?.map((item) => item.id);
+
+        if (stageNames && stageNames.length > 0) {
+          setStages(stageNames.reverse());
+          setStageId(stageIdArray.reverse());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchStages();
+  }, []);
 
   const fetchLead = () => {
     axios
@@ -56,13 +89,13 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         setEditedItem(response.data.data[0]);
         setName(
           response.data.data[0].first_name +
-          " " +
-          response.data.data[0].last_name
+            " " +
+            response.data.data[0].last_name
         );
         setOwner(
           response.data.data[0].ownerf_name +
-          " " +
-          response.data.data[0].ownerl_name
+            " " +
+            response.data.data[0].ownerl_name
         );
         setIsLoading(false);
       })
@@ -72,24 +105,27 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       });
   };
 
+  console.log(editedItem)
+  console.log("hello")
+
   const fetchLabelData = async () => {
     try {
-        const response = await axios.get(GET_LABEL, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        });
-        if (response.data.status === 1) {
-            setLabelData(response.data.data);
-        } 
+      const response = await axios.get(GET_LABEL, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      });
+      if (response.data.status === 1) {
+        setLabelData(response.data.data);
+      }
     } catch (error) {
       console.log(error);
-          if (error?.response?.data?.message === "Invalid or expired token.") {
-            alert(error?.response?.data?.message);
-           handleLogout() 
-          }
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
     }
-};
+  };
 
   useEffect(() => {
     // Set the initial state to the first user in the userData array
@@ -108,7 +144,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   }, []);
 
   // useEffect(() => {
-    
+
   // }, []);
 
   const userAdded = () => {
@@ -125,23 +161,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         console.log(error);
       });
   };
-  
-  const getStatusBackgroundColor = () => {
-    switch (editedItem?.status) {
-      case "New":
-        return "#5181FF";
-      case "Open":
-        return "#B543EB";
-      case "In Progress":
-        return "#63C257";
-      case "Open deal":
-        return "#FD9802";
-      case "Unread":
-        return "#797979";
-      default:
-        return ""; // Default background color
-    }
-  };
+
+
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -156,43 +177,45 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       .then((response) => {
         if (response.data.status === 1) {
           setNotes(response.data.data.length);
-        } 
+        }
       })
       .catch((error) => {
         console.log(error);
         if (error?.response?.data?.message === "Invalid or expired token.") {
           alert(error?.response?.data?.message);
-         handleLogout() 
+          handleLogout();
         }
       });
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "label") {
-      const selectedLabelData = mergedLabels.find((label) => label.id === parseInt(value));
+      const selectedLabelData = mergedLabels.find(
+        (label) => label.id === parseInt(value)
+      );
       setEditedItem({
         ...editedItem,
         label_id: selectedLabelData.id,
       });
-    } else {
+    } else if(name==="stage_id"){
+      setSelectedStageId(e.target.value)
+    }else {
       setEditedItem({
         ...editedItem,
         [name]: value,
       });
     }
-  
+
     setStateBtn(1);
   };
-  
-  
-  
+
   const handleNameChange = (e) => {
     setName(e.target.value);
     setStateBtn(1);
   };
-  
+
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
@@ -214,13 +237,14 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       email: editedItem?.email,
       type: editedItem?.type,
       label_id: editedItem?.label_id,
-      status: editedItem?.status,
       address1: editedItem?.address1,
       city: editedItem?.city,
       state: editedItem?.state,
       country: editedItem?.country,
       pin: editedItem?.pin,
       owner: selectedUser?.id,
+      stage_id: selectedStageId,
+      status: editedItem?.status,
     };
     axios
       .put(UPDATE_LEAD, updatedLead, {
@@ -230,9 +254,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .then((response) => {
         toast.success("Lead data updated successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
+          position: "top-center",
+          autoClose: 2000,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -240,9 +264,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
     setIsEditable(false);
     setIsDisabled(!isDisabled);
-    onLeadAdded();
     setStateBtn(0);
     fetchLead();
+    onLeadAdded();
   };
 
   const handleTabClick = (tab) => {
@@ -326,10 +350,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     borderRadius: "0.3125rem",
     padding: "0.1rem",
     height: "2rem",
-    backgroundColor:"#fff"
+    backgroundColor: "#fff",
   };
   const normalStylingSelect2 = {
-    backgroundColor: editedItem?.status && getStatusBackgroundColor(),
     /* height: 32px; */
     color: " #ffffff !important",
     fontSize: " 0.8rem",
@@ -359,7 +382,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const normalStylingSelect3 = {
-
     /* height: 32px; */
     fontSize: " 0.8rem",
     fontFamily: '"Lexend Deca", sans-serif',
@@ -387,13 +409,18 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const mergedLabels = labelData
-  .filter(item => item?.entity?.includes('leads'))
-  .map(item => ({ id: item?.id, name: item?.name, colour_code: item?.colour_code }));
+    .filter((item) => item?.entity?.includes("leads"))
+    .map((item) => ({
+      id: item?.id,
+      name: item?.name,
+      colour_code: item?.colour_code,
+    }));
 
   const normalStylingSelect1 = {
     backgroundColor: editedItem?.label_id
-    ? mergedLabels.find((label) => label.id === editedItem?.label_id)?.colour_code
-    : '',
+      ? mergedLabels.find((label) => label.id === editedItem?.label_id)
+          ?.colour_code
+      : "",
     /* height: 32px; */
     color: "white !important",
     fontSize: " 0.8rem",
@@ -407,7 +434,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     appearance: "none",
     border: "1px solid transparent",
     height: "2rem",
-    width:"fit-content"
+    width: "fit-content",
   };
 
   return (
@@ -457,7 +484,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   <p>Email</p>
                   <p>Industry</p>
                   <p>Lables</p>
-                  <p>Status</p>
+                  <p>Stages</p>
                 </div>
                 <div className="detailsRightContainer">
                   <p>
@@ -612,23 +639,23 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <select
                           name="label_id"
                           id="label_id"
-                          value={editedItem?.label_id || ''}
+                          value={editedItem?.label_id || ""}
                           onChange={handleInputChange}
                           disabled={isDisabled}
                           style={
                             isEditable
                               ? editStylingSelect1
-                              : normalStylingSelect1 }
+                              : normalStylingSelect1
+                          }
                           className={isDisabled ? "disabled" : ""}
-                        
                         >
-                         {
-                    mergedLabels.map(item => {
-                      return (
-                        <option key={item?.id} value={item?.id}>{item?.name}</option>
-                      )
-                    })
-                  }
+                          {mergedLabels.map((item) => {
+                            return (
+                              <option key={item?.id} value={item?.id}>
+                                {item?.name}
+                              </option>
+                            );
+                          })}
                         </select>
                       </span>
                     )}
@@ -638,9 +665,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   ) : (
                     <span>
                       <select
-                        name="status"
-                        id="status"
-                        value={editedItem?.status}
+                        name="stage_id"
+                        id="stage_id"
+                        value={editedItem?.stage_id}
                         onChange={handleInputChange}
                         disabled={isDisabled}
                         style={
@@ -648,10 +675,13 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                         }
                         className={isDisabled ? "disabled" : ""}
                       >
-                        <option value="New">New</option>
-                        <option value="Open">Open</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Unread">Unread</option>
+                        {stages?.map((item, index) => {
+                          return (
+                            <option key={index} value={stageId[index]}>
+                              {item}
+                            </option>
+                          );
+                        })}
                       </select>
                     </span>
                   )}
@@ -684,12 +714,21 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                           className={isDisabled ? "disabled" : ""}
                         >
                           {userData.map((item) => (
-                            <option key={item?.id} value={item?.first_name + " " + item?.last_name} className="owner-val">
-                             {`${item?.first_name.charAt(0).toUpperCase() + item?.first_name.slice(1)} ${item?.last_name.charAt(0).toUpperCase() + item?.last_name.slice(1)}`}
+                            <option
+                              key={item?.id}
+                              value={item?.first_name + " " + item?.last_name}
+                              className="owner-val"
+                            >
+                              {`${
+                                item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1)
+                              } ${
+                                item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                              }`}
                             </option>
                           ))}
                           {/* <option value="Imp">{owner}</option> */}
-
                         </select>
                       </span>
                     )}
@@ -703,9 +742,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                           type="email"
                           name="owner_email"
                           value={selectedUser?.email}
-                          style={
-                            normalStylingInput
-                          }
+                          style={normalStylingInput}
                           disabled={true}
                           className="email-case"
                         />
@@ -721,9 +758,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                           type="text"
                           name="owner_phone"
                           value={selectedUser?.phone}
-                          style={
-                            normalStylingInput
-                          }
+                          style={normalStylingInput}
                           disabled={true}
                         />
                       </span>
@@ -839,7 +874,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
           </div>
           {isEditable ? (
             <div className="modalLeftBtnBox">
-              <button className="convertToDeal" onClick={() => openConvertModal(selectedItem)}>Convert to deal</button>
+              <button
+                className="convertToDeal"
+                onClick={() => openConvertModal(selectedItem)}
+              >
+                Convert to deal
+              </button>
               {stateBtn === 0 ? (
                 <button disabled className="disabledBtn">
                   Save
@@ -853,7 +893,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
           ) : (
             <div className="modalLeftBtnBox">
               <span></span>
-              <button className="convertToDeal" onClick={() => openConvertModal(selectedItem)}>Convert to deal</button>
+              <button
+                className="convertToDeal"
+                onClick={() => openConvertModal(selectedItem)}
+              >
+                Convert to deal
+              </button>
             </div>
           )}
         </div>
@@ -893,7 +938,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes item={selectedItem} onNotesNum={fetchNotes} type="lead"/>
+                <AddNotes
+                  item={selectedItem}
+                  onNotesNum={fetchNotes}
+                  type="lead"
+                />
               </div>
             )}
             {activeTab === "email" && (
@@ -914,8 +963,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
           </div>
         </div>
       </div>
-       {/* modal container ends here */}
-       {convertModalVisible && (
+      {/* modal container ends here */}
+      {convertModalVisible && (
         <CreateDeal
           isOpen={true}
           onClose={closeConvertModal}

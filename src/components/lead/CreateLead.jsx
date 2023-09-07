@@ -7,13 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
-  const [status, setStatus] = useState("");
   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
   const decryptedToken = getDecryptedToken();
   const [isDisable, setIsDisable] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState("");
   const [stages, setStages] = useState([]);
   const [stageId, setStageId] = useState([]);
   const [selectedStageName, setSelectedStageName] = useState("");
@@ -33,11 +31,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     stage_id: 1,
   });
 
-  function handleStatus(status) {
-    setStatus(status);
-    setIsDisable(false);
-    setSelectedStatus(status);
-  }
+
 
   const fetchStages = () => {
     axios
@@ -56,12 +50,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           setStages(stageNames.reverse());
           setStageId(stageIdArray.reverse());
         }
-        // const statusNames = response?.data?.message?.map(
-        //   (item) => item.stage_name
-        // );
-        // if (statusNames && statusNames.length > 0) {
-        //   setStatus(statusNames.reverse());
-        // }
+
       })
       .catch((error) => {
         console.log(error);
@@ -142,7 +131,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
         <div class="create-lead-top">
           <p>Create Lead</p>
           <p className="close-icon" onClick={onClose}>
-            &times;
+            X
           </p>
         </div>
         <div className="create-lead-form">
@@ -323,18 +312,11 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   name="stage_id"
                   id="stage_id"
                   className="lead-priority"
-                  onChange={(e) => {
-                    handleChange(e);
-                    const selectedId = e.target.value;
-                    const selectedName = stages.find(
-                      (stage, index) => stageId[index] === selectedId
-                    );
-                    setSelectedStageName(selectedName || "");
-                  }}
+                  onChange={handleChange}
                 >
                   {stages?.map((item, index) => {
                     return (
-                      <option key={index} value={stageId[index]} onClick={() => handleStatus(item)}>
+                      <option key={index} value={stageId[index]}>
                         {item}
                       </option>
                     );
