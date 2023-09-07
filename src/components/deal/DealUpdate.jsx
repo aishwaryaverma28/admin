@@ -142,7 +142,7 @@ const DealUpdate = () => {
 
   const fetchStages = () => {
     axios
-      .get(GET_ALL_STAGE, {
+      .get(GET_ALL_STAGE+"/deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

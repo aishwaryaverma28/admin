@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
 import Lead from "./components/lead/Lead";
-import Admin from "./components/Admin";
 import EmployeeProfile from "./components/EmployeeProfile";
 import Editor from "./components/Editor";
 import TimeSheet from "./components/TimeSheet";

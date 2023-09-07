@@ -18,7 +18,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
 
   const fetchStages = () => {
     axios
-      .get(GET_ALL_STAGE, {
+      .get(GET_ALL_STAGE+"/deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
