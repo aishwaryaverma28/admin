@@ -410,6 +410,18 @@ input.activity-date-input {
   padding: 1rem;
   margin-left: 1rem;
 }
+.activity-select-area {
+  border-radius: 0.3125rem;
+  border: 1px solid var(--Stroke, #dcdcdc);
+  background: #f4f5f9;
+  width: 30.5rem;
+  height: 2rem;
+  vertical-align: top;
+  outline: none;
+  padding: 1rem;
+  margin-left: 1rem;
+  color:#1e2224;
+}
 
 .activity-text img {
   margin-top: 0.5rem;
