@@ -795,3 +795,47 @@
     overflow-y: auto;
 }
 
+
+  .add-call input {
+    color: #1e2224;
+    font-family: Lexend Deca;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    cursor: pointer;
+    height: 2.625rem;
+    border-radius: 0.3125rem;
+    background: #f4f5f9;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    width:100%;
+    outline: none;
+    border: none;
+    margin-bottom: 2rem;
+  }
+
+  .activity-button{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .activity-button button:first-child{
+    margin-right: 1rem;
+  }
+  .activity-button button:last-child{
+    margin-right: 3.5rem;
+  }
+
+  .activity-container{
+    height: 100vh;
+     overflow-y: scroll;
+
+  }
+
+  .activity-save-note{
+    margin-bottom: 5rem;
+  }
