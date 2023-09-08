@@ -839,3 +839,18 @@
   .activity-save-note{
     margin-bottom: 5rem;
   }
+
+  /* .activityBox{
+    border: 2px solid red;
+  } */
+.activity-date{
+  width: 12rem;
+  height: 2.125rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: "Lexend Deca", sans-serif;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

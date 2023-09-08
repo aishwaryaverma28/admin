@@ -11,17 +11,59 @@ import {
   getDecryptedToken,
   ADD_ACTIVITY,
 } from "../utils/Constants";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import TextIcon from "../../assets/image/text-icon.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import Calling from "../../assets/image/call-calling.svg";
+import { toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LeadActivity = ({ item, type, id }) => {
-  const [startDate, setStartDate] = useState(null);
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("call");
+  const [openEditor, setOpenEditor] = useState(false);
+  const [stateBtn, setStateBtn] = useState(0);
+  const [activity,setActivity] = useState([]);
+  const [form, setForm] = useState({
+  activity_description: "",
+  activity_for: type,
+  activity_name: "",
+  scheduled_date: "",
+  scheduled_time: "",
+  activity_title:"",
+  end_time:"",
+  source_id:  type === "lead" ? item.id : id,
+  })
+console.log(decryptedToken);
+  // Function to generate time options with 15-minute intervals
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const hh = String(hour).padStart(2, "0");
+        const mm = String(minute).padStart(2, "0");
+        options.push(`${hh}:${mm}`);
+      }
+    }
+    return options;
+  };
+
+  const timeOptions = generateTimeOptions();
+
+  const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+  const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
+
+  useEffect(() => {
+    if (selectedTimeFrom) {
+      // Filter timeOptions to get options for the second dropdown
+      const filteredOptions = timeOptions.filter(
+        (time) => time > selectedTimeFrom
+      );
+      setTimeOptionsTo(filteredOptions);
+      setStateBtn(1);
+    }
+  }, [selectedTimeFrom]);
 
   useEffect(() => {
     fetchCall();
@@ -36,7 +78,8 @@ const LeadActivity = ({ item, type, id }) => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data[0]);
+          console.log(response?.data?.data);
+          setActivity(response?.data?.data);
         })
 
         .catch((error) => {
@@ -68,166 +111,249 @@ const LeadActivity = ({ item, type, id }) => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    setStateBtn(1);
   };
+
+  const expandEditor = () => {
+    setOpenEditor(true);
+  };
+
+  function handleChange (e) {
+    const {name, value} = e.target;
+    setForm((prev) => {
+      return {...prev, [name]: value};
+    })
+    setStateBtn(1);
+ }
+
+  const handleAddNote = () => {
+    const updatedFormData = {
+      ...form,
+      activity_for: type,
+      activity_name: activeTab,
+      scheduled_time: selectedTimeFrom,
+      source_id:  type === "lead" ? item.id : id,
+    };
+console.log(updatedFormData);
+    axios
+      .post(ADD_ACTIVITY, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success("Employee data added successfully", {
+          position:"top-center",
+          autoClose:2000
+        })
+        setForm({
+          activity_description: "",
+          activity_name: "",
+          scheduled_date: "",
+          scheduled_time: "",                  
+        });
+        setActiveTab("call");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setOpenEditor(false);
+    setStateBtn(0);
+  };
+
   return (
-    <div className="activity-container">
-      <div className="add-call">
-        <input type="text" placeholder="Add Title" />
-      </div>
-      <div className="genral-setting-btn activity-tab genral-setting-fonts">
-        <button
-          className={`genral-btn ${
-            activeTab === "call" ? "genral-active" : ""
-          }`}
-          onClick={() => handleTabClick("call")}
-        >
-          Call
-        </button>
-        <button
-          className={`genral-btn ${
-            activeTab === "meeting" ? "genral-active" : ""
-          }`}
-          onClick={() => handleTabClick("meeting")}
-        >
-          Meeting
-        </button>
-        <button
-          className={`genral-btn ${
-            activeTab === "task" ? "genral-active" : ""
-          }`}
-          onClick={() => handleTabClick("task")}
-        >
-          Task
-        </button>
-        <button
-          className={`genral-btn ${
-            activeTab === "deadline" ? "genral-active" : ""
-          }`}
-          onClick={() => handleTabClick("deadline")}
-        >
-          Deadline
-        </button>
-      </div>
-
-      <div className="tab-content">
-        <div>
-          <div className="activity-call-btn">
-            <button className="common-fonts log-meeting">Log Call</button>
-            <button className="common-fonts log-meeting call-btn-active">
-              Make a Phone Call
-            </button>
+    <>
+      <div className="activity-container">
+        {!openEditor ? (
+          <div className="colapedEditor" onClick={expandEditor}>
+            <p>Click here to add an activity</p>
           </div>
+        ) : (
+          <div className="activityBox">
+            <div className="add-call">
+              <input type="text" placeholder="Add Title" name="activity_title"
+                onChange={handleChange}/>
+            </div>
+            <div className="genral-setting-btn activity-tab genral-setting-fonts">
+              <button
+                className={`genral-btn ${
+                  activeTab === "call" ? "genral-active" : ""
+                }`}
+                onClick={() => handleTabClick("call")}
+              >
+                Call
+              </button>
+              <button
+                className={`genral-btn ${
+                  activeTab === "meeting" ? "genral-active" : ""
+                }`}
+                onClick={() => handleTabClick("meeting")}
+              >
+                Meeting
+              </button>
+              <button
+                className={`genral-btn ${
+                  activeTab === "task" ? "genral-active" : ""
+                }`}
+                onClick={() => handleTabClick("task")}
+              >
+                Task
+              </button>
+              <button
+                className={`genral-btn ${
+                  activeTab === "deadline" ? "genral-active" : ""
+                }`}
+                onClick={() => handleTabClick("deadline")}
+              >
+                Deadline
+              </button>
+            </div>
 
-          <div className="activity-time-travel">
-            <div className="permission-input-box">
-              <label className="common-fonts activity-label">Date</label>
-
-              <div className="custom-date-input">
-                <img
-                  src={CalendarIcon}
-                  alt="Delete"
-                  className="activity-calender-icon"
-                />
-                <div className="activity-date-wrapper">
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    className="activity-date-input"
-                    dateFormat="dd/MM/yyyy"
-                    value={startDate}
-                    placeholderText="dd/mm/yyyy"
-                  />
+            <div className="tab-content">
+              <div>
+                <div className="activity-call-btn">
+                  <button className="common-fonts log-meeting">Log Call</button>
+                  <button className="common-fonts log-meeting call-btn-active">
+                    Make a Phone Call
+                  </button>
                 </div>
-              </div>
-            </div>
-            <div className="permission-input-box">
-              <label className="common-fonts activity-label activity-label-2">
-                Time From
-              </label>
 
-              <select name="" id="" className="common-fonts activity-select">
-                <option value="">hh:mm Pm</option>
-              </select>
-            </div>
-            <div className="permission-input-box">
-              <label className="common-fonts activity-label activity-label-2">
-                Time To
-              </label>
+                <div className="activity-time-travel">
+                  <div className="permission-input-box">
+                    <label className="common-fonts activity-label">Date</label>
 
-              <select name="" id="" className="common-fonts activity-select">
-                <option value="">hh:mm Pm</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="activity-text">
-            <img src={TextIcon} alt="" />
-            <textarea
-              name=""
-              id=""
-              cols="30"
-              rows="10"
-              className="common-fonts activity-text-area"
-              placeholder="Write Here"
-            ></textarea>
-          </div>
-          <div className="activity-text">
-            <img src={TextIcon} alt="" />
-           <select name="" id="" className="common-fonts activity-select-area">
-            <option value="">Rahul (you)</option>
-           </select>
-          </div>
-
-          <div className="activity-button">
-            <button className="common-white-button">Cancel</button>
-            <button className="common-save-button">Save</button>
-          </div>
-
-          <div className="activity-bottom">
-            <p className="common-fonts activity-month">July 2023</p>
-
-            <div className="savedNotes activity-save-note">
-              <>
-                <section className="note-display">
-                  <div className="note-content">
-                    <div className="arrow-greater">
-                      <img src={GreaterArrow} alt="" />
-                    </div>
-
-                    <div className="notes-main">
-                      <div className="notes-by">
-                        <p>
-                          <span>Task </span>
-                          assigned to anant
-                        </p>
-                        <div className="notes-date activity-date">
-                          <img src={CalendarIcon} alt="" />
-                          <p className="common-fonts activity-date">
-                            Due July 6, 2023 at 10:00 AM GMT+5:30
-                          </p>
-                        </div>
-                      </div>
-                      <div className="">
-                        <div className="activity-ring">
-                          <div className="activity-calling">
-                            <img src={Calling} alt="" />
-                          </div>
-                          <p className="common-fonts activity-call-name">
-                            Call
-                          </p>
-                        </div>
+                    <div className="custom-date-input">
+                      <div className="activity-date-wrapper">
+                        <input type="date" onChange={handleChange} name="scheduled_date" className="activity-date"/>
                       </div>
                     </div>
                   </div>
-                </section>
+                  <div className="permission-input-box">
+                    <label className="common-fonts activity-label activity-label-2">
+                      Time From
+                    </label>
+                    <select
+                      name="timeFrom"
+                      id="timeFrom"
+                      className="common-fonts activity-select"
+                      onChange={(e) => setSelectedTimeFrom(e.target.value)}
+                    >
+                      <option value="">Select Time</option>
+                      {timeOptions.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="permission-input-box">
+                    <label className="common-fonts activity-label activity-label-2">
+                      Time To
+                    </label>
 
-                <div className={"answer display_answer"}></div>
-              </>
+                    <select
+                      name="end_time"
+                      id="timeTo"
+                      onChange={handleChange}
+                      className="common-fonts activity-select"
+                    >
+                      {timeOptionsTo.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="activity-text">
+                  <img src={TextIcon} alt="" />
+                  <textarea
+                    name="activity_description"
+                    id="activity_description"
+                    cols="30"
+                    rows="10"
+                    className="common-fonts activity-text-area"
+                    placeholder="Write Here"
+                    onChange={handleChange}
+                  ></textarea>
+                </div>
+                <div className="activity-text">
+                  <img src={TextIcon} alt="" />
+                  <select
+                    name=""
+                    id=""
+                    className="common-fonts activity-select-area"
+                  >
+                    <option value="">Rahul (you)</option>
+                  </select>
+                </div>
+
+                <div className="activity-button">
+                  <button className="common-white-button">Cancel</button>
+                  {stateBtn === 0 ? (
+                    <button disabled className="disabledBtn">
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleAddNote}
+                      className="common-save-button"
+                    >
+                      Save
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
+        )}
+        {activity && activity.map((item) => 
+        <div className="activity-bottom">
+        <p className="common-fonts activity-month">July 2023</p>
+
+        <div className="savedNotes activity-save-note">
+          <>
+            <section className="note-display">
+              <div className="note-content">
+                <div className="arrow-greater">
+                  <img src={GreaterArrow} alt="" />
+                </div>
+
+                <div className="notes-main">
+                  <div className="notes-by">
+                    <p>
+                      <span>Task </span>
+                      assigned to anant
+                    </p>
+                    <div className="notes-date activity-date">
+                      <img src={CalendarIcon} alt="" />
+                      <p className="common-fonts activity-date">
+                        Due July 6, 2023 at 10:00 AM GMT+5:30
+                      </p>
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="activity-ring">
+                      <div className="activity-calling">
+                        <img src={Calling} alt="" />
+                      </div>
+                      <p className="common-fonts activity-call-name">Call</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className={"answer display_answer"}></div>
+          </>
         </div>
       </div>
-    </div>
+        )}
+        
+      </div>
+    </>
   );
 };
 
