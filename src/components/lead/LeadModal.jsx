@@ -87,17 +87,18 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        setEditedItem(response.data.data[0]);
+        setEditedItem(response?.data?.data[0]);
         setName(
-          response.data.data[0].first_name +
+          response?.data?.data[0]?.first_name +
             " " +
-            response.data.data[0].last_name
+            response?.data?.data[0]?.last_name
         );
         setOwner(
-          response.data.data[0].ownerf_name +
+          response?.data?.data[0]?.ownerf_name +
             " " +
-            response.data.data[0].ownerl_name
+            response?.data?.data[0]?.ownerl_name
         );
+        setSelectedStageId(response?.data?.data[0]?.stage_id)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -105,9 +106,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         setIsLoading(false);
       });
   };
-
-  console.log(editedItem)
-  console.log("hello")
 
   const fetchLabelData = async () => {
     try {
@@ -132,8 +130,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     // Set the initial state to the first user in the userData array
     if (userData.length > 0) {
       setSelectedUser({
-        email: userData[0].email,
-        phone: userData[0].phone,
+        email: userData[0]?.email,
+        phone: userData[0]?.phone,
       });
     }
   }, [userData]);
@@ -156,7 +154,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        setUserData(response.data.data);
+        setUserData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -176,8 +174,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        if (response.data.status === 1) {
-          setNotes(response.data.data.length);
+        if (response?.data?.status === 1) {
+          setNotes(response?.data?.data.length);
         }
       })
       .catch((error) => {
@@ -953,7 +951,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <LeadActivity/>
+                <LeadActivity item={selectedItem} type={"lead"}/>
               </div>
             )}
             {activeTab === "attachment" && (

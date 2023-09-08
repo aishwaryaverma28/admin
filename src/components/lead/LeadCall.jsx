@@ -1,15 +1,23 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import TextIcon from "../../assets/image/text-icon.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import Calling from "../../assets/image/call-calling.svg";
-import { useState } from 'react';
+import axios from "axios";
+import {
+  ADD_ACTIVITY,
+  handleLogout,
+  getDecryptedToken,
+} from "../utils/Constants";
 
 
-const LeadCall = () => {
+const LeadCall = ({type, item, id}) => {
   const [startDate, setStartDate] = useState(null);
+    const decryptedToken = getDecryptedToken();
+
+  
   return (
     <div>
       <div className='activity-call-btn'>

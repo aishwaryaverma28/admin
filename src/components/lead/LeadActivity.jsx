@@ -1,13 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Call from "../../assets/image/call-activity.svg";
 import Meeting from "../../assets/image/meeting.svg";
 import Task from "../../assets/image/task.svg";
 import Deadline from "../../assets/image/deadline.svg";
 import LeadCall from './LeadCall.jsx';
+import axios from "axios";
+import {
+  GET_ACTIVITY,
+  handleLogout,
+  getDecryptedToken,
+} from "../utils/Constants";
 
 
-const LeadActivity = () => {
+const LeadActivity = ({item, type, id}) => {
+  const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("call"); 
+
+  useEffect(() => {
+    fetchCall();
+  }, []);
+
+  const fetchCall = () => {
+    if (type === "lead") {
+      axios
+        .get(GET_ACTIVITY + "lead/" + item.id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response?.data?.data[0])
+        })
+
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+    } else if (type === "deal") {
+      axios
+        .get(GET_ACTIVITY + "deal/" + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+    }
+  };
+
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -51,7 +102,7 @@ const LeadActivity = () => {
           <div className="tab-content">
             {activeTab === "call" && (
               <div>
-               <LeadCall/>
+               <LeadCall type={type} item={item} />
               </div>
             )}
             {activeTab === "meeting" && (
