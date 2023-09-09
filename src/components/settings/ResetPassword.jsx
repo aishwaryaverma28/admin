@@ -102,12 +102,6 @@ console.log(passDes)
 
   const handleSave = () => {
     if (passwordMatch) {
-      if (
-        minLength &&
-        hasNumberSymbolWhitespace &&
-        hasUppercase &&
-        hasSpecialCharacter
-      ) {
         axios
           .put(
             UPDATE_TEAM_MEM + user,
@@ -134,12 +128,6 @@ console.log(passDes)
               autoClose:2000
             });
           });
-      } else {
-        toast.error("Please fulfill all password criteria.", {
-          position: "top-center",
-          autoClose:2000
-        });
-      }
     } else {
       toast.error("Passwords do not match", {
         position: "top-center",

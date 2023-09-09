@@ -86,7 +86,7 @@ const Login = () => {
             secretKey
           ).toString();
           localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
-          // navigate(landingUrl);
+          navigate(landingUrl);
         }
       })
       .catch((error) => {

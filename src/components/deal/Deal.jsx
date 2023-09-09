@@ -42,7 +42,7 @@ const Deal = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None"); 
   const [sortOrder, setSortOrder] = useState("asc");
-
+  
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };

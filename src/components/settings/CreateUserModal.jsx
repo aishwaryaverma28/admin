@@ -105,13 +105,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (
-      minLength &&
-      hasNumberSymbolWhitespace &&
-      hasUppercase &&
-      hasSpecialCharacter
-    ) {
-      const updated = { ...details, password: password };
+     const updated = { ...details, password: password };
       axios
         .post(ADD_USER, updated, {
           headers: {
@@ -126,10 +120,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      alert("Please fulfill all password criteria.");
-    }
-  };
+    };
 
   function handleSubmit(e) {
     e.preventDefault();

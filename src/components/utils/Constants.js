@@ -48,6 +48,8 @@ export const COUNTRIES = start+"api/user/getcountries";
 export const LOGIN = start+"api/user/login";
 export const CREATE_ACC = start+"api/user/createaccount";
 export const OTP = start + "api/user/send-otp";
+export const MAIN_PASS = start + "api/user/forgot-password";
+export const VERIFY_OTP = start + "api/user/verify-otp"
 //==============================================================blog apis
 export const BLOG_ADD = start+"api/blog/add"
 export const BLOG_EDIT = start+"api/blog/edit/";
