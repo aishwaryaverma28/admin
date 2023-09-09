@@ -35,7 +35,6 @@ const LeadActivity = ({ item, type, id }) => {
   end_time:"",
   source_id:  type === "lead" ? item.id : id,
   })
-console.log(decryptedToken);
   // Function to generate time options with 15-minute intervals
   const generateTimeOptions = () => {
     const options = [];
@@ -53,6 +52,18 @@ console.log(decryptedToken);
 
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
   const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expansion, setExpansion] = useState(false);
+
+  const toggleExpand = (index) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+    } else {
+      setExpandedIndex(index);
+    }
+    setExpansion(!expansion); 
+  };
+  
 
   useEffect(() => {
     if (selectedTimeFrom) {
@@ -134,7 +145,6 @@ console.log(decryptedToken);
       scheduled_time: selectedTimeFrom,
       source_id:  type === "lead" ? item.id : id,
     };
-console.log(updatedFormData);
     axios
       .post(ADD_ACTIVITY, updatedFormData, {
         headers: {
@@ -158,6 +168,7 @@ console.log(updatedFormData);
       .catch((error) => {
         console.log(error);
       });
+      fetchCall();
     setOpenEditor(false);
     setStateBtn(0);
   };
@@ -309,46 +320,115 @@ console.log(updatedFormData);
             </div>
           </div>
         )}
-        {activity && activity.map((item) => 
+        {activity && activity.map((item, index) => 
+        <div className="activity-task-map">
         <div className="activity-bottom">
-        <p className="common-fonts activity-month">July 2023</p>
-
-        <div className="savedNotes activity-save-note">
+        {/* <p className="common-fonts activity-month">July 2023</p> */}
+        <div className="savedNotes activity-save-note" onClick={() => toggleExpand(index)}>
           <>
             <section className="note-display">
-              <div className="note-content">
-                <div className="arrow-greater">
+              <div className="note-content activity-content">
+                <div className="arrow-greater" >
                   <img src={GreaterArrow} alt="" />
                 </div>
 
                 <div className="notes-main">
-                  <div className="notes-by">
+                  <div className="notes-by activity-by">
                     <p>
                       <span>Task </span>
                       assigned to anant
                     </p>
-                    <div className="notes-date activity-date">
+                    <div>
+                    <select className="activity-role" name="" id="">
+                        <option>Action</option>
+                      </select>
+                    </div>
+                     
+                    <div className="activity-date-time">
                       <img src={CalendarIcon} alt="" />
-                      <p className="common-fonts activity-date">
+                      <p className="common-fonts activity-due">
                         Due July 6, 2023 at 10:00 AM GMT+5:30
                       </p>
                     </div>
                   </div>
-                  <div className="">
+                  <div className={`activity-phone ${expandedIndex !== index ? "activity-disable-white" : "activity-new-call"}`}>
                     <div className="activity-ring">
-                      <div className="activity-calling">
+                      <div className="activity-calling-2">
                         <img src={Calling} alt="" />
                       </div>
-                      <p className="common-fonts activity-call-name">Call</p>
+                      <input disabled={expandedIndex === index ? false : true}
+  className={`common-fonts activity-call-name ${expandedIndex !== index ? "activity-disable-white" : "activity-phone-input"}`} type="text" value="Call" />
                     </div>
                   </div>
+
+                  {expandedIndex === index && (
+                    <>
+                      
+                  <div className="activity-open-time">
+                  <div className="activity-timefrom">
+                    <label>Due Date</label>
+
+                    <div className="custom-date-input activity-new-date">
+                      <div className="">
+                        <input type="date" />
+                      </div>
+                    </div>
+                  </div>
+                    <div className="activity-timefrom">
+                      <label htmlFor="">Time To</label>
+                      <select name="" id="" className="common-fonts activity-timefrom-select">
+                        <option value="">8:00 AM</option>
+                      </select>
+                    </div>
+                    <div className="activity-timefrom">
+                      <label htmlFor="">Time From</label>
+                      <select name="" id="" className="common-fonts activity-timefrom-select">
+                        <option value="">8:00 AM</option>
+                      </select>
+                    </div>
+                    <div className="activity-timefrom">
+                      <label htmlFor="">Type</label>
+                      <select name="" id="" className="common-fonts activity-timefrom-select">
+                        <option value="">Deadline</option>
+                      </select>
+                    </div>
+                    <div className="activity-timefrom">
+                      <label htmlFor="">Assign To</label>
+                      <select name="" id="" className="common-fonts activity-timefrom-select">
+                        <option value="">Anant Singh</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="common-fonts activity-describe">Description</p>
+                    <textarea name="" id="" cols="30" rows="5" className="activity-big-textarea"></textarea>
+                  </div>
+                    </>
+
+                          )}
+
+
+                
+
                 </div>
               </div>
             </section>
 
-            <div className={"answer display_answer"}></div>
+            {expandedIndex === index && (
+              <div className={"answer display_answer"}></div>
+            )}
           </>
         </div>
+      </div>
+      {expandedIndex === index && (
+        <div className="activity-bottom-buttons">
+        <button className="common-white-button">Cancel</button>
+        <button className="common-save-button activity-save-buttons">Save</button>
+      </div>
+            )}
+      
+
       </div>
         )}
         
