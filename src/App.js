@@ -52,6 +52,7 @@ import SettingUsage from "./components/settings/SettingUsage";
 import SettingImpExp from "./components/settings/SettingImpExp";
 import DealUpdate from "./components/deal/DealUpdate";
 import HelpView from "./components/HelpView";
+import Reset from "./components/Reset";
 const router = createBrowserRouter([
   // {
   //   path: "/:auth",
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
   {
     path: "/registration",
     element: <Registration />,
+  },
+  {
+    path: "/reset",
+    element: <Reset/>,
   },
   {
     path: "/lp",

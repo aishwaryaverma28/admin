@@ -47,6 +47,7 @@ export const COUNTRIES = start+"api/user/getcountries";
 //===============================================================login apis
 export const LOGIN = start+"api/user/login";
 export const CREATE_ACC = start+"api/user/createaccount";
+export const OTP = start + "api/user/send-otp";
 //==============================================================blog apis
 export const BLOG_ADD = start+"api/blog/add"
 export const BLOG_EDIT = start+"api/blog/edit/";
