@@ -324,17 +324,17 @@ const LeadActivity = ({ item, type, id }) => {
         <div className="activity-task-map">
         <div className="activity-bottom">
         {/* <p className="common-fonts activity-month">July 2023</p> */}
-        <div className="savedNotes activity-save-note" onClick={() => toggleExpand(index)}>
+        <div className="savedNotes activity-save-note">
           <>
-            <section className="note-display">
+            <section className="note-display"  >
               <div className="note-content activity-content">
-                <div className="arrow-greater" >
+                <div className="arrow-greater" onClick={() => toggleExpand(index)} >
                   <img src={GreaterArrow} alt="" />
                 </div>
 
                 <div className="notes-main">
-                  <div className="notes-by activity-by">
-                    <p>
+                  <div className="notes-by activity-by" >
+                    <p onClick={() => toggleExpand(index)}>
                       <span>Task </span>
                       assigned to anant
                     </p>
@@ -344,7 +344,7 @@ const LeadActivity = ({ item, type, id }) => {
                       </select>
                     </div>
                      
-                    <div className="activity-date-time">
+                    <div className="activity-date-time" onClick={() => toggleExpand(index)}>
                       <img src={CalendarIcon} alt="" />
                       <p className="common-fonts activity-due">
                         Due July 6, 2023 at 10:00 AM GMT+5:30
