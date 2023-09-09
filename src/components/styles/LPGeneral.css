@@ -352,6 +352,15 @@ input.activity-date-input {
   border: 1px solid #dcdcdc;
   background: #fff;
 }
+.activity-date-wrapper-2 {
+  display: flex;
+  align-items: center;
+  width: 8rem;
+  height: 2.125rem;
+  border-radius: 0.3125rem;
+  border: none;
+  background: #fff;
+}
 
 .activity-calender-icon {
   position: absolute;
@@ -420,7 +429,7 @@ input.activity-date-input {
   outline: none;
   padding: 1rem;
   margin-left: 1rem;
-  color:#1e2224;
+  color: #1e2224;
 }
 
 .activity-text img {
@@ -432,45 +441,244 @@ input.activity-date-input {
   font-weight: 500;
 }
 
-.activity-bottom{
-    margin-top: 2rem;
+.activity-bottom p {
+  margin-bottom: 0.75rem;
 }
 
-.activity-bottom p{
-    margin-bottom: 0.75rem;
+.activity-bottom-buttons{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.activity-calling{
-    margin-top: 1rem;
-    border-radius: 50%;
-    border: 1px solid #dcdcdc;
-    padding: 0.2rem;
-    width:30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+.activity-save-buttons{
+  margin-right: 0.3rem;
+  margin-left: 1rem;
 }
 
-.activity-ring{
-    display: flex;
-    align-items: center;
-
+.activity-task-map:last-child .activity-bottom-buttons{
+  margin-bottom: 8rem;
 }
 
-.activity-date{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.activity-calling {
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  padding: 0.2rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.activity-calling-2 {
+  border-radius: 50%;
+  border: 1px solid #dcdcdc;
+  padding: 0.2rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.activity-date img{
-    margin-top: -0.5rem;
-    margin-right: 0.5rem;
+.activity-ring {
+  display: flex;
+  align-items: center;
 }
 
-.activity-call-name{
-    margin-top: 1rem;
+.activity-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.activity-date img {
+  margin-top: -0.6rem;
+  margin-right: 0.5rem;
+}
+
+.activity-action {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.activity-by {
+  justify-content: space-between;
+  align-items: start;
+}
+
+.activity-button {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 2rem;
+}
+.activity-button button:first-child {
+  margin-right: 1rem;
+}
+.activity-button button:last-child {
+  margin-right: 3.5rem;
+}
+
+.activity-container {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+/* .activityBox{
+    border: 2px solid red;
+  } */
+.activity-date {
+  height: 2.125rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: "Lexend Deca", sans-serif;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.activity-date-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.activity-date-time img {
+  margin-top: -0.8rem;
+  margin-right: 0.1rem;
+}
+
+.activity-save-note {
+  padding-bottom: 0;
+}
+
+.activity-role {
+  border: none;
+  outline: none;
+  color: var(--ternary);
+  font-family: Lexend Deca;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+
+.activity-call-name {
+  padding-left: 0.3rem;
+}
+
+.activity-disable-white{
+  border:none;
+  outline:none;
+  background-color: #fff;
+}
+
+.activity-phone {
+  margin-left: -0.7rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.activity-new-call{
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #f4f5f9;
+}
+
+.activity-phone-input {
+  border: none;
+  outline: none;
+  background-color: #f4f5f9;
+}
+
+.activity-phone-input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.activity-timefrom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.activity-timefrom-select {
+  color: #1E2224;
+  font-family: Lexend Deca;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  border:none;
+  outline:none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.activity-timefrom label{
+  color: #33475B;
+font-family: Lexend Deca;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.02563rem;
+text-transform: capitalize;
+margin-top: 1.3rem;
+margin-bottom: 0.5rem;
+}
+
+.activity-open-time{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-date-2{
+padding: 0;
+}
+
+.activity-new-date input{
+  border:none;
+  outline:none;
+}
+
+.activity-describe{
+  margin-top: 2rem;
+  color:#33475B;
+font-family: Lexend Deca;
+font-size: 0.75rem;
+}
+
+.activity-big-textarea{
+  border-radius: 0.3125rem;
+border: 1px solid #dcdcdc;
+background: #F4F5F9;
+width: 100%;
+font-size: 0.875rem;
+padding:1rem;
+outline: none;
+}
+
+.activity-due{
+  color:#33475B;
+font-size: 0.75rem !important;
+margin-left: 0.3rem;
 }
