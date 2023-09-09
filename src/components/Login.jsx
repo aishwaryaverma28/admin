@@ -18,7 +18,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { LOGIN } from "./utils/Constants";
+import { LOGIN, OTP } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 import "./styles/Login.css";
 import LoginHeader from "./LoginHeader";
@@ -86,7 +86,7 @@ const Login = () => {
             secretKey
           ).toString();
           localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
-          navigate(landingUrl);
+          // navigate(landingUrl);
         }
       })
       .catch((error) => {
@@ -95,18 +95,50 @@ const Login = () => {
           error.response.data &&
           error.response.data.message === "Invalid or expired token."
         ) {
-          // Display an alert to the user
           alert("Your session has expired. Please login again.");
-          // Clear JWT token from localStorage
           localStorage.removeItem("jwtToken");
-
-          // Redirect to the login page
           navigate("/");
         } else {
           console.log(error);
         }
       });
   };
+  const forgetPass = (e) => {
+    e.preventDefault();
+    if(email==="")
+    {
+      alert("please the email");
+    }
+    const updateForm = {
+      email: email,
+    };
+    axios
+      .post(OTP, updateForm)
+      .then((response) => {
+        const data = response?.data;
+        const status = response?.data?.status;
+        console.log(data);
+        if (status === 0) {
+          alert(data.message);
+        } else if (status === 1) {
+          localStorage.setItem("email", email);
+          navigate("/reset");
+        }
+      })
+      .catch((error) => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message === "Invalid or expired token."
+        ) {
+          alert("Your session has expired. Please login again.");
+          localStorage.removeItem("jwtToken");
+          navigate("/");
+        } else {
+          console.log(error);
+        }
+      });
+  }
   // Conditionally render the login form or null based on the presence of the token
   const renderLoginForm = () => {
     const encryptedToken = localStorage.getItem("jwtToken");
@@ -174,7 +206,7 @@ const Login = () => {
               </div>
 
               <div>
-                <p className="login-forget-password">forget Password?</p>
+              <p className="login-forget-password" onClick={forgetPass}>forget Password?</p>
               </div>
 
               <div className="login-checkbox">

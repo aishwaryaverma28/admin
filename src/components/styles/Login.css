@@ -244,3 +244,26 @@ input:focus {
     height: auto;
   }
 }
+
+
+.otpBoxNum{
+  width: 3.125rem;
+border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #FFF;
+padding: 0.8rem 0.5rem;
+margin-top: 0.5rem;
+margin-right: 0.5rem;
+margin-bottom: 0.5rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+/* input[type=number] {
+  -moz-appearance: textfield;
+} */
