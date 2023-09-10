@@ -32,11 +32,7 @@ const Reset = () => {
 
   const passGet = () => {
     axios
-      .get(GET_PASSWORD, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .get(GET_PASSWORD)
       .then((response) => {
         setPassDes(response?.data?.data);
         response?.data?.data?.forEach((condition) => {

@@ -16,7 +16,7 @@ import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import TextIcon from "../../assets/image/text-icon.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import Calling from "../../assets/image/call-calling.svg";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const LeadActivity = ({ item, type, id }) => {
@@ -24,17 +24,17 @@ const LeadActivity = ({ item, type, id }) => {
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
-  const [activity,setActivity] = useState([]);
+  const [activity, setActivity] = useState([]);
   const [form, setForm] = useState({
-  activity_description: "",
-  activity_for: type,
-  activity_name: "",
-  scheduled_date: "",
-  scheduled_time: "",
-  activity_title:"",
-  end_time:"",
-  source_id:  type === "lead" ? item.id : id,
-  })
+    activity_description: "",
+    activity_for: type,
+    activity_name: "",
+    scheduled_date: "",
+    scheduled_time: "",
+    activity_title: "",
+    end_time: "",
+    source_id: type === "lead" ? item.id : id,
+  });
   // Function to generate time options with 15-minute intervals
   const generateTimeOptions = () => {
     const options = [];
@@ -61,9 +61,8 @@ const LeadActivity = ({ item, type, id }) => {
     } else {
       setExpandedIndex(index);
     }
-    setExpansion(!expansion); 
+    setExpansion(!expansion);
   };
-  
 
   useEffect(() => {
     if (selectedTimeFrom) {
@@ -129,13 +128,13 @@ const LeadActivity = ({ item, type, id }) => {
     setOpenEditor(true);
   };
 
-  function handleChange (e) {
-    const {name, value} = e.target;
+  function handleChange(e) {
+    const { name, value } = e.target;
     setForm((prev) => {
-      return {...prev, [name]: value};
-    })
+      return { ...prev, [name]: value };
+    });
     setStateBtn(1);
- }
+  }
 
   const handleAddNote = () => {
     const updatedFormData = {
@@ -143,7 +142,7 @@ const LeadActivity = ({ item, type, id }) => {
       activity_for: type,
       activity_name: activeTab,
       scheduled_time: selectedTimeFrom,
-      source_id:  type === "lead" ? item.id : id,
+      source_id: type === "lead" ? item.id : id,
     };
     axios
       .post(ADD_ACTIVITY, updatedFormData, {
@@ -154,21 +153,21 @@ const LeadActivity = ({ item, type, id }) => {
       .then((response) => {
         console.log(response);
         toast.success("Employee data added successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
+          position: "top-center",
+          autoClose: 2000,
+        });
         setForm({
           activity_description: "",
           activity_name: "",
           scheduled_date: "",
-          scheduled_time: "",                  
+          scheduled_time: "",
         });
         setActiveTab("call");
       })
       .catch((error) => {
         console.log(error);
       });
-      fetchCall();
+    fetchCall();
     setOpenEditor(false);
     setStateBtn(0);
   };
@@ -183,8 +182,12 @@ const LeadActivity = ({ item, type, id }) => {
         ) : (
           <div className="activityBox">
             <div className="add-call">
-              <input type="text" placeholder="Add Title" name="activity_title"
-                onChange={handleChange}/>
+              <input
+                type="text"
+                placeholder="Add Title"
+                name="activity_title"
+                onChange={handleChange}
+              />
             </div>
             <div className="genral-setting-btn activity-tab genral-setting-fonts">
               <button
@@ -236,7 +239,12 @@ const LeadActivity = ({ item, type, id }) => {
 
                     <div className="custom-date-input">
                       <div className="activity-date-wrapper">
-                        <input type="date" onChange={handleChange} name="scheduled_date" className="activity-date"/>
+                        <input
+                          type="date"
+                          onChange={handleChange}
+                          name="scheduled_date"
+                          className="activity-date"
+                        />
                       </div>
                     </div>
                   </div>
@@ -320,118 +328,156 @@ const LeadActivity = ({ item, type, id }) => {
             </div>
           </div>
         )}
-        {activity && activity.map((item, index) => 
-        <div className="activity-task-map">
-        <div className="activity-bottom">
-        {/* <p className="common-fonts activity-month">July 2023</p> */}
-        <div className="savedNotes activity-save-note">
-          <>
-            <section className="note-display"  >
-              <div className="note-content activity-content">
-                <div className="arrow-greater" onClick={() => toggleExpand(index)} >
-                  <img src={GreaterArrow} alt="" />
-                </div>
+        {activity &&
+          activity.map((item, index) => (
+            <div className="activity-task-map">
+              <div className="activity-bottom">
+                <div className="savedNotes activity-save-note">
+                  <>
+                    <section className="note-display">
+                      <div className="note-content activity-content">
+                        <div
+                          className="arrow-greater"
+                          onClick={() => toggleExpand(index)}
+                        >
+                          <img src={GreaterArrow} alt="" />
+                        </div>
 
-                <div className="notes-main">
-                  <div className="notes-by activity-by" >
-                    <p onClick={() => toggleExpand(index)}>
-                      <span>Task </span>
-                      assigned to anant
-                    </p>
-                    <div>
-                    <select className="activity-role" name="" id="">
-                        <option>Action</option>
-                      </select>
-                    </div>
-                     
-                    <div className="activity-date-time" onClick={() => toggleExpand(index)}>
-                      <img src={CalendarIcon} alt="" />
-                      <p className="common-fonts activity-due">
-                        Due July 6, 2023 at 10:00 AM GMT+5:30
-                      </p>
-                    </div>
-                  </div>
-                  <div className={`activity-phone ${expandedIndex !== index ? "activity-disable-white" : "activity-new-call"}`}>
-                    <div className="activity-ring">
-                      <div className="activity-calling-2">
-                        <img src={Calling} alt="" />
-                      </div>
-                      <input disabled={expandedIndex === index ? false : true}
-  className={`common-fonts activity-call-name ${expandedIndex !== index ? "activity-disable-white" : "activity-phone-input"}`} type="text" value="Call" />
-                    </div>
-                  </div>
+                        <div className="notes-main">
+                          <div className="notes-by activity-by">
+                            <p onClick={() => toggleExpand(index)}>
+                              {item.activity_title}
+                              {/* <span>Task </span>
+                              assigned to anant */}
+                            </p>
+                            <div>
+                            </div>
 
-                  {expandedIndex === index && (
-                    <>
-                      
-                  <div className="activity-open-time">
-                  <div className="activity-timefrom">
-                    <label>Due Date</label>
+                            <div
+                              className="activity-date-time"
+                              onClick={() => toggleExpand(index)}
+                            >
+                              <img src={CalendarIcon} alt="" />
+                              <p className="common-fonts activity-due">
+                                {item.scheduled_date.split("T")[0]}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            className={`activity-phone ${
+                              expandedIndex !== index
+                                ? "activity-disable-white"
+                                : "activity-new-call"
+                            }`}
+                          >
+                            <div className="activity-ring">
+                              <div className="activity-calling-2">
+                                <img src={Calling} alt="" />
+                              </div>
+                              <input
+                                disabled={
+                                  expandedIndex === index ? false : true
+                                }
+                                className={`common-fonts activity-call-name ${
+                                  expandedIndex !== index
+                                    ? "activity-disable-white"
+                                    : "activity-phone-input"
+                                }`}
+                                type="text"
+                                value={item.activity_name}
+                              />
+                            </div>
+                          </div>
 
-                    <div className="custom-date-input activity-new-date">
-                      <div className="">
-                        <input type="date" />
-                      </div>
-                    </div>
-                  </div>
-                    <div className="activity-timefrom">
-                      <label htmlFor="">Time To</label>
-                      <select name="" id="" className="common-fonts activity-timefrom-select">
-                        <option value="">8:00 AM</option>
-                      </select>
-                    </div>
-                    <div className="activity-timefrom">
-                      <label htmlFor="">Time From</label>
-                      <select name="" id="" className="common-fonts activity-timefrom-select">
-                        <option value="">8:00 AM</option>
-                      </select>
-                    </div>
-                    <div className="activity-timefrom">
-                      <label htmlFor="">Type</label>
-                      <select name="" id="" className="common-fonts activity-timefrom-select">
-                        <option value="">Deadline</option>
-                      </select>
-                    </div>
-                    <div className="activity-timefrom">
-                      <label htmlFor="">Assign To</label>
-                      <select name="" id="" className="common-fonts activity-timefrom-select">
-                        <option value="">Anant Singh</option>
-                      </select>
-                    </div>
-                  </div>
+                          {expandedIndex === index && (
+                            <>
+                              <div className="activity-open-time">
+                                <div className="activity-timefrom">
+                                  <label>Due Date</label>
 
-                  <div>
-                    <p className="common-fonts activity-describe">Description</p>
-                    <textarea name="" id="" cols="30" rows="5" className="activity-big-textarea"></textarea>
-                  </div>
-                    </>
+                                  <div className="custom-date-input activity-new-date">
+                                    <div className="">
+                                      <input type="date" value={item.scheduled_date.split("T")[0]}/>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Time To</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="">8:00 AM</option>
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Time From</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="">8:00 AM</option>
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Type</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="">Deadline</option>
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Assign To</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="">Anant Singh</option>
+                                  </select>
+                                </div>
+                              </div>
 
+                              <div>
+                                <p className="common-fonts activity-describe">
+                                  Description
+                                </p>
+                                <textarea
+                                  name=""
+                                  id=""
+                                  cols="30"
+                                  rows="5"
+                                  className="activity-big-textarea"
+                                  value={item.activity_description}
+                                ></textarea>
+                              </div>
+                            </>
                           )}
+                        </div>
+                      </div>
+                    </section>
 
-
-                
-
+                    {expandedIndex === index && (
+                      <div className={"answer display_answer"}></div>
+                    )}
+                  </>
                 </div>
               </div>
-            </section>
-
-            {expandedIndex === index && (
-              <div className={"answer display_answer"}></div>
-            )}
-          </>
-        </div>
-      </div>
-      {expandedIndex === index && (
-        <div className="activity-bottom-buttons">
-        <button className="common-white-button">Cancel</button>
-        <button className="common-save-button activity-save-buttons">Save</button>
-      </div>
-            )}
-      
-
-      </div>
-        )}
-        
+              {expandedIndex === index && (
+                <div className="activity-bottom-buttons">
+                  <button className="common-white-button">Cancel</button>
+                  <button className="common-save-button activity-save-buttons">
+                    Save
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
       </div>
     </>
   );
