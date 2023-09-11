@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ADD_USER, getDecryptedToken, GET_PASSWORD } from "../utils/Constants";
 import "../styles/LPUserAndTeam.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateUserModal = ({ onClose, onUserAdded }) => {
   const decryptedToken = getDecryptedToken();
@@ -105,6 +107,8 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
+     if(minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter)
+        {
      const updated = { ...details, password: password };
       axios
         .post(ADD_USER, updated, {
@@ -115,11 +119,22 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
         .then((response) => {
           console.log(response);
           onUserAdded(); // Call the onLeadAdded function from props
+          toast.success("User added successfully", {
+              position: "top-center",
+              autoClose:2000
+            });
           onClose();
         })
         .catch((error) => {
           console.log(error);
         });
+      }
+          else{
+          toast.error("Fulfil password policy", {
+            position: "top-center",
+            autoClose:2000
+          });
+        }
     };
 
   function handleSubmit(e) {
@@ -132,6 +147,10 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
       })
       .then((response) => {
         console.log(response);
+         toast.success("User added successfully", {
+              position: "top-center",
+              autoClose:2000
+            });
         setDetails({
           first_name: "",
           last_name: "",
@@ -374,6 +393,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
