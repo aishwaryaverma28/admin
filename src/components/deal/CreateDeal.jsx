@@ -29,12 +29,12 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     age_of_business: null,
     company_type: "",
     industry_type: "",
-    turnover: 0,
-    location_of_company_or_individual:"",
-    duration:"",
-    individual_or_company:"",
+    turnover: null,
+    location_of_company_or_individual: "",
+    duration: "",
+    individual_or_company: "",
     loan_amount: null,
-    loan_type:"",
+    loan_type: "",
   });
   const [leadData, setLeadData] = useState({
     probability: "",
@@ -52,13 +52,13 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     company_type: "",
     industry_type: "",
     turnover: null,
-    location_of_company_or_individual:"",
-    duration:"",
-    individual_or_company:"",
+    location_of_company_or_individual: "",
+    duration: "",
+    individual_or_company: "",
     loan_amount: null,
     loan_type: "",
   });
-  
+
   const fetchCall = () => {
     axios
       .get(ELIGIBLE_LOANS, {
@@ -126,7 +126,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         label_id: selectedItem.label_id,
         pipeline_id: 1,
         stage_id: selectedItem.stage_id,
-        loan_amount:selectedItem.value,
+        loan_amount: selectedItem.value,
       });
     }
   }, [selectedItem]);
@@ -160,11 +160,15 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let parsedValue = value;  
+    let parsedValue = value;
     // Check if the name is one of the fields that should be integers
-    if (name === 'turnover' || name === 'loan_amount' || name === 'age_of_business') {
+    if (
+      name === "turnover" ||
+      name === "loan_amount" ||
+      name === "age_of_business"
+    ) {
       // Use parseInt to convert the value to an integer
-      parsedValue = parseInt(value); // Base 10  
+      parsedValue = parseInt(value); // Base 10
       // Check if the conversion was successful (not NaN)
       if (isNaN(parsedValue)) {
         // Handle the case where parsing fails (e.g., display an error message)
@@ -173,78 +177,87 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         parsedValue = 0; // Set a default value, for example
       }
     }
-  
+
     setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
     setIsDisable(false);
     setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
   };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
- // Filter out empty or null values from loanDetails
- const filteredLoanDetails = {};
- for (const key in loanDetails) {
-   if (loanDetails[key] !== null && loanDetails[key] !== "") {
-     filteredLoanDetails[key] = loanDetails[key];
-   }
- }
+    // Filter out empty or null values from loanDetails
+    const filteredLoanDetails = {};
+    for (const key in loanDetails) {
+      if (loanDetails[key] !== null && loanDetails[key] !== "") {
+        filteredLoanDetails[key] = loanDetails[key];
+      }
+    }
 
- console.log("Filtered loanDetails:", filteredLoanDetails);
- console.log("loan:", loan);
+    console.log("Filtered loanDetails:", filteredLoanDetails);
+    console.log("loan:", loan);
 
- // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
- const matchingLoans = loan.filter((loanItem) => {
-   // Check if every key-value pair in filteredLoanDetails exists in loanItem
-   return Object.entries(filteredLoanDetails).every(([key, value]) => {
-     return loanItem[key] === value;
-   });
- });
+    // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
+    const matchingLoans = loan.filter((loanItem) => {
+      // Check if every key-value pair in filteredLoanDetails exists in loanItem
+      return Object.entries(filteredLoanDetails).every(([key, value]) => {
+        return loanItem[key] === value;
+      });
+    });
 
- console.log("Matching Loans:", matchingLoans);
+    // Extract loan_offered_by values from matchingLoans
+    const loanOfferedByValues = matchingLoans.map(
+      (loanItem) => loanItem.loan_offered_by
+    );
 
+    console.log("Matching Loans:", matchingLoans);
 
-    // axios
-    //   .post(ADD_DEAL, leadData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     toast.success("Deal data added successfully", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //     setLeadData({
-    //       probability: "",
-    //       deal_name: "",
-    //       organization: "",
-    //       mobile: "",
-    //       email: "",
-    //       // value: 0,
-    //       label_id: 36,
-    //       closure_date: "",
-    //       stage_id: 1,
-    //       pipeline_id: 1,
-    //       lead_id: 0,
-    //       age_of_business: 0,
-    //       company_type: "Corporation",
-    //       industry_type: "Textile",
-    //       turnover: 0,
-    //       location_of_company_or_individual:"",
-    //       duration:"Short-term",
-    //       individual_or_company:"",
-    //       loan_amount: 0,
-    //       loan_type: "Home loan",
-    //     });
-    //     // setName("");
-    //     onLeadAdded();
-    //     navigate("/lp/deals");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    const updatedForm = { ...leadData, value: leadData.loan_amount };
+
+    axios
+      .post(ADD_DEAL, updatedForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+
+        toast.success(
+          `Deal created. Banks list: ` + loanOfferedByValues.join(","),
+          {
+            position: "top-center",
+            autoClose: 3000,
+          }
+        );
+        setLeadData({
+          probability: "",
+          deal_name: "",
+          organization: "",
+          mobile: "",
+          email: "",
+          // value: 0,
+          label_id: 36,
+          closure_date: "",
+          stage_id: 1,
+          pipeline_id: 1,
+          lead_id: 0,
+          age_of_business: 0,
+          company_type: "Corporation",
+          industry_type: "Textile",
+          turnover: 0,
+          location_of_company_or_individual: "",
+          duration: "Short-term",
+          individual_or_company: "",
+          loan_amount: 0,
+          loan_type: "Home loan",
+        });
+        // setName("");
+        onLeadAdded();
+        navigate("/lp/deals");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const mergedLabels = labelData
@@ -302,7 +315,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   // value={name} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="value">
-                Loan Amount
+                  Loan Amount
                 </label>
                 <div className="currency-section">
                   <input
@@ -371,7 +384,12 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                 <label className="lead-label" htmlFor="pipeline_id">
                   Loan Type
                 </label>
-                <select className="lead-input" name="loan_type" onChange={handleChange}>
+                <select
+                  className="lead-input deal-new-select"
+                  name="loan_type"
+                  onChange={handleChange}
+                >
+                  <option value="">Select Loan Type</option>
                   <option value="Home loan">Home loan</option>
                   <option value="Business">Business</option>
                   <option value="Personal">Personal</option>
@@ -387,7 +405,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                       type="radio"
                       id="individual"
                       name="individual_or_company"
-                      value="individual"
+                      value="Individual"
                       onChange={handleChange}
                     />
                     <label className="deal-label" htmlFor="individual">
@@ -399,7 +417,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                       type="radio"
                       id="company"
                       name="individual_or_company"
-                      value="company"
+                      value="Company"
                       onChange={handleChange}
                     />
                     <label className="deal-label" htmlFor="company">
@@ -457,16 +475,19 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   Company Type
                 </label>
                 <select
-                  className="lead-input"
+                  className="lead-input deal-new-select"
                   name="company_type"
                   onChange={handleChange}
                 >
+                  <option value="">Select Company Type</option>
                   <option value="Corporation">Corporation</option>
                   <option value="limited company">Limited Company</option>
                   <option value="private limited">Private Limited</option>
                   <option value="public company">Public Company</option>
                   <option value="joint venture">Joint Venture</option>
-                  <option value="Sole Proprietorship">Sole Proprietorship</option>
+                  <option value="Sole Proprietorship">
+                    Sole Proprietorship
+                  </option>
                   <option value="LLC">LLC</option>
                 </select>
 
@@ -474,18 +495,25 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   Duration
                 </label>
                 <select
-                  className="lead-input"
+                  className="lead-input deal-new-select"
                   name="duration"
                   onChange={handleChange}
                 >
-                 <option value="Short-term">Short term</option>
-                 <option value="Medium-term">Medium term</option>
-                 <option value="Long-term">Long term</option>
+                  <option value="">Select Duration</option>
+                  <option value="Short-term">Short term</option>
+                  <option value="Medium-term">Medium term</option>
+                  <option value="Long-term">Long term</option>
                 </select>
                 <label className="lead-label" htmlFor="pipeline_id">
                   Location of Company/Individual
                 </label>
-                <input id="location_of_company_or_individual" type="text" className="lead-input email-case" name="location_of_company_or_individual" onChange={handleChange}/>
+                <input
+                  id="location_of_company_or_individual"
+                  type="text"
+                  className="lead-input email-case"
+                  name="location_of_company_or_individual"
+                  onChange={handleChange}
+                />
                 <label className="lead-label" htmlFor="age_of_business">
                   Age of Business
                 </label>
@@ -496,7 +524,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   className="lead-input"
                   onChange={handleChange}
                 />
-
 
                 <label className="lead-label" htmlFor="turnover">
                   Turnover
@@ -513,10 +540,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   Industry Type
                 </label>
                 <select
-                  className="lead-input"
+                  className="lead-input deal-new-select"
                   name="industry_type"
                   onChange={handleChange}
                 >
+                  <option value="">Select Industry Type</option>
                   <option value="Textile">Textile</option>
                   <option value="Healthcare">Healthcare</option>
                   <option value="Manufacturing">Manufacturing</option>
