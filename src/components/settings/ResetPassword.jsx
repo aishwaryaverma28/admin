@@ -102,7 +102,9 @@ console.log(passDes)
 
   const handleSave = () => {
     if (passwordMatch) {
-        axios
+      if(minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter)
+        {
+          axios
           .put(
             UPDATE_TEAM_MEM + user,
             { password: password },
@@ -128,6 +130,13 @@ console.log(passDes)
               autoClose:2000
             });
           });
+        }
+        else{
+          toast.error("Fulfil password policy", {
+            position: "top-center",
+            autoClose:2000
+          });
+        }
     } else {
       toast.error("Passwords do not match", {
         position: "top-center",

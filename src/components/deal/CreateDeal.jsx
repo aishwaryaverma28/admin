@@ -27,14 +27,14 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const navigate = useNavigate();
   const [loanDetails, setLoanDetails] = useState({
     age_of_business: null,
-    company_type: "",
-    industry_type: "",
+    company_type: "Corporation",
+    industry_type: "Textile",
     turnover: null,
     location_of_company_or_individual:"",
-    duration:"",
+    duration:"Short-term",
     individual_or_company:"",
     loan_amount: null,
-    loan_type: "",
+    loan_type: "Home loan",
   });
   const [leadData, setLeadData] = useState({
     probability: "",
@@ -48,15 +48,15 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     stage_id: 1,
     pipeline_id: 1,
     lead_id: 0,
-    age_of_business: 0,
-    company_type: "",
-    industry_type: "",
-    turnover: 0,
+    age_of_business: null,
+    company_type: "Corporation",
+    industry_type: "Textile",
+    turnover: null,
     location_of_company_or_individual:"",
-    duration:"",
+    duration:"Short-term",
     individual_or_company:"",
-    loan_amount: 0,
-    loan_type: "",
+    loan_amount: null,
+    loan_type: "Home loan",
   });
   
   const fetchCall = () => {
@@ -158,82 +158,93 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     return null;
   }
 
-  // function handleChangeName(event) {
-  //   setIsDisable(false);
-  //   const empName = event.target.value;
-  //   setName(empName);
-  //   let arr = empName.split(" ");
-  //   if (arr.length >= 1) {
-  //     setfName(arr[0]);
-  //     setlName(arr[arr.length - 1]);
-  //   }
-  // }
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLeadData((prevState) => ({ ...prevState, [name]: value }));
+    let parsedValue = value;  
+    // Check if the name is one of the fields that should be integers
+    if (name === 'turnover' || name === 'loan_amount' || name === 'age_of_business') {
+      // Use parseInt to convert the value to an integer
+      parsedValue = parseInt(value); // Base 10  
+      // Check if the conversion was successful (not NaN)
+      if (isNaN(parsedValue)) {
+        // Handle the case where parsing fails (e.g., display an error message)
+        console.error(`Failed to parse ${name} as an integer`);
+        // You can set a default value or handle the error as needed
+        parsedValue = 0; // Set a default value, for example
+      }
+    }
+  
+    setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
     setIsDisable(false);
-    setLoanDetails((prevState) => ({...prevState, [name]: value }));
+    setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-console.log(loanDetails);
 
-  // Find objects in the loan array that match all key-value pairs in loanDetails
-  const matchingLoans = loan.filter((loanItem) => {
-    for (const key in loanDetails) {
-      if (loanDetails[key] !== loanItem[key]) {
-        return false; // If any key-value pair doesn't match, return false
-      }
-    }
-    return true; // All key-value pairs match
-  });
-  console.log("Matching Loans:", matchingLoans);
-  // Now you can do something with the matchingLoans array, such as sending it to the server.
+ // Filter out empty or null values from loanDetails
+ const filteredLoanDetails = {};
+ for (const key in loanDetails) {
+   if (loanDetails[key] !== null && loanDetails[key] !== "") {
+     filteredLoanDetails[key] = loanDetails[key];
+   }
+ }
+
+ console.log("Filtered loanDetails:", filteredLoanDetails);
+ console.log("loan:", loan);
+
+ // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
+ const matchingLoans = loan.filter((loanItem) => {
+   // Check if every key-value pair in filteredLoanDetails exists in loanItem
+   return Object.entries(filteredLoanDetails).every(([key, value]) => {
+     return loanItem[key] === value;
+   });
+ });
+
+ console.log("Matching Loans:", matchingLoans);
 
 
-
-    // axios
-    //   .post(ADD_DEAL, leadData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-    //     },
-    //   })
-    //   .then((response) => {
-    //     toast.success("Deal data added successfully", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //     setLeadData({
-    //       probability: "",
-    //       deal_name: "",
-    //       organization: "",
-    //       mobile: "",
-    //       email: "",
-    //       // value: 0,
-    //       label_id: 36,
-    //       closure_date: "",
-    //       stage_id: 1,
-    //       pipeline_id: 1,
-    //       lead_id: 0,
-    //       age_of_business: 0,
-    //       company_type: "",
-    //       industry_type: "",
-    //       turnover: 0,
-    //       location_of_company_or_individual:"",
-    //       duration:"",
-    //       individual_or_company:"",
-    //       loan_amount: 0,
-    //       loan_type: "",
-    //     });
-    //     // setName("");
-    //     onLeadAdded();
-    //     navigate("/lp/deals");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .post(ADD_DEAL, leadData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        toast.success("Deal data added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setLeadData({
+          probability: "",
+          deal_name: "",
+          organization: "",
+          mobile: "",
+          email: "",
+          // value: 0,
+          label_id: 36,
+          closure_date: "",
+          stage_id: 1,
+          pipeline_id: 1,
+          lead_id: 0,
+          age_of_business: null,
+          company_type: "Corporation",
+          industry_type: "Textile",
+          turnover: null,
+          location_of_company_or_individual:"",
+          duration:"Short-term",
+          individual_or_company:"",
+          loan_amount: null,
+          loan_type: "Home loan",
+        });
+        // setName("");
+        onLeadAdded();
+        navigate("/lp/deals");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const mergedLabels = labelData
@@ -450,12 +461,12 @@ console.log(loanDetails);
                   name="company_type"
                   onChange={handleChange}
                 >
-                  <option value="Corporation">corporation</option>
-                  <option value="limited company">limited company</option>
-                  <option value="private limited">private limited</option>
-                  <option value="public company">public company</option>
-                  <option value="joint venture">joint venture</option>
-                  <option value="Sole Proprietorship">"Sole Proprietorship"</option>
+                  <option value="Corporation">Corporation</option>
+                  <option value="limited company">Limited Company</option>
+                  <option value="private limited">Private Limited</option>
+                  <option value="public company">Public Company</option>
+                  <option value="joint venture">Joint Venture</option>
+                  <option value="Sole Proprietorship">Sole Proprietorship</option>
                   <option value="LLC">LLC</option>
                 </select>
 
@@ -478,23 +489,6 @@ console.log(loanDetails);
                 <label className="lead-label" htmlFor="age_of_business">
                   Age of Business
                 </label>
-                {/* <select
-                  className="lead-input"
-                  name="age_of_business"
-                  onChange={handleChange}
-                >
-                  <option value="1">0-1</option>
-                  <option value="2">1-2</option>
-                  <option value="3">2-3</option>
-                  <option value="4">3-4</option>
-                  <option value="5">4-5</option>
-                  <option value="6">5-6</option>
-                  <option value="7">6-7</option>
-                  <option value="8">7-8</option>
-                  <option value="9">8-9</option>
-                  <option value="10">9-10</option>
-                  <option value="11">10+</option>
-                </select> */}
                 <input
                   id="age_of_business"
                   type="number"

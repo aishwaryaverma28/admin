@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { VERIFY_OTP,MAIN_PASS,GET_PASSWORD } from "./utils/Constants";
+import { VERIFY_OTP, MAIN_PASS, GET_PASSWORD } from "./utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/Login.css";
@@ -11,13 +11,10 @@ import { useNavigate } from "react-router-dom";
 
 const Reset = () => {
   const email = localStorage.getItem("email");
-  const [otp,setOtp] = useState(0);
+  const [otp, setOtp] = useState(0);
   const [otpDigits, setOtpDigits] = useState(["", "", "", ""]);
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-    const navigate = useNavigate();
-  const decryptedToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjk0MjY0OTg0LCJleHAiOjE2OTUxMjg5ODR9.34Jgb17DRqHK4niCwaQznB2fLM-4EkZEV3-IamQPeBI";
-
+  const navigate = useNavigate();
   const [passDes, setPassDes] = useState([]);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,6 +26,8 @@ const Reset = () => {
   const [hasSpecialCharacter, setHasSpecialCharacter] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passBtn, setPassBtn] = useState(false);
+  const [input, setInput] = useState(false);
 
   const passGet = () => {
     axios
@@ -36,7 +35,7 @@ const Reset = () => {
       .then((response) => {
         setPassDes(response?.data?.data);
         response?.data?.data?.forEach((condition) => {
-          console.log(condition)
+          console.log(condition);
           switch (condition.id) {
             case 1:
               setMinLength(condition.active === 1);
@@ -66,6 +65,7 @@ const Reset = () => {
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
+    setPassBtn(true);
     setPassword(newPassword);
     // Use the passDes array to dynamically update the password criteria
     passDes.forEach((condition) => {
@@ -102,6 +102,7 @@ const Reset = () => {
   };
   const handleChange = (event) => {
     setPassword(event.target.value);
+    setPassBtn(true);
   };
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
@@ -111,18 +112,24 @@ const Reset = () => {
 
   const handleSave = () => {
     if (passwordMatch) {
-              const updatedForm = {
+      if (
+        minLength &&
+        hasNumberSymbolWhitespace &&
+        hasUppercase &&
+        hasSpecialCharacter
+      ) {
+        const updatedForm = {
           email: email,
           otp: otp,
-          password: password
-      }
-      axios
-        .post(MAIN_PASS,updatedForm,)
+          password: password,
+        };
+        axios
+          .post(MAIN_PASS, updatedForm)
           .then((response) => {
             // Handle successful response
             toast.success("Password saved successfully", {
               position: "top-center",
-              autoClose:2000
+              autoClose: 2000,
             });
             navigate("/");
           })
@@ -130,9 +137,15 @@ const Reset = () => {
             // Handle error
             toast.error("Error saving password", {
               position: "top-center",
-              autoClose:2000
+              autoClose: 2000,
             });
           });
+      } else {
+        toast.error("Fulfil password policy", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
     } else {
       toast.error("Passwords do not match", {
         position: "top-center",
@@ -146,14 +159,14 @@ const Reset = () => {
       const updatedForm = {
         email: email,
         otp: otp,
-        password: password
-    }
+        password: password,
+      };
       axios
-        .post(MAIN_PASS,updatedForm,)
+        .post(MAIN_PASS, updatedForm)
         .then((response) => {
           toast.success("Password saved successfully", {
             position: "top-center",
-            autoClose:2000
+            autoClose: 2000,
           });
           navigate("/");
         })
@@ -161,7 +174,7 @@ const Reset = () => {
           // Handle error
           toast.error("Error saving password", {
             position: "top-center",
-            autoClose:2000
+            autoClose: 2000,
           });
         });
     }
@@ -202,6 +215,7 @@ const Reset = () => {
       .then((response) => {
         const data = response?.data;
         const status = response?.data?.status;
+        setInput(true);
         console.log(data);
         if (status === 0) {
           alert(data.message);
@@ -266,76 +280,120 @@ const Reset = () => {
                 />
               ))}
             </div>
+
             <div>
-              <div>
-                <div className="pwd-label">
-                  <label htmlFor="" className="common-fonts pwd-heading">
-                    New Password
-                  </label>
-                  <div className="password-input-wrapper">
-                    {/* ========================================================================================================== */}
-                    {passDes && passDes.some(
-                      (condition) =>
-                        condition.id === 5 && condition.active === 1
-                    ) ? (
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className="common-fonts common-input pwd-input"
-                        onChange={handlePasswordChange}
-                        value={password}
-                      />
-                    ) : (
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        onChange={handleChange}
-                        className="common-fonts common-input pwd-input"
-                        value={password}
-                      />
-                    )}
-                    {/* =================================================================================================================== */}
-                    <button
-                      className="password-toggle-button"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <i className="fa-sharp fa-solid fa-eye-slash "></i>
-                      ) : (
-                        <i className="fa-sharp fa-solid fa-eye "></i>
-                      )}
-                    </button>
+              {input ? (
+                <>
+                  <div>
+                    <div className="pwd-label">
+                      <label htmlFor="" className="common-fonts pwd-heading">
+                        New Password
+                      </label>
+                      <div className="password-input-wrapper">
+                        {/* ========================================================================================================== */}
+                        {passDes &&
+                        passDes.some(
+                          (condition) =>
+                            condition.id === 5 && condition.active === 1
+                        ) ? (
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            className="common-fonts common-input pwd-input"
+                            onChange={handlePasswordChange}
+                            value={password}
+                          />
+                        ) : (
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            onChange={handleChange}
+                            className="common-fonts common-input pwd-input"
+                            value={password}
+                          />
+                        )}
+                        {/* =================================================================================================================== */}
+                        <button
+                          className="password-toggle-button"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <i className="fa-sharp fa-solid fa-eye-slash "></i>
+                          ) : (
+                            <i className="fa-sharp fa-solid fa-eye "></i>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="pwd-label">
+                      <label htmlFor="" className="common-fonts pwd-heading">
+                        Confirm Password
+                      </label>
+                      <div className="password-input-wrapper">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          className={`common-fonts common-input pwd-input ${
+                            confirmPassword && !passwordMatch
+                              ? "password-mismatch"
+                              : ""
+                          }`}
+                          onChange={handleConfirmPasswordChange}
+                          value={confirmPassword}
+                        />
+                        <button
+                          className="password-toggle-button"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                        >
+                          {showConfirmPassword ? (
+                            <i className="fa-sharp fa-solid fa-eye-slash "></i>
+                          ) : (
+                            <i className="fa-sharp fa-solid fa-eye "></i>
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="pwd-label">
-                  <label htmlFor="" className="common-fonts pwd-heading">
-                    Confirm Password
-                  </label>
-                  <div className="password-input-wrapper">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      className={`common-fonts common-input pwd-input ${
-                        confirmPassword && !passwordMatch
-                          ? "password-mismatch"
-                          : ""
-                      }`}
-                      onChange={handleConfirmPasswordChange}
-                      value={confirmPassword}
-                    />
-                    <button
-                      className="password-toggle-button"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      {showConfirmPassword ? (
-                        <i className="fa-sharp fa-solid fa-eye-slash "></i>
-                      ) : (
-                        <i className="fa-sharp fa-solid fa-eye "></i>
-                      )}
-                    </button>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <div className="pwd-label">
+                      <label htmlFor="" className="common-fonts pwd-heading">
+                        New Password
+                      </label>
+                      <div className="password-input-wrapper">
+                        <input
+                          disabled
+                          type={showPassword ? "text" : "password"}
+                          className="common-fonts common-input pwd-input"
+                          onChange={handlePasswordChange}
+                          value={password}
+                        />
+                        <button className="password-toggle-button">
+                          {" "}
+                          <i className="fa-sharp fa-solid fa-eye "></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="pwd-label">
+                      <label htmlFor="" className="common-fonts pwd-heading">
+                        Confirm Password
+                      </label>
+                      <div className="password-input-wrapper">
+                        <input
+                          disabled
+                          className={`common-fonts common-input pwd-input`}
+                        />
+                        <button className="password-toggle-button">
+                          <i className="fa-sharp fa-solid fa-eye "></i>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              {passDes && passDes.some(
+                </>
+              )}
+              {passDes &&
+              passDes.some(
                 (condition) => condition.id === 5 && condition.active === 1
               ) ? (
                 <div className="pwd-rules">
@@ -446,25 +504,34 @@ const Reset = () => {
               ) : (
                 <></>
               )}
-              <div className="recycle-popup-btn">
-                {passDes && passDes.some(
-                  (condition) => condition.id === 5 && condition.active === 1
-                ) ? (
-                  <button
-                    className="restore-yes common-fonts"
-                    onClick={handleSave}
-                  >
+              {passBtn ? (
+                <div className="recycle-popup-btn">
+                  {passDes &&
+                  passDes.some(
+                    (condition) => condition.id === 5 && condition.active === 1
+                  ) ? (
+                    <button
+                      className="restore-yes common-fonts"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      className="restore-yes common-fonts"
+                      onClick={handleSave2}
+                    >
+                      Save
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="recycle-popup-btn">
+                  <button className="common-inactive-button" disable>
                     Save
                   </button>
-                ) : (
-                  <button
-                    className="restore-yes common-fonts"
-                    onClick={handleSave2}
-                  >
-                    Save2
-                  </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
             <ToastContainer />
           </>
