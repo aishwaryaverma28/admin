@@ -196,12 +196,11 @@ axios
   };
 
   function handleChange(e) {
+    console.log(e.target)
     const { name, value } = e.target;
     setForm((prev) => {
       return { ...prev, [name]: value };
     });
-    
-    
     setStateBtn(1);
   }
 
@@ -219,7 +218,7 @@ axios
       activity_for: type,
       activity_name: activeTab,
       scheduled_time: selectedTimeFrom,
-      end_time:updatedEndTime,
+      end_time: updatedEndTime,
       source_id: type === "lead" ? item.id : id,
     };
     axios
@@ -480,6 +479,8 @@ axios
                                 }`}
                                 type="text"
                                 value={item.activity_name}
+                                name="activity_name"
+                                onChange={handleChange}
                               />
                             </div>
                           </div>
@@ -492,17 +493,18 @@ axios
 
                                   <div className="custom-date-input activity-new-date">
                                     <div className="">
-                                      <input type="date" value={item.scheduled_date.split("T")[0]}/>
+                                      <input type="date" value={item.scheduled_date.split("T")[0]} name="scheduled_date" onChange={handleChange}/>
                                     </div>
                                   </div>
                                 </div>
                                 <div className="activity-timefrom">
                                   <label htmlFor="">Time From</label>
                                   <select
-                                    name=""
+                                    name="scheduled_time"
                                     id=""
                                     className="common-fonts activity-timefrom-select"
                                     value={item?.scheduled_time?.slice(0,5)}
+                                    onChange={handleChange}
                                   >
                                     {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
@@ -518,6 +520,7 @@ axios
                                     id=""
                                     className="common-fonts activity-timefrom-select"
                                     value={item?.end_time?.slice(0,5)}
+                                    onChange={handleChange}
                                   >
                                     {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
