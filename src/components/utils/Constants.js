@@ -44,6 +44,7 @@ const userId = localStorage.getItem('id');
 export const USER_INFO = start + "api/user/getuserinfo";
 export const USER_UPDATE = start + "api/user/update";
 export const COUNTRIES = start+"api/user/getcountries";
+export const ELIGIBLE_LOANS = start + "api/user/geteligibilitycriteria";
 //===============================================================login apis
 export const LOGIN = start+"api/user/login";
 export const CREATE_ACC = start+"api/user/createaccount";
