@@ -602,14 +602,13 @@
 .customization_popup_container {
   position: absolute;
   width: 70%;
-  margin: 0 auto;
-  left: 1rem;
+  right: 0;
   top: 0;
   height: 100vh;
   background: #fff;
   border-radius: 0.25em 0.25em 0.4em 0.4em;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  -webkit-transform: translatex(400px);
+  /* -webkit-transform: translatex(400px);
   -moz-transform: translatex(400px);
   -ms-transform: translatex(400px);
   -o-transform: translatex(400px);
@@ -619,7 +618,7 @@
   transition-property: transform;
   -webkit-transition-duration: 0.3s;
   -moz-transition-duration: 0.3s;
-  transition-duration: 0.3s;
+  transition-duration: 0.3s; */
   display: flex;
   flex-wrap: nowrap;
 }
@@ -860,11 +859,12 @@
   display: flex;
   padding: 0.7rem;
   gap: 0.5rem;
+  flex-wrap: nowrap;
   /* justify-content: space-between; */
 }
 
 .tab-navigation button {
-  padding: 8px 25px;
+  padding: 8px 12px;
   border: 1px solid #d8d8d8;
   border-radius: 0.3125rem;
   font-family: "Lexend Deca";

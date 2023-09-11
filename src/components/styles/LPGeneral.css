@@ -683,3 +683,8 @@ margin-bottom: 1rem;
 font-size: 0.75rem !important;
 margin-left: 0.3rem;
 }
+
+.activity-del{
+  cursor: pointer;
+  margin-left: 0.2rem;
+}

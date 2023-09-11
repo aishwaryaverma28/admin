@@ -920,10 +920,17 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
               Email
             </button>
             <button
+              className={activeTab === "whatsapp" ? "active" : ""}
+              onClick={() => handleTabClick("whatsapp")}
+            >
+              <i class="fa-sharp fa-regular fab fa-whatsapp"></i>
+              Whatsapp
+            </button>
+            <button
               className={activeTab === "activity" ? "active" : ""}
               onClick={() => handleTabClick("activity")}
             >
-              <i className="fa-sharp fa-regular fa-calendar"></i>
+             <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
               Activity
             </button>
             <button

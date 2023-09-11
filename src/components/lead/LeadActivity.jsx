@@ -3,24 +3,50 @@ import Call from "../../assets/image/call-activity.svg";
 import Meeting from "../../assets/image/meeting.svg";
 import Task from "../../assets/image/task.svg";
 import Deadline from "../../assets/image/deadline.svg";
-import LeadCall from "./LeadCall.jsx";
+import bin from "../../assets/image/TrashFill.svg";
 import axios from "axios";
 import {
   GET_ACTIVITY,
   handleLogout,
   getDecryptedToken,
   ADD_ACTIVITY,
+  DELETE_LEAD_ACTIVITY,
+  UPDATE_LEAD_ACTIVITY
 } from "../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import TextIcon from "../../assets/image/text-icon.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import Calling from "../../assets/image/call-calling.svg";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const LeadActivity = ({ item, type, id }) => {
   const decryptedToken = getDecryptedToken();
+  const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+ 
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expansion, setExpansion] = useState(false);
+
+    // Function to generate time options with 15-minute intervals
+    const generateTimeOptions = () => {
+      const options = [];
+      for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 15) {
+          const hh = String(hour).padStart(2, "0");
+          const mm = String(minute).padStart(2, "0");
+          options.push(`${hh}:${mm}`);
+        }
+      }
+      return options;
+    };
+
+  const timeOptions = generateTimeOptions();
+  const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
+  const [selectedTimeTo, setSelectedTimeTo] = useState(timeOptionsTo[0] || "");
+  const selectedTimeFromIndex = timeOptionsTo.indexOf(selectedTimeFrom);
+  const nextIndex = selectedTimeFromIndex + 1;
+  const newTime = nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
@@ -35,25 +61,11 @@ const LeadActivity = ({ item, type, id }) => {
     end_time: "",
     source_id: type === "lead" ? item.id : id,
   });
-  // Function to generate time options with 15-minute intervals
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
-        const hh = String(hour).padStart(2, "0");
-        const mm = String(minute).padStart(2, "0");
-        options.push(`${hh}:${mm}`);
-      }
-    }
-    return options;
-  };
 
-  const timeOptions = generateTimeOptions();
 
-  const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
-  const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
-  const [expandedIndex, setExpandedIndex] = useState(null);
-  const [expansion, setExpansion] = useState(false);
+
+
+
 
   const toggleExpand = (index) => {
     if (expandedIndex === index) {
@@ -63,6 +75,8 @@ const LeadActivity = ({ item, type, id }) => {
     }
     setExpansion(!expansion);
   };
+
+  
 
   useEffect(() => {
     if (selectedTimeFrom) {
@@ -74,6 +88,8 @@ const LeadActivity = ({ item, type, id }) => {
       setStateBtn(1);
     }
   }, [selectedTimeFrom]);
+
+
 
   useEffect(() => {
     fetchCall();
@@ -119,6 +135,57 @@ const LeadActivity = ({ item, type, id }) => {
     }
   };
 
+  const handleActivityDelete = (id) => {
+
+    axios
+        .delete(DELETE_LEAD_ACTIVITY+id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }).then(()=>{
+          toast.success("Activity Deleted successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          fetchCall();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+          }
+        })
+
+  }
+  const handleActivityUpdate = (id) => {
+
+
+ const updatedData = {
+ activity_description: form.activity_description
+};
+
+
+axios
+.put(UPDATE_LEAD_ACTIVITY + id, updatedData, {
+  headers: {
+    Authorization: `Bearer ${decryptedToken}`,
+  },
+})
+.then(() => {
+  toast.success("Activity Updated successfully", {
+    position: "top-center",
+    autoClose: 2000,
+  });
+  fetchCall();
+})
+.catch((error) => {
+  console.log(error);
+  if (error?.response?.data?.message === "Invalid or expired token.") {
+    alert(error?.response?.data?.message);
+  }
+});
+};
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setStateBtn(1);
@@ -133,15 +200,26 @@ const LeadActivity = ({ item, type, id }) => {
     setForm((prev) => {
       return { ...prev, [name]: value };
     });
+    
+    
     setStateBtn(1);
   }
 
+
   const handleAddNote = () => {
+    let updatedEndTime;
+    if(form.end_time===""){
+      updatedEndTime =newTime;
+    }else{
+      updatedEndTime =form.end_time;
+    }
+   
     const updatedFormData = {
       ...form,
       activity_for: type,
       activity_name: activeTab,
       scheduled_time: selectedTimeFrom,
+      end_time:updatedEndTime,
       source_id: type === "lead" ? item.id : id,
     };
     axios
@@ -161,8 +239,10 @@ const LeadActivity = ({ item, type, id }) => {
           activity_name: "",
           scheduled_date: "",
           scheduled_time: "",
+          end_time:""
         });
         setActiveTab("call");
+        fetchCall();
       })
       .catch((error) => {
         console.log(error);
@@ -258,7 +338,6 @@ const LeadActivity = ({ item, type, id }) => {
                       className="common-fonts activity-select"
                       onChange={(e) => setSelectedTimeFrom(e.target.value)}
                     >
-                      <option value="">Select Time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
                           {time}
@@ -359,9 +438,25 @@ const LeadActivity = ({ item, type, id }) => {
                             >
                               <img src={CalendarIcon} alt="" />
                               <p className="common-fonts activity-due">
-                                {item.scheduled_date.split("T")[0]}
+                                {item.scheduled_date &&
+                                  item.scheduled_date.includes("T") &&
+                                  item.scheduled_date.includes(".")
+                            ? item.scheduled_date.split("T")[0] +
+                              " at " +
+                              item.scheduled_date.split("T")[1].split(".")[0]
+                            : "-"}
                               </p>
+                              
+                            <div className="three-side-dots activity-del">
+                          <img
+                            src={bin}
+                            alt="trash"
+                            title="Delete"
+                            onClick={() => handleActivityDelete(item.id)}
+                          />
+                        </div>
                             </div>
+
                           </div>
                           <div
                             className={`activity-phone ${
@@ -402,23 +497,33 @@ const LeadActivity = ({ item, type, id }) => {
                                   </div>
                                 </div>
                                 <div className="activity-timefrom">
-                                  <label htmlFor="">Time To</label>
-                                  <select
-                                    name=""
-                                    id=""
-                                    className="common-fonts activity-timefrom-select"
-                                  >
-                                    <option value="">8:00 AM</option>
-                                  </select>
-                                </div>
-                                <div className="activity-timefrom">
                                   <label htmlFor="">Time From</label>
                                   <select
                                     name=""
                                     id=""
                                     className="common-fonts activity-timefrom-select"
+                                    value={item?.scheduled_time?.slice(0,5)}
                                   >
-                                    <option value="">8:00 AM</option>
+                                    {timeOptions.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Time To</label>
+                                  <select
+                                    name="end_time"
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                    value={item?.end_time?.slice(0,5)}
+                                  >
+                                    {timeOptions.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
                                   </select>
                                 </div>
                                 <div className="activity-timefrom">
@@ -448,12 +553,13 @@ const LeadActivity = ({ item, type, id }) => {
                                   Description
                                 </p>
                                 <textarea
-                                  name=""
-                                  id=""
+                                  name="activity_description"
+                                  id="activity_description"
                                   cols="30"
                                   rows="5"
                                   className="activity-big-textarea"
                                   value={item.activity_description}
+                                  onChange={handleChange}
                                 ></textarea>
                               </div>
                             </>
@@ -471,7 +577,7 @@ const LeadActivity = ({ item, type, id }) => {
               {expandedIndex === index && (
                 <div className="activity-bottom-buttons">
                   <button className="common-white-button">Cancel</button>
-                  <button className="common-save-button activity-save-buttons">
+                  <button className="common-save-button activity-save-buttons" onClick={() => handleActivityUpdate(item.id)}>
                     Save
                   </button>
                 </div>
