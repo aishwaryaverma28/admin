@@ -241,15 +241,15 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
           stage_id: 1,
           pipeline_id: 1,
           lead_id: 0,
-          age_of_business: 0,
-          company_type: "Corporation",
-          industry_type: "Textile",
-          turnover: 0,
+          age_of_business: null,
+          company_type: "",
+          industry_type: "",
+          turnover: null,
           location_of_company_or_individual: "",
-          duration: "Short-term",
+          duration: "",
           individual_or_company: "",
-          loan_amount: 0,
-          loan_type: "Home loan",
+          loan_amount: null,
+          loan_type: "",
         });
         // setName("");
         onLeadAdded();
