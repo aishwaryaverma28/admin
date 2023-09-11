@@ -27,14 +27,14 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const navigate = useNavigate();
   const [loanDetails, setLoanDetails] = useState({
     age_of_business: null,
-    company_type: "Corporation",
-    industry_type: "Textile",
-    turnover: null,
+    company_type: "",
+    industry_type: "",
+    turnover: 0,
     location_of_company_or_individual:"",
-    duration:"Short-term",
+    duration:"",
     individual_or_company:"",
     loan_amount: null,
-    loan_type: "Home loan",
+    loan_type:"",
   });
   const [leadData, setLeadData] = useState({
     probability: "",
@@ -49,14 +49,14 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     pipeline_id: 1,
     lead_id: 0,
     age_of_business: null,
-    company_type: "Corporation",
-    industry_type: "Textile",
+    company_type: "",
+    industry_type: "",
     turnover: null,
     location_of_company_or_individual:"",
-    duration:"Short-term",
+    duration:"",
     individual_or_company:"",
     loan_amount: null,
-    loan_type: "Home loan",
+    loan_type: "",
   });
   
   const fetchCall = () => {
@@ -205,46 +205,46 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
  console.log("Matching Loans:", matchingLoans);
 
 
-    axios
-      .post(ADD_DEAL, leadData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        toast.success("Deal data added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        setLeadData({
-          probability: "",
-          deal_name: "",
-          organization: "",
-          mobile: "",
-          email: "",
-          // value: 0,
-          label_id: 36,
-          closure_date: "",
-          stage_id: 1,
-          pipeline_id: 1,
-          lead_id: 0,
-          age_of_business: null,
-          company_type: "Corporation",
-          industry_type: "Textile",
-          turnover: null,
-          location_of_company_or_individual:"",
-          duration:"Short-term",
-          individual_or_company:"",
-          loan_amount: null,
-          loan_type: "Home loan",
-        });
-        // setName("");
-        onLeadAdded();
-        navigate("/lp/deals");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios
+    //   .post(ADD_DEAL, leadData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     toast.success("Deal data added successfully", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //     setLeadData({
+    //       probability: "",
+    //       deal_name: "",
+    //       organization: "",
+    //       mobile: "",
+    //       email: "",
+    //       // value: 0,
+    //       label_id: 36,
+    //       closure_date: "",
+    //       stage_id: 1,
+    //       pipeline_id: 1,
+    //       lead_id: 0,
+    //       age_of_business: 0,
+    //       company_type: "Corporation",
+    //       industry_type: "Textile",
+    //       turnover: 0,
+    //       location_of_company_or_individual:"",
+    //       duration:"Short-term",
+    //       individual_or_company:"",
+    //       loan_amount: 0,
+    //       loan_type: "Home loan",
+    //     });
+    //     // setName("");
+    //     onLeadAdded();
+    //     navigate("/lp/deals");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const mergedLabels = labelData
