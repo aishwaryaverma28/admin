@@ -151,3 +151,5 @@ export const UPDATE_HELP = start+"api/user/help/update/";
 //===============================================================================Activity api
 export const ADD_ACTIVITY = start + "api/leaddeal/activity/add";
 export const GET_ACTIVITY = start + "api/leaddeal/activity/getbysource/";
+export const DELETE_LEAD_ACTIVITY = start + "api/leaddeal/activity/delete/";
+export const UPDATE_LEAD_ACTIVITY = start + "api/leaddeal/activity/edit/";
