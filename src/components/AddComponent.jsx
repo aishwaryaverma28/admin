@@ -7,7 +7,7 @@ import {
 import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RecycleRestorePopUp = ({onClose, docsData}) => {
+const RecycleRestorePopUp = ({onClose, docsData, type}) => {
   const decryptedToken = getDecryptedToken();
   const [doc, setDoc] = useState("");
 
@@ -20,6 +20,7 @@ const RecycleRestorePopUp = ({onClose, docsData}) => {
     const updatedFormData = 
     {
       document_name: doc,
+      source_type: type,
       is_required: 1,
       is_deleted: 0
   }

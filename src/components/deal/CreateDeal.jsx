@@ -25,17 +25,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const [isDisable, setIsDisable] = useState(true);
   const [labelData, setLabelData] = useState([]);
   const navigate = useNavigate();
-  const [loanDetails, setLoanDetails] = useState({
-    age_of_business: null,
-    company_type: "",
-    industry_type: "",
-    turnover: null,
-    location_of_company_or_individual: "",
-    duration: "",
-    individual_or_company: "",
-    loan_amount: null,
-    loan_type: "",
-  });
+ 
   const [leadData, setLeadData] = useState({
     probability: "",
     deal_name: "",
@@ -52,13 +42,23 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     company_type: "",
     industry_type: "",
     turnover: null,
-    location_of_company_or_individual: "",
+    company_location: "",
     duration: "",
     individual_or_company: "",
     loan_amount: null,
     loan_type: "",
   });
-
+  const [loanDetails, setLoanDetails] = useState({
+    age_of_business: null,
+    company_type: "",
+    industry_type: "",
+    turnover: null,
+    location_of_company: "",
+    duration: "",
+    individual_or_company: "",
+    loan_amount: null,
+    loan_type: "",
+  });
   const fetchCall = () => {
     axios
       .get(ELIGIBLE_LOANS, {
@@ -179,8 +179,15 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     }
 
     setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
+    console.log(leadData);
     setIsDisable(false);
     setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
+    if (name === "company_location") {
+    setLoanDetails((prevState) => ({
+      ...prevState,
+      location_of_company: parsedValue,
+    }));
+  }
   };
 
   const handleSubmit = (e) => {
@@ -213,7 +220,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     console.log("Matching Loans:", matchingLoans);
 
     const updatedForm = { ...leadData, value: leadData.loan_amount };
-
+console.log(updatedForm);
     axios
       .post(ADD_DEAL, updatedForm, {
         headers: {
@@ -245,7 +252,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
           company_type: "",
           industry_type: "",
           turnover: null,
-          location_of_company_or_individual: "",
+          company_location: "",
           duration: "",
           individual_or_company: "",
           loan_amount: null,
@@ -508,10 +515,10 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   Location of Company/Individual
                 </label>
                 <input
-                  id="location_of_company_or_individual"
+                  id="company_location"
                   type="text"
                   className="lead-input email-case"
-                  name="location_of_company_or_individual"
+                  name="company_location"
                   onChange={handleChange}
                 />
                 <label className="lead-label" htmlFor="age_of_business">

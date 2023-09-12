@@ -1359,7 +1359,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <DealAttachments/>
+                <DealAttachments dealId = {id} type={"deal"}/>
               </div>
             )}
           </div>

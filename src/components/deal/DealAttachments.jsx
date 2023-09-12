@@ -8,16 +8,17 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealAttachments = () => {
+const DealAttachments = ({dealId, type}) => {
   const decryptedToken = getDecryptedToken();
   const [documentList, setDocumentList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [fileName, setFileName] = useState("");
+  const [docId, setDocId] = useState(0);
   const fileInputRef = useRef(null);
-
+console.log(decryptedToken);
   const fetchDocuments = () => {
     axios
-      .get(REQ_DOCUMENT + "deal", {
+      .get(REQ_DOCUMENT + type, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -37,13 +38,7 @@ const DealAttachments = () => {
       });
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-    }
-  };
-
+  
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -63,12 +58,48 @@ const DealAttachments = () => {
     (doc) => !selectedDocuments.some((selectedDoc) => selectedDoc.id === doc.id)
   );
 
-
-
-  const handleBrowseClick = (doc) => {
-    console.log(doc)
-      fileInputRef.current.click();
+ const handleButtonClick = (doc) => {
+    setDocId(doc.id);
+    fileInputRef.current.click();
   };
+
+const handleFileChange = (event) => {
+     setFileName(event.target.files[0]);
+      handleBrowseClick(event.target.files[0]);
+      console.log(fileName);
+    };
+
+  const handleBrowseClick = async (file) => {
+    console.log(file);
+      const formData = new FormData();
+      // formData.append('file', file);
+      formData.append('source_type', type);
+      formData.append('source_id', dealId);
+      formData.append('docId', docId);
+      formData.append('ldDoc', file);
+    
+  
+      try {
+        const response = await axios.post(
+          "http://core.leadplaner.com:3001/api/deal/uplaoddoc",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+  
+        if (response.status === 200) {
+          toast.success(`File uploaded successfully for ${file.document_name}.`);
+          // You can update the document's status here if needed.
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        toast.error('Error uploading file.');
+      }
+   };
   
 
   return (
@@ -112,7 +143,7 @@ const DealAttachments = () => {
                 marginRight: "10px",
               }}
             >
-              <button className="contact-browse-btn common-fonts" onClick={()=>handleBrowseClick(doc)}>Browse</button>
+              <button className="contact-browse-btn common-fonts" onClick={()=>handleButtonClick(doc)}>Browse</button>
 
               <input
                 type="file"
@@ -131,7 +162,7 @@ const DealAttachments = () => {
               <button className='deal-doc-eye'> <i className="fa-sharp fa-solid fa-eye "></i></button>
               {fileName && (
                 <span className="common-fonts upload-file-name">
-                  Selected File: {fileName}
+                  {/* Selected File: {fileName} */}
                 </span>
               )}
             </span>
