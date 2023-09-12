@@ -67,7 +67,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setLoan(response?.data?.data);
       })
 
@@ -179,7 +178,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     }
 
     setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
-    console.log(leadData);
     setIsDisable(false);
     setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
     if (name === "company_location") {
@@ -201,8 +199,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
       }
     }
 
-    console.log("Filtered loanDetails:", filteredLoanDetails);
-    console.log("loan:", loan);
 
     // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
     const matchingLoans = loan.filter((loanItem) => {
@@ -217,10 +213,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
       (loanItem) => loanItem.loan_offered_by
     );
 
-    console.log("Matching Loans:", matchingLoans);
-
     const updatedForm = { ...leadData, value: leadData.loan_amount };
-console.log(updatedForm);
     axios
       .post(ADD_DEAL, updatedForm, {
         headers: {
@@ -230,7 +223,7 @@ console.log(updatedForm);
       .then((response) => {
 
         toast.success(
-          `Deal created. Banks list: ` + loanOfferedByValues.join(","),
+          loanOfferedByValues.length>0 ? `Deal created. Banks list: ` + loanOfferedByValues.join(",") : 'Deal Created',
           {
             position: "top-center",
             autoClose: 3000,
