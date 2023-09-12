@@ -588,3 +588,74 @@ margin-right: 2.5rem;
 .deal-new-select{
   padding: 0;
 }
+
+/* deal attachments  */
+
+.deal-browse-doc{
+  margin-left: 0.7rem;
+  text-transform: none;
+}
+
+.deal-doc-select{
+  border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #FFF;
+width:23rem;
+height: 2rem;
+margin-left: 0.5rem;
+cursor: pointer;
+text-transform: capitalize;
+}
+
+.deal-doc-list{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.deal-doc-eye{
+  border: none;
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+  right:17%;
+}
+
+.deal-doc-verify{
+  margin-left:0.7rem;
+  margin-top: 1rem;
+}
+
+
+.deal-doc-label span:first-child{
+  font-weight: 500;
+  margin-right: 0.7rem;
+}
+
+.deal-doc-label i{
+color: #077838;
+margin-right: 0.7rem;
+}
+.deal-doc-label span:last-child{
+  color: var(--Tertiary-Text, #909DB0);
+  font-size: 0.75rem;
+}
+
+.deal-doc-file{
+  margin-top: 0.2rem;
+}
+
+.deal-doc-btn{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  position: fixed;
+  bottom: 5%;
+  right:5%;
+}
+.deal-doc-btn button:first-child{
+  margin-right: 1rem;
+}
+
+/* deal attachments ends */

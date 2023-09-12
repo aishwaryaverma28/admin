@@ -126,7 +126,7 @@ export const ADD_PRODUCT = start + "api/product/add";
 export const UPDATE_PRODUCT = start + "api/product/edit/";
 export const GET_ALL_PRODUCT = start + "api/product/getall";
 
-export const REQ_DOCUMENT = start + "api/setting/requireddocs";
+export const REQ_DOCUMENT = start + "api/setting/requireddocs/";
 export const ADD_DOCUMENT = start + "api/setting/adddocindocumentmaster";
 export const UPDATE_DOCUMENT = start + "api/setting/updatedocmaster";
 
