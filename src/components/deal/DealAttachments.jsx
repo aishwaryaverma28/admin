@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   handleLogout,
   getDecryptedToken,
@@ -13,6 +13,7 @@ const DealAttachments = () => {
   const [documentList, setDocumentList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
 
   const fetchDocuments = () => {
     axios
@@ -48,13 +49,27 @@ const DealAttachments = () => {
   }, []);
 
   const handleDocumentChange = (event) => {
-    const selectedDocument = event.target.value;
-    setSelectedDocuments((prevSelected) => [...prevSelected, selectedDocument]);
+    const selectedDocumentName = event.target.value;
+    const selectedDocument = availableDocuments.find(
+      (doc) => doc.document_name === selectedDocumentName
+    );
+
+    if (selectedDocument) {
+      setSelectedDocuments((prevSelected) => [...prevSelected, selectedDocument]);
+    }
   };
 
   const availableDocuments = documentList.filter(
-    (doc) => !selectedDocuments.includes(doc.document_name)
+    (doc) => !selectedDocuments.some((selectedDoc) => selectedDoc.id === doc.id)
   );
+
+
+
+  const handleBrowseClick = (doc) => {
+    console.log(doc)
+      fileInputRef.current.click();
+  };
+  
 
   return (
     <div>
@@ -71,23 +86,21 @@ const DealAttachments = () => {
             <option value="" disabled>
               Select a document
             </option>
-            {availableDocuments.map((doc) => {
-              return (
-                <option key={doc.id} value={doc.document_name}>
-                  {doc.document_name}
-                </option>
-              );
-            })}
+            {availableDocuments.map((doc) => (
+              <option key={doc.id} value={doc.document_name}>
+                {doc.document_name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
 
-      {selectedDocuments.map((selectedDocument, index) => (
+      {selectedDocuments.map((doc, index) => (
         <div key={index} className="contact-tab-fields deal-doc-verify">
           <label
             className="common-fonts contact-tab-label deal-doc-label"
           >
-            <span>{selectedDocument}</span>{" "}
+            <span>{doc.document_name}</span>{" "}
             <i className="fa fa-check-circle deal-doc-tick" aria-hidden="true"></i>{" "}
             <span>(Uploaded)</span>
           </label>
@@ -99,12 +112,12 @@ const DealAttachments = () => {
                 marginRight: "10px",
               }}
             >
-              <button className="contact-browse-btn common-fonts">Browse</button>
+              <button className="contact-browse-btn common-fonts" onClick={()=>handleBrowseClick(doc)}>Browse</button>
 
               <input
                 type="file"
                 style={{
-                  opacity: 0,
+                   display: "none",
                   position: "absolute",
                   top: 0,
                   left: 0,
@@ -112,6 +125,7 @@ const DealAttachments = () => {
                   right: 0,
                   width: "100%",
                 }}
+                ref={fileInputRef}
                 onChange={handleFileChange}
               />
               <button className='deal-doc-eye'> <i className="fa-sharp fa-solid fa-eye "></i></button>
