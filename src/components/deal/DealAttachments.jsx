@@ -22,8 +22,10 @@ const DealAttachments = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
-        setDocumentList(response?.data?.data);
+        const requiredDocuments = response?.data?.data.filter(
+          (doc) => doc.is_required === 1
+        );
+        setDocumentList(requiredDocuments);
       })
       .catch((error) => {
         console.log(error);
@@ -38,7 +40,6 @@ const DealAttachments = () => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
-      // You can upload the file to the server here using APIs, if needed.
     }
   };
 
