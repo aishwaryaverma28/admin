@@ -11,42 +11,42 @@ import {
   getDecryptedToken,
   ADD_ACTIVITY,
   DELETE_LEAD_ACTIVITY,
-  UPDATE_LEAD_ACTIVITY
+  UPDATE_LEAD_ACTIVITY,
 } from "../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import TextIcon from "../../assets/image/text-icon.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
-import Calling from "../../assets/image/call-calling.svg";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const LeadActivity = ({ item, type, id }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
- 
+
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [expansion, setExpansion] = useState(false);
 
-    // Function to generate time options with 15-minute intervals
-    const generateTimeOptions = () => {
-      const options = [];
-      for (let hour = 0; hour < 24; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
-          const hh = String(hour).padStart(2, "0");
-          const mm = String(minute).padStart(2, "0");
-          options.push(`${hh}:${mm}`);
-        }
+  // Function to generate time options with 15-minute intervals
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const hh = String(hour).padStart(2, "0");
+        const mm = String(minute).padStart(2, "0");
+        options.push(`${hh}:${mm}`);
       }
-      return options;
-    };
+    }
+    return options;
+  };
 
   const timeOptions = generateTimeOptions();
   const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
   const [selectedTimeTo, setSelectedTimeTo] = useState(timeOptionsTo[0] || "");
   const selectedTimeFromIndex = timeOptionsTo.indexOf(selectedTimeFrom);
   const nextIndex = selectedTimeFromIndex + 1;
-  const newTime = nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
+  const newTime =
+    nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
@@ -62,21 +62,14 @@ const LeadActivity = ({ item, type, id }) => {
     source_id: type === "lead" ? item.id : id,
   });
 
-
-
-
-
-
   const toggleExpand = (index) => {
-    if (expandedIndex === index) {
-      setExpandedIndex(null);
-    } else {
-      setExpandedIndex(index);
-    }
-    setExpansion(!expansion);
+    setExpandedIndex(index);
+    setExpansion(true);
   };
-
-  
+  const toggleExpandClose = (index) => {
+    setExpandedIndex(null);
+    setExpansion(false);
+  };
 
   useEffect(() => {
     if (selectedTimeFrom) {
@@ -88,8 +81,6 @@ const LeadActivity = ({ item, type, id }) => {
       setStateBtn(1);
     }
   }, [selectedTimeFrom]);
-
-
 
   useEffect(() => {
     fetchCall();
@@ -136,55 +127,60 @@ const LeadActivity = ({ item, type, id }) => {
   };
 
   const handleActivityDelete = (id) => {
+    axios
+      .delete(DELETE_LEAD_ACTIVITY + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then(() => {
+        toast.success("Activity Deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        fetchCall();
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+        }
+      });
+  };
+  const handleActivityUpdate = (id, index) => {
+    const updatedData = {
+      activity_description: form.activity_description,
+    };
 
     axios
-        .delete(DELETE_LEAD_ACTIVITY+id, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }).then(()=>{
-          toast.success("Activity Deleted successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          fetchCall();
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error?.response?.data?.message === "Invalid or expired token.") {
-            alert(error?.response?.data?.message);
-          }
-        })
+      .put(UPDATE_LEAD_ACTIVITY + id, updatedData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then(() => {
+        toast.success("Activity Updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        fetchCall();
+        setExpandedIndex(index);
+        setExpansion(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+        }
+        setExpandedIndex(index);
+        setExpansion(false);
+      });
+  };
 
-  }
-  const handleActivityUpdate = (id) => {
-
-
- const updatedData = {
- activity_description: form.activity_description
-};
-
-
-axios
-.put(UPDATE_LEAD_ACTIVITY + id, updatedData, {
-  headers: {
-    Authorization: `Bearer ${decryptedToken}`,
-  },
-})
-.then(() => {
-  toast.success("Activity Updated successfully", {
-    position: "top-center",
-    autoClose: 2000,
-  });
-  fetchCall();
-})
-.catch((error) => {
-  console.log(error);
-  if (error?.response?.data?.message === "Invalid or expired token.") {
-    alert(error?.response?.data?.message);
-  }
-});
-};
+  const handleActivityClose = (index) => {
+    setExpandedIndex(index);
+    setExpansion(false);
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -196,7 +192,7 @@ axios
   };
 
   function handleChange(e) {
-    console.log(e.target)
+    console.log(e.target);
     const { name, value } = e.target;
     setForm((prev) => {
       return { ...prev, [name]: value };
@@ -204,15 +200,14 @@ axios
     setStateBtn(1);
   }
 
-
   const handleAddNote = () => {
     let updatedEndTime;
-    if(form.end_time===""){
-      updatedEndTime =newTime;
-    }else{
-      updatedEndTime =form.end_time;
+    if (form.end_time === "") {
+      updatedEndTime = newTime;
+    } else {
+      updatedEndTime = form.end_time;
     }
-   
+
     const updatedFormData = {
       ...form,
       activity_for: type,
@@ -238,7 +233,7 @@ axios
           activity_name: "",
           scheduled_date: "",
           scheduled_time: "",
-          end_time:""
+          end_time: "",
         });
         setActiveTab("call");
         fetchCall();
@@ -414,49 +409,58 @@ axios
                   <>
                     <section className="note-display">
                       <div className="note-content activity-content">
-                        <div
-                          className="arrow-greater"
-                          onClick={() => toggleExpand(index)}
-                        >
+                        <div className="arrow-greater activity-new-arrow">
                           <img src={GreaterArrow} alt="" />
                         </div>
 
                         <div className="notes-main">
-                          <div className="notes-by activity-by">
-                            <p onClick={() => toggleExpand(index)}>
-                              {item.activity_title}
-                              {/* <span>Task </span>
-                              assigned to anant */}
-                            </p>
-                            <div>
-                            </div>
-
+                          <div className="activity-flex">
                             <div
-                              className="activity-date-time"
+                              className="notes-by activity-by "
                               onClick={() => toggleExpand(index)}
                             >
-                              <img src={CalendarIcon} alt="" />
-                              <p className="common-fonts activity-due">
-                                {item.scheduled_date &&
+                              <input
+                                className={`common-fonts activity-call-name ${
+                                  expandedIndex !== index
+                                    ? "activity-new-disable-white"
+                                    : "activity-phone-input activity-new-input"
+                                }`}
+                                type="text"
+                                value={item.activity_title}
+                                name="activity_name"
+                                onChange={handleChange}
+                              />
+
+                              <div className="activity-date-time">
+                                <img src={CalendarIcon} alt="" />
+                                <p className="common-fonts activity-due">
+                                  {item.scheduled_date &&
                                   item.scheduled_date.includes("T") &&
                                   item.scheduled_date.includes(".")
-                            ? item.scheduled_date.split("T")[0] +
-                              " at " +
-                              item.scheduled_date.split("T")[1].split(".")[0]
-                            : "-"}
-                              </p>
-                              
-                            <div className="three-side-dots activity-del">
-                          <img
-                            src={bin}
-                            alt="trash"
-                            title="Delete"
-                            onClick={() => handleActivityDelete(item.id)}
-                          />
-                        </div>
+                                    ? item.scheduled_date.split("T")[0] +
+                                      " at " +
+                                      item.scheduled_date
+                                        .split("T")[1]
+                                        .split(".")[0]
+                                    : "-"}
+                                </p>
+                              </div>
                             </div>
-
+                            <div className="three-side-dots activity-del">
+                              <img
+                                src={bin}
+                                alt="trash"
+                                title="Delete"
+                                onClick={() => handleActivityDelete(item.id)}
+                                className={` ${
+                                  expansion === true
+                                    ? "activity-new-trash"
+                                    : "activity-trash"
+                                }`}
+                              />
+                            </div>
                           </div>
+
                           <div
                             className={`activity-phone ${
                               expandedIndex !== index
@@ -466,22 +470,41 @@ axios
                           >
                             <div className="activity-ring">
                               <div className="activity-calling-2">
-                                <img src={Calling} alt="" />
+                                <img
+                                  src={
+                                    item.activity_name === "call"
+                                      ? Call
+                                      : item.activity_name === "meeting"
+                                      ? Meeting
+                                      : item.activity_name === "deadline"
+                                      ? Deadline
+                                      : item.activity_name === "task"
+                                      ? Task
+                                      : ""
+                                  }
+                                  alt=""
+                                />
                               </div>
-                              <input
-                                disabled={
-                                  expandedIndex === index ? false : true
-                                }
+                              <select
+                                id=""
                                 className={`common-fonts activity-call-name ${
                                   expandedIndex !== index
                                     ? "activity-disable-white"
                                     : "activity-phone-input"
+                                } ${
+                                  expandedIndex !== index
+                                    ? "hide-select-arrow"
+                                    : ""
                                 }`}
-                                type="text"
                                 value={item.activity_name}
                                 name="activity_name"
                                 onChange={handleChange}
-                              />
+                              >
+                                <option value="">Call</option>
+                                <option value="">Meeting</option>
+                                <option value="">Task</option>
+                                <option value="">Deadline</option>
+                              </select>
                             </div>
                           </div>
 
@@ -493,7 +516,14 @@ axios
 
                                   <div className="custom-date-input activity-new-date">
                                     <div className="">
-                                      <input type="date" value={item.scheduled_date.split("T")[0]} name="scheduled_date" onChange={handleChange}/>
+                                      <input
+                                        type="date"
+                                        value={
+                                          item.scheduled_date.split("T")[0]
+                                        }
+                                        name="scheduled_date"
+                                        onChange={handleChange}
+                                      />
                                     </div>
                                   </div>
                                 </div>
@@ -503,14 +533,14 @@ axios
                                     name="scheduled_time"
                                     id=""
                                     className="common-fonts activity-timefrom-select"
-                                    value={item?.scheduled_time?.slice(0,5)}
+                                    value={item?.scheduled_time?.slice(0, 5)}
                                     onChange={handleChange}
                                   >
                                     {timeOptions.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
-                        </option>
-                      ))}
+                                      <option key={index} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
                                   </select>
                                 </div>
                                 <div className="activity-timefrom">
@@ -519,14 +549,14 @@ axios
                                     name="end_time"
                                     id=""
                                     className="common-fonts activity-timefrom-select"
-                                    value={item?.end_time?.slice(0,5)}
+                                    value={item?.end_time?.slice(0, 5)}
                                     onChange={handleChange}
                                   >
                                     {timeOptions.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
-                        </option>
-                      ))}
+                                      <option key={index} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
                                   </select>
                                 </div>
                                 <div className="activity-timefrom">
@@ -580,7 +610,16 @@ axios
               {expandedIndex === index && (
                 <div className="activity-bottom-buttons">
                   <button className="common-white-button">Cancel</button>
-                  <button className="common-save-button activity-save-buttons" onClick={() => handleActivityUpdate(item.id)}>
+                  <button
+                    className="common-delete-button"
+                    onClick={() => toggleExpandClose(index)}
+                  >
+                    CLose
+                  </button>
+                  <button
+                    className="common-save-button activity-save-buttons"
+                    onClick={() => handleActivityUpdate(item.id, index)}
+                  >
                     Save
                   </button>
                 </div>
