@@ -25,7 +25,7 @@ const DealsSetup = () => {
 
   const fetchDocs = () => {
     axios
-      .get(REQ_DOCUMENT, {
+      .get(REQ_DOCUMENT + "deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -386,7 +386,7 @@ const DealsSetup = () => {
         <button className="common-save-button cp-save">Save</button>
       </div> */}
       {isDocumentModalOpen && (
-        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs}/>
+        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs} type={"deal"}/>
       )}
       <ToastContainer />
     </div>
