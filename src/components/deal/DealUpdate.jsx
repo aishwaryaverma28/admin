@@ -17,6 +17,7 @@ import {
 import AddNotes from "../AddNotes";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DealAttachments from "./DealAttachments.jsx";
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -1358,7 +1359,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <p>Attachments</p>
+                <DealAttachments/>
               </div>
             )}
           </div>
