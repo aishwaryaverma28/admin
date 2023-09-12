@@ -23,9 +23,13 @@ import "react-toastify/dist/ReactToastify.css";
 const LeadActivity = ({ item, type, id }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
-
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [expansion, setExpansion] = useState(false);
+  const [tick, setTick] = useState(false);
+
+  const [editedTitle, setEditedTitle] = useState(item.activity_title)
+  const [editedDescription, setEditedDescription] = useState(item.activity_description)
+  const [timeTo, setTimeTo] = useState(item.end_time)
 
   // Function to generate time options with 15-minute intervals
   const generateTimeOptions = () => {
@@ -61,14 +65,29 @@ const LeadActivity = ({ item, type, id }) => {
     end_time: "",
     source_id: type === "lead" ? item.id : id,
   });
+  const [newform, setNewForm] = useState({
+    activity_description: item.activity_description,
+    activity_for: type,
+    activity_name: item.activity_name,
+    scheduled_date: item.scheduled_date,
+    scheduled_time: item.scheduled_time,
+    activity_title: item.activity_title,
+    end_time: item.end_time,
+    source_id: type === "lead" ? item.id : id,
+  });
 
   const toggleExpand = (index) => {
-    setExpandedIndex(index);
-    setExpansion(true);
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+      setExpansion(false);
+    } else {
+      setExpandedIndex(index);
+      setExpansion(true);
+    }
   };
-  const toggleExpandClose = (index) => {
-    setExpandedIndex(null);
-    setExpansion(false);
+
+  const toggleTick = () => {
+    setTick(!tick);
   };
 
   useEffect(() => {
@@ -82,9 +101,7 @@ const LeadActivity = ({ item, type, id }) => {
     }
   }, [selectedTimeFrom]);
 
-  useEffect(() => {
-    fetchCall();
-  }, []);
+
 
   const fetchCall = () => {
     if (type === "lead") {
@@ -126,6 +143,13 @@ const LeadActivity = ({ item, type, id }) => {
     }
   };
 
+  useEffect(() => {
+    fetchCall();
+  }, []);
+
+  console.log(activity)
+  console.log("bro")
+
   const handleActivityDelete = (id) => {
     axios
       .delete(DELETE_LEAD_ACTIVITY + id, {
@@ -149,7 +173,8 @@ const LeadActivity = ({ item, type, id }) => {
   };
   const handleActivityUpdate = (id, index) => {
     const updatedData = {
-      activity_description: form.activity_description,
+      activity_title: newform.activity_title,
+      activity_description:newform.activity_description
     };
 
     axios
@@ -177,11 +202,6 @@ const LeadActivity = ({ item, type, id }) => {
       });
   };
 
-  const handleActivityClose = (index) => {
-    setExpandedIndex(index);
-    setExpansion(false);
-  };
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setStateBtn(1);
@@ -192,13 +212,44 @@ const LeadActivity = ({ item, type, id }) => {
   };
 
   function handleChange(e) {
-    console.log(e.target);
     const { name, value } = e.target;
     setForm((prev) => {
       return { ...prev, [name]: value };
     });
     setStateBtn(1);
   }
+
+
+
+
+  function handleDescriptionChange(e) {
+    const { value } = e.target;
+    setEditedDescription(value); 
+  
+
+    setNewForm((prev) => ({
+      ...prev,
+      activity_description: value,
+    }));
+  
+    setEditedDescription(item.activity_description);
+  
+    setStateBtn(1);
+  }
+
+  function handleTitleChange(e) {
+    const { value } = e.target;
+    setEditedTitle(value);
+
+    setNewForm((prev) => {
+      return { ...prev, activity_title: value };
+    });
+    setEditedTitle(item.activity_title);
+    setStateBtn(1);
+  }
+
+
+
 
   const handleAddNote = () => {
     let updatedEndTime;
@@ -409,7 +460,10 @@ const LeadActivity = ({ item, type, id }) => {
                   <>
                     <section className="note-display">
                       <div className="note-content activity-content">
-                        <div className="arrow-greater activity-new-arrow">
+                        <div
+                          className="arrow-greater activity-new-arrow"
+                          onClick={() => toggleExpand(index)}
+                        >
                           <img src={GreaterArrow} alt="" />
                         </div>
 
@@ -419,17 +473,10 @@ const LeadActivity = ({ item, type, id }) => {
                               className="notes-by activity-by "
                               onClick={() => toggleExpand(index)}
                             >
-                              <input
-                                className={`common-fonts activity-call-name ${
-                                  expandedIndex !== index
-                                    ? "activity-new-disable-white"
-                                    : "activity-phone-input activity-new-input"
-                                }`}
-                                type="text"
-                                value={item.activity_title}
-                                name="activity_name"
-                                onChange={handleChange}
-                              />
+                              <p className="common-fonts activity-assigned-to">
+                                {item.activity_name} Assigned to :
+                                <span>Anant Singh</span>
+                              </p>
 
                               <div className="activity-date-time">
                                 <img src={CalendarIcon} alt="" />
@@ -452,11 +499,7 @@ const LeadActivity = ({ item, type, id }) => {
                                 alt="trash"
                                 title="Delete"
                                 onClick={() => handleActivityDelete(item.id)}
-                                className={` ${
-                                  expansion === true
-                                    ? "activity-new-trash"
-                                    : "activity-trash"
-                                }`}
+                                className="activity-trash"
                               />
                             </div>
                           </div>
@@ -469,42 +512,37 @@ const LeadActivity = ({ item, type, id }) => {
                             }`}
                           >
                             <div className="activity-ring">
-                              <div className="activity-calling-2">
-                                <img
-                                  src={
-                                    item.activity_name === "call"
-                                      ? Call
-                                      : item.activity_name === "meeting"
-                                      ? Meeting
-                                      : item.activity_name === "deadline"
-                                      ? Deadline
-                                      : item.activity_name === "task"
-                                      ? Task
-                                      : ""
-                                  }
-                                  alt=""
-                                />
-                              </div>
-                              <select
-                                id=""
+                              <i
+                                className={`fa fa-check-circle  ${
+                                  expandedIndex !== index
+                                    ? "hide-activity-tick"
+                                    : "show-activity-tick"
+                                } ${
+                                  tick === true
+                                    ? "green-activity-tick"
+                                    : "white-activity-tick"
+                                }`}
+                                onClick={toggleTick}
+                                aria-hidden="true"
+                              ></i>
+                              <input
+                                disabled={
+                                  expandedIndex !== index ? true : false
+                                }
                                 className={`common-fonts activity-call-name ${
                                   expandedIndex !== index
-                                    ? "activity-disable-white"
-                                    : "activity-phone-input"
-                                } ${
-                                  expandedIndex !== index
-                                    ? "hide-select-arrow"
-                                    : ""
+                                    ? "activity-new-disable-white"
+                                    : "activity-new-input"
                                 }`}
-                                value={item.activity_name}
-                                name="activity_name"
-                                onChange={handleChange}
-                              >
-                                <option value="">Call</option>
-                                <option value="">Meeting</option>
-                                <option value="">Task</option>
-                                <option value="">Deadline</option>
-                              </select>
+                                type="text"
+                                value={
+                                  expandedIndex === index
+                                    ? editedTitle
+                                    : item.activity_title
+                                }
+                                name="activity_title"
+                                onChange={handleTitleChange}
+                              />
                             </div>
                           </div>
 
@@ -566,7 +604,10 @@ const LeadActivity = ({ item, type, id }) => {
                                     id=""
                                     className="common-fonts activity-timefrom-select"
                                   >
-                                    <option value="">Deadline</option>
+                                    <option value="Call">Call</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Task">Task</option>
+                                    <option value="Deadline">Deadline</option>
                                   </select>
                                 </div>
                                 <div className="activity-timefrom">
@@ -587,12 +628,15 @@ const LeadActivity = ({ item, type, id }) => {
                                 </p>
                                 <textarea
                                   name="activity_description"
-                                  id="activity_description"
                                   cols="30"
                                   rows="5"
                                   className="activity-big-textarea"
-                                  value={item.activity_description}
-                                  onChange={handleChange}
+                                  value={
+                                    expandedIndex === index
+                                    ? editedDescription
+                                    : item.activity_description
+                                }
+                                  onChange={handleDescriptionChange}
                                 ></textarea>
                               </div>
                             </>
@@ -610,12 +654,7 @@ const LeadActivity = ({ item, type, id }) => {
               {expandedIndex === index && (
                 <div className="activity-bottom-buttons">
                   <button className="common-white-button">Cancel</button>
-                  <button
-                    className="common-delete-button"
-                    onClick={() => toggleExpandClose(index)}
-                  >
-                    CLose
-                  </button>
+
                   <button
                     className="common-save-button activity-save-buttons"
                     onClick={() => handleActivityUpdate(item.id, index)}
