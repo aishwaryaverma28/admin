@@ -584,11 +584,7 @@ input.activity-date-input {
   outline:none;
   background-color: #fff;
 }
-.activity-new-disable-white{
-  border:none;
-  outline:none;
-  background-color: #fff;
-}
+
 
 .activity-phone {
   margin-left: -0.7rem;
@@ -703,14 +699,12 @@ margin-left: 0.3rem;
 .activity-flex div:first-child{
   width: 100%;
 } 
-.activity-trash, .activity-new-trash {
+.activity-trash{
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  /* Add width and height properties to keep the size consistent */
-  width: 15px; /* Adjust the width as needed */
-  height: 15px; /* Adjust the height as needed */
+   margin-top: -0.5rem;
 }
 
 
@@ -724,9 +718,55 @@ margin-left: 0.3rem;
   padding-right: 20px; /* Adjust the padding to leave space for the arrow */
 }
 
+.activity-new-disable-white{
+  border:none;
+  outline:none;
+  background-color: #fff;
+  padding:0.5rem;
+}
+
 .activity-new-input{
  padding:0.5rem;
- margin-bottom: 0.5rem;
+ border: none;
+ outline: none;
+ background-color: #f4f5f9;
+
+}
+.activity-new-input:focus{
+ padding:0.5rem;
+ border: none;
+ outline: none;
+ background-color: #f4f5f9;
 
 }
 
+.activity-assigned-to span{
+font-weight: 600;
+}
+
+
+
+.hide-activity-tick{
+  display:none;
+}
+
+.show-activity-tick{
+  display: block;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 0.5rem;
+
+}
+
+.green-activity-tick{
+  color: #077838;
+  border:1px solid transparent;
+  border-radius: 50%;
+  
+}
+.white-activity-tick{
+  color: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 50%;
+
+}
