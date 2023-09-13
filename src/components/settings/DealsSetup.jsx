@@ -241,6 +241,12 @@ const DealsSetup = ({type}) => {
         </table>
       </div>
 
+      <div>
+         <div className="ds-setup-stage-btn">
+          <button className="common-fonts" onClick={handleAddStage}>+ Add Fields</button>
+         </div>
+      </div>
+
       <div className="ds-setup-accordian">
         <div>
           <div className="ds-setup-table-container">
