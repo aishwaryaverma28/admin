@@ -196,9 +196,6 @@ const DealsSetup = ({type}) => {
       <div>
          <p className="common-fonts ds-setup-info">Additional Information</p>
          <p className="common-fonts ds-setup-note">you can add five additional fields to your lead details. (0/5)</p>
-         <div className="ds-setup-stage-btn">
-          <button className="common-fonts" onClick={handleAddStage}>+ Add Stages</button>
-         </div>
       </div>
 
       <div className="ds-setup-table">

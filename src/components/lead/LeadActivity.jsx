@@ -147,9 +147,6 @@ const LeadActivity = ({ item, type, id }) => {
     fetchCall();
   }, []);
 
-  console.log(activity)
-  console.log("bro")
-
   const handleActivityDelete = (id) => {
     axios
       .delete(DELETE_LEAD_ACTIVITY + id, {

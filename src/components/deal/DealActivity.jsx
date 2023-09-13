@@ -26,6 +26,9 @@ const DealActivity = ({ item, type, id }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expansion, setExpansion] = useState(false);
+  const [tick, setTick] = useState(false);
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -40,6 +43,7 @@ const DealActivity = ({ item, type, id }) => {
 
   const timeOptions = generateTimeOptions();
   const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
+  const [activity, setActivity] = useState([]);
   const selectedTimeFromIndex = timeOptionsTo.indexOf(selectedTimeFrom);
   const nextIndex = selectedTimeFromIndex + 1;
   const newTime =
@@ -55,6 +59,7 @@ const DealActivity = ({ item, type, id }) => {
     source_id: type === "lead" ? item.id : id,
   });
 
+
   const fetchCall = () => {
     if (type === "lead") {
       axios
@@ -64,7 +69,7 @@ const DealActivity = ({ item, type, id }) => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data);
+          setActivity(response?.data?.data);
         })
 
         .catch((error) => {
@@ -83,6 +88,7 @@ const DealActivity = ({ item, type, id }) => {
         })
         .then((response) => {
           console.log(response?.data?.data);
+          setActivity(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -94,9 +100,49 @@ const DealActivity = ({ item, type, id }) => {
     }
   };
 
+  
+
+
+
+  
+  const handleActivityDelete = (id) => {
+    axios
+      .delete(DELETE_LEAD_ACTIVITY + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then(() => {
+        toast.success("Activity Deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        fetchCall();
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+        }
+      });
+  };
+
+  
+
   useEffect(() => {
     fetchCall();
   }, []);
+
+  useEffect(() => {
+    if (selectedTimeFrom) {
+      // Filter timeOptions to get options for the second dropdown
+      const filteredOptions = timeOptions.filter(
+        (time) => time > selectedTimeFrom
+      );
+      setTimeOptionsTo(filteredOptions);
+      setStateBtn(1);
+    }
+  }, [selectedTimeFrom]);
 
   const expandEditor = () => {
     setOpenEditor(true);
@@ -112,6 +158,13 @@ const DealActivity = ({ item, type, id }) => {
       return { ...prev, [name]: value };
     });
     setStateBtn(1);
+  }
+  
+  const handleActivityUpdate = (id, index) => {
+    const updatedData = {
+      activity_title: form?.activity_title,
+      activity_description:form?.activity_description
+    };
   }
 
   const handleAddNote = () => {
@@ -160,9 +213,23 @@ const DealActivity = ({ item, type, id }) => {
     setStateBtn(0);
   };
 
+  const toggleExpand = (index) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+      setExpansion(false);
+    } else {
+      setExpandedIndex(index);
+      setExpansion(true);
+    }
+  };
+
+  const toggleTick = () => {
+    setTick(!tick);
+  };
+
   return (
     <>
-      <div className="activity-container">
+      <div className="activity-container ">
         {!openEditor ? (
           <div className="colapedEditor" onClick={expandEditor}>
             <p>Click here to add an activity</p>
@@ -296,7 +363,7 @@ const DealActivity = ({ item, type, id }) => {
                   </select>
                 </div>
 
-                <div className="activity-button">
+                <div className="activity-button deal-activity-btn">
                   <button className="common-white-button">Cancel</button>
                   {stateBtn === 0 ? (
                     <button disabled className="disabledBtn">
@@ -315,9 +382,219 @@ const DealActivity = ({ item, type, id }) => {
             </div>
           </div>
         )}
+
+        {activity &&
+          activity.map((item, index) => (
+            <div className="activity-task-map">
+              <div className="activity-bottom">
+                <div className="savedNotes activity-save-note">
+                  <>
+                    <section className="note-display">
+                      <div className="note-content activity-content">
+                        <div
+                          className="arrow-greater activity-new-arrow"
+                          onClick={() => toggleExpand(index)}
+                        >
+                          <img src={GreaterArrow} alt="" />
+                        </div>
+
+                        <div className="notes-main">
+                          <div className="activity-flex">
+                            <div
+                              className="notes-by activity-by "
+                              onClick={() => toggleExpand(index)}
+                            >
+                              <p className="common-fonts activity-assigned-to">
+                                {item.activity_name} Assigned to :
+                                <span>Anant Singh</span>
+                              </p>
+
+                              <div className="activity-date-time">
+                                <img src={CalendarIcon} alt="" />
+                                <p className="common-fonts activity-due">
+                                  {item.scheduled_date &&
+                                  item.scheduled_date.includes("T") &&
+                                  item.scheduled_date.includes(".")
+                                    ? item.scheduled_date.split("T")[0] +
+                                      " at " +
+                                      item.scheduled_date
+                                        .split("T")[1]
+                                        .split(".")[0]
+                                    : "-"}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="three-side-dots activity-del">
+                              <img
+                                src={bin}
+                                alt="trash"
+                                title="Delete"
+                                onClick={() => handleActivityDelete(item.id)}
+                                className="activity-trash"
+                              />
+                            </div>
+                          </div>
+
+                          <div
+                            className={`activity-phone ${
+                              expandedIndex !== index
+                                ? "activity-disable-white"
+                                : "activity-new-call"
+                            }`}
+                          >
+                            <div className="activity-ring">
+                              <i
+                                className={`fa fa-check-circle  ${
+                                  expandedIndex !== index
+                                    ? "hide-activity-tick"
+                                    : "show-activity-tick"
+                                } ${
+                                  tick === true
+                                    ? "green-activity-tick"
+                                    : "white-activity-tick"
+                                }`}
+                                onClick={toggleTick}
+                                aria-hidden="true"
+                              ></i>
+                              <input
+                                disabled={
+                                  expandedIndex !== index ? true : false
+                                }
+                                className={`common-fonts activity-call-name ${
+                                  expandedIndex !== index
+                                    ? "activity-new-disable-white"
+                                    : "activity-new-input"
+                                }`}
+                                type="text"
+                                value={item?.activity_title
+                                }
+                                name="activity_title"
+                                onChange={handleChange}
+                              />
+                            </div>
+                          </div>
+
+                          {expandedIndex === index && (
+                            <>
+                              <div className="activity-open-time">
+                                <div className="activity-timefrom">
+                                  <label>Due Date</label>
+
+                                  <div className="custom-date-input activity-new-date">
+                                    <div className="">
+                                      <input
+                                        type="date"
+                                        value={
+                                          item.scheduled_date.split("T")[0]
+                                        }
+                                        name="scheduled_date"
+                                        onChange={handleChange}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Time From</label>
+                                  <select
+                                    name="scheduled_time"
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                    value={item?.scheduled_time?.slice(0, 5)}
+                                    onChange={handleChange}
+                                  >
+                                    {timeOptions.map((time, index) => (
+                                      <option key={index} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Time To</label>
+                                  <select
+                                    name="end_time"
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                    value={item?.end_time?.slice(0, 5)}
+                                    onChange={handleChange}
+                                  >
+                                    {timeOptions.map((time, index) => (
+                                      <option key={index} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Type</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="Call">Call</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Task">Task</option>
+                                    <option value="Deadline">Deadline</option>
+                                  </select>
+                                </div>
+                                <div className="activity-timefrom">
+                                  <label htmlFor="">Assign To</label>
+                                  <select
+                                    name=""
+                                    id=""
+                                    className="common-fonts activity-timefrom-select"
+                                  >
+                                    <option value="">Anant Singh</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div>
+                                <p className="common-fonts activity-describe">
+                                  Description
+                                </p>
+                                <textarea
+                                  name="activity_description"
+                                  cols="30"
+                                  rows="5"
+                                  className="activity-big-textarea"
+                                  value={item?.activity_description}
+                                  onChange={handleChange}
+                                ></textarea>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </section>
+
+                    {expandedIndex === index && (
+                      <div className={"answer display_answer"}></div>
+                    )}
+                  </>
+                </div>
+              </div>
+              {expandedIndex === index && (
+                <div className="activity-bottom-buttons">
+                  <button className="common-white-button">Cancel</button>
+
+                  <button
+                    className="common-save-button activity-save-buttons"
+                    onClick={() => handleActivityUpdate(item.id, index)}
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
       </div>
+
+
     </>
   );
 };
+
 
 export default DealActivity;
