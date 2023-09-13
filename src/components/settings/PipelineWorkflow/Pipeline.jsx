@@ -5,7 +5,7 @@ import ManageAccessPopUp from './ManageAccessPopUp.jsx.jsx';
 import Stage from './Stage';
 import Automate from './Automate';
 
-const Pipeline = () => {
+const Pipeline = ({type}) => {
   const [actionopen, setActionOpen] = useState(false);
   const [actionopen2, setActionOpen2] = useState(false);
   const actionDropDownRef = useRef(null);
@@ -145,7 +145,7 @@ const Pipeline = () => {
     
   {activeTab === "stage" && 
     (
-       <Stage/>
+       <Stage type={type}/>
     )
   
          }

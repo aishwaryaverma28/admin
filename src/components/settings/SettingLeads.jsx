@@ -37,7 +37,7 @@ const SettingLeads = () => {
        }
        {
         activeTab === "pipeline" && (
-          <Pipeline/>
+          <Pipeline type={"lead"}/>
         )
        }
       

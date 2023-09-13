@@ -7,14 +7,14 @@ import {
   getDecryptedToken,
 } from "../../utils/Constants";
 
-const Stage = () => {
+const Stage = ({type}) => {
   const [stages, setStages] = useState([]);
     const [customDocuments, setCustomDocuments] = useState([]);
     const decryptedToken = getDecryptedToken();
-
+    
     const fetchStatus = () => {
       axios
-        .get(GET_ALL_STAGE+"/deal", {
+        .get(GET_ALL_STAGE+"/"+type, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
