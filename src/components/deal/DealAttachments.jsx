@@ -69,7 +69,7 @@ const DealAttachments = ({ dealId, type }) => {
     fetchDocuments();
     uploadedDocs();
   }, []);
-y
+
   const handleDocumentChange = (event) => {
     const selectedDocumentName = event.target.value;
     const selectedDocument = availableDocuments.find(
@@ -225,12 +225,12 @@ y
                 marginRight: "10px",
               }}
             >
-              <button
+              {/* <button
                 className="contact-browse-btn common-fonts"
                 onClick={() => handleButtonClick(doc)}
               >
                 Browse
-              </button>
+              </button> */}
 
               <input
                 type="file"
@@ -246,7 +246,7 @@ y
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <button className="deal-doc-eye">
+              <button className="deal-doc-eye-2">
                 {" "}
                 <i className="fa-sharp fa-solid fa-eye "></i>
               </button>

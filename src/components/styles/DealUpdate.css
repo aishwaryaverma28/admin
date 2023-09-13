@@ -622,6 +622,14 @@ text-transform: capitalize;
   right:17%;
 }
 
+.deal-doc-eye-2{
+  border: none;
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+  right:2%;
+}
+
 .deal-doc-verify{
   margin-left:0.7rem;
   margin-top: 1rem;
