@@ -70,7 +70,6 @@ const DealAttachments = ({ dealId, type }) => {
     uploadedDocs();
   }, []);
 
-
   const handleDocumentChange = (event) => {
     const selectedDocumentName = event.target.value;
     const selectedDocument = availableDocuments.find(
@@ -118,7 +117,11 @@ const DealAttachments = ({ dealId, type }) => {
 
       if (response.status === 200) {
         toast.success(`File uploaded successfully`);
+        setSelectedDocuments((prevSelected) =>
+        prevSelected.filter((selectedDoc) => selectedDoc.id !== docId)
+      );
         uploadedDocs();
+
       }
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -222,12 +225,12 @@ const DealAttachments = ({ dealId, type }) => {
                 marginRight: "10px",
               }}
             >
-              <button
+              {/* <button
                 className="contact-browse-btn common-fonts"
                 onClick={() => handleButtonClick(doc)}
               >
                 Browse
-              </button>
+              </button> */}
 
               <input
                 type="file"
@@ -243,7 +246,7 @@ const DealAttachments = ({ dealId, type }) => {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <button className="deal-doc-eye">
+              <button className="deal-doc-eye-2">
                 {" "}
                 <i className="fa-sharp fa-solid fa-eye "></i>
               </button>
