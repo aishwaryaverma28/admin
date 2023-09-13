@@ -496,6 +496,70 @@
   margin-left: 1rem;
 }
 
+.ds-setup-info{
+font-size: 1.125rem;
+font-weight: 600;
+line-height: normal;
+margin-left: 1rem;
+margin-top: 2rem;
+}
+
+.ds-setup-note{
+  color:#33475B;
+  margin-left: 1rem;
+}
+
+.ds-setup-stage-btn{
+margin-left: 1rem;
+margin-top: 1rem;
+}
+
+.ds-setup-stage-btn button{
+  color: var(--ternary);
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+  border: 1px solid var(--ternary);
+}
+.ds-setup-stage-btn button:hover{
+  color: white;
+  background-color: var(--ternary);
+  cursor: pointer;
+  border: 1px solid var(--ternary);
+  transition: all 0.5s ease-in-out;
+}
+
+.ds-stage-input{
+  width: 100%;
+  margin-bottom: 1rem;
+  margin-top: 0.3rem;
+}
+
+.ds-stage-label{
+  color:#33475B;
+}
+
+.ds-setup-table th{
+background-color: #F3F6FA;
+text-align: left;
+}
+
+.ds-setup-table th:first-child{
+  width:50%;
+}
+
+.ds-setup-td-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ds-setup-menu{
+  width:8rem;
+  left: -0.6rem;
+}
+
+
+
 /* setting deals css ends */
 
 .add-component-input {
