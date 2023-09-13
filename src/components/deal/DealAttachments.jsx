@@ -69,8 +69,7 @@ const DealAttachments = ({ dealId, type }) => {
     fetchDocuments();
     uploadedDocs();
   }, []);
-
-
+y
   const handleDocumentChange = (event) => {
     const selectedDocumentName = event.target.value;
     const selectedDocument = availableDocuments.find(
@@ -118,7 +117,11 @@ const DealAttachments = ({ dealId, type }) => {
 
       if (response.status === 200) {
         toast.success(`File uploaded successfully`);
+        setSelectedDocuments((prevSelected) =>
+        prevSelected.filter((selectedDoc) => selectedDoc.id !== docId)
+      );
         uploadedDocs();
+
       }
     } catch (error) {
       console.error("Error uploading file:", error);
