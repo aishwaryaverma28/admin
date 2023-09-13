@@ -1,24 +1,47 @@
 import React from 'react'
-import '../styles/Error.css';
-import ErrorImg from "../../assets/image/404.jpg";
+import "../styles/DealUpdate.css";
+import { useState } from 'react';
+import DealsSetup from './DealsSetup.jsx';
+import Pipeline from './PipelineWorkflow/Pipeline.jsx';
 
 
 const SettingLeads = () => {
-    const handleGoBack = () => {
-        window.history.back(); // Navigate back in the browser history
-      };
+  const [activeTab, setActiveTab] = useState("setup");
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
   return (
-    <section className="lead-error-page">
-    <div>
-        <img src={ErrorImg} alt=""/>
-    </div>
-    <div className="lead-error-content error-font-style">
-        <p>404</p>
-        <p>page not found</p>
-        <p>We’re sorry, the page you requested could not be found. Please go back to the homepage</p>
-        <button onClick={handleGoBack}>Go back</button>
-    </div>
-</section>
+    <section className='ds-container'>
+    <p className='common-fonts ds-name'>Lead</p>
+
+    <div className="genral-setting-btn genral-setting-fonts">
+            <button
+              className={`genral-btn ${activeTab === "setup" ? "genral-active" : ""
+                }`}
+              onClick={() => handleTabClick("setup")}
+            >
+              Set Up
+            </button>
+            <button
+              className={`genral-btn ${activeTab === "pipeline" ? "genral-active" : ""
+                }`}
+              onClick={() => handleTabClick("pipeline")}
+            >
+              Pipeline
+            </button>
+          </div>
+       {
+        activeTab === "setup" && (
+          <DealsSetup type={"lead"}/>
+        )
+       }
+       {
+        activeTab === "pipeline" && (
+          <Pipeline/>
+        )
+       }
+      
+    </section>
   )
 }
 

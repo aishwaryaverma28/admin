@@ -32,7 +32,7 @@ const SettingDeal = () => {
           </div>
        {
         activeTab === "setup" && (
-          <DealsSetup/>
+          <DealsSetup type={"deal"}/>
         )
        }
        {

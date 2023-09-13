@@ -13,7 +13,7 @@ import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 
-const DealsSetup = () => {
+const DealsSetup = ({type}) => {
   const decryptedToken = getDecryptedToken();
   const [customDocuments, setCustomDocuments] = useState([]);
   const [showBasic, setShowBasic] = useState(false);
@@ -25,7 +25,7 @@ const DealsSetup = () => {
 
   const fetchDocs = () => {
     axios
-      .get(REQ_DOCUMENT + "deal", {
+      .get(REQ_DOCUMENT + type, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
