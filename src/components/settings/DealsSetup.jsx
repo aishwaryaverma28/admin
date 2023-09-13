@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import {
   REQ_DOCUMENT,
@@ -12,6 +12,7 @@ import "../styles/DealUpdate.css";
 import SetUp from "../../assets/image/setup.svg";
 import GreaterUp from "../../assets/image/greater-up.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
+import StageModal from "./StageModal.jsx";
 
 const DealsSetup = ({type}) => {
   const decryptedToken = getDecryptedToken();
@@ -22,6 +23,14 @@ const DealsSetup = ({type}) => {
   const [doc, setDoc] = useState([]);
   const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+ const [openModal, setOpenModal] = useState(false);
+ const [actionopen, setActionOpen] = useState(false);
+ const actionDropDownRef = useRef(null);
+
+ const toggleActionDropdown = () => {
+  setActionOpen(!actionopen);
+};
+
 
   const fetchDocs = () => {
     axios
@@ -48,6 +57,26 @@ const DealsSetup = ({type}) => {
       .map((item) => item.id);
     setSelectedDocumentIds(updatedSelectedIds);
   }, [doc]);
+
+  useEffect(() => {
+
+
+    const handleOutsideClick = (event) => {
+      if (
+        actionDropDownRef.current &&
+        !actionDropDownRef.current.contains(event.target)
+      ) {
+        setActionOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+
+    };
+  }, []);
 
   const handleCheckboxChange = (id) => {
     setSelectedDocumentIds((prevIds) => {
@@ -109,6 +138,13 @@ const DealsSetup = ({type}) => {
     setIsDocumentModalOpen(false);
   };
 
+  const handleAddStage = () => {
+    setOpenModal(true);
+  }
+  const handleCloseStage = () => {
+    setOpenModal(false);
+  }
+
   return (
     <div className="ds-setup-container">
       <p className="common-fonts ds-setup-heading">creating deals</p>
@@ -153,6 +189,56 @@ const DealsSetup = ({type}) => {
         <label htmlFor="ds-setup-2" className="common-fonts">
           Time from deal creation
         </label>
+      </div>
+
+      
+
+      <div>
+         <p className="common-fonts ds-setup-info">Additional Information</p>
+         <p className="common-fonts ds-setup-note">you can add five additional fields to your lead details. (0/5)</p>
+         <div className="ds-setup-stage-btn">
+          <button className="common-fonts" onClick={handleAddStage}>+ Add Stages</button>
+         </div>
+      </div>
+
+      <div className="ds-setup-table">
+        <table>
+          <tr>
+            <th className="common-fonts">Field Name</th>
+            <th className="common-fonts">Field Value</th>
+          </tr>
+          <tr>
+            <td className="common-fonts">Type Of Security</td>
+            <td className="common-fonts">
+            <div className="ds-setup-td-flex">
+              <span>Property</span>
+              <div className="select action-select">
+              <div className="dropdown-container" ref={actionDropDownRef}>
+                <div
+                  className="dropdown-header2"
+                  onClick={toggleActionDropdown}
+                >
+                  Actions{" "}
+                  <i
+                    className={`fa-sharp fa-solid ${
+                      actionopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
+                </div>
+                {actionopen && (
+                  <ul className="dropdown-menu ds-setup-menu">                 
+                    <li>Add</li>
+                    <li>Edit</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+            </div>
+            
+              
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div className="ds-setup-accordian">
@@ -389,6 +475,11 @@ const DealsSetup = ({type}) => {
         <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs} type={type}/>
       )}
       <ToastContainer />
+      {
+        openModal && (
+          <StageModal onClose={handleCloseStage} />
+        )
+      }
     </div>
   );
 };
