@@ -156,4 +156,5 @@ export const UPDATE_LEAD_ACTIVITY = start + "api/leaddeal/activity/edit/";
 
 //=================================================================================upload documents
 export const UPLOADED_DOCS = start + "api/deal/getuplaoddoc/";
-export const UPLOAD_ATTACHMENTS = start + "api/deal/uplaoddoc"
+export const UPLOAD_ATTACHMENTS = start + "api/deal/uplaoddoc";
+export const VIEW_DOC = start + "deal/doc/";

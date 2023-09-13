@@ -13,11 +13,11 @@ import {
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
-import LeadDocUp from "./../LeadDocUp";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 import LeadActivity from "./LeadActivity.jsx";
+import DealAttachments from "../deal/DealAttachments";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -98,7 +98,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             " " +
             response?.data?.data[0]?.ownerl_name
         );
-        setSelectedStageId(response?.data?.data[0]?.stage_id)
+        setSelectedStageId(response?.data?.data[0]?.stage_id);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -161,7 +161,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       });
   };
 
-
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -198,9 +197,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         ...editedItem,
         label_id: selectedLabelData.id,
       });
-    } else if(name==="stage_id"){
-      setSelectedStageId(e.target.value)
-    }else {
+    } else if (name === "stage_id") {
+      setSelectedStageId(e.target.value);
+    } else {
       setEditedItem({
         ...editedItem,
         [name]: value,
@@ -930,7 +929,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
               className={activeTab === "activity" ? "active" : ""}
               onClick={() => handleTabClick("activity")}
             >
-             <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
+              <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
               Activity
             </button>
             <button
@@ -958,12 +957,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <LeadActivity item={selectedItem} type={"lead"}/>
+                <LeadActivity item={selectedItem} type={"lead"} />
               </div>
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <LeadDocUp item={selectedItem} />
+                <DealAttachments dealId={selectedItem.id} type={"lead"} />
               </div>
             )}
           </div>

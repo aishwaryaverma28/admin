@@ -4,6 +4,7 @@ import {
   getDecryptedToken,
   REQ_DOCUMENT,
   UPLOAD_ATTACHMENTS,
+  VIEW_DOC,
   UPLOADED_DOCS,
 } from "../utils/Constants";
 import axios from "axios";
@@ -52,9 +53,10 @@ const DealAttachments = ({ dealId, type }) => {
       .then((response) => {
         setAttachment(response?.data?.message);
 
-        const uploadedNames = response?.data?.message.map((doc) => doc.document_name);
+        const uploadedNames = response?.data?.message.map(
+          (doc) => doc.document_name
+        );
         setUploadedDocumentNames(uploadedNames);
-
       })
       .catch((error) => {
         console.log(error);
@@ -69,6 +71,7 @@ const DealAttachments = ({ dealId, type }) => {
     fetchDocuments();
     uploadedDocs();
   }, []);
+  console.log(attachment);
 
   const handleDocumentChange = (event) => {
     const selectedDocumentName = event.target.value;
@@ -101,7 +104,6 @@ const DealAttachments = ({ dealId, type }) => {
   const handleBrowseClick = async (file) => {
     console.log(file);
     const formData = new FormData();
-    // formData.append('file', file);
     formData.append("source_type", type);
     formData.append("source_id", dealId);
     formData.append("docId", docId);
@@ -118,15 +120,17 @@ const DealAttachments = ({ dealId, type }) => {
       if (response.status === 200) {
         toast.success(`File uploaded successfully`);
         setSelectedDocuments((prevSelected) =>
-        prevSelected.filter((selectedDoc) => selectedDoc.id !== docId)
-      );
+          prevSelected.filter((selectedDoc) => selectedDoc.id !== docId)
+        );
         uploadedDocs();
-
       }
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Error uploading file.");
     }
+  };
+  const handleViewDocument = (imageUrl) => {
+    window.open(VIEW_DOC + imageUrl, "_blank");
   };
 
   return (
@@ -191,17 +195,16 @@ const DealAttachments = ({ dealId, type }) => {
                   right: 0,
                   width: "100%",
                 }}
-               
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <button className="deal-doc-eye">
+              {/* <button className="deal-doc-eye">
                 {" "}
                 <i className="fa-sharp fa-solid fa-eye "></i>
-              </button>
+              </button> */}
               {fileName && (
                 <span className="common-fonts upload-file-name">
-                  {/* Selected File: {fileName} */}
+                  Selected File: {fileName.name}
                 </span>
               )}
             </span>
@@ -213,8 +216,10 @@ const DealAttachments = ({ dealId, type }) => {
         <div key={index} className="contact-tab-fields deal-doc-verify">
           <label className="common-fonts contact-tab-label deal-doc-label">
             <span>{doc.document_name}</span>
-
-           <i className="fa fa-check-circle deal-doc-tick" aria-hidden="true"></i>{" "} 
+            <i
+              className="fa fa-check-circle deal-doc-tick"
+              aria-hidden="true"
+            ></i>{" "}
             <span>(Uploaded)</span>
           </label>
           <div className="contact-browse deal-doc-file">
@@ -246,15 +251,15 @@ const DealAttachments = ({ dealId, type }) => {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <button className="deal-doc-eye-2">
-                {" "}
-                <i className="fa-sharp fa-solid fa-eye "></i>
+              <button
+                className="deal-doc-eye-2"
+                onClick={() => handleViewDocument(doc.document_url)}
+              >
+                <i className="fa-sharp fa-solid fa-eye"></i>
               </button>
-              {fileName && (
-                <span className="common-fonts upload-file-name">
-                   {/* Selected File: {fileName}  */}
-                </span>
-              )}
+              <span className="common-fonts upload-file-name">
+                Selected File: {doc.document_url}
+              </span>
             </span>
           </div>
         </div>
