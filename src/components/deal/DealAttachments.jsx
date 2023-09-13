@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   handleLogout,
   getDecryptedToken,
-  REQ_DOCUMENT
+  REQ_DOCUMENT,
+  UPLOAD_ATTACHMENTS,
+  UPLOADED_DOCS
 } from "../utils/Constants";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -14,8 +16,9 @@ const DealAttachments = ({dealId, type}) => {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [fileName, setFileName] = useState("");
   const [docId, setDocId] = useState(0);
+  const [attachment, setAttachment] = useState([])
   const fileInputRef = useRef(null);
-console.log(decryptedToken);
+
   const fetchDocuments = () => {
     axios
       .get(REQ_DOCUMENT + type, {
@@ -37,10 +40,27 @@ console.log(decryptedToken);
         }
       });
   };
-
+const uploadedDocs = () => {
+  axios.get(UPLOADED_DOCS + type +"/" + dealId,{
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`,
+    },
+  })
+  .then((response) => {
+    setAttachment(response?.data?.message);
+  })
+  .catch((error) => {
+    console.log(error);
+    if (error?.response?.data?.message === "Invalid or expired token.") {
+      alert(error?.response?.data?.message);
+      handleLogout();
+    }
+  });
+}
   
   useEffect(() => {
     fetchDocuments();
+    uploadedDocs();
   }, []);
 
   const handleDocumentChange = (event) => {
@@ -81,7 +101,7 @@ const handleFileChange = (event) => {
   
       try {
         const response = await axios.post(
-          "http://core.leadplaner.com:3001/api/deal/uplaoddoc",
+          UPLOAD_ATTACHMENTS,
           formData,
           {
             headers: {
@@ -92,8 +112,8 @@ const handleFileChange = (event) => {
         );
   
         if (response.status === 200) {
-          toast.success(`File uploaded successfully for ${file.document_name}.`);
-          // You can update the document's status here if needed.
+          toast.success(`File uploaded successfully`);
+          uploadedDocs();
         }
       } catch (error) {
         console.error('Error uploading file:', error);
