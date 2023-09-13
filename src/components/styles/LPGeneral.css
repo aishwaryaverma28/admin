@@ -461,7 +461,9 @@ input.activity-date-input {
   margin-bottom: 8rem;
 }
 
-
+.deal-activity-btn{
+  margin-bottom: 1rem;
+}
 .activity-calling {
   border-radius: 50%;
   border: 1px solid #dcdcdc;

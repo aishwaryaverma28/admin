@@ -100,6 +100,12 @@
   outline: none;
 }
 
+.stage-new-save{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .stages-addition {
   color: var(--ternary);
   font-weight: 500;
