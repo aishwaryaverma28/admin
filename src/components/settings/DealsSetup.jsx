@@ -386,7 +386,7 @@ const DealsSetup = ({type}) => {
         <button className="common-save-button cp-save">Save</button>
       </div> */}
       {isDocumentModalOpen && (
-        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs} type={"deal"}/>
+        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs} type={type}/>
       )}
       <ToastContainer />
     </div>
