@@ -258,7 +258,7 @@ const DealAttachments = ({ dealId, type }) => {
                 <i className="fa-sharp fa-solid fa-eye"></i>
               </button>
               <span className="common-fonts upload-file-name">
-                Selected File: {doc.document_url}
+                Selected File: {doc.document_url.length<30 ?  doc.document_url : doc.document_url.slice(0,30)+"..."}
               </span>
             </span>
           </div>
