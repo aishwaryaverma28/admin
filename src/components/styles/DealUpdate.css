@@ -627,6 +627,12 @@ text-transform: capitalize;
   margin-top: 1rem;
 }
 
+.deal-doc-label{
+display: flex;
+justify-content: start;
+align-items: center;
+}
+
 
 .deal-doc-label span:first-child{
   font-weight: 500;
@@ -636,6 +642,10 @@ text-transform: capitalize;
 .deal-doc-label i{
 color: #077838;
 margin-right: 0.7rem;
+}
+
+.deal-doc-label img{
+  margin-right: 0.7rem;
 }
 .deal-doc-label span:last-child{
   color: var(--Tertiary-Text, #909DB0);
