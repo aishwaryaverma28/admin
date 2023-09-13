@@ -37,7 +37,7 @@ const SettingDeal = () => {
        }
        {
         activeTab === "pipeline" && (
-          <Pipeline/>
+          <Pipeline type={"deal"}/>
         )
        }
       
