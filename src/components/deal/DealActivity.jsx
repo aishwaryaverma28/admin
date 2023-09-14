@@ -25,6 +25,7 @@ const DealActivity = ({ item, type, id }) => {
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
+  const [updateBtn,setUpdateBtn] = useState(0);
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [expansion, setExpansion] = useState(false);
@@ -87,7 +88,7 @@ const DealActivity = ({ item, type, id }) => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data);
+          // console.log(response?.data?.data);
           setActivity(response?.data?.data);
         })
         .catch((error) => {
@@ -100,11 +101,6 @@ const DealActivity = ({ item, type, id }) => {
     }
   };
 
-  
-
-
-
-  
   const handleActivityDelete = (id) => {
     axios
       .delete(DELETE_LEAD_ACTIVITY + id, {
@@ -126,8 +122,6 @@ const DealActivity = ({ item, type, id }) => {
         }
       });
   };
-
-  
 
   useEffect(() => {
     fetchCall();
@@ -160,14 +154,7 @@ const DealActivity = ({ item, type, id }) => {
     setStateBtn(1);
   }
   
-  const handleActivityUpdate = (id, index) => {
-    const updatedData = {
-      activity_title: form?.activity_title,
-      activity_description:form?.activity_description
-    };
-  }
-
-  const handleAddNote = () => {
+    const handleAddNote = () => {
     let updatedEndTime;
     if (form.end_time === "") {
       updatedEndTime = newTime;
@@ -190,8 +177,8 @@ const DealActivity = ({ item, type, id }) => {
         },
       })
       .then((response) => {
-        console.log(response);
-        toast.success("Employee data added successfully", {
+        // console.log(response);
+        toast.success("Activity added successfully", {
           position: "top-center",
           autoClose: 2000,
         });
@@ -226,6 +213,91 @@ const DealActivity = ({ item, type, id }) => {
   const toggleTick = () => {
     setTick(!tick);
   };
+
+  const handleTitleChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].activity_title = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+  const handleDescriptionChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].activity_description = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+
+  const handleDateChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].scheduled_date = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+
+  const handleTimeChange = (event, index) => {
+    const newActivity = [...activity];
+    const selectedStartTime = event.target.value;
+    newActivity[index].scheduled_time = selectedStartTime;
+    const [hours, minutes] = selectedStartTime.split(":");
+    const startTime = new Date();
+    startTime.setHours(parseInt(hours, 10));
+    startTime.setMinutes(parseInt(minutes, 10));
+    startTime.setMinutes(startTime.getMinutes() + 15);
+    const endHours = String(startTime.getHours()).padStart(2, '0');
+    const endMinutes = String(startTime.getMinutes()).padStart(2, '0');
+    const formattedEndTime = `${endHours}:${endMinutes}`;
+    newActivity[index].end_time = formattedEndTime;  
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+  
+  const handleEndTimeChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].end_time = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+
+  const handleTypeChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].activity_name = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
+
+  const handleCancleChange = (id,index) => {
+       setUpdateBtn(0);
+  };
+
+    const handleActivityUpdate = (actId, index) => {
+      const newActivity = [...activity];
+    const updatedData = {
+      activity_for: type,
+      activity_title: newActivity[index].activity_title,
+      activity_description: newActivity[index].activity_description,
+      scheduled_time:newActivity[index].scheduled_time,
+      end_time:newActivity[index].end_time,
+      activity_name:newActivity[index].activity_name,
+      scheduled_date:newActivity[index].scheduled_date,
+    };
+    console.log(updatedData)
+    axios.put(UPDATE_LEAD_ACTIVITY + actId, updatedData, {
+headers: {
+  Authorization: `Bearer ${decryptedToken}`,
+}
+    })
+    .then((response) => {
+      console.log(response);
+      toast.success("Activity updated successfully", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    setUpdateBtn(0);
+  }
 
   return (
     <>
@@ -466,10 +538,9 @@ const DealActivity = ({ item, type, id }) => {
                                     : "activity-new-input"
                                 }`}
                                 type="text"
-                                value={item?.activity_title
-                                }
+                                value={item?.activity_title}
                                 name="activity_title"
-                                onChange={handleChange}
+                                onChange={(event) => handleTitleChange(event, index)}
                               />
                             </div>
                           </div>
@@ -488,7 +559,7 @@ const DealActivity = ({ item, type, id }) => {
                                           item.scheduled_date.split("T")[0]
                                         }
                                         name="scheduled_date"
-                                        onChange={handleChange}
+                                        onChange={(event) => handleDateChange(event, index)}
                                       />
                                     </div>
                                   </div>
@@ -500,7 +571,7 @@ const DealActivity = ({ item, type, id }) => {
                                     id=""
                                     className="common-fonts activity-timefrom-select"
                                     value={item?.scheduled_time?.slice(0, 5)}
-                                    onChange={handleChange}
+                                    onChange={(event) => handleTimeChange(event, index)}
                                   >
                                     {timeOptions.map((time, index) => (
                                       <option key={index} value={time}>
@@ -516,7 +587,7 @@ const DealActivity = ({ item, type, id }) => {
                                     id=""
                                     className="common-fonts activity-timefrom-select"
                                     value={item?.end_time?.slice(0, 5)}
-                                    onChange={handleChange}
+                                    onChange={(event) => handleEndTimeChange(event, index)}
                                   >
                                     {timeOptions.map((time, index) => (
                                       <option key={index} value={time}>
@@ -528,9 +599,11 @@ const DealActivity = ({ item, type, id }) => {
                                 <div className="activity-timefrom">
                                   <label htmlFor="">Type</label>
                                   <select
-                                    name=""
-                                    id=""
+                                    name="activity_name"
+                                    id="activity_name"
+                                    value={item?.activity_name}
                                     className="common-fonts activity-timefrom-select"
+                                    onChange={(event) => handleTypeChange(event, index)}
                                   >
                                     <option value="Call">Call</option>
                                     <option value="Meeting">Meeting</option>
@@ -560,7 +633,7 @@ const DealActivity = ({ item, type, id }) => {
                                   rows="5"
                                   className="activity-big-textarea"
                                   value={item?.activity_description}
-                                  onChange={handleChange}
+                                  onChange={(event) => handleDescriptionChange(event, index)}
                                 ></textarea>
                               </div>
                             </>
@@ -577,14 +650,21 @@ const DealActivity = ({ item, type, id }) => {
               </div>
               {expandedIndex === index && (
                 <div className="activity-bottom-buttons">
-                  <button className="common-white-button">Cancel</button>
+                  <button className="common-white-button"
+                   onClick={() => handleCancleChange(item.id,index)}>Cancel</button>
 
-                  <button
+                  {updateBtn === 0 ? (
+                    <button disabled className="disabledBtn">
+                      Save
+                    </button>
+                  ) : (
+                    <button
                     className="common-save-button activity-save-buttons"
                     onClick={() => handleActivityUpdate(item.id, index)}
                   >
                     Save
                   </button>
+                  )}
                 </div>
               )}
             </div>
