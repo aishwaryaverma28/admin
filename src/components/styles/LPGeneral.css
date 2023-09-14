@@ -772,3 +772,9 @@ font-weight: 600;
   border-radius: 50%;
 
 }
+
+
+.activity-height{
+  height:70vh;
+  overflow-y: scroll;
+}

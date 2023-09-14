@@ -10,13 +10,14 @@ import {
   getDecryptedToken,
   GET_LABEL,
   GET_ALL_STAGE,
+  UPLOADED_DOCS,
+  GET_ACTIVITY
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
-import LeadActivity from "./LeadActivity.jsx";
 import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 
@@ -26,6 +27,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [editedItem, setEditedItem] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
+  const [activityCount, setActivityCount] = useState();
   const [stateBtn, setStateBtn] = useState(0);
   const decryptedToken = getDecryptedToken();
   const [name, setName] = useState("");
@@ -40,9 +42,33 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [convertModalVisible, setConvertModalVisible] = useState(false);
   const [stages, setStages] = useState([]);
   const [stageId, setStageId] = useState([]);
+  const [attachedFile, setAttachedFiles] = useState();
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
+
+  const uploadedDocs = () => {
+    axios
+      .get(UPLOADED_DOCS + "lead" + "/" + selectedItem.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setAttachedFiles(response?.data?.message?.length);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
+  useEffect(() => {
+    uploadedDocs();
+  }, []);
 
   const openConvertModal = (item) => {
     setSelectedConvertItem(item); // Set the selected item
@@ -51,6 +77,27 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const closeConvertModal = () => {
     setSelectedConvertItem(null); // Clear the selected item
     setConvertModalVisible(false); // Close the modal
+  };
+
+  const fetchCall = () => {
+      axios
+        .get(GET_ACTIVITY + "lead/" + selectedItem.id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setActivityCount(response?.data?.data?.length);
+        })
+
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+
   };
 
   const fetchStages = () => {
@@ -164,7 +211,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     fetchNotes();
+    fetchCall();
   }, []);
+
 
   const fetchNotes = () => {
     axios
@@ -931,14 +980,14 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
               onClick={() => handleTabClick("activity")}
             >
               <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
-              Activity
+              Activity ({activityCount})
             </button>
             <button
               className={activeTab === "attachment" ? "active" : ""}
               onClick={() => handleTabClick("attachment")}
             >
               <i className="fa-sharp fa-solid fa-paperclip"></i>
-              Attachment
+              Attachment ({attachedFile})
             </button>
           </div>
           <div className="tab-content">
@@ -958,12 +1007,16 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <DealActivity item={selectedItem} type={"lead"} />
+                <DealActivity item={selectedItem} type={"lead"} count={fetchCall} />
               </div>
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <DealAttachments dealId={selectedItem.id} type={"lead"} />
+                <DealAttachments
+                  dealId={selectedItem.id}
+                  type={"lead"}
+                  onAttachNum={uploadedDocs}
+                />
               </div>
             )}
           </div>

@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import notUpload from "../../assets/image/notupload.svg";
 
-const DealAttachments = ({ dealId, type }) => {
+const DealAttachments = ({ dealId, type, onAttachNum }) => {
   const decryptedToken = getDecryptedToken();
   const [documentList, setDocumentList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
@@ -21,6 +21,7 @@ const DealAttachments = ({ dealId, type }) => {
   const [attachment, setAttachment] = useState([]);
   const fileInputRef = useRef(null);
   const [uploadedDocumentNames, setUploadedDocumentNames] = useState([]);
+
 
   const fetchDocuments = () => {
     axios
@@ -85,6 +86,8 @@ const DealAttachments = ({ dealId, type }) => {
         selectedDocument,
       ]);
     }
+
+    setFileName("");
   };
 
   const availableDocuments = documentList.filter(
@@ -123,6 +126,7 @@ const DealAttachments = ({ dealId, type }) => {
           prevSelected.filter((selectedDoc) => selectedDoc.id !== docId)
         );
         uploadedDocs();
+        onAttachNum();
       }
     } catch (error) {
       console.error("Error uploading file:", error);
