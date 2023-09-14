@@ -436,3 +436,31 @@
   align-items: center;
   gap: 1rem;
 }
+
+.quillEditor2 .ql-toolbar {
+  position: relative;
+  border: 1px solid #ccc; /* Add or adjust border styles as needed */
+  border-radius: 4px; /* Add or adjust border radius as needed */
+}
+
+.quillEditor2 .ql-toolbar.ql-snow {
+  height: auto;
+  top: 9.1rem; /* Adjust this value to move the icons down */
+  border: 1px solid #ccc;
+  z-index: 1000;
+  background: #f4f5f9;
+}
+
+.quillEditor2 .ql-toolbar button {
+  padding: 5px 8px;
+  margin: 0 2px;
+}
+
+.quillEditor2 .ql-container{
+  margin-top: -40px;
+}
+
+.abc{
+  border-top: 1px solid #ccc;
+  width: 99%;
+}
