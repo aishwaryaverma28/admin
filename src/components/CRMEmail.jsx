@@ -3,6 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./styles/BlogAdd.css";
 
+
 function CRMeditor({ onDataTransfer, initialContent }) {
   const [value, setValue] = useState("");
 
@@ -20,12 +21,12 @@ function CRMeditor({ onDataTransfer, initialContent }) {
 
   return (
     <ReactQuill
-      theme="snow"
-      value={value}
-      onChange={handleQuillChange}
-      modules={modules}
-      className="quillEditor"
-    />
+    theme="snow"
+    value={value}
+    onChange={handleQuillChange}
+    modules={modules}
+    className="quillEditor quillEditor2 abc"
+  />
   );
 }
 
