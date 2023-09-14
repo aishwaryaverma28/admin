@@ -114,6 +114,7 @@ const DealActivity = ({ item, type, id, count }) => {
           autoClose: 2000,
         });
         fetchCall();
+        count();
       })
       .catch((error) => {
         console.log(error);
