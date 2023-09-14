@@ -21,6 +21,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealAttachments from "./DealAttachments.jsx";
 import DealActivity from "./DealActivity";
+import DealEmail from "./DealEmail.jsx";
 
 
 
@@ -1413,7 +1414,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <p>Email</p>
+                <DealEmail/>
               </div>
             )}
             {activeTab === "activity" && (
