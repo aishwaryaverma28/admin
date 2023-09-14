@@ -864,11 +864,11 @@
 }
 
 .tab-navigation button {
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: 1px solid #d8d8d8;
   border-radius: 0.3125rem;
   font-family: "Lexend Deca";
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

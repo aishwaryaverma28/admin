@@ -20,12 +20,12 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealActivity = ({ item, type, id }) => {
+const DealActivity = ({ item, type, id, count }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
   const [stateBtn, setStateBtn] = useState(0);
-  const [updateBtn,setUpdateBtn] = useState(0);
+  const [updateBtn, setUpdateBtn] = useState(0);
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [expansion, setExpansion] = useState(false);
@@ -48,7 +48,7 @@ const DealActivity = ({ item, type, id }) => {
   const selectedTimeFromIndex = timeOptionsTo.indexOf(selectedTimeFrom);
   const nextIndex = selectedTimeFromIndex + 1;
   const newTime =
-  nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
+    nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
   const [form, setForm] = useState({
     activity_description: "",
     activity_for: type,
@@ -57,9 +57,9 @@ const DealActivity = ({ item, type, id }) => {
     scheduled_time: "",
     activity_title: "",
     end_time: "",
+    is_completed: null,
     source_id: type === "lead" ? item.id : id,
   });
-
 
   const fetchCall = () => {
     if (type === "lead") {
@@ -153,8 +153,8 @@ const DealActivity = ({ item, type, id }) => {
     });
     setStateBtn(1);
   }
-  
-    const handleAddNote = () => {
+
+  const handleAddNote = () => {
     let updatedEndTime;
     if (form.end_time === "") {
       updatedEndTime = newTime;
@@ -191,6 +191,7 @@ const DealActivity = ({ item, type, id }) => {
         });
         setActiveTab("call");
         fetchCall();
+        count();
       })
       .catch((error) => {
         console.log(error);
@@ -210,9 +211,15 @@ const DealActivity = ({ item, type, id }) => {
     }
   };
 
-  const toggleTick = () => {
-    setTick(!tick);
+  const toggleCompletion = (index) => {
+    setActivity((prevActivity) => {
+      const newActivity = [...prevActivity];
+      newActivity[index].is_completed = newActivity[index].is_completed === null ? 1 : null;
+      return newActivity;
+    });
+    setUpdateBtn(1);
   };
+  
 
   const handleTitleChange = (event, index) => {
     const newActivity = [...activity];
@@ -243,14 +250,14 @@ const DealActivity = ({ item, type, id }) => {
     startTime.setHours(parseInt(hours, 10));
     startTime.setMinutes(parseInt(minutes, 10));
     startTime.setMinutes(startTime.getMinutes() + 15);
-    const endHours = String(startTime.getHours()).padStart(2, '0');
-    const endMinutes = String(startTime.getMinutes()).padStart(2, '0');
+    const endHours = String(startTime.getHours()).padStart(2, "0");
+    const endMinutes = String(startTime.getMinutes()).padStart(2, "0");
     const formattedEndTime = `${endHours}:${endMinutes}`;
-    newActivity[index].end_time = formattedEndTime;  
+    newActivity[index].end_time = formattedEndTime;
     setActivity(newActivity);
     setUpdateBtn(1);
   };
-  
+
   const handleEndTimeChange = (event, index) => {
     const newActivity = [...activity];
     newActivity[index].end_time = event.target.value;
@@ -265,40 +272,43 @@ const DealActivity = ({ item, type, id }) => {
     setUpdateBtn(1);
   };
 
-  const handleCancleChange = (id,index) => {
-       setUpdateBtn(0);
+  const handleCancleChange = (id, index) => {
+    setUpdateBtn(0);
   };
 
-    const handleActivityUpdate = (actId, index) => {
-      const newActivity = [...activity];
+  const handleActivityUpdate = (actId, index) => {
+    const newActivity = [...activity];
     const updatedData = {
       activity_for: type,
       activity_title: newActivity[index].activity_title,
       activity_description: newActivity[index].activity_description,
-      scheduled_time:newActivity[index].scheduled_time,
-      end_time:newActivity[index].end_time,
-      activity_name:newActivity[index].activity_name,
-      scheduled_date:newActivity[index].scheduled_date,
+      scheduled_time: newActivity[index].scheduled_time,
+      end_time: newActivity[index].end_time,
+      activity_name: newActivity[index].activity_name,
+      scheduled_date: newActivity[index].scheduled_date.split("T")[0],
+      is_completed: newActivity[index].is_completed ,
     };
-    console.log(updatedData)
-    axios.put(UPDATE_LEAD_ACTIVITY + actId, updatedData, {
-headers: {
-  Authorization: `Bearer ${decryptedToken}`,
-}
-    })
-    .then((response) => {
-      console.log(response);
-      toast.success("Activity updated successfully", {
-        position: "top-center",
-        autoClose: 2000,
+    console.log(updatedData);
+    axios
+      .put(UPDATE_LEAD_ACTIVITY + actId, updatedData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success("Activity updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    })
-    .catch((error) => {
-      console.log(error);
-    })
     setUpdateBtn(0);
-  }
-
+  };
+  console.log(activity);
+  console.log("hii");
   return (
     <>
       <div className="activity-container ">
@@ -454,227 +464,241 @@ headers: {
             </div>
           </div>
         )}
+        <div className="activity-height">
+          {activity &&
+            activity.map((item, index) => (
+              <div className="activity-task-map">
+                <div className="activity-bottom">
+                  <div className="savedNotes activity-save-note">
+                    <>
+                      <section className="note-display">
+                        <div className="note-content activity-content">
+                          <div
+                            className="arrow-greater activity-new-arrow"
+                            onClick={() => toggleExpand(index)}
+                          >
+                            <img src={GreaterArrow} alt="" />
+                          </div>
 
-        {activity &&
-          activity.map((item, index) => (
-            <div className="activity-task-map">
-              <div className="activity-bottom">
-                <div className="savedNotes activity-save-note">
-                  <>
-                    <section className="note-display">
-                      <div className="note-content activity-content">
-                        <div
-                          className="arrow-greater activity-new-arrow"
-                          onClick={() => toggleExpand(index)}
-                        >
-                          <img src={GreaterArrow} alt="" />
-                        </div>
-
-                        <div className="notes-main">
-                          <div className="activity-flex">
-                            <div
-                              className="notes-by activity-by "
-                              onClick={() => toggleExpand(index)}
-                            >
-                              <p className="common-fonts activity-assigned-to">
-                                {item.activity_name} Assigned to :
-                                <span>Anant Singh</span>
-                              </p>
-
-                              <div className="activity-date-time">
-                                <img src={CalendarIcon} alt="" />
-                                <p className="common-fonts activity-due">
-                                  {item.scheduled_date &&
-                                  item.scheduled_date.includes("T") &&
-                                  item.scheduled_date.includes(".")
-                                    ? item.scheduled_date.split("T")[0] +
-                                      " at " +
-                                      item.scheduled_date
-                                        .split("T")[1]
-                                        .split(".")[0]
-                                    : "-"}
+                          <div className="notes-main">
+                            <div className="activity-flex">
+                              <div
+                                className="notes-by activity-by "
+                                onClick={() => toggleExpand(index)}
+                              >
+                                <p className="common-fonts activity-assigned-to">
+                                  {item.activity_name} Assigned to :
+                                  <span>Anant Singh</span>
                                 </p>
+
+                                <div className="activity-date-time">
+                                  <img src={CalendarIcon} alt="" />
+                                  <p className="common-fonts activity-due">
+                                    {item.scheduled_date &&
+                                    item.scheduled_date.includes("T") &&
+                                    item.scheduled_date.includes(".")
+                                      ? item.scheduled_date.split("T")[0] +
+                                        " at " +
+                                        item.scheduled_date
+                                          .split("T")[1]
+                                          .split(".")[0]
+                                      : "-"}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="three-side-dots activity-del">
+                                <img
+                                  src={bin}
+                                  alt="trash"
+                                  title="Delete"
+                                  onClick={() => handleActivityDelete(item.id)}
+                                  className="activity-trash"
+                                />
                               </div>
                             </div>
-                            <div className="three-side-dots activity-del">
-                              <img
-                                src={bin}
-                                alt="trash"
-                                title="Delete"
-                                onClick={() => handleActivityDelete(item.id)}
-                                className="activity-trash"
-                              />
+
+                            <div
+                              className={`activity-phone ${
+                                expandedIndex !== index
+                                  ? "activity-disable-white"
+                                  : "activity-new-call"
+                              }`}
+                            >
+                              <div className="activity-ring">
+                                <i
+                                  className={`fa fa-check-circle ${
+                                    expandedIndex !== index
+                                      ? "hide-activity-tick"
+                                      : "show-activity-tick"
+                                  } ${
+                                    item.is_completed === 1
+                                      ? "green-activity-tick"
+                                      : "white-activity-tick"
+                                  } `}
+                                  onClick={() => toggleCompletion(index)}
+                                  aria-hidden="true"
+                                ></i>
+                                <input
+                                  disabled={
+                                    expandedIndex !== index ? true : false
+                                  }
+                                  className={`common-fonts activity-call-name ${
+                                    expandedIndex !== index
+                                      ? "activity-new-disable-white"
+                                      : "activity-new-input"
+                                  }`}
+                                  type="text"
+                                  value={item?.activity_title}
+                                  name="activity_title"
+                                  onChange={(event) =>
+                                    handleTitleChange(event, index)
+                                  }
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          <div
-                            className={`activity-phone ${
-                              expandedIndex !== index
-                                ? "activity-disable-white"
-                                : "activity-new-call"
-                            }`}
-                          >
-                            <div className="activity-ring">
-                              <i
-                                className={`fa fa-check-circle  ${
-                                  expandedIndex !== index
-                                    ? "hide-activity-tick"
-                                    : "show-activity-tick"
-                                } ${
-                                  tick === true
-                                    ? "green-activity-tick"
-                                    : "white-activity-tick"
-                                }`}
-                                onClick={toggleTick}
-                                aria-hidden="true"
-                              ></i>
-                              <input
-                                disabled={
-                                  expandedIndex !== index ? true : false
-                                }
-                                className={`common-fonts activity-call-name ${
-                                  expandedIndex !== index
-                                    ? "activity-new-disable-white"
-                                    : "activity-new-input"
-                                }`}
-                                type="text"
-                                value={item?.activity_title}
-                                name="activity_title"
-                                onChange={(event) => handleTitleChange(event, index)}
-                              />
-                            </div>
-                          </div>
+                            {expandedIndex === index && (
+                              <>
+                                <div className="activity-open-time">
+                                  <div className="activity-timefrom">
+                                    <label>Due Date</label>
 
-                          {expandedIndex === index && (
-                            <>
-                              <div className="activity-open-time">
-                                <div className="activity-timefrom">
-                                  <label>Due Date</label>
-
-                                  <div className="custom-date-input activity-new-date">
-                                    <div className="">
-                                      <input
-                                        type="date"
-                                        value={
-                                          item.scheduled_date.split("T")[0]
-                                        }
-                                        name="scheduled_date"
-                                        onChange={(event) => handleDateChange(event, index)}
-                                      />
+                                    <div className="custom-date-input activity-new-date">
+                                      <div className="">
+                                        <input
+                                          type="date"
+                                          value={
+                                            item.scheduled_date.split("T")[0]
+                                          }
+                                          name="scheduled_date"
+                                          onChange={(event) =>
+                                            handleDateChange(event, index)
+                                          }
+                                        />
+                                      </div>
                                     </div>
                                   </div>
+                                  <div className="activity-timefrom">
+                                    <label htmlFor="">Time From</label>
+                                    <select
+                                      name="scheduled_time"
+                                      id=""
+                                      className="common-fonts activity-timefrom-select"
+                                      value={item?.scheduled_time?.slice(0, 5)}
+                                      onChange={(event) =>
+                                        handleTimeChange(event, index)
+                                      }
+                                    >
+                                      {timeOptions.map((time, index) => (
+                                        <option key={index} value={time}>
+                                          {time}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="activity-timefrom">
+                                    <label htmlFor="">Time To</label>
+                                    <select
+                                      name="end_time"
+                                      id=""
+                                      className="common-fonts activity-timefrom-select"
+                                      value={item?.end_time?.slice(0, 5)}
+                                      onChange={(event) =>
+                                        handleEndTimeChange(event, index)
+                                      }
+                                    >
+                                      {timeOptions.map((time, index) => (
+                                        <option key={index} value={time}>
+                                          {time}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="activity-timefrom">
+                                    <label htmlFor="">Type</label>
+                                    <select
+                                      name="activity_name"
+                                      id="activity_name"
+                                      value={item?.activity_name}
+                                      className="common-fonts activity-timefrom-select"
+                                      onChange={(event) =>
+                                        handleTypeChange(event, index)
+                                      }
+                                    >
+                                      <option value="Call">Call</option>
+                                      <option value="Meeting">Meeting</option>
+                                      <option value="Task">Task</option>
+                                      <option value="Deadline">Deadline</option>
+                                    </select>
+                                  </div>
+                                  <div className="activity-timefrom">
+                                    <label htmlFor="">Assign To</label>
+                                    <select
+                                      name=""
+                                      id=""
+                                      className="common-fonts activity-timefrom-select"
+                                    >
+                                      <option value="">Anant Singh</option>
+                                    </select>
+                                  </div>
                                 </div>
-                                <div className="activity-timefrom">
-                                  <label htmlFor="">Time From</label>
-                                  <select
-                                    name="scheduled_time"
-                                    id=""
-                                    className="common-fonts activity-timefrom-select"
-                                    value={item?.scheduled_time?.slice(0, 5)}
-                                    onChange={(event) => handleTimeChange(event, index)}
-                                  >
-                                    {timeOptions.map((time, index) => (
-                                      <option key={index} value={time}>
-                                        {time}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                                <div className="activity-timefrom">
-                                  <label htmlFor="">Time To</label>
-                                  <select
-                                    name="end_time"
-                                    id=""
-                                    className="common-fonts activity-timefrom-select"
-                                    value={item?.end_time?.slice(0, 5)}
-                                    onChange={(event) => handleEndTimeChange(event, index)}
-                                  >
-                                    {timeOptions.map((time, index) => (
-                                      <option key={index} value={time}>
-                                        {time}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                                <div className="activity-timefrom">
-                                  <label htmlFor="">Type</label>
-                                  <select
-                                    name="activity_name"
-                                    id="activity_name"
-                                    value={item?.activity_name}
-                                    className="common-fonts activity-timefrom-select"
-                                    onChange={(event) => handleTypeChange(event, index)}
-                                  >
-                                    <option value="Call">Call</option>
-                                    <option value="Meeting">Meeting</option>
-                                    <option value="Task">Task</option>
-                                    <option value="Deadline">Deadline</option>
-                                  </select>
-                                </div>
-                                <div className="activity-timefrom">
-                                  <label htmlFor="">Assign To</label>
-                                  <select
-                                    name=""
-                                    id=""
-                                    className="common-fonts activity-timefrom-select"
-                                  >
-                                    <option value="">Anant Singh</option>
-                                  </select>
-                                </div>
-                              </div>
 
-                              <div>
-                                <p className="common-fonts activity-describe">
-                                  Description
-                                </p>
-                                <textarea
-                                  name="activity_description"
-                                  cols="30"
-                                  rows="5"
-                                  className="activity-big-textarea"
-                                  value={item?.activity_description}
-                                  onChange={(event) => handleDescriptionChange(event, index)}
-                                ></textarea>
-                              </div>
-                            </>
-                          )}
+                                <div>
+                                  <p className="common-fonts activity-describe">
+                                    Description
+                                  </p>
+                                  <textarea
+                                    name="activity_description"
+                                    cols="30"
+                                    rows="5"
+                                    className="activity-big-textarea"
+                                    value={item?.activity_description}
+                                    onChange={(event) =>
+                                      handleDescriptionChange(event, index)
+                                    }
+                                  ></textarea>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </section>
+                      </section>
 
-                    {expandedIndex === index && (
-                      <div className={"answer display_answer"}></div>
-                    )}
-                  </>
+                      {expandedIndex === index && (
+                        <div className={"answer display_answer"}></div>
+                      )}
+                    </>
+                  </div>
                 </div>
-              </div>
-              {expandedIndex === index && (
-                <div className="activity-bottom-buttons">
-                  <button className="common-white-button"
-                   onClick={() => handleCancleChange(item.id,index)}>Cancel</button>
-
-                  {updateBtn === 0 ? (
-                    <button disabled className="disabledBtn">
-                      Save
-                    </button>
-                  ) : (
+                {expandedIndex === index && (
+                  <div className="activity-bottom-buttons">
                     <button
-                    className="common-save-button activity-save-buttons"
-                    onClick={() => handleActivityUpdate(item.id, index)}
-                  >
-                    Save
-                  </button>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                      className="common-white-button"
+                      onClick={() => handleCancleChange(item.id, index)}
+                    >
+                      Cancel
+                    </button>
+
+                    {updateBtn === 0 ? (
+                      <button disabled className="disabledBtn">
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className="common-save-button activity-save-buttons"
+                        onClick={() => handleActivityUpdate(item.id, index)}
+                      >
+                        Save
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
       </div>
-
-
     </>
   );
 };
-
 
 export default DealActivity;

@@ -13,12 +13,16 @@ import {
   getDecryptedToken,
   GET_LABEL,
   GET_ALL_STAGE,
+  UPLOADED_DOCS,
+  GET_ACTIVITY
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealAttachments from "./DealAttachments.jsx";
 import DealActivity from "./DealActivity";
+
+
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -32,6 +36,9 @@ const DealUpdate = () => {
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [similarStage, setSimilarStage] = useState([]);
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
+  const [activityCount, setActivityCount] = useState();
+
+
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -75,6 +82,7 @@ const DealUpdate = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
+  const [attachedFile, setAttachedFiles] = useState();
   const [value, setValue] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [editedItem, setEditedItem] = useState("");
@@ -83,6 +91,31 @@ const DealUpdate = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
+
+  const fetchCall = () => {
+    axios
+      .get(GET_ACTIVITY + "deal/" + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setActivityCount(response?.data?.data?.length);
+      })
+  
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  
+  };
+
+  useEffect(()=>{
+   fetchCall();
+  },[])
 
   const handleStageClickFromList = (event, stageId) => {
     setSelectedStageId(stageId);
@@ -394,6 +427,29 @@ const DealUpdate = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const uploadedDocs = () => {
+    axios
+      .get(UPLOADED_DOCS + "deal" + "/" + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setAttachedFiles(response?.data?.message?.length);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
+  useEffect(()=>{
+    uploadedDocs();
+  },[])
 
   const fetchNotes = () => {
     axios
@@ -1323,18 +1379,25 @@ const DealUpdate = () => {
               Email
             </button>
             <button
+              className={activeTab === "whatsapp" ? "active" : ""}
+              onClick={() => handleTabClick("whatsapp")}
+            >
+              <i className="fa-sharp fa-regular fab fa-whatsapp"></i>
+              Whatsapp
+            </button>
+            <button
               className={activeTab === "activity" ? "active" : ""}
               onClick={() => handleTabClick("activity")}
             >
               <i className="fa-sharp fa-regular fa-calendar"></i>
-              Activity
+              Activity ({activityCount})
             </button>
             <button
               className={activeTab === "attachment" ? "active" : ""}
               onClick={() => handleTabClick("attachment")}
             >
               <i className="fa-sharp fa-solid fa-paperclip"></i>
-              Attachment
+              Attachment ({attachedFile})
             </button>
           </div>
           <div className="tab-content">
@@ -1355,12 +1418,12 @@ const DealUpdate = () => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <DealActivity id = {id} type={"deal"}/>
+                <DealActivity id = {id} type={"deal"} count={fetchCall}/>
               </div>
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <DealAttachments dealId = {id} type={"deal"}/>
+                <DealAttachments dealId = {id} type={"deal"} onAttachNum={uploadedDocs}/>
               </div>
             )}
           </div>
