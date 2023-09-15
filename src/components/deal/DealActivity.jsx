@@ -45,6 +45,7 @@ const DealActivity = ({ item, type, id, count }) => {
   const timeOptions = generateTimeOptions();
   const [timeOptionsTo, setTimeOptionsTo] = useState(timeOptions);
   const [activity, setActivity] = useState([]);
+  const [replaceAct, setReplaceAct] = useState([]);
   const selectedTimeFromIndex = timeOptionsTo.indexOf(selectedTimeFrom);
   const nextIndex = selectedTimeFromIndex + 1;
   const newTime =
@@ -71,6 +72,7 @@ const DealActivity = ({ item, type, id, count }) => {
         })
         .then((response) => {
           setActivity(response?.data?.data);
+          setReplaceAct(response?.data?.data);
         })
 
         .catch((error) => {
@@ -90,6 +92,7 @@ const DealActivity = ({ item, type, id, count }) => {
         .then((response) => {
           // console.log(response?.data?.data);
           setActivity(response?.data?.data);
+          setReplaceAct(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -274,6 +277,9 @@ const DealActivity = ({ item, type, id, count }) => {
   };
 
   const handleCancleChange = (id, index) => {
+    const newActivity = [...activity];
+    console.log(newActivity[index]);
+    console.log(replaceAct);
     setUpdateBtn(0);
   };
 
@@ -308,8 +314,21 @@ const DealActivity = ({ item, type, id, count }) => {
       });
     setUpdateBtn(0);
   };
-  console.log(activity);
-  console.log("hii");
+
+  const handleClose = () => {
+    setOpenEditor(false);
+    setForm({
+      activity_description: "",
+      activity_name: "",
+      scheduled_date: "",
+      scheduled_time: "",
+      activity_title: "",
+      end_time: "",
+    });
+    setActiveTab("call");
+    setStateBtn(0);
+  };
+
   return (
     <>
       <div className="activity-container ">
@@ -447,7 +466,7 @@ const DealActivity = ({ item, type, id, count }) => {
                 </div>
 
                 <div className="activity-button deal-activity-btn">
-                  <button className="common-white-button">Cancel</button>
+                  <button className="common-white-button" onClick={handleClose}>Cancel</button>
                   {stateBtn === 0 ? (
                     <button disabled className="disabledBtn">
                       Save

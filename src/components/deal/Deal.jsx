@@ -16,6 +16,7 @@ import DealsColn from "./DealsColn";
 import CreateDeal from "./CreateDeal";
 import DealDeletePopUp from "../DeleteComponent";
 import ExcelJS from "exceljs";
+import Papa from "papaparse"; 
 
 const Deal = () => {
   const [stages, setStages] = useState([]);
@@ -42,7 +43,8 @@ const Deal = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None"); 
   const [sortOrder, setSortOrder] = useState("asc");
-  
+    const [csvData, setCsvData] = useState([]);
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -233,9 +235,6 @@ const Deal = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-  const handleButtonClick = async () => {
-    fileInputRef.current.click();
   };
   //===========================================================for bulk import
 
@@ -485,6 +484,7 @@ const Deal = () => {
     }
   };
 
+  console.log(selectedIds);
   const handleDeleteLead = () => {
     if (selectedIds) {
       const body = {
@@ -498,7 +498,7 @@ const Deal = () => {
           },
         })
         .then((response) => {
-          toast.success("Lead moved to trash successfully", {
+          toast.success("Deal moved to trash successfully", {
             position: "top-center",
             autoClose: 2000,
           });
@@ -511,6 +511,28 @@ const Deal = () => {
         });
     }
   };
+
+  const handleCsvFileImport = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          // Store CSV data in state
+          setCsvData(result.data);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  // Function to handle "Import" menu item click
+  const handleImportClick = () => {
+    // Trigger a click event on the hidden file input element
+    fileInputRef.current.click();
+  };
+
 
   return (
     <div>
@@ -582,14 +604,13 @@ const Deal = () => {
                 )}
               </div>
             </div>
-            <div className="importDiv">
-              <input
-                type="file"
-                accept=".csv"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-              />
-            </div>
+            <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleCsvFileImport}
+      />
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
                 <div
@@ -613,7 +634,7 @@ const Deal = () => {
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
-                    <li onClick={handleButtonClick}>Import</li>
+                    <li onClick={handleImportClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Deals
                     </li>
