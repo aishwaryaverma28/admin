@@ -4,6 +4,8 @@ import {
   REQ_DOCUMENT,
   UPDATE_DOCUMENT,
   getDecryptedToken,
+  GET_FIELDS,
+  handleLogout,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,7 +16,7 @@ import GreaterUp from "../../assets/image/greater-up.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import StageModal from "./StageModal.jsx";
 
-const DealsSetup = ({type}) => {
+const DealsSetup = ({ type }) => {
   const decryptedToken = getDecryptedToken();
   const [customDocuments, setCustomDocuments] = useState([]);
   const [showBasic, setShowBasic] = useState(false);
@@ -23,14 +25,40 @@ const DealsSetup = ({type}) => {
   const [doc, setDoc] = useState([]);
   const [selectedDocumentIds, setSelectedDocumentIds] = useState([]);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
- const [openModal, setOpenModal] = useState(false);
- const [actionopen, setActionOpen] = useState(false);
- const actionDropDownRef = useRef(null);
+  const [openModal, setOpenModal] = useState(false);
+  const actionDropDownRef = useRef({});
+  const [fields, setFields] = useState([]);
+  const [userActionOpen, setUserActionOpen] = useState({});
+  const [loading, setLoading] = useState(true);
 
- const toggleActionDropdown = () => {
-  setActionOpen(!actionopen);
-};
+  const toggleActionDropdown = (userId) => {
+    setUserActionOpen((prevState) => ({
+      ...prevState,
+      [userId]: !prevState[userId],
+    }));
+  };
 
+  const fetchFields = () => {
+      axios
+        .get(GET_FIELDS + type, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setFields(response?.data?.data.reverse());
+          setLoading(false);
+        })
+
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+    
+  };
 
   const fetchDocs = () => {
     axios
@@ -49,6 +77,7 @@ const DealsSetup = ({type}) => {
 
   useEffect(() => {
     fetchDocs();
+    fetchFields();
   }, []);
 
   useEffect(() => {
@@ -59,22 +88,22 @@ const DealsSetup = ({type}) => {
   }, [doc]);
 
   useEffect(() => {
-
-
     const handleOutsideClick = (event) => {
-      if (
-        actionDropDownRef.current &&
-        !actionDropDownRef.current.contains(event.target)
-      ) {
-        setActionOpen(false);
+      if (actionDropDownRef.current) {
+        Object.values(actionDropDownRef.current).forEach((ref) => {
+          if (ref && !ref.contains(event.target)) {
+            setUserActionOpen((prevState) => ({
+              ...prevState,
+              [ref.dataset.userId]: false,
+            }));
+          }
+        });
       }
     };
-
     document.addEventListener("click", handleOutsideClick);
 
     return () => {
       document.removeEventListener("click", handleOutsideClick);
-
     };
   }, []);
 
@@ -140,10 +169,10 @@ const DealsSetup = ({type}) => {
 
   const handleAddStage = () => {
     setOpenModal(true);
-  }
+  };
   const handleCloseStage = () => {
     setOpenModal(false);
-  }
+  };
 
   return (
     <div className="ds-setup-container">
@@ -191,11 +220,11 @@ const DealsSetup = ({type}) => {
         </label>
       </div>
 
-      
-
       <div>
-         <p className="common-fonts ds-setup-info">Additional Information</p>
-         <p className="common-fonts ds-setup-note">you can add five additional fields to your lead details. (0/5)</p>
+        <p className="common-fonts ds-setup-info">Additional Information</p>
+        <p className="common-fonts ds-setup-note">
+          you can add five additional fields to your lead details. ({fields.length}/5)
+        </p>
       </div>
 
       <div className="ds-setup-table">
@@ -204,44 +233,70 @@ const DealsSetup = ({type}) => {
             <th className="common-fonts">Field Name</th>
             <th className="common-fonts">Field Value</th>
           </tr>
-          <tr>
-            <td className="common-fonts">Type Of Security</td>
-            <td className="common-fonts">
-            <div className="ds-setup-td-flex">
-              <span>Property</span>
-              <div className="select action-select">
-              <div className="dropdown-container" ref={actionDropDownRef}>
-                <div
-                  className="dropdown-header2"
-                  onClick={toggleActionDropdown}
-                >
-                  Actions{" "}
-                  <i
-                    className={`fa-sharp fa-solid ${
-                      actionopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
-                </div>
-                {actionopen && (
-                  <ul className="dropdown-menu ds-setup-menu">                 
-                    <li>Add</li>
-                    <li>Edit</li>
-                  </ul>
-                )}
+
+          {
+            loading ? (
+             <p className="common-fonts field-loading">Loading...</p>
+            ) : 
+              fields.map((field) => { // Rename the parameter to singular form (field) for clarity
+  return (
+    <tr key={field.id}>
+      <td className="common-fonts">{field.field_name}</td>
+      <td className="common-fonts">
+        <div className="ds-setup-td-flex">
+          <span>Property</span>
+          <div className="select action-select">
+            <div
+              className="dropdown-container"
+              ref={(ref) => {
+                if (actionDropDownRef.current) {
+                  actionDropDownRef.current[field.id] = ref;
+                }
+              }}
+              data-user-id={field.id}
+            >
+              <div
+                className="dropdown-header2"
+                onClick={() => toggleActionDropdown(field.id)}
+              >
+                Actions{" "}
+                <i
+                  className={`fa-sharp fa-solid ${
+                    userActionOpen[field.id]
+                      ? "fa-angle-up"
+                      : "fa-angle-down"
+                  }`}
+                ></i>
               </div>
+              {userActionOpen[field.id] && (
+                <ul className="dropdown-menu ds-setup-menu">
+                  <li>Add</li>
+                  <li>Edit</li>
+                </ul>
+              )}
             </div>
-            </div>
-            
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
+})
+
+
               
-            </td>
-          </tr>
+
+          }
+
+
         </table>
       </div>
 
       <div>
-         <div className="ds-setup-stage-btn">
-          <button className="common-fonts" onClick={handleAddStage}>+ Add Fields</button>
-         </div>
+        <div className="ds-setup-stage-btn">
+          <button className="common-fonts" onClick={()=>handleAddStage()}>
+            + Add Fields
+          </button>
+        </div>
       </div>
 
       <div className="ds-setup-accordian">
@@ -475,14 +530,14 @@ const DealsSetup = ({type}) => {
         <button className="common-save-button cp-save">Save</button>
       </div> */}
       {isDocumentModalOpen && (
-        <AddComponent onClose={handleCloseDocumentModal} docsData={fetchDocs} type={type}/>
+        <AddComponent
+          onClose={handleCloseDocumentModal}
+          docsData={fetchDocs}
+          type={type}
+        />
       )}
       <ToastContainer />
-      {
-        openModal && (
-          <StageModal onClose={handleCloseStage} />
-        )
-      }
+      {openModal && <StageModal onClose={handleCloseStage} type={type} fields={fields} fetchFields={fetchFields}/>}
     </div>
   );
 };

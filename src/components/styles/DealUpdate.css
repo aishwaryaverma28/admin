@@ -739,4 +739,21 @@ margin-right: 0.7rem;
   margin-right: 1rem;
 }
 
+.fields-msg{
+  color: #077838;
+  text-transform: none;
+  margin-bottom: 1rem;
+}
+.fields-select{
+  padding: 0.5rem;
+  outline:none;
+  margin-left: 0.6rem;
+  cursor: pointer;
+}
+
+.field-loading{
+ padding: 1rem;
+ font-size: 1rem;
+}
+
 /* deal attachments ends */
