@@ -25,7 +25,7 @@ function CRMeditor({ onDataTransfer, initialContent }) {
     value={value}
     onChange={handleQuillChange}
     modules={modules}
-    className="quillEditor quillEditor2 abc"
+    className="quillEditor quillEditor2 crm-new-border"
   />
   );
 }

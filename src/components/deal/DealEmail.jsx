@@ -18,6 +18,11 @@ const DealEmail = () => {
     setOpenEditor(true);
   };
 
+  const closeEditor = () => {
+    setOpenEditor(false);
+    setStateAdd(0);
+  }
+
   return (
     <>
       {!openEditor ? (
@@ -30,6 +35,8 @@ const DealEmail = () => {
             <CRMEmail onDataTransfer={handleDataTransfer} />
           </div>
           <div className="addNoteBtn">
+
+            <button className="common-fonts common-white-button" onClick={closeEditor}>Cancel</button>
             {stateAdd === 0 ? (
               <button disabled className="disabledBtn">
                 Send
