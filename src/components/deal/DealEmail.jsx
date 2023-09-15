@@ -38,11 +38,11 @@ const DealEmail = () => {
 
             <button className="common-fonts common-white-button" onClick={closeEditor}>Cancel</button>
             {stateAdd === 0 ? (
-              <button disabled className="disabledBtn">
+              <button disabled className="common-fonts common-inactive-button note-btn">
                 Send
               </button>
             ) : (
-              <button className="convertToDeal">Send</button>
+              <button className="common-fonts common-save-button note-btn">Send</button>
             )}
           </div>
         </>
