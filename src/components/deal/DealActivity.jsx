@@ -466,15 +466,15 @@ const DealActivity = ({ item, type, id, count }) => {
                 </div>
 
                 <div className="activity-button deal-activity-btn">
-                  <button className="common-white-button" onClick={handleClose}>Cancel</button>
+                  <button className="common-fonts common-white-button" onClick={handleClose}>Cancel</button>
                   {stateBtn === 0 ? (
-                    <button disabled className="disabledBtn">
+                    <button disabled className="common-fonts common-inactive-button">
                       Save
                     </button>
                   ) : (
                     <button
                       onClick={handleAddNote}
-                      className="common-save-button"
+                      className="common-fonts common-save-button"
                     >
                       Save
                     </button>
@@ -693,19 +693,19 @@ const DealActivity = ({ item, type, id, count }) => {
                 {expandedIndex === index && (
                   <div className="activity-bottom-buttons">
                     <button
-                      className="common-white-button"
+                      className="common-fonts common-white-button"
                       onClick={() => handleCancleChange(item.id, index)}
                     >
                       Cancel
                     </button>
 
                     {updateBtn === 0 ? (
-                      <button disabled className="disabledBtn">
+                      <button disabled className="common-fonts common-inactive-button note-btn">
                         Save
                       </button>
                     ) : (
                       <button
-                        className="common-save-button activity-save-buttons"
+                        className="common-save-button common-fonts activity-save-button note-btn"
                         onClick={() => handleActivityUpdate(item.id, index)}
                       >
                         Save

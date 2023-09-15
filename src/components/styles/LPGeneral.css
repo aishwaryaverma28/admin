@@ -493,12 +493,15 @@ input.activity-date-input {
 .activity-ring {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .activity-date {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  border: none;
 }
 
 .activity-date img {
@@ -729,6 +732,9 @@ input.activity-date-input {
   border: none;
   outline: none;
   background-color: #f4f5f9;
+ box-shadow: none !important;
+ width: 100%;
+
 }
 .activity-new-input:focus {
   padding: 0.5rem;

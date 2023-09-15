@@ -328,11 +328,11 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
           <div className="addNoteBtn">
           <button className="common-white-button" onClick={handleClose}>Cancel</button>
             {stateAdd === 0 ? (
-              <button disabled className="disabledBtn">
+              <button disabled className="common-fonts common-inactive-button note-btn">
                 Add Note
               </button>
             ) : (
-              <button onClick={handleAddNote} className="convertToDeal">
+              <button onClick={handleAddNote} className="common-fonts common-save-button note-btn">
                 Add Note
               </button>
             )}
@@ -453,13 +453,13 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
                     Discard
                   </button>
                   {stateBtn === 0 ? (
-                    <button disabled className="disabledBtn">
+                    <button disabled className="common-fonts common-inactive-button note-btn">
                       Save
                     </button>
                   ) : (
                     <button
                       onClick={() => handleSaveNote(note.id)}
-                      className="convertToDeal"
+                      className="common-fonts common-save-button note-btn"
                     >
                       Save
                     </button>
