@@ -9,7 +9,6 @@ import CreateLead from "./CreateLead";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
   GET_LEAD,
-  IMPORT_CSV,
   EXPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
@@ -19,6 +18,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
+import Papa from "papaparse"; 
 
 const Lead = () => {
   const [stages, setStages] = useState([]);
@@ -44,8 +44,8 @@ const Lead = () => {
   const [isDelete, setIsDelete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None");
-  const [sortOrder, setSortOrder] = useState("asc");
-
+  const [sortOrder, setSortOrder] = useState("asc");  
+  const [csvData, setCsvData] = useState([]);
   const fetchStatus = () => {
     axios
       .get(GET_ALL_STAGE + "/lead", {
@@ -362,38 +362,10 @@ const Lead = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  const handleButtonClick = async () => {
-    fileInputRef.current.click();
-  };
-  //===========================================================for bulk import
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("userId", "125"); // Replace "yourUserId" with the actual user ID
-
-      try {
-        await axios.post(IMPORT_CSV, formData, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-          },
-        });
-        toast.success("File uploaded successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        // Handle the success case as needed
-      } catch (error) {
-        alert("File upload failed", error);
-        // Handle the error case as needed
-      }
-    }
-    fetchLeadsData();
-  };
-
-  // Function to toggle the dropdown menu
+  // const handleButtonClick = async () => {
+  //   fileInputRef.current.click();
+  // };
+  
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
   };
@@ -402,52 +374,12 @@ const Lead = () => {
   };
   const toggleActionDropdown = (option) => {
     if (option === "Export") {
-      // exportLeadsToCSV();
       exportToExcel();
     }
     setActionOpen(!actionopen);
   };
 
-  const exportLeadsToCSV = async () => {
-    try {
-      const response = await axios.get(
-        EXPORT_CSV, // Replace with your GET API endpoint
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-          responseType: "blob", // Set response type to blob to handle binary data
-          params: {
-            leadIds: selectedIds.join(","), // Convert selected card IDs to a comma-separated string
-          },
-        }
-      );
-
-      // Create a Blob object from the response data
-      const blob = new Blob([response.data], { type: "text/csv" });
-
-      // Create a download link and trigger a click event to download the CSV file
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "leads.csv"; // Set the download attribute
-      link.style.display = "none"; // Hide the link
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success("Leads exported successfully", {
-        position: "top-center",
-        autoClose: 2000,
-      });
-    } catch (error) {
-      console.error("Error exporting leads:", error);
-      toast.error("Error exporting leads", {
-        position: "top-center",
-        autoClose: 2000,
-      });
-    }
-  };
-  // Effect hook to add click event listener when the component mounts
+  
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -559,6 +491,7 @@ const Lead = () => {
         });
       fetchLeadsData();
       setSelectedIds([]); // Reset the stored ID
+  
       handleMassDeletePopUpClose();
     }
   };
@@ -570,6 +503,27 @@ const Lead = () => {
       name: item?.name,
       colour_code: item?.colour_code,
     }));
+
+    const handleCsvFileImport = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        Papa.parse(file, {
+          header: true, // Assume the first row contains headers
+          complete: (result) => {
+            // Store CSV data in state
+            setCsvData(result.data);
+          },
+          error: (error) => {
+            console.error("Error parsing CSV:", error.message);
+          },
+        });
+      }
+    };
+    // Function to handle "Import" menu item click
+    const handleImportClick = () => {
+      // Trigger a click event on the hidden file input element
+      fileInputRef.current.click();
+    };
 
   return (
     <div>
@@ -641,15 +595,15 @@ const Lead = () => {
                 )}
               </div>
             </div>
-            <div className="importDiv">
-              <input
-                type="file"
-                accept=".csv"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
-            </div>
+
+            <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleCsvFileImport}
+      />
+
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
                 <div
@@ -673,7 +627,7 @@ const Lead = () => {
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
-                    <li onClick={handleButtonClick}>Import</li>
+                    <li onClick={handleImportClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Leads
                     </li>

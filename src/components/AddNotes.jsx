@@ -114,7 +114,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
       source_id: type === "lead" ? item.id : id,
       type: type,
       description: dataFromChild,
-      importance: "1",
+      importance: "0",
       created_by: "aishwarya",
       label_id: 1,
     };
@@ -153,7 +153,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
         description: content,
         status: "B",
         sort: 1,
-        importance: "1",
+        // importance: "1",
         urgency: "No",
         viewable: 1,
         source_type: "source -2",
@@ -307,6 +307,13 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
     }
   };
 
+   const handleClose = () => {
+    setDataFromChild("");
+    setOpenEditor(false);
+    setStateAdd(0);
+  };
+
+
   return (
     <>
       {!openEditor ? (
@@ -319,6 +326,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
             <CRMeditor onDataTransfer={handleDataTransfer} />
           </div>
           <div className="addNoteBtn">
+          <button className="common-white-button" onClick={handleClose}>Cancel</button>
             {stateAdd === 0 ? (
               <button disabled className="disabledBtn">
                 Add Note

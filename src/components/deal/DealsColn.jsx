@@ -77,7 +77,7 @@ const [deleteLeadId, setDeleteLeadId] = useState(null);
           })
           .then((response) => {
             console.log(response);
-            toast.success("Lead moved to trash successfully", {
+            toast.success("Deal moved to trash successfully", {
               position: "top-center",
               autoClose: 2000,
             });
@@ -135,9 +135,9 @@ const [deleteLeadId, setDeleteLeadId] = useState(null);
               <i className="fas fa-ellipsis-h"></i>
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
-                  <li>Convert to deal</li>
+                  <li>Convert to Lead</li>
                   <li onClick={() => handleDeleteOpen(object.id)}>Delete</li>
-                  <li>object 3</li>
+                  {/* <li>object 3</li> */}
                 </ul>
               )}
             </button>
