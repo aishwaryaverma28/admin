@@ -36,7 +36,7 @@ export {getDecryptedUserPath}
     // // Redirect to the home page or any other desired path
     //   window.location.href = "https://www.leadplaner.com/user/login";
     localStorage.clear();
-    window.location.href = "http://core.leadplaner.com:3000/";
+    window.location.href = "http://core.leadplaner.com/";
   };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
