@@ -28,7 +28,7 @@ const LPheader = () => {
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
-  const allowed = decryptedUserPath.split(",");
+  let allowed = decryptedUserPath.split(",");
   // const allowed = [
   //   "/lp/lead",
   //   "/lp/admin",
@@ -66,6 +66,11 @@ const LPheader = () => {
   //   "/lp/settings/viewProfile/documents",
   //   "/lp/settings/viewProfile/salarySlip",
   // ];
+  if (landingUrl === "/lp/admin") {
+    allowed = allowed.filter((path) => path !== "/lp/home");
+  } else if (landingUrl === "/lp/home") {
+    allowed = allowed.filter((path) => path !== "/lp/admin");
+  }
 
   useEffect(()=>{
     if(landingUrl === "/lp/admin"){
