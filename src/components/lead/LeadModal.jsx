@@ -11,7 +11,7 @@ import {
   GET_LABEL,
   GET_ALL_STAGE,
   UPLOADED_DOCS,
-  GET_ACTIVITY
+  GET_ACTIVITY,
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
@@ -46,6 +46,15 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
+  const [adminInfo, setAdminInfo] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    id: 0,
+  });
+
+  const [info, setInfo] = useState({});
 
   const uploadedDocs = () => {
     axios
@@ -80,24 +89,23 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   const fetchCall = () => {
-      axios
-        .get(GET_ACTIVITY + "lead/" + selectedItem.id, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
-        .then((response) => {
-          setActivityCount(response?.data?.data?.length);
-        })
+    axios
+      .get(GET_ACTIVITY + "lead/" + selectedItem.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setActivityCount(response?.data?.data?.length);
+      })
 
-        .catch((error) => {
-          console.log(error);
-          if (error?.response?.data?.message === "Invalid or expired token.") {
-            alert(error?.response?.data?.message);
-            handleLogout();
-          }
-        });
-
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
   };
 
   const fetchStages = () => {
@@ -148,6 +156,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         );
         setSelectedStageId(response?.data?.data[0]?.stage_id);
         setIsLoading(false);
+        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
+        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
+        adminInfo.phone = response?.data?.data[0]?.owner_phone || "";
+        adminInfo.email = response?.data?.data[0]?.owner_email || "";
+        adminInfo.id = response?.data?.data[0]?.owner || "";
       })
       .catch((error) => {
         console.log(error);
@@ -180,6 +193,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       setSelectedUser({
         email: userData[0]?.email,
         phone: userData[0]?.phone,
+        id: userData[0]?.id,
       });
     }
   }, [userData]);
@@ -202,7 +216,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
-        setUserData(response?.data?.data);
+        const responseData = response?.data?.data;
+        const combinedData = [adminInfo, ...responseData];
+        setUserData(combinedData);
+        // setUserData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -213,7 +230,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     fetchNotes();
     fetchCall();
   }, []);
-
 
   const fetchNotes = () => {
     axios
@@ -248,7 +264,20 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         label_id: selectedLabelData.id,
       });
     } else if (name === "stage_id") {
-      setSelectedStageId(e.target.value);
+      setSelectedStageId(value);
+    } else if (name === "owner") {
+      const selectedUserData = userData.find(
+        (user) => user.id === parseInt(value)
+      );
+
+      console.log(selectedUserData);
+      setInfo(selectedUserData);
+
+      setSelectedUser({
+        email: selectedUserData?.email || "",
+        phone: selectedUserData?.phone || "",
+        id: selectedUserData?.id || "",
+      });
     } else {
       setEditedItem({
         ...editedItem,
@@ -258,6 +287,44 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
     setStateBtn(1);
   };
+
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+
+  //   if (name === "label") {
+  //     const selectedLabelData = mergedLabels.find(
+  //       (label) => label.id === parseInt(value)
+  //     );
+  //     setEditedItem({
+  //       ...editedItem,
+  //       label_id: selectedLabelData.id,
+  //     });
+  //   } else if (name === "stage_id") {
+  //     setSelectedStageId(e.target.value);
+  //   } else if (name === "owner") {
+
+  //     const selectedUserData = userData.find(
+  //       (user) =>
+  //          user.id === parseInt(value);
+  //     );
+  //   }
+
+  //     // setInfo(selectedUserData)
+
+  //     // setSelectedUser({
+  //     //   email: selectedUserData?.email || "",
+  //     //   phone: selectedUserData?.phone || "",
+  //     //   id: selectedUserData?.id || "",
+  //     // });
+  //    else {
+  //     setEditedItem({
+  //       ...editedItem,
+  //       [name]: value,
+  //     });
+  //   }
+
+  //   setStateBtn(1);
+  // };
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -269,6 +336,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
   };
+
+  // console.log(editedItem)
+  // console.log("ttuyy")
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
@@ -290,7 +360,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       state: editedItem?.state,
       country: editedItem?.country,
       pin: editedItem?.pin,
-      owner: selectedUser?.id,
+      owner: info?.id,
       stage_id: selectedStageId,
       status: editedItem?.status,
     };
@@ -316,7 +386,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     fetchLead();
     onLeadAdded();
   };
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -760,19 +829,20 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                               : normalStylingSelect3
                           }
                           className={isDisabled ? "disabled" : ""}
+                          name="owner"
                         >
                           {userData.map((item) => (
                             <option
                               key={item?.id}
-                              value={item?.first_name + " " + item?.last_name}
+                              value={item?.id}
                               className="owner-val"
                             >
                               {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
+                                item?.first_name?.charAt(0).toUpperCase() +
+                                item?.first_name?.slice(1)
                               } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
+                                item?.last_name?.charAt(0).toUpperCase() +
+                                item?.last_name?.slice(1)
                               }`}
                             </option>
                           ))}
@@ -1007,7 +1077,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <DealActivity item={selectedItem} type={"lead"} count={fetchCall} />
+                <DealActivity
+                  item={selectedItem}
+                  type={"lead"}
+                  count={fetchCall}
+                />
               </div>
             )}
             {activeTab === "attachment" && (

@@ -14,7 +14,8 @@ import {
   GET_LABEL,
   GET_ALL_STAGE,
   UPLOADED_DOCS,
-  GET_ACTIVITY
+  GET_ACTIVITY,
+  GET_TEAM_MEM
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
 import { toast, ToastContainer } from "react-toastify";
@@ -92,6 +93,22 @@ const DealUpdate = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
+  const [userData, setUserData] = useState([])
+
+  const userAdded = () => {
+    axios
+      .get(GET_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setUserData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const fetchCall = () => {
     axios
@@ -116,6 +133,8 @@ const DealUpdate = () => {
 
   useEffect(()=>{
    fetchCall();
+   userAdded();
+
   },[])
 
   const handleStageClickFromList = (event, stageId) => {
@@ -292,6 +311,33 @@ const DealUpdate = () => {
     lineHeight: "17px",
     width: "100%",
     padding: "0.5rem",
+  };
+
+  const normalStylingSelect3 = {
+    /* height: 32px; */
+    fontSize: " 0.8rem",
+    fontFamily: '"Lexend Deca", sans-serif',
+    padding: "0.3rem",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+    WebkitAppearance: "none",
+    MozAppearance: "none",
+    appearance: "none",
+    border: "1px solid transparent",
+    height: "2rem",
+  };
+
+  const editStylingSelect3 = {
+    width: "100%",
+    color: " #1e2224",
+    border: "1px solid #dcdcdc",
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.1rem",
+    height: "2rem",
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -720,8 +766,7 @@ const DealUpdate = () => {
                   <p>Lable</p>
                   <p>Contact Person</p>
                   <p>Organization</p>
-                  <p>Owner First Name</p>
-                  <p>Owner Last Name</p>
+                  <p>Deal Owner</p>
                   <p>Closing Date</p>
                 </div>
 
@@ -813,39 +858,36 @@ const DealUpdate = () => {
                     {isLoading ? (
                       <span>-</span>
                     ) : (
-                      <span>
-                        <input
-                          type="text"
-                          name="ownerf_name"
-                          value={dealDetails?.ownerf_name}
+                      <select
+                          id="lp-main-owner"
                           onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
                           disabled={isDisabled}
-                        />
-                      </span>
+                          style={
+                            isEditable
+                              ? editStylingSelect3
+                              : normalStylingSelect3
+                          }
+                          className={isDisabled ? "disabled" : ""}
+                        >
+                          {userData.map((item) => (
+                            <option
+                              key={item?.id}
+                              value={item?.first_name + " " + item?.last_name}
+                              className="owner-val"
+                            >
+                              {`${
+                                item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1)
+                              } ${
+                                item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                              }`}
+                            </option>
+                          ))}
+                          {/* <option value="Imp">{owner}</option> */}
+                        </select>
                     )}
                   </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          name="ownerl_name"
-                          value={dealDetails?.ownerl_name}
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
-
                   <p>
                     {isLoading ? (
                       <span>-</span>
