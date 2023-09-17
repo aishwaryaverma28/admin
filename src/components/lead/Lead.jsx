@@ -7,6 +7,7 @@ import axios from "axios";
 import LeadCards from "./LeadCards";
 import CreateLead from "./CreateLead";
 import LeadDeletePopUp from "../DeleteComponent";
+
 import {
   GET_LEAD,
   EXPORT_CSV,
@@ -16,7 +17,8 @@ import {
   GET_LABEL,
   handleLogout,
   GET_TEAM_MEM,
-  USER_INFO
+  USER_INFO,
+  GET_OWNER_LEAD
 
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -35,6 +37,7 @@ const Lead = () => {
   const [sortOpen, setSortOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const actionSortRef = useRef(null);
+  const actionOwnerRef = useRef(null);
   const [deals, setDeals] = useState([]);
   const fileInputRef = useRef(null);
   const [totalValue, setTotalValue] = useState(0);
@@ -51,11 +54,29 @@ const Lead = () => {
   const [sortOrder, setSortOrder] = useState("asc");  
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [ownerOpen, setOwnerOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
     id: 0,
   });
+
+  const handleOwnerClick = (id) => {
+    axios
+    .get(GET_OWNER_LEAD+id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      setDeals(response?.data?.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    setOwnerOpen(false);
+  } 
 
 
   const userAdded = () => {
@@ -143,6 +164,9 @@ const Lead = () => {
 
   const toggleSortDropdown = () => {
     setSortOpen(!sortOpen);
+  };
+  const toggleOwnerDropdown = () => {
+    setOwnerOpen(!ownerOpen);
   };
   //======================================================================fetch lead data from api
   const fetchLeadsData = () => {
@@ -470,11 +494,20 @@ const Lead = () => {
         setSortOpen(false);
       }
     };
+    const handleOutsideClick5 = (event) => {
+      if (
+        actionOwnerRef.current &&
+        !actionOwnerRef.current.contains(event.target)
+      ) {
+        setOwnerOpen(false);
+      }
+    };
 
     document.addEventListener("click", handleOutsideClick);
     document.addEventListener("click", handleOutsideClick2);
     document.addEventListener("click", handleOutsideClick3);
     document.addEventListener("click", handleOutsideClick4);
+    document.addEventListener("click", handleOutsideClick5);
 
     // Clean up the event listener when the component unmounts
     return () => {
@@ -482,6 +515,7 @@ const Lead = () => {
       document.removeEventListener("click", handleOutsideClick2);
       document.removeEventListener("click", handleOutsideClick3);
       document.removeEventListener("click", handleOutsideClick4);
+      document.removeEventListener("click", handleOutsideClick5);
     };
   }, []);
 
@@ -536,7 +570,6 @@ const Lead = () => {
           },
         })
         .then((response) => {
-          console.log(response);
           toast.success("Lead moved to trash successfully", {
             position: "top-center",
             autoClose: 2000,
@@ -623,13 +656,24 @@ const Lead = () => {
                 <img src={Search} alt="" />
               </span>
             </div>
-            <div>
-          <select name="" id="" className="common-fonts lead-nav-select">
-          {userData.map((item) => (
-                            <option
+
+        <div className="dropdown-container" ref={actionOwnerRef}>
+                <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
+                  Select Owner
+                  <i
+                    className={`fa-sharp fa-solid ${
+                      actionopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
+                </div>
+                {ownerOpen && (
+                  <ul className="dropdown-menu owner-menu">
+                              {userData.map((item) => (
+                            <li
                               key={item?.id}
                               value={item?.id}
                               className="owner-val"
+                              onClick={()=>handleOwnerClick(item.id)}
                             >
                               {`${
                                 item?.first_name.charAt(0).toUpperCase() +
@@ -638,10 +682,11 @@ const Lead = () => {
                                 item?.last_name.charAt(0).toUpperCase() +
                                 item?.last_name.slice(1)
                               }`}
-                            </option>
+                            </li>
                           ))}
-          </select>
-        </div>
+                  </ul>
+                )}
+              </div>
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
