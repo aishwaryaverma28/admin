@@ -39,6 +39,13 @@ const DealUpdate = () => {
   const [similarStage, setSimilarStage] = useState([]);
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
   const [activityCount, setActivityCount] = useState();
+  const [info, setInfo] = useState({});
+
+  const [adminInfo, setAdminInfo] = useState({
+    first_name: "",
+    last_name: "",
+    id: 0,
+  });
 
 
 
@@ -103,7 +110,9 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        setUserData(response?.data?.data);
+        const responseData = response?.data?.data;
+        const combinedData = [adminInfo, ...responseData];
+        setUserData(combinedData);
       })
       .catch((error) => {
         console.log(error);
@@ -409,7 +418,12 @@ const DealUpdate = () => {
           deal_commission: details.deal_commission,
           completion_date: details.completion_date?.split("T")[0],
           stage_id: details.stage_id,
+          owner:info?.id
         });
+
+        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
+        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
+        adminInfo.id = response?.data?.data[0]?.owner || "";
         setIsLoading(false);
       })
       .catch((error) => {
@@ -585,6 +599,12 @@ const DealUpdate = () => {
       if (selectedLabel) {
         setSelectedLabelColor(selectedLabel.colour_code);
       }
+    }else if (name === "owner") {
+      const selectedUserData = userData.find(
+        (user) => user.id === parseInt(value)
+      );
+
+      setInfo(selectedUserData);
     }
     setDealDetails({
       ...dealDetails,
@@ -592,6 +612,7 @@ const DealUpdate = () => {
     });
     setStateBtn(1);
   };
+
 
   return (
     <>
@@ -868,11 +889,12 @@ const DealUpdate = () => {
                               : normalStylingSelect3
                           }
                           className={isDisabled ? "disabled" : ""}
+                          name="owner"
                         >
                           {userData.map((item) => (
                             <option
                               key={item?.id}
-                              value={item?.first_name + " " + item?.last_name}
+                              value={item?.id}
                               className="owner-val"
                             >
                               {`${
@@ -1461,7 +1483,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <DealActivity id = {id} type={"deal"} count={fetchCall}/>
+                <DealActivity id = {id} type={"deal"} count={fetchCall} userData={userData}/>
               </div>
             )}
             {activeTab === "attachment" && (

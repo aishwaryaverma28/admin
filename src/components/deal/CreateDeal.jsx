@@ -25,7 +25,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const [isDisable, setIsDisable] = useState(true);
   const [labelData, setLabelData] = useState([]);
   const navigate = useNavigate();
- 
+
   const [leadData, setLeadData] = useState({
     probability: "",
     deal_name: "",
@@ -181,11 +181,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     setIsDisable(false);
     setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
     if (name === "company_location") {
-    setLoanDetails((prevState) => ({
-      ...prevState,
-      location_of_company: parsedValue,
-    }));
-  }
+      setLoanDetails((prevState) => ({
+        ...prevState,
+        location_of_company: parsedValue,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -198,7 +198,6 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
-
 
     // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
     const matchingLoans = loan.filter((loanItem) => {
@@ -221,14 +220,26 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         },
       })
       .then((response) => {
-
-        toast.success(
-          loanOfferedByValues.length>0 ? `Deal created. Banks list: ` + loanOfferedByValues.join(",") : 'Deal Created',
+       if(response.data.status===0){
+        toast.error(
+             response.data.message,
           {
             position: "top-center",
             autoClose: 3000,
           }
         );
+       }else{
+        toast.success(
+          loanOfferedByValues.length > 0
+            ? `Deal created. Banks list: ` + loanOfferedByValues.join(",")
+            : "Deal Created",
+          {
+            position: "top-center",
+            autoClose: 3000,
+          }
+        );
+       }
+
         setLeadData({
           probability: "",
           deal_name: "",

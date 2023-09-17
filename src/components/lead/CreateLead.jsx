@@ -54,6 +54,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error("error in fetch Stages", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       });
   };
 
@@ -98,11 +102,21 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
-        toast.success("Lead data added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+        if(response.data.status===0){
+          toast.error(
+               "Please check all fields",
+            {
+              position: "top-center",
+              autoClose: 3000,
+            }
+          );
+         }else{
+          toast.success("Lead data added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+         }
+
         setLeadData({
           position: "",
           lead_name: "",

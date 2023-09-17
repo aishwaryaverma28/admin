@@ -20,7 +20,7 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealActivity = ({ item, type, id, count }) => {
+const DealActivity = ({ item, type, id, count, userData }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
@@ -181,11 +181,22 @@ const DealActivity = ({ item, type, id, count }) => {
         },
       })
       .then((response) => {
-        // console.log(response);
-        toast.success("Activity added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+        if(response.data.status===0){
+          toast.error(
+               response.data.message,
+            {
+              position: "top-center",
+              autoClose: 3000,
+            }
+          );
+         }else{
+          toast.success("Activity added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+
+         }
+       
         setForm({
           activity_description: "",
           activity_name: "",
@@ -329,6 +340,8 @@ const DealActivity = ({ item, type, id, count }) => {
     setStateBtn(0);
   };
 
+  const defaultValue = userData.length > 0 ? userData[0].id : "";
+
   return (
     <>
       <div className="activity-container ">
@@ -457,11 +470,26 @@ const DealActivity = ({ item, type, id, count }) => {
                 <div className="activity-text">
                   <img src={TextIcon} alt="" />
                   <select
-                    name=""
+                    name="assigned_to"
+                    onChange={handleChange}
                     id=""
                     className="common-fonts activity-select-area"
                   >
-                    <option value="">Rahul (you)</option>
+                                             {userData.map((item) => (
+                            <option
+                              key={item?.id}
+                              value={item?.id}
+                              className="owner-val"
+                            >
+                              {`${
+                                item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1)
+                              } ${
+                                item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                              }`}
+                            </option>
+                          ))}
                   </select>
                 </div>
 
