@@ -11,7 +11,8 @@ import {
   GET_LABEL,
   GET_TEAM_MEM,
   USER_INFO,
-  handleLogout
+  handleLogout,
+  GET_OWNER_DEAL
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +33,7 @@ const Deal = () => {
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const actionSortRef = useRef(null);
+  const actionOwnerRef = useRef(null);
   const [deals, setDeals] = useState([]);
   const fileInputRef = useRef(null);
   const [totalValue, setTotalValue] = useState(0);
@@ -46,6 +48,7 @@ const Deal = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None"); 
   const [sortOrder, setSortOrder] = useState("asc");
+  const [ownerOpen, setOwnerOpen] = useState(false);
     const [csvData, setCsvData] = useState([]);
     const [userData, setUserData] = useState([]);
     const [adminInfo, setAdminInfo] = useState({
@@ -53,6 +56,23 @@ const Deal = () => {
       last_name: "",
       id: 0,
     });
+
+    const handleOwnerClick = (id) => {
+      axios
+      .get(GET_OWNER_DEAL+id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setDeals(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  
+      setOwnerOpen(false);
+    } 
   
 
     const userAdded = () => {
@@ -106,6 +126,10 @@ const Deal = () => {
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const toggleOwnerDropdown = () => {
+    setOwnerOpen(!ownerOpen);
   };
 
 
@@ -486,11 +510,20 @@ const Deal = () => {
         setSortOpen(false);
       }
     };
+    const handleOutsideClick5 = (event) => {
+      if (
+        actionOwnerRef.current &&
+        !actionOwnerRef.current.contains(event.target)
+      ) {
+        setOwnerOpen(false);
+      }
+    };
 
     document.addEventListener("click", handleOutsideClick);
     document.addEventListener("click", handleOutsideClick2);
     document.addEventListener("click", handleOutsideClick3);
     document.addEventListener("click", handleOutsideClick4);
+    document.addEventListener("click", handleOutsideClick5);
 
     // Clean up the event listener when the component unmounts
     return () => {
@@ -498,6 +531,7 @@ const Deal = () => {
       document.removeEventListener("click", handleOutsideClick2);
       document.removeEventListener("click", handleOutsideClick3);
       document.removeEventListener("click", handleOutsideClick4);
+      document.removeEventListener("click", handleOutsideClick5);
     };
   }, []);
 
@@ -539,7 +573,6 @@ const Deal = () => {
     }
   };
 
-  console.log(selectedIds);
   const handleDeleteLead = () => {
     if (selectedIds) {
       const body = {
@@ -631,13 +664,23 @@ const Deal = () => {
             <img src={Search} alt="" />
           </span>
         </div>
-        <div>
-          <select name="" id="" className="common-fonts lead-nav-select">
-          {userData.map((item) => (
-                            <option
+        <div className="dropdown-container" ref={actionOwnerRef}>
+                <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
+                  Select Owner
+                  <i
+                    className={`fa-sharp fa-solid ${
+                      actionopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
+                </div>
+                {ownerOpen && (
+                  <ul className="dropdown-menu owner-menu">
+                              {userData.map((item) => (
+                            <li
                               key={item?.id}
                               value={item?.id}
                               className="owner-val"
+                              onClick={()=>handleOwnerClick(item.id)}
                             >
                               {`${
                                 item?.first_name.charAt(0).toUpperCase() +
@@ -646,10 +689,11 @@ const Deal = () => {
                                 item?.last_name.charAt(0).toUpperCase() +
                                 item?.last_name.slice(1)
                               }`}
-                            </option>
+                            </li>
                           ))}
-          </select>
-        </div>
+                  </ul>
+                )}
+              </div>
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>

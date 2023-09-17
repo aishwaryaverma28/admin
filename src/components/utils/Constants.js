@@ -164,3 +164,8 @@ export const VIEW_DOC = start + "deal/doc/";
 
 export const GET_FIELDS = start + "api/lead/getleaddealactivefields/"
 export const ADD_FIELDS = start + "api/lead/changecoloumns"
+
+//==================================================owner api
+
+export const GET_OWNER_LEAD = start + "api/lead/getbyowner/"
+export const GET_OWNER_DEAL = start + "api/deal/getbyowner/"
