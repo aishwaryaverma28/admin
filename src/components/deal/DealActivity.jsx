@@ -72,6 +72,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
         })
         .then((response) => {
           setActivity(response?.data?.data);
+          console.log(response.data.data)
           setReplaceAct(response?.data?.data);
         })
 
@@ -279,6 +280,12 @@ const DealActivity = ({ item, type, id, count, userData }) => {
     setActivity(newActivity);
     setUpdateBtn(1);
   };
+  const handleAssignChange = (event, index) => {
+    const newActivity = [...activity];
+    newActivity[index].assigned_to = event.target.value;
+    setActivity(newActivity);
+    setUpdateBtn(1);
+  };
 
   const handleTypeChange = (event, index) => {
     const newActivity = [...activity];
@@ -287,11 +294,8 @@ const DealActivity = ({ item, type, id, count, userData }) => {
     setUpdateBtn(1);
   };
 
-  const handleCancleChange = (id, index) => {
-    const newActivity = [...activity];
-    console.log(newActivity[index]);
-    console.log(replaceAct);
-    setUpdateBtn(0);
+  const handleCancleChange = () => {
+   fetchCall();
   };
 
   const handleActivityUpdate = (actId, index) => {
@@ -305,6 +309,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
       activity_name: newActivity[index].activity_name,
       scheduled_date: newActivity[index].scheduled_date.split("T")[0],
       is_completed: newActivity[index].is_completed ,
+      assigned_to:newActivity[index].assigned_to
     };
     console.log(updatedData);
     axios
@@ -319,6 +324,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchCall();
       })
       .catch((error) => {
         console.log(error);
@@ -339,8 +345,6 @@ const DealActivity = ({ item, type, id, count, userData }) => {
     setActiveTab("call");
     setStateBtn(0);
   };
-
-  const defaultValue = userData.length > 0 ? userData[0].id : "";
 
   return (
     <>
@@ -536,7 +540,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                               >
                                 <p className="common-fonts activity-assigned-to">
                                   {item.activity_name} Assigned to :
-                                  <span>Anant Singh</span>
+                                  <span>{item.assigned_user_fname} {item.assigned_user_lname}</span>
                                 </p>
 
                                 <div className="activity-date-time">
@@ -685,8 +689,26 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       name=""
                                       id=""
                                       className="common-fonts activity-timefrom-select"
+                                      onChange={(event) =>
+                                        handleAssignChange(event, index)
+                                      }
+                                      value={item?.assigned_to}
                                     >
-                                      <option value="">Anant Singh</option>
+                                                                                  {userData.map((item,index) => (
+                            <option
+                              key={item?.id}
+                              value={item?.id}
+                              className="owner-val"
+                            >
+                              {`${
+                                item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1)
+                              } ${
+                                item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                              }`}
+                            </option>
+                          ))}
                                     </select>
                                   </div>
                                 </div>
@@ -722,7 +744,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                   <div className="activity-bottom-buttons">
                     <button
                       className="common-fonts common-white-button"
-                      onClick={() => handleCancleChange(item.id, index)}
+                      onClick={handleCancleChange}
                     >
                       Cancel
                     </button>
