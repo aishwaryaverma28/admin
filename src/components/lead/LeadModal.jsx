@@ -43,6 +43,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [stages, setStages] = useState([]);
   const [stageId, setStageId] = useState([]);
   const [attachedFile, setAttachedFiles] = useState();
+  const [showOwner, setShowOwner] = useState(false);
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -55,6 +56,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   });
 
   const [info, setInfo] = useState({});
+  const role = parseInt(localStorage.getItem('role'));
+  
+
 
   const uploadedDocs = () => {
     axios
@@ -335,9 +339,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
   };
-
-  // console.log(editedItem)
-  // console.log("ttuyy")
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
@@ -804,13 +805,16 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
               </div>
             </div>
-            <div className="detailsBox">
+
+            {
+              role===1  && (
+                <div className="detailsBox">
               <p className="detailHead">LEAD OWNER</p>
               <div className="detailsContent">
                 <div className="detailsLeftContainer">
                   <p>Lead Owner</p>
                   <p>Email</p>
-                  <p>Contact</p>
+                  <p>Contacts</p>
                 </div>
                 <div className="detailsRightContainer">
                   <p>
@@ -823,7 +827,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                           onChange={handleInputChange}
                           disabled={isDisabled}
                           style={
-                            isEditable
+                            isEditable 
                               ? editStylingSelect3
                               : normalStylingSelect3
                           }
@@ -884,6 +888,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
               </div>
             </div>
+              )
+            }
+
             <div className="detailsBox">
               <p className="detailHead">ADDRESS INFORMATION</p>
               <div className="detailsContent">

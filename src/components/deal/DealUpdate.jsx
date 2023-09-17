@@ -40,14 +40,11 @@ const DealUpdate = () => {
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
   const [activityCount, setActivityCount] = useState();
   const [info, setInfo] = useState({});
-
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
     id: 0,
   });
-
-
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -100,7 +97,8 @@ const DealUpdate = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState([]);
+  const role = parseInt(localStorage.getItem('role'));
 
   const userAdded = () => {
     axios
@@ -212,6 +210,7 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
+
         const displayNames = response?.data?.message?.map(
           (item) => item.display_name
         );
@@ -533,6 +532,8 @@ const DealUpdate = () => {
       });
   };
 
+
+
   const toggleEditable = (e) => {
     e.preventDefault();
     setIsEditable(!isEditable);
@@ -787,7 +788,11 @@ const DealUpdate = () => {
                   <p>Lable</p>
                   <p>Contact Person</p>
                   <p>Organization</p>
-                  <p>Deal Owner</p>
+                  {
+                    role === 1 &&
+                    <p>Deal Owner</p>
+                  }
+
                   <p>Closing Date</p>
                 </div>
 
@@ -874,8 +879,9 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-
-                  <p>
+                  {
+                    role === 1  && (
+                      <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -910,6 +916,10 @@ const DealUpdate = () => {
                         </select>
                     )}
                   </p>
+                    )
+                  }
+
+
                   <p>
                     {isLoading ? (
                       <span>-</span>
