@@ -9,6 +9,9 @@ import {
   GET_ALL_STAGE,
   getDecryptedToken,
   GET_LABEL,
+  GET_TEAM_MEM,
+  USER_INFO,
+  handleLogout
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,6 +47,58 @@ const Deal = () => {
   const [sortOption, setSortOption] = useState("None"); 
   const [sortOrder, setSortOrder] = useState("asc");
     const [csvData, setCsvData] = useState([]);
+    const [userData, setUserData] = useState([]);
+    const [adminInfo, setAdminInfo] = useState({
+      first_name: "",
+      last_name: "",
+      id: 0,
+    });
+  
+
+    const userAdded = () => {
+      axios
+        .get(GET_TEAM_MEM, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          const responseData = response?.data?.data;
+          const combinedData = [adminInfo, ...responseData];
+          setUserData(combinedData);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+
+    async function getUser() {
+      try {
+        const response = await axios.get(USER_INFO, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        });
+
+        if (response.data.status === 1) {
+          adminInfo.first_name = response?.data?.data[0]?.first_name || "";
+          adminInfo.last_name = response?.data?.data[0]?.last_name || "";
+          adminInfo.id = response?.data?.data[0]?.id || "";
+         
+        }
+      } catch (error) {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      }
+    }
+
+    useEffect(()=>{
+     userAdded();
+     getUser();
+    },[])
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -575,6 +630,25 @@ const Deal = () => {
           <span className="recycle-search-icon">
             <img src={Search} alt="" />
           </span>
+        </div>
+        <div>
+          <select name="" id="" className="common-fonts lead-nav-select">
+          {userData.map((item) => (
+                            <option
+                              key={item?.id}
+                              value={item?.id}
+                              className="owner-val"
+                            >
+                              {`${
+                                item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1)
+                              } ${
+                                item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                              }`}
+                            </option>
+                          ))}
+          </select>
         </div>
           </div>
           <div className="right-side--btns">
