@@ -276,3 +276,29 @@
  font-size: 1rem;
  font-weight: 500;
 }
+
+
+
+
+
+
+
+/* ===============================================================================drag and drop css */
+.item-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.item-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 0 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.item-list li:hover {
+  background-color: #f0f0f0;
+}

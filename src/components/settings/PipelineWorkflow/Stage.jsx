@@ -16,6 +16,7 @@ const Stage = ({ type }) => {
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
   const [showAddStageInput, setShowAddStageInput] = useState(true);
+  const [dragId, setDragId] = useState(0);
   const [details, setDetails] = useState({
     display_name: "",
     stage_type: type,
@@ -50,7 +51,11 @@ const Stage = ({ type }) => {
         },
       })
       .then((response) => {
-        setStages(response?.data?.message?.reverse());
+        console.log(response?.data?.message);
+        const sortedStages = response?.data?.message?.sort(
+          (a, b) => a.position - b.position
+        );
+        setStages(sortedStages);
         setDetails((prev) => {
           return { ...prev, position: response?.data?.message?.length + 1 };
         });
@@ -96,8 +101,64 @@ const Stage = ({ type }) => {
       setShowAddStageInput(true);
 
   };
+
+//===================================================================== drag and drop function
+const handleDragStart = (e, index, id) => {
+  e.dataTransfer.setData('index', index);
+  setDragId(id);
+};
+
+const handleDragOver = (e) => {
+  e.preventDefault();
+};
+
+const handleDrop = (e, targetIndex) => {
+  e.preventDefault();
+  const sourceIndex = e.dataTransfer.getData('index');
+  const updatedItems = [...stages];
+  const [draggedItem] = updatedItems.splice(sourceIndex, 1);
+  updatedItems.splice(targetIndex, 0, draggedItem);
+  setStages(updatedItems);
+  axios
+    .put("http://core.leadplaner.com:3001/api/deal/stages/update/"+dragId, { position: targetIndex+1 }, { // Use targetIndex instead of sourceIndex
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response?.data);
+      // Handle the API response if needed
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+
+//===================================================================== drag and drop function
+
+
   return (
     <div className="stage-table">
+
+{/* ===================================================================== drag and drop function */}
+{/* <ul className="item-list">
+      {stages.map((item, index) => (
+        <li
+          key={item.id}
+          draggable
+          onDragStart={(e) => handleDragStart(e, index, item.id)}
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, index)}
+        >
+          {item.display_name}
+        </li>
+      ))}
+    </ul> */}
+
+{/* ===================================================================== drag and drop function */}
+
+
       <table>
         <thead>
           <tr>
