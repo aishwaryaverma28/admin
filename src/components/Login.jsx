@@ -70,12 +70,8 @@ const Login = () => {
             secretKey
           ).toString();
           localStorage.setItem("jwtToken", encryptedToken);
-          // code for decrypt token
-          // const decryptedBytes = CryptoJS.AES.decrypt(encryptedToken, secretKey);
-          // const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
-          // console.log(decryptedToken)
-          const userId = data.user[0].id;
-          localStorage.setItem("id", userId);
+          const role = data?.role;
+          localStorage.setItem("role", role);
           const landingUrl = response.data.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
           const userPath = data.user[0].permissions.split(",");
