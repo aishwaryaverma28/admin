@@ -270,7 +270,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         (user) => user.id === parseInt(value)
       );
 
-      console.log(selectedUserData);
       setInfo(selectedUserData);
 
       setSelectedUser({
@@ -1081,6 +1080,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   item={selectedItem}
                   type={"lead"}
                   count={fetchCall}
+                  userData={userData}
                 />
               </div>
             )}

@@ -197,8 +197,8 @@ select:focus {
 
 .common-white-button:hover {
   color: #fff;
-  border: 1px solid #077838;
-  background-color: #077838;
+  border: 1px solid #d83c38;
+  background-color: #d83c38;
   transition: all 0.5s ease-in-out;
 }
 

@@ -128,10 +128,18 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
       .then((response) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
-        toast.success("Notes added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+
+        if(response.data.status===1){
+          toast.success("Notes added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }else{
+          toast.error("Something went wrong", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);

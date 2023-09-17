@@ -387,8 +387,8 @@
 .cancel-btn:hover,
 .add-btn:hover {
   cursor: pointer;
-  border: 1px solid #077838;
-  background: #077838;
+  border: 1px solid var(--secondary);
+  background: var(--secondary);
   color: #ffffff;
   transition: all 400ms ease-in-out;
 }
