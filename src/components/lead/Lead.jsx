@@ -604,10 +604,10 @@ const Lead = () => {
               ...row,
               value: parseInt(row.value), // Parse the "value" field as an integer
             }));
-            // Store CSV data in state
-            setCsvData(dataWithIntValues);
-            console.log(dataWithIntValues);
-            postCsvDataToAPI(dataWithIntValues);
+
+            const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+            setCsvData(dataWithoutLastValue);
+            postCsvDataToAPI(dataWithoutLastValue);
           },
           error: (error) => {
             console.error("Error parsing CSV:", error.message);
