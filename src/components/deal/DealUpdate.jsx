@@ -15,7 +15,8 @@ import {
   GET_ALL_STAGE,
   UPLOADED_DOCS,
   GET_ACTIVITY,
-  GET_TEAM_MEM
+  GET_TEAM_MEM,
+  GET_FIELDS,
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
 import { toast, ToastContainer } from "react-toastify";
@@ -24,11 +25,11 @@ import DealAttachments from "./DealAttachments.jsx";
 import DealActivity from "./DealActivity";
 import DealEmail from "./DealEmail.jsx";
 
-
-
 const DealUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
+  console.log(decryptedToken)
+  console.log("hello")
   const [labelData, setLabelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLabelColor, setSelectedLabelColor] = useState("");
@@ -40,6 +41,7 @@ const DealUpdate = () => {
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
   const [activityCount, setActivityCount] = useState();
   const [info, setInfo] = useState({});
+  const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
@@ -98,7 +100,31 @@ const DealUpdate = () => {
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
   const [userData, setUserData] = useState([]);
-  const role = parseInt(localStorage.getItem('role'));
+  const role = parseInt(localStorage.getItem("role"));
+  const [fields, setFields] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchFields = () => {
+    axios
+      .get(GET_FIELDS + "deal", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setFields(response?.data?.data.reverse());
+        console.log(response.data.data.reverse());
+        setLoading(false);
+      })
+
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
 
   const userAdded = () => {
     axios
@@ -127,7 +153,7 @@ const DealUpdate = () => {
       .then((response) => {
         setActivityCount(response?.data?.data?.length);
       })
-  
+
       .catch((error) => {
         console.log(error);
         if (error?.response?.data?.message === "Invalid or expired token.") {
@@ -135,14 +161,13 @@ const DealUpdate = () => {
           handleLogout();
         }
       });
-  
   };
 
-  useEffect(()=>{
-   fetchCall();
-   userAdded();
-
-  },[])
+  useEffect(() => {
+    fetchCall();
+    userAdded();
+    fetchFields();
+  }, []);
 
   const handleStageClickFromList = (event, stageId) => {
     setSelectedStageId(stageId);
@@ -204,13 +229,12 @@ const DealUpdate = () => {
 
   const fetchStages = () => {
     axios
-      .get(GET_ALL_STAGE+"/deal", {
+      .get(GET_ALL_STAGE + "/deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-
         const displayNames = response?.data?.message?.map(
           (item) => item.display_name
         );
@@ -242,9 +266,6 @@ const DealUpdate = () => {
       });
   };
 
-
-
-
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
   };
@@ -253,6 +274,9 @@ const DealUpdate = () => {
   };
   const handleDetails = () => {
     setIsDetailsOpen(!isDetailsOpen);
+  };
+  const handleFields = () => {
+    setIsFieldsOpen(!isFieldsOpen);
   };
 
   // const status = [
@@ -417,7 +441,7 @@ const DealUpdate = () => {
           deal_commission: details.deal_commission,
           completion_date: details.completion_date?.split("T")[0],
           stage_id: details.stage_id,
-          owner:info?.id
+          owner: info?.id,
         });
 
         adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
@@ -507,9 +531,9 @@ const DealUpdate = () => {
       });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     uploadedDocs();
-  },[])
+  }, []);
 
   const fetchNotes = () => {
     axios
@@ -531,8 +555,6 @@ const DealUpdate = () => {
         }
       });
   };
-
-
 
   const toggleEditable = (e) => {
     e.preventDefault();
@@ -587,12 +609,12 @@ const DealUpdate = () => {
     height: "2rem",
   };
 
-
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "label_id") {
-      const selectedLabel = mergedLabels.find((label) => label.id === parseInt(value));
+      const selectedLabel = mergedLabels.find(
+        (label) => label.id === parseInt(value)
+      );
       setDealDetails({
         ...dealDetails,
         label_id: selectedLabel.id,
@@ -600,7 +622,7 @@ const DealUpdate = () => {
       if (selectedLabel) {
         setSelectedLabelColor(selectedLabel.colour_code);
       }
-    }else if (name === "owner") {
+    } else if (name === "owner") {
       const selectedUserData = userData.find(
         (user) => user.id === parseInt(value)
       );
@@ -613,7 +635,6 @@ const DealUpdate = () => {
     });
     setStateBtn(1);
   };
-
 
   return (
     <>
@@ -663,47 +684,49 @@ const DealUpdate = () => {
             <p className="common-fonts arrow-text arrow-text-2">contact made (888 days)</p>
           </div> */}
 
-          {
-  isLoading ? (
-    <p className="deal-loading">loading...</p>
-  ) : (
-    <>
-      {visibleStages?.map((stage, index) => {
-        const isActive = currentIndex + index + 1 === dealDetails.stage_id;
-        const activeIndex = dealDetails.stage_id;
-        const backgroundColor = isActive
-          ? "#2b74da"
-          : activeIndex > currentIndex + index + 1
-          ? "#077838"
-          : "#f3f3f3";
-        const textColor =
-          isActive ||
-          backgroundColor === "#077838" ||
-          backgroundColor === "#2b74da"
-            ? "white"
-            : "#1e2224";
+          {isLoading ? (
+            <p className="deal-loading">loading...</p>
+          ) : (
+            <>
+              {visibleStages?.map((stage, index) => {
+                const isActive =
+                  currentIndex + index + 1 === dealDetails.stage_id;
+                const activeIndex = dealDetails.stage_id;
+                const backgroundColor = isActive
+                  ? "#2b74da"
+                  : activeIndex > currentIndex + index + 1
+                  ? "#077838"
+                  : "#f3f3f3";
+                const textColor =
+                  isActive ||
+                  backgroundColor === "#077838" ||
+                  backgroundColor === "#2b74da"
+                    ? "white"
+                    : "#1e2224";
 
-        const arrowClass = isActive
-          ? "arrow-blue"
-          : backgroundColor === "#077838"
-          ? "arrow-green"
-          : "";
+                const arrowClass = isActive
+                  ? "arrow-blue"
+                  : backgroundColor === "#077838"
+                  ? "arrow-green"
+                  : "";
 
-        return (
-          <div
-            className={`arrow-pointer ${arrowClass}`}
-            style={{ backgroundColor, color: textColor }}
-            key={index}
-          >
-            <p className="common-fonts arrow-text" style={{color:textColor}}>
-              {stage} (3 days)
-            </p>
-          </div>
-        );
-      })}
-    </>
-  )
-}
+                return (
+                  <div
+                    className={`arrow-pointer ${arrowClass}`}
+                    style={{ backgroundColor, color: textColor }}
+                    key={index}
+                  >
+                    <p
+                      className="common-fonts arrow-text"
+                      style={{ color: textColor }}
+                    >
+                      {stage} (3 days)
+                    </p>
+                  </div>
+                );
+              })}
+            </>
+          )}
 
           <button
             className="arrow-scroll-right"
@@ -712,7 +735,6 @@ const DealUpdate = () => {
           >
             <img src={GreaterRight} alt="" class="deals-arrow-right" />
           </button>
-
 
           <div className="arrow-btn">
             <button className="arrow-won common-fonts">Won</button>
@@ -753,8 +775,13 @@ const DealUpdate = () => {
                 )}
                 <li>
                   <button
-                    className={isStageButton ? `common-inactive-button stage-save-btn` :`common-save-button stage-save-btn`}
-                    onClick={handleChangeStatusClick} disabled={isStageButton}
+                    className={
+                      isStageButton
+                        ? `common-inactive-button stage-save-btn`
+                        : `common-save-button stage-save-btn`
+                    }
+                    onClick={handleChangeStatusClick}
+                    disabled={isStageButton}
                   >
                     Change Status
                   </button>
@@ -788,10 +815,7 @@ const DealUpdate = () => {
                   <p>Lable</p>
                   <p>Contact Person</p>
                   <p>Organization</p>
-                  {
-                    role === 1 &&
-                    <p>Deal Owner</p>
-                  }
+                  {role === 1 && <p>Deal Owner</p>}
 
                   <p>Closing Date</p>
                 </div>
@@ -879,13 +903,12 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  {
-                    role === 1  && (
-                      <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <select
+                  {role === 1 && (
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <select
                           id="lp-main-owner"
                           onChange={handleInputChange}
                           disabled={isDisabled}
@@ -914,11 +937,9 @@ const DealUpdate = () => {
                           ))}
                           {/* <option value="Imp">{owner}</option> */}
                         </select>
-                    )}
-                  </p>
-                    )
-                  }
-
+                      )}
+                    </p>
+                  )}
 
                   <p>
                     {isLoading ? (
@@ -1418,23 +1439,65 @@ const DealUpdate = () => {
                 </div>
               </div>
             )}
-            {
-              ShowUpdateButton && (
-                <div className="deal-update-btn">
-              {stateBtn === 0 ? (
-                <button disabled className="disabledBtn ">
-                  Update
-                </button>
-              ) : (
-                <button className="convertToDeal" onClick={handleUpdateClick}>
-                  Update
-                </button>
-              )}
+
+            <div className="summaryDiv">
+              <p className="dealSectionHead" onClick={handleFields}>
+                {isFieldsOpen ? (
+                  <i class="fa-sharp fa-solid fa-angle-up"></i>
+                ) : (
+                  <i class="fa-sharp fa-solid fa-angle-down"></i>
+                )}
+                Fields
+              </p>
             </div>
 
-              )
-            }
+            {isFieldsOpen && (
+              <div className="detailsContent">
+                <div className="dealsLeftContainer">
+                  <p>Field 1</p>
+                  <p>Field 2</p>
+                  <p>Field 3</p>
+                  <p>Field 4</p>
+                  <p>Field 5</p>
+                </div>
 
+                <div className="detailsRightContainer">
+                  {fields.map((field) => (
+                    <p key={field.id}>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="text"
+                            name="introducer_name"
+                            value={field.field_name} // Assuming it should be field.field_name
+                            onChange={handleInputChange}
+                            style={
+                             normalStylingInput
+                            }
+                            disabled={true}
+                          />
+                        </span>
+                      )}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+            {ShowUpdateButton && (
+              <div className="deal-update-btn">
+                {stateBtn === 0 ? (
+                  <button disabled className="disabledBtn ">
+                    Update
+                  </button>
+                ) : (
+                  <button className="convertToDeal" onClick={handleUpdateClick}>
+                    Update
+                  </button>
+                )}
+              </div>
+            )}
           </section>
         </div>
         <div className="divRightSection">
@@ -1488,17 +1551,26 @@ const DealUpdate = () => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail/>
+                <DealEmail />
               </div>
             )}
             {activeTab === "activity" && (
               <div className="activity-tab-content">
-                <DealActivity id = {id} type={"deal"} count={fetchCall} userData={userData}/>
+                <DealActivity
+                  id={id}
+                  type={"deal"}
+                  count={fetchCall}
+                  userData={userData}
+                />
               </div>
             )}
             {activeTab === "attachment" && (
               <div className="attachment-tab-content">
-                <DealAttachments dealId = {id} type={"deal"} onAttachNum={uploadedDocs}/>
+                <DealAttachments
+                  dealId={id}
+                  type={"deal"}
+                  onAttachNum={uploadedDocs}
+                />
               </div>
             )}
           </div>
