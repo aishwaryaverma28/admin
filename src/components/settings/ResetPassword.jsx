@@ -365,7 +365,7 @@ console.log(passDes)
             </button>
           ) : (
             <button className="restore-yes common-fonts" onClick={handleSave2}>
-              Save2
+              Save
             </button>
           )}
         </div>

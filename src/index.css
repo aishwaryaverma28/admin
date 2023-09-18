@@ -201,6 +201,27 @@ select:focus {
   background-color: #d83c38;
   transition: all 0.5s ease-in-out;
 }
+.common-white-green-button {
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  padding: 7px 15px;
+  color: #1e2224;
+  font-family: "Lexend Deca", sans-serif;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+}
+
+.common-white-green-button:hover {
+  color: #fff;
+  border: 1px solid #077838;
+  background-color: #077838;
+  transition: all 0.5s ease-in-out;
+}
 
 .common-delete-button {
   border-radius: 0.3125rem;
@@ -252,4 +273,9 @@ select:focus {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
+}
+
+
+.left-space{
+  margin-left: 1rem;
 }

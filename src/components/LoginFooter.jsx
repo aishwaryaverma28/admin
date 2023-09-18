@@ -11,6 +11,7 @@ import Award7 from "../assets/image/award-image7.png";
 const LoginFooter = () => {
   return (
     <>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
 <footer className="registration-footer1">
         <div className="footer-contact">
@@ -21,10 +22,17 @@ const LoginFooter = () => {
 
         <div className="footer-follow">
             <p>Follow Us On</p>
-            <div>
-                <i className="fa fa-facebook footer-media" aria-hidden="true"></i>
-                <i className="fa fa-twitter footer-media" aria-hidden="true"></i>
-                <i className="fa fa-linkedin footer-media" aria-hidden="true"></i>
+            
+            <div className='footer-media-flex'>
+            <div className='footer-media'>
+            <i className="fa fa-facebook" aria-hidden="true"></i>
+            </div>
+            <div className='footer-media footer-twitter'>
+            <i className="fa fa-twitter" aria-hidden="true"></i>
+            </div>
+            <div className='footer-media'>
+            <i className="fa fa-linkedin" aria-hidden="true"></i>
+            </div>
             </div>
 
             <div className="footer-nav-item">
