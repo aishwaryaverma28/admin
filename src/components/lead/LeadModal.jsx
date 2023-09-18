@@ -12,6 +12,7 @@ import {
   GET_ALL_STAGE,
   UPLOADED_DOCS,
   GET_ACTIVITY,
+  GET_FIELDS
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
@@ -45,6 +46,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [stageId, setStageId] = useState([]);
   const [attachedFile, setAttachedFiles] = useState();
   const [showOwner, setShowOwner] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fieldNames, setFieldNames] = useState({});
+  const [fields, setFields] = useState([]);
+  const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -58,6 +63,89 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const [info, setInfo] = useState({});
   const role = parseInt(localStorage.getItem('role'));
+
+  const fetchFields = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(GET_FIELDS + "lead", {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setFields(response?.data?.data.reverse());
+          const fieldsData = response?.data?.data.reverse();
+          const newFieldNames = {};
+          fieldsData.forEach((field, index) => {
+            newFieldNames[`field${index + 1}`] = field.field_name;
+          });
+          setFieldNames(newFieldNames);
+
+          setEditedItem((prevDealDetails) => {
+            const updatedDealDetails = { ...prevDealDetails };
+
+            for (const key in newFieldNames) {
+              updatedDealDetails[newFieldNames[key]] = "";
+            }
+
+            return updatedDealDetails;
+          });
+          setLoading(false);
+          resolve(); // Resolve the promise when the fetch is successful
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+          reject(error); // Reject the promise if there is an error
+        });
+    });
+  };
+
+  const fetchLead = () => {
+    axios
+      .get(GET_LEAD_ID + selectedItem?.id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setEditedItem(response?.data?.data[0]);
+        setName(
+          response?.data?.data[0]?.first_name +
+            " " +
+            response?.data?.data[0]?.last_name
+        );
+        setOwner(
+          response?.data?.data[0]?.ownerf_name +
+            " " +
+            response?.data?.data[0]?.ownerl_name
+        );
+        setSelectedStageId(response?.data?.data[0]?.stage_id);
+        setIsLoading(false);
+        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
+        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
+        adminInfo.phone = response?.data?.data[0]?.owner_phone || "";
+        adminInfo.email = response?.data?.data[0]?.owner_email || "";
+        adminInfo.id = response?.data?.data[0]?.owner || "";
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchFields()
+  }, []);
+
+  useEffect(() => {
+
+      fetchLead();
+
+  }, [fieldNames])
   
 
 
@@ -140,38 +228,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     fetchStages();
   }, []);
 
-  const fetchLead = () => {
-    axios
-      .get(GET_LEAD_ID + selectedItem?.id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        setEditedItem(response?.data?.data[0]);
-        setName(
-          response?.data?.data[0]?.first_name +
-            " " +
-            response?.data?.data[0]?.last_name
-        );
-        setOwner(
-          response?.data?.data[0]?.ownerf_name +
-            " " +
-            response?.data?.data[0]?.ownerl_name
-        );
-        setSelectedStageId(response?.data?.data[0]?.stage_id);
-        setIsLoading(false);
-        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
-        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
-        adminInfo.phone = response?.data?.data[0]?.owner_phone || "";
-        adminInfo.email = response?.data?.data[0]?.owner_email || "";
-        adminInfo.id = response?.data?.data[0]?.owner || "";
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
+
 
   const fetchLabelData = async () => {
     try {
@@ -292,6 +349,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     setStateBtn(1);
   };
 
+  const handleFields = () => {
+    setIsFieldsOpen(!isFieldsOpen);
+  };
+
   // const handleInputChange = (e) => {
   //   const { name, value } = e.target;
 
@@ -343,6 +404,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
+    const fieldMappings = {};
+
+    for (const key in fieldNames) {
+      fieldMappings[fieldNames[key]] = editedItem?.[fieldNames[key]];
+    }
     const updatedLead = {
       leadIds: [selectedItem?.id],
       lead_name: editedItem?.lead_name,
@@ -365,8 +431,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       stage_id: selectedStageId,
       status: editedItem?.status,
     };
+
+    const newUpdatedLead={...updatedLead, ...fieldMappings};
     axios
-      .put(UPDATE_LEAD, updatedLead, {
+      .put(UPDATE_LEAD, newUpdatedLead, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -996,6 +1064,40 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
               </div>
             </div>
+
+            <div className="detailsBox">
+              <p className="detailHead">Fields</p>
+              <div className="detailsContent">
+                <div className="detailsLeftContainer">
+                  {fields.map((field) => (
+                    <p key={field.id}>{field.field_name}</p>
+                  ))}
+                </div>
+                <div className="detailsRightContainer">
+                {fields.map((field, index) => (
+                    <p key={field.id}>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="text"
+                            name={field.field_name}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable ? editStylingInput : normalStylingInput
+                            }
+                            value={editedItem[field.field_name]}
+                            disabled={isDisabled}
+                          />
+                        </span>
+                      )}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+
           </div>
           {isEditable ? (
             <div className="modalLeftBtnBox">

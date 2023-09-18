@@ -28,8 +28,6 @@ import DealEmail from "./DealEmail.jsx";
 const DealUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
-  console.log(decryptedToken)
-  console.log("hello")
   const [labelData, setLabelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLabelColor, setSelectedLabelColor] = useState("");
@@ -47,6 +45,8 @@ const DealUpdate = () => {
     last_name: "",
     id: 0,
   });
+
+  const [fieldNames, setFieldNames] = useState({});
 
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
@@ -105,27 +105,115 @@ const DealUpdate = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchFields = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(GET_FIELDS + "deal", {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setFields(response?.data?.data.reverse());
+          const fieldsData = response?.data?.data.reverse();
+          const newFieldNames = {};
+          fieldsData.forEach((field, index) => {
+            newFieldNames[`field${index + 1}`] = field.field_name;
+          });
+          setFieldNames(newFieldNames);
+
+          setDealDetails((prevDealDetails) => {
+            const updatedDealDetails = { ...prevDealDetails };
+
+            for (const key in newFieldNames) {
+              updatedDealDetails[newFieldNames[key]] = "";
+            }
+
+            return updatedDealDetails;
+          });
+          setLoading(false);
+          resolve(); // Resolve the promise when the fetch is successful
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+          reject(error); // Reject the promise if there is an error
+        });
+    });
+  };
+
+  const fetchDeal = () => {
     axios
-      .get(GET_FIELDS + "deal", {
+      .get(GET_DEAL_ID + id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`,
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        setFields(response?.data?.data.reverse());
-        console.log(response.data.data.reverse());
-        setLoading(false);
-      })
+        const details = response?.data?.data[0];
+        const fieldMappings = {};
 
+        for (const key in fieldNames) {
+          // Use the value from fieldNames as the key in fieldMappings
+          fieldMappings[fieldNames[key]] = details?.[fieldNames[key]];
+        }
+        
+
+
+        setDealDetails({
+          ...dealDetails,
+          ...fieldMappings,
+          closure_date: details.closure_date?.split("T")[0],
+          contact: details.contact,
+          deal_name: details.deal_name,
+          doc_number: details.doc_number,
+          document_verified: details.document_verified,
+          email: details.email,
+          is_deleted: details.is_deleted,
+          label_id: details.label_id,
+          mobile: details.mobile,
+          organization: details.organization,
+          // ownerf_name: details.ownerf_name,
+          // ownerl_name: details.ownerl_name,
+          pipeline_id: 1,
+          probability: details.probability,
+          status: details.status,
+          value: details.value,
+          introducer_name: details.introducer_name,
+          introducer_firm_name: details.introducer_firm_name,
+          data_enquiry_receive: details.data_enquiry_receive,
+          borrower_entry: details.borrower_entry,
+          security_value: details.security_value,
+          loan_amount: details.loan_amount,
+          deposit: details.deposit,
+          type_of_security: details.type_of_security,
+          loan_type: details.loan_type,
+          lender: details.lender,
+          lead_source: details.lead_source,
+          engagement_fee: details.engagement_fee,
+          engagement_fee_paid: details.engagement_fee_paid,
+          broker_fee: details.broker_fee,
+          broker_fee_paid: details.broker_fee_paid,
+          procuration_fee: details.procuration_fee,
+          procuration_fee_paid: details.procuration_fee_paid,
+          deal_commission: details.deal_commission,
+          completion_date: details.completion_date?.split("T")[0],
+          stage_id: details.stage_id,
+          owner: info?.id,
+        });
+
+        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
+        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
+        adminInfo.id = response?.data?.data[0]?.owner || "";
+        setIsLoading(false);
+      })
       .catch((error) => {
         console.log(error);
-        if (error?.response?.data?.message === "Invalid or expired token.") {
-          alert(error?.response?.data?.message);
-          handleLogout();
-        }
+        setIsLoading(false);
       });
   };
-
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -166,7 +254,39 @@ const DealUpdate = () => {
   useEffect(() => {
     fetchCall();
     userAdded();
+  }, []);
+
+  useEffect(() => {
     fetchFields();
+  }, []);
+
+  useEffect(() => {
+
+      fetchDeal();
+
+  }, [fieldNames])
+
+  useEffect(() => {
+    fetchLabelData();
+    fetchNotes();
+  }, [])
+
+
+
+
+  useEffect(() => {
+    fetchFields() // Fetch fields first
+      .then(() => {
+        // Once fields are fetched, fetchDeal
+        fetchDeal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // Fetch other data like labels and notes here if needed
+    fetchLabelData();
+    fetchNotes();
   }, []);
 
   const handleStageClickFromList = (event, stageId) => {
@@ -394,66 +514,7 @@ const DealUpdate = () => {
     fetchStages();
   }, []);
 
-  const fetchDeal = () => {
-    axios
-      .get(GET_DEAL_ID + id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        const details = response?.data?.data[0];
-        setDealDetails({
-          ...dealDetails,
-          closure_date: details.closure_date?.split("T")[0],
-          contact: details.contact,
-          deal_name: details.deal_name,
-          doc_number: details.doc_number,
-          document_verified: details.document_verified,
-          email: details.email,
-          is_deleted: details.is_deleted,
-          label_id: details.label_id,
-          mobile: details.mobile,
-          organization: details.organization,
-          // ownerf_name: details.ownerf_name,
-          // ownerl_name: details.ownerl_name,
-          pipeline_id: 1,
-          probability: details.probability,
-          status: details.status,
-          value: details.value,
-          introducer_name: details.introducer_name,
-          introducer_firm_name: details.introducer_firm_name,
-          data_enquiry_receive: details.data_enquiry_receive,
-          borrower_entry: details.borrower_entry,
-          security_value: details.security_value,
-          loan_amount: details.loan_amount,
-          deposit: details.deposit,
-          type_of_security: details.type_of_security,
-          loan_type: details.loan_type,
-          lender: details.lender,
-          lead_source: details.lead_source,
-          engagement_fee: details.engagement_fee,
-          engagement_fee_paid: details.engagement_fee_paid,
-          broker_fee: details.broker_fee,
-          broker_fee_paid: details.broker_fee_paid,
-          procuration_fee: details.procuration_fee,
-          procuration_fee_paid: details.procuration_fee_paid,
-          deal_commission: details.deal_commission,
-          completion_date: details.completion_date?.split("T")[0],
-          stage_id: details.stage_id,
-          owner: info?.id,
-        });
 
-        adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
-        adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
-        adminInfo.id = response?.data?.data[0]?.owner || "";
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
 
   const fetchLabelData = async () => {
     try {
@@ -473,11 +534,6 @@ const DealUpdate = () => {
       }
     }
   };
-  useEffect(() => {
-    fetchDeal();
-    fetchLabelData();
-    fetchNotes();
-  }, []);
 
   const handleUpdateClick = (event) => {
     event.preventDefault();
@@ -511,7 +567,6 @@ const DealUpdate = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-
   const uploadedDocs = () => {
     axios
       .get(UPLOADED_DOCS + "deal" + "/" + id, {
@@ -1454,15 +1509,13 @@ const DealUpdate = () => {
             {isFieldsOpen && (
               <div className="detailsContent">
                 <div className="dealsLeftContainer">
-                  <p>Field 1</p>
-                  <p>Field 2</p>
-                  <p>Field 3</p>
-                  <p>Field 4</p>
-                  <p>Field 5</p>
+                  {fields.map((field) => (
+                    <p key={field.id}>{field.field_name}</p>
+                  ))}
                 </div>
 
                 <div className="detailsRightContainer">
-                  {fields.map((field) => (
+                  {fields.map((field, index) => (
                     <p key={field.id}>
                       {isLoading ? (
                         <span>-</span>
@@ -1470,13 +1523,13 @@ const DealUpdate = () => {
                         <span>
                           <input
                             type="text"
-                            name="introducer_name"
-                            value={field.field_name} // Assuming it should be field.field_name
+                            name={field.field_name}
                             onChange={handleInputChange}
                             style={
-                             normalStylingInput
+                              isEditable ? editStylingInput : normalStylingInput
                             }
-                            disabled={true}
+                            value={dealDetails[field.field_name]}
+                            disabled={isDisabled}
                           />
                         </span>
                       )}
