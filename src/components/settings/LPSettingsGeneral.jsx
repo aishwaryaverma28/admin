@@ -287,11 +287,11 @@ const LPSettingsGeneral = () => {
                     </div>
 
                     <div className="general-page-btn">
-                      <button className="general-discard-btn">Discard</button>
+                      <button className="common-white-button common-fonts left-space">Discard</button>
                       {stateBtn === 0 ? (
                         <button className="disabledBtn">Save</button>
                       ) : (
-                        <button className="general-save-btn" onClick={handleSubmit}>Save</button>
+                        <button className="common-fonts common-save-button left-space" onClick={handleSubmit}>Save</button>
                       )}
                     </div>
                   </form>

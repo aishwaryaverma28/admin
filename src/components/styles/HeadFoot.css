@@ -216,9 +216,22 @@
   border-radius: 50%;
   background: #51bff0;
   color: #fff;
-  padding: 0.625rem;
   margin-bottom: 1.875rem;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-twitter{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.footer-media-flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer-media:hover {
