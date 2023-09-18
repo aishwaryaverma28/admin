@@ -8,9 +8,9 @@ const PaymentsPrefrenceTab = () => {
     
 <>
     <div className='pp-button'>
-        <button className='common-white-button'>set as default</button>
+        <button className='common-white-green-button'>set as default</button>
         <button className='common-delete-button'>Delete</button>
-        <button className='common-white-button'>Edit</button>
+        <button className='common-white-green-button'>Edit</button>
         <button className='common-save-button'>Add payment method</button>
     </div>
 

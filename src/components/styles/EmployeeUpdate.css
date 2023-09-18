@@ -221,8 +221,8 @@
 }
 
 .saveBtnRight > .cancleBtn:hover {
-  border: 1px solid #077838;
+  border: 1px solid #d83c38;
   color: #ffffff;
-  background: #077838;
+  background: #d83c38;
   transition: all 0.8s ease-in-out;
 }
