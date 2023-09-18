@@ -607,7 +607,7 @@ const Lead = () => {
             // Store CSV data in state
             setCsvData(dataWithIntValues);
             console.log(dataWithIntValues);
-            postCsvDataToAPI(dataWithIntValues);
+            postCsvDataToAPI(result.data);
           },
           error: (error) => {
             console.error("Error parsing CSV:", error.message);
