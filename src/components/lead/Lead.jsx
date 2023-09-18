@@ -10,7 +10,7 @@ import LeadDeletePopUp from "../DeleteComponent";
 
 import {
   GET_LEAD,
-  EXPORT_CSV,
+  IMPORT_CSV ,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
   GET_ALL_STAGE,
@@ -600,8 +600,14 @@ const Lead = () => {
         Papa.parse(file, {
           header: true, // Assume the first row contains headers
           complete: (result) => {
+            const dataWithIntValues = result.data.map((row) => ({
+              ...row,
+              value: parseInt(row.value), // Parse the "value" field as an integer
+            }));
             // Store CSV data in state
-            setCsvData(result.data);
+            setCsvData(dataWithIntValues);
+            console.log(dataWithIntValues);
+            postCsvDataToAPI(dataWithIntValues);
           },
           error: (error) => {
             console.error("Error parsing CSV:", error.message);
@@ -614,6 +620,29 @@ const Lead = () => {
       // Trigger a click event on the hidden file input element
       fileInputRef.current.click();
     };
+    const postCsvDataToAPI = async (csvData) => {
+      try {
+        const response = await axios.post(IMPORT_CSV,{
+          data: csvData,
+        }, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
+        if (response.status === 200) {
+          console.log('CSV data successfully posted to the API');
+          // You can add further logic here if needed
+        } else {
+          console.error('Failed to post CSV data to the API');
+          // Handle the error as needed
+        }
+      } catch (error) {
+        console.error('Error posting CSV data:', error);
+        // Handle the error as needed
+      }
+    };
+    
+
 
   return (
     <div>
