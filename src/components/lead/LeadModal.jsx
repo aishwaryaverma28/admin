@@ -22,6 +22,7 @@ import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
+
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
