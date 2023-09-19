@@ -65,6 +65,7 @@ const Deal = () => {
     }
     const handleMassUpdateClose = () =>{
       setMassUpdateModalOpen(false)
+      setSelectedIds([]);
     }
   
 
@@ -887,7 +888,7 @@ const Deal = () => {
 
       {
         massUpdateModalOpen && (
-          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Deal"/>
+          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Deal" ids={selectedIds}/>
         )
       }
     </div>
