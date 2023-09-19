@@ -691,6 +691,8 @@ const DealUpdate = () => {
     setStateBtn(1);
   };
 
+
+
   return (
     <>
       <div className="backToDeal">
@@ -870,8 +872,7 @@ const DealUpdate = () => {
                   <p>Lable</p>
                   <p>Contact Person</p>
                   <p>Organization</p>
-                  {role === 1 && <p>Deal Owner</p>}
-
+                  <p>Deal Owner</p>
                   <p>Closing Date</p>
                 </div>
 
@@ -958,7 +959,7 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  {role === 1 && (
+                  {role === 1 ? (
                     <p>
                       {isLoading ? (
                         <span>-</span>
@@ -994,6 +995,24 @@ const DealUpdate = () => {
                         </select>
                       )}
                     </p>
+                  ):
+                  (
+                    <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="value"
+                          disabled={true}
+                          style={
+                            normalStylingInput
+                          }
+                        />
+                      </span>
+                    )}
+                  </p>
                   )}
 
                   <p>
