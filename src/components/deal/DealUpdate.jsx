@@ -165,6 +165,7 @@ const DealUpdate = () => {
         setDealDetails({
           ...dealDetails,
           ...fieldMappings,
+          dealId:[id],
           closure_date: details.closure_date?.split("T")[0],
           contact: details.contact,
           deal_name: details.deal_name,
@@ -538,7 +539,7 @@ const DealUpdate = () => {
   const handleUpdateClick = (event) => {
     event.preventDefault();
     axios
-      .put(UPDATE_DEAL + id, dealDetails, {
+      .put(UPDATE_DEAL, dealDetails, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
