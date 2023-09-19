@@ -1276,4 +1276,6 @@
 
 .owner-menu{
   left:0%;
+  height: 70vh;
+  overflow: scroll;
 }
