@@ -28,10 +28,13 @@ const MassUpdateModal = ({ onClose, userData , text, ids }) => {
           })
           .then((response) => {
             console.log(response);
+            if(response?.data?.status === 1){
             toast.success("Lead tranfered successfully", {
               position:"top-center",
               autoClose:2000
             })
+          }
+          onClose();
           })
           .catch((error) => {
             console.log(error);
