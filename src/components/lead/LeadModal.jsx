@@ -63,7 +63,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [info, setInfo] = useState({});
   const role = parseInt(localStorage.getItem("role"));
 
-
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
       axios
@@ -273,10 +272,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .then((response) => {
         const responseData = response?.data?.data;
-        const combinedData = [adminInfo, ...responseData];
+        // const combinedData = [adminInfo, ...responseData];
 
-        setUserData(combinedData);
-        // setUserData(response?.data?.data);
+        setUserData(responseData);
       })
       .catch((error) => {
         console.log(error);
@@ -618,8 +616,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     width: "fit-content",
   };
 
-
-
   return (
     <div className="modal">
       <div className="customization_popup_container">
@@ -912,7 +908,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             className={isDisabled ? "disabled" : ""}
                             name="owner"
                           >
-                            {userData.map((item) => (
+                            {userData.slice().reverse().map((item) => (
                               <option
                                 key={item?.id}
                                 value={item?.id}

@@ -96,8 +96,8 @@ const Deal = () => {
         })
         .then((response) => {
           const responseData = response?.data?.data;
-          const combinedData = [adminInfo, ...responseData];
-          setUserData(combinedData);
+          // const combinedData = [adminInfo, ...responseData];
+          setUserData(responseData);
         })
         .catch((error) => {
           console.log(error);
@@ -689,7 +689,7 @@ const Deal = () => {
                 </div>
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
-                              {userData.map((item) => (
+                              {userData.slice().reverse().map((item) => (
                             <li
                               key={item?.id}
                               value={item?.id}
@@ -855,6 +855,7 @@ const Deal = () => {
                         setSelectedIds={setSelectedIds}
                         // status={item} // Pass the status as a prop
                         onLeadAdded={fetchLeadsData}
+                        userData={userData}
                       />
                     );
                   }
