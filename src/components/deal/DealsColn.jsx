@@ -7,15 +7,24 @@ import axios from "axios";
 import { MOVEDEAL_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AssignModal from "../lead/AssignModal.jsx";
 
 
-const DealsColn = ({ object, selectedIds, setSelectedIds, status, onLeadAdded  }) => {
+const DealsColn = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, userData  }) => {
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 const [deleteLeadId, setDeleteLeadId] = useState(null);
+const [assign,setAssign] = useState(false);
+
+const handleAssignModal = () => {
+  setAssign(true);
+}
+const handleAssignModalClose = () => {
+  setAssign(false);
+}
     
   const handleDeleteOpen = (id) => {
     setIsDeleteOpen(true);
@@ -136,6 +145,7 @@ const [deleteLeadId, setDeleteLeadId] = useState(null);
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
                   <li>Convert to Lead</li>
+                  <li onClick={handleAssignModal}>Assign</li>
                   <li onClick={() => handleDeleteOpen(object.id)}>Delete</li>
                   {/* <li>object 3</li> */}
                 </ul>
@@ -157,6 +167,12 @@ const [deleteLeadId, setDeleteLeadId] = useState(null);
       {
         isDeleteOpen && (
           <DealDeletePopUp onClose={handleDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
+        )
+      }
+
+      {
+        assign && (
+          <AssignModal onClose={handleAssignModalClose} text="Deal" userData={userData} />
         )
       }
     </>

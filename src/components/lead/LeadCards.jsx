@@ -9,8 +9,9 @@ import { MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
+import AssignModal from "./AssignModal.jsx";
 
-const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded}) => {
+const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, userData}) => {
   const decryptedToken = getDecryptedToken();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef(null);
@@ -20,7 +21,15 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded}) 
     const [isDelete, setIsDelete] = useState(false);
     const [deleteLeadId, setDeleteLeadId] = useState(null);
     const [selectedConvertItem, setSelectedConvertItem] = useState(null);
+    const [assign, setAssign] = useState(false);
   const [convertModalVisible, setConvertModalVisible] = useState(false);
+
+  const handleAssignModal = () => {
+    setAssign(true);
+  }
+  const handleAssignModalClose = () => {
+    setAssign(false);
+  }
 
   const openConvertModal = (item) => {
     setSelectedConvertItem(item); // Set the selected item
@@ -154,6 +163,7 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded}) 
             {isMenuOpen && (
               <ul className="cardMenu" ref={menuRef}>
                 <li onClick={() => openConvertModal(object)}>Convert to deal</li>
+                <li onClick={handleAssignModal}>Assign</li>
                 <li onClick={() => handleLeadDelete(object.id)}>Delete</li>
               </ul>
             )}
@@ -191,6 +201,12 @@ const LeadCards = ({ object, selectedIds, setSelectedIds, status, onLeadAdded}) 
           selectedItem={selectedConvertItem} // Pass the selected item to modal
         />
       )}
+
+      {
+        assign && (
+          <AssignModal onClose={handleAssignModalClose} text="Lead" userData={userData} />
+        )
+      }
   </>
   )
 }

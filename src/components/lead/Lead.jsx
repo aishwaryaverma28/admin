@@ -9,7 +9,7 @@ import CreateLead from "./CreateLead";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
   GET_LEAD,
-  IMPORT_CSV ,
+  IMPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
   GET_ALL_STAGE,
@@ -17,13 +17,12 @@ import {
   handleLogout,
   GET_TEAM_MEM,
   USER_INFO,
-  GET_OWNER_LEAD
-
+  GET_OWNER_LEAD,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
-import Papa from "papaparse"; 
+import Papa from "papaparse";
 import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
@@ -51,43 +50,42 @@ const Lead = () => {
   const [isDelete, setIsDelete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None");
-  const [sortOrder, setSortOrder] = useState("asc");  
+  const [sortOrder, setSortOrder] = useState("asc");
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
-  const role= parseInt(localStorage.getItem('role'));
-  const [massUpdateModalOpen,setMassUpdateModalOpen] = useState(false)
+  const role = parseInt(localStorage.getItem("role"));
+  const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
     id: 0,
   });
 
-  const handleMassUpdate = () =>{
-    setMassUpdateModalOpen(true)
-  }
-  const handleMassUpdateClose = () =>{
-    setMassUpdateModalOpen(false)
+  const handleMassUpdate = () => {
+    setMassUpdateModalOpen(true);
+  };
+  const handleMassUpdateClose = () => {
+    setMassUpdateModalOpen(false);
     setSelectedIds([]);
-  }
+  };
 
   const handleOwnerClick = (id) => {
     axios
-    .get(GET_OWNER_LEAD+id, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      setDeals(response?.data?.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .get(GET_OWNER_LEAD + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setDeals(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     setOwnerOpen(false);
-  } 
-
+  };
 
   const userAdded = () => {
     axios
@@ -98,8 +96,8 @@ const Lead = () => {
       })
       .then((response) => {
         const responseData = response?.data?.data;
-        const combinedData = [adminInfo, ...responseData];
-        setUserData(combinedData);
+        // const combinedData = [adminInfo, ...responseData];
+        setUserData(responseData);
       })
       .catch((error) => {
         console.log(error);
@@ -118,7 +116,6 @@ const Lead = () => {
         adminInfo.first_name = response?.data?.data[0]?.first_name || "";
         adminInfo.last_name = response?.data?.data[0]?.last_name || "";
         adminInfo.id = response?.data?.data[0]?.id || "";
-       
       }
     } catch (error) {
       console.log(error);
@@ -129,10 +126,10 @@ const Lead = () => {
     }
   }
 
-  useEffect(()=>{
-   userAdded();
-   getUser();
-  },[])
+  useEffect(() => {
+    userAdded();
+    getUser();
+  }, []);
   const fetchStatus = () => {
     axios
       .get(GET_ALL_STAGE + "/lead", {
@@ -167,7 +164,7 @@ const Lead = () => {
     });
     setStatusCounts(counts);
   }, [deals, status]);
-  
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -455,7 +452,7 @@ const Lead = () => {
   // const handleButtonClick = async () => {
   //   fileInputRef.current.click();
   // };
-  
+
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
   };
@@ -469,7 +466,6 @@ const Lead = () => {
     setActionOpen(!actionopen);
   };
 
-  
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -590,7 +586,7 @@ const Lead = () => {
         });
       fetchLeadsData();
       setSelectedIds([]); // Reset the stored ID
-  
+
       handleMassDeletePopUpClose();
     }
   };
@@ -603,62 +599,64 @@ const Lead = () => {
       colour_code: item?.colour_code,
     }));
 
-    const handleCsvFileImport = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        Papa.parse(file, {
-          header: true, // Assume the first row contains headers
-          complete: (result) => {
-            const dataWithIntValues = result.data.map((row) => ({
-              ...row,
-              value: parseInt(row.value), // Parse the "value" field as an integer
-              stage_id: parseInt(row.stage_id),
-            }));
-            // Store CSV data in state
-            const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
-            setCsvData(dataWithoutLastValue);
-            postCsvDataToAPI(dataWithoutLastValue);
-          },
-          error: (error) => {
-            console.error("Error parsing CSV:", error.message);
-          },
-        });
-      }
-    };
-    // Function to handle "Import" menu item click
-    const handleImportClick = () => {
-      // Trigger a click event on the hidden file input element
-      fileInputRef.current.click();
-    };
-    const postCsvDataToAPI = async (csvData) => {
-      try {
-        const response = await axios.post(IMPORT_CSV,{
+  const handleCsvFileImport = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          const dataWithIntValues = result.data.map((row) => ({
+            ...row,
+            value: parseInt(row.value), // Parse the "value" field as an integer
+            stage_id: parseInt(row.stage_id),
+          }));
+          // Store CSV data in state
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          setCsvData(dataWithoutLastValue);
+          postCsvDataToAPI(dataWithoutLastValue);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  // Function to handle "Import" menu item click
+  const handleImportClick = () => {
+    // Trigger a click event on the hidden file input element
+    fileInputRef.current.click();
+  };
+  const postCsvDataToAPI = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_CSV,
+        {
           data: csvData,
-        }, {
+        },
+        {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
-        });
-        if (response.data.status === 1) {
-          toast.success("Import successfull", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          // You can add further logic here if needed
-        } else {
-          toast.error("Some Error Occured", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          // Handle the error as needed
         }
-      } catch (error) {
-        console.error('Error posting CSV data:', error);
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // You can add further logic here if needed
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         // Handle the error as needed
       }
-    };
-    
-
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+      // Handle the error as needed
+    }
+  };
 
   return (
     <div>
@@ -702,9 +700,8 @@ const Lead = () => {
                 <img src={Search} alt="" />
               </span>
             </div>
-            {
-              role===1 && (
-                <div className="dropdown-container" ref={actionOwnerRef}>
+            {role === 1 && (
+              <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   Select Owner
                   <i
@@ -715,30 +712,29 @@ const Lead = () => {
                 </div>
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
-                              {userData.map((item) => (
-                            <li
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                              onClick={()=>handleOwnerClick(item.id)}
-                            >
-                              {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
-                              } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
-                              }`}
-                            </li>
-                          ))}
+                    {userData
+                      .slice()
+                      .reverse()
+                      .map((item) => (
+                        <li
+                          key={item?.id}
+                          value={item?.id}
+                          className="owner-val"
+                          onClick={() => handleOwnerClick(item.id)}
+                        >
+                          {`${
+                            item?.first_name.charAt(0).toUpperCase() +
+                            item?.first_name.slice(1)
+                          } ${
+                            item?.last_name.charAt(0).toUpperCase() +
+                            item?.last_name.slice(1)
+                          }`}
+                        </li>
+                      ))}
                   </ul>
                 )}
               </div>
-
-              )
-            }
-
-
+            )}
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
@@ -769,12 +765,12 @@ const Lead = () => {
             </div>
 
             <input
-        type="file"
-        accept=".csv"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleCsvFileImport}
-      />
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleCsvFileImport}
+            />
 
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
@@ -939,6 +935,7 @@ const Lead = () => {
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
                         onLeadAdded={fetchLeadsData}
+                        userData={userData}
                       />
                     );
                   }
@@ -971,11 +968,14 @@ const Lead = () => {
         />
       )}
 
-      {
-        massUpdateModalOpen && (
-          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Lead" ids={selectedIds}/>
-        )
-      }
+      {massUpdateModalOpen && (
+        <MassUpdateModal
+          onClose={handleMassUpdateClose}
+          userData={userData}
+          text="Lead"
+          ids={selectedIds}
+        />
+      )}
     </div>
   );
 };
