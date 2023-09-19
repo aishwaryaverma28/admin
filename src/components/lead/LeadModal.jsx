@@ -77,8 +77,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
           setFields(response?.data?.data.reverse());
           const fieldsData = response?.data?.data.reverse();
           const newFieldNames = {};
-          fieldsData.forEach((field, index) => {
-            newFieldNames[`field${index + 1}`] = field.field_name;
+          fieldsData?.forEach((field, index) => {
+            newFieldNames[`field${index + 1}`] = field?.field_name;
           });
           setFieldNames(newFieldNames);
 
@@ -1118,7 +1118,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             style={
                               isEditable ? editStylingInput : normalStylingInput
                             }
-                            value={editedItem[field.field_name]}
+                            value={editedItem && editedItem[field.field_name]}
                             disabled={isDisabled}
                           />
                         </span>
