@@ -68,6 +68,7 @@ const Lead = () => {
   }
   const handleMassUpdateClose = () =>{
     setMassUpdateModalOpen(false)
+    setSelectedIds([]);
   }
 
   const handleOwnerClick = (id) => {

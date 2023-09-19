@@ -3,7 +3,8 @@ import axios from "axios";
 import {
   getDecryptedToken
 } from "../utils/Constants";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MassUpdateModal = ({ onClose, userData , text, ids }) => {
   const decryptedToken = getDecryptedToken();
@@ -15,9 +16,8 @@ const MassUpdateModal = ({ onClose, userData , text, ids }) => {
       } 
     
       const handleConfirmed = () => {
-        if (ids) {
           const body = {
-            leadIds: [ids], // Use the stored ID
+            leadIds: ids, // Use the stored ID
             owner: ownerId 
           };
           console.log(body);
@@ -26,8 +26,17 @@ const MassUpdateModal = ({ onClose, userData , text, ids }) => {
               Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
             },
           })
-        }
-      };
+          .then((response) => {
+            console.log(response);
+            toast.success("Lead tranfered successfully", {
+              position:"top-center",
+              autoClose:2000
+            })
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        };
 
 
   return (
