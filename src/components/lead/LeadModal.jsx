@@ -62,8 +62,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const [info, setInfo] = useState({});
   const role = parseInt(localStorage.getItem("role"));
-  console.log(role);
-  console.log("kgf");
+
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -619,8 +618,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     width: "fit-content",
   };
 
-  console.log(editedItem);
-  console.log("ggff");
+
 
   return (
     <div className="modal">

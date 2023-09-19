@@ -31,6 +31,31 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     stage_id: 1,
   });
 
+  const resetForm = () => {
+    setLeadData({
+      position: "",
+      lead_name: "",
+      company_name: "",
+      registration_no: "",
+      employees: "",
+      type: "",
+      phone: "",
+      email: "",
+      value: 0,
+      label_id: 0,
+      source: "",
+      stage_id: 1,
+    });
+    setName("");
+    setfName("");
+    setlName("");
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  }
+
 
 
   const fetchStages = () => {
@@ -144,7 +169,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       <div className="modal-content">
         <div class="create-lead-top">
           <p>Create Lead</p>
-          <p className="close-icon" onClick={onClose}>
+          <p className="close-icon" onClick={handleClose}>
             X
           </p>
         </div>
@@ -311,6 +336,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
+                <option value="">Select Label</option>
                   {mergedLabels.map((item) => {
                     return (
                       <option key={item?.id} value={item?.id}>
@@ -328,6 +354,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
+                <option value="">Select Stages</option>
                   {stages?.map((item, index) => {
                     return (
                       <option key={index} value={stageId[index]}>
@@ -341,7 +368,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
             <section className="bottom-section font-style">
               <div>
-                <button className="cancel-btn" onClick={onClose}>
+                <button className="cancel-btn" onClick={handleClose}>
                   Cancel
                 </button>
               </div>

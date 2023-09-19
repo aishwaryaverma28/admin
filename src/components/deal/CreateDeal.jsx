@@ -59,6 +59,36 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     loan_amount: null,
     loan_type: "",
   });
+
+  const resetForm = () => {
+    setLeadData({
+      probability: "",
+      deal_name: "",
+      organization: "",
+      mobile: "",
+      email: "",
+      label_id: 36,
+      closure_date: "",
+      stage_id: 1,
+      pipeline_id: 1,
+      lead_id: 0,
+      age_of_business: null,
+      company_type: "",
+      industry_type: "",
+      turnover: null,
+      company_location: "",
+      duration: "",
+      individual_or_company: "",
+      loan_amount: null,
+      loan_type: "",
+    });
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
   const fetchCall = () => {
     axios
       .get(ELIGIBLE_LOANS, {
@@ -220,25 +250,22 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         },
       })
       .then((response) => {
-       if(response.data.status===0){
-        toast.error(
-             response.data.message,
-          {
+        if (response.data.status === 0) {
+          toast.error(response.data.message, {
             position: "top-center",
             autoClose: 3000,
-          }
-        );
-       }else{
-        toast.success(
-          loanOfferedByValues.length > 0
-            ? `Deal created. Banks list: ` + loanOfferedByValues.join(",")
-            : "Deal Created",
-          {
-            position: "top-center",
-            autoClose: 3000,
-          }
-        );
-       }
+          });
+        } else {
+          toast.success(
+            loanOfferedByValues.length > 0
+              ? `Deal created. Banks list: ` + loanOfferedByValues.join(",")
+              : "Deal Created",
+            {
+              position: "top-center",
+              autoClose: 3000,
+            }
+          );
+        }
 
         setLeadData({
           probability: "",
@@ -284,7 +311,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
       <div className="modal-content">
         <div class="create-lead-top">
           <p>Create Deal</p>
-          <p className="close-icon" onClick={onClose}>
+          <p className="close-icon" onClick={handleClose}>
             X
           </p>
         </div>
@@ -383,6 +410,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
+                <option value="">Select Stages</option>
                   {stages?.map((item, index) => {
                     return (
                       <option key={index} value={stageId[index]}>
@@ -473,6 +501,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
+                <option value="">Select Label</option>
                   {mergedLabels.map((item) => {
                     return (
                       <option key={item?.id} value={item?.id}>
@@ -572,7 +601,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
 
             <section className="bottom-section font-style">
               <div>
-                <button className="cancel-btn" onClick={onClose}>
+                <button className="cancel-btn" onClick={handleClose}>
                   Cancel
                 </button>
               </div>
