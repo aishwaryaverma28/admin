@@ -12,7 +12,7 @@ import {
   GET_ALL_STAGE,
   UPLOADED_DOCS,
   GET_ACTIVITY,
-  GET_FIELDS
+  GET_FIELDS,
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
@@ -23,7 +23,6 @@ import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
-
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
@@ -62,7 +61,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   });
 
   const [info, setInfo] = useState({});
-  const role = parseInt(localStorage.getItem('role'));
+  const role = parseInt(localStorage.getItem("role"));
+  console.log(role);
+  console.log("kgf");
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -138,16 +139,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   };
 
   useEffect(() => {
-    fetchFields()
+    fetchFields();
   }, []);
 
   useEffect(() => {
-
-      fetchLead();
-
-  }, [fieldNames])
-  
-
+    fetchLead();
+  }, [fieldNames]);
 
   const uploadedDocs = () => {
     axios
@@ -227,8 +224,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   useEffect(() => {
     fetchStages();
   }, []);
-
-
 
   const fetchLabelData = async () => {
     try {
@@ -433,7 +428,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       status: editedItem?.status,
     };
 
-    const newUpdatedLead={...updatedLead, ...fieldMappings};
+    const newUpdatedLead = { ...updatedLead, ...fieldMappings };
     axios
       .put(UPDATE_LEAD, newUpdatedLead, {
         headers: {
@@ -623,6 +618,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     height: "2rem",
     width: "fit-content",
   };
+
+  console.log(editedItem);
+  console.log("ggff");
 
   return (
     <div className="modal">
@@ -890,35 +888,77 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        <select
-                          id="lp-main-owner"
-                          onChange={handleInputChange}
-                          disabled={isDisabled}
-                          style={
-                            isEditable 
-                              ? editStylingSelect3
-                              : normalStylingSelect3
-                          }
-                          className={isDisabled ? "disabled" : ""}
-                          name="owner"
-                        >
-                          {userData.map((item) => (
-                            <option
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                            >
-                              {`${
-                                item?.first_name?.charAt(0).toUpperCase() +
-                                item?.first_name?.slice(1)
-                              } ${
-                                item?.last_name?.charAt(0).toUpperCase() +
-                                item?.last_name?.slice(1)
-                              }`}
-                            </option>
-                          ))}
-                          {/* <option value="Imp">{owner}</option> */}
-                        </select>
+                        {role !== 1 ? (
+                          <input
+                            type="text"
+                            name=""
+                            value={
+                              editedItem.ownerf_name +
+                              " " +
+                              editedItem.ownerl_name
+                            }
+                            style={normalStylingInput}
+                            disabled={true}
+                            className="email-case"
+                          />
+                        ) : (
+                          <select
+                            id="lp-main-owner"
+                            onChange={handleInputChange}
+                            disabled={isDisabled}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            className={isDisabled ? "disabled" : ""}
+                            name="owner"
+                          >
+                            {userData.map((item) => (
+                              <option
+                                key={item?.id}
+                                value={item?.id}
+                                className="owner-val"
+                              >
+                                {`${
+                                  item?.first_name?.charAt(0).toUpperCase() +
+                                  item?.first_name?.slice(1)
+                                } ${
+                                  item?.last_name?.charAt(0).toUpperCase() +
+                                  item?.last_name?.slice(1)
+                                }`}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        {role !== 1 ? (
+                          <input
+                            type="email"
+                            name="owner_email"
+                            value={editedItem?.owner_email}
+                            style={normalStylingInput}
+                            disabled={true}
+                            className="email-case"
+                          />
+                        ) : (
+                          <input
+                            type="email"
+                            name="owner_email"
+                            value={selectedUser?.owner_email}
+                            style={normalStylingInput}
+                            disabled={true}
+                            className="email-case"
+                          />
+                        )}
                       </span>
                     )}
                   </p>
@@ -927,29 +967,23 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        <input
-                          type="email"
-                          name="owner_email"
-                          value={selectedUser?.email}
-                          style={normalStylingInput}
-                          disabled={true}
-                          className="email-case"
-                        />
-                      </span>
-                    )}
-                  </p>
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          name="owner_phone"
-                          value={selectedUser?.phone}
-                          style={normalStylingInput}
-                          disabled={true}
-                        />
+                        {role !== 1 ? (
+                          <input
+                            type="text"
+                            name="owner_phone"
+                            value={editedItem?.owner_phone}
+                            style={normalStylingInput}
+                            disabled={true}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            name="owner_phone"
+                            value={selectedUser?.phone}
+                            style={normalStylingInput}
+                            disabled={true}
+                          />
+                        )}
                       </span>
                     )}
                   </p>
@@ -1071,7 +1105,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   ))}
                 </div>
                 <div className="detailsRightContainer">
-                {fields.map((field, index) => (
+                  {fields.map((field, index) => (
                     <p key={field.id}>
                       {isLoading ? (
                         <span>-</span>
@@ -1094,7 +1128,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
               </div>
             </div>
-
           </div>
           {isEditable ? (
             <div className="modalLeftBtnBox">
