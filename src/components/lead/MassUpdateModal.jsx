@@ -1,12 +1,33 @@
 import React, { useState} from 'react';
+import axios from "axios";
+import {
+  getDecryptedToken
+} from "../utils/Constants";
 
-const MassUpdateModal = ({ onClose, userData , text }) => {
+
+const MassUpdateModal = ({ onClose, userData , text, ids }) => {
+  const decryptedToken = getDecryptedToken();
+  const [ownerId, setOwnerId] = useState(1);
 
     const handleOwnerClick = (id) => {
      console.log(id);
+     setOwnerId(id);
       } 
     
-
+      const handleConfirmed = () => {
+        if (ids) {
+          const body = {
+            leadIds: [ids], // Use the stored ID
+            owner: ownerId 
+          };
+          console.log(body);
+          axios.put("http://core.leadplaner.com:3001/api/lead/edit", body, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            },
+          })
+        }
+      };
 
 
   return (
@@ -36,7 +57,7 @@ const MassUpdateModal = ({ onClose, userData , text }) => {
             </select>
           <div className="recycle-popup-btn mass-update-btn">
             <button className="restore-no common-fonts" onClick={onClose}>Cancel</button>
-            <button className="restore-yes common-fonts">Reassign</button>
+            <button className="restore-yes common-fonts" onClick={handleConfirmed}>Reassign</button>
           </div>
         </div>
       </div>
