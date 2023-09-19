@@ -7,7 +7,6 @@ import axios from "axios";
 import LeadCards from "./LeadCards";
 import CreateLead from "./CreateLead";
 import LeadDeletePopUp from "../DeleteComponent";
-
 import {
   GET_LEAD,
   IMPORT_CSV ,
@@ -25,6 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
 import Papa from "papaparse"; 
+import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
   const [stages, setStages] = useState([]);
@@ -56,11 +56,19 @@ const Lead = () => {
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
   const role= parseInt(localStorage.getItem('role'));
+  const [massUpdateModalOpen,setMassUpdateModalOpen] = useState(false)
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
     id: 0,
   });
+
+  const handleMassUpdate = () =>{
+    setMassUpdateModalOpen(true)
+  }
+  const handleMassUpdateClose = () =>{
+    setMassUpdateModalOpen(false)
+  }
 
   const handleOwnerClick = (id) => {
     axios
@@ -605,9 +613,9 @@ const Lead = () => {
               value: parseInt(row.value), // Parse the "value" field as an integer
             }));
             // Store CSV data in state
-            setCsvData(dataWithIntValues);
-            console.log(dataWithIntValues);
-            postCsvDataToAPI(result.data);
+            const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+            setCsvData(dataWithoutLastValue);
+            postCsvDataToAPI(dataWithoutLastValue);
           },
           error: (error) => {
             console.error("Error parsing CSV:", error.message);
@@ -629,11 +637,17 @@ const Lead = () => {
             Authorization: `Bearer ${decryptedToken}`,
           },
         });
-        if (response.status === 200) {
-          console.log('CSV data successfully posted to the API');
+        if (response.data.status === 1) {
+          toast.success("Import successfull", {
+            position: "top-center",
+            autoClose: 2000,
+          });
           // You can add further logic here if needed
         } else {
-          console.error('Failed to post CSV data to the API');
+          toast.error("Some Error Occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
           // Handle the error as needed
         }
       } catch (error) {
@@ -779,7 +793,7 @@ const Lead = () => {
                       Mass Delete
                     </li> */}
                     <li onClick={handleDeletePopUpOpen}>Mass Delete</li>
-                    <li>Mass Update</li>
+                    <li onClick={handleMassUpdate}>Mass Update</li>
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
@@ -954,6 +968,12 @@ const Lead = () => {
           onDeleteConfirmed={handleDeleteLead}
         />
       )}
+
+      {
+        massUpdateModalOpen && (
+          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Lead"/>
+        )
+      }
     </div>
   );
 };

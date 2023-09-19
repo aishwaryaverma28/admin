@@ -21,6 +21,7 @@ import CreateDeal from "./CreateDeal";
 import DealDeletePopUp from "../DeleteComponent";
 import ExcelJS from "exceljs";
 import Papa from "papaparse"; 
+import MassUpdateModal from "../lead/MassUpdateModal.jsx";
 
 const Deal = () => {
   const [stages, setStages] = useState([]);
@@ -52,11 +53,20 @@ const Deal = () => {
   const role= parseInt(localStorage.getItem('role'));
     const [csvData, setCsvData] = useState([]);
     const [userData, setUserData] = useState([]);
+    const [massUpdateModalOpen,setMassUpdateModalOpen] = useState(false)
     const [adminInfo, setAdminInfo] = useState({
       first_name: "",
       last_name: "",
       id: 0,
     });
+
+    const handleMassUpdate = () =>{
+      setMassUpdateModalOpen(true)
+    }
+    const handleMassUpdateClose = () =>{
+      setMassUpdateModalOpen(false)
+    }
+  
 
     const handleOwnerClick = (id) => {
       axios
@@ -755,7 +765,7 @@ const Deal = () => {
                       Mass Delete
                     </li> */}
                     <li onClick={handleDeleteOpen}>Mass Delete</li>
-                    <li>Mass Update</li>
+                    <li onClick={handleMassUpdate}>Mass Update</li>
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
@@ -874,6 +884,12 @@ const Deal = () => {
           onDeleteConfirmed={handleDeleteLead}
         />
       )}
+
+      {
+        massUpdateModalOpen && (
+          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Deal"/>
+        )
+      }
     </div>
   );
 };

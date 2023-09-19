@@ -756,4 +756,21 @@ margin-right: 0.7rem;
  font-size: 1rem;
 }
 
+.mass-update-input{
+  width:100%;
+  padding: 0;
+  margin-bottom: 6rem;
+}
+
+.mass-update-btn{
+  margin-left:-1.75rem;
+  margin-right: -1.75rem;
+  margin-bottom: -1rem;
+}
+
+.selected-mass-user{
+  color: #33475B;
+  margin-bottom: 0.5rem;
+}
+
 /* deal attachments ends */
