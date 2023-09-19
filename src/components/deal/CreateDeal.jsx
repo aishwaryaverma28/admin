@@ -208,19 +208,32 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     }
 
     setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
-    setIsDisable(false);
-    setLoanDetails((prevState) => ({ ...prevState, [name]: parsedValue }));
-    if (name === "company_location") {
+   if (name === "company_location") {
       setLoanDetails((prevState) => ({
         ...prevState,
         location_of_company: parsedValue,
       }));
+    } else if (
+      name === "age_of_business" ||
+      name === "company_type" ||
+      name === "industry_type" ||
+      name === "turnover" ||
+      name === "duration" ||
+      name === "individual_or_company" ||
+      name === "loan_amount" ||
+      name === "loan_type"
+    ) {
+      setLoanDetails((prevState) => ({
+        ...prevState,
+        [name]: parsedValue,
+      }));
     }
+    setIsDisable(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+console.log(loanDetails);
     // Filter out empty or null values from loanDetails
     const filteredLoanDetails = {};
     for (const key in loanDetails) {
@@ -228,7 +241,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
-
+console.log(filteredLoanDetails);
     // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
     const matchingLoans = loan.filter((loanItem) => {
       // Check if every key-value pair in filteredLoanDetails exists in loanItem
@@ -241,7 +254,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     const loanOfferedByValues = matchingLoans.map(
       (loanItem) => loanItem.loan_offered_by
     );
-
+console.log(loanOfferedByValues);
     const updatedForm = { ...leadData, value: leadData.loan_amount };
     axios
       .post(ADD_DEAL, updatedForm, {
