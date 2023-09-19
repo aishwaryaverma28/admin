@@ -280,6 +280,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       .then((response) => {
         const responseData = response?.data?.data;
         const combinedData = [adminInfo, ...responseData];
+
         setUserData(combinedData);
         // setUserData(response?.data?.data);
       })
@@ -875,9 +876,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
               </div>
             </div>
 
-            {
-              role===1  && (
-                <div className="detailsBox">
+            <div className="detailsBox">
               <p className="detailHead">LEAD OWNER</p>
               <div className="detailsContent">
                 <div className="detailsLeftContainer">
@@ -957,8 +956,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 </div>
               </div>
             </div>
-              )
-            }
 
             <div className="detailsBox">
               <p className="detailHead">ADDRESS INFORMATION</p>
