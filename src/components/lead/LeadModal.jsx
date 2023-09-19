@@ -209,7 +209,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         );
         const stageIdArray = response?.data?.message?.map((item) => item.id);
 
-        if (stageNames && stageNames.length > 0) {
+        if (stageNames && stageNames?.length > 0) {
           setStages(stageNames.reverse());
           setStageId(stageIdArray.reverse());
         }
@@ -244,7 +244,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     // Set the initial state to the first user in the userData array
-    if (userData.length > 0) {
+    if (userData?.length > 0) {
       setSelectedUser({
         email: userData[0]?.email,
         phone: userData[0]?.phone,
@@ -295,7 +295,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .then((response) => {
         if (response?.data?.status === 1) {
-          setNotes(response?.data?.data.length);
+          setNotes(response?.data?.data?.length);
         }
       })
       .catch((error) => {
