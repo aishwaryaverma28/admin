@@ -62,6 +62,7 @@ const LeadCards = ({
             position: "top-center",
             autoClose: 2000,
           });
+          onLeadAdded();
         })
         .catch((error) => {
           console.log(error);
@@ -252,7 +253,8 @@ const LeadCards = ({
           userData={userData}
           text="Lead"
           handleConfirmed={handleAssignLead}
-          handleDataReceived={handleDataReceived}   
+          handleDataReceived={handleDataReceived}
+          dataAdded={onLeadAdded}   
         />
       )}
     </>

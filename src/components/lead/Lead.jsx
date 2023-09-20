@@ -980,6 +980,7 @@ const Lead = () => {
           text="Lead"
           ids={selectedIds}
           handleDataReceived={handleDataReceived}
+          fetchLeadsData={fetchLeadsData}
         />
       )}
     </div>
