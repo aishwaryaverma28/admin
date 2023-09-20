@@ -11,6 +11,7 @@ import {
   GET_LABEL,
   GET_TEAM_MEM,
   USER_INFO,
+  IMPORT_DEAL,
   handleLogout,
   GET_OWNER_DEAL,
 } from "../utils/Constants";
@@ -636,8 +637,31 @@ const Deal = () => {
       Papa.parse(file, {
         header: true, // Assume the first row contains headers
         complete: (result) => {
+          const dataWithIntValues = result.data.map((row) => ({
+            ...row,
+            lead_id: parseInt(row.lead_id),
+            value: parseInt(row.value),
+            pipeline_id: parseInt(row.pipeline_id),
+            mobile: parseInt(row.mobile),
+            security_value: parseInt(row.security_value),
+            loan_amount: parseInt(row.loan_amount),
+            deposit: parseInt(row.deposit),
+            engagement_fee: parseInt(row.engagement_fee),
+            engagement_fee_paid: parseInt(row.engagement_fee_paid),
+            broker_fee: parseInt(row.broker_fee),
+            broker_fee_paid: parseInt(row.broker_fee_paid),
+            procuration_fee: parseInt(row.procuration_fee),
+            procuration_fee_paid: parseInt(row.procuration_fee_paid),
+            deal_commission: parseInt(row.deal_commission),
+            closure_date: formatDate(row.closure_date),
+            data_enquiry_receive: formatDate(row.data_enquiry_receive),
+            borrower_entry: formatDate(row.borrower_entry),
+            completion_date: formatDate(row.completion_date),
+          }));
           // Store CSV data in state
-          setCsvData(result.data);
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          setCsvData(dataWithoutLastValue);
+          postCsvDataToAPI(dataWithoutLastValue);
         },
         error: (error) => {
           console.error("Error parsing CSV:", error.message);
@@ -645,10 +669,49 @@ const Deal = () => {
       });
     }
   };
+  const formatDate = (dateString) => {
+    // console.log(dateString);
+    if(dateString){
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+    }
+  };
   // Function to handle "Import" menu item click
   const handleImportClick = () => {
     // Trigger a click event on the hidden file input element
     fileInputRef.current.click();
+  };
+  const postCsvDataToAPI = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_DEAL,
+        {
+          data: csvData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // You can add further logic here if needed
+        fetchLeadsData();
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // Handle the error as needed
+      }
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+      // Handle the error as needed
+    }
   };
 
   return (

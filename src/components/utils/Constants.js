@@ -83,7 +83,6 @@ export const GET_LEAD = start+"api/lead/getall";
 export const GET_LEAD_ID = start+"api/lead/get/";
 export const ADD_LEAD = start+"api/lead/add";
 export const IMPORT_CSV = start+"api/lead/importcsv";
-export const EXPORT_CSV = start+"api/lead/exporttocsv";
 export const UPDATE_LEAD = start+"api/lead/edit";
 export const ADD_USER = start+"api/user/addteammember";
 export const GET_TEAM_MEM = start+"api/user/getteammember";
@@ -141,7 +140,7 @@ export const DELETE_DEAL_TRASH = start + "api/deal/deletefromtrash";
 export const UPDATE_DEAL = start + "api/deal/edit";
 export const GET_ALL_STAGE = start + "api/deal/getAllStages";
 export const ADD_STAGE = start + "api/deal/stages/add";
-
+export const IMPORT_DEAL = start+"api/deal/import";
 //========================================================================= master settings
 
 export const ADD_HELP = start+"api/user/help/addquation";
