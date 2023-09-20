@@ -9,31 +9,73 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AssignModal from "../lead/AssignModal.jsx";
 
-
-const DealsColn = ({ object, selectedIds, setSelectedIds, status, onLeadAdded, userData  }) => {
+const DealsColn = ({
+  object,
+  selectedIds,
+  setSelectedIds,
+  status,
+  onLeadAdded,
+  userData,
+}) => {
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-const [deleteLeadId, setDeleteLeadId] = useState(null);
-const [assign,setAssign] = useState(false);
+  const [deleteLeadId, setDeleteLeadId] = useState(null);
+  const [assign, setAssign] = useState(false);
+  const [assignLeadId, setAssignLeadId] = useState(null);
+  const [data, setData] = useState("");
+  const handleDataReceived = (newData) => {
+    setData(newData);
+    console.log(newData);
+  };
 
-const handleAssignModal = () => {
-  setAssign(true);
-}
-const handleAssignModalClose = () => {
-  setAssign(false);
-}
-    
+
+  const handleAssignModal = (id) => {
+    setAssign(true);
+    setAssignLeadId(id);
+  };
+  const handleAssignModalClose = () => {
+    setAssign(false);
+  };
+  const handleAssignLead = () => {
+    if (assignLeadId) {
+      const body = {
+        dealId: [assignLeadId], // Use the stored ID
+        owner: data,
+      };
+      axios
+      .put("http://core.leadplaner.com:3001/api/deal/edit", body, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          toast.success("Deal reassign successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          onLeadAdded();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setAssignLeadId(null); // Reset the stored ID
+      setAssign(false);
+    }
+  };
+
+
   const handleDeleteOpen = (id) => {
     setIsDeleteOpen(true);
     setDeleteLeadId(id);
-  }
+  };
 
   const handleDeleteClose = () => {
     setIsDeleteOpen(false);
-  }
+  };
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (
@@ -60,7 +102,7 @@ const handleAssignModalClose = () => {
     }
   };
 
-// Add a useEffect to update selectedIds when the status changes
+  // Add a useEffect to update selectedIds when the status changes
   useEffect(() => {
     if (selectedIds.includes(object.id) && object.status !== status) {
       setSelectedIds((prevSelectedIds) =>
@@ -73,33 +115,32 @@ const handleAssignModalClose = () => {
   }, [object.status, status]);
 
   const handleDeleteLead = () => {
-      if (deleteLeadId) {
-        const body = {
-          dealIds: [deleteLeadId], // Use the stored ID
-        };
-        axios
-          .delete(MOVEDEAL_TO_TRASH, {
-            data: body,
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-          .then((response) => {
-            console.log(response);
-            toast.success("Deal moved to trash successfully", {
-              position: "top-center",
-              autoClose: 2000,
-            });
-            onLeadAdded();
-        setDeleteLeadId(null); // Reset the stored ID
-        handleDeleteClose();
-          })
-          .catch((error) => {
-            console.log(error);
-          });        
-      }
-    };
-
+    if (deleteLeadId) {
+      const body = {
+        dealIds: [deleteLeadId], // Use the stored ID
+      };
+      axios
+        .delete(MOVEDEAL_TO_TRASH, {
+          data: body,
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          toast.success("Deal moved to trash successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          onLeadAdded();
+          setDeleteLeadId(null); // Reset the stored ID
+          handleDeleteClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   return (
     <>
@@ -145,7 +186,7 @@ const handleAssignModalClose = () => {
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
                   <li>Convert to Lead</li>
-                  <li onClick={handleAssignModal}>Assign</li>
+                  <li onClick={() => handleAssignModal(object.id)}>Assign</li>
                   <li onClick={() => handleDeleteOpen(object.id)}>Delete</li>
                   {/* <li>object 3</li> */}
                 </ul>
@@ -164,17 +205,23 @@ const handleAssignModalClose = () => {
           </div>
         </div>
       </div>
-      {
-        isDeleteOpen && (
-          <DealDeletePopUp onClose={handleDeleteClose} onDeleteConfirmed={handleDeleteLead}/>
-        )
-      }
+      {isDeleteOpen && (
+        <DealDeletePopUp
+          onClose={handleDeleteClose}
+          onDeleteConfirmed={handleDeleteLead}
+        />
+      )}
 
-      {
-        assign && (
-          <AssignModal onClose={handleAssignModalClose} text="Deal" userData={userData} />
-        )
-      }
+      {assign && (
+        <AssignModal
+          onClose={handleAssignModalClose}
+          userData={userData}
+          text="Deal"
+          handleConfirmed={handleAssignLead}
+          handleDataReceived={handleDataReceived}
+          dataAdded={onLeadAdded}   
+        />
+      )}
     </>
   );
 };
