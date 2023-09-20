@@ -4,7 +4,7 @@ import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AssignModal = ({ onClose, userData, text,handleConfirmed, handleDataReceived }) => {
+const AssignModal = ({ onClose, userData, text,handleConfirmed, handleDataReceived}) => {
   const decryptedToken = getDecryptedToken();
   const [ownerId, setOwnerId] = useState(1);
 
@@ -26,8 +26,9 @@ const AssignModal = ({ onClose, userData, text,handleConfirmed, handleDataReceiv
             className="common-input mass-update-input"
             onChange={(e) => handleOwnerClick(e.target.value)}
           >
+          <option value="">Select Owner</option>
             {userData.slice().reverse().map((item) => (
-              <option key={item?.id} value={item?.id} className="owner-val">
+              <option  key={item?.id} value={item?.id} className="owner-val">
                 {`${
                   item?.first_name.charAt(0).toUpperCase() +
                   item?.first_name.slice(1)

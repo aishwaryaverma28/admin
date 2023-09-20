@@ -33,6 +33,7 @@ const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived, fet
               position: "top-center",
               autoClose: 2000,
             });
+            fetchLeadsData()
           }
           onClose();
         })
@@ -80,6 +81,7 @@ const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived, fet
             className="common-input mass-update-input"
             onChange={(e) => handleOwnerClick(e.target.value)}
           >
+          <option value="">Select Owner</option>
             {userData.map((item) => (
               <option key={item?.id} value={item?.id} className="owner-val">
                 {`${
