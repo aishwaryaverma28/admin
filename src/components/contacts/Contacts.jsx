@@ -2,11 +2,13 @@ import React from 'react';
 import '../styles/Contacts.css';
 import { useState } from 'react';
 import CompanyModal from './CompanyModal.jsx';
+import PeopleModal from './PeopleModal.jsx';
 
 const Contacts = () => {
   const [activeTab, setActiveTab] = useState("people");
   const [number,setNumber] = useState(0);
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
+  const [personModalOpen, setPersonModalOpen] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -18,6 +20,12 @@ const Contacts = () => {
   }
   const handleCompanyModalClose = () => {
     setCompanyModalOpen(false)
+  }
+  const handlePersonModal = () => {
+    setPersonModalOpen(true)
+  }
+  const handlePersonModalClose = () => {
+    setPersonModalOpen(false)
   }
   return (
     <>
@@ -49,7 +57,7 @@ const Contacts = () => {
             
             {
               number===0 ? (
-                <button className='common-fonts common-save-button contact-dots contact-btn-top'>Add People</button>
+                <button className='common-fonts common-save-button contact-dots contact-btn-top' onClick={handlePersonModal}>Add People</button>
               ):
               (
                 <button className='common-fonts common-save-button contact-dots contact-btn-top' onClick={handleCompanyModal}>Add Company</button>
@@ -80,6 +88,11 @@ const Contacts = () => {
           {
             companyModalOpen && (
               <CompanyModal onClose={handleCompanyModalClose} />
+            )
+          }
+          {
+            personModalOpen&& (
+              <PeopleModal onClose={handlePersonModalClose} />
             )
           }
     </>

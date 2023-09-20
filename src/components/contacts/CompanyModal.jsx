@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getDecryptedToken } from "../utils/Constants";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CompanyModal = ({ onClose, getCall }) => {
+const CompanyModal = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
   const [company, setCompany] = useState({
     "name": "",
-    "orgid": "ORG123",
+    "orgid": "",
     "address1": "",
     "address2": "",
     "city": "",
@@ -29,9 +29,32 @@ const CompanyModal = ({ onClose, getCall }) => {
     setStateBtn(1);
   };
 
+
+
+  const resetForm = () => {
+    setCompany({
+        "name": "",
+        "orgid": "",
+        "address1": "",
+        "address2": "",
+        "city": "",
+        "country": "",
+        "postcode": "",
+        "email": "",
+        "phone": "",
+        "valuation":0,
+        "valuation_in": "",
+        "domain": "",
+        "industry": ""
+    });
+  }
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(company)
     axios
       .post("http://core.leadplaner.com:3001/api/contact/company/add", company, {
         headers: {
@@ -39,14 +62,21 @@ const CompanyModal = ({ onClose, getCall }) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
-        toast.success("Company is added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+        if(response.data.status===1){
+            toast.success("Company is added successfully", {
+                position: "top-center",
+                autoClose: 2000,
+              });
+        }else{
+            toast.error(response.data.message, {
+                position: "top-center",
+                autoClose: 2000,
+              });
+        }
+
         setCompany({
             "name": "",
-            "orgid": "ORG123",
+            "orgid": "",
             "address1": "",
             "address2": "",
             "city": "",
@@ -59,17 +89,20 @@ const CompanyModal = ({ onClose, getCall }) => {
             "domain": "",
             "industry": ""
         });
-        setStateBtn(0);
-        getCall(); 
-        onClose();
+        setStateBtn(0); 
          })
       .catch((error) => {
         console.log(error);
+        toast.error("some error occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       });
   };
 
   return (
     <div className="popup-wrapper">
+    <ToastContainer/>
       <div className="product-popup-container">
         <div className="product-popup-box">
           <p className="common-fonts add-product-heading">Add Company</p>
@@ -91,19 +124,27 @@ const CompanyModal = ({ onClose, getCall }) => {
                   onChange={handleChange}
                   value={company.domain}/>
               </div>
-              <div className="product-popup-fields">
+              {/* <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                  Company Owner
                 </label>
                 <select name="" id="" className="common-select">
                     <option value="">Select Owner</option>
                 </select>
+              </div> */}
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
+                 Organization Id
+                </label>
+                <input type="text" className="common-input" name="orgid"
+                  onChange={handleChange}
+                  value={company.orgid}  />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                  Industry
                 </label>
-                <select name="industry" id="" className="common-select" value={company.industry}>
+                <select name="industry" id="" className="common-select" onChange={handleChange} value={company.industry}>
                     <option value="">Select Industry</option>
                     <option value="tech">Tech</option>
                     <option value="non-tech">Non-Tech</option>
@@ -115,7 +156,7 @@ const CompanyModal = ({ onClose, getCall }) => {
                 </label>
                 <div className="product-two-input">
                   <input
-                    type="text"
+                    type="number"
                     className="common-input product-popup-input"
                     name="valuation"
                   onChange={handleChange}
@@ -126,6 +167,7 @@ const CompanyModal = ({ onClose, getCall }) => {
                     id=""
                     className="common-input product-popup-select"
                     value={company.valuation_in}
+                    onChange={handleChange}
                   >
                   <option value="">Select Currency</option>
                     <option value="usd">US Dollar (USD)</option>
@@ -134,31 +176,49 @@ const CompanyModal = ({ onClose, getCall }) => {
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
+                  Phone
+                </label>
+                <input type="number" name="phone" value={company.phone} onChange={handleChange} className="common-input" />
+              </div>
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
+                  Email
+                </label>
+                <input type="email" name="email" value={company.email} onChange={handleChange} className="common-input" />
+              </div>
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
                   City
                 </label>
-                <input type="text" className="common-input" />
+                <input type="text" className="common-input" onChange={handleChange} value={company.city} name="city" />
+              </div>
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
+                  Country
+                </label>
+                <input type="text" className="common-input" onChange={handleChange} value={company.country} name="country" />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Address 1
                 </label>
-                <input type="text" className="common-input" name="address1" value={company.address1} />
+                <input type="text" className="common-input" onChange={handleChange} name="address1" value={company.address1} />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Address 2
                 </label>
-                <input type="text" name="address2" className="common-input" value={company.address2} />
+                <input type="text" name="address2" onChange={handleChange} className="common-input" value={company.address2} />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Postal Code
                 </label>
-                <input type="text" name="postcode" className="common-input" value={company.postcode} />
+                <input type="number" name="postcode" onChange={handleChange} className="common-input" value={company.postcode} />
               </div>
             </form>
             <div className="product-popup-bottom">
-              {/* <button className='common-white-button' onClick={handleCancel}>Cancel</button> */}
+              <button className='common-white-button' onClick={handleClose}>Cancel</button>
               {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>
                   Save
@@ -175,7 +235,7 @@ const CompanyModal = ({ onClose, getCall }) => {
           </div>
         </div>
       </div>
-      <div className="help-cross" onClick={onClose}>
+      <div className="help-cross" onClick={handleClose}>
         X
       </div>
     </div>
