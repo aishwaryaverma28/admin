@@ -4,7 +4,7 @@ import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived }) => {
+const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived, fetchLeadsData }) => {
   const decryptedToken = getDecryptedToken();
   const [ownerId, setOwnerId] = useState(1);
 
@@ -58,6 +58,7 @@ const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived }) =
               position: "top-center",
               autoClose: 2000,
             });
+            fetchLeadsData()
           }
           onClose();
         })
