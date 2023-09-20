@@ -29,7 +29,7 @@ import BlogUpdate from "./components/BlogUpdate";
 import SitePagesView from "./components/SitePagesView";
 import SitePagesUpdate from "./components/SitePagesUpdate";
 import Home from "./components/Home";
-import Contacts from "./components/Contacts";
+import Contacts from "./components/contacts/Contacts.jsx";
 import Deal from "./components/deal/Deal";
 import Mail from "./components/Mail";
 import Login from "./components/Login";

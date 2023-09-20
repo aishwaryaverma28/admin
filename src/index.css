@@ -170,7 +170,7 @@ select:focus {
   font-family: "Lexend Deca", sans-serif;
 }
 
-.common-input {
+.common-input,.common-select {
   border-radius: 0.3125rem;
   border: 1px solid #dcdcdc;
   background: #f3f6fa;
@@ -178,6 +178,10 @@ select:focus {
   cursor: pointer;
   width: 28rem;
   height: 2rem;
+}
+
+.common-select{
+  padding:0;
 }
 
 .common-white-button {

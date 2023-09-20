@@ -128,7 +128,7 @@
   color: var(--font-light);
 }
 
-.product-popup-content input{
+.product-popup-content input, .product-popup-content select{
   margin-bottom: 1rem;
   
 }

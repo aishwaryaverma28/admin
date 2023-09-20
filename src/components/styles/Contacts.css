@@ -1,0 +1,28 @@
+.aaa{
+    margin-top: 1rem;
+}
+
+.contacts-top-flex{
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+
+}
+
+.contact-top-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -1rem;
+    margin-right: 1rem;
+}
+
+.contact-dots{
+    margin-left: 1rem;
+}
+
+.contact-btn-top{
+    width:9rem;
+}
+
