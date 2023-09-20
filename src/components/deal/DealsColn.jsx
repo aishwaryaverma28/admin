@@ -4,7 +4,7 @@ import user from "../../assets/image/user.svg";
 import { Link } from "react-router-dom";
 import DealDeletePopUp from "../DeleteComponent";
 import axios from "axios";
-import { MOVEDEAL_TO_TRASH, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_DEAL, MOVEDEAL_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AssignModal from "../lead/AssignModal.jsx";
@@ -46,7 +46,7 @@ const DealsColn = ({
         owner: data,
       };
       axios
-      .put("http://core.leadplaner.com:3001/api/deal/edit", body, {
+      .put(UPDATE_DEAL, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },

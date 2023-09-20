@@ -16,7 +16,7 @@ import bin from "../assets/image/TrashFill.svg";
 import unpin from "../assets/image/unpin.svg";
 import pin from "../assets/image/pin.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddNotes = ({ item, onNotesNum, type, id }) => {

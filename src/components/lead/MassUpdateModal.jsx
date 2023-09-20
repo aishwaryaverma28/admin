@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getDecryptedToken } from "../utils/Constants";
+import { UPDATE_LEAD,getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,7 +21,7 @@ const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived, fet
       };
       console.log(body);
       axios
-        .put("http://core.leadplaner.com:3001/api/lead/edit", body, {
+        .put(UPDATE_LEAD, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
           },

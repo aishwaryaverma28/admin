@@ -16,7 +16,21 @@ function CRMeditor({ onDataTransfer, initialContent }) {
     onDataTransfer(value);
   };
   const modules = {
-    toolbar: [["bold", "italic", "underline"]],
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ align: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image'],
+      ['clean'],
+      // Add additional tools here
+      ['color', 'background'],
+      ['blockquote'],
+      [{ script: 'sub' }, { script: 'super' }],
+      ['blockquote', 'code-block'],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ direction: 'rtl' }],
+    ],
   };
 
   return (
