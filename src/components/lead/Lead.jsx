@@ -61,6 +61,11 @@ const Lead = () => {
     last_name: "",
     id: 0,
   });
+  const [data, setData] = useState("");
+  const handleDataReceived = (newData) => {
+    setData(newData);
+    console.log(newData);
+  };
 
   const handleMassUpdate = () => {
     setMassUpdateModalOpen(true);
@@ -974,6 +979,7 @@ const Lead = () => {
           userData={userData}
           text="Lead"
           ids={selectedIds}
+          handleDataReceived={handleDataReceived}
         />
       )}
     </div>

@@ -4,13 +4,13 @@ import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MassUpdateModal = ({ onClose, userData, text, ids }) => {
+const MassUpdateModal = ({ onClose, userData, text, ids, handleDataReceived }) => {
   const decryptedToken = getDecryptedToken();
   const [ownerId, setOwnerId] = useState(1);
 
   const handleOwnerClick = (id) => {
-    console.log(id);
     setOwnerId(id);
+    handleDataReceived(id);
   };
 
   const handleConfirmed = () => {

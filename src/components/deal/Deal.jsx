@@ -12,7 +12,7 @@ import {
   GET_TEAM_MEM,
   USER_INFO,
   handleLogout,
-  GET_OWNER_DEAL
+  GET_OWNER_DEAL,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +20,7 @@ import DealsColn from "./DealsColn";
 import CreateDeal from "./CreateDeal";
 import DealDeletePopUp from "../DeleteComponent";
 import ExcelJS from "exceljs";
-import Papa from "papaparse"; 
+import Papa from "papaparse";
 import MassUpdateModal from "../lead/MassUpdateModal.jsx";
 
 const Deal = () => {
@@ -47,31 +47,35 @@ const Deal = () => {
   const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("None"); 
+  const [sortOption, setSortOption] = useState("None");
   const [sortOrder, setSortOrder] = useState("asc");
   const [ownerOpen, setOwnerOpen] = useState(false);
-  const role= parseInt(localStorage.getItem('role'));
-    const [csvData, setCsvData] = useState([]);
-    const [userData, setUserData] = useState([]);
-    const [massUpdateModalOpen,setMassUpdateModalOpen] = useState(false)
-    const [adminInfo, setAdminInfo] = useState({
-      first_name: "",
-      last_name: "",
-      id: 0,
-    });
+  const role = parseInt(localStorage.getItem("role"));
+  const [csvData, setCsvData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
+  const [adminInfo, setAdminInfo] = useState({
+    first_name: "",
+    last_name: "",
+    id: 0,
+  });
+  const [data, setData] = useState("");
+  const handleDataReceived = (newData) => {
+    setData(newData);
+    console.log(newData);
+  };
 
-    const handleMassUpdate = () =>{
-      setMassUpdateModalOpen(true)
-    }
-    const handleMassUpdateClose = () =>{
-      setMassUpdateModalOpen(false)
-      setSelectedIds([]);
-    }
-  
+  const handleMassUpdate = () => {
+    setMassUpdateModalOpen(true);
+  };
+  const handleMassUpdateClose = () => {
+    setMassUpdateModalOpen(false);
+    setSelectedIds([]);
+  };
 
-    const handleOwnerClick = (id) => {
-      axios
-      .get(GET_OWNER_DEAL+id, {
+  const handleOwnerClick = (id) => {
+    axios
+      .get(GET_OWNER_DEAL + id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -82,55 +86,53 @@ const Deal = () => {
       .catch((error) => {
         console.log(error);
       });
-  
-      setOwnerOpen(false);
-    } 
-  
 
-    const userAdded = () => {
-      axios
-        .get(GET_TEAM_MEM, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
-        .then((response) => {
-          const responseData = response?.data?.data;
-          // const combinedData = [adminInfo, ...responseData];
-          setUserData(responseData);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
+    setOwnerOpen(false);
+  };
 
-    async function getUser() {
-      try {
-        const response = await axios.get(USER_INFO, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-          },
-        });
-
-        if (response.data.status === 1) {
-          adminInfo.first_name = response?.data?.data[0]?.first_name || "";
-          adminInfo.last_name = response?.data?.data[0]?.last_name || "";
-          adminInfo.id = response?.data?.data[0]?.id || "";
-         
-        }
-      } catch (error) {
+  const userAdded = () => {
+    axios
+      .get(GET_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const responseData = response?.data?.data;
+        // const combinedData = [adminInfo, ...responseData];
+        setUserData(responseData);
+      })
+      .catch((error) => {
         console.log(error);
-        if (error?.response?.data?.message === "Invalid or expired token.") {
-          alert(error?.response?.data?.message);
-          handleLogout();
-        }
+      });
+  };
+
+  async function getUser() {
+    try {
+      const response = await axios.get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+
+      if (response.data.status === 1) {
+        adminInfo.first_name = response?.data?.data[0]?.first_name || "";
+        adminInfo.last_name = response?.data?.data[0]?.last_name || "";
+        adminInfo.id = response?.data?.data[0]?.id || "";
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
       }
     }
+  }
 
-    useEffect(()=>{
-     userAdded();
-     getUser();
-    },[])
+  useEffect(() => {
+    userAdded();
+    getUser();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -144,11 +146,10 @@ const Deal = () => {
     setOwnerOpen(!ownerOpen);
   };
 
-
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
     axios
-      .get(GET_ALL_STAGE+"/deal", {
+      .get(GET_ALL_STAGE + "/deal", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -237,22 +238,31 @@ const Deal = () => {
     fetchStatus();
   }, []);
 
-  const filterDealData = deals?.filter((item)=>{
-    
-    const dealName= `${item?.deal_name}`?.toLowerCase() || "";
-    const dealValue= `${item?.value}`?.toLowerCase() || "";
-    const dealValue2= `$${item?.value}`?.toLowerCase() || "";
-    const ownerFirstName= `${item?.ownerf_name}`?.toLowerCase() || "";
-    const ownerLastName= `${item?.ownerl_name}`?.toLowerCase() || "";
-    const ownerFullName= `${item?.ownerf_name} ${item?.ownerl_name}`?.toLowerCase() || "";
-    const closureDate= `${item?.closure_date}`.split("T")[0]?.toLowerCase() || "";
-    const labelName= `${item?.label_name}`?.toLowerCase() || "";
+  const filterDealData = deals?.filter((item) => {
+    const dealName = `${item?.deal_name}`?.toLowerCase() || "";
+    const dealValue = `${item?.value}`?.toLowerCase() || "";
+    const dealValue2 = `$${item?.value}`?.toLowerCase() || "";
+    const ownerFirstName = `${item?.ownerf_name}`?.toLowerCase() || "";
+    const ownerLastName = `${item?.ownerl_name}`?.toLowerCase() || "";
+    const ownerFullName =
+      `${item?.ownerf_name} ${item?.ownerl_name}`?.toLowerCase() || "";
+    const closureDate =
+      `${item?.closure_date}`.split("T")[0]?.toLowerCase() || "";
+    const labelName = `${item?.label_name}`?.toLowerCase() || "";
     const searchDeal = searchQuery?.toLowerCase();
 
-    const matchQuery = dealName.includes(searchDeal) || dealValue.includes(searchDeal) || dealValue2.includes(searchDeal) || ownerFirstName.includes(searchDeal) || ownerLastName.includes(searchDeal) || ownerFullName.includes(searchDeal) || closureDate.includes(searchDeal) || labelName.includes(searchDeal) ;
-    return matchQuery; 
+    const matchQuery =
+      dealName.includes(searchDeal) ||
+      dealValue.includes(searchDeal) ||
+      dealValue2.includes(searchDeal) ||
+      ownerFirstName.includes(searchDeal) ||
+      ownerLastName.includes(searchDeal) ||
+      ownerFullName.includes(searchDeal) ||
+      closureDate.includes(searchDeal) ||
+      labelName.includes(searchDeal);
+    return matchQuery;
   });
-  
+
   const sortData = (data, option, order) => {
     switch (option) {
       case "Amount":
@@ -262,34 +272,40 @@ const Deal = () => {
         });
       case "LeadName":
         return data.slice().sort((a, b) => {
-          const result =a.deal_name?.toLowerCase().localeCompare(b?.deal_name?.toLowerCase());
+          const result = a.deal_name
+            ?.toLowerCase()
+            .localeCompare(b?.deal_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
         return data.slice().sort((a, b) => {
-          const result =a?.label_name?.toLowerCase().localeCompare(b?.label_name?.toLowerCase());
+          const result = a?.label_name
+            ?.toLowerCase()
+            .localeCompare(b?.label_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
         return data.slice().sort((a, b) => {
-          const result =a?.ownerf_name?.toLowerCase().localeCompare(b?.lead_name?.toLowerCase());
+          const result = a?.ownerf_name
+            ?.toLowerCase()
+            .localeCompare(b?.lead_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Closure":
         return data.slice().sort((a, b) => {
-          const result =a?.closure_date?.toLowerCase().localeCompare(b?.closure_date?.toLowerCase());
+          const result = a?.closure_date
+            ?.toLowerCase()
+            .localeCompare(b?.closure_date?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
         return data.slice().sort(() => {
-          
           return order === "asc" ? 1 : -1; // Toggle sorting order
-        }); 
+        });
     }
   };
-  
-  const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
 
+  const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
 
   // ======================================================================calculate total value of all leads
   useEffect(() => {
@@ -633,7 +649,6 @@ const Deal = () => {
     fileInputRef.current.click();
   };
 
-
   return (
     <div>
       <section className="lead-body">
@@ -665,20 +680,19 @@ const Deal = () => {
               </a>
             </div>
             <div className="recycle-search-box">
-          <input
-            type="text"
-            className="recycle-search-input recycle-fonts"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <span className="recycle-search-icon">
-            <img src={Search} alt="" />
-          </span>
-        </div>
-        {
-          role===1 && (
-            <div className="dropdown-container" ref={actionOwnerRef}>
+              <input
+                type="text"
+                className="recycle-search-input recycle-fonts"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <span className="recycle-search-icon">
+                <img src={Search} alt="" />
+              </span>
+            </div>
+            {role === 1 && (
+              <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   Select Owner
                   <i
@@ -689,29 +703,29 @@ const Deal = () => {
                 </div>
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
-                              {userData.slice().reverse().map((item) => (
-                            <li
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                              onClick={()=>handleOwnerClick(item.id)}
-                            >
-                              {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
-                              } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
-                              }`}
-                            </li>
-                          ))}
+                    {userData
+                      .slice()
+                      .reverse()
+                      .map((item) => (
+                        <li
+                          key={item?.id}
+                          value={item?.id}
+                          className="owner-val"
+                          onClick={() => handleOwnerClick(item.id)}
+                        >
+                          {`${
+                            item?.first_name.charAt(0).toUpperCase() +
+                            item?.first_name.slice(1)
+                          } ${
+                            item?.last_name.charAt(0).toUpperCase() +
+                            item?.last_name.slice(1)
+                          }`}
+                        </li>
+                      ))}
                   </ul>
                 )}
               </div>
-
-          )
-        }
-
+            )}
           </div>
           <div className="right-side--btns">
             <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
@@ -741,12 +755,12 @@ const Deal = () => {
               </div>
             </div>
             <input
-        type="file"
-        accept=".csv"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleCsvFileImport}
-      />
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleCsvFileImport}
+            />
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
                 <div
@@ -783,10 +797,7 @@ const Deal = () => {
             </div>
             <div className="select action-select">
               <div className="dropdown-container" ref={actionSortRef}>
-                <div
-                  className="dropdown-header2"
-                  onClick={toggleSortDropdown}
-                >
+                <div className="dropdown-header2" onClick={toggleSortDropdown}>
                   Sort By
                   <i
                     className={`fa-sharp fa-solid ${
@@ -796,13 +807,60 @@ const Deal = () => {
                 </div>
                 {sortOpen && (
                   <ul className="dropdown-menu">
-
-                  <li onClick={() => { setSortOption("None"); setSortOrder("asc"); setSortOpen(false); }}>None</li>
-                  <li onClick={() => { setSortOption("LeadName"); setSortOrder("asc"); setSortOpen(false); }}>Deal Name</li>
-                    <li onClick={() => { setSortOption("Amount"); setSortOrder("asc"); setSortOpen(false); }}>Amount</li>
-                    <li onClick={() => { setSortOption("Label"); setSortOrder("asc"); setSortOpen(false); }}>Label</li>
-                    <li onClick={() => { setSortOption("Owner"); setSortOrder("asc"); setSortOpen(false); }}>Deal Owner</li>
-                    <li onClick={() => { setSortOption("Closure"); setSortOrder("asc"); setSortOpen(false); }}>Closure Date</li>
+                    <li
+                      onClick={() => {
+                        setSortOption("None");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      None
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("LeadName");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Deal Name
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Amount");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Amount
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Label");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Label
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Owner");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Deal Owner
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Closure");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Closure Date
+                    </li>
                   </ul>
                 )}
               </div>
@@ -887,11 +945,15 @@ const Deal = () => {
         />
       )}
 
-      {
-        massUpdateModalOpen && (
-          <MassUpdateModal onClose={handleMassUpdateClose} userData={userData} text="Deal" ids={selectedIds}/>
-        )
-      }
+      {massUpdateModalOpen && (
+        <MassUpdateModal
+          onClose={handleMassUpdateClose}
+          userData={userData}
+          text="Deal"
+          ids={selectedIds}
+          handleDataReceived={handleDataReceived}
+        />
+      )}
     </div>
   );
 };
