@@ -5,12 +5,23 @@ import CalendarIcon from "../../assets/image/calendar-edit.svg";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Arrow from "../../assets/image/arrow-right.svg";
+import axios from "axios";
+import {
+  handleLogout,
+  getDecryptedToken,
+} from "../utils/Constants";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = () => {
+
+const DealEmail = ({type, id, item}) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
+  const [dataFromChild, setDataFromChild] = useState("");
+  const decryptedToken = getDecryptedToken();
 
   const handleDataTransfer = (data) => {
+    setDataFromChild(data);
     setStateAdd(1);
   };
 
@@ -21,7 +32,58 @@ const DealEmail = () => {
   const closeEditor = () => {
     setOpenEditor(false);
     setStateAdd(0);
-  }
+  };
+
+  const handleAddEmail = () => {
+    const updatedFormData = {
+      source_id: type === "lead" ? item.id : id,
+      type: type,
+      subject: "Test email - 1",
+      html: dataFromChild,
+      to: [
+        {
+            email: "maheshmhaske241198@gmail.com",
+            name: "Mahesh Mhaske"
+        }
+    ],
+    cc: [
+        {
+           email: "maheshmhaske241198@gmail.com",
+           name: "Mahesh Mhaske"
+        }
+    ]
+    };
+console.log(updatedFormData);
+    // axios
+    //   .post(ADD_NOTES, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+    //     },
+    //   })
+    //   .then((response) => {
+    //     fetchNotes(); // Fetch the updated notes after adding a new note
+    //     onNotesNum();
+
+    //     if(response.data.status===1){
+    //       toast.success("Notes added successfully", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }else{
+    //       toast.error("Something went wrong", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
+    setDataFromChild("");
+    // setOpenEditor(false);
+    setStateAdd(0);
+  };
 
   return (
     <>
@@ -35,14 +97,26 @@ const DealEmail = () => {
             <CRMEmail onDataTransfer={handleDataTransfer} />
           </div>
           <div className="addNoteBtn">
-
-            <button className="common-fonts common-white-button" onClick={closeEditor}>Cancel</button>
+            <button
+              className="common-fonts common-white-button"
+              onClick={closeEditor}
+            >
+              Cancel
+            </button>
             {stateAdd === 0 ? (
-              <button disabled className="common-fonts common-inactive-button note-btn">
+              <button
+                disabled
+                className="common-fonts common-inactive-button note-btn"
+              >
                 Send
               </button>
             ) : (
-              <button className="common-fonts common-save-button note-btn">Send</button>
+              <button
+                className="common-fonts common-save-button note-btn"
+                onClick={handleAddEmail}
+              >
+                Send
+              </button>
             )}
           </div>
         </>
@@ -75,12 +149,21 @@ const DealEmail = () => {
                     </div>
 
                     <div className={`activity-phone email-tab-view`}>
-                     <p className="common-fonts email-sender-name"> <span>From:</span> Anant Singh</p>
-                     <p className="common-fonts email-reciever-name"> <span>To:</span>noah@gmail.com</p>
-                     <p className="common-fonts">Hi, Noah</p>
-                     <p className="common-fonts">Thanks for reaching out, please book a call with me here.</p>
-                     <p className="common-fonts">Regards,</p>
-                     <p className="common-fonts">Anant Singh</p>
+                      <p className="common-fonts email-sender-name">
+                        {" "}
+                        <span>From:</span> Anant Singh
+                      </p>
+                      <p className="common-fonts email-reciever-name">
+                        {" "}
+                        <span>To:</span>noah@gmail.com
+                      </p>
+                      <p className="common-fonts">Hi, Noah</p>
+                      <p className="common-fonts">
+                        Thanks for reaching out, please book a call with me
+                        here.
+                      </p>
+                      <p className="common-fonts">Regards,</p>
+                      <p className="common-fonts">Anant Singh</p>
                     </div>
                   </div>
                 </div>

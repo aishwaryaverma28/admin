@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LeadModal from "../lead/LeadModal.jsx";
 import LeadDeletePopUp from "../DeleteComponent.jsx";
 import axios from "axios";
-import { MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
+import {UPDATE_LEAD, MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
@@ -51,7 +51,7 @@ const LeadCards = ({
         owner: data,
       };
       axios
-      .put("http://core.leadplaner.com:3001/api/lead/edit", body, {
+      .put(UPDATE_LEAD, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },

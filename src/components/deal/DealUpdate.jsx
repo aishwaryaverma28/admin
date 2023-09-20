@@ -307,10 +307,11 @@ const DealUpdate = () => {
     setIsStageButton(true);
     if (selectedStageId !== null) {
       const updateForm = {
+        dealId:[id],
         stage_id: selectedStageId,
       };
       axios
-        .put(UPDATE_DEAL + id, updateForm, {
+        .put(UPDATE_DEAL, updateForm, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
           },
@@ -1624,7 +1625,8 @@ const DealUpdate = () => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail />
+                <DealEmail type="deal"
+                  id={id}/>
               </div>
             )}
             {activeTab === "activity" && (
