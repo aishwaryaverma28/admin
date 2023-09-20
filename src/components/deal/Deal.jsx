@@ -90,6 +90,8 @@ const Deal = () => {
     setOwnerOpen(false);
   };
 
+
+
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -952,6 +954,7 @@ const Deal = () => {
           text="Deal"
           ids={selectedIds}
           handleDataReceived={handleDataReceived}
+          fetchLeadsData={fetchLeadsData}
         />
       )}
     </div>
