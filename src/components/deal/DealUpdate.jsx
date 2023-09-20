@@ -546,10 +546,19 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        toast.success("Deal data updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+
+        if(response.data.status===1){
+          toast.success("Deal data updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }else{
+          toast.error("Some error occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+
         setShowUpdateButton(false);
         setStateBtn(0);
         fetchDeal();
@@ -872,7 +881,7 @@ const DealUpdate = () => {
                 <div className="dealsLeftContainer">
                   <p>Value</p>
                   <p>Lable</p>
-                  <p>Contact Person</p>
+                  {/* <p>Contact Person</p> */}
                   <p>Organization</p>
                   <p>Deal Owner</p>
                   <p>Closing Date</p>
@@ -926,7 +935,7 @@ const DealUpdate = () => {
                     )}
                   </p>
 
-                  <p>
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -941,7 +950,7 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
+                  </p> */}
 
                   <p>
                     {isLoading ? (
@@ -1054,7 +1063,7 @@ const DealUpdate = () => {
               <div className="detailsContent">
                 <div className="dealsLeftContainer">
                   <p>Name</p>
-                  <p>Address</p>
+                  {/* <p>Address</p> */}
                   <p>Phone No</p>
                 </div>
 
@@ -1077,7 +1086,7 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  <p>
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -1092,7 +1101,7 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
+                  </p> */}
 
                   <p>
                     {isLoading ? (
@@ -1132,9 +1141,9 @@ const DealUpdate = () => {
                 <div className="dealsLeftContainer">
                   <p>Introducer Name</p>
                   <p>Introducer Firm Name</p>
-                  <p>Data Enquiry Recieve</p>
-                  <p>Borrower Entry</p>
-                  <p>Security Value</p>
+                  {/* <p>Data Enquiry Recieve</p> */}
+                  {/* <p>Borrower Entry</p> */}
+                  {/* <p>Security Value</p> */}
                   <p>Loan Amount</p>
                   <p>Deposit</p>
                   <p>Type Of Security</p>
@@ -1149,7 +1158,7 @@ const DealUpdate = () => {
                   <p>Procuration Fee Paid</p>
                   <p>Deal Commission</p>
                   <p>Completion Date</p>
-                  <p>Commercial Finance-File Completion Checklist</p>
+                  {/* <p>Commercial Finance-File Completion Checklist</p> */}
                 </div>
 
                 <div className="detailsRightContainer">
@@ -1189,7 +1198,7 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  <p>
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -1206,8 +1215,8 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
-                  <p>
+                  </p> */}
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -1224,8 +1233,8 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
-                  <p>
+                  </p> */}
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -1242,7 +1251,7 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
+                  </p> */}
                   <p>
                     {isLoading ? (
                       <span>-</span>
@@ -1496,7 +1505,7 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  <p>
+                  {/* <p>
                     {isLoading ? (
                       <span>-</span>
                     ) : (
@@ -1511,7 +1520,7 @@ const DealUpdate = () => {
                         />
                       </span>
                     )}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             )}
