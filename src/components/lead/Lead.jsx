@@ -54,7 +54,7 @@ const Lead = () => {
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
-  const role = parseInt(localStorage.getItem("role"));
+  const role_name = localStorage.getItem("role_name");
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -705,7 +705,7 @@ const Lead = () => {
                 <img src={Search} alt="" />
               </span>
             </div>
-            {role === 1 && (
+            {role_name === "admin" && (
               <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   Select Owner

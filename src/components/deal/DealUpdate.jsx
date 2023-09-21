@@ -45,7 +45,7 @@ const DealUpdate = () => {
     last_name: "",
     id: 0,
   });
-
+const [dealName, setDealName] = useState("");
   const [fieldNames, setFieldNames] = useState({});
 
   const [dealDetails, setDealDetails] = useState({
@@ -100,7 +100,7 @@ const DealUpdate = () => {
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
   const [userData, setUserData] = useState([]);
-  const role = parseInt(localStorage.getItem("role"));
+  const role_name = localStorage.getItem("role_name");
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -153,6 +153,7 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
+        setDealName(response?.data?.data[0]?.deal_name);
         const fieldMappings = {};
 
         for (const key in fieldNames) {
@@ -970,7 +971,7 @@ const DealUpdate = () => {
                       </span>
                     )}
                   </p>
-                  {role === 1 ? (
+                  {role_name === "admin" ? (
                     <p>
                       {isLoading ? (
                         <span>-</span>
@@ -1634,8 +1635,11 @@ const DealUpdate = () => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail type="deal"
-                  id={id}/>
+                <DealEmail 
+                type="deal"
+                  id={id}
+                  dealName= {dealName}
+                  />
               </div>
             )}
             {activeTab === "activity" && (

@@ -61,7 +61,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   });
 
   const [info, setInfo] = useState({});
-  const role = parseInt(localStorage.getItem("role"));
+  const role_name = localStorage.getItem("role_name");
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -882,7 +882,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        {role !== 1 ? (
+                        {role_name !== "admin" ? (
                           <input
                             type="text"
                             name=""
@@ -934,7 +934,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        {role !== 1 ? (
+                        {role_name !== "admin" ? (
                           <input
                             type="email"
                             name="owner_email"
@@ -961,7 +961,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                       <span>-</span>
                     ) : (
                       <span>
-                        {role !== 1 ? (
+                        {role_name !== "admin" ? (
                           <input
                             type="text"
                             name="owner_phone"

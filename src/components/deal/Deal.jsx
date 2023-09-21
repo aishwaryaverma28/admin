@@ -51,7 +51,7 @@ const Deal = () => {
   const [sortOption, setSortOption] = useState("None");
   const [sortOrder, setSortOrder] = useState("asc");
   const [ownerOpen, setOwnerOpen] = useState(false);
-  const role = parseInt(localStorage.getItem("role"));
+  const role_name = localStorage.getItem("role_name");
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
@@ -756,7 +756,7 @@ const Deal = () => {
                 <img src={Search} alt="" />
               </span>
             </div>
-            {role === 1 && (
+            {role_name === 1 && (
               <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   Select Owner
