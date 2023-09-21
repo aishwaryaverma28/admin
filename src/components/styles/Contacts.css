@@ -26,3 +26,57 @@ align-items: center;
     width:9rem;
 }
 
+.contact-search-container{
+    margin-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    margin-right: 1rem;
+}
+
+.contact-cp-table{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    height: 70vh;
+    overflow: auto;
+}
+
+
+.contact-building{
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: #F3F6FA;
+}
+
+.contact-box{
+    padding-top: 1.2rem;
+
+}
+
+.contact-three-dots{
+    border-radius: 0.3125rem;
+    border: 1px solid #dcdcdc;
+    background: #fff;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin-left: 1rem;
+}
+
+.contact-three-dots img{
+margin-top: 0.2rem;
+}
+
+.contact-delete-menu{
+    left:-200%;
+}
+
+.contact-th{
+    text-align: left;
+    font-weight: 600;
+}
+
+.person-email{
+    text-transform: lowercase;
+}

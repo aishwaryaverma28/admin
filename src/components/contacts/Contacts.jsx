@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import '../styles/Contacts.css';
-import CompanyModal from './CompanyModal.jsx';
-import PeopleModal from './PeopleModal.jsx';
+import "../styles/Contacts.css";
+import CompanyModal from "./CompanyModal.jsx";
+import PeopleModal from "./PeopleModal.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Papa from "papaparse";
@@ -11,36 +11,117 @@ import {
   IMPORT_COMPANY,
   handleLogout,
   getDecryptedToken,
+  ALL_COMPANY,
+  ALL_PEOPLE
 } from "../utils/Constants";
+import CompanyTable from "./CompanyTable.jsx";
+import PeopleTable from "./PeopleTable.jsx";
+import More from '../../assets/image/more.svg';
 
 const Contacts = () => {
   const [activeTab, setActiveTab] = useState("people");
-  const [number,setNumber] = useState(0);
+  const [number, setNumber] = useState(0);
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
+  console.log(decryptedToken);
   const fileInputRef = useRef(null);
   const [csvData, setCsvData] = useState([]);
   const fileInputRef2 = useRef(null);
   const [csvData2, setCsvData2] = useState([]);
-  
+  const [companyData, setCompanyData] = useState([])
+  const [personData, setPersonData] = useState([])
+  const [actionopen, setActionOpen] = useState(false);
+  const actionDropDownRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingPeople, setLoadingPeople] = useState(true);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        actionDropDownRef.current &&
+        !actionDropDownRef.current.contains(event.target)
+      ) {
+        setActionOpen(false);
+      }
+    };
+
+
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  const toggleDropdown = () => {
+    setActionOpen(!actionopen);
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    setNumber(number===0 ? 1 : 0)
+    setNumber(number === 0 ? 1 : 0);
   };
 
   const handleCompanyModal = () => {
-    setCompanyModalOpen(true)
-  }
+    setCompanyModalOpen(true);
+  };
   const handleCompanyModalClose = () => {
-    setCompanyModalOpen(false)
-  }
+    setCompanyModalOpen(false);
+  };
   const handlePersonModal = () => {
-    setPersonModalOpen(true)
-  }
+    setPersonModalOpen(true);
+  };
   const handlePersonModalClose = () => {
-    setPersonModalOpen(false)
-  }
+    setPersonModalOpen(false);
+  };
+
+  const fetchCompany = (e) => {
+    
+    axios
+      .get(ALL_COMPANY, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+          setCompanyData(response?.data?.data);
+          setLoading(false)
+         })
+      .catch((error) => {
+        console.log(error);
+        toast.error("some error occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
+  };
+  const fetchPeople = (e) => {
+    
+    axios
+      .get(ALL_PEOPLE, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setPersonData(response?.data?.data);
+        setLoadingPeople(false);
+         })
+      .catch((error) => {
+        console.log(error);
+        toast.error("some error occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
+  };
+
+  useEffect(()=>{
+    fetchCompany();
+    fetchPeople();
+  },[])
 
   const handleCsvFileImport = (e) => {
     const file = e.target.files[0];
@@ -69,7 +150,7 @@ const Contacts = () => {
     fileInputRef.current.click();
   };
   const postCsvDataToAPI = async (csvData) => {
-     try {
+    try {
       const response = await axios.post(
         IMPORT_COMPANY,
         {
@@ -154,97 +235,136 @@ const Contacts = () => {
     }
   };
 
-
   return (
     <>
+      <div className="contacts-top-flex ">
+        <div className="genral-setting-btn genral-setting-fonts aaa">
+          <button
+            className={`genral-btn  ${
+              activeTab === "people" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("people")}
+          >
+            People
+          </button>
+          <button
+            className={`genral-btn contact-genral-btn ${
+              activeTab === "company" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("company")}
+          >
+            Company
+          </button>
+        </div>
 
-    <div className='contacts-top-flex '>
+        <div className="contact-top-right">
+          <p className="common-fonts contact-records">
+            {number === 0 ? personData.length : companyData.length} Records
+          </p>
 
-    <div className="genral-setting-btn genral-setting-fonts aaa">
-    <button
-              className={`genral-btn  ${activeTab === "people" ? "genral-active" : ""
-                }`}
-              onClick={() => handleTabClick("people")}
-            >
-              People
-            </button>
+          {number === 0 ? (
             <button
-              className={`genral-btn contact-genral-btn ${activeTab === "company" ? "genral-active" : ""
-                }`}
-              onClick={() => handleTabClick("company")}
+              className="common-fonts common-save-button contact-dots contact-btn-top"
+              onClick={handlePersonModal}
             >
-              Company
+              Add People
             </button>
-          </div>
+          ) : (
+            <button
+              className="common-fonts common-save-button contact-dots contact-btn-top"
+              onClick={handleCompanyModal}
+            >
+              Add Company
+            </button>
+          )}
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleCsvFileImport}
+          />
 
-
-          <div className='contact-top-right'>
-          
-              <p className='common-fonts contact-records'>{number===0 ? 6 : 10} Records</p>
-   
-            
-            {
-              number===0 ? (
-                <button className='common-fonts common-save-button contact-dots contact-btn-top' onClick={handlePersonModal}>Add People</button>
-              ):
-              (
-                <button className='common-fonts common-save-button contact-dots contact-btn-top' onClick={handleCompanyModal}>Add Company</button>
-              )
-            }
-<input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleCsvFileImport}
-            />
-
-<input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef2}
-              style={{ display: "none" }}
-              onChange={handleCsvFileImport2}
-            />
-            {
-              number===0 ? (
-                <button className='common=save-button common-white-green-button contact-dots' onClick={handleImportClick2}>Import People</button>
-                ):
-              (
-            <button className='common=save-button common-white-green-button contact-dots' onClick={handleImportClick}>Import Compnay</button>
-              )}
-            <button className='common-white-green-button contact-dots'>...</button>
-          </div>
-
-
-    </div>
-
-
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef2}
+            style={{ display: "none" }}
+            onChange={handleCsvFileImport2}
+          />
+          {number === 0 ? (
+            <button
+              className="common=save-button common-white-green-button contact-dots contact-btn-top"
+              onClick={handleImportClick2}
+            >
+              Import People
+            </button>
+          ) : (
+            <button
+              className="common=save-button common-white-green-button contact-dots contact-btn-top"
+              onClick={handleImportClick}
+            >
+              Import Compnay
+            </button>
+          )}
 
           {
-            activeTab==="people" && (
-              <div>People</div>
-            )
-          }
-          {
-            activeTab==="company" && (
-              <div>Company</div>
+            number===0 ? (
+
+              //for people delete
+
+              <div className="select action-select">
+              <div className="dropdown-container" ref={actionDropDownRef}>
+                <div
+                  className="contact-three-dots"
+                  onClick={toggleDropdown}
+                >
+                  <img src={More} alt="" />
+                </div>
+                {actionopen && (
+                  <ul className="dropdown-menu contact-delete-menu">
+                    <li>Delete People</li>
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            ) : (
+
+              //for company delete
+              <div className="select action-select">
+              <div className="dropdown-container" ref={actionDropDownRef}>
+                <div
+                  className="contact-three-dots"
+                  onClick={toggleDropdown}
+                >
+                  <img src={More} alt="" />
+                </div>
+                {actionopen && (
+                  <ul className="dropdown-menu contact-delete-menu">
+                    <li>Delete Company</li>
+                  </ul>
+                )}
+              </div>
+            </div>
             )
           }
 
-          {
-            companyModalOpen && (
-              <CompanyModal onClose={handleCompanyModalClose} />
-            )
-          }
-          {
-            personModalOpen&& (
-              <PeopleModal onClose={handlePersonModalClose} />
-            )
-          }
-           <ToastContainer />
+        </div>
+      </div>
+
+      {activeTab === "people" && (
+        <PeopleTable personData={personData} loading={loadingPeople}/>
+      )}
+      {activeTab === "company" && (
+        <CompanyTable companyData={companyData} loading={loading} />
+      )}
+
+      {companyModalOpen && <CompanyModal onClose={handleCompanyModalClose} />}
+      {personModalOpen && <PeopleModal onClose={handlePersonModalClose} />}
+      <ToastContainer />
     </>
-  )
-}
+  );
+};
 
-export default Contacts
+export default Contacts;
