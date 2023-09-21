@@ -72,6 +72,8 @@ const Login = () => {
           localStorage.setItem("jwtToken", encryptedToken);
           const role = data?.role;
           localStorage.setItem("role", role);
+          const role_name = data?.role_name;
+          localStorage.setItem("role_name", role_name);
           localStorage.setItem("id", data?.user[0].id);
           const landingUrl = response.data.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
