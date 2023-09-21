@@ -6,25 +6,46 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Arrow from "../../assets/image/arrow-right.svg";
 import axios from "axios";
-import { ADD_EMAIL,POST_EMAIL,handleLogout, getDecryptedToken } from "../utils/Constants";
+import {
+  ADD_EMAIL,
+  POST_EMAIL,
+  handleLogout,
+  getDecryptedToken,
+} from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = ({ type, id, item }) => {
+const DealEmail = ({ type, id, item, dealName }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
   const decryptedToken = getDecryptedToken();
   const [emailInput, setEmailInput] = useState("");
   const [toEmails, setToEmails] = useState([]);
+  const [emailInput2, setEmailInput2] = useState("");
+  const [toEmails2, setToEmails2] = useState([]);
+  const [allEmails, setAllEmails] = useState([]);
 
   const handleEmailInputChange = (event) => {
     setEmailInput(event.target.value);
   };
   const handleEmailInputKeyPress = (event) => {
     if (event.key === "Enter" && emailInput.trim() !== "") {
-      setToEmails([...toEmails, emailInput.trim()]);
+      setToEmails([...toEmails, { email: emailInput.trim(), name: dealName }]);
       setEmailInput("");
+    }
+  };
+
+  const handleEmailInputChange2 = (event) => {
+    setEmailInput2(event.target.value);
+  };
+  const handleEmailInputKeyPress2 = (event) => {
+    if (event.key === "Enter" && emailInput2.trim() !== "") {
+      setToEmails2([
+        ...toEmails2,
+        { email: emailInput2.trim(), name: dealName },
+      ]);
+      setEmailInput2("");
     }
   };
 
@@ -45,79 +66,68 @@ const DealEmail = ({ type, id, item }) => {
   const handleAddEmail = () => {
     const updatedFormData = {
       source_id: type === "lead" ? item.id : id,
-      type: type,
+      source: type,
       subject: "Test email - 1",
       html: dataFromChild,
-      to: [
-        {
-          email: "maheshmhaske241198@gmail.com",
-          name: "Mahesh Mhaske",
-        },
-      ],
-      cc: [
-        {
-          email: "maheshmhaske241198@gmail.com",
-          name: "Mahesh Mhaske",
-        },
-      ],
+      to: toEmails,
+      cc: toEmails2,
     };
     console.log(updatedFormData);
-    // axios
-    //   .post(ADD_EMAIL, updatedFormData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-    //     },
-    //   })
-    //   .then((response) => {
-    //     fetchNotes(); // Fetch the updated notes after adding a new note
-    //     onNotesNum();
-
-    //     if(response.data.status===1){
-    //       toast.success("Notes added successfully", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     }else{
-    //       toast.error("Something went wrong", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
+    axios
+      .post(ADD_EMAIL, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          console.log(response?.data);
+          toast.success("Email send successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Something went wrong", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setToEmails([]);
+    setToEmails2([]);
     setDataFromChild("");
-    // setOpenEditor(false);
+    setOpenEditor(false);
     setStateAdd(0);
   };
 
-const handleGetEmail = () => {
-  const updatedFormData = {
-        source: type,
-        source_id: type === "lead" ? item.id : id,
-    }
-  console.log(updatedFormData);
-  axios
-    .post(POST_EMAIL, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      if(response?.data?.status===1){
-    console.log(response?.data?.data);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+  const handleGetEmail = () => {
+    const updatedFormData = {
+      source: type,
+      source_id: type === "lead" ? item.id : id,
+    };
+    axios
+      .post(POST_EMAIL, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          console.log(response?.data?.data);
+          setAllEmails(response?.data?.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-useEffect(() => {
-  handleGetEmail();
-}, []);
+  useEffect(() => {
+    handleGetEmail();
+  }, []);
 
   return (
     <>
@@ -142,7 +152,27 @@ useEffect(() => {
               <p>Selected email addresses:</p>
               <ul>
                 {toEmails.map((email, index) => (
-                  <li key={index}>{email}</li>
+                  <li key={index}>{email?.email}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div>
+              <label htmlFor="emailInput">Cc:</label>
+              <input
+                type="email"
+                id="emailInput"
+                value={emailInput2}
+                onChange={handleEmailInputChange2}
+                onKeyPress={handleEmailInputKeyPress2}
+              />
+            </div>
+            <div>
+              <p>Selected Cc email addresses:</p>
+              <ul>
+                {toEmails2.map((email, index) => (
+                  <li key={index}>{email?.email}</li>
                 ))}
               </ul>
             </div>
