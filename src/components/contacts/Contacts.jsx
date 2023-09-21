@@ -360,8 +360,8 @@ const Contacts = () => {
         <CompanyTable companyData={companyData} loading={loading} />
       )}
 
-      {companyModalOpen && <CompanyModal onClose={handleCompanyModalClose} />}
-      {personModalOpen && <PeopleModal onClose={handlePersonModalClose} />}
+      {companyModalOpen && <CompanyModal onClose={handleCompanyModalClose} fetchCompany={fetchCompany} />}
+      {personModalOpen && <PeopleModal onClose={handlePersonModalClose} fetchPeople={fetchPeople} />}
       <ToastContainer />
     </>
   );

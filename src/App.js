@@ -53,6 +53,8 @@ import SettingImpExp from "./components/settings/SettingImpExp";
 import DealUpdate from "./components/deal/DealUpdate";
 import HelpView from "./components/HelpView";
 import Reset from "./components/Reset";
+import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
+import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
 const router = createBrowserRouter([
   // {
   //   path: "/:auth",
@@ -100,6 +102,14 @@ const router = createBrowserRouter([
       {
         path: "/lp/contacts",
         element: <SecureRoutes Component={Contacts} />,
+      },
+      {
+        path: "/lp/contacts/company/:id",
+        element: <CompanyUpdate/>,
+      },
+      {
+        path: "/lp/contacts/people/:id",
+        element: <PeopleUpdate/>,
       },
       {
         path: "/lp/deals",

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Search from "../../assets/image/search.svg";
 import User from "../../assets/image/user.svg";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 
 const PeopleTable = ({personData, loading}) => {
@@ -107,10 +108,12 @@ const PeopleTable = ({personData, loading}) => {
                       </label>
                     </th>
                     <td className="common-fonts ">
+                    <Link to={`/lp/contacts/people/${person.id}`}>
                       <span className="contact-building">
                         <img src={User} alt="" />
                       </span>{" "}
                       {person.name}
+                      </Link>
                     </td>
                     <td className="common-fonts">{person.organization}</td>
                     <td className="common-fonts person-email">{person.email}</td>

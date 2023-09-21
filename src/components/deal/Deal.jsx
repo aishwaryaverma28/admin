@@ -756,7 +756,7 @@ const Deal = () => {
                 <img src={Search} alt="" />
               </span>
             </div>
-            {role_name === 1 && (
+            {role_name === "admin" && (
               <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   Select Owner
