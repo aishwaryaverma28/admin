@@ -92,10 +92,33 @@ const DealEmail = ({ type, id, item }) => {
     // setOpenEditor(false);
     setStateAdd(0);
   };
-//  BODY {
-//     "source": "lead",
-//     "source_id": 3631385
-// }
+
+const handleGetEmail = () => {
+  const updatedFormData = {
+        source: type,
+        source_id: type === "lead" ? item.id : id,
+    }
+  console.log(updatedFormData);
+  axios
+    .post(POST_EMAIL, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      if(response?.data?.status===1){
+    console.log(response?.data?.data);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+useEffect(() => {
+  handleGetEmail();
+}, []);
+
   return (
     <>
       {!openEditor ? (
