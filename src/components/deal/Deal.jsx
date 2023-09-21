@@ -637,26 +637,26 @@ const Deal = () => {
       Papa.parse(file, {
         header: true, // Assume the first row contains headers
         complete: (result) => {
-          const dataWithIntValues = result.data.map((row) => ({
+          const dataWithIntValues = result?.data.map((row) => ({
             ...row,
-            lead_id: parseInt(row.lead_id),
-            value: parseInt(row.value),
-            pipeline_id: parseInt(row.pipeline_id),
-            mobile: parseInt(row.mobile),
-            security_value: parseInt(row.security_value),
-            loan_amount: parseInt(row.loan_amount),
-            deposit: parseInt(row.deposit),
-            engagement_fee: parseInt(row.engagement_fee),
-            engagement_fee_paid: parseInt(row.engagement_fee_paid),
-            broker_fee: parseInt(row.broker_fee),
-            broker_fee_paid: parseInt(row.broker_fee_paid),
-            procuration_fee: parseInt(row.procuration_fee),
-            procuration_fee_paid: parseInt(row.procuration_fee_paid),
-            deal_commission: parseInt(row.deal_commission),
-            closure_date: formatDate(row.closure_date),
-            data_enquiry_receive: formatDate(row.data_enquiry_receive),
-            borrower_entry: formatDate(row.borrower_entry),
-            completion_date: formatDate(row.completion_date),
+            lead_id: parseInt(row?.lead_id),
+            value: parseInt(row?.value),
+            pipeline_id: parseInt(row?.pipeline_id),
+            mobile: parseInt(row?.mobile),
+            security_value: parseInt(row?.security_value),
+            loan_amount: parseInt(row?.loan_amount),
+            deposit: parseInt(row?.deposit),
+            engagement_fee: parseInt(row?.engagement_fee),
+            engagement_fee_paid: parseInt(row?.engagement_fee_paid),
+            broker_fee: parseInt(row?.broker_fee),
+            broker_fee_paid: parseInt(row?.broker_fee_paid),
+            procuration_fee: parseInt(row?.procuration_fee),
+            procuration_fee_paid: parseInt(row?.procuration_fee_paid),
+            deal_commission: parseInt(row?.deal_commission),
+            closure_date: formatDate(row?.closure_date),
+            data_enquiry_receive: formatDate(row?.data_enquiry_receive),
+            borrower_entry: formatDate(row?.borrower_entry),
+            completion_date: formatDate(row?.completion_date),
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);

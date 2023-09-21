@@ -610,10 +610,10 @@ const Lead = () => {
       Papa.parse(file, {
         header: true, // Assume the first row contains headers
         complete: (result) => {
-          const dataWithIntValues = result.data.map((row) => ({
+          const dataWithIntValues = result?.data.map((row) => ({
             ...row,
-            value: parseInt(row.value), // Parse the "value" field as an integer
-            stage_id: parseInt(row.stage_id),
+            value: parseInt(row?.value), // Parse the "value" field as an integer
+            stage_id: parseInt(row?.stage_id),
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);

@@ -6,7 +6,7 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Arrow from "../../assets/image/arrow-right.svg";
 import axios from "axios";
-import { handleLogout, getDecryptedToken } from "../utils/Constants";
+import { ADD_EMAIL,POST_EMAIL,handleLogout, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -63,7 +63,7 @@ const DealEmail = ({ type, id, item }) => {
     };
     console.log(updatedFormData);
     // axios
-    //   .post(ADD_NOTES, updatedFormData, {
+    //   .post(ADD_EMAIL, updatedFormData, {
     //     headers: {
     //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
     //     },
@@ -92,7 +92,10 @@ const DealEmail = ({ type, id, item }) => {
     // setOpenEditor(false);
     setStateAdd(0);
   };
-
+//  BODY {
+//     "source": "lead",
+//     "source_id": 3631385
+// }
   return (
     <>
       {!openEditor ? (

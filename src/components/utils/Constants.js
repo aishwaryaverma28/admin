@@ -170,4 +170,18 @@ export const GET_OWNER_LEAD = start + "api/lead/getbyowner/"
 export const GET_OWNER_DEAL = start + "api/deal/getbyowner/"
 
 
+//=================================================================================email apis
 export const ADD_EMAIL = start + "api/lead/sendleaddealemail";
+export const POST_EMAIL =start + "api/lead/getleaddealsentemail";
+
+//=================================================================================company apis
+export const IMPORT_COMPANY = start + "api/contact/company/import";
+export const ADD_COMPANY = start + "api/contact/company/add";
+export const UPDATE_COMPANY = start + "api/contact/company/edit/";
+export const ALL_COMPANY = start+ "api/contact/company/get";
+
+//=======================================people apis
+export const IMPORT_PEOPLE = start + "api/contact/person/import";
+export const ADD_PEOPLE = start + "api/contact/person/add";
+export const UPDATE_PEOPLE = start + "api/contact/person/edit/";
+export const ALL_PEOPLE = start + "api/contact/person/get";
