@@ -6,19 +6,27 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Arrow from "../../assets/image/arrow-right.svg";
 import axios from "axios";
-import {
-  handleLogout,
-  getDecryptedToken,
-} from "../utils/Constants";
+import { handleLogout, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-const DealEmail = ({type, id, item}) => {
+const DealEmail = ({ type, id, item }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
   const decryptedToken = getDecryptedToken();
+  const [emailInput, setEmailInput] = useState("");
+  const [toEmails, setToEmails] = useState([]);
+
+  const handleEmailInputChange = (event) => {
+    setEmailInput(event.target.value);
+  };
+  const handleEmailInputKeyPress = (event) => {
+    if (event.key === "Enter" && emailInput.trim() !== "") {
+      setToEmails([...toEmails, emailInput.trim()]);
+      setEmailInput("");
+    }
+  };
 
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -42,18 +50,18 @@ const DealEmail = ({type, id, item}) => {
       html: dataFromChild,
       to: [
         {
-            email: "maheshmhaske241198@gmail.com",
-            name: "Mahesh Mhaske"
-        }
-    ],
-    cc: [
+          email: "maheshmhaske241198@gmail.com",
+          name: "Mahesh Mhaske",
+        },
+      ],
+      cc: [
         {
-           email: "maheshmhaske241198@gmail.com",
-           name: "Mahesh Mhaske"
-        }
-    ]
+          email: "maheshmhaske241198@gmail.com",
+          name: "Mahesh Mhaske",
+        },
+      ],
     };
-console.log(updatedFormData);
+    console.log(updatedFormData);
     // axios
     //   .post(ADD_NOTES, updatedFormData, {
     //     headers: {
@@ -93,6 +101,26 @@ console.log(updatedFormData);
         </div>
       ) : (
         <>
+          <div>
+            <div>
+              <label htmlFor="emailInput">To:</label>
+              <input
+                type="email"
+                id="emailInput"
+                value={emailInput}
+                onChange={handleEmailInputChange}
+                onKeyPress={handleEmailInputKeyPress}
+              />
+            </div>
+            <div>
+              <p>Selected email addresses:</p>
+              <ul>
+                {toEmails.map((email, index) => (
+                  <li key={index}>{email}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <div className="notesEditor">
             <CRMEmail onDataTransfer={handleDataTransfer} />
           </div>
