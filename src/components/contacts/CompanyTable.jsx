@@ -3,6 +3,7 @@ import Search from "../../assets/image/search.svg";
 import Building from "../../assets/image/building.svg";
 import { useState } from "react";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 
 const CompanyTable = ({ companyData, loading }) => {
@@ -113,11 +114,15 @@ const CompanyTable = ({ companyData, loading }) => {
                       </label>
                     </th>
                     <td className="common-fonts ">
+                    <Link to={`/lp/contacts/company/${company.id}`}>
+
                       <span className="contact-building">
                         <img src={Building} alt="" />
                       </span>{" "}
                       {company.name}
+                      </Link>
                     </td>
+
                     <td className="common-fonts">{company.industry}</td>
                     <td className="common-fonts person-email">{company.email}</td>
                     <td className="common-fonts">{company.phone}</td>

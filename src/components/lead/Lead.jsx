@@ -649,6 +649,7 @@ const Lead = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchLeadsData();
         // You can add further logic here if needed
       } else {
         toast.error("Some Error Occured", {

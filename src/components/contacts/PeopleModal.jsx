@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getDecryptedToken } from "../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
+import { getDecryptedToken, ADD_PEOPLE } from "../utils/Constants";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const PeopleModal = ({ onClose }) => {
+const PeopleModal = ({ onClose , fetchPeople }) => {
   const decryptedToken = getDecryptedToken();
   const [people, setPeople] = useState({
     name: "",
@@ -42,7 +42,7 @@ const PeopleModal = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://core.leadplaner.com:3001/api/contact/person/add", people, {
+      .post(ADD_PEOPLE, people, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -54,6 +54,8 @@ const PeopleModal = ({ onClose }) => {
             position: "top-center",
             autoClose: 2000,
           });
+          fetchPeople();
+          onClose();
         } else {
           toast.error(response.data.message, {
             position: "top-center",
@@ -196,7 +198,6 @@ const PeopleModal = ({ onClose }) => {
       <div className="help-cross" onClick={handleClose}>
         X
       </div>
-      <ToastContainer />
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getDecryptedToken } from "../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
+import { getDecryptedToken, ADD_COMPANY } from "../utils/Constants";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CompanyModal = ({ onClose }) => {
+const CompanyModal = ({ onClose, fetchCompany }) => {
   const decryptedToken = getDecryptedToken();
   const [company, setCompany] = useState({
     "name": "",
@@ -56,7 +56,7 @@ const CompanyModal = ({ onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://core.leadplaner.com:3001/api/contact/company/add", company, {
+      .post(ADD_COMPANY, company, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -67,6 +67,8 @@ const CompanyModal = ({ onClose }) => {
                 position: "top-center",
                 autoClose: 2000,
               });
+              fetchCompany();
+              onClose();
         }else{
             toast.error(response.data.message, {
                 position: "top-center",
@@ -102,7 +104,6 @@ const CompanyModal = ({ onClose }) => {
 
   return (
     <div className="popup-wrapper">
-    <ToastContainer/>
       <div className="product-popup-container">
         <div className="product-popup-box">
           <p className="common-fonts add-product-heading">Add Company</p>
