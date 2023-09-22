@@ -181,7 +181,8 @@ export const UPDATE_COMPANY = start + "api/contact/company/edit/";
 export const ALL_COMPANY = start+ "api/contact/company/get";
 export const MOVE_TO_BIN = start + "api/contact/movetotrash";
 export const GET_BIN_COMPANY = start + "api/contact/getfromtrash";
-export const REMOVE_COMPANY = start + "api/contact/removefromtrash";
+export const RESTORE_COMPANY = start + "api/contact/removefromtrash";
+export const DELETE_COMPANY = start + "api/contact/deletefromtrash";
 //=======================================people apis
 export const IMPORT_PEOPLE = start + "api/contact/person/import";
 export const ADD_PEOPLE = start + "api/contact/person/add";

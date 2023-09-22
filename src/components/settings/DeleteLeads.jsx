@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 const DeleteLeads = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [activeTab, setActiveTab] = useState("Notes");
+  const [activeTab, setActiveTab] = useState("Leads");
   const [recycleData, setRecycleData] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
