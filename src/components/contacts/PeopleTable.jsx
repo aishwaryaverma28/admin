@@ -101,7 +101,11 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
         </div>
       </div>
       <div className="contact-cp-table">
-        <table>
+      {
+        loading ? (
+          <p>Loading....</p>
+        ):(
+          <table>
           <thead>
             <tr>
               <th className="contact-box">
@@ -127,13 +131,7 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={10} style={{ textAlign: "center" }}>
-                  Loading...
-                </td>
-              </tr>
-            ) : filteredPersonData.length === 0 ? (
+            {filteredPersonData.length === 0 ? (
               <tr>
                 <td colSpan={10} style={{ textAlign: "center" }}>
                   No data found
@@ -180,6 +178,9 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
             )}
           </tbody>
         </table>
+        )
+      }
+
       </div>
     </div>
   );
