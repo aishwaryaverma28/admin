@@ -18,6 +18,7 @@ import {
 import CompanyTable from "./CompanyTable.jsx";
 import PeopleTable from "./PeopleTable.jsx";
 import More from "../../assets/image/more.svg";
+import ContactDeleteModal from "./ContactDeleteModal.jsx";
 
 const Contacts = () => {
   const [activeTab, setActiveTab] = useState("people");
@@ -37,6 +38,24 @@ const Contacts = () => {
   const [loadingPeople, setLoadingPeople] = useState(true);
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedPpl, setSelectedPpl] = useState([]);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [action, setAction] = useState("");
+  const [isDeletePeople, setIsDeletePeople] = useState(false);
+
+  const handleDeleteModal = () => {
+    setIsDeleteModal(true);
+  };
+  const handleDeleteModalClose = () => {
+    setIsDeleteModal(false);
+    setSelectedIds([]);
+  };
+  const handleDeletePeople = () => {
+    setIsDeletePeople(true);
+  };
+  const handleDeletePeopleClose = () => {
+    setIsDeletePeople(false);
+    setSelectedPpl([]);
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -69,12 +88,22 @@ const Contacts = () => {
   };
   const handleCompanyModalClose = () => {
     setCompanyModalOpen(false);
+    clearSelectedIds();
   };
   const handlePersonModal = () => {
     setPersonModalOpen(true);
   };
   const handlePersonModalClose = () => {
     setPersonModalOpen(false);
+    clearSelectedPpl();
+  };
+
+  const clearSelectedIds = () => {
+    setSelectedIds([]);
+  };
+
+  const clearSelectedPpl = () => {
+    setSelectedPpl([]);
   };
 
   const fetchCompany = (e) => {
@@ -165,6 +194,7 @@ const Contacts = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchCompany();
         // You can add further logic here if needed
       } else {
         toast.error("Some Error Occured", {
@@ -219,6 +249,7 @@ const Contacts = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchPeople();
         // You can add further logic here if needed
       } else {
         toast.error("Some Error Occured", {
@@ -278,30 +309,14 @@ const Contacts = () => {
     }
   };
 
-  const handleDropdownItemClick = (action) => {
-    if (action === "deleteCompany") {
-      // Check if there are selected company IDs
-      if (selectedIds.length === 0) {
-        toast.info("No companies selected for deletion", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      } else {
-        // Call the function to delete selected companies
-        deleteSelectedCompanies(selectedIds);
-      }
-    }
-    // Close the dropdown menu after performing the action
-    setActionOpen(false);
-  };
-
   const handleSelectedPplChange = (ids) => {
     setSelectedPpl(ids);
   };
-  
+
   const handleDropdownClick = (action) => {
     if (action === "deletePeople") {
       // Check if there are selected company IDs
+      setAction("deletePeople");
       if (selectedPpl.length === 0) {
         toast.info("No people selected for deletion", {
           position: "top-center",
@@ -311,8 +326,19 @@ const Contacts = () => {
         // Call the function to delete selected companies
         deleteSelectedPeople(selectedPpl);
       }
+    } else if (action === "deleteCompany") {
+      // Check if there are selected company IDs
+      setAction("deleteCompany");
+      if (selectedIds.length === 0) {
+        toast.info("No companies selected for deletion", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        deleteSelectedCompanies(selectedIds);
+      }
     }
-    // Close the dropdown menu after performing the action
+
     setActionOpen(false);
   };
 
@@ -356,7 +382,6 @@ const Contacts = () => {
       });
     }
   };
-
 
   return (
     <>
@@ -441,11 +466,7 @@ const Contacts = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li
-                      onClick={() => handleDropdownClick("deletePeople")}
-                    >
-                      Delete People
-                    </li>
+                    <li onClick={handleDeletePeople}>Delete People</li>
                   </ul>
                 )}
               </div>
@@ -459,11 +480,7 @@ const Contacts = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li
-                      onClick={() => handleDropdownItemClick("deleteCompany")}
-                    >
-                      Delete Company
-                    </li>
+                    <li onClick={handleDeleteModal}>Delete Company</li>
                   </ul>
                 )}
               </div>
@@ -473,7 +490,11 @@ const Contacts = () => {
       </div>
 
       {activeTab === "people" && (
-        <PeopleTable personData={personData} loading={loadingPeople} onSelectedIdsChange={handleSelectedPplChange}/>
+        <PeopleTable
+          personData={personData}
+          loading={loadingPeople}
+          onSelectedIdsChange={handleSelectedPplChange}
+        />
       )}
       {activeTab === "company" && (
         <CompanyTable
@@ -493,6 +514,22 @@ const Contacts = () => {
         <PeopleModal
           onClose={handlePersonModalClose}
           fetchPeople={fetchPeople}
+        />
+      )}
+      {isDeleteModal && (
+        <ContactDeleteModal
+          onClose={handleDeleteModalClose}
+          handleDropdownClick={handleDropdownClick}
+          action="deleteCompany"
+          fetchData={fetchCompany}
+        />
+      )}
+      {isDeletePeople && (
+        <ContactDeleteModal
+           onClose={handleDeletePeopleClose}
+          handleDropdownClick={handleDropdownClick}
+          action="deletePeople"
+          fetchData={fetchPeople}
         />
       )}
       <ToastContainer />
