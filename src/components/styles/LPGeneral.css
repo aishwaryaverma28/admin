@@ -460,6 +460,8 @@ input.activity-date-input {
   margin-bottom: 8rem;
 }
 
+
+
 .deal-activity-btn {
   margin-bottom: 1rem;
 }
@@ -834,3 +836,91 @@ input.activity-date-input {
 .email-pink{
 background: #FFF5DC;
 }
+
+.email-top-cc{
+  background-color: #F4F5F9 ;
+  width: 98.9%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  border: 1px solid #ccc;
+}
+
+.email-top-cc:first-child{
+  padding-top: 1rem;
+  padding-left: 1rem;
+}
+
+
+.quillEditor2 .ql-toolbar {
+  position: relative;
+  border: 1px solid #ccc; /* Add or adjust border styles as needed */
+  border-radius: 4px; /* Add or adjust border radius as needed */
+}
+
+.quillEditor2 .ql-toolbar.ql-snow {
+  height: auto;
+  top: 9.1rem; /* Adjust this value to move the icons down */
+  border: 1px solid #ccc;
+  z-index: 1000;
+  background: #f4f5f9;
+}
+
+.quillEditor2 .ql-toolbar button {
+  padding: 5px 8px;
+  margin: 0 2px;
+}
+
+.quillEditor2 .ql-container{
+  margin-top: -4.2rem;
+  /* border: none !important; */
+  width: 100%;
+}
+
+.crm-new-border{
+  border-top: 1px solid #ccc;
+}
+
+
+
+.email-to-input{
+  width:40rem;
+  background-color: #f3f6fa;
+  border:none;
+  outline: none;
+  margin-left: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+#emailInput:focus, #emailInput2:focus, #emailInput3:focus{
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.email-ul li{
+  background-color: white;
+  margin-bottom: 0.5rem;
+  width: max-content;
+  padding: 0.2rem 0.5rem;
+}
+
+.email-cross{
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.email-save-cancel{
+  margin-top: 1rem;
+}
+
+.email-open{
+  background-color: #fff;
+}
+
+.email-close{
+  background-color: #e2e9f2;
+}
+

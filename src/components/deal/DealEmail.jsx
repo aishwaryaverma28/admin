@@ -10,12 +10,13 @@ import {
   ADD_EMAIL,
   POST_EMAIL,
   handleLogout,
+  USER_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = ({ type, id, item, dealName }) => {
+const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
@@ -25,16 +26,51 @@ const DealEmail = ({ type, id, item, dealName }) => {
   const [emailInput2, setEmailInput2] = useState("");
   const [toEmails2, setToEmails2] = useState([]);
   const [allEmails, setAllEmails] = useState([]);
+  const [subject, setSubject] = useState("");
+  const [owner, setOwner] = useState("");
+  const [openEmailId, setOpenEmailId] = useState(null);
+  const [number, setNumber] = useState(0);
+
+  const toggleEmail = (emailId) => {
+    if (openEmailId === emailId) {
+      setOpenEmailId(null);
+      setNumber(0) 
+    } else {
+      setOpenEmailId(emailId); 
+      setNumber(1)
+    }
+  };
 
   const handleEmailInputChange = (event) => {
     setEmailInput(event.target.value);
   };
+
+  const handleSelectChange = (e) => {
+     setSubject(e.target.value);
+  }
   const handleEmailInputKeyPress = (event) => {
     if (event.key === "Enter" && emailInput.trim() !== "") {
       setToEmails([...toEmails, { email: emailInput.trim(), name: dealName }]);
       setEmailInput("");
     }
   };
+
+  function extractTextFromHtml(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  }
+  function extractTextFromHtml2(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    let textContent = tempDiv.textContent || tempDiv.innerText || '';
+  
+    if (textContent.length > 120) {
+      textContent = textContent.slice(0, 120) + '...';
+    }
+  
+    return textContent;
+  }
 
   const handleEmailInputChange2 = (event) => {
     setEmailInput2(event.target.value);
@@ -48,6 +84,39 @@ const DealEmail = ({ type, id, item, dealName }) => {
       setEmailInput2("");
     }
   };
+
+  const handleRemoveEmail = (index, listType) => {
+    if (listType === 'toEmails') {
+      const updatedToEmails = [...toEmails];
+      updatedToEmails.splice(index, 1);
+      setToEmails(updatedToEmails);
+    } else if (listType === 'toEmails2') {
+      const updatedToEmails2 = [...toEmails2];
+      updatedToEmails2.splice(index, 1);
+      setToEmails2(updatedToEmails2);
+    }
+  };
+
+  async function getUser() {
+    try {
+      const response = await axios.get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      const data = response?.data?.data;
+      if (response.data.status === 1) {
+        setOwner(data[0]);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  }
+  
 
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -64,28 +133,50 @@ const DealEmail = ({ type, id, item, dealName }) => {
   };
 
   const handleAddEmail = () => {
+    let updatedTo = toEmails;
+    let updatedCc = toEmails2;
+  
+
+    if (emailInput.trim() !== "") {
+      updatedTo = [...updatedTo, { email: emailInput.trim(), name: dealName }];
+    }
+  
+    if (emailInput2.trim() !== "") {
+      updatedCc = [...updatedCc, { email: emailInput2.trim(), name: dealName }];
+    }
+    if (emailInput2.trim() === "" && emailInput.trim() !== "" ) {
+      updatedCc = [...updatedCc, { email: emailInput.trim(), name: dealName }];
+    }
+
+    if (updatedCc.length === 0) {
+      updatedCc = [...updatedTo];
+    }
+  
     const updatedFormData = {
       source_id: type === "lead" ? item.id : id,
       source: type,
-      subject: "Test email - 1",
+      subject: subject,
       html: dataFromChild,
-      to: toEmails,
-      cc: toEmails2,
+      to: updatedTo,
+      cc: updatedCc,
     };
+  
     console.log(updatedFormData);
     axios
       .post(ADD_EMAIL, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
+        console.log(response.data.data)
         if (response?.data?.status === 1) {
           console.log(response?.data);
           toast.success("Email send successfully", {
             position: "top-center",
             autoClose: 2000,
           });
+          handleGetEmail();
         } else {
           toast.error("Something went wrong", {
             position: "top-center",
@@ -96,12 +187,16 @@ const DealEmail = ({ type, id, item, dealName }) => {
       .catch((error) => {
         console.log(error);
       });
+  
     setToEmails([]);
     setToEmails2([]);
     setDataFromChild("");
+    setEmailInput("");
+    setEmailInput2("");
     setOpenEditor(false);
     setStateAdd(0);
   };
+  
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -116,7 +211,6 @@ const DealEmail = ({ type, id, item, dealName }) => {
       })
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data);
           setAllEmails(response?.data?.data);
         }
       })
@@ -127,7 +221,12 @@ const DealEmail = ({ type, id, item, dealName }) => {
 
   useEffect(() => {
     handleGetEmail();
+    getUser();
   }, []);
+
+  useEffect(() => {
+    updateEmailCount(allEmails.length);
+  }, [allEmails]); 
 
   return (
     <>
@@ -137,50 +236,84 @@ const DealEmail = ({ type, id, item, dealName }) => {
         </div>
       ) : (
         <>
-          <div>
+          <div className="email-top-cc">
             <div>
-              <label htmlFor="emailInput">To:</label>
-              <input
-                type="email"
-                id="emailInput"
-                value={emailInput}
-                onChange={handleEmailInputChange}
-                onKeyPress={handleEmailInputKeyPress}
-              />
+              <div>
+                <label htmlFor="emailInput" className="email-to">
+                  To :
+                </label>
+                <input
+                  type="email"
+                  id="emailInput"
+                  value={emailInput}
+                  onChange={handleEmailInputChange}
+                  onKeyPress={handleEmailInputKeyPress}
+                  className="email-to-input"
+                />
+              </div>
+              <div>
+                <ul className="email-ul">
+                  {toEmails.map((email, index) => (
+                    <li key={index}>
+                      <span
+                        className="email-cross"
+                        onClick={() => handleRemoveEmail(index, "toEmails")}
+                      >
+                        X
+                      </span>
+                      {email?.email}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
+
             <div>
-              <p>Selected email addresses:</p>
-              <ul>
-                {toEmails.map((email, index) => (
-                  <li key={index}>{email?.email}</li>
-                ))}
-              </ul>
+              <div>
+                <label htmlFor="emailInput">Cc:</label>
+                <input
+                  type="email"
+                  id="emailInput2"
+                  value={emailInput2}
+                  onChange={handleEmailInputChange2}
+                  onKeyPress={handleEmailInputKeyPress2}
+                  className="email-to-input"
+                />
+              </div>
+              <div>
+                <ul className="email-ul">
+                  {toEmails2.map((email, index) => (
+                    <li key={index}>
+                      <span
+                        className="email-cross"
+                        onClick={() => handleRemoveEmail(index, "toEmails2")}
+                      >
+                        X
+                      </span>
+                      {email?.email}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <label htmlFor="emailInput">Subject:</label>
+                <input
+                  type="text"
+                  id="emailInput3"
+                  className="email-to-input"
+                  onChange={handleSelectChange}
+                />
+              </div>
             </div>
           </div>
-          <div>
-            <div>
-              <label htmlFor="emailInput">Cc:</label>
-              <input
-                type="email"
-                id="emailInput"
-                value={emailInput2}
-                onChange={handleEmailInputChange2}
-                onKeyPress={handleEmailInputKeyPress2}
-              />
-            </div>
-            <div>
-              <p>Selected Cc email addresses:</p>
-              <ul>
-                {toEmails2.map((email, index) => (
-                  <li key={index}>{email?.email}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+
           <div className="notesEditor">
             <CRMEmail onDataTransfer={handleDataTransfer} />
           </div>
-          <div className="addNoteBtn">
+          <div className="addNoteBtn email-save-cancel">
             <button
               className="common-fonts common-white-button"
               onClick={closeEditor}
@@ -206,49 +339,83 @@ const DealEmail = ({ type, id, item, dealName }) => {
         </>
       )}
 
-      <div className="activity-task-map ">
+      {
+        allEmails.map((mail)=>{
+          const recipientData = JSON.parse(mail.recipient);
+           const recipientEmails = recipientData.map((recipient) => recipient.email).join(', ');
+           const emailClassName =
+          openEmailId === mail.id ? "email-open" : "email-close";
+          return(
+            <div className="activity-task-map email-map" key={mail.id} onClick={() => toggleEmail(mail.id)}>
         <div className="activity-bottom">
           <div className="savedNotes activity-save-note">
             <>
-              <section className="note-display email-task-map">
+              <section className={`note-display email-task-map ${emailClassName}` }>
                 <div className="note-content activity-content">
                   <div className="arrow-greater activity-new-arrow">
-                    <img src={GreaterDown} alt="" />
+                  {
+                    openEmailId === mail.id ? (
+                      <img src={GreaterDown} alt="" />
+                    ) : (
+                      <img src={GreaterArrow} alt="" />
+                    )
+                  }
+                    
                   </div>
 
                   <div className="notes-main">
                     <div className="activity-flex">
                       <div className="notes-by activity-by ">
                         <p className="common-fonts email-call">
-                          Noah, book a call with me
+                         {mail.subject}
                         </p>
 
                         <div className="activity-date-time">
                           <img src={CalendarIcon} alt="" />
                           <p className="common-fonts activity-due">
-                            July 10, 2023 at 01:30 PM
+                          {mail.sent_date &&
+                            mail.sent_date.includes("T") &&
+                            mail.sent_date.includes(".")
+                            ? mail.sent_date.split("T")[0] +
+                              " at " +
+                              mail.sent_date.split("T")[1].split(".")[0]
+                            : "-"}
                           </p>
                         </div>
                       </div>
                     </div>
 
+                    {
+                      openEmailId !== mail.id && (
+                        <div className={`activity-phone email-tab-view`}>
+                      <p className="common-fonts email-assign-arrow">
+                        <span>{owner.first_name} {owner.last_name}</span>
+                        <img src={Arrow} alt="" /> <span>{recipientEmails}</span>
+                      </p>
+                      <p className="common-fonts">
+                      {extractTextFromHtml2(mail.html)}
+                      </p>
+                    </div>
+                      )
+                    }
+
+                    {
+                      openEmailId === mail.id && (
+                        <>
+                            
                     <div className={`activity-phone email-tab-view`}>
                       <p className="common-fonts email-sender-name">
-                        {" "}
-                        <span>From:</span> Anant Singh
+                        <span>From:</span> {owner.first_name} {owner.last_name}
                       </p>
                       <p className="common-fonts email-reciever-name">
-                        {" "}
-                        <span>To:</span>noah@gmail.com
+                        <span>To:</span>{recipientEmails}
                       </p>
-                      <p className="common-fonts">Hi, Noah</p>
-                      <p className="common-fonts">
-                        Thanks for reaching out, please book a call with me
-                        here.
-                      </p>
-                      <p className="common-fonts">Regards,</p>
-                      <p className="common-fonts">Anant Singh</p>
+                          <p className="common-fonts">{extractTextFromHtml(mail.html)}</p>
                     </div>
+                        </>
+                      )
+                    }
+
                   </div>
                 </div>
               </section>
@@ -256,92 +423,9 @@ const DealEmail = ({ type, id, item, dealName }) => {
           </div>
         </div>
       </div>
-      <div className="activity-task-map">
-        <div className="activity-bottom">
-          <div className="savedNotes activity-save-note">
-            <>
-              <section className="note-display">
-                <div className="note-content activity-content">
-                  <div className="arrow-greater activity-new-arrow">
-                    <img src={GreaterArrow} alt="" />
-                  </div>
-
-                  <div className="notes-main">
-                    <div className="activity-flex">
-                      <div className="notes-by activity-by ">
-                        <p className="common-fonts email-call">
-                          Noah, book a call with me
-                        </p>
-
-                        <div className="activity-date-time">
-                          <img src={CalendarIcon} alt="" />
-                          <p className="common-fonts activity-due">
-                            July 10, 2023 at 01:30 PM
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={`activity-phone email-tab-view`}>
-                      <p className="common-fonts email-assign-arrow">
-                        <span>Anant Singh</span>
-                        <img src={Arrow} alt="" /> <span>noah@gmail.com</span>
-                      </p>
-                      <p className="common-fonts">
-                        Hi, Noah Thanks for reaching out, please book a call
-                        with me here. Regards, Anant Singh
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </>
-          </div>
-        </div>
-      </div>
-      <div className="activity-task-map">
-        <div className="activity-bottom">
-          <div className="savedNotes activity-save-note">
-            <>
-              <section className="note-display email-pink">
-                <div className="note-content activity-content">
-                  <div className="arrow-greater activity-new-arrow">
-                    <img src={GreaterArrow} alt="" />
-                  </div>
-
-                  <div className="notes-main">
-                    <div className="activity-flex">
-                      <div className="notes-by activity-by ">
-                        <p className="common-fonts email-call">
-                          Noah, book a call with me
-                        </p>
-
-                        <div className="activity-date-time">
-                          <img src={CalendarIcon} alt="" />
-                          <p className="common-fonts activity-due">
-                            July 10, 2023 at 01:30 PM
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={`activity-phone email-tab-view`}>
-                      <p className="common-fonts email-assign-arrow">
-                        <span>Anant Singh</span>
-                        <img src={Arrow} alt="" /> <span>noah@gmail.com</span>
-                      </p>
-                      <p className="common-fonts">
-                        Hi, Noah Thanks for reaching out, please book a call
-                        with me here. Regards, Anant Singh
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </>
-          </div>
-        </div>
-      </div>
+          )
+        })
+      }
     </>
   );
 };
