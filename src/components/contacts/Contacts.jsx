@@ -298,6 +298,7 @@ const Contacts = () => {
   const handleSelectedPplChange = (ids) => {
     setSelectedPpl(ids);
   };
+  
   const handleDropdownClick = (action) => {
     if (action === "deletePeople") {
       // Check if there are selected company IDs
@@ -316,44 +317,44 @@ const Contacts = () => {
   };
 
   const deleteSelectedPeople = async (selectedPpl) => {
-    // const body = {
-    //   contactType: "xx_company",
-    //   contactIds: selectedPpl,
-    // };
-    // try {
-    //   const response = await axios.post(
-    //     MOVE_TO_BIN, // Replace this with your actual API endpoint for deleting companies
-    //     body,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${decryptedToken}`,
-    //       },
-    //     }
-    //   );
+    const body = {
+      contactType: "xx_contact_person",
+      contactIds: selectedPpl,
+    };
+    try {
+      const response = await axios.post(
+        MOVE_TO_BIN, // Replace this with your actual API endpoint for deleting companies
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
 
-    //   if (response.data.status === 1) {
-    //     // Companies were successfully deleted
-    //     toast.success("People deleted successfully", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //     setSelectedPpl([]);
-    //     fetchPeople();
-    //   } else {
-    //     // Handle the case where the deletion was not successful
-    //     toast.error("Failed to delete people", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error("Error deleting companies:", error);
-    //   // Handle the error as needed
-    //   toast.error("An error occurred while deleting companies", {
-    //     position: "top-center",
-    //     autoClose: 2000,
-    //   });
-    // }
+      if (response.data.status === 1) {
+        // Companies were successfully deleted
+        toast.success("People deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setSelectedPpl([]);
+        fetchPeople();
+      } else {
+        // Handle the case where the deletion was not successful
+        toast.error("Failed to delete people", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting companies:", error);
+      // Handle the error as needed
+      toast.error("An error occurred while deleting companies", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
   };
 
 

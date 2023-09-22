@@ -47,9 +47,11 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
   const handleTableHeaderCheckboxChange = () => {
     if (isTableHeaderChecked) {
       setSelectedIds([]);
+      onSelectedIdsChange(selectedIds);
     } else {
       const allIds = filteredPersonData.map((company) => company.id);
       setSelectedIds(allIds);
+      onSelectedIdsChange(selectedIds);
     }
     setIsTableHeaderChecked(!isTableHeaderChecked);
   };
@@ -58,11 +60,12 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
     if (selectedIds.includes(id)) {
       // If the ID is already selected, remove it
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+      onSelectedIdsChange(selectedIds);
     } else {
       // If the ID is not selected, add it
       setSelectedIds([...selectedIds, id]);
+      onSelectedIdsChange(selectedIds);
     }
-    onSelectedIdsChange(selectedIds);
   };
 
   // Use useEffect to monitor changes in selectedIds and update isTableHeaderChecked accordingly
@@ -70,10 +73,10 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
     const isAllChecked = filteredPersonData.every((company) =>
       selectedIds.includes(company.id)
     );
+    onSelectedIdsChange(selectedIds);
     setIsTableHeaderChecked(isAllChecked);
   }, [selectedIds, filteredPersonData]);
 
-  console.log(selectedIds);
 
   return (
     <div>
