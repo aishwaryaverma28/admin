@@ -46,7 +46,9 @@ const BlogUpdate = () => {
   const [formData, setFormData] = useState({
     title: "",
     url: "",
-    description: "",
+    description: "",    
+    meta_description: "",
+    meta_keywords: "",
     tag: "",
     image: "",
     date: "",
@@ -98,14 +100,16 @@ const BlogUpdate = () => {
       setCurrentBlog(blog);
       setFormData({
         ...formData,
-        title: blog.title,
-        url: blog.url,
-        description: blog.description,
-        tag: blog.tag,
-        image: blog.image,
-        date: blog.date.split("T")[0],
-        site: blog.site,
-        route:blog.url,
+        title: blog?.title,
+        url: blog?.url,
+        description: blog?.description,        
+        meta_description: blog?.meta_description,
+        meta_keywords: blog?.meta_keywords,
+        tag: blog?.tag,
+        image: blog?.image,
+        date: blog?.date.split("T")[0],
+        site: blog?.site,
+        route:blog?.url,
       });
       setTagId(blog.tag);
       setSelectSite(blog.site);
@@ -352,16 +356,18 @@ const BlogUpdate = () => {
   async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
-      title: formData.title,
-      url: formData.url,
-      description: formData.description,
+      title: formData?.title,
+      url: formData?.url,
+      description: formData?.description,
+      meta_description: formData?.meta_description,
+    meta_keywords: formData?.meta_keywords,
       // image: pic,
-      image:formData.image,
-      date: formData.date,
+      image:formData?.image,
+      date: formData?.date,
       site: selectSite,
       tag: tagId,
       sections: sectionData,
-      route:formData.url,
+      route:formData?.url,
     };
     console.log(JSON.stringify(updatedFormData));
     try {
@@ -448,6 +454,26 @@ const BlogUpdate = () => {
                 id="description"
                 value={formData.description}
                 placeholder="Description"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="fromFiled">
+              <input
+                type="text"
+                name="meta_description"
+                id="meta_description"
+                value={formData.meta_description}
+                placeholder="Blog Meta Description"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="fromFiled">
+              <input
+                type="text"
+                name="meta_keywords"
+                id="meta_keywords"
+                value={formData.meta_keywords}
+                placeholder="Blog Meta Keywords"
                 onChange={handleChange}
               />
             </div>

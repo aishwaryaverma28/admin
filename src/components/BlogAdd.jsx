@@ -67,6 +67,8 @@ const BlogAdd = () => {
     title: "",
     url: "",
     description: "",
+    meta_description: "",
+    meta_keywords: "",
   });
 
   // ===================================================================functions for tags addition and removal
@@ -319,7 +321,7 @@ const BlogAdd = () => {
   return (
     <>
       <header className="headerEditor">
-        <h2> Add a new Blog</h2>
+        <h3> Add a new Blog</h3>
       </header>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
@@ -359,6 +361,24 @@ const BlogAdd = () => {
                 name="description"
                 id="description"
                 placeholder="Description"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="fromFiled">
+              <input
+                type="text"
+                name="meta_description"
+                id="meta_description"
+                placeholder="Blog Meta Description"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="fromFiled">
+              <input
+                type="text"
+                name="meta_keywords"
+                id="meta_keywords"
+                placeholder="Blog Meta Keywords"
                 onChange={handleChange}
               />
             </div>

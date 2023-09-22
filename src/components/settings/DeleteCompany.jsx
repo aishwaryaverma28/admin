@@ -5,23 +5,24 @@ import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar.svg";
 import axios from "axios";
 import {
-  GETDEAL_FROM_TRASH,
-  RESTORE_DEAL_TRASH,
-  DELETE_DEAL_TRASH,
+  GET_BIN_COMPANY,
+  RESTORE_COMPANY,
+  DELETE_COMPANY,
   getDecryptedToken,
   handleLogout,
 } from "../utils/Constants";
 import { format } from "date-fns";
 import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
+import NotePopUp from "./NotePopUp";
 import SearchIcon from '../../assets/image/search.svg';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DeleteDeal = ({deleteCount}) => {
+const DeleteCompany = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [activeTab, setActiveTab] = useState("Deal");
+  const [activeTab, setActiveTab] = useState("Company");
   const [recycleData, setRecycleData] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,20 +31,22 @@ const DeleteDeal = ({deleteCount}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
 
-  const leadDeletePopUp = () => {
+  const handleDeletePopUp = ()  => {
     setIsDeleteModalOpen(true);
   }
 
-  const closeLeadDeletePopUp = () => {
-   setIsDeleteModalOpen(false)
-  }
-  const leadRestorePopUp = () => {
+  const handleRestorePopUp = () => {
     setIsRestoreModalOpen(true);
   }
 
-  const closeLeadRestorePopUp = () => {
-    setIsRestoreModalOpen(false)
+  const onCloseNoteDeletePopUp = () => {
+    setIsDeleteModalOpen(false);
   }
+
+  const onCloseNoteRestorePopUP = () => {
+    setIsRestoreModalOpen(false);
+  }
+
   
 
   useEffect(() => {
@@ -51,28 +54,31 @@ const DeleteDeal = ({deleteCount}) => {
   }, [decryptedToken]);
 
   const fetchData = async () => {
+    const body = {
+        contactType: "xx_company"
+    }
     try {
-      const response = await axios.get(GETDEAL_FROM_TRASH, {
+      const response = await axios.post(GET_BIN_COMPANY, body,{
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       });
-      if (response.data.status === 1) {
+      if (response?.data?.status === 1) {
         setRecycleData(
-          response.data.data.map((item) => ({ ...item, isChecked: false }))
+          response?.data?.data.map((item) => ({ ...item, isChecked: false }))
         );
-      }
+      } 
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setIsLoading(false);
       if (error?.response?.data?.message === "Invalid or expired token.") {
         alert(error?.response?.data?.message);
         handleLogout();
       }
+      setIsLoading(false);
     }
   };
-
+  
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -94,15 +100,8 @@ const DeleteDeal = ({deleteCount}) => {
     setActiveTab(tabName);
   };
 
-  const resetData = () => {
-    fetchData();
-  }
-
   const filteredRecycleData = recycleData.filter((recycleItem) => {
-    const fullName =
-      `${recycleItem.first_name} ${recycleItem.last_name}`.toLowerCase();
-    const leadName = recycleItem.lead_name?.toLowerCase() || "";
-    const updateDate = formatDate(recycleItem?.update_date) || "";
+    const name = recycleItem.name?.toLowerCase() || "";  
     const searchRecycle = searchQuery.toLowerCase();
 
     const itemDate = new Date(recycleItem.update_date);
@@ -110,9 +109,7 @@ const DeleteDeal = ({deleteCount}) => {
 
     // Check if the search query matches any of the fields
     const matchesSearchQuery =
-      fullName.includes(searchRecycle) ||
-      leadName.includes(searchRecycle) ||
-      updateDate.includes(searchRecycle);
+      name.includes(searchRecycle);
 
     // Check if the item date falls within the specified date range
     const withinDateRange =
@@ -147,37 +144,36 @@ const DeleteDeal = ({deleteCount}) => {
   };
   const handleTableRowCheckboxChange = (event, itemId) => {
     const { checked } = event.target;
-  
-    setRecycleData(prevState =>
-      prevState.map(item =>
+    setRecycleData((prevState) =>
+      prevState.map((item) =>
         item.id === itemId ? { ...item, isChecked: checked } : item
       )
     );
-  
-    setSelectedRows(prevSelectedRows =>
+
+    setSelectedRows((prevSelectedRows) =>
       checked
         ? [...prevSelectedRows, itemId]
-        : prevSelectedRows.filter(id => id !== itemId)
+        : prevSelectedRows.filter((id) => id !== itemId)
     );
   };
-  
-  const handleRestoreLead = () => {
+  const handleRestoreNote = () => {
     const updatedFormData = {
-      dealIds: selectedRows,
+        contactType: "xx_company",
+        contactIds: selectedRows,
     };
     axios
-      .post(RESTORE_DEAL_TRASH, updatedFormData, {
+      .post(RESTORE_COMPANY, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
         console.log(response);
-        closeLeadRestorePopUp();
         fetchData();
         deleteCount();
+        onCloseNoteRestorePopUP();
         setSelectedRows([]);
-        toast.success("Lead restored successfully", {
+        toast.success("Company restored successfully", {
           position:"top-center",
           autoClose:2000
         })
@@ -186,24 +182,25 @@ const DeleteDeal = ({deleteCount}) => {
         console.log(error);
       });
   };
-  const handleDeleteLead = () => {
-    const body = {
-      dealIds: selectedRows,
+  const handleDeleteNote = () => {
+    const updatedFormData = {
+        contactType: "xx_company",
+      contactIds: selectedRows,
     };
     axios
-      .delete(DELETE_DEAL_TRASH, {
-        data: body,
+      .delete(DELETE_COMPANY, {
+        data:updatedFormData,
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        // console.log(response);
-        closeLeadDeletePopUp();
+        console.log(response);
         fetchData();
         deleteCount();
+        onCloseNoteDeletePopUp();
         setSelectedRows([]);
-        toast.error("Lead deleted successfully", {
+        toast.error("Company delete successfully", {
           position:"top-center",
           autoClose:2000
         })
@@ -213,8 +210,15 @@ const DeleteDeal = ({deleteCount}) => {
       });
   };
 
+  const resetData = () => {
+    fetchData();
+  }
+
+  
   const isTableHeaderCheckboxChecked =
     recycleData.length > 0 && selectedRows.length === recycleData.length;
+    
+    
   return (
     <>
       <div className="recycle-search-user-section">
@@ -260,21 +264,20 @@ const DeleteDeal = ({deleteCount}) => {
             </div>
           </div>
         </div>
+
         <div className="recycle-btn">
           <button
-            className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button inactive-delete  recycle-fonts ' : 'recycle-delete recycle-fonts' }
-            // onClick={handleDeleteLead}
-            disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
-            onClick={leadDeletePopUp}
+              className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button inactive-delete  recycle-fonts ' : 'recycle-delete recycle-fonts' }
+             disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
+            onClick={handleDeletePopUp}
+
           >
             Delete
           </button>
           <button
             className={recycleData.length <= 0 || selectedRows.length  === 0  ?'common-inactive-button recycle-fonts ' : 'recycle-restore recycle-fonts' }
-            // onClick={handleRestoreLead}
             disabled={recycleData.length <= 0 || selectedRows.length  === 0  ? true : false}
-
-            onClick={leadRestorePopUp}
+            onClick={handleRestorePopUp}
           >
             Restore
           </button>
@@ -299,8 +302,8 @@ const DeleteDeal = ({deleteCount}) => {
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th>Deal Name</th>
-              <th>Status</th>
+              <th>Company Name</th>
+              <th>Created By</th>
               <th>Deleted By</th>
               <th>Date Deleted</th>
             </tr>
@@ -339,37 +342,29 @@ const DeleteDeal = ({deleteCount}) => {
                     </label>
                   </td>
                   <td>
-                    {item.deal_name}
-                    <p></p>
+                    {item.name}
                   </td>
-                  <td>
-                    {item.status}
-                  </td>
-                  <td>
-                    {item.first_name} {item.last_name}
-                  </td>
-                  <td>{formatDate(item.update_date.slice(0, 10))}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-
-        {
-          isDeleteModalOpen && (
-            <RecycleDeletePopUp onClose={closeLeadDeletePopUp} onDeleteConfirmed={handleDeleteLead} />
-          )
-        }
-
-        {
-          isRestoreModalOpen && (
-            <RecycleRestorePopUp onClose={closeLeadRestorePopUp} onRestoreConfirmed={handleRestoreLead} />
-          )
-        }
       </div>
+      {isDeleteModalOpen && (
+         <RecycleDeletePopUp onClose={onCloseNoteDeletePopUp} onDeleteConfirmed={handleDeleteNote} />
+      )}
+
+      {
+        isRestoreModalOpen && (
+          <RecycleRestorePopUp onClose={onCloseNoteRestorePopUP} onRestoreConfirmed={handleRestoreNote} />
+        )
+      }
       <ToastContainer/>
     </>
   );
 };
 
-export default DeleteDeal;
+export default DeleteCompany;

@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   GETNOTE_FROM_TRASH,
   GETDEAL_FROM_TRASH,
+  GET_BIN_COMPANY,
   getDecryptedToken,
   handleLogout,
   GET_ALL_FROM_TRASH
@@ -18,6 +19,8 @@ import RecycleDeletePopUp from "./RecycleDeletePopUp";
 import RecycleRestorePopUp from "./RecycleRestorePopUp";
 import SearchIcon from "../../assets/image/search.svg";
 import DeleteDeal from "./DeleteDeal";
+import DeleteCompany from "./DeleteCompany";
+import DeletePeople from "./DeletePeople";
 
 const RecycleBin = () => {
   const [startDate, setStartDate] = useState(null);
@@ -25,6 +28,8 @@ const RecycleBin = () => {
   const [leadlen, setLeadlen] = useState(0);
   const [deallen, setDeallen] = useState(0);
   const [noteslen, setNoteslen] = useState(0);
+  const [companylen, setCompanylen] = useState(0);
+  const [peoplelen, setPeoplelen] = useState(0);
   const [activeTab, setActiveTab] = useState(
     localStorage.getItem("activeTab") || "Leads"
   );
@@ -104,7 +109,9 @@ const RecycleBin = () => {
     fetchData();
     fetchNotesData();
     fetchDealData();
-    const validTabs = ["Notes", "Deals", "Leads", "Company", "Contacts"];
+    fetchCompanyData();
+    fetchPeopleData();
+    const validTabs = ["Notes", "Deals", "Leads", "Company", "People"];
     if (!validTabs.includes(localStorage.getItem("activeTab"))) {
       setActiveTab("Leads");
       localStorage.setItem("activeTab", "Leads");
@@ -180,6 +187,48 @@ const RecycleBin = () => {
     }
   };
 
+  const fetchCompanyData = async () => {
+    const body = {
+        contactType: "xx_company"
+    }
+    try {
+      const response = await axios.post(GET_BIN_COMPANY, body,{
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      if (response?.data?.status === 1) {
+        setCompanylen(response.data.data.length);
+      } 
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  };
+  const fetchPeopleData = async () => {
+    const body = {
+      contactType: "xx_contact_person",
+    }
+    try {
+      const response = await axios.post(GET_BIN_COMPANY, body,{
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      if (response?.data?.status === 1) {
+        setPeoplelen(response.data.data.length);
+      } 
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  };
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
     localStorage.setItem("activeTab", tabName); // Store the active tab in localStorage
@@ -236,387 +285,26 @@ const RecycleBin = () => {
             }`}
             onClick={() => handleTabClick("Company")}
           >
-            Company (5)
+            Company ({companylen})
           </button>
           <button
             className={`recycle-btn recycle-fonts ${
               activeTab === "Contacts" ? "recycle-active" : ""
             }`}
-            onClick={() => handleTabClick("Contacts")}
+            onClick={() => handleTabClick("People")}
           >
-            Contacts (6)
+            People ({peoplelen})
           </button>
         </div>
         {activeTab === "Notes" && <DeleteNotes deleteCount={fetchNotesData} />}
         {activeTab === "Deals" && <DeleteDeal deleteCount={fetchDealData}/>}
         {activeTab === "Leads" && <DeleteLeads deleteCount={fetchData} />}
-        {activeTab === "Company" && (
-          <>
-            <div className="recycle-search-user-section">
-              <div className="recycle-search-box">
-                <input
-                  type="text"
-                  className="recycle-search-input recycle-fonts"
-                  placeholder="Search..."
-                />
-                <span className="recycle-search-icon">
-                  <img src={SearchIcon} alt="" />
-                </span>
-              </div>
-              <div className="recycle-date">
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={startDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-                <span className="recycle-fonts date-to">To</span>
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={endDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="recycle-btn">
-                <button
-                  className="recycle-delete recycle-fonts"
-                  onClick={companyDeletePopUp}
-                >
-                  Delete
-                </button>
-                <button
-                  className="recycle-restore recycle-fonts"
-                  onClick={companyRestorePopUp}
-                >
-                  Restore
-                </button>
-                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
-              <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
-              </div>
-            </div>
-            <div className="recycle-list-table recycle-fonts">
-              <table className="recycle-table" id="recycle-border">
-                <thead>
-                  <tr>
-                    <th>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </th>
-                    <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Deleted By</th>
-                    <th>Date Deleted</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              {isDeleteCompanyModalOpen && (
-                <RecycleDeletePopUp onClose={closeCompanyDeletePopUp} />
-              )}
-
-              {isRestoreCompanyModalOpen && (
-                <RecycleRestorePopUp onClose={closeCompanyRestorePopUp} />
-              )}
-            </div>
-          </>
-        )}
-        {activeTab === "Contacts" && (
-          <>
-            <div className="recycle-search-user-section">
-              <div className="recycle-search-box">
-                <input
-                  type="text"
-                  className="recycle-search-input recycle-fonts"
-                  placeholder="Search..."
-                />
-                <span className="recycle-search-icon">
-                  <img src={SearchIcon} alt="" />
-                </span>
-              </div>
-              <div className="recycle-date">
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={startDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-                <span className="recycle-fonts date-to">To</span>
-                <div className="custom-date-input">
-                  <div className="date-input-wrapper">
-                    <img
-                      src={CalendarIcon}
-                      alt="Delete"
-                      className="delete-icon"
-                    />
-                    <DatePicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      className="recycle-date-input"
-                      dateFormat="dd/MM/yyyy"
-                      value={endDate}
-                      placeholderText="dd/mm/yyyy"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="recycle-btn">
-                <button
-                  className="recycle-delete recycle-fonts"
-                  onClick={contactDeletePopUp}
-                >
-                  Delete
-                </button>
-                <button
-                  className="recycle-restore recycle-fonts"
-                  onClick={contactRestorePopUp}
-                >
-                  Restore
-                </button>
-                <button type="button" className="helpBtn recycle-refresh-icon" title="Refresh">
-              <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
-              </div>
-            </div>
-            <div className="recycle-list-table recycle-fonts">
-              <table className="recycle-table" id="recycle-border">
-                <thead>
-                  <tr>
-                    <th>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </th>
-                    <th>Subject</th>
-                    <th>Created By</th>
-                    <th>Deleted By</th>
-                    <th>Date Deleted</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-
-                    <td>vaneet gupta</td>
-
-                    <td>anant singh</td>
-
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" />
-                        <span className="checkmark"></span>
-                      </label>
-                    </td>
-                    <td>
-                      Lorem ipsum dolor sit amet consectetur. Porttitor.....
-                      <p></p>
-                    </td>
-                    <td>vaneet gupta</td>
-                    <td>anant singh</td>
-                    <td>08 august 2023</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              {isDeleteContactModalOpen && (
-                <RecycleDeletePopUp onClose={closeContactDeletePopUp} />
-              )}
-
-              {isRestoreContactModalOpen && (
-                <RecycleRestorePopUp onClose={closeContactRestorePopUp} />
-              )}
-            </div>
-          </>
-        )}
+        {activeTab === "Company" && <DeleteCompany deleteCount={fetchCompanyData}/>}
+        {activeTab === "People" && <DeletePeople deleteCount={fetchPeopleData}/>}
       </section>
     </>
   );
 };
 
 export default RecycleBin;
+
