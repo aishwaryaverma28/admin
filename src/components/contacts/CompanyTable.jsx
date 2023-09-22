@@ -103,7 +103,11 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
         </div>
       </div>
       <div className="contact-cp-table">
-        <table>
+      {
+        loading ?  (
+          <p>Loading....</p>
+        ) : (
+          <table>
           <thead>
             <tr>
               <th className="contact-box">
@@ -130,13 +134,7 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={10} style={{ textAlign: "center" }}>
-                  Loading...
-                </td>
-              </tr>
-            ) : filteredCompanyData.length === 0 ? (
+            { filteredCompanyData.length === 0 ? (
               <tr>
                 <td colSpan={10} style={{ textAlign: "center" }}>
                   No data found
@@ -187,6 +185,9 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
             )}
           </tbody>
         </table>
+        )
+      }
+
       </div>
     </div>
   );

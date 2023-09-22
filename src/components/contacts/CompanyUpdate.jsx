@@ -12,7 +12,7 @@ import GreaterUp from "../../assets/image/greater-up.svg";
 import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
-import DealAttachments from "../deal/DealAttachments.jsx";
+
 
 const CompanyUpdate = () => {
   const { id } = useParams();
@@ -627,6 +627,19 @@ const CompanyUpdate = () => {
             </div>
           </>
         )}
+        {ShowUpdateButton && (
+              <div className="deal-update-btn">
+                {stateBtn === 0 ? (
+                  <button disabled className="disabledBtn ">
+                    Update
+                  </button>
+                ) : (
+                  <button className="convertToDeal">
+                    Update
+                  </button>
+                )}
+              </div>
+            )}
       </div>
       <div className="cpu-right">
           <div className="tab-navigation">
@@ -658,13 +671,6 @@ const CompanyUpdate = () => {
               <i className="fa-sharp fa-regular fa-calendar"></i>
               Activity (2)
             </button>
-            <button
-              className={activeTab === "attachment" ? "active" : ""}
-              onClick={() => handleTabClick("attachment")}
-            >
-              <i className="fa-sharp fa-solid fa-paperclip"></i>
-              Attachment (2)
-            </button>
           </div>
           <div className="tab-content">
             {activeTab === "notes" && (
@@ -682,12 +688,6 @@ const CompanyUpdate = () => {
             {activeTab === "activity" && (
               <div className="activity-tab-content">
                 <DealActivity
-                />
-              </div>
-            )}
-            {activeTab === "attachment" && (
-              <div className="attachment-tab-content">
-                <DealAttachments
                 />
               </div>
             )}
