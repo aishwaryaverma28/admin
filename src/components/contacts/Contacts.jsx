@@ -9,14 +9,15 @@ import axios from "axios";
 import {
   IMPORT_PEOPLE,
   IMPORT_COMPANY,
+  MOVE_TO_BIN,
   handleLogout,
   getDecryptedToken,
   ALL_COMPANY,
-  ALL_PEOPLE
+  ALL_PEOPLE,
 } from "../utils/Constants";
 import CompanyTable from "./CompanyTable.jsx";
 import PeopleTable from "./PeopleTable.jsx";
-import More from '../../assets/image/more.svg';
+import More from "../../assets/image/more.svg";
 
 const Contacts = () => {
   const [activeTab, setActiveTab] = useState("people");
@@ -24,17 +25,18 @@ const Contacts = () => {
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
-  console.log(decryptedToken);
   const fileInputRef = useRef(null);
   const [csvData, setCsvData] = useState([]);
   const fileInputRef2 = useRef(null);
   const [csvData2, setCsvData2] = useState([]);
-  const [companyData, setCompanyData] = useState([])
-  const [personData, setPersonData] = useState([])
+  const [companyData, setCompanyData] = useState([]);
+  const [personData, setPersonData] = useState([]);
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [loadingPeople, setLoadingPeople] = useState(true);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedPpl, setSelectedPpl] = useState([]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -45,8 +47,6 @@ const Contacts = () => {
         setActionOpen(false);
       }
     };
-
-
 
     document.addEventListener("click", handleOutsideClick);
 
@@ -78,7 +78,6 @@ const Contacts = () => {
   };
 
   const fetchCompany = (e) => {
-    
     axios
       .get(ALL_COMPANY, {
         headers: {
@@ -86,9 +85,9 @@ const Contacts = () => {
         },
       })
       .then((response) => {
-          setCompanyData(response?.data?.data);
-          setLoading(false)
-         })
+        setCompanyData(response?.data?.data);
+        setLoading(false);
+      })
       .catch((error) => {
         console.log(error);
         toast.error("some error occured", {
@@ -98,7 +97,6 @@ const Contacts = () => {
       });
   };
   const fetchPeople = (e) => {
-    
     axios
       .get(ALL_PEOPLE, {
         headers: {
@@ -108,7 +106,7 @@ const Contacts = () => {
       .then((response) => {
         setPersonData(response?.data?.data);
         setLoadingPeople(false);
-         })
+      })
       .catch((error) => {
         console.log(error);
         toast.error("some error occured", {
@@ -118,10 +116,10 @@ const Contacts = () => {
       });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchCompany();
     fetchPeople();
-  },[])
+  }, []);
 
   const handleCsvFileImport = (e) => {
     const file = e.target.files[0];
@@ -235,6 +233,130 @@ const Contacts = () => {
     }
   };
 
+  const handleSelectedIdsChange = (ids) => {
+    setSelectedIds(ids);
+  };
+
+  const deleteSelectedCompanies = async (selectedIds) => {
+    const body = {
+      contactType: "xx_company",
+      contactIds: selectedIds,
+    };
+    try {
+      const response = await axios.post(
+        MOVE_TO_BIN, // Replace this with your actual API endpoint for deleting companies
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        // Companies were successfully deleted
+        toast.success("Companies deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setSelectedIds([]);
+        fetchCompany();
+      } else {
+        // Handle the case where the deletion was not successful
+        toast.error("Failed to delete companies", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting companies:", error);
+      // Handle the error as needed
+      toast.error("An error occurred while deleting companies", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  };
+
+  const handleDropdownItemClick = (action) => {
+    if (action === "deleteCompany") {
+      // Check if there are selected company IDs
+      if (selectedIds.length === 0) {
+        toast.info("No companies selected for deletion", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        // Call the function to delete selected companies
+        deleteSelectedCompanies(selectedIds);
+      }
+    }
+    // Close the dropdown menu after performing the action
+    setActionOpen(false);
+  };
+
+  const handleSelectedPplChange = (ids) => {
+    setSelectedPpl(ids);
+  };
+  const handleDropdownClick = (action) => {
+    if (action === "deletePeople") {
+      // Check if there are selected company IDs
+      if (selectedPpl.length === 0) {
+        toast.info("No people selected for deletion", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        // Call the function to delete selected companies
+        deleteSelectedPeople(selectedPpl);
+      }
+    }
+    // Close the dropdown menu after performing the action
+    setActionOpen(false);
+  };
+
+  const deleteSelectedPeople = async (selectedPpl) => {
+    // const body = {
+    //   contactType: "xx_company",
+    //   contactIds: selectedPpl,
+    // };
+    // try {
+    //   const response = await axios.post(
+    //     MOVE_TO_BIN, // Replace this with your actual API endpoint for deleting companies
+    //     body,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${decryptedToken}`,
+    //       },
+    //     }
+    //   );
+
+    //   if (response.data.status === 1) {
+    //     // Companies were successfully deleted
+    //     toast.success("People deleted successfully", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //     setSelectedPpl([]);
+    //     fetchPeople();
+    //   } else {
+    //     // Handle the case where the deletion was not successful
+    //     toast.error("Failed to delete people", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting companies:", error);
+    //   // Handle the error as needed
+    //   toast.error("An error occurred while deleting companies", {
+    //     position: "top-center",
+    //     autoClose: 2000,
+    //   });
+    // }
+  };
+
+
   return (
     <>
       <div className="contacts-top-flex ">
@@ -308,60 +430,70 @@ const Contacts = () => {
             </button>
           )}
 
-          {
-            number===0 ? (
+          {number === 0 ? (
+            //for people delete
 
-              //for people delete
-
-              <div className="select action-select">
+            <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
-                <div
-                  className="contact-three-dots"
-                  onClick={toggleDropdown}
-                >
+                <div className="contact-three-dots" onClick={toggleDropdown}>
                   <img src={More} alt="" />
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li>Delete People</li>
+                    <li
+                      onClick={() => handleDropdownClick("deletePeople")}
+                    >
+                      Delete People
+                    </li>
                   </ul>
                 )}
               </div>
             </div>
-
-            ) : (
-
-              //for company delete
-              <div className="select action-select">
+          ) : (
+            //for company delete
+            <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
-                <div
-                  className="contact-three-dots"
-                  onClick={toggleDropdown}
-                >
+                <div className="contact-three-dots" onClick={toggleDropdown}>
                   <img src={More} alt="" />
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li>Delete Company</li>
+                    <li
+                      onClick={() => handleDropdownItemClick("deleteCompany")}
+                    >
+                      Delete Company
+                    </li>
                   </ul>
                 )}
               </div>
             </div>
-            )
-          }
-
+          )}
         </div>
       </div>
 
       {activeTab === "people" && (
-        <PeopleTable personData={personData} loading={loadingPeople}/>
+        <PeopleTable personData={personData} loading={loadingPeople} onSelectedIdsChange={handleSelectedPplChange}/>
       )}
       {activeTab === "company" && (
-        <CompanyTable companyData={companyData} loading={loading} />
+        <CompanyTable
+          companyData={companyData}
+          loading={loading}
+          onSelectedIdsChange={handleSelectedIdsChange}
+        />
       )}
 
-      {companyModalOpen && <CompanyModal onClose={handleCompanyModalClose} fetchCompany={fetchCompany} />}
-      {personModalOpen && <PeopleModal onClose={handlePersonModalClose} fetchPeople={fetchPeople} />}
+      {companyModalOpen && (
+        <CompanyModal
+          onClose={handleCompanyModalClose}
+          fetchCompany={fetchCompany}
+        />
+      )}
+      {personModalOpen && (
+        <PeopleModal
+          onClose={handlePersonModalClose}
+          fetchPeople={fetchPeople}
+        />
+      )}
       <ToastContainer />
     </>
   );

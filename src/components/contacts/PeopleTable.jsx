@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React,{ useState, useEffect } from "react";
 import Search from "../../assets/image/search.svg";
 import User from "../../assets/image/user.svg";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
 
-const PeopleTable = ({personData, loading}) => {
- const [searchQuery, setSearchQuery] = useState("");
+const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -42,6 +44,37 @@ const PeopleTable = ({personData, loading}) => {
     return matchesSearchQuery;
   });
 
+  const handleTableHeaderCheckboxChange = () => {
+    if (isTableHeaderChecked) {
+      setSelectedIds([]);
+    } else {
+      const allIds = filteredPersonData.map((company) => company.id);
+      setSelectedIds(allIds);
+    }
+    setIsTableHeaderChecked(!isTableHeaderChecked);
+  };
+
+  const handleCheckboxChange = (id) => {
+    if (selectedIds.includes(id)) {
+      // If the ID is already selected, remove it
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      // If the ID is not selected, add it
+      setSelectedIds([...selectedIds, id]);
+    }
+    onSelectedIdsChange(selectedIds);
+  };
+
+  // Use useEffect to monitor changes in selectedIds and update isTableHeaderChecked accordingly
+  useEffect(() => {
+    const isAllChecked = filteredPersonData.every((company) =>
+      selectedIds.includes(company.id)
+    );
+    setIsTableHeaderChecked(isAllChecked);
+  }, [selectedIds, filteredPersonData]);
+
+  console.log(selectedIds);
+
   return (
     <div>
       <div className="contact-search-container">
@@ -70,7 +103,13 @@ const PeopleTable = ({personData, loading}) => {
             <tr>
               <th className="contact-box">
                 <label className="custom-checkbox">
-                  <input type="checkbox" className="cb1" name="" />
+                <input
+                type="checkbox"
+                className="cb1"
+                name=""
+                checked={isTableHeaderChecked}
+                onChange={handleTableHeaderCheckboxChange}
+              />
                   <span className="checkmark"></span>
                 </label>
               </th>
@@ -103,7 +142,13 @@ const PeopleTable = ({personData, loading}) => {
                   <tr key={person.id}>
                     <th className="contact-box">
                       <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" name="" />
+                      <input
+                      type="checkbox"
+                      className="cb1"
+                      name=""
+                      checked={selectedIds.includes(person.id)}
+                      onChange={() => handleCheckboxChange(person.id)}
+                    />
                         <span className="checkmark"></span>
                       </label>
                     </th>

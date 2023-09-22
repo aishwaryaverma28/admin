@@ -1,13 +1,13 @@
-import React from "react";
+import React,{ useState, useEffect } from "react";
 import Search from "../../assets/image/search.svg";
 import Building from "../../assets/image/building.svg";
-import { useState } from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
-
-const CompanyTable = ({ companyData, loading }) => {
+const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -28,7 +28,8 @@ const CompanyTable = ({ companyData, loading }) => {
     const creationDate = formatDate(item?.creation_date) || "";
     const valuationIn = item?.valuation_in?.toLowerCase() || "";
     const domain = item?.domain?.toLowerCase() || "";
-    const fullVal = `${item.valuation} ${item.valuation_in}`.toLowerCase() || "";
+    const fullVal =
+      `${item.valuation} ${item.valuation_in}`.toLowerCase() || "";
     const searchCompany = searchQuery.toLowerCase();
 
     // Check if the search query matches any of the fields
@@ -46,6 +47,36 @@ const CompanyTable = ({ companyData, loading }) => {
 
     return matchesSearchQuery;
   });
+  const handleTableHeaderCheckboxChange = () => {
+    if (isTableHeaderChecked) {
+      setSelectedIds([]);
+    } else {
+      const allIds = filteredCompanyData.map((company) => company.id);
+      setSelectedIds(allIds);
+    }
+    setIsTableHeaderChecked(!isTableHeaderChecked);
+  };
+
+  const handleCheckboxChange = (id) => {
+    if (selectedIds.includes(id)) {
+      // If the ID is already selected, remove it
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      // If the ID is not selected, add it
+      setSelectedIds([...selectedIds, id]);
+    }
+    onSelectedIdsChange(selectedIds);
+  };
+
+  // Use useEffect to monitor changes in selectedIds and update isTableHeaderChecked accordingly
+  useEffect(() => {
+    const isAllChecked = filteredCompanyData.every((company) =>
+      selectedIds.includes(company.id)
+    );
+    setIsTableHeaderChecked(isAllChecked);
+  }, [selectedIds, filteredCompanyData]);
+
+  console.log(selectedIds);
 
   return (
     <div>
@@ -75,7 +106,13 @@ const CompanyTable = ({ companyData, loading }) => {
             <tr>
               <th className="contact-box">
                 <label className="custom-checkbox">
-                  <input type="checkbox" className="cb1" name="" />
+                <input
+                type="checkbox"
+                className="cb1"
+                name=""
+                checked={isTableHeaderChecked}
+                onChange={handleTableHeaderCheckboxChange}
+              />
                   <span className="checkmark"></span>
                 </label>
               </th>
@@ -109,22 +146,29 @@ const CompanyTable = ({ companyData, loading }) => {
                   <tr key={company.id}>
                     <th className="contact-box">
                       <label className="custom-checkbox">
-                        <input type="checkbox" className="cb1" name="" />
+                      <input
+                      type="checkbox"
+                      className="cb1"
+                      name=""
+                      checked={selectedIds.includes(company.id)}
+                      onChange={() => handleCheckboxChange(company.id)}
+                    />
                         <span className="checkmark"></span>
                       </label>
                     </th>
                     <td className="common-fonts ">
-                    <Link to={`/lp/contacts/company/${company.id}`}>
-
-                      <span className="contact-building">
-                        <img src={Building} alt="" />
-                      </span>{" "}
-                      {company.name}
+                      <Link to={`/lp/contacts/company/${company.id}`}>
+                        <span className="contact-building">
+                          <img src={Building} alt="" />
+                        </span>{" "}
+                        {company.name}
                       </Link>
                     </td>
 
                     <td className="common-fonts">{company.industry}</td>
-                    <td className="common-fonts person-email">{company.email}</td>
+                    <td className="common-fonts person-email">
+                      {company.email}
+                    </td>
                     <td className="common-fonts">{company.phone}</td>
                     <td className="common-fonts">{company.country}</td>
                     <td className="common-fonts">{company.city}</td>
