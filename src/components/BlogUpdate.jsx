@@ -34,6 +34,7 @@ const BlogUpdate = () => {
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const decryptedToken = getDecryptedToken();
+  console.log(decryptedToken);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
@@ -48,7 +49,7 @@ const BlogUpdate = () => {
     url: "",
     description: "",    
     meta_description: "",
-    meta_keywords: "",
+    keywords: "",
     tag: "",
     image: "",
     date: "",
@@ -105,7 +106,7 @@ const BlogUpdate = () => {
         url: blog?.url,
         description: blog?.description,        
         meta_description: blog?.meta_description,
-        meta_keywords: blog?.meta_keywords,
+        keywords: blog?.keywords,
         tag: blog?.tag,
         image: blog?.image,
         date: blog?.date.split("T")[0],
@@ -361,7 +362,7 @@ const BlogUpdate = () => {
       url: formData?.url,
       description: formData?.description,
       meta_description: formData?.meta_description,
-    meta_keywords: formData?.meta_keywords,
+      keywords: formData?.keywords,
       // image: pic,
       image:formData?.image,
       date: formData?.date,
@@ -383,7 +384,7 @@ const BlogUpdate = () => {
 
       const data = await response.json();
       console.log(data);
-      if (response.data.status == 1) {
+      if (data?.status == 1) {
       toast.success("Blog data updated successfully", {
         position:"top-center",
         autoClose:2000
@@ -473,10 +474,10 @@ const BlogUpdate = () => {
             <div className="fromFiled">
               <input
                 type="text"
-                name="meta_keywords"
-                id="meta_keywords"
-                value={formData.meta_keywords}
-                placeholder="Blog Meta Keywords"
+                name="keywords"
+                id="keywords"
+                value={formData.keywords}
+                placeholder="Blog Keywords"
                 onChange={handleChange}
               />
             </div>

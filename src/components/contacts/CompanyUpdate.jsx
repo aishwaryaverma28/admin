@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import arrowLeft from "../../assets/image/arrow-left.svg";
 import Building from "../../assets/image/building.svg";
@@ -12,10 +12,16 @@ import GreaterUp from "../../assets/image/greater-up.svg";
 import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
+import axios from "axios";
+import {
+  getDecryptedToken,
+} from "../utils/Constants";
+
 
 
 const CompanyUpdate = () => {
   const { id } = useParams();
+  const decryptedToken = getDecryptedToken();
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
@@ -28,6 +34,22 @@ const CompanyUpdate = () => {
   const [companyDetails, setCompanyDetails] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("notes");
+
+  const fetchData = () => {
+    const body = {
+      contactType: "xx_company",
+      contactId:id,
+  }
+  const response = axios.post("http://core.leadplaner.com:3001/api/contact/getById", body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    });
+    console.log(response?.data)
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);

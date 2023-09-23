@@ -67,7 +67,7 @@ const BlogAdd = () => {
     url: "",
     description: "",
     meta_description: "",
-    meta_keywords: "",
+    keywords: "",
   });
 
   // ===================================================================functions for tags addition and removal
@@ -377,9 +377,9 @@ const BlogAdd = () => {
             <div className="fromFiled">
               <input
                 type="text"
-                name="meta_keywords"
-                id="meta_keywords"
-                placeholder="Blog Meta Keywords"
+                name="keywords"
+                id="keywords"
+                placeholder="Blog Keywords"
                 onChange={handleChange}
               />
             </div>
