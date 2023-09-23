@@ -259,27 +259,16 @@ const [dealName, setDealName] = useState("");
   };
 
   useEffect(() => {
-    fetchCall();
-    userAdded();
-  }, []);
-
-  useEffect(() => {
-    fetchFields();
-  }, []);
-
-  useEffect(() => {
-
       fetchDeal();
-
   }, [fieldNames])
 
   useEffect(() => {
     fetchLabelData();
     fetchNotes();
+    fetchFields();
+    fetchCall();
+    userAdded();
   }, [])
-
-
-
 
   useEffect(() => {
     fetchFields() // Fetch fields first
