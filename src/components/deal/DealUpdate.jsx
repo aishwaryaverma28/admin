@@ -40,6 +40,7 @@ const DealUpdate = () => {
   const [activityCount, setActivityCount] = useState();
   const [info, setInfo] = useState({});
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
+  const [emailCount, setEmailCount] = useState();
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
@@ -103,6 +104,10 @@ const [dealName, setDealName] = useState("");
   const role_name = localStorage.getItem("role_name");
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const updateEmailCount = (count) => {
+    setEmailCount(count);
+  };
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -1598,7 +1603,7 @@ const [dealName, setDealName] = useState("");
               onClick={() => handleTabClick("email")}
             >
               <i className="fa-sharp fa-regular fa-envelope-open"></i>
-              Email
+              Email ({emailCount})
             </button>
             <button
               className={activeTab === "whatsapp" ? "active" : ""}
@@ -1639,6 +1644,7 @@ const [dealName, setDealName] = useState("");
                 type="deal"
                   id={id}
                   dealName= {dealName}
+                  updateEmailCount={updateEmailCount}
                   />
               </div>
             )}
