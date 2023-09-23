@@ -13,6 +13,7 @@ import {
   UPLOADED_DOCS,
   GET_ACTIVITY,
   GET_FIELDS,
+  POST_EMAIL
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "./../AddNotes";
@@ -21,6 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
+import DealEmail from "../deal/DealEmail.jsx";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +51,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [fieldNames, setFieldNames] = useState({});
   const [fields, setFields] = useState([]);
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
+  const [allEmails, setAllEmails] = useState([]);
+  const [totalMail, setTotalMail]= useState(0)
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -59,6 +63,27 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     phone: "",
     id: 0,
   });
+
+  const handleGetEmail = () => {
+    const updatedFormData = {
+      source: "lead",
+      source_id: selectedItem.id
+    };
+    axios
+      .post(POST_EMAIL, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          setAllEmails(response?.data?.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const [info, setInfo] = useState({});
   const role_name = localStorage.getItem("role_name");
@@ -139,6 +164,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   useEffect(() => {
     fetchFields();
   }, []);
+
+  useEffect(()=>{
+    handleGetEmail();
+  },[allEmails])
 
   useEffect(() => {
     fetchLead();
@@ -1169,7 +1198,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
               onClick={() => handleTabClick("email")}
             >
               <i className="fa-sharp fa-regular fa-envelope-open"></i>
-              Email
+              Email ({allEmails.length})
             </button>
             <button
               className={activeTab === "whatsapp" ? "active" : ""}
@@ -1205,7 +1234,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <p>Email</p>
+                <DealEmail id={selectedItem.id} type="lead" dealName="hello"/>
               </div>
             )}
             {activeTab === "activity" && (

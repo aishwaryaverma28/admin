@@ -839,12 +839,19 @@ background: #FFF5DC;
 
 .email-top-cc{
   background-color: #F4F5F9 ;
-  width: 98.9%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
   border: 1px solid #ccc;
+}
+
+.email-top-deal{
+  width:98.9%
+}
+
+.email-top-lead{
+  width:98.3%;
 }
 
 .email-top-cc:first-child{
@@ -885,12 +892,19 @@ background: #FFF5DC;
 
 
 .email-to-input{
-  width:40rem;
   background-color: #f3f6fa;
   border:none;
   outline: none;
   margin-left: 0.2rem;
   margin-bottom: 0.5rem;
+}
+
+.email-lead{
+  width:20rem;
+}
+
+.email-deal{
+  width:40rem;
 }
 
 #emailInput:focus, #emailInput2:focus, #emailInput3:focus{
