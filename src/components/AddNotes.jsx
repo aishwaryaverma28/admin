@@ -10,7 +10,8 @@ import {
   MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
-  GETNOTECOMPANY
+  GETNOTECOMPANY,
+  GETNOTEPEOPLE
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
 import bin from "../assets/image/TrashFill.svg";
@@ -107,6 +108,38 @@ const AddNotes = ({onNotesNum, type , item}) => {
     }else if (type === "xx_company") {
       axios
         .get(GETNOTECOMPANY + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          const notesWithImportance = response?.data?.data.filter(
+            (note) => note.importance === "1"
+          );
+          const notesWithoutImportance = response?.data?.data.filter(
+            (note) => note.importance !== "1"
+          );
+
+          const sortedNotes = [
+            ...notesWithImportance,
+            ...notesWithoutImportance,
+          ];
+
+          setNotes(sortedNotes);
+          setOriginalContents(sortedNotes);
+          // setNotes(response?.data?.data);
+          // setOriginalContents(response?.data?.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+    }else if (type === "xx_coNTACT_PERSON") {
+      axios
+        .get(GETNOTEPEOPLE + id, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },

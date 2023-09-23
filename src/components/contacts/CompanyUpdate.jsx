@@ -86,9 +86,9 @@ const CompanyUpdate = () => {
       });
   };
 
-  // useEffect(() => {
-  //   // handleGetEmail();
-  // }, [allEmails]);
+  useEffect(() => {
+    handleGetEmail();
+  }, [allEmails]);
 
   const fetchData = () => {
     const body = {
