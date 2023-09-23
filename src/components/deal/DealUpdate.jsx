@@ -49,7 +49,17 @@ const DealUpdate = () => {
   });
 const [dealName, setDealName] = useState("");
   const [fieldNames, setFieldNames] = useState({});
-
+  const [loanDetails, setLoanDetails] = useState({
+    age_of_business: null,
+    company_type: "",
+    industry_type: "",
+    turnover: null,
+    location_of_company: "",
+    duration: "",
+    individual_or_company: "",
+    loan_amount: null,
+    loan_type: "",
+  });
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
     contact: "",
@@ -178,16 +188,13 @@ const [dealName, setDealName] = useState("");
       })
       .then((response) => {
         const details = response?.data?.data[0];
+        console.log(details);
         setDealName(response?.data?.data[0]?.deal_name);
         const fieldMappings = {};
-
         for (const key in fieldNames) {
           // Use the value from fieldNames as the key in fieldMappings
           fieldMappings[fieldNames[key]] = details?.[fieldNames[key]];
         }
-        
-
-
         setDealDetails({
           ...dealDetails,
           ...fieldMappings,
@@ -230,7 +237,18 @@ const [dealName, setDealName] = useState("");
           stage_id: details.stage_id,
           owner: info?.id,
         });
-
+setLoanDetails({
+  ...loanDetails,
+  age_of_business: details?.age_of_business,
+    company_type: details?.company_type,
+    industry_type: details?.industry_type,
+    turnover: details?.turnover,
+    location_of_company: details?.company_location,
+    duration: details?.duration,
+    individual_or_company: details?.individual_or_company,
+    loan_amount: details?.value,
+    loan_type: details?.loan_type,
+})
         adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
         adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
         adminInfo.id = response?.data?.data[0]?.owner || "";

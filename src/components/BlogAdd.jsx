@@ -280,6 +280,32 @@ const BlogAdd = () => {
     setStateBtn(1);
   }
 
+  const resetForm = () => {
+    setFormData({
+      ...formData,
+       title: "",
+    url: "",
+    description: "",
+    meta_description: "",
+    keywords: "",
+    });
+    setSelectSite("");
+    setTagId("");
+    setSelectedTags([]);
+    setTagApi([]);
+    setSelectedDate("");
+    setSectionData([]);
+    setSectionTitle("");
+    setSectionSort("");
+    setSectionImage("");
+    setDataFromChild("");
+    setShowUploadButton(false);
+    setShowEditButton(false);
+    setShowChooseButton(false);
+    setSelectedImage(null);
+  };
+
+
   function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -306,6 +332,7 @@ const BlogAdd = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        resetForm();
       }
       })
       .catch((error) => {
@@ -334,6 +361,7 @@ const BlogAdd = () => {
                 name="title"
                 id="title"
                 placeholder="Blog Title"
+                value={formData.title}
                 onChange={handleChange}
               />
             </div>
@@ -343,6 +371,7 @@ const BlogAdd = () => {
                 name="url"
                 id="url"
                 placeholder="Url"
+                value={formData.url}
                 onChange={handleChange}
               />
               <div>
@@ -352,6 +381,7 @@ const BlogAdd = () => {
                   name="image"
                   id="image"
                   placeholder="image"
+                  value={formData.image}
                   onChange={handleChange}
                 />
               </div>
@@ -362,6 +392,7 @@ const BlogAdd = () => {
                 name="description"
                 id="description"
                 placeholder="Description"
+                value={formData.description}
                 onChange={handleChange}
               />
             </div>
@@ -371,6 +402,7 @@ const BlogAdd = () => {
                 name="meta_description"
                 id="meta_description"
                 placeholder="Blog Meta Description"
+                value={formData.meta_description}
                 onChange={handleChange}
               />
             </div>
@@ -379,6 +411,7 @@ const BlogAdd = () => {
                 type="text"
                 name="keywords"
                 id="keywords"
+                value={formData.keywords}
                 placeholder="Blog Keywords"
                 onChange={handleChange}
               />
