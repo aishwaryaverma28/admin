@@ -5,19 +5,13 @@ import Building from "../../assets/image/building.svg";
 import User from "../../assets/image/user-icon.svg";
 import Calender from "../../assets/image/calendar-new.svg";
 import Copy from "../../assets/image/copy.svg";
-import Pen from "../../assets/image/building.svg";
-import Dots from "../../assets/image/building.svg";
-import GreaterDown from "../../assets/image/greater-arrow-down.svg";
-import GreaterUp from "../../assets/image/greater-up.svg";
 import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
-import {
-  getDecryptedToken,
-} from "../utils/Constants";
-
-
+import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CompanyUpdate = () => {
   const { id } = useParams();
@@ -31,22 +25,55 @@ const CompanyUpdate = () => {
   const [isContactsOpen, setIsContactsOpen] = useState(false);
   const [isDealOpen, setIsDealsOpen] = useState(false);
   const [isLeadsOpen, setIsLeadssOpen] = useState(false);
-  const [companyDetails, setCompanyDetails] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [companyDetails, setCompanyDetails] = useState({
+    name: "",
+    domain: "",
+    valuation: "",
+    industry: "",
+    phone: "",
+    email: "",
+    city: "",
+    country:"",
+    address1: "",
+    address2: "",
+  });
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
 
   const fetchData = () => {
     const body = {
       contactType: "xx_company",
-      contactId:id,
-  }
-  const response = axios.post("http://core.leadplaner.com:3001/api/contact/getById", body, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    });
-    console.log(response?.data)
-  }
+      contactId: id,
+    };
+
+    axios
+      .post(GET_COMPANY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const responseData = response?.data?.data[0];
+        const updatedCompanyDetails = {
+          name: responseData.name,
+          domain: responseData.domain,
+          valuation: responseData.valuation,
+          industry: responseData.industry,
+          phone: responseData.phone,
+          email: responseData.email,
+          city: responseData.city,
+          country: responseData.country,
+          address1: responseData.address1,
+          address2: responseData.address2,
+        };
+        setCompanyDetails(updatedCompanyDetails);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -91,6 +118,42 @@ const CompanyUpdate = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleUpdateClick = (event) => {
+    event.preventDefault();
+    axios
+      .put(UPDATE_COMPANY + id, companyDetails, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Company updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          fetchData();
+        } else {
+          toast.error("Some error occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+
+        setShowUpdateButton(false);
+        setStateBtn(0);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowUpdateButton(false);
+        setStateBtn(0);
+      });
+
+    setIsEditable(false);
+    setIsDisabled(!isDisabled);
+    setStateBtn(0);
   };
 
   const normalStylingInput = {
@@ -200,24 +263,44 @@ const CompanyUpdate = () => {
           </div>
 
           <div className="cpu-input-container">
+          {isLoading ? (
+            <span>-</span>
+          ) : (
             <input
               type="text"
-              value="Scotish Bridge Deal"
+              value={companyDetails.name}
               style={isEditable ? editStyling : normalStyling}
               disabled={isDisabled}
+              onChange={handleInputChange}
+              name="name"
             />
+          )}
+
+          {isLoading ? (
+            <span>-</span>
+          ) : (
             <input
               type="text"
-              value="websitelink.com"
+              value={companyDetails.domain}
               style={isEditable ? editStylingInput : normalStylingInput}
               disabled={isDisabled}
+              onChange={handleInputChange}
+              name="domain"
             />
+          )}
+
+          {isLoading ? (
+            <span>-</span>
+          ) : (
             <input
-              type="text"
-              value="-917987803489"
+              type="number"
+              value={companyDetails.phone}
               style={isEditable ? editStylingInput : normalStylingInput}
               disabled={isDisabled}
+              onChange={handleInputChange}
+              name="phone"
             />
+          )}
           </div>
 
           <div className="cpu-icons">
@@ -256,8 +339,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name=""
-                      value="Abc inc"
+                      name="name"
+                      value={companyDetails.name}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -273,8 +356,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name="value"
-                      value="www.abc.com"
+                      name="domain"
+                      value={companyDetails.domain}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -289,9 +372,9 @@ const CompanyUpdate = () => {
                 ) : (
                   <span>
                     <input
-                      type="text"
-                      name="value"
-                      value="10000"
+                      type="number"
+                      name="valuation"
+                      value={companyDetails.valuation}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -307,7 +390,7 @@ const CompanyUpdate = () => {
                 ) : (
                   <span>
                     <select
-                      name=""
+                      name="industry"
                       onChange={handleInputChange}
                       disabled={isDisabled}
                       style={
@@ -315,6 +398,7 @@ const CompanyUpdate = () => {
                       }
                       className={`${isDisabled ? "disabled" : ""}`}
                       id="cpu-tech"
+                      value={companyDetails.industry}
                     >
                       <option value="tech">Tech</option>
                       <option value="non tech">Non Tech</option>
@@ -347,7 +431,6 @@ const CompanyUpdate = () => {
               <p>City</p>
               <p>Address 1</p>
               <p>Address 2</p>
-              <p>Domain</p>
             </div>
 
             <div className="detailsRightContainer">
@@ -357,9 +440,26 @@ const CompanyUpdate = () => {
                 ) : (
                   <span>
                     <input
-                      type="text"
-                      name=""
-                      value="Abc inc"
+                      type="number"
+                      name="phone"
+                      value={companyDetails.phone}
+                      onChange={handleInputChange}
+                      style={isEditable ? editStylingInput : normalStylingInput}
+                      disabled={isDisabled}
+                    />
+                  </span>
+                )}
+              </p>
+
+              <p>
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={companyDetails.email}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -375,43 +475,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name="value"
-                      value="www.abc.com"
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="value"
-                      value="10000"
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="value"
-                      value="10000"
+                      name="country"
+                      value={companyDetails.country}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -428,8 +493,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name="value"
-                      value="10000"
+                      name="city"
+                      value={companyDetails.city}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -446,8 +511,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name="value"
-                      value="10000"
+                      name="address1"
+                      value={companyDetails.address1}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -464,8 +529,8 @@ const CompanyUpdate = () => {
                   <span>
                     <input
                       type="text"
-                      name="value"
-                      value="10000"
+                      name="address2"
+                      value={companyDetails.address2}
                       onChange={handleInputChange}
                       style={isEditable ? editStylingInput : normalStylingInput}
                       disabled={isDisabled}
@@ -650,71 +715,69 @@ const CompanyUpdate = () => {
           </>
         )}
         {ShowUpdateButton && (
-              <div className="deal-update-btn">
-                {stateBtn === 0 ? (
-                  <button disabled className="disabledBtn ">
-                    Update
-                  </button>
-                ) : (
-                  <button className="convertToDeal">
-                    Update
-                  </button>
-                )}
-              </div>
+          <div className="deal-update-btn">
+            {stateBtn === 0 ? (
+              <button disabled className="disabledBtn ">
+                Update
+              </button>
+            ) : (
+              <button className="convertToDeal" onClick={handleUpdateClick}>
+                Update
+              </button>
             )}
+          </div>
+        )}
       </div>
       <div className="cpu-right">
-          <div className="tab-navigation">
-            <button
-              className={activeTab === "notes" ? "active" : ""}
-              onClick={() => handleTabClick("notes")}
-            >
-              <i className="fa-sharp fa-regular fa-note-sticky"></i>
-              Notes (2)
-            </button>
-            <button
-              className={activeTab === "email" ? "active" : ""}
-              onClick={() => handleTabClick("email")}
-            >
-              <i className="fa-sharp fa-regular fa-envelope-open"></i>
-              Email
-            </button>
-            <button
-              className={activeTab === "whatsapp" ? "active" : ""}
-              onClick={() => handleTabClick("whatsapp")}
-            >
-              <i className="fa-sharp fa-regular fab fa-whatsapp"></i>
-              Whatsapp
-            </button>
-            <button
-              className={activeTab === "activity" ? "active" : ""}
-              onClick={() => handleTabClick("activity")}
-            >
-              <i className="fa-sharp fa-regular fa-calendar"></i>
-              Activity (2)
-            </button>
-          </div>
-          <div className="tab-content">
-            {activeTab === "notes" && (
-              <div className="notes-tab-content">
-                <AddNotes
-                />
-              </div>
-            )}
-            {activeTab === "email" && (
-              <div className="email-tab-content">
-                <DealEmail 
-                  />
-              </div>
-            )}
-            {activeTab === "activity" && (
-              <div className="activity-tab-content">
-                <DealActivity
-                />
-              </div>
-            )}
-          </div>
+        <div className="tab-navigation">
+          <button
+            className={activeTab === "notes" ? "active" : ""}
+            onClick={() => handleTabClick("notes")}
+          >
+            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+            Notes (2)
+          </button>
+          <button
+            className={activeTab === "email" ? "active" : ""}
+            onClick={() => handleTabClick("email")}
+          >
+            <i className="fa-sharp fa-regular fa-envelope-open"></i>
+            Email
+          </button>
+          <button
+            className={activeTab === "whatsapp" ? "active" : ""}
+            onClick={() => handleTabClick("whatsapp")}
+          >
+            <i className="fa-sharp fa-regular fab fa-whatsapp"></i>
+            Whatsapp
+          </button>
+          <button
+            className={activeTab === "activity" ? "active" : ""}
+            onClick={() => handleTabClick("activity")}
+          >
+            <i className="fa-sharp fa-regular fa-calendar"></i>
+            Activity (2)
+          </button>
         </div>
+        <div className="tab-content">
+          {activeTab === "notes" && (
+            <div className="notes-tab-content">
+              <AddNotes />
+            </div>
+          )}
+          {activeTab === "email" && (
+            <div className="email-tab-content">
+              <DealEmail />
+            </div>
+          )}
+          {activeTab === "activity" && (
+            <div className="activity-tab-content">
+              <DealActivity />
+            </div>
+          )}
+        </div>
+      </div>
+      <ToastContainer />
     </div>
   );
 };
