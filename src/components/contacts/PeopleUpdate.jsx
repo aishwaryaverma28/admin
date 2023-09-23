@@ -14,6 +14,8 @@ import {
   UPDATE_PEOPLE,
   GET_COMPANY,
   POST_EMAIL,
+  GETNOTEPEOPLE,
+  handleLogout
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 const CompanyUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
+  const [notes, setNotes] = useState();
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
@@ -43,6 +46,27 @@ const CompanyUpdate = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
+
+  const fetchNotes = () => {
+    axios
+      .get(GETNOTEPEOPLE + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          setNotes(response?.data?.data?.length);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -674,7 +698,10 @@ const CompanyUpdate = () => {
         <div className="tab-content">
           {activeTab === "notes" && (
             <div className="notes-tab-content">
-              <AddNotes />
+            <AddNotes
+                  onNotesNum={fetchNotes}
+                  type="xx_contact_person"
+                />
             </div>
           )}
           {activeTab === "email" && (
