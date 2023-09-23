@@ -44,7 +44,6 @@ const BlogAdd = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const decryptedToken = getDecryptedToken();
   const editorRef = useRef(); // Define the editorRef using useRef
-
   useEffect(() => {
     axios
       .get(GET_TAG, {
@@ -273,7 +272,7 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  console.log(sectionData);
+  // console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -301,11 +300,13 @@ const BlogAdd = () => {
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response?.data?.status);
+        if (response?.data?.status == 1) {
         toast.success("Blog data added successfully", {
           position: "top-center",
           autoClose: 2000,
         });
+      }
       })
       .catch((error) => {
         console.log(error);

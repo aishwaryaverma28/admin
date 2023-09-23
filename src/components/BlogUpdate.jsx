@@ -68,6 +68,7 @@ const BlogUpdate = () => {
       }
     });
     const data = response.data.data;
+    console.log(response.data.data);
     setBlogData(data);
     searchData(data);
     const secResponse = await axios.get(SEC_GET + id, {
@@ -92,7 +93,7 @@ const BlogUpdate = () => {
     });
   };
 
-  console.log(sectionData);
+  // console.log(formData);
 
   function searchData(data) {
     const blog = data.find((item) => item.id == id);
@@ -346,7 +347,7 @@ const BlogUpdate = () => {
     setStateBtn(1);
     // setFormData.image(data);
     setPic(data);
-    console.log(data);
+    // console.log(data);
   };
   const handleImageEditor = (data) => {
     setStateBtn(1);
@@ -369,7 +370,7 @@ const BlogUpdate = () => {
       sections: sectionData,
       route:formData?.url,
     };
-    console.log(JSON.stringify(updatedFormData));
+    // console.log(JSON.stringify(updatedFormData));
     try {
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
@@ -382,10 +383,12 @@ const BlogUpdate = () => {
 
       const data = await response.json();
       console.log(data);
+      if (response.data.status == 1) {
       toast.success("Blog data updated successfully", {
         position:"top-center",
         autoClose:2000
       })
+    }
     }catch(error){
       console.log(error)
     };
