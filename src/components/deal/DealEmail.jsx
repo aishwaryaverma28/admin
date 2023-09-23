@@ -16,7 +16,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
+const DealEmail = ({ type, id, dealName }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
@@ -153,7 +153,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
     }
   
     const updatedFormData = {
-      source_id: type === "lead" ? item.id : id,
+      source_id:id,
       source: type,
       subject: subject,
       html: dataFromChild,
@@ -201,7 +201,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
   const handleGetEmail = () => {
     const updatedFormData = {
       source: type,
-      source_id: type === "lead" ? item.id : id,
+      source_id:id,
     };
     axios
       .post(POST_EMAIL, updatedFormData, {
@@ -220,13 +220,14 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
   };
 
   useEffect(() => {
-    handleGetEmail();
     getUser();
   }, []);
 
-  useEffect(() => {
-    updateEmailCount(allEmails.length);
-  }, [allEmails]); 
+  useEffect (() => {
+  handleGetEmail();
+  },[allEmails])
+
+
 
   return (
     <>
@@ -236,7 +237,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
         </div>
       ) : (
         <>
-          <div className="email-top-cc">
+          <div className={`email-top-cc ${type === 'deal' ? ' email-top-deal' : type === 'lead' ? ' email-top-lead' : ''}`}>
             <div>
               <div>
                 <label htmlFor="emailInput" className="email-to">
@@ -248,7 +249,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
                   value={emailInput}
                   onChange={handleEmailInputChange}
                   onKeyPress={handleEmailInputKeyPress}
-                  className="email-to-input"
+                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
                 />
               </div>
               <div>
@@ -277,7 +278,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
                   value={emailInput2}
                   onChange={handleEmailInputChange2}
                   onKeyPress={handleEmailInputKeyPress2}
-                  className="email-to-input"
+                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
                 />
               </div>
               <div>
@@ -303,7 +304,7 @@ const DealEmail = ({ type, id, item, dealName, updateEmailCount }) => {
                 <input
                   type="text"
                   id="emailInput3"
-                  className="email-to-input"
+                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
                   onChange={handleSelectChange}
                 />
               </div>
