@@ -9,13 +9,15 @@ import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY } from "../utils/Constants";
+import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY, POST_EMAIL, GETNOTECOMPANY, handleLogout } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const CompanyUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
+  const [notes, setNotes] = useState();
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [ShowUpdateButton, setShowUpdateButton] = useState(false);
@@ -25,6 +27,7 @@ const CompanyUpdate = () => {
   const [isContactsOpen, setIsContactsOpen] = useState(false);
   const [isDealOpen, setIsDealsOpen] = useState(false);
   const [isLeadsOpen, setIsLeadssOpen] = useState(false);
+  const [companyName, setCompanyName] = useState("");
   const [companyDetails, setCompanyDetails] = useState({
     name: "",
     domain: "",
@@ -39,6 +42,53 @@ const CompanyUpdate = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
+  const [allEmails, setAllEmails] = useState([]);
+
+  const fetchNotes = () => {
+    axios
+      .get(GETNOTECOMPANY + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          setNotes(response?.data?.data?.length);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
+  const handleGetEmail = () => {
+    const updatedFormData = {
+      source: "xx_company",
+      source_id: id,
+    };
+    axios
+      .post(POST_EMAIL, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          setAllEmails(response?.data?.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // useEffect(() => {
+  //   // handleGetEmail();
+  // }, [allEmails]);
 
   const fetchData = () => {
     const body = {
@@ -54,6 +104,7 @@ const CompanyUpdate = () => {
       })
       .then((response) => {
         const responseData = response?.data?.data[0];
+         setCompanyName(response?.data?.data[0]?.name);
         const updatedCompanyDetails = {
           name: responseData.name,
           domain: responseData.domain,
@@ -742,7 +793,7 @@ const CompanyUpdate = () => {
             onClick={() => handleTabClick("email")}
           >
             <i className="fa-sharp fa-regular fa-envelope-open"></i>
-            Email
+            Email ({allEmails.length})
           </button>
           <button
             className={activeTab === "whatsapp" ? "active" : ""}
@@ -762,12 +813,12 @@ const CompanyUpdate = () => {
         <div className="tab-content">
           {activeTab === "notes" && (
             <div className="notes-tab-content">
-              <AddNotes />
+              <AddNotes type="xx_company" onNotesNum={fetchNotes} />
             </div>
           )}
           {activeTab === "email" && (
             <div className="email-tab-content">
-              <DealEmail />
+              <DealEmail type="xx_company" id={id} dealName={companyName} />
             </div>
           )}
           {activeTab === "activity" && (

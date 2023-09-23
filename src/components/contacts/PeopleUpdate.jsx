@@ -9,7 +9,12 @@ import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_PEOPLE, GET_COMPANY } from "../utils/Constants";
+import {
+  getDecryptedToken,
+  UPDATE_PEOPLE,
+  GET_COMPANY,
+  POST_EMAIL,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +30,8 @@ const CompanyUpdate = () => {
   const [isContactsOpen, setIsContactsOpen] = useState(false);
   const [isDealOpen, setIsDealsOpen] = useState(false);
   const [isLeadsOpen, setIsLeadssOpen] = useState(false);
+  const [companyName, setCompanyName] = useState("");
+  const [allEmails, setAllEmails] = useState([]);
   const [peopleDetails, setpeopleDetails] = useState({
     name: "",
     organization: "",
@@ -36,6 +43,31 @@ const CompanyUpdate = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
+
+  const handleGetEmail = () => {
+    const updatedFormData = {
+      source: "xx_contact_person",
+      source_id: id,
+    };
+    axios
+      .post(POST_EMAIL, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          setAllEmails(response?.data?.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    handleGetEmail();
+  }, [allEmails]);
 
   const fetchData = () => {
     const body = {
@@ -51,14 +83,15 @@ const CompanyUpdate = () => {
       })
       .then((response) => {
         const responseData = response?.data?.data[0];
+        setCompanyName(response?.data?.data[0]?.organization);
         const updatedpeopleDetails = {
           name: responseData.name,
-         organization:responseData.organization,
-         phone:responseData.phone,
-         email:responseData.email,
-         city:responseData.city,
-         state:responseData.state,
-         postal_code: responseData.postal_code
+          organization: responseData.organization,
+          phone: responseData.phone,
+          email: responseData.email,
+          city: responseData.city,
+          state: responseData.state,
+          postal_code: responseData.postal_code,
         };
         setpeopleDetails(updatedpeopleDetails);
         setIsLoading(false);
@@ -257,31 +290,31 @@ const CompanyUpdate = () => {
           </div>
 
           <div className="cpu-input-container">
-          {isLoading ? (
-            <span>-</span>
-          ) : (
-            <input
-              type="text"
-              value={peopleDetails.organization}
-              style={isEditable ? editStyling : normalStyling}
-              disabled={isDisabled}
-              onChange={handleInputChange}
-              name="organization"
-            />
-          )}
+            {isLoading ? (
+              <span>-</span>
+            ) : (
+              <input
+                type="text"
+                value={peopleDetails.organization}
+                style={isEditable ? editStyling : normalStyling}
+                disabled={isDisabled}
+                onChange={handleInputChange}
+                name="organization"
+              />
+            )}
 
-          {isLoading ? (
-            <span>-</span>
-          ) : (
-            <input
-              type="number"
-              value={peopleDetails.phone}
-              style={isEditable ? editStylingInput : normalStylingInput}
-              disabled={isDisabled}
-              onChange={handleInputChange}
-              name="phone"
-            />
-          )}
+            {isLoading ? (
+              <span>-</span>
+            ) : (
+              <input
+                type="number"
+                value={peopleDetails.phone}
+                style={isEditable ? editStylingInput : normalStylingInput}
+                disabled={isDisabled}
+                onChange={handleInputChange}
+                name="phone"
+              />
+            )}
           </div>
 
           <div className="cpu-icons">
@@ -417,8 +450,6 @@ const CompanyUpdate = () => {
                   </span>
                 )}
               </p>
-
-
             </div>
           </div>
         )}
@@ -623,7 +654,7 @@ const CompanyUpdate = () => {
             onClick={() => handleTabClick("email")}
           >
             <i className="fa-sharp fa-regular fa-envelope-open"></i>
-            Email
+            Email ({allEmails.length})
           </button>
           <button
             className={activeTab === "whatsapp" ? "active" : ""}
@@ -648,7 +679,11 @@ const CompanyUpdate = () => {
           )}
           {activeTab === "email" && (
             <div className="email-tab-content">
-              <DealEmail />
+              <DealEmail
+                dealName={companyName}
+                id={id}
+                type="xx_contact_person"
+              />
             </div>
           )}
           {activeTab === "activity" && (

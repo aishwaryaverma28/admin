@@ -77,16 +77,21 @@
   text-transform: lowercase;
 }
 
+
 .contact-cpu-container {
-  display: grid;
-  grid-template-columns: 1.2fr 3fr;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  padding-top: 0px;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0.3125rem;
 }
 
 .cpu-left {
+  width: 30%;
   height: 85vh;
-  overflow: auto;
-  border-right: 1px solid #dcdcdc;
-  width: 100%;
+  overflow-y: scroll;
+  border-right: 1px solid #d3d4d5;
 }
 
 .cpu-back button {
@@ -268,7 +273,7 @@
 }
 
 .cpu-right{
-    width: 100%;
+    width: 70%;
 }
 
 

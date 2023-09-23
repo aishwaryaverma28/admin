@@ -34,10 +34,10 @@ const DealEmail = ({ type, id, dealName }) => {
   const toggleEmail = (emailId) => {
     if (openEmailId === emailId) {
       setOpenEmailId(null);
-      setNumber(0) 
+      setNumber(0);
     } else {
-      setOpenEmailId(emailId); 
-      setNumber(1)
+      setOpenEmailId(emailId);
+      setNumber(1);
     }
   };
 
@@ -46,8 +46,8 @@ const DealEmail = ({ type, id, dealName }) => {
   };
 
   const handleSelectChange = (e) => {
-     setSubject(e.target.value);
-  }
+    setSubject(e.target.value);
+  };
   const handleEmailInputKeyPress = (event) => {
     if (event.key === "Enter" && emailInput.trim() !== "") {
       setToEmails([...toEmails, { email: emailInput.trim(), name: dealName }]);
@@ -56,19 +56,19 @@ const DealEmail = ({ type, id, dealName }) => {
   };
 
   function extractTextFromHtml(html) {
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
+    return tempDiv.textContent || tempDiv.innerText || "";
   }
   function extractTextFromHtml2(html) {
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
-    let textContent = tempDiv.textContent || tempDiv.innerText || '';
-  
+    let textContent = tempDiv.textContent || tempDiv.innerText || "";
+
     if (textContent.length > 120) {
-      textContent = textContent.slice(0, 120) + '...';
+      textContent = textContent.slice(0, 120) + "...";
     }
-  
+
     return textContent;
   }
 
@@ -86,11 +86,11 @@ const DealEmail = ({ type, id, dealName }) => {
   };
 
   const handleRemoveEmail = (index, listType) => {
-    if (listType === 'toEmails') {
+    if (listType === "toEmails") {
       const updatedToEmails = [...toEmails];
       updatedToEmails.splice(index, 1);
       setToEmails(updatedToEmails);
-    } else if (listType === 'toEmails2') {
+    } else if (listType === "toEmails2") {
       const updatedToEmails2 = [...toEmails2];
       updatedToEmails2.splice(index, 1);
       setToEmails2(updatedToEmails2);
@@ -116,7 +116,6 @@ const DealEmail = ({ type, id, dealName }) => {
       }
     }
   }
-  
 
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -135,32 +134,31 @@ const DealEmail = ({ type, id, dealName }) => {
   const handleAddEmail = () => {
     let updatedTo = toEmails;
     let updatedCc = toEmails2;
-  
 
     if (emailInput.trim() !== "") {
       updatedTo = [...updatedTo, { email: emailInput.trim(), name: dealName }];
     }
-  
+
     if (emailInput2.trim() !== "") {
       updatedCc = [...updatedCc, { email: emailInput2.trim(), name: dealName }];
     }
-    if (emailInput2.trim() === "" && emailInput.trim() !== "" ) {
+    if (emailInput2.trim() === "" && emailInput.trim() !== "") {
       updatedCc = [...updatedCc, { email: emailInput.trim(), name: dealName }];
     }
 
     if (updatedCc.length === 0) {
       updatedCc = [...updatedTo];
     }
-  
+
     const updatedFormData = {
-      source_id:id,
+      source_id: id,
       source: type,
       subject: subject,
       html: dataFromChild,
       to: updatedTo,
       cc: updatedCc,
     };
-  
+
     console.log(updatedFormData);
     axios
       .post(ADD_EMAIL, updatedFormData, {
@@ -169,7 +167,7 @@ const DealEmail = ({ type, id, dealName }) => {
         },
       })
       .then((response) => {
-        console.log(response.data.data)
+        console.log(response.data.data);
         if (response?.data?.status === 1) {
           console.log(response?.data);
           toast.success("Email send successfully", {
@@ -187,7 +185,7 @@ const DealEmail = ({ type, id, dealName }) => {
       .catch((error) => {
         console.log(error);
       });
-  
+
     setToEmails([]);
     setToEmails2([]);
     setDataFromChild("");
@@ -196,12 +194,11 @@ const DealEmail = ({ type, id, dealName }) => {
     setOpenEditor(false);
     setStateAdd(0);
   };
-  
 
   const handleGetEmail = () => {
     const updatedFormData = {
       source: type,
-      source_id:id,
+      source_id: id,
     };
     axios
       .post(POST_EMAIL, updatedFormData, {
@@ -223,11 +220,9 @@ const DealEmail = ({ type, id, dealName }) => {
     getUser();
   }, []);
 
-  useEffect (() => {
-  handleGetEmail();
-  },[allEmails])
-
-
+  useEffect(() => {
+    handleGetEmail();
+  }, [allEmails]);
 
   return (
     <>
@@ -237,7 +232,19 @@ const DealEmail = ({ type, id, dealName }) => {
         </div>
       ) : (
         <>
-          <div className={`email-top-cc ${type === 'deal' ? ' email-top-deal' : type === 'lead' ? ' email-top-lead' : ''}`}>
+          <div
+            className={`email-top-cc ${
+              type === "deal"
+                ? " email-top-deal"
+                : type === "lead"
+                ? " email-top-lead"
+                : type === "xx_company"
+                ? " email_xx_company"
+                : type === "xx_contact_person"
+                ? " email_xx_contact_person"
+                : ""
+            }`}
+          >
             <div>
               <div>
                 <label htmlFor="emailInput" className="email-to">
@@ -249,7 +256,13 @@ const DealEmail = ({ type, id, dealName }) => {
                   value={emailInput}
                   onChange={handleEmailInputChange}
                   onKeyPress={handleEmailInputKeyPress}
-                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
+                  className={`email-to-input${
+                    type === "deal"
+                      ? " email-deal"
+                      : type === "lead"
+                      ? " email-lead"
+                      : ""
+                  }`}
                 />
               </div>
               <div>
@@ -278,7 +291,13 @@ const DealEmail = ({ type, id, dealName }) => {
                   value={emailInput2}
                   onChange={handleEmailInputChange2}
                   onKeyPress={handleEmailInputKeyPress2}
-                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
+                  className={`email-to-input${
+                    type === "deal"
+                      ? " email-deal"
+                      : type === "lead"
+                      ? " email-lead"
+                      : ""
+                  }`}
                 />
               </div>
               <div>
@@ -304,7 +323,13 @@ const DealEmail = ({ type, id, dealName }) => {
                 <input
                   type="text"
                   id="emailInput3"
-                  className={`email-to-input${type === 'deal' ? ' email-deal' : type === 'lead' ? ' email-lead' : ''}`}
+                  className={`email-to-input${
+                    type === "deal"
+                      ? " email-deal"
+                      : type === "lead"
+                      ? " email-lead"
+                      : ""
+                  }`}
                   onChange={handleSelectChange}
                 />
               </div>
@@ -340,93 +365,97 @@ const DealEmail = ({ type, id, dealName }) => {
         </>
       )}
 
-      {
-        allEmails.map((mail)=>{
-          const recipientData = JSON.parse(mail.recipient);
-           const recipientEmails = recipientData.map((recipient) => recipient.email).join(', ');
-           const emailClassName =
+      {allEmails.map((mail) => {
+        const recipientData = JSON.parse(mail.recipient);
+        const recipientEmails = recipientData
+          .map((recipient) => recipient.email)
+          .join(", ");
+        const emailClassName =
           openEmailId === mail.id ? "email-open" : "email-close";
-          return(
-            <div className="activity-task-map email-map" key={mail.id} onClick={() => toggleEmail(mail.id)}>
-        <div className="activity-bottom">
-          <div className="savedNotes activity-save-note">
-            <>
-              <section className={`note-display email-task-map ${emailClassName}` }>
-                <div className="note-content activity-content">
-                  <div className="arrow-greater activity-new-arrow">
-                  {
-                    openEmailId === mail.id ? (
-                      <img src={GreaterDown} alt="" />
-                    ) : (
-                      <img src={GreaterArrow} alt="" />
-                    )
-                  }
-                    
-                  </div>
+        return (
+          <div
+            className="activity-task-map email-map"
+            key={mail.id}
+            onClick={() => toggleEmail(mail.id)}
+          >
+            <div className="activity-bottom">
+              <div className="savedNotes activity-save-note">
+                <>
+                  <section
+                    className={`note-display email-task-map ${emailClassName}`}
+                  >
+                    <div className="note-content activity-content">
+                      <div className="arrow-greater activity-new-arrow">
+                        {openEmailId === mail.id ? (
+                          <img src={GreaterDown} alt="" />
+                        ) : (
+                          <img src={GreaterArrow} alt="" />
+                        )}
+                      </div>
 
-                  <div className="notes-main">
-                    <div className="activity-flex">
-                      <div className="notes-by activity-by ">
-                        <p className="common-fonts email-call">
-                         {mail.subject}
-                        </p>
+                      <div className="notes-main">
+                        <div className="activity-flex">
+                          <div className="notes-by activity-by ">
+                            <p className="common-fonts email-call">
+                              {mail.subject}
+                            </p>
 
-                        <div className="activity-date-time">
-                          <img src={CalendarIcon} alt="" />
-                          <p className="common-fonts activity-due">
-                          {mail.sent_date &&
-                            mail.sent_date.includes("T") &&
-                            mail.sent_date.includes(".")
-                            ? mail.sent_date.split("T")[0] +
-                              " at " +
-                              mail.sent_date.split("T")[1].split(".")[0]
-                            : "-"}
-                          </p>
+                            <div className="activity-date-time">
+                              <img src={CalendarIcon} alt="" />
+                              <p className="common-fonts activity-due">
+                                {mail.sent_date &&
+                                mail.sent_date.includes("T") &&
+                                mail.sent_date.includes(".")
+                                  ? mail.sent_date.split("T")[0] +
+                                    " at " +
+                                    mail.sent_date.split("T")[1].split(".")[0]
+                                  : "-"}
+                              </p>
+                            </div>
+                          </div>
                         </div>
+
+                        {openEmailId !== mail.id && (
+                          <div className={`activity-phone email-tab-view`}>
+                            <p className="common-fonts email-assign-arrow">
+                              <span>
+                                {owner.first_name} {owner.last_name}
+                              </span>
+                              <img src={Arrow} alt="" />{" "}
+                              <span>{recipientEmails}</span>
+                            </p>
+                            <p className="common-fonts">
+                              {extractTextFromHtml2(mail.html)}
+                            </p>
+                          </div>
+                        )}
+
+                        {openEmailId === mail.id && (
+                          <>
+                            <div className={`activity-phone email-tab-view`}>
+                              <p className="common-fonts email-sender-name">
+                                <span>From:</span> {owner.first_name}{" "}
+                                {owner.last_name}
+                              </p>
+                              <p className="common-fonts email-reciever-name">
+                                <span>To:</span>
+                                {recipientEmails}
+                              </p>
+                              <p className="common-fonts">
+                                {extractTextFromHtml(mail.html)}
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
-
-                    {
-                      openEmailId !== mail.id && (
-                        <div className={`activity-phone email-tab-view`}>
-                      <p className="common-fonts email-assign-arrow">
-                        <span>{owner.first_name} {owner.last_name}</span>
-                        <img src={Arrow} alt="" /> <span>{recipientEmails}</span>
-                      </p>
-                      <p className="common-fonts">
-                      {extractTextFromHtml2(mail.html)}
-                      </p>
-                    </div>
-                      )
-                    }
-
-                    {
-                      openEmailId === mail.id && (
-                        <>
-                            
-                    <div className={`activity-phone email-tab-view`}>
-                      <p className="common-fonts email-sender-name">
-                        <span>From:</span> {owner.first_name} {owner.last_name}
-                      </p>
-                      <p className="common-fonts email-reciever-name">
-                        <span>To:</span>{recipientEmails}
-                      </p>
-                          <p className="common-fonts">{extractTextFromHtml(mail.html)}</p>
-                    </div>
-                        </>
-                      )
-                    }
-
-                  </div>
-                </div>
-              </section>
-            </>
+                  </section>
+                </>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-          )
-        })
-      }
+        );
+      })}
     </>
   );
 };

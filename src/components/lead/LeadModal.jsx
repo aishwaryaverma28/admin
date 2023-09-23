@@ -52,7 +52,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [fields, setFields] = useState([]);
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
-  const [totalMail, setTotalMail]= useState(0)
+  const [leadName, setLeadName] = useState("");
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -136,6 +136,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         },
       })
       .then((response) => {
+        setLeadName(response?.data?.data[0]?.lead_name);
         setEditedItem(response?.data?.data[0]);
         setName(
           response?.data?.data[0]?.first_name +
@@ -644,6 +645,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     height: "2rem",
     width: "fit-content",
   };
+
 
   return (
     <div className="modal">
@@ -1234,7 +1236,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail id={selectedItem.id} type="lead" dealName="hello"/>
+                <DealEmail id={selectedItem.id} type="lead" dealName={leadName}/>
               </div>
             )}
             {activeTab === "activity" && (

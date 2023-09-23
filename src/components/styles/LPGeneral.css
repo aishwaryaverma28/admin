@@ -854,6 +854,14 @@ background: #FFF5DC;
   width:98.3%;
 }
 
+.email_xx_contact_person{
+  width:98.9%;
+}
+
+.email_xx_company{
+  width:98.9%
+}
+
 .email-top-cc:first-child{
   padding-top: 1rem;
   padding-left: 1rem;
@@ -883,6 +891,7 @@ background: #FFF5DC;
   margin-top: -4.2rem;
   /* border: none !important; */
   width: 100%;
+ 
 }
 
 .crm-new-border{
@@ -906,6 +915,7 @@ background: #FFF5DC;
 .email-deal{
   width:40rem;
 }
+
 
 #emailInput:focus, #emailInput2:focus, #emailInput3:focus{
   outline: none !important;

@@ -10,6 +10,7 @@ import {
   MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
+  GETNOTECOMPANY
 } from "./utils/Constants";
 import ThreeDots from "../assets/image/three-dots.svg";
 import bin from "../assets/image/TrashFill.svg";
@@ -18,8 +19,10 @@ import pin from "../assets/image/pin.svg";
 import GreaterArrow from "../assets/image/greater-arrow.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useParams } from "react-router";
 
-const AddNotes = ({ item, onNotesNum, type, id }) => {
+const AddNotes = ({onNotesNum, type , item}) => {
+  const { id }  =useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -101,6 +104,38 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
             handleLogout();
           }
         });
+    }else if (type === "xx_company") {
+      axios
+        .get(GETNOTECOMPANY + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          const notesWithImportance = response?.data?.data.filter(
+            (note) => note.importance === "1"
+          );
+          const notesWithoutImportance = response?.data?.data.filter(
+            (note) => note.importance !== "1"
+          );
+
+          const sortedNotes = [
+            ...notesWithImportance,
+            ...notesWithoutImportance,
+          ];
+
+          setNotes(sortedNotes);
+          setOriginalContents(sortedNotes);
+          // setNotes(response?.data?.data);
+          // setOriginalContents(response?.data?.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
     }
   };
 
@@ -111,7 +146,7 @@ const AddNotes = ({ item, onNotesNum, type, id }) => {
 
   const handleAddNote = () => {
     const updatedFormData = {
-      source_id: type === "lead" ? item.id : id,
+      source_id: type==="lead" ? item.id : id,
       type: type,
       description: dataFromChild,
       importance: "0",
