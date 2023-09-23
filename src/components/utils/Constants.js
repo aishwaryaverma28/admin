@@ -183,6 +183,7 @@ export const MOVE_TO_BIN = start + "api/contact/movetotrash";
 export const GET_BIN_COMPANY = start + "api/contact/getfromtrash";
 export const RESTORE_COMPANY = start + "api/contact/removefromtrash";
 export const DELETE_COMPANY = start + "api/contact/deletefromtrash";
+export const GET_COMPANY = start + "api/contact/getById";
 //=======================================people apis
 export const IMPORT_PEOPLE = start + "api/contact/person/import";
 export const ADD_PEOPLE = start + "api/contact/person/add";
