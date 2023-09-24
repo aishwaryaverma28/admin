@@ -105,10 +105,10 @@ export const countryPhoneCodes = [
     { code: "+81", country: "Japan"},
 ]
 export const worldCurrencies = [
+    { code: "GBP", currency: "British Pound Sterling" },
     { code: "USD", currency: "United States Dollar" },
     { code: "EUR", currency: "Euro" },
     { code: "JPY", currency: "Japanese Yen" },
-    { code: "GBP", currency: "British Pound Sterling" },
     { code: "AUD", currency: "Australian Dollar" },
     { code: "CAD", currency: "Canadian Dollar" },
     { code: "CHF", currency: "Swiss Franc" },

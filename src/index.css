@@ -283,3 +283,7 @@ select:focus {
 .left-space{
   margin-left: 1rem;
 }
+
+.pound{
+  width: 0.7rem;
+}

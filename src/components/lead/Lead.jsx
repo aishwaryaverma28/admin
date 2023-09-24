@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
+import pound from "../../assets/image/british-pound-symbol.svg";
 import Search from "../../assets/image/search.svg";
 import Sort from "../../assets/image/sort.svg";
 import axios from "axios";
@@ -743,7 +744,7 @@ const Lead = () => {
             )}
           </div>
           <div className="right-side--btns">
-            <p>sub total: ${totalValue.toLocaleString("en-IN")}</p>
+            <p>sub total: <img className="pound" src={pound}/>{totalValue.toLocaleString("en-IN")}</p>
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Lead
             </button>
@@ -951,7 +952,7 @@ const Lead = () => {
               <div className="bottom-fixed">
                 <p>
                   {" "}
-                  Total Value: $
+                  Total Value: <img className="pound" src={pound}/>
                   {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
                 </p>
               </div>

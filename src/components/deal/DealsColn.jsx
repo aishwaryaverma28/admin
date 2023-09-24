@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import user from "../../assets/image/user.svg";
+import pound from "../../assets/image/british-pound-symbol.svg";
 import { Link } from "react-router-dom";
 import DealDeletePopUp from "../DeleteComponent";
 import axios from "axios";
@@ -153,7 +154,7 @@ const DealsColn = ({
               </p>
             </div>
             <div className="lead-value">
-              ${object.value.toLocaleString("en-IN")}
+            <img className="pound" src={pound}/>{object.value.toLocaleString("en-IN")}
             </div>
             <div className="contact-details">
               <div className="mail">

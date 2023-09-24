@@ -9,6 +9,7 @@ import {
   GETNOTEDEAL,
   GET_DEAL_ID,
   UPDATE_DEAL,
+  ELIGIBLE_LOANS,
   handleLogout,
   getDecryptedToken,
   GET_LABEL,
@@ -17,7 +18,7 @@ import {
   GET_ACTIVITY,
   GET_TEAM_MEM,
   GET_FIELDS,
-  POST_EMAIL
+  POST_EMAIL,
 } from "../utils/Constants";
 import AddNotes from "../AddNotes";
 import { toast, ToastContainer } from "react-toastify";
@@ -47,7 +48,7 @@ const DealUpdate = () => {
     last_name: "",
     id: 0,
   });
-const [dealName, setDealName] = useState("");
+  const [dealName, setDealName] = useState("");
   const [fieldNames, setFieldNames] = useState({});
   const [loanDetails, setLoanDetails] = useState({
     age_of_business: null,
@@ -60,6 +61,7 @@ const [dealName, setDealName] = useState("");
     loan_amount: null,
     loan_type: "",
   });
+  const [loan, setLoan] = useState([]);
   const [dealDetails, setDealDetails] = useState({
     closure_date: "",
     contact: "",
@@ -120,7 +122,7 @@ const [dealName, setDealName] = useState("");
   const handleGetEmail = () => {
     const updatedFormData = {
       source: "deal",
-      source_id: id
+      source_id: id,
     };
     axios
       .post(POST_EMAIL, updatedFormData, {
@@ -137,7 +139,6 @@ const [dealName, setDealName] = useState("");
         console.log(error);
       });
   };
-
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -198,7 +199,7 @@ const [dealName, setDealName] = useState("");
         setDealDetails({
           ...dealDetails,
           ...fieldMappings,
-          dealId:[id],
+          dealId: [id],
           closure_date: details.closure_date?.split("T")[0],
           contact: details.contact,
           deal_name: details.deal_name,
@@ -237,21 +238,22 @@ const [dealName, setDealName] = useState("");
           stage_id: details.stage_id,
           owner: info?.id,
         });
-setLoanDetails({
-  ...loanDetails,
-  age_of_business: details?.age_of_business,
-    company_type: details?.company_type,
-    industry_type: details?.industry_type,
-    turnover: details?.turnover,
-    location_of_company: details?.company_location,
-    duration: details?.duration,
-    individual_or_company: details?.individual_or_company,
-    loan_amount: details?.value,
-    loan_type: details?.loan_type,
-})
+        setLoanDetails({
+          ...loanDetails,
+          age_of_business: details?.age_of_business,
+          company_type: details?.company_type,
+          industry_type: details?.industry_type,
+          turnover: details?.turnover,
+          location_of_company: details?.company_location,
+          duration: details?.duration,
+          individual_or_company: details?.individual_or_company,
+          loan_amount: details?.value,
+          loan_type: details?.loan_type,
+        });
         adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
         adminInfo.last_name = response?.data?.data[0]?.ownerl_name || "";
         adminInfo.id = response?.data?.data[0]?.owner || "";
+        filterBanks();
         setIsLoading(false);
       })
       .catch((error) => {
@@ -259,6 +261,45 @@ setLoanDetails({
         setIsLoading(false);
       });
   };
+
+  const fetchBanks = () => {
+    axios
+      .get(ELIGIBLE_LOANS, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setLoan(response?.data?.data);
+      })
+
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
+  const filterBanks = () => {
+    const filteredLoanDetails = {};
+    for (const key in loanDetails) {
+      if (loanDetails[key] !== null && loanDetails[key] !== "") {
+        filteredLoanDetails[key] = loanDetails[key];
+      }
+    }
+    const matchingLoans = loan.filter((loanItem) => {
+      return Object.entries(filteredLoanDetails).every(([key, value]) => {
+        return loanItem[key] === value;
+      });
+    });
+    const loanOfferedByValues = matchingLoans.map(
+      (loanItem) => loanItem.loan_offered_by
+    );
+    console.log(loanOfferedByValues);
+  };
+  
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -297,8 +338,8 @@ setLoanDetails({
   };
 
   useEffect(() => {
-      fetchDeal();
-  }, [fieldNames])
+    fetchDeal();
+  }, [fieldNames]);
 
   useEffect(() => {
     fetchLabelData();
@@ -307,7 +348,8 @@ setLoanDetails({
     fetchCall();
     userAdded();
     handleGetEmail();
-  }, [])
+    fetchBanks();
+  }, []);
 
   useEffect(() => {
     fetchFields() // Fetch fields first
@@ -341,7 +383,7 @@ setLoanDetails({
     setIsStageButton(true);
     if (selectedStageId !== null) {
       const updateForm = {
-        dealId:[id],
+        dealId: [id],
         stage_id: selectedStageId,
       };
       axios
@@ -550,8 +592,6 @@ setLoanDetails({
     fetchStages();
   }, []);
 
-
-
   const fetchLabelData = async () => {
     try {
       const response = await axios.get(GET_LABEL, {
@@ -580,13 +620,12 @@ setLoanDetails({
         },
       })
       .then((response) => {
-
-        if(response.data.status===1){
+        if (response.data.status === 1) {
           toast.success("Deal data updated successfully", {
             position: "top-center",
             autoClose: 2000,
           });
-        }else{
+        } else {
           toast.error("Some error occured", {
             position: "top-center",
             autoClose: 2000,
@@ -735,8 +774,6 @@ setLoanDetails({
     });
     setStateBtn(1);
   };
-
-
 
   return (
     <>
@@ -1021,43 +1058,43 @@ setLoanDetails({
                           className={isDisabled ? "disabled" : ""}
                           name="owner"
                         >
-                          {userData.slice().reverse().map((item) => (
-                            <option
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                            >
-                              {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
-                              } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
-                              }`}
-                            </option>
-                          ))}
+                          {userData
+                            .slice()
+                            .reverse()
+                            .map((item) => (
+                              <option
+                                key={item?.id}
+                                value={item?.id}
+                                className="owner-val"
+                              >
+                                {`${
+                                  item?.first_name.charAt(0).toUpperCase() +
+                                  item?.first_name.slice(1)
+                                } ${
+                                  item?.last_name.charAt(0).toUpperCase() +
+                                  item?.last_name.slice(1)
+                                }`}
+                              </option>
+                            ))}
                           {/* <option value="Imp">{owner}</option> */}
                         </select>
                       )}
                     </p>
-                  ):
-                  (
+                  ) : (
                     <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          name="value"
-                          disabled={true}
-                          style={
-                            normalStylingInput
-                          }
-                        />
-                      </span>
-                    )}
-                  </p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="text"
+                            name="value"
+                            disabled={true}
+                            style={normalStylingInput}
+                          />
+                        </span>
+                      )}
+                    </p>
                   )}
 
                   <p>
@@ -1658,19 +1695,12 @@ setLoanDetails({
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes
-                  onNotesNum={fetchNotes}
-                  type="deal"
-                />
+                <AddNotes onNotesNum={fetchNotes} type="deal" />
               </div>
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail 
-                type="deal"
-                  id={id}
-                  dealName= {dealName}
-                  />
+                <DealEmail type="deal" id={id} dealName={dealName} />
               </div>
             )}
             {activeTab === "activity" && (
