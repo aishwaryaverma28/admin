@@ -436,3 +436,15 @@
   align-items: center;
   gap: 1rem;
 }
+
+
+
+.blog-update-btn{
+  display: flex;
+  justify-content: end; 
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-left: 85%;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}

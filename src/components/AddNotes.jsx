@@ -137,7 +137,7 @@ const AddNotes = ({onNotesNum, type , item}) => {
             handleLogout();
           }
         });
-    }else if (type === "xx_coNTACT_PERSON") {
+    }else if (type === "xx_contact_person") {
       axios
         .get(GETNOTEPEOPLE + id, {
           headers: {

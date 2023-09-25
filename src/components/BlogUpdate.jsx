@@ -9,6 +9,7 @@ import {
   IMAGE_UP,
   IMAGE_DEL,
   GET_TAG,
+  SEC_UPDATE,
   getDecryptedToken,
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
@@ -55,11 +56,55 @@ const BlogUpdate = () => {
     site: "",
     route: "",
   });
+
   const [stateBtn, setStateBtn] = useState(0);
+  const [updateStateBtn, setUpdateStateBtn] = useState(0);
   const editorRef = useRef();
   useEffect(() => {
     getBlogInfo();
   }, []);
+
+  const handleUpdateClick = (id) => {
+
+ 
+    const updatedSection = sectionData.find((section) => section.id === id);
+
+    if (!updatedSection) {
+      console.error(`Section with id ${id} not found.`);
+      return;
+    }
+
+    const updatedFormData = {
+      heading: updatedSection.heading,
+      sort: updatedSection.sort,
+      image: updatedSection.image,
+      section: updatedSection.section,
+      blogid: updatedSection.blogid,
+    };
+
+    axios.put(SEC_UPDATE + updatedSection.id, updatedFormData,{
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      if (response.data.status === 1) {
+        toast.success("Blog updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some error occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }
+
+
 
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GETID + id, {
@@ -237,20 +282,20 @@ const BlogUpdate = () => {
     const newSectionData = [...sectionData];
     newSectionData[index].heading = event.target.value;
     setSectionData(newSectionData);
-    setStateBtn(1);
+    setUpdateStateBtn(1);
   };
   const handleimageChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].image = event.target.value;
     setSectionData(newSectionData);
-    setStateBtn(1);
+    setUpdateStateBtn(1);
   };
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
-    setStateBtn(1);
+    setUpdateStateBtn(1);
   };
   //==============================================================sub section image
   const subImageTrasfer = (data, index) => {
@@ -265,7 +310,7 @@ const BlogUpdate = () => {
     const newSectionData = [...sectionData];
     newSectionData[index].section = data;
     setSectionData(newSectionData);
-    setStateBtn(1);
+    setUpdateStateBtn(1);
   };
 
   //=========================================================== sort and title data change
@@ -390,6 +435,9 @@ const BlogUpdate = () => {
     // };
     // setStateBtn(0);
   }
+
+  console.log(sectionData)
+  console.log("kkkk")
 
   return (
     <>
@@ -650,6 +698,17 @@ const BlogUpdate = () => {
                         initialContent={section.section}
                       />
                     </div>
+                    <div className="blg-update-btns">
+                    {updateStateBtn === 0 ? (
+                  <button disabled className="disabledBtn">
+                    Update
+                  </button>
+                ) : (
+                  <button className="common-fonts common-save-button blog-update-btn" onClick={()=>handleUpdateClick(section.id)}>
+                    Update
+                  </button>
+                )}
+                    </div>
                     {section.id ? (
                       <></>
                     ) : (
@@ -667,6 +726,7 @@ const BlogUpdate = () => {
                       </div>
                     )}
                   </div>
+                 
                 </div>
               ))}
             </>
