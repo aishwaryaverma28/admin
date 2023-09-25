@@ -443,8 +443,17 @@
   display: flex;
   justify-content: end; 
   align-items: center;
-  margin-top: 0.5rem;
   margin-left: 85%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   margin-right: 1rem;
+}
+
+.blog-disable {
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: end; 
+  align-items: center;
+  margin-left: 85%;
+  margin-right: 0.5rem;
 }
