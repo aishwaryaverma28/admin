@@ -460,7 +460,7 @@ const BlogUpdate = () => {
   return (
     <>
       <header className="headerEditor">
-        <h2>Update Blog</h2>
+        <h3>Update Blog</h3>
       </header>
       <div className="back-to-user general-refresh">
         <Link to={"/lp/settings/blog/view"}>
