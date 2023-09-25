@@ -22,7 +22,7 @@ const BlogAdd = () => {
   const [hover, setHover] = useState(false);
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
-  const [sectionSort, setSectionSort] = useState("");
+  const [sectionSort, setSectionSort] = useState(null);
   const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
@@ -190,7 +190,7 @@ const BlogAdd = () => {
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].sort = event.target.value;
+    newSectionData[index].sort = parseInt(event.target.value);
     setSectionData(newSectionData);
     setStateBtn(1);
   };
@@ -225,7 +225,7 @@ const BlogAdd = () => {
   };
 
   const handleSecSortChange = (event) => {
-    const sort = event.target.value;
+    const sort = parseInt(event.target.value);
     setSectionSort(sort);
     setStateBtn(1);
   };
@@ -239,15 +239,22 @@ const BlogAdd = () => {
     setDataFromChild(data);
     setStateBtn(1);
   };
+
+  const removeHtmlTags = (htmlString) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlString;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  };
   //====================================================================================== handle section data in an array of objects
   const handleAddSection = (e) => {
     e.preventDefault();
+     const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
-      sort: sectionSort,
+      sort: parseInt(sectionSort),
       // image: childData,
       image: sectionImage,
-      section: dataFromChild,
+      section: plainText,
       site: "",
       alt: "",
     };
@@ -272,7 +279,7 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  // console.log(sectionData);
+  console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -283,7 +290,7 @@ const BlogAdd = () => {
   const resetForm = () => {
     setFormData({
       ...formData,
-       title: "",
+    title: "",
     url: "",
     description: "",
     meta_description: "",
