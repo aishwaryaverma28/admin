@@ -102,6 +102,44 @@ const DealActivity = ({ item, type, id, count, userData }) => {
             handleLogout();
           }
         });
+    }else if (type === "xx_company") {
+      axios
+        .get(GET_ACTIVITY + "xx_company/" + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response?.data?.data);
+          setActivity(response?.data?.data);
+          setReplaceAct(response?.data?.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
+    }else if (type === "xx_contact_person") {
+      axios
+        .get(GET_ACTIVITY + "xx_contact_person/" + id, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          // console.log(response?.data?.data);
+          setActivity(response?.data?.data);
+          setReplaceAct(response?.data?.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error?.response?.data?.message === "Invalid or expired token.") {
+            alert(error?.response?.data?.message);
+            handleLogout();
+          }
+        });
     }
   };
 
@@ -432,7 +470,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                       className="common-fonts activity-select"
                       onChange={(e) => setSelectedTimeFrom(e.target.value)}
                     >
-                      {timeOptions.map((time, index) => (
+                      {timeOptions?.map((time, index) => (
                         <option key={index} value={time}>
                           {time}
                         </option>
@@ -450,7 +488,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                       onChange={handleChange}
                       className="common-fonts activity-select"
                     >
-                      {timeOptionsTo.map((time, index) => (
+                      {timeOptionsTo?.map((time, index) => (
                         <option key={index} value={time}>
                           {time}
                         </option>
@@ -479,7 +517,8 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                     id=""
                     className="common-fonts activity-select-area"
                   >
-                                             {userData.map((item) => (
+                  <option value="">Select Assign to</option>
+                                             {userData?.map((item) => (
                             <option
                               key={item?.id}
                               value={item?.id}
@@ -518,7 +557,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
         )}
         <div className="activity-height">
           {activity &&
-            activity.map((item, index) => (
+            activity?.map((item, index) => (
               <div className="activity-task-map">
                 <div className="activity-bottom">
                   <div className="savedNotes activity-save-note">
@@ -641,7 +680,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                         handleTimeChange(event, index)
                                       }
                                     >
-                                      {timeOptions.map((time, index) => (
+                                      {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
                                           {time}
                                         </option>
@@ -659,7 +698,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                         handleEndTimeChange(event, index)
                                       }
                                     >
-                                      {timeOptions.map((time, index) => (
+                                      {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
                                           {time}
                                         </option>
@@ -694,7 +733,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       }
                                       value={item?.assigned_to}
                                     >
-                                                                                  {userData.map((item,index) => (
+                                                                                  {userData?.map((item,index) => (
                             <option
                               key={item?.id}
                               value={item?.id}
