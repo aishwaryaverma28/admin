@@ -15,7 +15,9 @@ import {
   GET_COMPANY,
   POST_EMAIL,
   GETNOTEPEOPLE,
-  handleLogout
+  handleLogout,
+  GET_TEAM_MEM,
+  GET_ACTIVITY,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,6 +37,8 @@ const CompanyUpdate = () => {
   const [isLeadsOpen, setIsLeadssOpen] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [allEmails, setAllEmails] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [activityCount, setActivityCount] = useState();
   const [peopleDetails, setpeopleDetails] = useState({
     name: "",
     organization: "",
@@ -46,6 +50,23 @@ const CompanyUpdate = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
+
+  const userAdded = () => {
+    axios
+      .get(GET_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const responseData = response?.data?.data;
+        console.log("dddw");
+        setUserData(responseData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const fetchNotes = () => {
     axios
@@ -67,6 +88,10 @@ const CompanyUpdate = () => {
         }
       });
   };
+
+  useEffect(() => {
+    fetchNotes();
+    },[notes])
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -125,8 +150,33 @@ const CompanyUpdate = () => {
       });
   };
 
+  const fetchCall = () => {
+    axios
+      .get(GET_ACTIVITY + "xx_contact_person/" + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setActivityCount(response?.data?.data?.length);
+      })
+
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchCall();
+  }, [activityCount]);
+
   useEffect(() => {
     fetchData();
+    userAdded();
   }, []);
 
   const handleSummary = () => {
@@ -671,7 +721,7 @@ const CompanyUpdate = () => {
             onClick={() => handleTabClick("notes")}
           >
             <i className="fa-sharp fa-regular fa-note-sticky"></i>
-            Notes (2)
+            Notes ({notes})
           </button>
           <button
             className={activeTab === "email" ? "active" : ""}
@@ -692,16 +742,13 @@ const CompanyUpdate = () => {
             onClick={() => handleTabClick("activity")}
           >
             <i className="fa-sharp fa-regular fa-calendar"></i>
-            Activity (2)
+            Activity ({activityCount})
           </button>
         </div>
         <div className="tab-content">
           {activeTab === "notes" && (
             <div className="notes-tab-content">
-            <AddNotes
-                  onNotesNum={fetchNotes}
-                  type="xx_contact_person"
-                />
+              <AddNotes onNotesNum={fetchNotes} type="xx_contact_person" />
             </div>
           )}
           {activeTab === "email" && (
@@ -715,7 +762,12 @@ const CompanyUpdate = () => {
           )}
           {activeTab === "activity" && (
             <div className="activity-tab-content">
-              <DealActivity />
+              <DealActivity
+                id={id}
+                type={"xx_contact_person"}
+                count={fetchCall}
+                userData={userData}
+              />
             </div>
           )}
         </div>
