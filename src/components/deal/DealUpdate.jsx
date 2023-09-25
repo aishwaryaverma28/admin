@@ -42,6 +42,7 @@ const DealUpdate = () => {
   const [activityCount, setActivityCount] = useState();
   const [info, setInfo] = useState({});
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
+  const [banks, setBanks] = useState([]);
 
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -110,6 +111,7 @@ const DealUpdate = () => {
   const [editedItem, setEditedItem] = useState("");
   const [isSummaryOpen, setIsSummaryOpen] = useState(true);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false);
+  const [isBankOpen, setIsBankOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isStageButton, setIsStageButton] = useState(true);
   const [status, setStatus] = useState([]);
@@ -294,10 +296,11 @@ const DealUpdate = () => {
         return loanItem[key] === value;
       });
     });
+
     const loanOfferedByValues = matchingLoans.map(
       (loanItem) => loanItem.loan_offered_by
     );
-    console.log(loanOfferedByValues);
+    setBanks(loanOfferedByValues);
   };
   
   const userAdded = () => {
@@ -475,6 +478,9 @@ const DealUpdate = () => {
   };
   const handleFields = () => {
     setIsFieldsOpen(!isFieldsOpen);
+  };
+  const handleBank = () => {
+    setIsBankOpen(!isBankOpen);
   };
 
   // const status = [
@@ -1635,6 +1641,26 @@ const DealUpdate = () => {
                         </span>
                       )}
                     </p>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="summaryDiv">
+              <p className="dealSectionHead" onClick={handleBank}>
+                {isBankOpen ? (
+                  <i class="fa-sharp fa-solid fa-angle-up"></i>
+                ) : (
+                  <i class="fa-sharp fa-solid fa-angle-down"></i>
+                )}
+                Banks
+              </p>
+            </div>
+
+            {isBankOpen && (
+              <div className="detailsContent">
+                <div className="dealsLeftContainer">
+                  {banks?.map((banks,index) => (
+                    <p key={index}>{banks}</p>
                   ))}
                 </div>
               </div>
