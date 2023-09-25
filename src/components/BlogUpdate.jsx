@@ -361,6 +361,17 @@ const BlogUpdate = () => {
     })
     .then((response) => {
       console.log(response?.data?.status);
+      if(response.data.status===1){
+        toast.success("Section Added successfully", {
+          position:"top-center",
+          autoClose:2000
+        })
+      }else{
+        toast.error(response?.data?.message, {
+          position:"top-center",
+          autoClose:2000
+        })
+      }
       getBlogInfo();
     })
     setSectionTitle("");
@@ -433,7 +444,9 @@ const BlogUpdate = () => {
       const data = await response.json();
       console.log(data);
       if (data?.status == 1) {
-      toast.success("Blog data updated successfully", {
+      
+    }else{
+      toast.error(data?.message, {
         position:"top-center",
         autoClose:2000
       })
@@ -703,9 +716,9 @@ const BlogUpdate = () => {
                         initialContent={section.section}
                       />
                     </div>
-                    <div className="blg-update-btns">
+                    <div className="blog-disable">
                     {updateStateBtn === 0 ? (
-                  <button disabled className="disabledBtn">
+                  <button disabled className="disabledBtn blog-update-btn">
                     Update
                   </button>
                 ) : (

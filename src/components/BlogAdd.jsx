@@ -340,6 +340,11 @@ const BlogAdd = () => {
           autoClose: 2000,
         });
         resetForm();
+      }else{
+        toast.error(response?.data?.message, {
+          position:"top-center",
+          autoClose:2000
+        })
       }
       })
       .catch((error) => {
