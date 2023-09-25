@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
+  BLOG_GETID,
   BLOG_GET,
   BLOG_EDIT,
   SEC_GET,
   IMAGE_UP,
   IMAGE_DEL,
   GET_TAG,
-  getDecryptedToken
+  getDecryptedToken,
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
@@ -34,27 +35,25 @@ const BlogUpdate = () => {
   const [showEditButton, setShowEditButton] = useState(false);
   const [showChooseButton, setShowChooseButton] = useState(false);
   const decryptedToken = getDecryptedToken();
-  console.log(decryptedToken);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
   const [tagApi, setTagApi] = useState([]);
   const [selectSite, setSelectSite] = useState("");
-  const [blogData, setBlogData] = useState([]);
   const [currentBlog, setCurrentBlog] = useState({});
   const [sectionData, setSectionData] = useState([]);
   const [pic, setPic] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     url: "",
-    description: "",    
+    description: "",
     meta_description: "",
     keywords: "",
     tag: "",
     image: "",
     date: "",
     site: "",
-    route:"",
+    route: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
   const editorRef = useRef();
@@ -63,75 +62,64 @@ const BlogUpdate = () => {
   }, []);
 
   async function getBlogInfo() {
-    const response = await axios.get(BLOG_GET, {
+    const response = await axios.get(BLOG_GETID + id, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
     });
-    const data = response.data.data;
-    console.log(response.data.data);
-    setBlogData(data);
-    searchData(data);
+    const data = response.data.data[0];
+    console.log(data);
+    if (data) {
+    setFormData({
+      ...formData,
+      title: data?.title,
+      url: data?.url,
+      description: data?.description,
+      meta_description: data?.meta_description,
+      keywords: data?.keywords,
+      tag: data?.tag,
+      image: data?.image,
+      date: data?.date?.split("T")[0],
+      site: data?.site,
+      route: data?.url,
+    });
+    setTagId(data?.tag);
+    setSelectSite(data?.site);
+  }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
     });
-    // const secData = secResponse.data.data;
-    // setSectionData(secData);
     const secData = secResponse.data.data;
-  const sectionDataWithoutDate = removeDateFromSectionData(secData);
-  setSectionData(sectionDataWithoutDate);
+    const sectionDataWithoutDate = removeDateFromSectionData(secData);
+    setSectionData(sectionDataWithoutDate);
     tagData();
-    
   }
 
   const removeDateFromSectionData = (data) => {
     return data.map((section) => {
-      // Create a copy of the section object without the 'date' property
       const { date, ...newSection } = section;
       return newSection;
     });
   };
-
-  // console.log(formData);
-
-  function searchData(data) {
-    const blog = data.find((item) => item.id == id);
-    if (blog) {
-      setCurrentBlog(blog);
-      setFormData({
-        ...formData,
-        title: blog?.title,
-        url: blog?.url,
-        description: blog?.description,        
-        meta_description: blog?.meta_description,
-        keywords: blog?.keywords,
-        tag: blog?.tag,
-        image: blog?.image,
-        date: blog?.date.split("T")[0],
-        site: blog?.site,
-        route:blog?.url,
-      });
-      setTagId(blog.tag);
-      setSelectSite(blog.site);
-    }
-  }
-    //==========================================================================tag part
+  //==========================================================================tag part
   useEffect(() => {
-    axios.get(GET_TAG, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      setTagApi(response);
-      tagData(); // Call tagData() after receiving the tag data
-    });
+    axios
+      .get(GET_TAG, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setTagApi(response);
+        tagData(); // Call tagData() after receiving the tag data
+      });
   }, []);
 
   const options = tagApi?.data?.data || [];
   const tagData = () => {
-    const ids = tagId.split(",");
+    const ids = tagId?.split(",");
     const newTags = [];
     ids.forEach((item) => {
       const option = options.find((opt) => opt.id == item);
@@ -161,7 +149,7 @@ const BlogUpdate = () => {
 
   const handleTagRemoval = (index) => {
     setStateBtn(1);
-    const numbersArray = tagId.split(",");
+    const numbersArray = tagId?.split(",");
     numbersArray.splice(index, 1);
     const updatedNumbersString = numbersArray.join(",");
     setTagId(updatedNumbersString);
@@ -196,11 +184,11 @@ const BlogUpdate = () => {
     try {
       const response = await axios.post(IMAGE_UP, formData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       console.log("Image uploaded successfully:", response.data);
-      
+
       // Perform any additional actions on successful upload
       setShowUploadButton(false);
       setShowEditButton(true);
@@ -221,8 +209,8 @@ const BlogUpdate = () => {
     try {
       const response = await axios.delete(IMAGE_DEL + childData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       console.log("Image deleted successfully:", response);
       // Perform any additional actions on successful upload
@@ -299,19 +287,27 @@ const BlogUpdate = () => {
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
+
+  const removeHtmlTags = (htmlString) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlString;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  };
   //=========================================================handle section data in an array of objects
-  
+
   const handleAddSection = (e) => {
     e.preventDefault();
+    const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
-      sort: sectionSort,
+      sort: parseInt(sectionSort),
       // image: childData,
       image: sectionImage,
-      section: dataFromChild,
-      site:"",
-      alt:"",
+      section: plainText,
+      site: "",
+      alt: "",
     };
+    
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
@@ -321,8 +317,8 @@ const BlogUpdate = () => {
     setShowEditButton(false);
     setSelectedImage("");
     setStateBtn(1);
-     // Clear the editor content using the ref
-  editorRef.current.clearEditorContent(); // Add this line
+    // Clear the editor content using the ref
+    editorRef.current.clearEditorContent(); // Add this line
   };
   // console.log(sectionData);
 
@@ -364,36 +360,36 @@ const BlogUpdate = () => {
       meta_description: formData?.meta_description,
       keywords: formData?.keywords,
       // image: pic,
-      image:formData?.image,
+      image: formData?.image,
       date: formData?.date,
       site: selectSite,
       tag: tagId,
       sections: sectionData,
-      route:formData?.url,
+      route: formData?.url,
     };
-    // console.log(JSON.stringify(updatedFormData));
-    try {
-      const response = await fetch(BLOG_EDIT + id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        },
-        body: JSON.stringify(updatedFormData), // Convert the data to JSON string
-      });
+    console.log(JSON.stringify(updatedFormData));
+    // try {
+    //   const response = await fetch(BLOG_EDIT + id, {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json", // Set the content type to JSON
+    //       Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+    //     },
+    //     body: JSON.stringify(updatedFormData), // Convert the data to JSON string
+    //   });
 
-      const data = await response.json();
-      console.log(data);
-      if (data?.status == 1) {
-      toast.success("Blog data updated successfully", {
-        position:"top-center",
-        autoClose:2000
-      })
-    }
-    }catch(error){
-      console.log(error)
-    };
-    setStateBtn(0);
+    //   const data = await response.json();
+    //   console.log(data);
+    //   if (data?.status == 1) {
+    //   toast.success("Blog data updated successfully", {
+    //     position:"top-center",
+    //     autoClose:2000
+    //   })
+    // }
+    // }catch(error){
+    //   console.log(error)
+    // };
+    // setStateBtn(0);
   }
 
   return (
@@ -402,13 +398,13 @@ const BlogUpdate = () => {
         <h2>Update Blog</h2>
       </header>
       <div className="back-to-user general-refresh">
-      <Link to={"/lp/settings/blog/view"}>
-              <button className="common-fonts">
-                <img src={LeftArrow} alt="" />
-                <span>Back To Blog Table</span>
-              </button>
-            </Link>
-            </div>
+        <Link to={"/lp/settings/blog/view"}>
+          <button className="common-fonts">
+            <img src={LeftArrow} alt="" />
+            <span>Back To Blog Table</span>
+          </button>
+        </Link>
+      </div>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
@@ -581,10 +577,10 @@ const BlogUpdate = () => {
                 </div>
 
                 <div className="formEditor">
-                <ReactEditor
-        ref={editorRef} // Attach the ref here
-        onDataTransfer={handleDataTransfer}
-      />
+                  <ReactEditor
+                    ref={editorRef} // Attach the ref here
+                    onDataTransfer={handleDataTransfer}
+                  />
                 </div>
               </div>
 
@@ -594,7 +590,7 @@ const BlogUpdate = () => {
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
                   >
-                   <div className="accHead">
+                    <div className="accHead">
                       <h3>{section.sort}</h3>
                       <h3>{section.heading}</h3>
                     </div>
@@ -632,7 +628,7 @@ const BlogUpdate = () => {
                         value={section.heading}
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
-<input
+                      <input
                         type="text"
                         name="image"
                         id="image"
@@ -763,7 +759,7 @@ const BlogUpdate = () => {
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };
