@@ -63,24 +63,7 @@ export const IMAGE_UP = start+"api/blog/addImg";
 export const IMAGE_DEL = start+"api/blog/deleteImg/";
 export const IMG_BASE = start+"blog/";
 export const SEC_UPDATE = start+"api/blog/section/update/";
-// +SECTION ID
-// {
-//   "heading": "1001",
-//   "sort": 1,
-//   "image": "section.jpg",
-//   "section": "<section></section>",
-//   "blogid": 1,
-//   "date": "2022-02-02"
-// }
 export const SEC_ADD = start+"api/blog/section/add/";
-// +blog id
-// {
-//   "heading": "The Progress of ISL",
-//   "sort": 1,
-//   "image": "section.jpg",
-//   "section": "Global Recognition: The ISL has come a long way since its inception in 2014. With each passing season, it has gained more recognition on the global stage. International stars like Diego Forlán, Robert Pires, and Robbie Keane have graced our stadiums, adding a touch of glamour and showcasing the league's growing appeal.\nInvestment and Expansion: One of the key drivers of ISL's progress has been the significant investment it has attracted. Franchise owners, both Indian and international, have poured resources into developing top-class infrastructure, youth academies, and scouting networks. The expansion of the league to include more teams has also widened its reach.\nYouth Development: ISL has played a crucial role in nurturing young talents. The emergence of players like Anirudh Thapa, Sahal Abdul Samad, and Suresh Wangjam, who have gone on to represent the national team, is a testament to the league's commitment to youth development.\nTelevision Viewership: ISL's partnership with broadcasters has ensured that millions of Indian households have access to live football action. This has not only increased the league's popularity but has also contributed to the growth of football as a whole in India.",
-//   "date": "2022-02-02"
-// }
 // ====================================================================employee apis
 export const EMPLOYEE_UPDATE = start+"api/employee/edit/";
 export const EMPLOYEE_ADD = start+"api/employee/add";

@@ -10,14 +10,15 @@ import {
 } from "./utils/Constants";
 
 import "./styles/BlogAdd.css";
-import ImageUploader from "./ImageUploader";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
-import ImageEditor from "./ImageEditor";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const BlogAdd = () => {
+  //cloudaniary images
+  const [image, setImage] = useState("");
+
   const [selectSite, setSelectSite] = useState("");
   const [hover, setHover] = useState(false);
   // section states
@@ -58,8 +59,6 @@ const BlogAdd = () => {
         console.log(error);
       });
   }, []);
-
-  // console.log(tagApi?.data?.data)
   const options = tagApi?.data?.data || [];
 
   const [formData, setFormData] = useState({
@@ -92,10 +91,10 @@ const BlogAdd = () => {
   };
 
   //==================================================================== get image name
-  const handleImageTransfer = (data) => {
-    setImageName(data);
-    setStateBtn(1);
-  };
+  // const handleImageTransfer = (data) => {
+  //   setImageName(data);
+  //   setStateBtn(1);
+  // };
 
   //===================================================================== function to add date in the form data
   const handleDateChange = (event) => {
@@ -114,64 +113,64 @@ const BlogAdd = () => {
     setStateBtn(1);
   }
   // =====================================================================================section data trasfer
-  // ========================================================================section image added/deleted
-  const handleImageSelect = (event) => {
-    setSelectedImage(event.target.files[0]);
-    setShowUploadButton(true);
-  };
+  // // ========================================================================section image added/deleted
+  // const handleImageSelect = (event) => {
+  //   setSelectedImage(event.target.files[0]);
+  //   setShowUploadButton(true);
+  // };
 
-  const imageUpload = async (event) => {
-    event.preventDefault();
+  // const imageUpload = async (event) => {
+  //   event.preventDefault();
 
-    if (!selectedImage) {
-      console.log("No image selected.");
-      return;
-    }
+  //   if (!selectedImage) {
+  //     console.log("No image selected.");
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append("blog_img", selectedImage);
+  //   const formData = new FormData();
+  //   formData.append("blog_img", selectedImage);
 
-    try {
-      const response = await axios.post(IMAGE_UP, formData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      });
-      console.log("Image uploaded successfully:", response.data);
-      // Perform any additional actions on successful upload
-      setShowUploadButton(false);
-      setShowEditButton(true);
-      setChildData(response.data.data);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // Handle error condition
-    }
-  };
+  //   try {
+  //     const response = await axios.post(IMAGE_UP, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+  //       },
+  //     });
+  //     console.log("Image uploaded successfully:", response.data);
+  //     // Perform any additional actions on successful upload
+  //     setShowUploadButton(false);
+  //     setShowEditButton(true);
+  //     setChildData(response.data.data);
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     // Handle error condition
+  //   }
+  // };
 
-  const handleClick = () => {
-    fileInputRef.current.click();
-    setShowChooseButton(false);
-  };
+  // const handleClick = () => {
+  //   fileInputRef.current.click();
+  //   setShowChooseButton(false);
+  // };
 
-  const handleEdit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.delete(IMAGE_DEL + childData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      });
-      console.log("Image deleted successfully:", response);
-      // Perform any additional actions on successful upload
-      setSelectedImage(null);
-      setShowUploadButton(false);
-      setShowEditButton(false);
-      setShowChooseButton(true);
-      setChildData(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleEdit = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const response = await axios.delete(IMAGE_DEL + childData, {
+  //       headers: {
+  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+  //       },
+  //     });
+  //     console.log("Image deleted successfully:", response);
+  //     // Perform any additional actions on successful upload
+  //     setSelectedImage(null);
+  //     setShowUploadButton(false);
+  //     setShowEditButton(false);
+  //     setShowChooseButton(true);
+  //     setChildData(response.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
@@ -241,14 +240,14 @@ const BlogAdd = () => {
   };
 
   const removeHtmlTags = (htmlString) => {
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
-    return tempDiv.textContent || tempDiv.innerText || '';
+    return tempDiv.textContent || tempDiv.innerText || "";
   };
   //====================================================================================== handle section data in an array of objects
   const handleAddSection = (e) => {
     e.preventDefault();
-     const plainText = removeHtmlTags(dataFromChild);
+    const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
@@ -279,7 +278,7 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  console.log(sectionData);
+  // console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -290,11 +289,11 @@ const BlogAdd = () => {
   const resetForm = () => {
     setFormData({
       ...formData,
-    title: "",
-    url: "",
-    description: "",
-    meta_description: "",
-    keywords: "",
+      title: "",
+      url: "",
+      description: "",
+      meta_description: "",
+      keywords: "",
     });
     setSelectSite("");
     setTagId("");
@@ -311,7 +310,6 @@ const BlogAdd = () => {
     setShowChooseButton(false);
     setSelectedImage(null);
   };
-
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -356,7 +354,31 @@ const BlogAdd = () => {
   function AddTag(event) {
     event.preventDefault();
   }
-  // ==========================================================================changes in section
+
+  const submitImage = (event) => {
+    event.preventDefault();
+    const selectedImage = fileInputRef.current.files[0];
+    if (selectedImage) {
+      alert("hi");
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("folder", "bookmyplayer");
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data?.url);
+          setImage(data?.url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+     }
+  };
 
   return (
     <>
@@ -367,6 +389,15 @@ const BlogAdd = () => {
         <div className="addBlogContainer">
           {/*==============================================================left side of form starts here ============================================================*/}
           <div className="addBlogMainForm">
+            {/* <div>
+              <input
+                type="file"
+                id="imageUpload"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+              />
+              <button onClick={submitImage}>upload</button>
+            </div> */}
             <div className="fromFiled">
               <input
                 type="text"
@@ -459,87 +490,6 @@ const BlogAdd = () => {
                       placeholder="image"
                       onChange={handleSecImageChange}
                     />
-                    {/* <div>
-                      <>
-                        {!showUploadButton &&
-                          !showEditButton &&
-                          !showChooseButton && (
-                            <button
-                              type="button"
-                              onClick={handleClick}
-                              className="imageUploaderData"
-                            >
-                              Choose Image
-                            </button>
-                          )}
-                        {selectedImage && !showEditButton && (
-                          <p className="image">
-                            Selected Image: {selectedImage.name}
-                          </p>
-                        )}
-                        <input
-                          type="file"
-                          name="blog_img"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={handleImageSelect}
-                        />
-                        {showUploadButton && !showEditButton && (
-                          <button
-                            type="submit"
-                            onClick={imageUpload}
-                            className="imageUploaderData"
-                          >
-                            Upload
-                          </button>
-                        )}
-
-                        {showEditButton && (
-                          <>
-                            <div className="blogImageEdit">
-                              <button
-                                type="button"
-                                onClick={handleEdit}
-                                className="imageUploaderData"
-                              >
-                                Edit Image
-                              </button>
-                              {childData && (
-                                <div
-                                  className="imageContainer"
-                                  onMouseEnter={() => setHover(true)}
-                                  onMouseLeave={() => setHover(false)}
-                                >
-                                  <img
-                                    src={IMG_BASE + childData}
-                                    alt="image"
-                                    className="docUpImg"
-                                  />
-                                  {hover && (
-                                    <p className="imageHoverText">
-                                      {childData}
-                                    </p>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </>
-                        )}
-                        {showChooseButton && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={handleClick}
-                              className="imageUploaderData"
-                            >
-                              Choose Image
-                            </button>
-                          </>
-                        )}
-                      </>
-                    </div> */}
-
                     <button
                       onClick={handleAddSection}
                       className="addSectionBtn"
@@ -612,13 +562,7 @@ const BlogAdd = () => {
                           value={section.image}
                           onChange={(event) => handleimageChange(event, index)}
                         />
-                        {/* <ImageEditor
-                          parentProp={section.image}
-                          onDataTransfer={(data) =>
-                            subImageTrasfer(data, index)
-                          }
-                        /> */}
-                      </div>
+                       </div>
                     </div>
                     <div className="formEditor">
                       <ReactEditor
@@ -706,11 +650,6 @@ const BlogAdd = () => {
                       />
                     )}
                   </div>
-                  {/* <input
-                    type="submit"
-                    value="Publish"
-                    className="secondaryBtn"
-                  /> */}
                 </div>
               </div>
             </div>
