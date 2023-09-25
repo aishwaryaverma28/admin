@@ -297,7 +297,7 @@ const BlogUpdate = () => {
 
   const handleAddSection = (e) => {
     e.preventDefault();
-    const plainText = removeHtmlTags(dataFromChild);
+     const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
@@ -307,7 +307,6 @@ const BlogUpdate = () => {
       site: "",
       alt: "",
     };
-    
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
