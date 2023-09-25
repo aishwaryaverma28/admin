@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
+  SEC_ADD,
   BLOG_GETID,
   BLOG_GET,
   BLOG_EDIT,
@@ -352,8 +353,16 @@ const BlogUpdate = () => {
       site: "",
       alt: "",
     };
-    setSectionData([...sectionData, newSection]);
-    // Reset input fields and image state
+    axios.
+    post(SEC_ADD + id, newSection, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
+    })
+    .then((response) => {
+      console.log(response?.data?.status);
+      getBlogInfo();
+    })
     setSectionTitle("");
     setSectionSort(parseInt(sectionSort) + 1);
     setChildData("");
@@ -408,36 +417,32 @@ const BlogUpdate = () => {
       date: formData?.date,
       site: selectSite,
       tag: tagId,
-      sections: sectionData,
       route: formData?.url,
     };
     console.log(JSON.stringify(updatedFormData));
-    // try {
-    //   const response = await fetch(BLOG_EDIT + id, {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json", // Set the content type to JSON
-    //       Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-    //     },
-    //     body: JSON.stringify(updatedFormData), // Convert the data to JSON string
-    //   });
+    try {
+      const response = await fetch(BLOG_EDIT + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        },
+        body: JSON.stringify(updatedFormData), // Convert the data to JSON string
+      });
 
-    //   const data = await response.json();
-    //   console.log(data);
-    //   if (data?.status == 1) {
-    //   toast.success("Blog data updated successfully", {
-    //     position:"top-center",
-    //     autoClose:2000
-    //   })
-    // }
-    // }catch(error){
-    //   console.log(error)
-    // };
-    // setStateBtn(0);
+      const data = await response.json();
+      console.log(data);
+      if (data?.status == 1) {
+      toast.success("Blog data updated successfully", {
+        position:"top-center",
+        autoClose:2000
+      })
+    }
+    }catch(error){
+      console.log(error)
+    };
+    setStateBtn(0);
   }
-
-  console.log(sectionData)
-  console.log("kkkk")
 
   return (
     <>
