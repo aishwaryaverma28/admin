@@ -145,10 +145,7 @@ const DealUpdate = () => {
   };
 
   const ownerName = userData.find((item) => item.id ===ownerId);
-  console.log(ownerId);
-  console.log(idOfOwner);
-  console.log("kkk");
-
+  
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
       axios
@@ -1735,12 +1732,12 @@ const DealUpdate = () => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes onNotesNum={fetchNotes} type="deal" />
+                <AddNotes onNotesNum={fetchNotes} type="deal" ownerId={ownerId} idOfOwner={idOfOwner} />
               </div>
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail type="deal" id={id} dealName={dealName} />
+                <DealEmail type="deal" id={id} dealName={dealName} ownerId={ownerId} idOfOwner={idOfOwner} />
               </div>
             )}
             {activeTab === "activity" && (
@@ -1750,6 +1747,8 @@ const DealUpdate = () => {
                   type={"deal"}
                   count={fetchCall}
                   userData={userData}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
                 />
               </div>
             )}
@@ -1759,6 +1758,8 @@ const DealUpdate = () => {
                   dealId={id}
                   type={"deal"}
                   onAttachNum={uploadedDocs}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
                 />
               </div>
             )}

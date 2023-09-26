@@ -20,7 +20,7 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealActivity = ({ item, type, id, count, userData }) => {
+const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("call");
   const [openEditor, setOpenEditor] = useState(false);
@@ -387,7 +387,10 @@ const DealActivity = ({ item, type, id, count, userData }) => {
   return (
     <>
       <div className="activity-container ">
-        {!openEditor ? (
+           {
+            ownerId === idOfOwner && (
+              <>
+              {!openEditor ? (
           <div className="colapedEditor" onClick={expandEditor}>
             <p>Click here to add an activity</p>
           </div>
@@ -555,6 +558,9 @@ const DealActivity = ({ item, type, id, count, userData }) => {
             </div>
           </div>
         )}
+              </>
+            )
+           }
         <div className="activity-height">
           {activity &&
             activity?.map((item, index) => (
@@ -597,7 +603,9 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                   </p>
                                 </div>
                               </div>
-                              <div className="three-side-dots activity-del">
+                              {
+                                ownerId === idOfOwner && (
+                                  <div className="three-side-dots activity-del">
                                 <img
                                   src={bin}
                                   alt="trash"
@@ -606,6 +614,9 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                   className="activity-trash"
                                 />
                               </div>
+                                )
+                              }
+
                             </div>
 
                             <div
@@ -626,7 +637,11 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       ? "green-activity-tick"
                                       : "white-activity-tick"
                                   } `}
-                                  onClick={() => toggleCompletion(index)}
+                                  onClick={() => {
+    if (ownerId === idOfOwner) {
+      toggleCompletion(index);
+    }
+  }}
                                   aria-hidden="true"
                                 ></i>
                                 <input
@@ -665,6 +680,8 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                           onChange={(event) =>
                                             handleDateChange(event, index)
                                           }
+                                          disabled={ownerId!==idOfOwner}
+                                          id="date-bg"
                                         />
                                       </div>
                                     </div>
@@ -679,6 +696,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       onChange={(event) =>
                                         handleTimeChange(event, index)
                                       }
+                                      disabled={ownerId!==idOfOwner}
                                     >
                                       {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
@@ -697,6 +715,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       onChange={(event) =>
                                         handleEndTimeChange(event, index)
                                       }
+                                      disabled={ownerId!==idOfOwner}
                                     >
                                       {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
@@ -715,6 +734,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                       onChange={(event) =>
                                         handleTypeChange(event, index)
                                       }
+                                      disabled={ownerId!==idOfOwner}
                                     >
                                       <option value="Call">Call</option>
                                       <option value="Meeting">Meeting</option>
@@ -732,6 +752,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                         handleAssignChange(event, index)
                                       }
                                       value={item?.assigned_to}
+                                      disabled={ownerId!==idOfOwner}
                                     >
                                                                                   {userData?.map((item,index) => (
                             <option
@@ -765,6 +786,7 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                                     onChange={(event) =>
                                       handleDescriptionChange(event, index)
                                     }
+                                    disabled={ownerId!==idOfOwner}
                                   ></textarea>
                                 </div>
                               </>
@@ -779,7 +801,10 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                     </>
                   </div>
                 </div>
-                {expandedIndex === index && (
+                {
+                  ownerId===idOfOwner && (
+                    <>
+                    {expandedIndex === index && (
                   <div className="activity-bottom-buttons">
                     <button
                       className="common-fonts common-white-button"
@@ -802,6 +827,9 @@ const DealActivity = ({ item, type, id, count, userData }) => {
                     )}
                   </div>
                 )}
+                    </>
+                  )
+                }
               </div>
             ))}
         </div>

@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router";
 
-const AddNotes = ({onNotesNum, type , item}) => {
+const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
   const { id }  =useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
@@ -392,7 +392,10 @@ const AddNotes = ({onNotesNum, type , item}) => {
 
   return (
     <>
-      {!openEditor ? (
+    {
+      ownerId===idOfOwner && (
+        <>
+        {!openEditor ? (
         <div className="colapedEditor" onClick={expandEditor}>
           <p>Click here to add a note</p>
         </div>
@@ -415,6 +418,11 @@ const AddNotes = ({onNotesNum, type , item}) => {
           </div>
         </>
       )}
+        </>
+
+      )
+    }
+
       {notes.length > 0 && (
         <div className="savedNotes">
           {notes.map((note) => (
@@ -422,7 +430,11 @@ const AddNotes = ({onNotesNum, type , item}) => {
               <section key={note.id} className="note-display">
                 <div
                   className="note-content"
-                  onClick={() => accordianClick(note.id)}
+                  onClick={() => {
+    if (ownerId === idOfOwner) {
+      accordianClick(note.id);
+    }
+  }}
                 >
                   <div className="arrow-greater">
                     <img src={GreaterArrow} alt="" />
@@ -444,8 +456,10 @@ const AddNotes = ({onNotesNum, type , item}) => {
                               note.creation_date.split("T")[1].split(".")[0]
                             : "-"}
                         </p>
-
-                        <div className="three-side-dots">
+                         
+                         {
+                          ownerId === idOfOwner && (
+                            <div className="three-side-dots">
                           {note.importance === "1" ? (
                             <img
                               src={pin}
@@ -461,13 +475,18 @@ const AddNotes = ({onNotesNum, type , item}) => {
                               onClick={() => handlePinNote(note.id)}
                             />
                           )}
-                          <img
+                              <img
                             src={bin}
                             alt="trash"
                             title="Delete"
                             onClick={() => handleDeleteNote(note.id)}
                           />
+
+                          
                         </div>
+                          )
+                         }
+
                       </div>
                     </div>
                     <div className="notes-content">
