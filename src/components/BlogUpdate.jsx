@@ -381,10 +381,8 @@ const BlogUpdate = () => {
     setShowEditButton(false);
     setSelectedImage("");
     setStateBtn(1);
-    // Clear the editor content using the ref
-    editorRef.current.clearEditorContent(); // Add this line
+    editorRef.current.clearEditorContent(); 
   };
-  // console.log(sectionData);
 
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
@@ -394,14 +392,21 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     setStateBtn(1);
   };
-
-  // console.log(sectionData);
   // ========================================================================================================================================================================
 
   function handleChange(event) {
     const { name, value } = event.target;
     if (formData[name] !== value) setStateBtn(1);
     setFormData({ ...formData, [name]: value });
+    let modifiedValue = value;
+    if (name === "title") {
+      modifiedValue = modifiedValue.toLowerCase();
+      modifiedValue = modifiedValue.replace(/\s+/g, "-");
+      modifiedValue = modifiedValue.replace(/[^\w\s-]/g, "");
+      setFormData((prev) => {
+        return { ...prev, url: modifiedValue };
+      });
+    }
   }
 
   const handleImageTransfer = (data) => {
@@ -492,6 +497,7 @@ const BlogUpdate = () => {
                 placeholder="Url"
                 value={formData.url}
                 onChange={handleChange}
+                disabled
               />
               <input
                 type="text"
