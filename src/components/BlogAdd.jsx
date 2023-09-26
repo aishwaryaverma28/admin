@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BlogAdd = () => {
   //cloudaniary images
-  const [image, setImage] = useState("");
+  const [blogImg, setBlogImg] = useState("");
 
   const [selectSite, setSelectSite] = useState("");
   const [hover, setHover] = useState(false);
@@ -324,44 +324,52 @@ const BlogAdd = () => {
       alt: "",
     };
     console.log(updatedFormData);
-    axios
-      .post(BLOG_ADD, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        console.log(response?.data?.status);
-        if (response?.data?.status == 1) {
-        toast.success("Blog data added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        resetForm();
-      }else{
-        toast.error(response?.data?.message, {
-          position:"top-center",
-          autoClose:2000
-        })
-      }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setStateBtn(0);
+    // axios
+    //   .post(BLOG_ADD, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response?.data?.status);
+    //     if (response?.data?.status == 1) {
+    //     toast.success("Blog data added successfully", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //     resetForm();
+    //   }else{
+    //     toast.error(response?.data?.message, {
+    //       position:"top-center",
+    //       autoClose:2000
+    //     })
+    //   }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    // setStateBtn(0);
   }
 
   function AddTag(event) {
     event.preventDefault();
   }
 
-  const submitImage = (event) => {
+  const handleButtonClick = (event) => {
     event.preventDefault();
-    const selectedImage = fileInputRef.current.files[0];
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    submitImage(event.target.files[0]);
+  };
+
+  const submitImage = (file) => {    
+    const selectedImage = file;
+    console.log(selectedImage);
     if (selectedImage) {
-      alert("hi");
       const data = new FormData();
-      data.append("file", image);
+      data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
       data.append("folder", "bookmyplayer");
@@ -372,12 +380,12 @@ const BlogAdd = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data?.url);
-          setImage(data?.url);
+          setBlogImg(data?.url);
         })
         .catch((err) => {
           console.log(err);
         });
-     }
+    }
   };
 
   return (
@@ -389,15 +397,22 @@ const BlogAdd = () => {
         <div className="addBlogContainer">
           {/*==============================================================left side of form starts here ============================================================*/}
           <div className="addBlogMainForm">
-            {/* <div>
+            <div>
               <input
                 type="file"
                 id="imageUpload"
                 ref={fileInputRef}
+                onChange={handleFileChange}
                 style={{ display: "none" }}
               />
-              <button onClick={submitImage}>upload</button>
-            </div> */}
+              <button
+                className="common-fonts"
+                onClick={handleButtonClick}
+              >
+                Browse
+              </button>
+              {(blogImg)?<img src={blogImg}/>:<></>}
+            </div>
             <div className="fromFiled">
               <input
                 type="text"
@@ -562,7 +577,7 @@ const BlogAdd = () => {
                           value={section.image}
                           onChange={(event) => handleimageChange(event, index)}
                         />
-                       </div>
+                      </div>
                     </div>
                     <div className="formEditor">
                       <ReactEditor
