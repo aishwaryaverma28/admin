@@ -457,3 +457,34 @@
   margin-left: 85%;
   margin-right: 0.5rem;
 }
+
+.blog-img{
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+}
+
+.blog-browse-img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left:;
+}
+
+.blog-add-img{
+ background-color: #2b74da;
+ color:white;
+ padding: 7px 15px;
+ border-radius: 0.3125rem;
+ border: 1px solid transparent;
+ margin-right: 1rem;
+ width: 7rem;
+}
+.blog-add-img:hover{
+ background-color: white;
+ border:1px solid #2b74da;
+ color:#2b74da;
+ padding: 7px 15px;
+ border-radius: 0.3125rem;
+ transition: all 0.5s ease-in-out;
+}
