@@ -233,8 +233,8 @@ const BlogAdd = () => {
   };
 
   const handleSecSortChange = (event) => {
-    const sort = parseInt(event.target.value);
-    setSectionSort(sort);
+    const newValue = event.target.value;
+    setSectionSort(newValue === '' ? null : parseInt(newValue, 10));
     setStateBtn(1);
   };
   const handleSecImageChange = (event) => {
@@ -259,7 +259,7 @@ const BlogAdd = () => {
     const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
-      sort: parseInt(sectionSort),
+      sort: sectionSort === null ? 1 : parseInt(sectionSort),
       // image: childData,
       image: sectionImage,
       section: plainText,
@@ -269,7 +269,7 @@ const BlogAdd = () => {
     setSectionData([...sectionData, newSection]);
     // Reset input fields and image state
     setSectionTitle("");
-    setSectionSort(parseInt(sectionSort) + 1);
+    setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
     setChildData("");
     setSectionImage("");
     setDataFromChild("");
@@ -333,31 +333,31 @@ const BlogAdd = () => {
       alt: "",
     };
     console.log(updatedFormData);
-    // axios
-    //   .post(BLOG_ADD, updatedFormData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response?.data?.status);
-    //     if (response?.data?.status == 1) {
-    //     toast.success("Blog data added successfully", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //     resetForm();
-    //   }else{
-    //     toast.error(response?.data?.message, {
-    //       position:"top-center",
-    //       autoClose:2000
-    //     })
-    //   }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // setStateBtn(0);
+    axios
+      .post(BLOG_ADD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.status);
+        if (response?.data?.status == 1) {
+        toast.success("Blog data added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        resetForm();
+      }else{
+        toast.error(response?.data?.message, {
+          position:"top-center",
+          autoClose:2000
+        })
+      }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setStateBtn(0);
   }
 
   function AddTag(event) {
@@ -439,15 +439,15 @@ const BlogAdd = () => {
                 disabled
               />
               <div>
-                {/* <input
+                <input
                   type="text"
                   name="image"
                   id="image"
                   placeholder="image"
                   value={formData.image}
                   onChange={handleChange}
-                /> */}
-                <div className="blog-browse-img">
+                />
+                {/* <div className="blog-browse-img">
                   <button
                     className="common-fonts blog-add-img"
                     onClick={handleButtonClick}
@@ -459,7 +459,7 @@ const BlogAdd = () => {
                   ) : (
                     <></>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="fromFiled">
@@ -511,7 +511,7 @@ const BlogAdd = () => {
                       type="text"
                       name="Sort"
                       id="Sort"
-                      value={sectionSort}
+                      value={sectionSort === null ? '' : sectionSort}
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
