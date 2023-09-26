@@ -16,7 +16,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = ({ type, id, dealName }) => {
+const DealEmail = ({ type, id, dealName, ownerId, idOfOwner }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
@@ -226,7 +226,10 @@ const DealEmail = ({ type, id, dealName }) => {
 
   return (
     <>
-      {!openEditor ? (
+    {
+      ownerId === idOfOwner && (
+        <>
+        {!openEditor ? (
         <div className="colapedEditor" onClick={expandEditor}>
           <p>Click here to send email</p>
         </div>
@@ -364,6 +367,11 @@ const DealEmail = ({ type, id, dealName }) => {
           </div>
         </>
       )}
+
+        </>
+      )
+    }
+
 
       {allEmails.map((mail) => {
         const recipientData = JSON.parse(mail.recipient);

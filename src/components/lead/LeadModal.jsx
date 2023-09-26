@@ -53,6 +53,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
   const [leadName, setLeadName] = useState("");
+  const idOfOwner = parseInt(localStorage.getItem('id'));
+  const [ownerId, setOwnerId] = useState(0);
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -137,6 +139,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .then((response) => {
         setLeadName(response?.data?.data[0]?.lead_name);
+        setOwnerId(response.data.data[0]?.owner)
         setEditedItem(response?.data?.data[0]);
         setName(
           response?.data?.data[0]?.first_name +
@@ -646,6 +649,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     width: "fit-content",
   };
 
+  const ownerName = userData.find((item) => item.id ===ownerId);
 
   return (
     <div className="modal">
@@ -676,9 +680,14 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 )}
               </p>
             </div>
-            <a href="#" className="edit-details" onClick={toggleEditable}>
+            {
+              ownerId === idOfOwner && (
+                <a href="#" className="edit-details" onClick={toggleEditable}>
               <i className="fa-solid fa-pen"></i>
             </a>
+              )
+            }
+
           </div>
           <div className="leadDetailsLeft">
             <div className="detailsBox">
@@ -938,6 +947,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             }
                             className={isDisabled ? "disabled" : ""}
                             name="owner"
+                            value={ownerName ? ownerName.id : ''}
                           >
                             {userData.slice().reverse().map((item) => (
                               <option
@@ -1231,12 +1241,15 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   item={selectedItem}
                   onNotesNum={fetchNotes}
                   type="lead"
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
                 />
               </div>
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail id={selectedItem.id} type="lead" dealName={leadName}/>
+                <DealEmail id={selectedItem.id} type="lead" dealName={leadName} ownerId={ownerId}
+                  idOfOwner={idOfOwner}/>
               </div>
             )}
             {activeTab === "activity" && (
@@ -1246,6 +1259,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   type={"lead"}
                   count={fetchCall}
                   userData={userData}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
                 />
               </div>
             )}
@@ -1255,6 +1270,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                   dealId={selectedItem.id}
                   type={"lead"}
                   onAttachNum={uploadedDocs}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
                 />
               </div>
             )}

@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import notUpload from "../../assets/image/notupload.svg";
 
-const DealAttachments = ({ dealId, type, onAttachNum }) => {
+const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
   const decryptedToken = getDecryptedToken();
   const [documentList, setDocumentList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
@@ -139,7 +139,9 @@ const DealAttachments = ({ dealId, type, onAttachNum }) => {
 
   return (
     <div>
-      <div className="deal-doc-list">
+    {
+      ownerId === idOfOwner && (
+        <div className="deal-doc-list">
         <p className="common-fonts deal-browse-doc">Browse-documents</p>
         <div>
           <select
@@ -164,6 +166,9 @@ const DealAttachments = ({ dealId, type, onAttachNum }) => {
           </select>
         </div>
       </div>
+      )
+    }
+
 
       {selectedDocuments.map((doc, index) => (
         <div key={index} className="contact-tab-fields deal-doc-verify">
