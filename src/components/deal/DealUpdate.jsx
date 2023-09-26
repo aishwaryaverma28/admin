@@ -120,6 +120,8 @@ const DealUpdate = () => {
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
+  const [ownerId, setOwnerId] = useState(0);
+  const idOfOwner = parseInt(localStorage.getItem('id'));
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -141,6 +143,11 @@ const DealUpdate = () => {
         console.log(error);
       });
   };
+
+  const ownerName = userData.find((item) => item.id ===ownerId);
+  console.log(ownerId);
+  console.log(idOfOwner);
+  console.log("kkk");
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -191,8 +198,9 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
-        console.log(details);
+        setOwnerId(details?.owner)
         setDealName(response?.data?.data[0]?.deal_name);
+        
         const fieldMappings = {};
         for (const key in fieldNames) {
           // Use the value from fieldNames as the key in fieldMappings
@@ -807,7 +815,12 @@ const DealUpdate = () => {
             </>
           )}
         </p>
-        <i className="fa-solid fa-pen" onClick={toggleEditable}></i>
+        {
+          ownerId===idOfOwner && (
+            <i className="fa-solid fa-pen" onClick={toggleEditable}></i>
+          )
+        }
+        
         <i className="fas fa-ellipsis-h"></i>
       </div>
       <div className="dealHead"></div>
@@ -1063,6 +1076,7 @@ const DealUpdate = () => {
                           }
                           className={isDisabled ? "disabled" : ""}
                           name="owner"
+                          value={ownerName ? ownerName.id : ''}
                         >
                           {userData
                             .slice()
