@@ -405,13 +405,7 @@ const BlogAdd = () => {
                 onChange={handleFileChange}
                 style={{ display: "none" }}
               />
-              <button
-                className="common-fonts"
-                onClick={handleButtonClick}
-              >
-                Browse
-              </button>
-              {(blogImg)?<img src={blogImg}/>:<></>}
+
             </div>
             <div className="fromFiled">
               <input
@@ -434,14 +428,25 @@ const BlogAdd = () => {
               />
               <div>
                 {/* <ImageUploader onDataTransfer={handleImageTransfer} /> */}
-                <input
+                {/* <input
                   type="text"
                   name="image"
                   id="image"
                   placeholder="image"
                   value={formData.image}
                   onChange={handleChange}
-                />
+                /> */}
+                  <div className="blog-browse-img">
+                  <button
+                className="common-fonts blog-add-img"
+                onClick={handleButtonClick}
+              >
+                Add Image
+              </button>
+              {(blogImg)?<img src={blogImg} alt="" className="blog-img"/>:<></>}
+
+                  </div>
+               
               </div>
             </div>
             <div className="fromFiled">
