@@ -110,6 +110,15 @@ const BlogAdd = () => {
     setFormData((prev) => {
       return { ...prev, [name]: value };
     });
+    let modifiedValue = value;
+    if (name === "title") {
+      modifiedValue = modifiedValue.toLowerCase();
+      modifiedValue = modifiedValue.replace(/\s+/g, "-");
+      modifiedValue = modifiedValue.replace(/[^\w\s-]/g, "");
+      setFormData((prev) => {
+        return { ...prev, url: modifiedValue };
+      });
+    }
     setStateBtn(1);
   }
   // =====================================================================================section data trasfer
@@ -425,6 +434,7 @@ const BlogAdd = () => {
                 placeholder="Url"
                 value={formData.url}
                 onChange={handleChange}
+                disabled
               />
               <div>
                 {/* <ImageUploader onDataTransfer={handleImageTransfer} /> */}
