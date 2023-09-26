@@ -373,22 +373,25 @@ const BlogAdd = () => {
     submitImage(event.target.files[0]);
   };
 
-  const submitImage = (file) => {    
+  const submitImage = (file) => {
     const selectedImage = file;
     console.log(selectedImage);
     if (selectedImage) {
+      const folder = "bookmyplayer/blog"; 
+      const uniqueFileName = `${folder}/${selectedImage.name}`;
+  
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
-      data.append("folder", "bookmyplayer");
+      data.append("public_id", uniqueFileName);
       fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
         method: "post",
         body: data,
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data?.url);
+          console.log(data);
           setBlogImg(data?.url);
         })
         .catch((err) => {
@@ -414,7 +417,6 @@ const BlogAdd = () => {
                 onChange={handleFileChange}
                 style={{ display: "none" }}
               />
-
             </div>
             <div className="fromFiled">
               <input
@@ -437,7 +439,6 @@ const BlogAdd = () => {
                 disabled
               />
               <div>
-                {/* <ImageUploader onDataTransfer={handleImageTransfer} /> */}
                 {/* <input
                   type="text"
                   name="image"
@@ -446,17 +447,19 @@ const BlogAdd = () => {
                   value={formData.image}
                   onChange={handleChange}
                 /> */}
-                  <div className="blog-browse-img">
+                <div className="blog-browse-img">
                   <button
-                className="common-fonts blog-add-img"
-                onClick={handleButtonClick}
-              >
-                Add Image
-              </button>
-              {(blogImg)?<img src={blogImg} alt="" className="blog-img"/>:<></>}
-
-                  </div>
-               
+                    className="common-fonts blog-add-img"
+                    onClick={handleButtonClick}
+                  >
+                    Add Image
+                  </button>
+                  {blogImg ? (
+                    <img src={blogImg} alt="" className="blog-img" />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
             <div className="fromFiled">
