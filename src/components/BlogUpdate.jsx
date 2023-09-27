@@ -61,6 +61,8 @@ const BlogUpdate = () => {
     route: "",
   });
   const [blogImg2, setBlogImg2] = useState("");
+  const [blogImgName, setBlogImgName] = useState("");
+  const [blogImgName2, setBlogImgName2] = useState("");
   const [blogImg3, setBlogImg3] = useState("");
 
   const [stateBtn, setStateBtn] = useState(0);
@@ -71,8 +73,6 @@ const BlogUpdate = () => {
   }, []);
 
   const handleUpdateClick = (id) => {
-
- 
     const updatedSection = sectionData.find((section) => section.id === id);
 
     if (!updatedSection) {
@@ -88,29 +88,30 @@ const BlogUpdate = () => {
       blogid: updatedSection.blogid,
     };
 
-    axios.put(SEC_UPDATE + updatedSection.id, updatedFormData,{
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      if (response.data.status === 1) {
-        toast.success("Blog updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      } else {
-        toast.error("Some error occured", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-    });
-  }
 
-
+    axios
+      .put(SEC_UPDATE + updatedSection.id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Blog updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some error occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GETID + id, {
@@ -119,25 +120,27 @@ const BlogUpdate = () => {
       },
     });
     const data = response.data.data[0];
-    console.log(data);
     if (data) {
-    setFormData({
-      ...formData,
-      title: data?.title,
-      url: data?.url,
-      description: data?.description,
-      meta_description: data?.meta_description,
-      keywords: data?.keywords,
-      tag: data?.tag,
-      image: data?.image,
-      date: data?.date?.split("T")[0],
-      site: data?.site,
-      route: data?.url,
-    });
-    setBlogImg2(data?.image);
-    setTagId(data?.tag);
-    setSelectSite(data?.site);
-  }
+      setFormData({
+        ...formData,
+        title: data?.title,
+        url: data?.url,
+        description: data?.description,
+        meta_description: data?.meta_description,
+        keywords: data?.keywords,
+        tag: data?.tag,
+        image: data?.image,
+        date: data?.date?.split("T")[0],
+        site: data?.site,
+        route: data?.url,
+      });
+      setBlogImg2(data?.image);
+      const parts = data?.image?.split("/");
+      const filename = parts[parts.length - 1];
+      setBlogImgName(filename);
+      setTagId(data?.tag);
+      setSelectSite(data?.site);
+    }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
@@ -341,45 +344,45 @@ const BlogUpdate = () => {
   };
 
   const removeHtmlTags = (htmlString) => {
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
-    return tempDiv.textContent || tempDiv.innerText || '';
+    return tempDiv.textContent || tempDiv.innerText || "";
   };
   //=========================================================handle section data in an array of objects
 
   const handleAddSection = (e) => {
     e.preventDefault();
-     const plainText = removeHtmlTags(dataFromChild);
+    const plainText = removeHtmlTags(dataFromChild);
     const newSection = {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
-      image: blogImg3,
+      image: blogImg3.split("blog/")[1],
       // image: sectionImage,
       section: plainText,
       site: "",
       alt: "",
     };
-    axios.
-    post(SEC_ADD + id, newSection, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-      },
-    })
-    .then((response) => {
-      console.log(response?.data?.status);
-      if(response.data.status===1){
-        toast.success("Section Added successfully", {
-          position:"top-center",
-          autoClose:2000
-        })
-      }else{
-        toast.error(response?.data?.message, {
-          position:"top-center",
-          autoClose:2000
-        })
-      }
-      getBlogInfo();
-    })
+    axios
+      .post(SEC_ADD + id, newSection, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.status);
+        if (response.data.status === 1) {
+          toast.success("Section Added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        getBlogInfo();
+      });
     setSectionTitle("");
     setSectionSort(parseInt(sectionSort) + 1);
     setChildData("");
@@ -442,13 +445,12 @@ const BlogUpdate = () => {
       tag: tagId,
       route: formData?.url,
     };
-    console.log(JSON.stringify(updatedFormData));
     try {
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json", // Set the content type to JSON
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
         body: JSON.stringify(updatedFormData), // Convert the data to JSON string
       });
@@ -456,16 +458,15 @@ const BlogUpdate = () => {
       const data = await response.json();
       console.log(data);
       if (data?.status == 1) {
-      
-    }else{
-      toast.error(data?.message, {
-        position:"top-center",
-        autoClose:2000
-      })
+      } else {
+        toast.error(data?.message, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
-    }catch(error){
-      console.log(error)
-    };
     setStateBtn(0);
   }
 
@@ -487,9 +488,13 @@ const BlogUpdate = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
+          console.log("fff");
           setBlogImg2(data?.url);
+          const part = data?.url.split("blog/");
+          setBlogImgName(part[1]);
           setFormData((prev) => {
-            return { ...prev, image: data?.url };
+            return { ...prev, image: part[1] };
           });
         })
         .catch((err) => {
@@ -499,7 +504,6 @@ const BlogUpdate = () => {
   };
   const submitImage3 = (file) => {
     const selectedImage = file;
-    console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
       const uniqueFileName = `${folder}/${selectedImage.name}`;
@@ -516,6 +520,7 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg3(data?.url);
+          setBlogImgName2(data?.url.split("blog/")[1]);
         })
         .catch((err) => {
           console.log(err);
@@ -561,7 +566,7 @@ const BlogUpdate = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url;
+          newSectionData[index].image = data?.url?.split("blog/")[1];
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -569,8 +574,6 @@ const BlogUpdate = () => {
         });
     }
   };
-
-
 
   return (
     <>
@@ -589,13 +592,13 @@ const BlogUpdate = () => {
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
           <div className="addBlogMainForm">
-          <input
-                  type="file"
-                  id="imageUpload"
-                  ref={fileInputRef2}
-                  onChange={handleFileChange2}
-                  style={{ display: "none" }}
-                />
+            <input
+              type="file"
+              id="imageUpload"
+              ref={fileInputRef2}
+              onChange={handleFileChange2}
+              style={{ display: "none" }}
+            />
             <div className="fromFiled">
               <input
                 type="text"
@@ -625,18 +628,14 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               /> */}
               <div className="blog-browse-img">
-                  <button
-                    className="common-fonts blog-add-img add-img-2 update-img"
-                    onClick={handleButtonClick2}
-                  >
-                    Chang Image
-                  </button>
-                  {blogImg2 ? (
-                    <img src={blogImg2} alt="" className="blog-img" />
-                  ) : (
-                    <></>
-                  )}
-                </div>
+                <button
+                  className="common-fonts blog-add-img add-img-2 update-img"
+                  onClick={handleButtonClick2}
+                >
+                  Change Image
+                </button>
+                {blogImg2 ? blogImgName : <></>}
+              </div>
               {/* <div>
                 {formData.image ? (
                   <ImageEditor
@@ -689,13 +688,13 @@ const BlogUpdate = () => {
                     onChange={handleTitle}
                     value={sectionTitle}
                   />
-                   <input
-                  type="file"
-                  id="imageUpload"
-                  ref={fileInputRef3}
-                  onChange={handleFileChange3}
-                  style={{ display: "none" }}
-                />
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    ref={fileInputRef3}
+                    onChange={handleFileChange3}
+                    style={{ display: "none" }}
+                  />
 
                   <div className="formBtnBox">
                     <input
@@ -706,18 +705,14 @@ const BlogUpdate = () => {
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
-                                        <div className="blog-browse-img">
+                    <div className="blog-browse-img">
                       <button
                         className="common-fonts blog-add-img add-img-2"
                         onClick={handleButtonClick3}
                       >
                         Add Image
                       </button>
-                      {blogImg3 ? (
-                        <img src={blogImg3} alt="" className="blog-img" />
-                      ) : (
-                        <></>
-                      )}
+                      {blogImg3 ? blogImgName2 : <></>}
                     </div>
                     {/* <input
                       type="text"
@@ -849,13 +844,13 @@ const BlogUpdate = () => {
                         value={section.heading}
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(event) => handleReplaceImage(event, index)}
-                          style={{ display: "none" }}
-                          ref={(input) => (fileInputRefs[index] = input)}
-                        />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => handleReplaceImage(event, index)}
+                        style={{ display: "none" }}
+                        ref={(input) => (fileInputRefs[index] = input)}
+                      />
                       {/* <input
                         type="text"
                         name="image"
@@ -869,20 +864,21 @@ const BlogUpdate = () => {
                       <div className="blog-browse-img">
                         <button
                           className="common-fonts blog-add-img add-img-2"
-                          onClick={() => fileInputRefs[index].click()}
+                          onClick={() => {
+                            fileInputRefs[index].click();
+                            setUpdateStateBtn(1);
+                          }}
                         >
-                        {section?.image ? ' change image': ' add image'}
+                          {section?.image ? " change image" : " add image"}
                         </button>
                         {section?.image ? (
-                          <img
-                            src={section?.image}
-                            alt=""
-                            className="blog-img blog-img-2"
-                          />
+                          <p className="common-fonts section-img-new">
+                            {section?.image}
+                          </p>
                         ) : (
                           <></>
                         )}
-                        </div>
+                      </div>
                       {/* <ImageEditor
                         parentProp={section.image}
                         onDataTransfer={(data) => subImageTrasfer(data, index)}
@@ -898,15 +894,21 @@ const BlogUpdate = () => {
                       />
                     </div>
                     <div className="blog-disable">
-                    {updateStateBtn === 0 ? (
-                  <button disabled className="disabledBtn blog-update-btn">
-                    Update
-                  </button>
-                ) : (
-                  <button className="common-fonts common-save-button blog-update-btn" onClick={()=>handleUpdateClick(section.id)}>
-                    Update
-                  </button>
-                )}
+                      {updateStateBtn === 0 ? (
+                        <button
+                          disabled
+                          className="disabledBtn blog-update-btn"
+                        >
+                          Update
+                        </button>
+                      ) : (
+                        <button
+                          className="common-fonts common-save-button blog-update-btn"
+                          onClick={() => handleUpdateClick(section.id)}
+                        >
+                          Update
+                        </button>
+                      )}
                     </div>
                     {section.id ? (
                       <></>
@@ -925,7 +927,6 @@ const BlogUpdate = () => {
                       </div>
                     )}
                   </div>
-                 
                 </div>
               ))}
             </>

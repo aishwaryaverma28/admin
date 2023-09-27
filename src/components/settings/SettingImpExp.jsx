@@ -1,24 +1,47 @@
-import React from 'react'
-import '../styles/Error.css';
-import ErrorImg from "../../assets/image/404.jpg";
+import React, { useState }   from 'react'
+import '../styles/Import.css';
+import ImportTab from './ImportTab.jsx';
+import ExportTab from './ExportTab.jsx';
+
 
 
 const SettingImpExp = () => {
-    const handleGoBack = () => {
-        window.history.back(); // Navigate back in the browser history
-      };
+  const [activeTab, setActiveTab] = useState("import");
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+    
   return (
-    <section className="lead-error-page">
-    <div>
-        <img src={ErrorImg} alt=""/>
-    </div>
-    <div className="lead-error-content error-font-style">
-        <p>404</p>
-        <p>page not found</p>
-        <p>We’re sorry, the page you requested could not be found. Please go back to the homepage</p>
-        <button onClick={handleGoBack}>Go back</button>
-    </div>
-</section>
+     <div className='ip-exp-container'>
+      <p className='common-fonts ip-exp-heading'>Import & Export</p>
+      {/* <p className='common-fonts imp-data'>Import data</p> */}
+      <div className="genral-setting-btn genral-setting-fonts">
+            <button
+              className={`genral-btn ${activeTab === "import" ? "genral-active" : ""
+                }`}
+              onClick={() => handleTabClick("import")}
+            >
+              Import
+            </button>
+            <button
+              className={`genral-btn ${activeTab === "export" ? "genral-active" : ""
+                }`}
+              onClick={() => handleTabClick("export")}
+            >
+              Export
+            </button>
+          </div>
+            {
+              activeTab === "import" && (
+                       <ImportTab/>
+          )}
+            {
+              activeTab === "export" && (
+                       <ExportTab/>
+          )}
+
+     </div>
   )
 }
 
