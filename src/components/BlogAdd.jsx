@@ -87,7 +87,7 @@ const BlogAdd = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url;
+          newSectionData[index].image = data?.url?.split("blog/")[1];
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -354,7 +354,7 @@ const BlogAdd = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setBlogImg(data?.url);
+          setBlogImg(data?.url?.split("blog/")[1]);
         })
         .catch((err) => {
           console.log(err);
@@ -379,9 +379,7 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          console.log("kkk");
-          setBlogImg2(data?.url);
+          setBlogImg2(data?.url?.split("blog/")[1]);
         })
         .catch((err) => {
           console.log(err);
@@ -444,7 +442,7 @@ const BlogAdd = () => {
                     Add Image
                   </button>
                   {blogImg ? (
-                    <img src={blogImg} alt="" className="blog-img" />
+                    blogImg
                   ) : (
                     <></>
                   )}
@@ -527,7 +525,7 @@ const BlogAdd = () => {
                         Add Image
                       </button>
                       {blogImg2 ? (
-                        <img src={blogImg2} alt="" className="blog-img" />
+                       blogImg2
                       ) : (
                         <></>
                       )}
@@ -619,11 +617,7 @@ const BlogAdd = () => {
                         {section?.image ? ' change image': ' add image'}
                         </button>
                         {section?.image ? (
-                          <img
-                            src={section?.image}
-                            alt=""
-                            className="blog-img blog-img-2"
-                          />
+                         section?.image
                         ) : (
                           <></>
                         )}
