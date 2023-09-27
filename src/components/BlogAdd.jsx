@@ -18,6 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 const BlogAdd = () => {
   //cloudaniary images
   const [blogImg, setBlogImg] = useState("");
+  const [blogImg2, setBlogImg2] = useState("");
+  const [sectionImages, setSectionImages] = useState([]);
 
   const [selectSite, setSelectSite] = useState("");
   const [hover, setHover] = useState(false);
@@ -29,6 +31,8 @@ const BlogAdd = () => {
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
   const fileInputRef = useRef(null);
+  const fileInputRef2 = useRef(null);
+  const fileInputRefs = useRef(null);
   const [childData, setChildData] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [showUploadButton, setShowUploadButton] = useState(false);
@@ -68,6 +72,36 @@ const BlogAdd = () => {
     meta_description: "",
     keywords: "",
   });
+
+  const handleReplaceImage = (event, index) => {
+    const selectedImage = event.target.files[0];
+    if (selectedImage) {
+      const folder = "bookmyplayer/blog";
+      const uniqueFileName = `${folder}/${selectedImage.name}`;
+
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          // Update the image URL in the sectionData state
+          const newSectionData = [...sectionData];
+          newSectionData[index].image = data?.url;
+          setSectionData(newSectionData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   // ===================================================================functions for tags addition and removal
   const handleTagSelection = (event) => {
@@ -234,7 +268,7 @@ const BlogAdd = () => {
 
   const handleSecSortChange = (event) => {
     const newValue = event.target.value;
-    setSectionSort(newValue === '' ? null : parseInt(newValue, 10));
+    setSectionSort(newValue === "" ? null : parseInt(newValue, 10));
     setStateBtn(1);
   };
   const handleSecImageChange = (event) => {
@@ -260,13 +294,14 @@ const BlogAdd = () => {
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
-      // image: childData,
-      image: sectionImage,
+      image: blogImg2,
+      // image: sectionImage,
       section: plainText,
       site: "",
       alt: "",
     };
     setSectionData([...sectionData, newSection]);
+    setSectionImages([...sectionImages, sectionImage]);
     // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
@@ -276,6 +311,7 @@ const BlogAdd = () => {
     setShowEditButton(false);
     setSelectedImage("");
     setStateBtn(1);
+    setBlogImg2("");
     // Clear the editor content using the ref
     editorRef.current.clearEditorContent(); // Add this line
   };
@@ -342,17 +378,17 @@ const BlogAdd = () => {
       .then((response) => {
         console.log(response?.data?.status);
         if (response?.data?.status == 1) {
-        toast.success("Blog data added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        resetForm();
-      }else{
-        toast.error(response?.data?.message, {
-          position:"top-center",
-          autoClose:2000
-        })
-      }
+          toast.success("Blog data added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          resetForm();
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -368,18 +404,25 @@ const BlogAdd = () => {
     event.preventDefault();
     fileInputRef.current.click();
   };
+  const handleButtonClick2 = (event) => {
+    event.preventDefault();
+    fileInputRef2.current.click();
+  };
 
   const handleFileChange = (event) => {
     submitImage(event.target.files[0]);
+  };
+  const handleFileChange2 = (event) => {
+    submitImage2(event.target.files[0]);
   };
 
   const submitImage = (file) => {
     const selectedImage = file;
     console.log(selectedImage);
     if (selectedImage) {
-      const folder = "bookmyplayer/blog"; 
+      const folder = "bookmyplayer/blog";
       const uniqueFileName = `${folder}/${selectedImage.name}`;
-  
+
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
@@ -393,6 +436,33 @@ const BlogAdd = () => {
         .then((data) => {
           console.log(data);
           setBlogImg(data?.url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const submitImage2 = (file) => {
+    const selectedImage = file;
+    console.log(selectedImage);
+    if (selectedImage) {
+      const folder = "bookmyplayer/blog";
+      const uniqueFileName = `${folder}/${selectedImage.name}`;
+
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          console.log("kkk");
+          setBlogImg2(data?.url);
         })
         .catch((err) => {
           console.log(err);
@@ -439,17 +509,17 @@ const BlogAdd = () => {
                 disabled
               />
               <div>
-                <input
+                {/* <input
                   type="text"
                   name="image"
                   id="image"
                   placeholder="image"
                   value={formData.image}
                   onChange={handleChange}
-                />
-                {/* <div className="blog-browse-img">
+                /> */}
+                <div className="blog-browse-img">
                   <button
-                    className="common-fonts blog-add-img"
+                    className="common-fonts blog-add-img add-img-2"
                     onClick={handleButtonClick}
                   >
                     Add Image
@@ -459,7 +529,7 @@ const BlogAdd = () => {
                   ) : (
                     <></>
                   )}
-                </div> */}
+                </div>
               </div>
             </div>
             <div className="fromFiled">
@@ -496,6 +566,13 @@ const BlogAdd = () => {
 
             <>
               <div className="addSection">
+                <input
+                  type="file"
+                  id="imageUpload"
+                  ref={fileInputRef2}
+                  onChange={handleFileChange2}
+                  style={{ display: "none" }}
+                />
                 <div className="fromBlogSection">
                   <input
                     type="text"
@@ -511,18 +588,31 @@ const BlogAdd = () => {
                       type="text"
                       name="Sort"
                       id="Sort"
-                      value={sectionSort === null ? '' : sectionSort}
+                      value={sectionSort === null ? "" : sectionSort}
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
-                    <input
+                    {/* <input
                       type="text"
                       name="image"
                       id="image"
                       value={sectionImage}
                       placeholder="image"
                       onChange={handleSecImageChange}
-                    />
+                    /> */}
+                    <div className="blog-browse-img">
+                      <button
+                        className="common-fonts blog-add-img add-img-2"
+                        onClick={handleButtonClick2}
+                      >
+                        Add Image
+                      </button>
+                      {blogImg2 ? (
+                        <img src={blogImg2} alt="" className="blog-img" />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                     <button
                       onClick={handleAddSection}
                       className="addSectionBtn"
@@ -585,8 +675,7 @@ const BlogAdd = () => {
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
 
-                      <div>
-                        <input
+                        {/* <input
                           type="text"
                           name="image"
                           id="image"
@@ -594,9 +683,34 @@ const BlogAdd = () => {
                           className="sectionHead"
                           value={section.image}
                           onChange={(event) => handleimageChange(event, index)}
+                        /> */}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => handleReplaceImage(event, index)}
+                          style={{ display: "none" }}
+                          ref={(input) => (fileInputRefs[index] = input)}
                         />
+
+                        <div className="blog-browse-img">
+                        <button
+                          className="common-fonts blog-add-img add-img-2"
+                          onClick={() => fileInputRefs[index].click()}
+                        >
+                        {section?.image ? ' change image': ' add image'}
+                        </button>
+                        {section?.image ? (
+                          <img
+                            src={section?.image}
+                            alt=""
+                            className="blog-img blog-img-2"
+                          />
+                        ) : (
+                          <></>
+                        )}
+                        </div>
                       </div>
-                    </div>
+
                     <div className="formEditor">
                       <ReactEditor
                         onDataTransfer={(data) =>
