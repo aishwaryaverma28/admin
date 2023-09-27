@@ -19,21 +19,16 @@ const BlogAdd = () => {
   //cloudaniary images
   const [blogImg, setBlogImg] = useState("");
   const [blogImg2, setBlogImg2] = useState("");
-  const [sectionImages, setSectionImages] = useState([]);
-
   const [selectSite, setSelectSite] = useState("");
-  const [hover, setHover] = useState(false);
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
-  const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
   const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
   const fileInputRefs = useRef(null);
-  const [childData, setChildData] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
@@ -44,8 +39,6 @@ const BlogAdd = () => {
   const [tagId, setTagId] = useState("");
   const [tagApi, setTagApi] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  // image useStates
-  const [imageName, setImageName] = useState(null);
   const [stateBtn, setStateBtn] = useState(0);
   const decryptedToken = getDecryptedToken();
   const editorRef = useRef(); // Define the editorRef using useRef
@@ -124,12 +117,6 @@ const BlogAdd = () => {
     const tagUpdate = selectedTags.splice(index, 1);
   };
 
-  //==================================================================== get image name
-  // const handleImageTransfer = (data) => {
-  //   setImageName(data);
-  //   setStateBtn(1);
-  // };
-
   //===================================================================== function to add date in the form data
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -155,65 +142,7 @@ const BlogAdd = () => {
     }
     setStateBtn(1);
   }
-  // =====================================================================================section data trasfer
-  // // ========================================================================section image added/deleted
-  // const handleImageSelect = (event) => {
-  //   setSelectedImage(event.target.files[0]);
-  //   setShowUploadButton(true);
-  // };
-
-  // const imageUpload = async (event) => {
-  //   event.preventDefault();
-
-  //   if (!selectedImage) {
-  //     console.log("No image selected.");
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("blog_img", selectedImage);
-
-  //   try {
-  //     const response = await axios.post(IMAGE_UP, formData, {
-  //       headers: {
-  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-  //       },
-  //     });
-  //     console.log("Image uploaded successfully:", response.data);
-  //     // Perform any additional actions on successful upload
-  //     setShowUploadButton(false);
-  //     setShowEditButton(true);
-  //     setChildData(response.data.data);
-  //   } catch (error) {
-  //     console.error("Error uploading image:", error);
-  //     // Handle error condition
-  //   }
-  // };
-
-  // const handleClick = () => {
-  //   fileInputRef.current.click();
-  //   setShowChooseButton(false);
-  // };
-
-  // const handleEdit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await axios.delete(IMAGE_DEL + childData, {
-  //       headers: {
-  //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-  //       },
-  //     });
-  //     console.log("Image deleted successfully:", response);
-  //     // Perform any additional actions on successful upload
-  //     setSelectedImage(null);
-  //     setShowUploadButton(false);
-  //     setShowEditButton(false);
-  //     setShowChooseButton(true);
-  //     setChildData(response.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+    
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
@@ -271,11 +200,6 @@ const BlogAdd = () => {
     setSectionSort(newValue === "" ? null : parseInt(newValue, 10));
     setStateBtn(1);
   };
-  const handleSecImageChange = (event) => {
-    const image = event.target.value;
-    setSectionImage(image);
-    setStateBtn(1);
-  };
   //=======================================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
@@ -301,19 +225,14 @@ const BlogAdd = () => {
       alt: "",
     };
     setSectionData([...sectionData, newSection]);
-    setSectionImages([...sectionImages, sectionImage]);
-    // Reset input fields and image state
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
-    setChildData("");
-    setSectionImage("");
     setDataFromChild("");
     setShowEditButton(false);
     setSelectedImage("");
     setStateBtn(1);
     setBlogImg2("");
-    // Clear the editor content using the ref
-    editorRef.current.clearEditorContent(); // Add this line
+    editorRef.current.clearEditorContent();
   };
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
@@ -323,7 +242,7 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  // console.log(sectionData);
+  console.log(sectionData);
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -348,7 +267,6 @@ const BlogAdd = () => {
     setSectionData([]);
     setSectionTitle("");
     setSectionSort("");
-    setSectionImage("");
     setDataFromChild("");
     setShowUploadButton(false);
     setShowEditButton(false);
@@ -362,6 +280,7 @@ const BlogAdd = () => {
       ...formData,
       tag: tagId,
       // image: imageName,
+      image: blogImg,
       date: selectedDate,
       sections: sectionData,
       site: selectSite,
