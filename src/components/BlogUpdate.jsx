@@ -488,6 +488,9 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg2(data?.url);
+          setFormData((prev) => {
+            return { ...prev, image: data?.url };
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -530,6 +533,7 @@ const BlogUpdate = () => {
   const handleButtonClick2 = (event) => {
     event.preventDefault();
     fileInputRef2.current.click();
+    setStateBtn(1);
   };
   const handleButtonClick3 = (event) => {
     event.preventDefault();
