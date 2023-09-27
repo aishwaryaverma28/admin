@@ -135,9 +135,7 @@ const BlogUpdate = () => {
         route: data?.url,
       });
       setBlogImg2(data?.image);
-      const parts = data?.image?.split("/");
-      const filename = parts[parts.length - 1];
-      setBlogImgName(filename);
+      setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
       setSelectSite(data?.site);
     }
@@ -488,8 +486,6 @@ const BlogUpdate = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          console.log("fff");
           setBlogImg2(data?.url);
           const part = data?.url.split("blog/");
           setBlogImgName(part[1]);
@@ -574,6 +570,8 @@ const BlogUpdate = () => {
         });
     }
   };
+
+
 
   return (
     <>
