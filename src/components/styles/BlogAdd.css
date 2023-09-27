@@ -122,7 +122,10 @@
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  align-items: start;
 }
+
+
 .formBtnBox input {
   width: 10rem;
 }
@@ -468,7 +471,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left:;
 }
 
 .blog-add-img{
@@ -487,4 +489,19 @@
  padding: 7px 15px;
  border-radius: 0.3125rem;
  transition: all 0.5s ease-in-out;
+}
+
+.add-img-2{
+  cursor: pointer;
+  width: 10rem;
+  font-weight: 600;
+  font-size:17px ;
+  border-radius: 10px;
+  height: 3rem;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.blog-img-2{
+  margin-right: 0.5rem;
 }
