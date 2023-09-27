@@ -455,7 +455,11 @@ const BlogUpdate = () => {
 
       const data = await response.json();
       console.log(data);
-      if (data?.status == 1) {
+      if (data?.status === 1) {
+        toast.success("blog updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       } else {
         toast.error(data?.message, {
           position: "top-center",

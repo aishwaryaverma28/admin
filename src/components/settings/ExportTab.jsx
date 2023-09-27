@@ -32,15 +32,111 @@ const ExportTab = () => {
 
 
   {activeTab === "leads" && 
-  <div>Leads</div>
+  <div>
+    <div className='import-tab-btn'> 
+      <button className='common-save-button common-fonts'>Export</button>
+    </div>
+
+    <div className='import-tab-table'>
+    <table>
+      <thead>
+        <tr>
+          <th className='common-fonts'>S NO</th>
+          <th className='common-fonts'>DATE</th>
+          <th className='common-fonts'>FILE NAME</th>
+          <th className='common-fonts'>TOTAL COUNT</th>
+          <th className='common-fonts'>SUCCESS</th>
+          <th className='common-fonts'>FAILED</th>
+          <th className='common-fonts'>USER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className='common-fonts'>1</td>
+          <td className='common-fonts'>Sep 6, 2023</td>
+          <td className='common-fonts'>Import Leads file</td>
+          <td className='common-fonts'>100</td>
+          <td className='common-fonts'>85</td>
+          <td className='common-fonts'>15</td>
+          <td className='common-fonts'>Anant Singh</td>
+        </tr>
+      </tbody>
+    </table>
+
+    </div>
+  </div>
   
          }
   {activeTab === "deals" && (
-    <div>deals</div>
+    <div>
+    <div className='import-tab-btn'>
+      <button className='common-save-button common-fonts'>Export</button>
+    </div>
+
+    <div className='import-tab-table'>
+    <table>
+      <thead>
+        <tr>
+          <th className='common-fonts'>S NO</th>
+          <th className='common-fonts'>DATE</th>
+          <th className='common-fonts'>FILE NAME</th>
+          <th className='common-fonts'>TOTAL COUNT</th>
+          <th className='common-fonts'>SUCCESS</th>
+          <th className='common-fonts'>FAILED</th>
+          <th className='common-fonts'>USER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className='common-fonts'>1</td>
+          <td className='common-fonts'>Sep 6, 2023</td>
+          <td className='common-fonts'>Import Leads file</td>
+          <td className='common-fonts'>100</td>
+          <td className='common-fonts'>85</td>
+          <td className='common-fonts'>15</td>
+          <td className='common-fonts'>Anant Singh</td>
+        </tr>
+      </tbody>
+    </table>
+
+    </div>
+  </div>
           )
          }
   {activeTab === "contacts" && (
-    <div>contacts</div>
+    <div>
+    <div className='import-tab-btn'>
+      <button className='common-save-button common-fonts'>Export</button>
+    </div>
+
+    <div className='import-tab-table'>
+    <table>
+      <thead>
+        <tr>
+          <th className='common-fonts'>S NO</th>
+          <th className='common-fonts'>DATE</th>
+          <th className='common-fonts'>FILE NAME</th>
+          <th className='common-fonts'>TOTAL COUNT</th>
+          <th className='common-fonts'>SUCCESS</th>
+          <th className='common-fonts'>FAILED</th>
+          <th className='common-fonts'>USER</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className='common-fonts'>1</td>
+          <td className='common-fonts'>Sep 6, 2023</td>
+          <td className='common-fonts'>Import Leads file</td>
+          <td className='common-fonts'>100</td>
+          <td className='common-fonts'>85</td>
+          <td className='common-fonts'>15</td>
+          <td className='common-fonts'>Anant Singh</td>
+        </tr>
+      </tbody>
+    </table>
+
+    </div>
+  </div>
           )
          }
  </div>
