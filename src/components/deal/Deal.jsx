@@ -482,20 +482,42 @@ const Deal = () => {
       });
     });
 
-    // Generate a blob containing the Excel file
-    const blob = await workbook.xlsx.writeBuffer();
+    // // Generate a blob containing the Excel file
+    // const blob = await workbook.xlsx.writeBuffer();
 
+    // // Create a download link
+    // const url = window.URL.createObjectURL(new Blob([blob]));
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = "deals.xlsx";
+    // a.style.display = "none";
+
+    // // Trigger the download
+    // document.body.appendChild(a);
+    // a.click();
+
+    // // Clean up
+    // window.URL.revokeObjectURL(url);
+    // document.body.removeChild(a);
+
+    
+    // Convert JSON data to CSV format
+    const csv = Papa.unparse(deals);
+  
+    // Create a blob from the CSV data
+    const blob = new Blob([csv], { type: "text/csv" });
+  
     // Create a download link
-    const url = window.URL.createObjectURL(new Blob([blob]));
+    const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "deals.xlsx";
+    a.download = "deals.csv";
     a.style.display = "none";
-
+  
     // Trigger the download
     document.body.appendChild(a);
     a.click();
-
+  
     // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
