@@ -345,7 +345,6 @@ const BlogUpdate = () => {
       description: formData?.description,
       meta_description: formData?.meta_description,
       keywords: formData?.keywords,
-      // image: pic,
       image: formData?.image,
       date: formData?.date,
       site: selectSite,

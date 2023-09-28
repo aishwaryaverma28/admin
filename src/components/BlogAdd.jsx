@@ -209,6 +209,7 @@ const BlogAdd = () => {
     return tempDiv.textContent || tempDiv.innerText || "";
   };
   //====================================================================================== handle section data in an array of objects
+  console.log(sectionData);
   const handleAddSection = (e) => {
     e.preventDefault();
     const plainText = removeHtmlTags(dataFromChild);
@@ -216,8 +217,7 @@ const BlogAdd = () => {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
       image: blogImg2,
-      // section: plainText,
-      section: `${dataFromChild}`,
+      section: plainText,
       site: "",
       alt: "",
     };
