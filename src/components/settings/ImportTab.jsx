@@ -1,22 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "../styles/CPGenral.css";
 import Papa from "papaparse";
 import axios from "axios";
-import {IMPORT_CSV,
-  getDecryptedToken,} from "../utils/Constants";
-  import { toast, ToastContainer } from "react-toastify";
+import { IMPORT_CSV, IMPORT_DEAL, IMPORT_PEOPLE, IMPORT_COMPANY, getDecryptedToken } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ImportTab = () => {
   const decryptedToken = getDecryptedToken();
+  const fileLeadInputRef = useRef(null);
+  const fileDealInputRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [csvData, setCsvData] = useState([]);
+  const fileInputRef2 = useRef(null);
   const [activeTab, setActiveTab] = useState("leads");
 
   function handleTabChange(tabName) {
     setActiveTab(tabName);
   }
-  const handleCsvFileImport = (e) => {
+  const handleCsvLeadFileImport = (e) => {
     const file = e.target.files[0];
     if (file) {
       Papa.parse(file, {
@@ -29,8 +30,7 @@ const ImportTab = () => {
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
-          setCsvData(dataWithoutLastValue);
-          postCsvDataToAPI(dataWithoutLastValue);
+          postLeadCsvDataToAPI(dataWithoutLastValue);
         },
         error: (error) => {
           console.error("Error parsing CSV:", error.message);
@@ -39,11 +39,11 @@ const ImportTab = () => {
     }
   };
   // Function to handle "Import" menu item click
-  const handleImportClick = () => {
+  const handleLeadImportClick = () => {
     // Trigger a click event on the hidden file input element
-    fileInputRef.current.click();
+    fileLeadInputRef.current.click();
   };
-  const postCsvDataToAPI = async (csvData) => {
+  const postLeadCsvDataToAPI = async (csvData) => {
     try {
       const response = await axios.post(
         IMPORT_CSV,
@@ -73,6 +73,188 @@ const ImportTab = () => {
       // Handle the error as needed
     }
   };
+
+  const handleDealCsvFileImport = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          const dataWithIntValues = result?.data.map((row) => ({
+            ...row,
+            lead_id: parseInt(row?.lead_id),
+            value: parseInt(row?.value),
+            pipeline_id: parseInt(row?.pipeline_id),
+            mobile: parseInt(row?.mobile),
+            security_value: parseInt(row?.security_value),
+            loan_amount: parseInt(row?.loan_amount),
+            deposit: parseInt(row?.deposit),
+            engagement_fee: parseInt(row?.engagement_fee),
+            engagement_fee_paid: parseInt(row?.engagement_fee_paid),
+            broker_fee: parseInt(row?.broker_fee),
+            broker_fee_paid: parseInt(row?.broker_fee_paid),
+            procuration_fee: parseInt(row?.procuration_fee),
+            procuration_fee_paid: parseInt(row?.procuration_fee_paid),
+            deal_commission: parseInt(row?.deal_commission),
+            closure_date: formatDate(row?.closure_date),
+            data_enquiry_receive: formatDate(row?.data_enquiry_receive),
+            borrower_entry: formatDate(row?.borrower_entry),
+            completion_date: formatDate(row?.completion_date),
+          }));
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          postDealCsvDataToAPI(dataWithoutLastValue);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  const formatDate = (dateString) => {
+    // console.log(dateString);
+    if(dateString){
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+    }
+  };
+  // Function to handle "Import" menu item click
+  const handleDealImportClick = () => {
+    // Trigger a click event on the hidden file input element
+    fileDealInputRef.current.click();
+  };
+  const postDealCsvDataToAPI = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_DEAL,
+        {
+          data: csvData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+    }
+  };
+  const handleCsvFileImport = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          const dataWithIntValues = result?.data.map((row) => ({
+            ...row,
+            valuation: parseInt(row?.valuation),
+          }));
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          postCsvDataToAPI(dataWithoutLastValue);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  const handleImportClick = () => {
+    fileInputRef.current.click();
+  };
+  const postCsvDataToAPI = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_COMPANY,
+        {
+          data: csvData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // Handle the error as needed
+      }
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+      // Handle the error as needed
+    }
+  };
+
+  const handleCsvFileImport2 = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          // Store CSV data in state
+          const dataWithoutLastValue = result?.data?.slice(0, -1);
+          postCsvDataToAPI2(dataWithoutLastValue);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  // Function to handle "Import" menu item click
+  const handleImportClick2 = () => {
+    // Trigger a click event on the hidden file input element
+    fileInputRef2.current.click();
+  };
+  const postCsvDataToAPI2 = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_PEOPLE,
+        {
+          data: csvData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // Handle the error as needed
+      }
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+      // Handle the error as needed
+    }
+  };
+
 
   const jsonLeadData = [
     {
@@ -195,14 +377,14 @@ const ImportTab = () => {
   const jsonPeopleData = [
     // Your JSON data here
     {
-      "name": "John Doe",
-      "organization": "ABC Corporation",
-      "phone": "+1-123-456-7890",
-      "email": "johndoe@example.com",
-      "city": "New York",
-      "state": "NY",
-      "postal_code": "10001"
-    }
+      name: "John Doe",
+      organization: "ABC Corporation",
+      phone: "+1-123-456-7890",
+      email: "johndoe@example.com",
+      city: "New York",
+      state: "NY",
+      postal_code: "10001",
+    },
   ];
 
   const downloadPeopleCSV = () => {
@@ -264,11 +446,16 @@ const ImportTab = () => {
             <input
               type="file"
               accept=".csv"
-              ref={fileInputRef}
+              ref={fileLeadInputRef}
               style={{ display: "none" }}
-              onChange={handleCsvFileImport}
+              onChange={handleCsvLeadFileImport}
             />
-            <button className="common-save-button common-fonts"onClick={handleImportClick}>Import</button>
+            <button
+              className="common-save-button common-fonts"
+              onClick={handleLeadImportClick}
+            >
+              Import
+            </button>
           </div>
 
           <div className="import-tab-table">
@@ -308,7 +495,14 @@ const ImportTab = () => {
             >
               Sample Download
             </button>
-            <button className="common-save-button common-fonts">Import</button>
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileDealInputRef}
+              style={{ display: "none" }}
+              onChange={handleDealCsvFileImport}
+            />
+            <button className="common-save-button common-fonts"onClick={handleDealImportClick}>Import</button>
           </div>
 
           <div className="import-tab-table">
@@ -348,7 +542,14 @@ const ImportTab = () => {
             >
               Sample Download
             </button>
-            <button className="common-save-button common-fonts">Import</button>
+            <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleCsvFileImport}
+          />
+            <button className="common-save-button common-fonts" onClick={handleImportClick}>Import</button>
           </div>
 
           <div className="import-tab-table">
@@ -388,7 +589,15 @@ const ImportTab = () => {
             >
               Sample Download
             </button>
-            <button className="common-save-button common-fonts">Import</button>
+            
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef2}
+            style={{ display: "none" }}
+            onChange={handleCsvFileImport2}
+          />
+            <button className="common-save-button common-fonts"  onClick={handleImportClick2}>Import</button>
           </div>
 
           <div className="import-tab-table">
