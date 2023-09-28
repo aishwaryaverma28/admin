@@ -1,14 +1,78 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../styles/CPGenral.css";
-import { useState } from "react";
 import Papa from "papaparse";
+import axios from "axios";
+import {IMPORT_CSV,
+  getDecryptedToken,} from "../utils/Constants";
+  import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ImportTab = () => {
+  const decryptedToken = getDecryptedToken();
+  const fileInputRef = useRef(null);
+  const [csvData, setCsvData] = useState([]);
   const [activeTab, setActiveTab] = useState("leads");
 
   function handleTabChange(tabName) {
     setActiveTab(tabName);
   }
+  const handleCsvFileImport = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true, // Assume the first row contains headers
+        complete: (result) => {
+          const dataWithIntValues = result?.data.map((row) => ({
+            ...row,
+            value: parseInt(row?.value), // Parse the "value" field as an integer
+            stage_id: parseInt(row?.stage_id),
+          }));
+          // Store CSV data in state
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          setCsvData(dataWithoutLastValue);
+          postCsvDataToAPI(dataWithoutLastValue);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error.message);
+        },
+      });
+    }
+  };
+  // Function to handle "Import" menu item click
+  const handleImportClick = () => {
+    // Trigger a click event on the hidden file input element
+    fileInputRef.current.click();
+  };
+  const postCsvDataToAPI = async (csvData) => {
+    try {
+      const response = await axios.post(
+        IMPORT_CSV,
+        {
+          data: csvData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Import successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        // Handle the error as needed
+      }
+    } catch (error) {
+      console.error("Error posting CSV data:", error);
+      // Handle the error as needed
+    }
+  };
 
   const jsonLeadData = [
     {
@@ -197,7 +261,14 @@ const ImportTab = () => {
             >
               Sample Download
             </button>
-            <button className="common-save-button common-fonts">Import</button>
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleCsvFileImport}
+            />
+            <button className="common-save-button common-fonts"onClick={handleImportClick}>Import</button>
           </div>
 
           <div className="import-tab-table">
@@ -348,6 +419,7 @@ const ImportTab = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };
