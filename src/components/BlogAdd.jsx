@@ -3,9 +3,6 @@ import axios from "axios";
 import {
   BLOG_ADD,
   GET_TAG,
-  IMAGE_UP,
-  IMAGE_DEL,
-  IMG_BASE,
   getDecryptedToken,
 } from "./utils/Constants";
 
@@ -219,8 +216,8 @@ const BlogAdd = () => {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
       image: blogImg2,
-      // image: sectionImage,
-      section: plainText,
+      // section: plainText,
+      section: `${dataFromChild}`,
       site: "",
       alt: "",
     };
@@ -426,14 +423,6 @@ const BlogAdd = () => {
                 disabled
               />
               <div>
-                {/* <input
-                  type="text"
-                  name="image"
-                  id="image"
-                  placeholder="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                /> */}
                 <div className="blog-browse-img">
                   <button
                     className="common-fonts blog-add-img add-img-2"

@@ -4,19 +4,14 @@ import axios from "axios";
 import {
   SEC_ADD,
   BLOG_GETID,
-  BLOG_GET,
   BLOG_EDIT,
   SEC_GET,
-  IMAGE_UP,
-  IMAGE_DEL,
   GET_TAG,
   SEC_UPDATE,
   getDecryptedToken,
 } from "./utils/Constants";
 import ReactEditor from "./ReactEditor";
 import trash from "../assets/image/delete-icon.svg";
-import ImageEditor from "./ImageEditor";
-import ImageUploader from "./ImageUploader";
 import "./styles/BlogAdd.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -217,66 +212,7 @@ const BlogUpdate = () => {
     setSelectSite(event.target.value);
     setStateBtn(1);
   }
-  // ========================================================section image added/deleted
-  const handleImageSelect = (event) => {
-    setSelectedImage(event.target.files[0]);
-    setShowUploadButton(true);
-  };
-
-  const imageUpload = async (event) => {
-    event.preventDefault();
-
-    if (!selectedImage) {
-      console.log("No image selected.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("blog_img", selectedImage);
-
-    try {
-      const response = await axios.post(IMAGE_UP, formData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      });
-      console.log("Image uploaded successfully:", response.data);
-
-      // Perform any additional actions on successful upload
-      setShowUploadButton(false);
-      setShowEditButton(true);
-      setChildData(response.data.data);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // Handle error condition
-    }
-  };
-
-  const handleClick = () => {
-    fileInputRef.current.click();
-    setShowChooseButton(false);
-  };
-
-  const handleEdit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.delete(IMAGE_DEL + childData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      });
-      console.log("Image deleted successfully:", response);
-      // Perform any additional actions on successful upload
-      setSelectedImage(null);
-      setShowUploadButton(false);
-      setShowEditButton(false);
-      setShowChooseButton(true);
-      setChildData(response.data.data);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      // Handle error condition
-    }
-  };
+  
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
@@ -292,26 +228,13 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
   };
-  const handleimageChange = (event, index) => {
-    const newSectionData = [...sectionData];
-    newSectionData[index].image = event.target.value;
-    setSectionData(newSectionData);
-    setUpdateStateBtn(1);
-  };
+  
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
     newSectionData[index].sort = event.target.value;
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
-  };
-  //==============================================================sub section image
-  const subImageTrasfer = (data, index) => {
-    const newSectionData = [...sectionData];
-    newSectionData[index].image = data;
-    setSectionData(newSectionData);
-    setHideImages(true);
-    setStateBtn(1);
   };
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
@@ -332,11 +255,7 @@ const BlogUpdate = () => {
     setSectionSort(sort);
   };
 
-  const handleSecImageChange = (event) => {
-    const image = event.target.value;
-    setSectionImage(image);
-  };
-  //==================================================================editor data transfer
+    //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
@@ -355,8 +274,8 @@ const BlogUpdate = () => {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
       image: blogImg3.split("blog/")[1],
-      // image: sectionImage,
-      section: plainText,
+      // section: plainText,
+      section: `${dataFromChild}`,
       site: "",
       alt: "",
     };
@@ -417,17 +336,7 @@ const BlogUpdate = () => {
     }
   }
 
-  const handleImageTransfer = (data) => {
-    setStateBtn(1);
-    // setFormData.image(data);
-    setPic(data);
-    // console.log(data);
-  };
-  const handleImageEditor = (data) => {
-    setStateBtn(1);
-    setPic(data);
-    console.log(data);
-  };
+  
   async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -621,14 +530,7 @@ const BlogUpdate = () => {
                 onChange={handleChange}
                 disabled
               />
-              {/* <input
-                type="text"
-                name="image"
-                id="image"
-                placeholder="image"
-                value={formData.image}
-                onChange={handleChange}
-              /> */}
+              
               <div className="blog-browse-img">
                 <button
                   className="common-fonts blog-add-img add-img-2 update-img"
@@ -638,16 +540,7 @@ const BlogUpdate = () => {
                 </button>
                 {blogImg2 ? blogImgName : <></>}
               </div>
-              {/* <div>
-                {formData.image ? (
-                  <ImageEditor
-                    parentProp={formData.image}
-                    onDataTransfer={handleImageEditor}
-                  />
-                ) : (
-                  <ImageUploader onDataTransfer={handleImageTransfer} />
-                )}
-              </div> */}
+              
             </div>
             <div className="fromFiled">
               <input
@@ -716,75 +609,6 @@ const BlogUpdate = () => {
                       </button>
                       {blogImg3 ? blogImgName2 : <></>}
                     </div>
-                    {/* <input
-                      type="text"
-                      name="image"
-                      id="image"
-                      value={sectionImage}
-                      placeholder="image"
-                      onChange={handleSecImageChange}
-                    /> */}
-                    {/* <div>
-                      <>
-                        {!showUploadButton &&
-                          !showEditButton &&
-                          !showChooseButton && (
-                            <button
-                              type="button"
-                              onClick={handleClick}
-                              className="imageUploaderData"
-                            >
-                              Choose Image
-                            </button>
-                          )}
-                        {selectedImage && !showEditButton && (
-                          <p className="image">
-                            Selected Image: {selectedImage.name}
-                          </p>
-                        )}
-                        <input
-                          type="file"
-                          name="blog_img"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={handleImageSelect}
-                        />
-                        {showUploadButton && !showEditButton && (
-                          <button
-                            type="submit"
-                            onClick={imageUpload}
-                            className="imageUploaderData"
-                          >
-                            Upload
-                          </button>
-                        )}
-                        {showEditButton && (
-                          <>
-                            <p className="image">{childData}</p>
-                            <button
-                              type="button"
-                              onClick={handleEdit}
-                              className="imageUploaderData"
-                            >
-                              Edit Image
-                            </button>
-                          </>
-                        )}
-                        {showChooseButton && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={handleClick}
-                              className="imageUploaderData"
-                            >
-                              Choose Image
-                            </button>
-                          </>
-                        )}
-                      </>
-                    </div> */}
-
                     <button
                       onClick={handleAddSection}
                       className="addSectionBtn"
@@ -853,16 +677,6 @@ const BlogUpdate = () => {
                         style={{ display: "none" }}
                         ref={(input) => (fileInputRefs[index] = input)}
                       />
-                      {/* <input
-                        type="text"
-                        name="image"
-                        id="image"
-                        placeholder="image"
-                        className="sectionHead"
-                        value={section.image}
-                        onChange={(event) => handleimageChange(event, index)}
-                      /> */}
-
                       <div className="blog-browse-img">
                         <button
                           className="common-fonts blog-add-img add-img-2"
@@ -881,11 +695,7 @@ const BlogUpdate = () => {
                           <></>
                         )}
                       </div>
-                      {/* <ImageEditor
-                        parentProp={section.image}
-                        onDataTransfer={(data) => subImageTrasfer(data, index)}
-                      /> */}
-                    </div>
+                     </div>
 
                     <div className="formEditor">
                       <ReactEditor
