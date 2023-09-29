@@ -15,6 +15,7 @@ import {
   IMPORT_DEAL,
   handleLogout,
   GET_OWNER_DEAL,
+  LOG_RECORD,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -91,8 +92,6 @@ const Deal = () => {
 
     setOwnerOpen(false);
   };
-
-
 
   const userAdded = () => {
     axios
@@ -360,6 +359,36 @@ const Deal = () => {
     setSortOpen(!sortOpen);
   };
 
+  const logRecord = () => {
+    const updatedFormData = {
+      attr1: "deal:export",
+      attr4: "deal exported",
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+      if(response?.data?.status===1){
+        toast.success("export successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }else{
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const exportToExcel = async () => {
     // Check if you have data to export
     if (!deals || deals.length === 0) {
@@ -500,27 +529,27 @@ const Deal = () => {
     // window.URL.revokeObjectURL(url);
     // document.body.removeChild(a);
 
-    
     // Convert JSON data to CSV format
     const csv = Papa.unparse(deals);
-  
+
     // Create a blob from the CSV data
     const blob = new Blob([csv], { type: "text/csv" });
-  
+
     // Create a download link
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "deals.csv";
     a.style.display = "none";
-  
+
     // Trigger the download
     document.body.appendChild(a);
     a.click();
-  
+
     // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord();
   };
 
   const toggleActionDropdown = (option) => {
@@ -694,9 +723,9 @@ const Deal = () => {
   };
   const formatDate = (dateString) => {
     // console.log(dateString);
-    if(dateString){
-    const [day, month, year] = dateString.split('/');
-    return `${year}-${month}-${day}`;
+    if (dateString) {
+      const [day, month, year] = dateString.split("/");
+      return `${year}-${month}-${day}`;
     }
   };
   // Function to handle "Import" menu item click
@@ -816,7 +845,10 @@ const Deal = () => {
             )}
           </div>
           <div className="right-side--btns">
-            <p>sub total: <img className="pound" src={pound}/>{totalValue.toLocaleString("en-IN")}</p>
+            <p>
+              sub total: <img className="pound" src={pound} />
+              {totalValue.toLocaleString("en-IN")}
+            </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Deal
             </button>
@@ -1011,7 +1043,7 @@ const Deal = () => {
               <div className="bottom-fixed">
                 <p>
                   {" "}
-                  Total Value: <img className="pound" src={pound}/>
+                  Total Value: <img className="pound" src={pound} />
                   {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
                 </p>
               </div>

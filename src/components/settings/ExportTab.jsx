@@ -3,7 +3,9 @@ import "../styles/CPGenral.css";
 import { useState } from "react";
 import Papa from "papaparse";
 import axios from "axios";
-import { getDecryptedToken, GET_LEAD, GET_ALL_DEAL, ALL_COMPANY, ALL_PEOPLE } from "../utils/Constants.js";
+import { getDecryptedToken, GET_LEAD, GET_ALL_DEAL, ALL_COMPANY, ALL_PEOPLE, LOG_RECORD } from "../utils/Constants.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ExportTab = () => {
   const [activeTab, setActiveTab] = useState("leads");
@@ -27,6 +29,36 @@ const ExportTab = () => {
     });
   };
 
+  const logRecord = (type) => {
+    const updatedFormData = {
+      attr1: `${type}:export`,
+      attr4: `${type} exported`,
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+      if(response?.data?.status===1){
+        toast.success(`${type} export successfull`, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }else{
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const downloadLeadCSV = () => {
     const csv = Papa.unparse(jsonLeadData);
     const blob = new Blob([csv], { type: "text/csv" });
@@ -38,6 +70,7 @@ const ExportTab = () => {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord("lead");
   };
 
   const fetchDealData = () => {
@@ -65,6 +98,7 @@ const ExportTab = () => {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord("deal");
   };
   const fetchCompanyData = () => {
     axios.get(ALL_COMPANY, {
@@ -91,6 +125,7 @@ const ExportTab = () => {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord("company");
   };
   const fetchPeopleData = () => {
     axios.get(ALL_PEOPLE, {
@@ -117,6 +152,7 @@ const ExportTab = () => {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord("people");
   };
 
 
@@ -307,6 +343,7 @@ const ExportTab = () => {
           </div>
         </div>
       )}
+      <ToastContainer/>
     </div>
   );
 };

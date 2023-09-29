@@ -3,11 +3,79 @@ import Search from "../../assets/image/search.svg";
 import Building from "../../assets/image/building.svg";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { getDecryptedToken, ALL_COMPANY, LOG_RECORD } from "../utils/Constants.js";
+import Papa from "papaparse";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
+  const [jsonCompanyData, setJsonCompanyData] = useState([]);
+  const decryptedToken = getDecryptedToken();
+
+  const fetchCompanyData = () => {
+    axios.get(ALL_COMPANY, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      },
+    })
+    .then((response) => {
+      setJsonCompanyData(response?.data?.data);
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  };
+
+  useEffect(()=>{
+  fetchCompanyData();
+  }, [])
+
+  const logRecord = () => {
+    const updatedFormData = {
+      attr1: `company:export`,
+      attr4: `company exported`,
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success(`export successfull`, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const downloadCompanyCSV = () => {
+    const csv = Papa.unparse(jsonCompanyData);
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "company.csv";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    logRecord();
+  };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -97,7 +165,7 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
         </div>
 
         <div>
-          <button className="common-fonts common-white-green-button">
+          <button className="common-fonts common-white-green-button" onClick={downloadCompanyCSV}>
             Export
           </button>
         </div>
@@ -175,7 +243,7 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
                     <td className="common-fonts">
                       {company.valuation} {company.valuation_in}
                     </td>
-                    <td className="common-fonts">{company.domain}</td>
+                    <td className="common-fonts company-domain-case">{company.domain}</td>
                     <td className="common-fonts">
                       {formatDate(company.creation_date.split("T")[0])}
                     </td>
