@@ -13,6 +13,7 @@ import {
   getDecryptedUserPath,
 } from "./utils/Constants";
 import HelpModal from "./HelpModal";
+import NotificationModal from "./NotificationModal.jsx";
 
 const LPheader = () => {
   const { name } = useContext(LPContext);
@@ -24,6 +25,7 @@ const LPheader = () => {
   const dropdownRef = useRef(null);
   const [clientData, setClientData] = useState(null);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [pathAddress, setPathAddress] = useState(null);
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
@@ -80,6 +82,13 @@ const LPheader = () => {
     }
 
   },[])
+
+  const handleBell = () => {
+    setIsNotifyModalOpen(true);
+  }
+  const handleBellCLose = () => {
+    setIsNotifyModalOpen(false);
+  }
 
 
 
@@ -193,7 +202,7 @@ const LPheader = () => {
           <ul className="icons">
             <li>
               <button type="button" className="bellBtn" title="Notification">
-                <i className="far fa-bell"></i>
+                <i className="far fa-bell" onClick={handleBell}></i>
               </button>
             </li>
             <li>
@@ -334,6 +343,7 @@ const LPheader = () => {
       {/* Bottom Navigation End */}
 
       {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}
+      {isNotifyModalOpen && <NotificationModal onClose={handleBellCLose} />}
     </>
   );
 };
