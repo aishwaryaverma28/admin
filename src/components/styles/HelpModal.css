@@ -344,3 +344,153 @@
   width: 40%;
   margin-left: 0.5rem;
 }
+
+
+/* notification modal css  */
+
+.notify-heading{
+  font-weight: 500 !important;
+  font-size: 1.375rem !important;
+  margin-left: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.notify-action{
+  margin-left: 1.5rem;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.notify-action button:first-child{
+margin-left: 1rem;
+}
+
+.notify-menu{
+  left:0% !important;
+  width: 18rem !important;
+}
+
+.notify-filter-by{
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.notify-filter-menu{
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ margin-top: 0.5rem;
+}
+
+.notify-check{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-left: -0.5rem;
+}
+
+.notify-done{
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.notify-btns{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.notify-day{
+  margin-left: 1.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+
+.notify-box{
+  border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background: #F3F6FA;
+margin-left: 1.5rem;
+margin-right: 1.5rem;
+margin-top: 1rem;
+padding: 1rem;
+display: flex;
+align-items: start;
+justify-content: space-between;
+}
+
+.notify-meeting{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.notify-meeting-text{
+  margin-left: 0.75rem;
+}
+
+.notify-meeting img{
+  margin-top: 0.1rem;
+}
+
+.notify-meet{
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.notify-view{
+ margin-top: 1.1rem;
+ color: var(--ternary);
+ cursor: pointer;
+ font-weight: 500;
+}
+
+.notify-ago{
+  font-size: 0.75rem;
+}
+
+.notify-new-box, .notify-new-box-2{
+  border-radius: 0.3125rem;
+  border: 1px solid #DCDCDC;
+  background: #F3F6FA;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.notify-new-box-2{
+  background-color: #fff;
+}
+
+.notify-edit-deal span{
+  font-weight: 600;
+}
+
+.notify-edit-deal{
+  width: 16rem;
+}
+
+.notify-dates{
+  font-size: 0.75rem;
+}
+
+.notify-dot{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.notify-dot p{
+  margin-left: 1rem;
+}
+
+.notify-last{
+  margin-bottom: 1rem;
+}
