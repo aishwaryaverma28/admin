@@ -276,6 +276,10 @@
     width: 70%;
 }
 
+.company-domain-case{
+  text-transform: lowercase;
+}
+
 
 
 

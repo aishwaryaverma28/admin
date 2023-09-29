@@ -1,14 +1,86 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../assets/image/search.svg";
 import User from "../../assets/image/user.svg";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import Papa from "papaparse";
+import axios from "axios";
+import {
+  getDecryptedToken,
+  ALL_PEOPLE,
+  LOG_RECORD,
+} from "../utils/Constants.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-
-const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
+const PeopleTable = ({ personData, loading, onSelectedIdsChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
   const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
+  const [jsonPeopleData, setJsonPeopleData] = useState([]);
+  const decryptedToken = getDecryptedToken();
+
+  const fetchPeopleData = () => {
+    axios
+      .get(ALL_PEOPLE, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setJsonPeopleData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchPeopleData();
+  }, []);
+
+  const logRecord = () => {
+    const updatedFormData = {
+      attr1: `people:export`,
+      attr4: `people exported`,
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success(`export successfull`, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const downloadPeopleCSV = () => {
+    const csv = Papa.unparse(jsonPeopleData);
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "people.csv";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    logRecord("people");
+  };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -77,7 +149,6 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
     setIsTableHeaderChecked(isAllChecked);
   }, [selectedIds, filteredPersonData]);
 
-
   return (
     <div>
       <div className="contact-search-container">
@@ -95,95 +166,98 @@ const PeopleTable = ({personData, loading, onSelectedIdsChange }) => {
         </div>
 
         <div>
-          <button className="common-fonts common-white-green-button">
+          <button
+            className="common-fonts common-white-green-button"
+            onClick={downloadPeopleCSV}
+          >
             Export
           </button>
         </div>
       </div>
       <div className="contact-cp-table">
-      {
-        loading ? (
+        {loading ? (
           <p>Loading....</p>
-        ):(
+        ) : (
           <table>
-          <thead>
-            <tr>
-              <th className="contact-box">
-                <label className="custom-checkbox">
-                <input
-                type="checkbox"
-                className="cb1"
-                name=""
-                checked={isTableHeaderChecked}
-                onChange={handleTableHeaderCheckboxChange}
-              />
-                  <span className="checkmark"></span>
-                </label>
-              </th>
-              <th className="common-fonts contact-th">Name</th>
-              <th className="common-fonts contact-th">Company</th>
-              <th className="common-fonts contact-th">Email</th>
-              <th className="common-fonts contact-th">Phone</th>
-              <th className="common-fonts contact-th">State</th>
-              <th className="common-fonts contact-th">City</th>
-              <th className="common-fonts contact-th">Creation Date</th>
-              <th className="common-fonts contact-th">Update Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPersonData.length === 0 ? (
+            <thead>
               <tr>
-                <td colSpan={10} style={{ textAlign: "center" }}>
-                  No data found
-                </td>
-              </tr>
-            ) : (
-                filteredPersonData.map((person) => {
-                return (
-                  <tr key={person.id}>
-                    <th className="contact-box">
-                      <label className="custom-checkbox">
-                      <input
+                <th className="contact-box">
+                  <label className="custom-checkbox">
+                    <input
                       type="checkbox"
                       className="cb1"
                       name=""
-                      checked={selectedIds.includes(person.id)}
-                      onChange={() => handleCheckboxChange(person.id)}
+                      checked={isTableHeaderChecked}
+                      onChange={handleTableHeaderCheckboxChange}
                     />
-                        <span className="checkmark"></span>
-                      </label>
-                    </th>
-                    <td className="common-fonts ">
-                    <Link to={`/lp/contacts/people/${person.id}`}>
-                      <span className="contact-building">
-                        <img src={User} alt="" />
-                      </span>{" "}
-                      {person.name}
-                      </Link>
-                    </td>
-                    <td className="common-fonts">{person.organization}</td>
-                    <td className="common-fonts person-email">{person.email}</td>
-                    <td className="common-fonts">{person.phone}</td>
-                    <td className="common-fonts">{person.state}</td>
-                    <td className="common-fonts">{person.city}</td>
-                    <td className="common-fonts">
-                      {formatDate(person.creation_date.split("T")[0])}
-                    </td>
-                    <td className="common-fonts">
-                      {formatDate(person.update_date.split("T")[0])}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-        )
-      }
-
+                    <span className="checkmark"></span>
+                  </label>
+                </th>
+                <th className="common-fonts contact-th">Name</th>
+                <th className="common-fonts contact-th">Company</th>
+                <th className="common-fonts contact-th">Email</th>
+                <th className="common-fonts contact-th">Phone</th>
+                <th className="common-fonts contact-th">State</th>
+                <th className="common-fonts contact-th">City</th>
+                <th className="common-fonts contact-th">Creation Date</th>
+                <th className="common-fonts contact-th">Update Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPersonData.length === 0 ? (
+                <tr>
+                  <td colSpan={10} style={{ textAlign: "center" }}>
+                    No data found
+                  </td>
+                </tr>
+              ) : (
+                filteredPersonData.map((person) => {
+                  return (
+                    <tr key={person.id}>
+                      <th className="contact-box">
+                        <label className="custom-checkbox">
+                          <input
+                            type="checkbox"
+                            className="cb1"
+                            name=""
+                            checked={selectedIds.includes(person.id)}
+                            onChange={() => handleCheckboxChange(person.id)}
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </th>
+                      <td className="common-fonts ">
+                        <Link to={`/lp/contacts/people/${person.id}`}>
+                          <span className="contact-building">
+                            <img src={User} alt="" />
+                          </span>{" "}
+                          {person.name}
+                        </Link>
+                      </td>
+                      <td className="common-fonts">{person.organization}</td>
+                      <td className="common-fonts person-email">
+                        {person.email}
+                      </td>
+                      <td className="common-fonts">{person.phone}</td>
+                      <td className="common-fonts">{person.state}</td>
+                      <td className="common-fonts">{person.city}</td>
+                      <td className="common-fonts">
+                        {formatDate(person.creation_date.split("T")[0])}
+                      </td>
+                      <td className="common-fonts">
+                        {formatDate(person.update_date.split("T")[0])}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
+      <ToastContainer />
     </div>
   );
-}
+};
 
-export default PeopleTable
+export default PeopleTable;

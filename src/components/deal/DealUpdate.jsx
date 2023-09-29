@@ -26,6 +26,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DealAttachments from "./DealAttachments.jsx";
 import DealActivity from "./DealActivity";
 import DealEmail from "./DealEmail.jsx";
+import DealDocument from "./DealDocument.jsx";
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -1728,6 +1729,13 @@ const DealUpdate = () => {
               <i className="fa-sharp fa-solid fa-paperclip"></i>
               Attachment ({attachedFile})
             </button>
+            <button
+              className={activeTab === "document" ? "active" : ""}
+              onClick={() => handleTabClick("document")}
+            >
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              Document
+            </button>
           </div>
           <div className="tab-content">
             {activeTab === "notes" && (
@@ -1761,6 +1769,11 @@ const DealUpdate = () => {
                   ownerId={ownerId}
                   idOfOwner={idOfOwner}
                 />
+              </div>
+            )}
+            {activeTab === "document" && (
+              <div className="attachment-tab-content">
+                <DealDocument/>
               </div>
             )}
           </div>

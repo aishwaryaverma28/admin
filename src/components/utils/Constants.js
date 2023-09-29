@@ -194,3 +194,7 @@ export const IMPORT_PEOPLE = start + "api/contact/person/import";
 export const ADD_PEOPLE = start + "api/contact/person/add";
 export const UPDATE_PEOPLE = start + "api/contact/person/edit/";
 export const ALL_PEOPLE = start + "api/contact/person/get";
+
+//=========================================================log api
+
+export const LOG_RECORD = start + "api/user/createlog";

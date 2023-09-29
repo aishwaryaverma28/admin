@@ -19,6 +19,7 @@ import {
   GET_TEAM_MEM,
   USER_INFO,
   GET_OWNER_LEAD,
+  LOG_RECORD
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -204,6 +205,36 @@ const Lead = () => {
       });
   };
 
+  const logRecord = () => {
+    const updatedFormData = {
+      attr1: "lead:export",
+      attr4: "lead exported",
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+      if(response?.data?.status===1){
+        toast.success("export successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }else{
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const exportToExcel = async () => {
     // Check if you have data to export
     if (!deals || deals.length === 0) {
@@ -336,6 +367,7 @@ const Lead = () => {
     // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+    logRecord();
   };
 
   const fetchLabelData = async () => {
