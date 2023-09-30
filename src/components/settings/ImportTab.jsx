@@ -2,9 +2,17 @@ import React, { useState, useRef } from "react";
 import "../styles/CPGenral.css";
 import Papa from "papaparse";
 import axios from "axios";
-import { IMPORT_CSV, IMPORT_DEAL, IMPORT_PEOPLE, IMPORT_COMPANY, getDecryptedToken } from "../utils/Constants";
+import {
+  IMPORT_CSV,
+  IMPORT_DEAL,
+  IMPORT_PEOPLE,
+  IMPORT_COMPANY,
+  IMPORT_DETAILS,
+  getDecryptedToken,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const ImportTab = () => {
   const decryptedToken = getDecryptedToken();
@@ -13,6 +21,10 @@ const ImportTab = () => {
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
   const [activeTab, setActiveTab] = useState("leads");
+  const [lead, setLead] = useState([]);
+  const [deal, setDeal] = useState([]);
+  const [people, setPeople] = useState([]);
+  const [company, setCompany] = useState([]);
 
   function handleTabChange(tabName) {
     setActiveTab(tabName);
@@ -61,6 +73,7 @@ const ImportTab = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchImportLeadDetails();
       } else {
         toast.error("Some Error Occured", {
           position: "top-center",
@@ -111,15 +124,12 @@ const ImportTab = () => {
     }
   };
   const formatDate = (dateString) => {
-    // console.log(dateString);
-    if(dateString){
-    const [day, month, year] = dateString.split('/');
-    return `${year}-${month}-${day}`;
+    if (dateString) {
+      const [day, month, year] = dateString.split("/");
+      return `${year}-${month}-${day}`;
     }
   };
-  // Function to handle "Import" menu item click
   const handleDealImportClick = () => {
-    // Trigger a click event on the hidden file input element
     fileDealInputRef.current.click();
   };
   const postDealCsvDataToAPI = async (csvData) => {
@@ -140,7 +150,8 @@ const ImportTab = () => {
           position: "top-center",
           autoClose: 2000,
         });
-      } else {
+        fetchImportDealDetails();
+        } else {
         toast.error("Some Error Occured", {
           position: "top-center",
           autoClose: 2000,
@@ -190,6 +201,7 @@ const ImportTab = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchImportCompanyDetails();
       } else {
         toast.error("Some Error Occured", {
           position: "top-center",
@@ -219,9 +231,76 @@ const ImportTab = () => {
       });
     }
   };
-  // Function to handle "Import" menu item click
+  // ==============================================Function to handle "Import" people item click
+  const fetchImportLeadDetails = () => {
+    axios
+      .get(IMPORT_DETAILS + "lead:imported", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data);
+        setLead(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const fetchImportDealDetails = () => {
+    axios
+      .get(IMPORT_DETAILS + "deal:imported", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data);
+        setDeal(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const fetchImportCompanyDetails = () => {
+    axios
+      .get(IMPORT_DETAILS + "comapny:imported", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data);
+        setCompany(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const fetchImportPeopleDetails = () => {
+    axios
+      .get(IMPORT_DETAILS + "people:imported", {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data);
+        setPeople(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchImportLeadDetails();
+    fetchImportDealDetails();
+    fetchImportCompanyDetails();
+    fetchImportPeopleDetails();
+  }, []);
+
   const handleImportClick2 = () => {
-    // Trigger a click event on the hidden file input element
     fileInputRef2.current.click();
   };
   const postCsvDataToAPI2 = async (csvData) => {
@@ -242,6 +321,7 @@ const ImportTab = () => {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchImportPeopleDetails();
       } else {
         toast.error("Some Error Occured", {
           position: "top-center",
@@ -254,7 +334,6 @@ const ImportTab = () => {
       // Handle the error as needed
     }
   };
-
 
   const jsonLeadData = [
     {
@@ -465,22 +544,34 @@ const ImportTab = () => {
                   <th className="common-fonts">S NO</th>
                   <th className="common-fonts">DATE</th>
                   <th className="common-fonts">FILE NAME</th>
-                  <th className="common-fonts">TOTAL COUNT</th>
-                  <th className="common-fonts">SUCCESS</th>
-                  <th className="common-fonts">FAILED</th>
+                  {/* <th className="common-fonts">TOTAL COUNT</th> */}
+                  {/* <th className="common-fonts">SUCCESS</th> */}
+                  {/* <th className="common-fonts">FAILED</th> */}
                   <th className="common-fonts">USER</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="common-fonts">1</td>
-                  <td className="common-fonts">Sep 6, 2023</td>
-                  <td className="common-fonts">Import Leads file</td>
-                  <td className="common-fonts">100</td>
-                  <td className="common-fonts">85</td>
-                  <td className="common-fonts">15</td>
-                  <td className="common-fonts">Anant Singh</td>
-                </tr>
+                {lead.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} style={{ textAlign: "center" }}>
+                      No data found
+                    </td>
+                  </tr>
+                ) : (
+                  lead.map((item) => {
+                    return (
+                      <tr key={item.id}>
+                        <td className="common-fonts">{item.id}</td>
+                        <td className="common-fonts">{item?.creation_date.split('T')[0]}</td>
+                        <td className="common-fonts">Import Leads file</td>
+                        {/* <td className="common-fonts">100</td> */}
+                        {/* <td className="common-fonts">85</td> */}
+                        {/* <td className="common-fonts">15</td> */}
+                        <td className="common-fonts">{item?.created_userfname} {item?.created_userlname}</td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -502,7 +593,12 @@ const ImportTab = () => {
               style={{ display: "none" }}
               onChange={handleDealCsvFileImport}
             />
-            <button className="common-save-button common-fonts"onClick={handleDealImportClick}>Import</button>
+            <button
+              className="common-save-button common-fonts"
+              onClick={handleDealImportClick}
+            >
+              Import
+            </button>
           </div>
 
           <div className="import-tab-table">
@@ -512,22 +608,34 @@ const ImportTab = () => {
                   <th className="common-fonts">S NO</th>
                   <th className="common-fonts">DATE</th>
                   <th className="common-fonts">FILE NAME</th>
-                  <th className="common-fonts">TOTAL COUNT</th>
-                  <th className="common-fonts">SUCCESS</th>
-                  <th className="common-fonts">FAILED</th>
+                  {/* <th className="common-fonts">TOTAL COUNT</th> */}
+                  {/* <th className="common-fonts">SUCCESS</th> */}
+                  {/* <th className="common-fonts">FAILED</th> */}
                   <th className="common-fonts">USER</th>
                 </tr>
               </thead>
               <tbody>
+              {deal.length === 0 ? (
                 <tr>
-                  <td className="common-fonts">1</td>
-                  <td className="common-fonts">Sep 6, 2023</td>
-                  <td className="common-fonts">Import Leads file</td>
-                  <td className="common-fonts">100</td>
-                  <td className="common-fonts">85</td>
-                  <td className="common-fonts">15</td>
-                  <td className="common-fonts">Anant Singh</td>
+                  <td colSpan={10} style={{ textAlign: "center" }}>
+                    No data found
+                  </td>
                 </tr>
+              ) : (
+                deal.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                    <td className="common-fonts">{item.id}</td>
+                    <td className="common-fonts">{item?.creation_date.split('T')[0]}</td>
+                    <td className="common-fonts">Import Deal file</td>
+                    {/* <td className="common-fonts">100</td> */}
+                    {/* <td className="common-fonts">85</td> */}
+                    {/* <td className="common-fonts">15</td> */}
+                    <td className="common-fonts">{item?.created_userfname} {item?.created_userlname}</td>
+                  </tr>
+                );
+              })
+            )}
               </tbody>
             </table>
           </div>
@@ -543,13 +651,18 @@ const ImportTab = () => {
               Sample Download
             </button>
             <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleCsvFileImport}
-          />
-            <button className="common-save-button common-fonts" onClick={handleImportClick}>Import</button>
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleCsvFileImport}
+            />
+            <button
+              className="common-save-button common-fonts"
+              onClick={handleImportClick}
+            >
+              Import
+            </button>
           </div>
 
           <div className="import-tab-table">
@@ -559,22 +672,35 @@ const ImportTab = () => {
                   <th className="common-fonts">S NO</th>
                   <th className="common-fonts">DATE</th>
                   <th className="common-fonts">FILE NAME</th>
-                  <th className="common-fonts">TOTAL COUNT</th>
+                  {/* <th className="common-fonts">TOTAL COUNT</th>
                   <th className="common-fonts">SUCCESS</th>
-                  <th className="common-fonts">FAILED</th>
+                  <th className="common-fonts">FAILED</th> */}
                   <th className="common-fonts">USER</th>
                 </tr>
               </thead>
               <tbody>
+              {company.length === 0 ? (
                 <tr>
-                  <td className="common-fonts">1</td>
-                  <td className="common-fonts">Sep 6, 2023</td>
-                  <td className="common-fonts">Import Leads file</td>
-                  <td className="common-fonts">100</td>
-                  <td className="common-fonts">85</td>
-                  <td className="common-fonts">15</td>
-                  <td className="common-fonts">Anant Singh</td>
+                  <td colSpan={10} style={{ textAlign: "center" }}>
+                    No data found
+                  </td>
                 </tr>
+              ) : (
+                company.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                    <td className="common-fonts">{item.id}</td>
+                    <td className="common-fonts">{item?.creation_date.split('T')[0]}</td>
+                    <td className="common-fonts">Import Company file</td>
+                    {/* <td className="common-fonts">100</td> */}
+                    {/* <td className="common-fonts">85</td> */}
+                    {/* <td className="common-fonts">15</td> */}
+                    <td className="common-fonts">{item?.created_userfname} {item?.created_userlname}</td>
+                  </tr>
+                );
+              })
+            )}
+            
               </tbody>
             </table>
           </div>
@@ -589,15 +715,20 @@ const ImportTab = () => {
             >
               Sample Download
             </button>
-            
-          <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef2}
-            style={{ display: "none" }}
-            onChange={handleCsvFileImport2}
-          />
-            <button className="common-save-button common-fonts"  onClick={handleImportClick2}>Import</button>
+
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef2}
+              style={{ display: "none" }}
+              onChange={handleCsvFileImport2}
+            />
+            <button
+              className="common-save-button common-fonts"
+              onClick={handleImportClick2}
+            >
+              Import
+            </button>
           </div>
 
           <div className="import-tab-table">
@@ -607,22 +738,35 @@ const ImportTab = () => {
                   <th className="common-fonts">S NO</th>
                   <th className="common-fonts">DATE</th>
                   <th className="common-fonts">FILE NAME</th>
-                  <th className="common-fonts">TOTAL COUNT</th>
+                  {/* <th className="common-fonts">TOTAL COUNT</th>
                   <th className="common-fonts">SUCCESS</th>
-                  <th className="common-fonts">FAILED</th>
+                  <th className="common-fonts">FAILED</th> */}
                   <th className="common-fonts">USER</th>
                 </tr>
               </thead>
               <tbody>
+              {people.length === 0 ? (
                 <tr>
-                  <td className="common-fonts">1</td>
-                  <td className="common-fonts">Sep 6, 2023</td>
-                  <td className="common-fonts">Import Leads file</td>
-                  <td className="common-fonts">100</td>
-                  <td className="common-fonts">85</td>
-                  <td className="common-fonts">15</td>
-                  <td className="common-fonts">Anant Singh</td>
+                  <td colSpan={10} style={{ textAlign: "center" }}>
+                    No data found
+                  </td>
                 </tr>
+              ) : (
+                people.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                    <td className="common-fonts">{item.id}</td>
+                    <td className="common-fonts">{item?.creation_date.split('T')[0]}</td>
+                    <td className="common-fonts">Import People file</td>
+                    {/* <td className="common-fonts">100</td> */}
+                    {/* <td className="common-fonts">85</td> */}
+                    {/* <td className="common-fonts">15</td> */}
+                    <td className="common-fonts">{item?.created_userfname} {item?.created_userlname}</td>
+                  </tr>
+                );
+              })
+            )}
+            
               </tbody>
             </table>
           </div>

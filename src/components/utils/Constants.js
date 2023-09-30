@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { id } from 'date-fns/locale';
+// import { id } from 'date-fns/locale';
 
 const secretKey = 'mySecretKey123';
 // const secretKey = "miyamura"; // Set your secret key for login
@@ -29,13 +29,6 @@ export {getDecryptedUserPath}
   
   //=============================================================logout function
   export const handleLogout = () => {
-    //   // Clear JWT token from local storage
-    // localStorage.removeItem("jwtToken");
-    // localStorage.removeItem("landingUrl");
-    // localStorage.removeItem("id");
-    // localStorage.removeItem("encryptedUserPathTot");
-    // // Redirect to the home page or any other desired path
-    //   window.location.href = "https://www.leadplaner.com/user/login";
     localStorage.clear();
     window.location.href = "http://core.leadplaner.com/";
   };
@@ -69,7 +62,6 @@ export const EMPLOYEE_UPDATE = start+"api/employee/edit/";
 export const EMPLOYEE_ADD = start+"api/employee/add";
 export const EMPLOYEE_GET = start+"api/employee/getall";
 export const EMPLOYEE_GETID = start+"api/employee/get/"+userId;
-// export const EMPLOYEE_GETID = start+"api/employee/get/1";
 export const REMOVE_DOC = start+"api/employee/removeDoc/";
 export const UPLOAD_DOC = start+"api/employee/uploadDoc";
 export const VIEW_IMG = start+"employee/doc/";
@@ -133,7 +125,7 @@ export const GET_ALL_PRODUCT = start + "api/product/getall";
 export const REQ_DOCUMENT = start + "api/setting/requireddocs/";
 export const ADD_DOCUMENT = start + "api/setting/adddocindocumentmaster";
 export const UPDATE_DOCUMENT = start + "api/setting/updatedocmaster";
-
+export const IMPORT_DETAILS = start + "api/setting/getlogs/";
 //========================================================================Deals
 export const GET_ALL_DEAL = start + "api/deal/getall";
 export const ADD_DEAL = start + "api/deal/add";

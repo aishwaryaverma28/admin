@@ -37,8 +37,8 @@
 .contact-cp-table {
   margin-left: 1rem;
   margin-right: 1rem;
-  height: 70vh;
-  overflow: auto;
+  /* height: 70vh; */
+  /* overflow: auto; */
 }
 
 .contact-building {
