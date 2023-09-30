@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.351dbb82.css",
-    "main.js": "/static/js/main.6073fb69.js",
+    "main.css": "/static/css/main.6689cb32.css",
+    "main.js": "/static/js/main.1330f43c.js",
     "static/js/703.a467f9cc.chunk.js": "/static/js/703.a467f9cc.chunk.js",
     "static/js/598.bf62a11e.chunk.js": "/static/js/598.bf62a11e.chunk.js",
     "static/media/404.jpg": "/static/media/404.848d7a9bea70cb1616e0.jpg",
+    "static/media/docsign.png": "/static/media/docsign.bdb5aac2b95d06ca3289.png",
     "static/media/latest.jpg": "/static/media/latest.cdd6fdbb45bf5f076274.jpg",
     "static/media/crm.svg": "/static/media/crm.2d816b75e8b954da6e30e6df2c26638a.svg",
     "static/media/delete-icon.svg": "/static/media/delete-icon.d2ae7e39d9351a186362654fe3d65f42.svg",
@@ -18,14 +19,17 @@
     "static/media/time.svg": "/static/media/time.245fbc940075c22fbf2ceba5bbaff155.svg",
     "static/media/TrashFill.svg": "/static/media/TrashFill.8c4c960f9dcf04fe49bbcab8b9e6e685.svg",
     "static/media/envelope.svg": "/static/media/envelope.7db154f7c2105d4a69aa8cc0b334f3ae.svg",
+    "static/media/cloud.svg": "/static/media/cloud.85e2c6bbc4bda8ab976d22dbe7ccf43a.svg",
     "static/media/headphone-blue.svg": "/static/media/headphone-blue.2aa4334668885ab80e9444f4ce559975.svg",
     "static/media/headphone.svg": "/static/media/headphone.039aae9e339c84ec06bd035c17a2311a.svg",
+    "static/media/peoples.svg": "/static/media/peoples.4877ca1b70e0177078d7ec637f70fbf2.svg",
     "static/media/british-pound-symbol.svg": "/static/media/british-pound-symbol.4800b053bcd7ce8c9c12e381c2e94827.svg",
     "static/media/call.svg": "/static/media/call.2d32e1ac07835fdc9f4edc8f6a902a30.svg",
     "static/media/calendar-edit.svg": "/static/media/calendar-edit.6df918d2d3b4c28b140171f6d030374f.svg",
     "static/media/building.svg": "/static/media/building.00dadb10b83dc56f4de53afa654cb24f.svg",
     "static/media/lead-icon.svg": "/static/media/lead-icon.e5b4e076cfb9dca9c11c38a3446d9173.svg",
     "static/media/call-activity.svg": "/static/media/call-activity.f766f27dc650e34f7dc4b0bc84791062.svg",
+    "static/media/device.svg": "/static/media/device.29408215e3985b92050f7c3ed7ea0d98.svg",
     "static/media/sort.svg": "/static/media/sort.6cfd86b51d6a46ab1f1770317e54152d.svg",
     "static/media/calender2.svg": "/static/media/calender2.6990b3569885fc1ee6b4f571887ac188.svg",
     "index.html": "/index.html",
@@ -66,6 +70,7 @@
     "static/media/notupload.svg": "/static/media/notupload.cd0cfc15c8aaac0b2b6ce9c1d4dfc9d3.svg",
     "static/media/time-icon.svg": "/static/media/time-icon.9260b7aef10b16d0cb0e84cbacebadcf.svg",
     "static/media/upload.svg": "/static/media/upload.39de5a3b8922f24b19252aade52b6f82.svg",
+    "static/media/filter.svg": "/static/media/filter.87fc28d723f853c34fe3aab692a22cda.svg",
     "static/media/email-sync-tick.svg": "/static/media/email-sync-tick.cbd10e2eb0804da6534d04a880f2d10b.svg",
     "static/media/greater-left.svg": "/static/media/greater-left.44021534154f5a25cad148a910949c97.svg",
     "static/media/greater-right.svg": "/static/media/greater-right.fb3dcb7e951b7f26699f629679338f59.svg",
@@ -73,13 +78,14 @@
     "static/media/greater-arrow-down.svg": "/static/media/greater-arrow-down.b30bc8d119b2524aa2ce5a3e17745abc.svg",
     "static/media/greater-arrow.svg": "/static/media/greater-arrow.c22fdd72da9beca5e3f40a18bb66fdb7.svg",
     "static/media/greater-up.svg": "/static/media/greater-up.a8eef9ef909059b38a5aaebf46db2763.svg",
-    "main.351dbb82.css.map": "/static/css/main.351dbb82.css.map",
-    "main.6073fb69.js.map": "/static/js/main.6073fb69.js.map",
+    "static/media/bluedot.svg": "/static/media/bluedot.8d480cafc752076cfa9b3ffc75b9a1c2.svg",
+    "main.6689cb32.css.map": "/static/css/main.6689cb32.css.map",
+    "main.1330f43c.js.map": "/static/js/main.1330f43c.js.map",
     "703.a467f9cc.chunk.js.map": "/static/js/703.a467f9cc.chunk.js.map",
     "598.bf62a11e.chunk.js.map": "/static/js/598.bf62a11e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.351dbb82.css",
-    "static/js/main.6073fb69.js"
+    "static/css/main.6689cb32.css",
+    "static/js/main.1330f43c.js"
   ]
 }
