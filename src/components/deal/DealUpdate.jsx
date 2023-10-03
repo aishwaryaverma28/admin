@@ -796,7 +796,11 @@ const DealUpdate = () => {
   };
 
   const getStageName = (stageId) => {
+
     const stage = similarStage.find((item) => item.id === stageId);
+    console.log(stageId)
+    console.log(similarStage)
+    console.log("taher")
     return stage ? stage.stage_name : "Unknown Stage";
   };
 
@@ -931,7 +935,7 @@ const DealUpdate = () => {
             </div>
 
             {actionopen && (
-              <div className="stage-additional">
+              <div className="stage-outer-div">
               <ul
                 className="dropdown-menu stage-position stage-dropdown"
                 id="stage-list"
