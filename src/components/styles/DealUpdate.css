@@ -598,10 +598,6 @@
   left: 0rem;
 }
 
-.stage-save-btn {
-  width: 100%;
-  margin: 0;
-}
 
 .active-stage {
   background-color: var(--ternary);
@@ -970,6 +966,18 @@ align-items: center;
 .stage-dropdown{
   height: 50vh;
   overflow-y: auto;
+  margin-top: -2rem;
+}
+
+.stage-additional{
+  position: relative;
+}
+
+.stage-save-btn {
+  width: 100%;
+  margin: 0;
+  position: absolute;
+  bottom: 0;
 }
 
 

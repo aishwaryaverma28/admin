@@ -931,6 +931,7 @@ const DealUpdate = () => {
             </div>
 
             {actionopen && (
+              <div className="stage-additional">
               <ul
                 className="dropdown-menu stage-position stage-dropdown"
                 id="stage-list"
@@ -947,8 +948,8 @@ const DealUpdate = () => {
                       </li>
                     )
                 )}
-                <li>
-                  <button
+              </ul>
+              <button
                     className={
                       isStageButton
                         ? `common-inactive-button stage-save-btn`
@@ -959,8 +960,8 @@ const DealUpdate = () => {
                   >
                     Change Status
                   </button>
-                </li>
-              </ul>
+              </div>
+
             )}
           </div>
         </div>
@@ -1639,7 +1640,7 @@ const DealUpdate = () => {
                 ) : (
                   <i class="fa-sharp fa-solid fa-angle-down"></i>
                 )}
-                Fields
+                Additional Fields
               </p>
             </div>
 
