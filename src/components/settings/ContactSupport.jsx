@@ -53,11 +53,19 @@ const ContactSupport = () => {
       },
     })
     .then((response) => {
-      console.log(response);
-      toast.success("Ticket is added successfully", {
-        position:"top-center",
-        autoClose:2000
-      })
+       if(response.data.status===1){
+        toast.success("Ticket is added successfully", {
+          position:"top-center",
+          autoClose:2000
+        })
+        
+       }else{
+        toast.error(response.data.message, {
+          position:"top-center",
+          autoClose:2000
+        })
+       }
+
       setDetails({
         title: "",
         description: "",
@@ -142,6 +150,7 @@ setStateBtn(0);
              onChange={handleChange}
               className="common-input contact-type-of-issue"
             >
+            <option value="">Select type of issue</option>
               <option value="technical">Technical</option>
               <option value="Non Technical">Non Technical</option>
             </select>
@@ -156,6 +165,7 @@ setStateBtn(0);
                onChange={handleChange}
               className="common-input contact-type-of-issue"
             >
+             <option value="">Select priority</option>
               <option value="Low">Low</option>
               <option value="Average">Average</option>
               <option value="High">High</option>
