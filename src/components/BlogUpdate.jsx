@@ -264,7 +264,7 @@ const BlogUpdate = () => {
     const newSection = {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
-      image: blogImg3.split("blog/")[1].replace(/\.jpg$/, ""),
+      image: blogImg3.split("blog/")[1]?.replace(/\.jpg$/, ""),
       // section: plainText,
       section: `${dataFromChild}`,
       site: "",
@@ -390,7 +390,7 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg2(data?.url);
-          const part = data?.url.split("blog/")[1].replace(/\.jpg$/, "");
+          const part = selectedImage.name;
           setBlogImgName(part);
           setFormData((prev) => {
             return { ...prev, image: part};
@@ -419,7 +419,7 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg3(data?.url);
-          setBlogImgName2(data?.url.split("blog/")[1].replace(/\.jpg$/, ""));
+          setBlogImgName2(selectedImage.name);
         })
         .catch((err) => {
           console.log(err);
@@ -465,7 +465,7 @@ const BlogUpdate = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url?.split("blog/")[1].replace(/\.jpg$/, "");
+          newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
         })
         .catch((err) => {
