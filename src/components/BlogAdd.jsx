@@ -84,7 +84,7 @@ const BlogAdd = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url?.split("blog/")[1].replace(/\.jpg$/, "");
+          newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -337,7 +337,7 @@ const BlogAdd = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setBlogImg(data?.url?.split("blog/")[1].replace(/\.jpg$/, ""));
+          setBlogImg(selectedImage.name);
         })
         .catch((err) => {
           console.log(err);
@@ -362,7 +362,7 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setBlogImg2(data?.url?.split("blog/")[1].replace(/\.jpg$/, ""));
+          setBlogImg2(selectedImage.name);
         })
         .catch((err) => {
           console.log(err);
