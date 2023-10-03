@@ -44,6 +44,7 @@ const DealUpdate = () => {
   const [info, setInfo] = useState({});
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [banks, setBanks] = useState([]);
+  const [selectedStage, setSelectedStage] = useState(null);
 
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -122,7 +123,7 @@ const DealUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
   const [ownerId, setOwnerId] = useState(0);
-  const idOfOwner = parseInt(localStorage.getItem('id'));
+  const idOfOwner = parseInt(localStorage.getItem("id"));
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -145,8 +146,8 @@ const DealUpdate = () => {
       });
   };
 
-  const ownerName = userData.find((item) => item.id ===ownerId);
-  
+  const ownerName = userData.find((item) => item.id === ownerId);
+
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
       axios
@@ -196,9 +197,9 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
-        setOwnerId(details?.owner)
+        setOwnerId(details?.owner);
         setDealName(response?.data?.data[0]?.deal_name);
-        
+
         const fieldMappings = {};
         for (const key in fieldNames) {
           // Use the value from fieldNames as the key in fieldMappings
@@ -308,7 +309,7 @@ const DealUpdate = () => {
     );
     setBanks(loanOfferedByValues);
   };
-  
+
   const userAdded = () => {
     axios
       .get(GET_TEAM_MEM, {
@@ -376,6 +377,8 @@ const DealUpdate = () => {
   }, []);
 
   const handleStageClickFromList = (event, stageId) => {
+    const selectedStageName = similarStage[stageId - 1];
+    setSelectedStage(selectedStageName.display_name);
     setSelectedStageId(stageId);
     setIsStageButton(false);
 
@@ -403,7 +406,12 @@ const DealUpdate = () => {
         })
         .then((response) => {
           fetchDeal();
-          alert(response?.data.message);
+          // alert(response?.data.message);
+          toast.success(response?.data.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          
         })
         .catch((error) => {
           console.log(error);
@@ -787,6 +795,15 @@ const DealUpdate = () => {
     setStateBtn(1);
   };
 
+  const getStageName = (stageId) => {
+    const stage = similarStage.find((item) => item.id === stageId);
+    return stage ? stage.stage_name : "Unknown Stage";
+  };
+
+  // Example usage
+  const stageId = dealDetails.stage_id; 
+  const stageName = getStageName(stageId);
+
   return (
     <>
       <div className="backToDeal">
@@ -813,12 +830,10 @@ const DealUpdate = () => {
             </>
           )}
         </p>
-        {
-          ownerId===idOfOwner && (
-            <i className="fa-solid fa-pen" onClick={toggleEditable}></i>
-          )
-        }
-        
+        {ownerId === idOfOwner && (
+          <i className="fa-solid fa-pen" onClick={toggleEditable}></i>
+        )}
+
         <i className="fas fa-ellipsis-h"></i>
       </div>
       <div className="dealHead"></div>
@@ -907,7 +922,7 @@ const DealUpdate = () => {
               className="dropdown-header2 pipeline-dropdown"
               onClick={toggleActionDropdownStatic}
             >
-              Select Stages
+              <p className="common-fonts ud-stage-name">{stageName}</p>
               <i
                 className={`fa-sharp fa-solid ${
                   actionopen ? "fa-angle-up" : "fa-angle-down"
@@ -916,7 +931,10 @@ const DealUpdate = () => {
             </div>
 
             {actionopen && (
-              <ul className="dropdown-menu stage-position" id="stage-list">
+              <ul
+                className="dropdown-menu stage-position stage-dropdown"
+                id="stage-list"
+              >
                 {similarStage?.map(
                   (stage, index) =>
                     dealDetails?.stage_id !== stage.id && (
@@ -1074,7 +1092,7 @@ const DealUpdate = () => {
                           }
                           className={isDisabled ? "disabled" : ""}
                           name="owner"
-                          value={ownerName ? ownerName.id : ''}
+                          value={ownerName ? ownerName.id : ""}
                         >
                           {userData
                             .slice()
@@ -1671,7 +1689,7 @@ const DealUpdate = () => {
             {isBankOpen && (
               <div className="detailsContent">
                 <div className="dealsLeftContainer">
-                  {banks?.map((banks,index) => (
+                  {banks?.map((banks, index) => (
                     <p key={index}>{banks}</p>
                   ))}
                 </div>
@@ -1740,12 +1758,23 @@ const DealUpdate = () => {
           <div className="tab-content">
             {activeTab === "notes" && (
               <div className="notes-tab-content">
-                <AddNotes onNotesNum={fetchNotes} type="deal" ownerId={ownerId} idOfOwner={idOfOwner} />
+                <AddNotes
+                  onNotesNum={fetchNotes}
+                  type="deal"
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
+                />
               </div>
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail type="deal" id={id} dealName={dealName} ownerId={ownerId} idOfOwner={idOfOwner} />
+                <DealEmail
+                  type="deal"
+                  id={id}
+                  dealName={dealName}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
+                />
               </div>
             )}
             {activeTab === "activity" && (
@@ -1773,7 +1802,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "document" && (
               <div className="attachment-tab-content">
-                <DealDocument/>
+                <DealDocument />
               </div>
             )}
           </div>
