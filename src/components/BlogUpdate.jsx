@@ -21,28 +21,21 @@ const BlogUpdate = () => {
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
-  const [sectionImage, setSectionImage] = useState("");
   const [dataFromChild, setDataFromChild] = useState("");
-  const [hideImages, setHideImages] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
-  const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
   const [childData, setChildData] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [showUploadButton, setShowUploadButton] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
-  const [showChooseButton, setShowChooseButton] = useState(false);
   const decryptedToken = getDecryptedToken();
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
   const [tagApi, setTagApi] = useState([]);
   const [selectSite, setSelectSite] = useState("");
-  const [currentBlog, setCurrentBlog] = useState({});
   const [sectionData, setSectionData] = useState([]);
-  const [pic, setPic] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -67,14 +60,14 @@ const BlogUpdate = () => {
     getBlogInfo();
   }, []);
 
-  const handleUpdateClick = (id) => {
+  const handleUpdateClick = (event,id) => {
+    event.preventDefault();
     const updatedSection = sectionData.find((section) => section.id === id);
 
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
     }
-
     const updatedFormData = {
       heading: updatedSection.heading,
       sort: updatedSection.sort,
@@ -82,8 +75,6 @@ const BlogUpdate = () => {
       section: updatedSection.section,
       blogid: updatedSection.blogid,
     };
-
-
     axios
       .put(SEC_UPDATE + updatedSection.id, updatedFormData, {
         headers: {
@@ -92,7 +83,7 @@ const BlogUpdate = () => {
       })
       .then((response) => {
         if (response.data.status === 1) {
-          toast.success("Blog updated successfully", {
+          toast.success("Section updated successfully", {
             position: "top-center",
             autoClose: 2000,
           });
@@ -273,7 +264,7 @@ const BlogUpdate = () => {
     const newSection = {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
-      image: blogImg3.split("blog/")[1],
+      image: blogImg3.split("blog/")[1].replace(/\.jpg$/, ""),
       // section: plainText,
       section: `${dataFromChild}`,
       site: "",
@@ -364,7 +355,7 @@ const BlogUpdate = () => {
       const data = await response.json();
       console.log(data);
       if (data?.status === 1) {
-        toast.success("blog updated successfully", {
+        toast.success("Blog updated successfully", {
           position: "top-center",
           autoClose: 2000,
         });
@@ -399,10 +390,10 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg2(data?.url);
-          const part = data?.url.split("blog/");
-          setBlogImgName(part[1]);
+          const part = data?.url.split("blog/")[1].replace(/\.jpg$/, "");
+          setBlogImgName(part);
           setFormData((prev) => {
-            return { ...prev, image: part[1] };
+            return { ...prev, image: part};
           });
         })
         .catch((err) => {
@@ -428,7 +419,7 @@ const BlogUpdate = () => {
         .then((res) => res.json())
         .then((data) => {
           setBlogImg3(data?.url);
-          setBlogImgName2(data?.url.split("blog/")[1]);
+          setBlogImgName2(data?.url.split("blog/")[1].replace(/\.jpg$/, ""));
         })
         .catch((err) => {
           console.log(err);
@@ -474,7 +465,7 @@ const BlogUpdate = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url?.split("blog/")[1];
+          newSectionData[index].image = data?.url?.split("blog/")[1].replace(/\.jpg$/, "");
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -679,7 +670,8 @@ const BlogUpdate = () => {
                       <div className="blog-browse-img">
                         <button
                           className="common-fonts blog-add-img add-img-2"
-                          onClick={() => {
+                          onClick={(event) => {
+                            event.preventDefault();
                             fileInputRefs[index].click();
                             setUpdateStateBtn(1);
                           }}

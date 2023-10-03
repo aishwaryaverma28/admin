@@ -171,7 +171,8 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                     onChange={handleChange}
                   >
                   <option value="">Select Currency</option>
-                    <option value="usd">US Dollar (USD)</option>
+                    {/* <option value="usd">US Dollar (USD)</option> */}
+                     <option value="Gbp">GBP</option>
                   </select>
                 </div>
               </div>

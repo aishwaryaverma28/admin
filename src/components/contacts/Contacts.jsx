@@ -415,14 +415,14 @@ const Contacts = () => {
               className="common-fonts common-save-button contact-dots contact-btn-top"
               onClick={handlePersonModal}
             >
-              Add People
+              Add
             </button>
           ) : (
             <button
               className="common-fonts common-save-button contact-dots contact-btn-top"
               onClick={handleCompanyModal}
             >
-              Add Company
+              Add
             </button>
           )}
           <input
@@ -445,14 +445,14 @@ const Contacts = () => {
               className="common=save-button common-white-green-button contact-dots contact-btn-top"
               onClick={handleImportClick2}
             >
-              Import People
+              Import
             </button>
           ) : (
             <button
               className="common=save-button common-white-green-button contact-dots contact-btn-top"
               onClick={handleImportClick}
             >
-              Import Compnay
+              Import
             </button>
           )}
 
@@ -466,7 +466,7 @@ const Contacts = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li onClick={handleDeletePeople}>Delete People</li>
+                    <li onClick={handleDeletePeople}>Delete</li>
                   </ul>
                 )}
               </div>
@@ -480,7 +480,7 @@ const Contacts = () => {
                 </div>
                 {actionopen && (
                   <ul className="dropdown-menu contact-delete-menu">
-                    <li onClick={handleDeleteModal}>Delete Company</li>
+                    <li onClick={handleDeleteModal}>Delete</li>
                   </ul>
                 )}
               </div>

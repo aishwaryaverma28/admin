@@ -84,7 +84,7 @@ const BlogAdd = () => {
           console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
-          newSectionData[index].image = data?.url?.split("blog/")[1];
+          newSectionData[index].image = data?.url?.split("blog/")[1].replace(/\.jpg$/, "");
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -163,20 +163,6 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  const handleimageChange = (event, index) => {
-    const newSectionData = [...sectionData];
-    newSectionData[index].image = event.target.value;
-    setSectionData(newSectionData);
-    setStateBtn(1);
-  };
-  //==============================================================sub section image
-  const subImageTrasfer = (data, index) => {
-    const newSectionData = [...sectionData];
-    newSectionData[index].image = data;
-    setSectionData(newSectionData);
-    setHideImages(true);
-    setStateBtn(1);
-  };
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
@@ -351,7 +337,7 @@ const BlogAdd = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setBlogImg(data?.url?.split("blog/")[1]);
+          setBlogImg(data?.url?.split("blog/")[1].replace(/\.jpg$/, ""));
         })
         .catch((err) => {
           console.log(err);
@@ -376,7 +362,7 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setBlogImg2(data?.url?.split("blog/")[1]);
+          setBlogImg2(data?.url?.split("blog/")[1].replace(/\.jpg$/, ""));
         })
         .catch((err) => {
           console.log(err);

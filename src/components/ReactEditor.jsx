@@ -29,12 +29,11 @@ function ReactEditor({ onDataTransfer, initialContent }, ref) {
         toolbar: [
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
           [{ align: [] }],
           [{ list: 'ordered' }, { list: 'bullet' }],
           ['link', 'image'],
           ['clean'],
-          // Add additional tools here
-          ['color', 'background'],
           ['blockquote'],
           [{ script: 'sub' }, { script: 'super' }],
           ['blockquote', 'code-block'],
