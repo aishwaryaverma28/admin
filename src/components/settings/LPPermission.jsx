@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
-  GET_TEAM_MEM,
+  GET_ACTIVE_TEAM_MEM,
   GET_ALL_ROLES,
   UPDATE_TEAM_MEM,
   getDecryptedToken,
@@ -106,7 +106,7 @@ const fetchData = async () => {
   //===========================================================api calls
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .get(GET_ACTIVE_TEAM_MEM, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

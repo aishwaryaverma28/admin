@@ -16,7 +16,7 @@ import {
   GET_ALL_STAGE,
   GET_LABEL,
   handleLogout,
-  GET_TEAM_MEM,
+  GET_ACTIVE_TEAM_MEM,
   USER_INFO,
   GET_OWNER_LEAD,
   LOG_RECORD
@@ -96,7 +96,7 @@ const Lead = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .get(GET_ACTIVE_TEAM_MEM, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

@@ -10,7 +10,7 @@ import {
   GET_ALL_STAGE,
   getDecryptedToken,
   GET_LABEL,
-  GET_TEAM_MEM,
+  GET_ACTIVE_TEAM_MEM,
   USER_INFO,
   IMPORT_DEAL,
   handleLogout,
@@ -95,7 +95,7 @@ const Deal = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .get(GET_ACTIVE_TEAM_MEM, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

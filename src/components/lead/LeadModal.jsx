@@ -5,7 +5,7 @@ import {
   UPDATE_LEAD,
   GETNOTEBYSOURCE,
   GET_LEAD_ID,
-  GET_TEAM_MEM,
+  GET_ACTIVE_TEAM_MEM,
   handleLogout,
   getDecryptedToken,
   GET_LABEL,
@@ -298,7 +298,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .get(GET_ACTIVE_TEAM_MEM, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
