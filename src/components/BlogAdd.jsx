@@ -249,6 +249,7 @@ const BlogAdd = () => {
     setSelectedDate("");
     setSectionData([]);
     setSectionTitle("");
+    setBlogImg("");
     setSectionSort("");
     setDataFromChild("");
     setShowUploadButton(false);
