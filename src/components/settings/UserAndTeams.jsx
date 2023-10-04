@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/LPSetting.css";
 import "../styles/LPUserAndTeam.css";
 import axios from "axios";
-import { GET_TEAM_MEM, getDecryptedToken } from "../utils/Constants";
+import { GET_TEAM_MEM, GET_ACTIVE_TEAM_MEM, GET_DEACTIVE_TEAM_MEM, getDecryptedToken, UPDATE_TEAM_MEM } from "../utils/Constants";
 import SearchIcon from "../../assets/image/search.svg";
 import ExportIcon from "../../assets/image/export.svg";
 import ExportIcon2 from "../../assets/image/export2.svg";
@@ -14,6 +14,9 @@ import CreateUserModal from "./CreateUserModal";
 import CreateTeamModal from "./CreateTeamModal";
 import { Link } from "react-router-dom";
 import DeactivateUser from "./DeactivateUser";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -22,6 +25,8 @@ const UserAndTeams = () => {
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false); // New state for modal
   const decryptedToken = getDecryptedToken();
   const [teamData, setTeamData] = useState([]);
+  const [activeData, setActiveData] = useState([]);
+  const [deactiveData, setDeactiveData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeTabName, setActiveTabName] = useState("All");
@@ -32,12 +37,89 @@ const UserAndTeams = () => {
   const [isDeactivateOpen, setIsDeactivateOpen] = useState(false);
   const [selectedFirstName, setSelectedFirstName] = useState("");
   const [selectedLastName, setSelectedLastName] = useState("");
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  const HandleDeactivateUser = (firstName, lastName) => {
-    setIsDeactivateOpen(true);
-    setSelectedFirstName(firstName);
-    setSelectedLastName(lastName);
+
+  // const HandleDeactivateUser = (firstName, lastName) => {
+
+  //   setIsDeactivateOpen(true);
+  //   setSelectedFirstName(firstName);
+  //   setSelectedLastName(lastName);
+  // };
+
+  const HandleDeactivateUser = (id) => {
+    const updateForm = {
+      is_deactivated :1
+    }
+    axios
+    .put(
+      UPDATE_TEAM_MEM + id,
+      updateForm,
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      // Handle successful response
+
+      toast.success("Member Deactivated successfully", {
+        position: "top-center",
+        autoClose:2000
+      });
+      userAdded();
+      userDeactive();
+      userActive();
+      setDropdownVisible(false);
+      
+    })
+    .catch((error) => {
+      // Handle error
+      toast.error("Error saving password", {
+        position: "top-center",
+        autoClose:2000
+      });
+      setDropdownVisible(false);
+    });
   };
+  const HandleActivateUser = (id) => {
+    const updateForm = {
+      is_deactivated :0
+    }
+    axios
+    .put(
+      UPDATE_TEAM_MEM + id,
+      updateForm,
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      // Handle successful response
+
+      toast.success("Member Deactivated successfully", {
+        position: "top-center",
+        autoClose:2000
+      });
+        userAdded();
+        userActive();
+        userDeactive();
+        setDropdownVisible(false);
+    })
+    .catch((error) => {
+      // Handle error
+      toast.error("Error saving password", {
+        position: "top-center",
+        autoClose:2000
+      });
+      setDropdownVisible(false);
+    });
+  };
+
+
   const HandleDeactivateClose = () => {
     setIsDeactivateOpen(false);
   };
@@ -84,8 +166,42 @@ const UserAndTeams = () => {
         setLoading(false);
       });
   };
+  const userActive = () => {
+    axios
+      .get(GET_ACTIVE_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setActiveData(response.data.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+  const userDeactive = () => {
+    axios
+      .get(GET_DEACTIVE_TEAM_MEM, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setDeactiveData(response.data.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
   useEffect(() => {
     userAdded();
+    userActive();
+    userDeactive();
   }, []);
 
   const handleSearchChange = (event) => {
@@ -101,6 +217,26 @@ const UserAndTeams = () => {
     return fullName.includes(searchLower) || email.includes(searchLower);
   });
 
+  const filteredActiveData = (activeData || []).filter((teamMember) => {
+    const fullName =
+      `${teamMember.first_name} ${teamMember.last_name}`.toLowerCase();
+    const email = teamMember.email?.toLowerCase() || "";
+    const searchLower = searchQuery.toLowerCase();
+
+    return fullName.includes(searchLower) || email.includes(searchLower);
+  });
+
+  const filteredDeactiveData = (deactiveData || []).filter((teamMember) => {
+    const fullName =
+      `${teamMember.first_name} ${teamMember.last_name}`.toLowerCase();
+    const email = teamMember.email?.toLowerCase() || "";
+    const searchLower = searchQuery.toLowerCase();
+
+    return fullName.includes(searchLower) || email.includes(searchLower);
+  });
+
+
+
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
   };
@@ -111,7 +247,11 @@ const UserAndTeams = () => {
       ...prevState,
       [userId]: !prevState[userId],
     }));
+    setDropdownVisible(!dropdownVisible);
   };
+
+
+  
 
 
 
@@ -240,7 +380,7 @@ const UserAndTeams = () => {
                   }`}
                   onClick={() => handleTabChange("Active")}
                 >
-                  Active (2)
+                  Active ({filteredActiveData.length})
                 </button>
                 <button
                   className={`user-team-btn ${
@@ -256,7 +396,7 @@ const UserAndTeams = () => {
                   }`}
                   onClick={() => handleTabChange("Deactivated")}
                 >
-                  Deactivated (1)
+                  Deactivated ({filteredDeactiveData.length})
                 </button>
               </div>
               <button type="button" className="helpBtn genral-refresh-icon user-team-refresh-icon" title="Refresh" onClick={userTeamRefresh}>
@@ -455,7 +595,7 @@ const UserAndTeams = () => {
                                     }`}
                                   ></i>
                                 </div>
-                                {userActionOpen[teamMember.id] && (
+                                {userActionOpen[teamMember.id] && dropdownVisible && (
                                   <ul className="dropdown-menu user-team-dropdown-position">
                                     <li>
                                       <Link
@@ -471,16 +611,22 @@ const UserAndTeams = () => {
                                     <li>Edit team</li>
                                     <li>Resend email invite</li>
                                     <li>Make Super Admin</li>
-                                    <li
-                                      onClick={() =>
-                                        HandleDeactivateUser(
-                                          teamMember.first_name,
-                                          teamMember.last_name
-                                        )
-                                      }
+                                    {
+                                      teamMember.is_deactivated === 0 ? (
+                                        <li
+                                      onClick={()=>HandleDeactivateUser(teamMember.id)}
                                     >
                                       Deactivate user
                                     </li>
+                                      ) : (
+                                        <li
+                                      onClick={()=>HandleActivateUser(teamMember.id)}
+                                    >
+                                      Activate user 
+                                    </li>
+                                      )
+                                    }
+                                   
                                   </ul>
                                 )}
                               </div>
@@ -570,79 +716,7 @@ const UserAndTeams = () => {
                         </div>
                       </th>
                     </tr>
-                    <tr>
-                      <td>
-                        <label class="custom-checkbox">
-                          <input type="checkbox" className="cb1" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </td>
-                      <td>
-                        <div className="user-info">
-                          <div className="usericon-name-email">
-                            <div className="user-icon-round">
-                              <img src={User} alt="" />
-                            </div>
-
-                            <div className="user-name-info">
-                              <p className="user-name-value">
-                                <Link
-                                  to={"/lp/settings/usernteams/permissions"}
-                                >
-                                  Anant Sign Chauhan
-                                </Link>
-                              </p>
-                              <p>anantsingh@123@gmail.com</p>
-                            </div>
-                          </div>
-                          <div>
-                            <div className="select action-select">
-                              <div
-                                className="dropdown-container"
-                                ref={actionDropDownRef}
-                              >
-                                <div
-                                  className="dropdown-header2"
-                                  onClick={toggleActionDropdownStatic}
-                                >
-                                  Actions{" "}
-                                  <i
-                                    className={`fa-sharp fa-solid ${
-                                      actionopen
-                                        ? "fa-angle-up"
-                                        : "fa-angle-down"
-                                    }`}
-                                  ></i>
-                                </div>
-                                {actionopen && (
-                                  <ul className="dropdown-menu user-team-dropdown-position">
-                                    <li>Edit user</li>
-                                    <li>Edit permissions</li>
-                                    <li>Edit team</li>
-                                    <li>Resend email invite</li>
-                                    <li>Make Super Admin</li>
-                                    <li
-                                      onClick={() =>
-                                        HandleDeactivateUser(
-                                          "Anant",
-                                          "Singh Chauhan"
-                                        )
-                                      }
-                                    >
-                                      Deactivate user
-                                    </li>
-                                  </ul>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="user-team-font"></td>
-                      <td className="user-team-font">Super Admin</td>
-                      <td className="user-team-font">3 hours ago</td>
-                    </tr>
-                    {filteredTeamData.map((teamMember) => (
+                    {filteredActiveData.map((teamMember) => (
                       <tr key={teamMember.id}>
                         <td>
                           <label className="custom-checkbox">
@@ -691,7 +765,7 @@ const UserAndTeams = () => {
                                     }`}
                                   ></i>
                                 </div>
-                                {userActionOpen[teamMember.id] && (
+                                {userActionOpen[teamMember.id] && dropdownVisible && (
                                   <ul className="dropdown-menu user-team-dropdown-position">
                                     <li>Edit user</li>
                                     <li>Edit permissions</li>
@@ -701,8 +775,7 @@ const UserAndTeams = () => {
                                     <li
                                       onClick={() =>
                                         HandleDeactivateUser(
-                                          teamMember.first_name,
-                                          teamMember.last_name
+                                          teamMember.id
                                         )
                                       }
                                     >
@@ -907,78 +980,82 @@ const UserAndTeams = () => {
                         </div>
                       </th>
                     </tr>
-                    <tr>
-                      <td>
-                        <label class="custom-checkbox">
-                          <input type="checkbox" className="cb1" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </td>
-                      <td>
-                        <div className="user-info">
-                          <div className="usericon-name-email">
-                            <div className="user-icon-round">
-                              <img src={User} alt="" />
-                            </div>
+                    {filteredDeactiveData.map((teamMember) => (
+                      <tr key={teamMember.id}>
+                        <td>
+                          <label className="custom-checkbox">
+                            <input type="checkbox" className="cb1" />
+                            <span className="checkmark"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <div className="user-info">
+                            <div className="usericon-name-email">
+                              <div className="user-icon-round">
+                                <img src={User} alt="" />
+                              </div>
 
-                            <div className="user-name-info">
-                              <p className="user-name-value">
-                                Anant Sign Chauhan
-                              </p>
-                              <p>anantsingh@123@gmail.com</p>
+                              <div className="user-name-info">
+                                <p className="user-name-value">
+                                  {teamMember.first_name +
+                                    " " +
+                                    teamMember.last_name}
+                                </p>
+                                <p>{teamMember.email}</p>
+                              </div>
+                            </div>
+                            <div className="select action-select">
+                              <div
+                                className="dropdown-container"
+                                ref={(ref) =>
+                                  (actionDropDownRefs.current[teamMember.id] =
+                                    ref)
+                                }
+                                data-user-id={teamMember.id}
+                              >
+                                {/* Pass the user ID to the toggleActionDropdown function */}
+                                <div
+                                  className="dropdown-header2"
+                                  onClick={() =>
+                                    toggleActionDropdown(teamMember.id)
+                                  }
+                                >
+                                  Actions{" "}
+                                  <i
+                                    className={`fa-sharp fa-solid ${
+                                      userActionOpen[teamMember.id]
+                                        ? "fa-angle-up"
+                                        : "fa-angle-down"
+                                    }`}
+                                  ></i>
+                                </div>
+                                {userActionOpen[teamMember.id] && dropdownVisible && (
+                                  <ul className="dropdown-menu user-team-dropdown-position">
+                                    <li>Edit user</li>
+                                    <li>Edit permissions</li>
+                                    <li>Edit team</li>
+                                    <li>Resend email invite</li>
+                                    <li>Make Super Admin</li>
+                                    <li
+                                      onClick={() =>
+                                        HandleActivateUser(
+                                          teamMember.id
+                                        )
+                                      }
+                                    >
+                                      Activate user
+                                    </li>
+                                  </ul>
+                                )}
+                              </div>
                             </div>
                           </div>
-                          <div>
-                            <select
-                              name=""
-                              id=""
-                              className="select-action user-team-font"
-                            >
-                              <option value="">Action</option>
-                            </select>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="user-team-font"></td>
-                      <td className="user-team-font">Super Admin</td>
-                      <td className="user-team-font">3 hours ago</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label class="custom-checkbox">
-                          <input type="checkbox" className="cb1" />
-                          <span class="checkmark"></span>
-                        </label>
-                      </td>
-                      <td>
-                        <div className="user-info">
-                          <div className="usericon-name-email">
-                            <div className="user-icon-round">
-                              <img src={User} alt="" />
-                            </div>
-
-                            <div className="user-name-info">
-                              <p className="user-name-value">
-                                Anant Sign Chauhan
-                              </p>
-                              <p>anantsingh@123@gmail.com</p>
-                            </div>
-                          </div>
-                          <div>
-                            <select
-                              name=""
-                              id=""
-                              className="select-action user-team-font"
-                            >
-                              <option value="">Action</option>
-                            </select>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="user-team-font"></td>
-                      <td className="user-team-font">Super Admin</td>
-                      <td className="user-team-font">3 hours ago</td>
-                    </tr>
+                        </td>
+                        <td className="user-team-font"></td>
+                        <td className="user-team-font"></td>
+                        <td className="user-team-font"></td>
+                      </tr>
+                    ))}
                   </table>
                 )}
               </section>
@@ -1037,6 +1114,7 @@ const UserAndTeams = () => {
           teamData={teamData}
         />
       )}
+      <ToastContainer/>
     </>
   );
 };
