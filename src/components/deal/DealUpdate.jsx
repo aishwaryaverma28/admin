@@ -45,6 +45,8 @@ const DealUpdate = () => {
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [banks, setBanks] = useState([]);
   const [selectedStage, setSelectedStage] = useState(null);
+  const [stagesId, setStagesId] = useState([])
+
 
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -453,6 +455,14 @@ const DealUpdate = () => {
           (item) => item.display_name
         );
 
+        const displayId = response?.data?.message?.map(
+          (item) => item.id
+        ).reverse();
+
+
+
+
+   
         setSimilarStage(response?.data?.message.reverse());
 
         // Sort displayNames based on item.id in ascending order
@@ -467,6 +477,7 @@ const DealUpdate = () => {
         });
 
         setStages(sortedDisplayNamesAsc);
+        setStagesId(displayId);
 
         const statusNames = response?.data?.message?.map(
           (item) => item.stage_name
@@ -479,6 +490,10 @@ const DealUpdate = () => {
         console.log(error);
       });
   };
+
+
+
+
 
   const handleSummary = () => {
     setIsSummaryOpen(!isSummaryOpen);
@@ -591,10 +606,19 @@ const DealUpdate = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const visibleStages = stages?.slice(currentIndex, currentIndex + 4);
+
+   const visibleStages = stages?.slice(currentIndex, currentIndex + 4);
+
+
+
+
+
+
+
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) => prevIndex - 1);
+
   };
 
   const handleNextClick = () => {
@@ -796,9 +820,6 @@ const DealUpdate = () => {
 
   const getStageName = (stageId) => {
     const stage = similarStage.find((item) => item.id === stageId);
-    console.log(stageId)
-    console.log(similarStage)
-    console.log("taher")
     return stage ? stage.stage_name : "Unknown Stage";
   };
 
@@ -861,43 +882,41 @@ const DealUpdate = () => {
             <p className="deal-loading">loading...</p>
           ) : (
             <>
-              {visibleStages?.map((stage, index) => {
-                const isActive =
-                  currentIndex + index + 1 === dealDetails.stage_id;
-                const activeIndex = dealDetails.stage_id;
-                const backgroundColor = isActive
-                  ? "#2b74da"
-                  : activeIndex > currentIndex + index + 1
-                  ? "#077838"
-                  : "#f3f3f3";
-                const textColor =
-                  isActive ||
-                  backgroundColor === "#077838" ||
-                  backgroundColor === "#2b74da"
-                    ? "white"
-                    : "#1e2224";
+            {visibleStages?.map((stage, index) => {
+  // Find the corresponding id for the current stage
+  const stageId = stagesId[currentIndex + index];
 
-                const arrowClass = isActive
-                  ? "arrow-blue"
-                  : backgroundColor === "#077838"
-                  ? "arrow-green"
-                  : "";
+  const isActive = stageId === dealDetails.stage_id;
+  const activeIndex = dealDetails.stage_id;
+  const backgroundColor = isActive
+    ? "#2b74da"
+    : activeIndex > stageId
+    ? "#077838"
+    : "#f3f3f3";
+  const textColor =
+    isActive || backgroundColor === "#077838" || backgroundColor === "#2b74da"
+      ? "white"
+      : "#1e2224";
 
-                return (
-                  <div
-                    className={`arrow-pointer ${arrowClass}`}
-                    style={{ backgroundColor, color: textColor }}
-                    key={index}
-                  >
-                    <p
-                      className="common-fonts arrow-text"
-                      style={{ color: textColor }}
-                    >
-                      {stage} (3 days)
-                    </p>
-                  </div>
-                );
-              })}
+  const arrowClass = isActive
+    ? "arrow-blue"
+    : backgroundColor === "#077838"
+    ? "arrow-green"
+    : "";
+
+  return (
+    <div
+      className={`arrow-pointer ${arrowClass}`}
+      style={{ backgroundColor, color: textColor }}
+      key={index}
+    >
+      <p className="common-fonts arrow-text" style={{ color: textColor }}>
+        {stage} (3 days)
+      </p>
+    </div>
+  );
+})}
+
             </>
           )}
 
