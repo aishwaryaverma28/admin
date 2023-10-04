@@ -377,7 +377,7 @@ const DealUpdate = () => {
   }, []);
 
   const handleStageClickFromList = (event, stageId) => {
-    const selectedStageName = similarStage[stageId - 1];
+    const selectedStageName = similarStage.find(stage => stage.id === stageId);
     setSelectedStage(selectedStageName.display_name);
     setSelectedStageId(stageId);
     setIsStageButton(false);
@@ -386,7 +386,6 @@ const DealUpdate = () => {
     liElements.forEach((li) => {
       li.classList.remove("active-stage");
     });
-
     // Add active class to the clicked li element
     event.target.classList.add("active-stage");
   };
@@ -796,7 +795,6 @@ const DealUpdate = () => {
   };
 
   const getStageName = (stageId) => {
-
     const stage = similarStage.find((item) => item.id === stageId);
     console.log(stageId)
     console.log(similarStage)
@@ -944,8 +942,8 @@ const DealUpdate = () => {
                   (stage, index) =>
                     dealDetails?.stage_id !== stage.id && (
                       <li
-                        key={index}
-                        onClick={(e) => handleStageClickFromList(e, index + 1)}
+                        key={stage.id}
+                        onClick={(e) => handleStageClickFromList(e, stage.id)}
                         className=""
                       >
                         {stage.display_name}
