@@ -7,6 +7,7 @@ import {
   BLOG_EDIT,
   SEC_GET,
   GET_TAG,
+  GET_TAG_BY_SITE,
   SEC_UPDATE,
   getDecryptedToken,
 } from "./utils/Constants";
@@ -26,9 +27,9 @@ const BlogUpdate = () => {
   const fileInputRef2 = useRef(null);
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
-  const [childData, setChildData] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [showEditButton, setShowEditButton] = useState(false);
+  // const [childData, setChildData] = useState("");
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const [showEditButton, setShowEditButton] = useState(false);
   const decryptedToken = getDecryptedToken();
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
@@ -124,6 +125,7 @@ const BlogUpdate = () => {
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
       setSelectSite(data?.site);
+      getTagBySite(data?.site)
     }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
@@ -153,10 +155,28 @@ const BlogUpdate = () => {
       .then((response) => {
         setTagApi(response);
         tagData(); // Call tagData() after receiving the tag data
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
 
   const options = tagApi?.data?.data || [];
+  const getTagBySite = (site) => {
+    axios
+      .get(GET_TAG_BY_SITE + site, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setTagApi(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const tagData = () => {
     const ids = tagId?.split(",");
     const newTags = [];
@@ -202,6 +222,7 @@ const BlogUpdate = () => {
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
     setStateBtn(1);
+    getTagBySite(event.target.value);
   }
   
   // ==========================================================accordion of sub sections
@@ -293,10 +314,10 @@ const BlogUpdate = () => {
       });
     setSectionTitle("");
     setSectionSort(parseInt(sectionSort) + 1);
-    setChildData("");
+    // setChildData("");
     setDataFromChild("");
-    setShowEditButton(false);
-    setSelectedImage("");
+    // setShowEditButton(false);
+    // setSelectedImage("");
     setStateBtn(1);
     editorRef.current.clearEditorContent();
     setBlogImg3("");
@@ -809,6 +830,7 @@ const BlogUpdate = () => {
                       <option value="">Select a Site</option>
                       <option value="leadplaner">leadplaner</option>
                       <option value="bookmyplayer">bookmyplayer</option>
+                      <option value="ezuka">ezuka</option>
                       <option value="routplaner">routplaner</option>
                     </select>
                   </div>
