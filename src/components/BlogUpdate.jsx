@@ -376,7 +376,7 @@ const BlogUpdate = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -405,7 +405,7 @@ const BlogUpdate = () => {
     const selectedImage = file;
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -448,7 +448,7 @@ const BlogUpdate = () => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);

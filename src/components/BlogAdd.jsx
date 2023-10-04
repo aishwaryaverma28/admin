@@ -67,7 +67,7 @@ const BlogAdd = () => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -323,13 +323,15 @@ const BlogAdd = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
       data.append("public_id", uniqueFileName);
+      // data.append("overwrite", true);
+
       fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
         method: "post",
         body: data,
@@ -349,7 +351,7 @@ const BlogAdd = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
