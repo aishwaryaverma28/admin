@@ -27,6 +27,7 @@ import DealAttachments from "./DealAttachments.jsx";
 import DealActivity from "./DealActivity";
 import DealEmail from "./DealEmail.jsx";
 import DealDocument from "./DealDocument.jsx";
+import LostModal from "./LostModal.jsx";
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -126,6 +127,14 @@ const DealUpdate = () => {
   const [allEmails, setAllEmails] = useState([]);
   const [ownerId, setOwnerId] = useState(0);
   const idOfOwner = parseInt(localStorage.getItem("id"));
+  const [lostModal, setLostModal] = useState(false)
+
+  const handleLostModal = () => {
+      setLostModal(true);
+  }
+  const handleLostModalClose = () => {
+      setLostModal(false);
+  }
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -930,7 +939,7 @@ const DealUpdate = () => {
 
           <div className="arrow-btn">
             <button className="arrow-won common-fonts">Won</button>
-            <button className="arrow-lost common-fonts">Lost</button>
+            <button className="arrow-lost common-fonts" onClick={handleLostModal}>Lost</button>
           </div>
         </div>
       </div>
@@ -1831,6 +1840,11 @@ const DealUpdate = () => {
         </div>
       </section>
       <ToastContainer />
+      {
+        lostModal && (
+          <LostModal onClose={handleLostModalClose} />
+        )
+      }
     </>
   );
 };

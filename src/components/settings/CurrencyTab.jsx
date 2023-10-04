@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/CPGenral.css';
+import Pound from "../../assets/image/british-pound-symbol.svg";
 
 const CurrencyTab = () => {
     return (
@@ -21,7 +22,19 @@ const CurrencyTab = () => {
 
                     <tbody>
                         <tr>
-                            <td className='common-fonts'><span className='currency-tab-dollar'>US dollars (USD) $</span > <span className="currency-tab-default">Default Currency</span></td>
+                            <td className='common-fonts'><span className='currency-tab-dollar'>Great Britain Pound (GBP) <img src={Pound} alt="" className='pound' /> </span > <span className="currency-tab-default">Default Currency</span></td>
+                            <td>$ 123,456.78</td>
+                            <td>
+                                <div>
+                                    <label className="password-switch">
+                                        <input type="checkbox" checked />
+                                        <span className="password-slider password-round"></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className='common-fonts'><span className='currency-tab-dollar'>US dollars (USD) $</span ></td>
                             <td>$ 123,456.78</td>
                             <td>
                                 <div>
