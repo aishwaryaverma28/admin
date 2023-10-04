@@ -46,7 +46,8 @@ const DealUpdate = () => {
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [banks, setBanks] = useState([]);
   const [selectedStage, setSelectedStage] = useState(null);
-  const [stagesId, setStagesId] = useState([])
+  const [stagesId, setStagesId] = useState([]);
+  const [won, setWon] = useState(false);
 
 
   const [adminInfo, setAdminInfo] = useState({
@@ -129,8 +130,10 @@ const DealUpdate = () => {
   const idOfOwner = parseInt(localStorage.getItem("id"));
   const [lostModal, setLostModal] = useState(false)
 
+
   const handleLostModal = () => {
       setLostModal(true);
+      setWon(false);
   }
   const handleLostModalClose = () => {
       setLostModal(false);
@@ -401,12 +404,16 @@ const DealUpdate = () => {
     event.target.classList.add("active-stage");
   };
 
-  const handleChangeStatusClick = () => {
+  const handleChangeStatusClick = (selectedStageId) => {
     setIsStageButton(true);
-    if (selectedStageId !== null) {
+    if (selectedStageId !== null && selectedStageId === 35 ) {
+      setActionOpen(!actionopen);
+      setLostModal(true);
+      return;
+    }else if (selectedStageId !== null) {
       const updateForm = {
         dealId: [id],
-        stage_id: selectedStageId,
+        stage_id:selectedStageId,
       };
       axios
         .put(UPDATE_DEAL, updateForm, {
@@ -429,6 +436,8 @@ const DealUpdate = () => {
     }
     setActionOpen(!actionopen);
   };
+
+
 
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
@@ -938,7 +947,7 @@ const DealUpdate = () => {
           </button>
 
           <div className="arrow-btn">
-            <button className="arrow-won common-fonts">Won</button>
+            <button className="arrow-won common-fonts" onClick={()=>handleChangeStatusClick(34)}>Won</button>
             <button className="arrow-lost common-fonts" onClick={handleLostModal}>Lost</button>
           </div>
         </div>
@@ -985,7 +994,7 @@ const DealUpdate = () => {
                         ? `common-inactive-button stage-save-btn`
                         : `common-save-button stage-save-btn`
                     }
-                    onClick={handleChangeStatusClick}
+                    onClick={()=>handleChangeStatusClick(selectedStageId)}
                     disabled={isStageButton}
                   >
                     Change Status
@@ -1842,7 +1851,7 @@ const DealUpdate = () => {
       <ToastContainer />
       {
         lostModal && (
-          <LostModal onClose={handleLostModalClose} />
+          <LostModal onClose={handleLostModalClose} fetchDeal={fetchDeal} id={id} />
         )
       }
     </>
