@@ -9,7 +9,7 @@ import AddNotes from "../AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY, POST_EMAIL, GETNOTECOMPANY, handleLogout, GET_ACTIVITY, GET_TEAM_MEM } from "../utils/Constants";
+import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY, POST_EMAIL, GETNOTECOMPANY, handleLogout, GET_ACTIVITY, GET_ACTIVE_TEAM_MEM } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -114,7 +114,7 @@ const CompanyUpdate = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .get(GET_ACTIVE_TEAM_MEM, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

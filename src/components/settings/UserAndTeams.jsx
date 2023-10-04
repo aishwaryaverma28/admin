@@ -2,7 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/LPSetting.css";
 import "../styles/LPUserAndTeam.css";
 import axios from "axios";
-import { GET_TEAM_MEM, GET_ACTIVE_TEAM_MEM, GET_DEACTIVE_TEAM_MEM, getDecryptedToken, UPDATE_TEAM_MEM } from "../utils/Constants";
+import {
+  GET_TEAM_MEM,
+  GET_ACTIVE_TEAM_MEM,
+  GET_DEACTIVE_TEAM_MEM,
+  getDecryptedToken,
+  UPDATE_TEAM_MEM,
+  CHECK_LEAD_DEAL,
+} from "../utils/Constants";
 import SearchIcon from "../../assets/image/search.svg";
 import ExportIcon from "../../assets/image/export.svg";
 import ExportIcon2 from "../../assets/image/export2.svg";
@@ -16,7 +23,6 @@ import { Link } from "react-router-dom";
 import DeactivateUser from "./DeactivateUser";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const UserAndTeams = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -37,88 +43,112 @@ const UserAndTeams = () => {
   const [isDeactivateOpen, setIsDeactivateOpen] = useState(false);
   const [selectedFirstName, setSelectedFirstName] = useState("");
   const [selectedLastName, setSelectedLastName] = useState("");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [newId, setNewId] = useState(0);
+  const [leadId, setLeadId] = useState([]);
+  const [dealId, setDealId] = useState([]);
 
+  const HandleDeactivateUserModal = (id) => {
+    setNewId(id);
+    setIsDeactivateOpen(true);
+  };
 
-  // const HandleDeactivateUser = (firstName, lastName) => {
-
-  //   setIsDeactivateOpen(true);
-  //   setSelectedFirstName(firstName);
-  //   setSelectedLastName(lastName);
-  // };
-
-  const HandleDeactivateUser = (id) => {
+  const HandleCheckLeadDeal = (id) => {
     const updateForm = {
-      is_deactivated :1
-    }
+      member_id: id,
+    };
     axios
-    .put(
-      UPDATE_TEAM_MEM + id,
-      updateForm,
-      {
+      .post(CHECK_LEAD_DEAL, updateForm, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
-      }
-    )
-    .then((response) => {
-      // Handle successful response
+      })
+      .then((response) => {
+        if (response.data.leads || response.data.deals) {
+          if (response?.data?.leads) {
+            const extractedIds = response.data.leads.map(lead => lead.id);
+            setLeadId(extractedIds);
+          }
+          if (response?.data?.deals) {
+            const extractedIds = response.data.deals.map(lead => lead.id);
+            setDealId(extractedIds);
+          }
+          HandleDeactivateUserModal(id);
+        } else {
+          HAndleDeactivateUserNormal(id);
+        }
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Error saving password", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
+  };
+  const HandleDeactivateUser = (id, firstName, lastName) => {
+    setSelectedFirstName(firstName);
+    setSelectedLastName(lastName)
+    HandleCheckLeadDeal(id);
+  };
 
-      toast.success("Member Deactivated successfully", {
-        position: "top-center",
-        autoClose:2000
+  const HAndleDeactivateUserNormal = (id) => {
+    const updateForm = {
+      is_deactivated: 1,
+    };
+    axios
+      .put(UPDATE_TEAM_MEM + id, updateForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        // Handle successful response
+
+        toast.error("Member Deactivated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        userAdded();
+        userDeactive();
+        userActive();
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Error saving password", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       });
-      userAdded();
-      userDeactive();
-      userActive();
-      setDropdownVisible(false);
-      
-    })
-    .catch((error) => {
-      // Handle error
-      toast.error("Error saving password", {
-        position: "top-center",
-        autoClose:2000
-      });
-      setDropdownVisible(false);
-    });
   };
   const HandleActivateUser = (id) => {
     const updateForm = {
-      is_deactivated :0
-    }
+      is_deactivated: 0,
+    };
     axios
-    .put(
-      UPDATE_TEAM_MEM + id,
-      updateForm,
-      {
+      .put(UPDATE_TEAM_MEM + id, updateForm, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
-      }
-    )
-    .then((response) => {
-      // Handle successful response
+      })
+      .then((response) => {
+        // Handle successful response
 
-      toast.success("Member Deactivated successfully", {
-        position: "top-center",
-        autoClose:2000
-      });
+        toast.success("Member Activated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         userAdded();
         userActive();
         userDeactive();
-        setDropdownVisible(false);
-    })
-    .catch((error) => {
-      // Handle error
-      toast.error("Error saving password", {
-        position: "top-center",
-        autoClose:2000
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Error saving password", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       });
-      setDropdownVisible(false);
-    });
   };
-
 
   const HandleDeactivateClose = () => {
     setIsDeactivateOpen(false);
@@ -235,8 +265,6 @@ const UserAndTeams = () => {
     return fullName.includes(searchLower) || email.includes(searchLower);
   });
 
-
-
   const toggleActionDropdownStatic = () => {
     setActionOpen(!actionopen);
   };
@@ -247,13 +275,7 @@ const UserAndTeams = () => {
       ...prevState,
       [userId]: !prevState[userId],
     }));
-    setDropdownVisible(!dropdownVisible);
   };
-
-
-  
-
-
 
   useEffect(() => {
     // Event listener callback for handling clicks outside the dropdown container
@@ -292,7 +314,7 @@ const UserAndTeams = () => {
 
   const userTeamRefresh = () => {
     userAdded();
-  }
+  };
 
   return (
     <>
@@ -399,14 +421,18 @@ const UserAndTeams = () => {
                   Deactivated ({filteredDeactiveData.length})
                 </button>
               </div>
-              <button type="button" className="helpBtn genral-refresh-icon user-team-refresh-icon" title="Refresh" onClick={userTeamRefresh}>
-              <i class="fa-sharp fa-solid fa-rotate "></i>
+              <button
+                type="button"
+                className="helpBtn genral-refresh-icon user-team-refresh-icon"
+                title="Refresh"
+                onClick={userTeamRefresh}
+              >
+                <i class="fa-sharp fa-solid fa-rotate "></i>
               </button>
             </section>
 
             {activeTabName === "All" && (
-              
-                            <section className="user-table">
+              <section className="user-table">
                 {loading ? (
                   // Show a loading message or spinner while data is loading
                   <p className="common-fonts">Loading...</p>
@@ -556,16 +582,15 @@ const UserAndTeams = () => {
 
                               <div className="user-name-info">
                                 <p className="user-name-value">
-                                <Link
-                                        to={
-                                          "/lp/settings/usernteams/" +
-                                          teamMember.id
-                                        }
-                                      >
-                                  {teamMember.first_name +
-                                    " " +
-                                    teamMember.last_name}
-                                    </Link>
+                                  <Link
+                                    to={
+                                      "/lp/settings/usernteams/" + teamMember.id
+                                    }
+                                  >
+                                    {teamMember.first_name +
+                                      " " +
+                                      teamMember.last_name}
+                                  </Link>
                                 </p>
                                 <p className="email-case">{teamMember.email}</p>
                               </div>
@@ -595,7 +620,7 @@ const UserAndTeams = () => {
                                     }`}
                                   ></i>
                                 </div>
-                                {userActionOpen[teamMember.id] && dropdownVisible && (
+                                {userActionOpen[teamMember.id] && (
                                   <ul className="dropdown-menu user-team-dropdown-position">
                                     <li>
                                       <Link
@@ -611,22 +636,23 @@ const UserAndTeams = () => {
                                     <li>Edit team</li>
                                     <li>Resend email invite</li>
                                     <li>Make Super Admin</li>
-                                    {
-                                      teamMember.is_deactivated === 0 ? (
-                                        <li
-                                      onClick={()=>HandleDeactivateUser(teamMember.id)}
-                                    >
-                                      Deactivate user
-                                    </li>
-                                      ) : (
-                                        <li
-                                      onClick={()=>HandleActivateUser(teamMember.id)}
-                                    >
-                                      Activate user 
-                                    </li>
-                                      )
-                                    }
-                                   
+                                    {teamMember.is_deactivated === 0 ? (
+                                      <li
+                                        onClick={() =>
+                                          HandleDeactivateUser(teamMember.id, teamMember.first_name, teamMember.last_name)
+                                        }
+                                      >
+                                        Deactivate user
+                                      </li>
+                                    ) : (
+                                      <li
+                                        onClick={() =>
+                                          HandleActivateUser(teamMember.id)
+                                        }
+                                      >
+                                        Activate user
+                                      </li>
+                                    )}
                                   </ul>
                                 )}
                               </div>
@@ -641,8 +667,6 @@ const UserAndTeams = () => {
                   </table>
                 )}
               </section>
-
-
             )}
             {activeTabName === "Active" && (
               <section className="user-table">
@@ -765,7 +789,7 @@ const UserAndTeams = () => {
                                     }`}
                                   ></i>
                                 </div>
-                                {userActionOpen[teamMember.id] && dropdownVisible && (
+                                {userActionOpen[teamMember.id] && (
                                   <ul className="dropdown-menu user-team-dropdown-position">
                                     <li>Edit user</li>
                                     <li>Edit permissions</li>
@@ -774,9 +798,7 @@ const UserAndTeams = () => {
                                     <li>Make Super Admin</li>
                                     <li
                                       onClick={() =>
-                                        HandleDeactivateUser(
-                                          teamMember.id
-                                        )
+                                        HandleDeactivateUser(teamMember.id)
                                       }
                                     >
                                       Deactivate user
@@ -1029,7 +1051,7 @@ const UserAndTeams = () => {
                                     }`}
                                   ></i>
                                 </div>
-                                {userActionOpen[teamMember.id] && dropdownVisible && (
+                                {userActionOpen[teamMember.id] && (
                                   <ul className="dropdown-menu user-team-dropdown-position">
                                     <li>Edit user</li>
                                     <li>Edit permissions</li>
@@ -1038,9 +1060,7 @@ const UserAndTeams = () => {
                                     <li>Make Super Admin</li>
                                     <li
                                       onClick={() =>
-                                        HandleActivateUser(
-                                          teamMember.id
-                                        )
+                                        HandleActivateUser(teamMember.id)
                                       }
                                     >
                                       Activate user
@@ -1111,10 +1131,14 @@ const UserAndTeams = () => {
           onClose={HandleDeactivateClose}
           firstName={selectedFirstName}
           lastName={selectedLastName}
-          teamData={teamData}
+          teamData={activeData}
+          deactivate={HAndleDeactivateUserNormal}
+          id={newId}
+          leadIdArray={leadId}
+          dealIdArray={dealId}
         />
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

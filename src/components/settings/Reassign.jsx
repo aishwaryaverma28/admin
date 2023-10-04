@@ -1,6 +1,7 @@
 import React from 'react'
 
-const Reassign = ({ onCloseReassign, teamData }) => {
+const Reassign = ({ onCloseReassign, teamData, firstName, lastName, id }) => {
+    const filteredTeamData = teamData.filter(member => member.id !== id);
     return (
         <div className="recycle-popup-wrapper">
 
@@ -12,7 +13,7 @@ const Reassign = ({ onCloseReassign, teamData }) => {
 
                 <div className='reassign-members'>
                     {
-                        teamData.map(members=>{
+                        filteredTeamData.map(members=>{
                             return (
                                 <div className='reassign-label common-fonts'>
                                 <label className='common-fonts'>

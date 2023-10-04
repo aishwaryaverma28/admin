@@ -146,6 +146,7 @@ export const IMPORT_DEAL = start+"api/deal/import";
 export const ADD_HELP = start+"api/user/help/addquation";
 export const GET_HELP_ID = start+"api/user/help/getbyid/";
 export const UPDATE_HELP = start+"api/user/help/update/";
+export const CHECK_LEAD_DEAL = start+"api/user/getleaddealbymember";
 
 
 //===============================================================================Activity api
