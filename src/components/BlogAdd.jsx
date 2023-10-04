@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   BLOG_ADD,
   GET_TAG,
+  GET_TAG_BY_SITE,
   getDecryptedToken,
 } from "./utils/Constants";
 
@@ -14,6 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BlogAdd = () => {
   //cloudaniary images
+  const fileInputRef = useRef(null);
+  const fileInputRef2 = useRef(null);
+  const fileInputRefs = useRef(null);
   const [blogImg, setBlogImg] = useState("");
   const [blogImg2, setBlogImg2] = useState("");
   const [selectSite, setSelectSite] = useState("");
@@ -21,15 +25,11 @@ const BlogAdd = () => {
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
-  const [hideImages, setHideImages] = useState(false);
-  const [isIndex, setIsIndex] = useState(-1);
-  const fileInputRef = useRef(null);
-  const fileInputRef2 = useRef(null);
-  const fileInputRefs = useRef(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [showUploadButton, setShowUploadButton] = useState(false);
-  const [showEditButton, setShowEditButton] = useState(false);
-  const [showChooseButton, setShowChooseButton] = useState(false);
+  const [isIndex, setIsIndex] = useState(-1);  
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const [showUploadButton, setShowUploadButton] = useState(false);
+  // const [showEditButton, setShowEditButton] = useState(false);
+  // const [showChooseButton, setShowChooseButton] = useState(false);
   const [sectionData, setSectionData] = useState([]);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
@@ -39,6 +39,14 @@ const BlogAdd = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const decryptedToken = getDecryptedToken();
   const editorRef = useRef(); // Define the editorRef using useRef
+  const [formData, setFormData] = useState({
+    title: "",
+    url: "",
+    description: "",
+    meta_description: "",
+    keywords: "",
+  });
+
   useEffect(() => {
     axios
       .get(GET_TAG, {
@@ -55,13 +63,20 @@ const BlogAdd = () => {
   }, []);
   const options = tagApi?.data?.data || [];
 
-  const [formData, setFormData] = useState({
-    title: "",
-    url: "",
-    description: "",
-    meta_description: "",
-    keywords: "",
-  });
+  const getTagBySite = (site) => {
+    axios
+      .get(GET_TAG_BY_SITE + site, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setTagApi(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
@@ -211,8 +226,8 @@ const BlogAdd = () => {
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
     setDataFromChild("");
-    setShowEditButton(false);
-    setSelectedImage("");
+    // setShowEditButton(false);
+    // setSelectedImage("");
     setStateBtn(1);
     setBlogImg2("");
     editorRef.current.clearEditorContent();
@@ -231,6 +246,7 @@ const BlogAdd = () => {
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
     setStateBtn(1);
+    getTagBySite(event.target.value);
   }
 
   const resetForm = () => {
@@ -252,10 +268,10 @@ const BlogAdd = () => {
     setBlogImg("");
     setSectionSort("");
     setDataFromChild("");
-    setShowUploadButton(false);
-    setShowEditButton(false);
-    setShowChooseButton(false);
-    setSelectedImage(null);
+    // setShowUploadButton(false);
+    // setShowEditButton(false);
+    // setShowChooseButton(false);
+    // setSelectedImage(null);
   };
 
   function handleFormSubmit(event) {
@@ -702,6 +718,7 @@ const BlogAdd = () => {
                     <option value="">Select a Site</option>
                     <option value="leadplaner">leadplaner</option>
                     <option value="bookmyplayer">bookmyplayer</option>
+                    <option value="ezuka">ezuka</option>
                     <option value="routplaner">routplaner</option>
                   </select>
                 </div>
