@@ -274,10 +274,10 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
         </div>
       ))}
 
-      <div className="deal-doc-btn">
+      {/* <div className="deal-doc-btn">
         <button className="common-fonts common-white-button">Cancel</button>
         <button className="common-fonts common-save-button">Save</button>
-      </div>
+      </div> */}
     </div>
   );
 };

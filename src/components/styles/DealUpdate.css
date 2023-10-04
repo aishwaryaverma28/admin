@@ -998,6 +998,24 @@ border: 1px solid #ccc;
 
 }
 
+.lost-flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.lost-flex textarea{
+  outline: none;
+  padding: 1rem;
+  margin-top: 0.5rem;
+
+}
+
+.lost-save{
+  margin-left: 1rem;
+}
+
 
 
 /* deal documentends */
