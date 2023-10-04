@@ -74,7 +74,7 @@ const DeactivateUser = ({
       )}
 
       {isReassign && (
-        <Reassign onCloseReassign={handleReassignClose} teamData={teamData} id={id} />
+        <Reassign onCloseReassign={handleReassignClose} teamData={teamData} id={id} leadIdArray={leadIdArray} dealIdArray={dealIdArray} deactivate={deactivate} />
       )}
     </div>
   );

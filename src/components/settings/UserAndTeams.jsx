@@ -69,7 +69,7 @@ const UserAndTeams = () => {
             setLeadId(extractedIds);
           }
           if (response?.data?.deals) {
-            const extractedIds = response.data.deals.map(lead => lead.id);
+            const extractedIds = response.data.deals.map(deals => deals.id);
             setDealId(extractedIds);
           }
           HandleDeactivateUserModal(id);
@@ -798,7 +798,7 @@ const UserAndTeams = () => {
                                     <li>Make Super Admin</li>
                                     <li
                                       onClick={() =>
-                                        HandleDeactivateUser(teamMember.id)
+                                        HandleDeactivateUser(teamMember.id, teamMember.first_name, teamMember.last_name)
                                       }
                                     >
                                       Deactivate user
