@@ -54,7 +54,7 @@ const DealDocument = () => {
     
   
   return (
-    <div>
+    <div className="deal-doc-wrapper">
        <div className="colapedEditor deal-doc-container">
           <p>Click here to add document</p>
         </div>

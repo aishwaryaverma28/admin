@@ -88,9 +88,14 @@
 }
 
 .cpu-left {
+  width: 100%;
+  height: 75vh;
+  overflow-y: scroll;
+ 
+}
+.cpu-left-wrapper{
   width: 30%;
   height: 85vh;
-  overflow-y: scroll;
   border-right: 1px solid #d3d4d5;
 }
 

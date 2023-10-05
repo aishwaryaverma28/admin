@@ -19,7 +19,7 @@ import {
   GET_ACTIVE_TEAM_MEM,
   USER_INFO,
   GET_OWNER_LEAD,
-  LOG_RECORD
+  LOG_RECORD,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,6 +56,7 @@ const Lead = () => {
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
+  const [display, setDisplay] = useState("Select Owner");
   const role_name = localStorage.getItem("role_name");
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
@@ -77,7 +78,7 @@ const Lead = () => {
     setSelectedIds([]);
   };
 
-  const handleOwnerClick = (id) => {
+  const handleOwnerClick = (id, firstName, lastName) => {
     axios
       .get(GET_OWNER_LEAD + id, {
         headers: {
@@ -86,6 +87,8 @@ const Lead = () => {
       })
       .then((response) => {
         setDeals(response?.data?.data);
+        const fullName = `${firstName} ${lastName}`;
+        setDisplay(fullName);
       })
       .catch((error) => {
         console.log(error);
@@ -217,18 +220,17 @@ const Lead = () => {
         },
       })
       .then((response) => {
-      if(response?.data?.status===1){
-        toast.success("export successfull", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }else{
-        toast.error("Some Error Occured", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-
+        if (response?.data?.status === 1) {
+          toast.success("export successfull", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occured", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -346,24 +348,23 @@ const Lead = () => {
     // window.URL.revokeObjectURL(url);
     // document.body.removeChild(a);
 
-  
     // Convert JSON data to CSV format
     const csv = Papa.unparse(deals);
-  
+
     // Create a blob from the CSV data
     const blob = new Blob([csv], { type: "text/csv" });
-  
+
     // Create a download link
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "leads.csv";
     a.style.display = "none";
-  
+
     // Trigger the download
     document.body.appendChild(a);
     a.click();
-  
+
     // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
@@ -764,7 +765,7 @@ const Lead = () => {
             {role_name === "admin" && (
               <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                  Select Owner
+                  {display}
                   <i
                     className={`fa-sharp fa-solid ${
                       actionopen ? "fa-angle-up" : "fa-angle-down"
@@ -781,7 +782,15 @@ const Lead = () => {
                           key={item?.id}
                           value={item?.id}
                           className="owner-val"
-                          onClick={() => handleOwnerClick(item.id)}
+                          onClick={() =>
+                            handleOwnerClick(
+                              item.id,
+                              item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1),
+                              item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                            )
+                          }
                         >
                           {`${
                             item?.first_name.charAt(0).toUpperCase() +
@@ -798,7 +807,10 @@ const Lead = () => {
             )}
           </div>
           <div className="right-side--btns">
-            <p>sub total: <img className="pound" src={pound}/>{totalValue.toLocaleString("en-IN")}</p>
+            <p>
+              sub total: <img className="pound" src={pound} />
+              {totalValue.toLocaleString("en-IN")}
+            </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Lead
             </button>
@@ -1006,7 +1018,7 @@ const Lead = () => {
               <div className="bottom-fixed">
                 <p>
                   {" "}
-                  Total Value: <img className="pound" src={pound}/>
+                  Total Value: <img className="pound" src={pound} />
                   {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
                 </p>
               </div>

@@ -91,7 +91,7 @@ const CompanyUpdate = () => {
 
   useEffect(() => {
     fetchNotes();
-    },[notes])
+  }, [notes]);
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -346,361 +346,379 @@ const CompanyUpdate = () => {
 
   return (
     <div className="contact-cpu-container">
-      <div className="cpu-left">
-        <div className="go-back-btn cpu-back ">
-          <button
-            className="setting-font-style"
-            onClick={handleGoBack}
-            style={{ backgroundColor: "white" }}
-          >
-            <img src={arrowLeft} alt="" />
-            <span>Go Back</span>
-          </button>
-        </div>
-
-        <div className="cpu-top-details">
-          <div className="cpu-building">
-            <img src={Building} alt="" />
+      <div className="cpu-left-wrapper">
+        <div className="cpu-left">
+          <div className="go-back-btn cpu-back ">
+            <button
+              className="setting-font-style"
+              onClick={handleGoBack}
+              style={{ backgroundColor: "white" }}
+            >
+              <img src={arrowLeft} alt="" />
+              <span>Go Back</span>
+            </button>
           </div>
 
-          <div className="cpu-input-container">
-            {isLoading ? (
-              <span>-</span>
-            ) : (
-              <input
-                type="text"
-                value={peopleDetails.organization}
-                style={isEditable ? editStyling : normalStyling}
-                disabled={isDisabled}
-                onChange={handleInputChange}
-                name="organization"
-              />
-            )}
-
-            {isLoading ? (
-              <span>-</span>
-            ) : (
-              <input
-                type="number"
-                value={peopleDetails.phone}
-                style={isEditable ? editStylingInput : normalStylingInput}
-                disabled={isDisabled}
-                onChange={handleInputChange}
-                name="phone"
-              />
-            )}
-          </div>
-
-          <div className="cpu-icons">
-            <i className="fa-solid fa-pen cpu-pen" onClick={toggleEditable}></i>
-            <i className="fas fa-ellipsis-h cpu-dot"></i>
-          </div>
-        </div>
-
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleSummary}>
-            {isSummaryOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Details
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isSummaryOpen && (
-          <div className="detailsContent cpu-content">
-            <div className="dealsLeftContainer cpu-p">
-              <p>Name</p>
-              <p>Phone</p>
-              <p>Email</p>
-              <p>City</p>
-              <p>State</p>
-              <p>Postal Code</p>
+          <div className="cpu-top-details">
+            <div className="cpu-building">
+              <img src={Building} alt="" />
             </div>
 
-            <div className="detailsRightContainer">
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="name"
-                      value={peopleDetails.name}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
+            <div className="cpu-input-container">
+              {isLoading ? (
+                <span>-</span>
+              ) : (
+                <input
+                  type="text"
+                  value={peopleDetails.organization}
+                  style={isEditable ? editStyling : normalStyling}
+                  disabled={isDisabled}
+                  onChange={handleInputChange}
+                  name="organization"
+                />
+              )}
 
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="number"
-                      name="phone"
-                      value={peopleDetails.phone}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
+              {isLoading ? (
+                <span>-</span>
+              ) : (
+                <input
+                  type="number"
+                  value={peopleDetails.phone}
+                  style={isEditable ? editStylingInput : normalStylingInput}
+                  disabled={isDisabled}
+                  onChange={handleInputChange}
+                  name="phone"
+                />
+              )}
+            </div>
 
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="email"
-                      name="email"
-                      value={peopleDetails.email}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="city"
-                      value={peopleDetails.city}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="state"
-                      value={peopleDetails.state}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="number"
-                      name="postal_code"
-                      value={peopleDetails.postal_code}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
+            <div className="cpu-icons">
+              <i
+                className="fa-solid fa-pen cpu-pen"
+                onClick={toggleEditable}
+              ></i>
+              <i className="fas fa-ellipsis-h cpu-dot"></i>
             </div>
           </div>
-        )}
 
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleContacts}>
-            {isContactsOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Contacts (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleSummary}>
+              {isSummaryOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Details
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isSummaryOpen && (
+            <div className="detailsContent cpu-content">
+              <div className="dealsLeftContainer cpu-p">
+                <p>Name</p>
+                <p>Phone</p>
+                <p>Email</p>
+                <p>City</p>
+                <p>State</p>
+                <p>Postal Code</p>
+              </div>
+
+              <div className="detailsRightContainer">
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="name"
+                        value={peopleDetails.name}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="number"
+                        name="phone"
+                        value={peopleDetails.phone}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="email"
+                        name="email"
+                        value={peopleDetails.email}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="city"
+                        value={peopleDetails.city}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="state"
+                        value={peopleDetails.state}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="number"
+                        name="postal_code"
+                        value={peopleDetails.postal_code}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleContacts}>
+              {isContactsOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Contacts (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isContactsOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-name">Kevin doms</p>
+                  <p className="common-fonts cpu-manager">Manager at hertz </p>
+                  <p className="common-fonts cpu-mail">
+                    kevin@mail.com <img src={Copy} alt="" />
+                  </p>
+                  <p className="common-fonts cpu-mail">
+                    +62 8564239548 <img src={Copy} alt="" />
+                  </p>
+                  <div className="cpu-user-icon">
+                    <img src={User} alt="" />
+                  </div>
+                  <div className="cpu-user-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-name">Kevin doms</p>
+                  <p className="common-fonts cpu-manager">Manager at hertz </p>
+                  <p className="common-fonts cpu-mail">
+                    kevin@mail.com <img src={Copy} alt="" />
+                  </p>
+                  <p className="common-fonts cpu-mail">
+                    +62 8564239548 <img src={Copy} alt="" />
+                  </p>
+                  <div className="cpu-user-icon">
+                    <img src={User} alt="" />
+                  </div>
+                  <div className="cpu-user-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleLeads}>
+              {isLeadsOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Leads (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isLeadsOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleDeals}>
+              {isDealOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Deals (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isDealOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        {isContactsOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-name">Kevin doms</p>
-                <p className="common-fonts cpu-manager">Manager at hertz </p>
-                <p className="common-fonts cpu-mail">
-                  kevin@mail.com <img src={Copy} alt="" />
-                </p>
-                <p className="common-fonts cpu-mail">
-                  +62 8564239548 <img src={Copy} alt="" />
-                </p>
-                <div className="cpu-user-icon">
-                  <img src={User} alt="" />
-                </div>
-                <div className="cpu-user-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
 
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-name">Kevin doms</p>
-                <p className="common-fonts cpu-manager">Manager at hertz </p>
-                <p className="common-fonts cpu-mail">
-                  kevin@mail.com <img src={Copy} alt="" />
-                </p>
-                <p className="common-fonts cpu-mail">
-                  +62 8564239548 <img src={Copy} alt="" />
-                </p>
-                <div className="cpu-user-icon">
-                  <img src={User} alt="" />
-                </div>
-                <div className="cpu-user-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleLeads}>
-            {isLeadsOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Leads (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isLeadsOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
 
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleDeals}>
-            {isDealOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Deals (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isDealOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        {ShowUpdateButton && (
           <div className="deal-update-btn">
             {stateBtn === 0 ? (
               <button disabled className="disabledBtn ">
@@ -712,8 +730,9 @@ const CompanyUpdate = () => {
               </button>
             )}
           </div>
-        )}
+
       </div>
+
       <div className="cpu-right">
         <div className="tab-navigation">
           <button

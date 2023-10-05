@@ -200,7 +200,7 @@ const DeletePeople = ({deleteCount}) => {
         deleteCount();
         onCloseNoteDeletePopUp();
         setSelectedRows([]);
-        toast.error("Company delete successfully", {
+        toast.error("People delete successfully", {
           position:"top-center",
           autoClose:2000
         })

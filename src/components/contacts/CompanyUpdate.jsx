@@ -344,7 +344,8 @@ const CompanyUpdate = () => {
 
   return (
     <div className="contact-cpu-container">
-      <div className="cpu-left">
+    <div className="cpu-left-wrapper">
+    <div className="cpu-left">
         <div className="go-back-btn cpu-back ">
           <button
             className="setting-font-style"
@@ -813,7 +814,9 @@ const CompanyUpdate = () => {
             </div>
           </>
         )}
-        {ShowUpdateButton && (
+
+      </div>
+
           <div className="deal-update-btn">
             {stateBtn === 0 ? (
               <button disabled className="disabledBtn ">
@@ -825,8 +828,10 @@ const CompanyUpdate = () => {
               </button>
             )}
           </div>
-        )}
-      </div>
+
+
+    </div>
+
       <div className="cpu-right">
         <div className="tab-navigation">
           <button
