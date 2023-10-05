@@ -30,7 +30,6 @@ const DealEmail = ({ type, id, dealName, ownerId, idOfOwner, email }) => {
   const [owner, setOwner] = useState("");
   const [openEmailId, setOpenEmailId] = useState(null);
   const [number, setNumber] = useState(0);
-console.log(toEmails);
   const toggleEmail = (emailId) => {
     if (openEmailId === emailId) {
       setOpenEmailId(null);

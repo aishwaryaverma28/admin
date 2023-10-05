@@ -7,8 +7,8 @@ const RecycleDeletePopUp = ({onClose, onDeleteConfirmed }) => {
     <div className="recycle-popup-container">
         <div className="recycle-popup-box">
             <p className="common-fonts restore-records">Delete checked record</p>
-      <p className="common-fonts selected-records-note">The selected record and their entities will get permanently deleted.</p>
-      <p className="common-fonts restore-questions">Are you sure you want to permanently delete the records?    </p>        
+      <p className="common-fonts selected-records-note">The selected record and their entities will get deleted.</p>
+      <p className="common-fonts restore-questions">Are you sure you want to delete the records?    </p>        
         </div>
      
 

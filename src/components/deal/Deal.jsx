@@ -56,6 +56,7 @@ const Deal = () => {
   const role_name = localStorage.getItem("role_name");
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [display, setDisplay] = useState('Select Owner');
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -76,7 +77,7 @@ const Deal = () => {
     setSelectedIds([]);
   };
 
-  const handleOwnerClick = (id) => {
+  const handleOwnerClick = (id, firstName, lastName) => {
     axios
       .get(GET_OWNER_DEAL + id, {
         headers: {
@@ -85,6 +86,8 @@ const Deal = () => {
       })
       .then((response) => {
         setDeals(response?.data?.data);
+        const fullName = `${firstName} ${lastName}`;
+        setDisplay(fullName);
       })
       .catch((error) => {
         console.log(error);
@@ -811,7 +814,7 @@ const Deal = () => {
             {role_name === "admin" && (
               <div className="dropdown-container" ref={actionOwnerRef}>
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                  Select Owner
+                  {display}
                   <i
                     className={`fa-sharp fa-solid ${
                       actionopen ? "fa-angle-up" : "fa-angle-down"
@@ -828,7 +831,15 @@ const Deal = () => {
                           key={item?.id}
                           value={item?.id}
                           className="owner-val"
-                          onClick={() => handleOwnerClick(item.id)}
+                          onClick={() =>
+                            handleOwnerClick(
+                              item.id,
+                              item?.first_name.charAt(0).toUpperCase() +
+                                item?.first_name.slice(1),
+                              item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
+                            )
+                          }
                         >
                           {`${
                             item?.first_name.charAt(0).toUpperCase() +

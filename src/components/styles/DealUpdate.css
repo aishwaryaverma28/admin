@@ -46,9 +46,15 @@
 }
 
 .dealLeftSection {
-  width: 30%;
-  height: 70vh;
+  width: 100%;
+  height: 48vh;
   overflow-y: scroll;
+  /* border-right: 1px solid #d3d4d5; */
+}
+
+.deal-left-wrapper{
+  width:30%;
+  height: 58vh;
   border-right: 1px solid #d3d4d5;
 }
 
@@ -114,14 +120,34 @@
 
 /* arrow css starts  */
 
+.arrow-container{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width:100vw;
+  flex-wrap: wrap;
+}
+
+.arrow-btn{
+  margin-top: 0.1rem;
+}
+
 .arrow-pointer {
-  width: 14rem;
+  width:10rem;
   height: 2.5rem;
   background-color: #f3f3f3;
   position: relative;
   cursor: pointer;
   margin-left: 1rem;
+  display: inline-block; 
 }
+.arrow-pointer p {
+margin-left: 0.5rem;
+
+}
+
+
+
 
 .arrow-pointer:after {
   content: "";
@@ -267,12 +293,7 @@
   transform: translate(-50%, -50%);
 }
 
-.arrow-btn {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  margin-left: 10rem;
-}
+
 
 .arrow-won {
   padding: 7px 15px;
@@ -282,7 +303,6 @@
   color: #fff;
   cursor: pointer;
   margin-right: 0.5rem;
-  margin-left: 2rem;
 }
 
 .arrow-won:hover {
@@ -307,14 +327,7 @@
   cursor: pointer;
 }
 
-.arrow-pointer {
-  width: 14rem;
-  height: 2.5rem;
-  background-color: #f3f3f3;
-  position: relative;
-  cursor: pointer;
-  margin-left: 1rem;
-}
+
 
 .arrow-point {
   position: absolute;
@@ -592,6 +605,7 @@
   align-items: center;
   margin-right: 0.5rem;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .stage-position {
@@ -769,6 +783,11 @@
 /* deal attachments ends */
 
 /* deal document */
+
+.deal-doc-wrapper{
+  height: 70vh;
+  overflow: auto;
+}
 
 .deal-doc-container {
   margin-left: 1rem;
