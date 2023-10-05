@@ -47,19 +47,11 @@ const DeactivateUser = ({
           </div>
 
           <div className="recycle-popup-btn deactivate-btn">
-            <div>
-              <button
-                className="common-active common-fonts"
-                onClick={handleReassignOpen}
-              >
-                Reassign
-              </button>
-            </div>
-            <div>
+          <div>
               <button className="restore-no common-fonts" onClick={onClose}>
                 Cancel
               </button>
-              <button
+              {/* <button
                 className="common-delete-button deactivate-delete common-fonts"
                 onClick={() => {
                   deactivate(id);
@@ -67,8 +59,17 @@ const DeactivateUser = ({
                 }}
               >
                 Deactivate
+              </button> */}
+            </div>
+            <div>
+              <button
+                className="common-save-button common-fonts"
+                onClick={handleReassignOpen}
+              >
+                Reassign
               </button>
             </div>
+
           </div>
         </div>
       )}

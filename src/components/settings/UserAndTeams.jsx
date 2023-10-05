@@ -111,6 +111,7 @@ const UserAndTeams = () => {
         userAdded();
         userDeactive();
         userActive();
+        toggleActionDropdown2(id)
       })
       .catch((error) => {
         // Handle error
@@ -140,6 +141,7 @@ const UserAndTeams = () => {
         userAdded();
         userActive();
         userDeactive();
+        toggleActionDropdown2(id)
       })
       .catch((error) => {
         // Handle error
@@ -274,6 +276,12 @@ const UserAndTeams = () => {
     setUserActionOpen((prevState) => ({
       ...prevState,
       [userId]: !prevState[userId],
+    }));
+  };
+  const toggleActionDropdown2 = (userId) => {
+    setUserActionOpen((prevState) => ({
+      ...prevState,
+      [userId]: false,
     }));
   };
 
