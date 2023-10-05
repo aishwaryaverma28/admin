@@ -14,6 +14,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
     phone: "",
     email: "",
     password: "",
+    company: "fiduciagroup",
   });
 
   const [passDes, setPassDes] = useState([]);
@@ -107,9 +108,13 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-     if(minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter)
-        {
-     const updated = { ...details, password: password };
+    if (
+      minLength &&
+      hasNumberSymbolWhitespace &&
+      hasUppercase &&
+      hasSpecialCharacter
+    ) {
+      const updated = { ...details, password: password };
       axios
         .post(ADD_USER, updated, {
           headers: {
@@ -120,22 +125,21 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           console.log(response);
           onUserAdded(); // Call the onLeadAdded function from props
           toast.success("User added successfully", {
-              position: "top-center",
-              autoClose:2000
-            });
+            position: "top-center",
+            autoClose: 2000,
+          });
           onClose();
         })
         .catch((error) => {
           console.log(error);
         });
-      }
-          else{
-          toast.error("Fulfil password policy", {
-            position: "top-center",
-            autoClose:2000
-          });
-        }
-    };
+    } else {
+      toast.error("Fulfil password policy", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -147,10 +151,10 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
       })
       .then((response) => {
         console.log(response);
-         toast.success("User added successfully", {
-              position: "top-center",
-              autoClose:2000
-            });
+        toast.success("User added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         setDetails({
           first_name: "",
           last_name: "",
@@ -267,113 +271,115 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
           </div>
 
           {passDes.some(
-          (condition) => condition.id === 5 && condition.active === 1
-        ) ? (
-          <div className="pwd-rules">
-            <p className="common-fonts pwd-policy">Password policy :</p>
-            {/* Minimum 8 characters long */}
-            {passDes.map((item) =>
-              item.id === 1 ? (
-                <p key={item.id} className="common-fonts password-text">
-                  <div className="password-rules">
-                    <div>
-                      <label className="custom-checkbox password-checkbox">
-                        <input
-                          type="checkbox"
-                          className="cb1"
-                          checked={minLength}
-                          readOnly
-                        />
-                        <span className="checkmark"></span>
-                      </label>
+            (condition) => condition.id === 5 && condition.active === 1
+          ) ? (
+            <div className="pwd-rules">
+              <p className="common-fonts pwd-policy">Password policy :</p>
+              {/* Minimum 8 characters long */}
+              {passDes.map((item) =>
+                item.id === 1 ? (
+                  <p key={item.id} className="common-fonts password-text">
+                    <div className="password-rules">
+                      <div>
+                        <label className="custom-checkbox password-checkbox">
+                          <input
+                            type="checkbox"
+                            className="cb1"
+                            checked={minLength}
+                            readOnly
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </div>
+                      <p className="common-fonts password-text">
+                        Minimum {item.value} characters long
+                      </p>
                     </div>
-                    <p className="common-fonts password-text">
-                      Minimum {item.value} characters long
-                    </p>
-                  </div>
-                </p>
-              ) : null
-            )}
+                  </p>
+                ) : null
+              )}
 
-            {/* 1 number, symbol, or whitespace character */}
-            {passDes.map((item) =>
-              item.id === 2 ? (
-                <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasNumberSymbolWhitespace}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">
-                {item.value} number, symbol, or whitespace character
-                </p>
-              </div>
-            </div>
-                </p>
-              ) : null
-            )}
+              {/* 1 number, symbol, or whitespace character */}
+              {passDes.map((item) =>
+                item.id === 2 ? (
+                  <p key={item.id} className="common-fonts password-text">
+                    <div className="password-rules">
+                      <div>
+                        <label className="custom-checkbox password-checkbox">
+                          <input
+                            type="checkbox"
+                            className="cb1"
+                            checked={hasNumberSymbolWhitespace}
+                            readOnly
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </div>
+                      <div>
+                        <p className="common-fonts password-text">
+                          {item.value} number, symbol, or whitespace character
+                        </p>
+                      </div>
+                    </div>
+                  </p>
+                ) : null
+              )}
 
-            
-            {/* 1 uppercase letter */}
-            {passDes.map((item) =>
-              item.id === 3 ? (
-                <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasUppercase}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">{item.value} uppercase letter</p>
-              </div>
-            </div>
-                </p>
-              ) : null
-            )}
+              {/* 1 uppercase letter */}
+              {passDes.map((item) =>
+                item.id === 3 ? (
+                  <p key={item.id} className="common-fonts password-text">
+                    <div className="password-rules">
+                      <div>
+                        <label className="custom-checkbox password-checkbox">
+                          <input
+                            type="checkbox"
+                            className="cb1"
+                            checked={hasUppercase}
+                            readOnly
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </div>
+                      <div>
+                        <p className="common-fonts password-text">
+                          {item.value} uppercase letter
+                        </p>
+                      </div>
+                    </div>
+                  </p>
+                ) : null
+              )}
 
-            {/* 1 special character */}
-            {passDes.map((item) =>
-              item.id === 4 ? (
-                <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasSpecialCharacter}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">{item.value} special character</p>
-              </div>
+              {/* 1 special character */}
+              {passDes.map((item) =>
+                item.id === 4 ? (
+                  <p key={item.id} className="common-fonts password-text">
+                    <div className="password-rules">
+                      <div>
+                        <label className="custom-checkbox password-checkbox">
+                          <input
+                            type="checkbox"
+                            className="cb1"
+                            checked={hasSpecialCharacter}
+                            readOnly
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </div>
+                      <div>
+                        <p className="common-fonts password-text">
+                          {item.value} special character
+                        </p>
+                      </div>
+                    </div>
+                  </p>
+                ) : null
+              )}
             </div>
-                </p>
-              ) : null
-            )}
-            
-          </div>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+          )}
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
             {passDes.some(

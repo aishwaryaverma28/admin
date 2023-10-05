@@ -134,7 +134,9 @@ const fetchData = async () => {
         },
       })
       .then((response) => {
-        setRoles(response?.data?.data);
+        const filteredRoles = response?.data?.data.filter(item => item.company === "fiduciagroup");
+
+        setRoles(filteredRoles);
       })
       .catch((error) => {
         console.log(error);
