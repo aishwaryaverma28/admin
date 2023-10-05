@@ -16,13 +16,13 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DealEmail = ({ type, id, dealName, ownerId, idOfOwner }) => {
+const DealEmail = ({ type, id, dealName, ownerId, idOfOwner, email }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [stateAdd, setStateAdd] = useState(0);
   const [dataFromChild, setDataFromChild] = useState("");
   const decryptedToken = getDecryptedToken();
   const [emailInput, setEmailInput] = useState("");
-  const [toEmails, setToEmails] = useState([]);
+  const [toEmails, setToEmails] = useState(email ? [{ email: email, name: dealName }] : []);
   const [emailInput2, setEmailInput2] = useState("");
   const [toEmails2, setToEmails2] = useState([]);
   const [allEmails, setAllEmails] = useState([]);
@@ -30,7 +30,7 @@ const DealEmail = ({ type, id, dealName, ownerId, idOfOwner }) => {
   const [owner, setOwner] = useState("");
   const [openEmailId, setOpenEmailId] = useState(null);
   const [number, setNumber] = useState(0);
-
+console.log(toEmails);
   const toggleEmail = (emailId) => {
     if (openEmailId === emailId) {
       setOpenEmailId(null);

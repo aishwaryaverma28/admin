@@ -1249,7 +1249,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             {activeTab === "email" && (
               <div className="email-tab-content">
                 <DealEmail id={selectedItem.id} type="lead" dealName={leadName} ownerId={ownerId}
-                  idOfOwner={idOfOwner}/>
+                  idOfOwner={idOfOwner} email={editedItem?.email}/>
               </div>
             )}
             {activeTab === "activity" && (

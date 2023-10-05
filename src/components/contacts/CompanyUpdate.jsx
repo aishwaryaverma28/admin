@@ -866,7 +866,7 @@ const CompanyUpdate = () => {
           )}
           {activeTab === "email" && (
             <div className="email-tab-content">
-              <DealEmail type="xx_company" id={id} dealName={companyName} />
+              <DealEmail type="xx_company" id={id} dealName={companyName} email={companyDetails.email}/>
             </div>
           )}
           {activeTab === "activity" && (
