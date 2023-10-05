@@ -211,6 +211,7 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
+        // console.log(details);
         setOwnerId(details?.owner);
         setDealName(response?.data?.data[0]?.deal_name);
 
@@ -1212,6 +1213,7 @@ const DealUpdate = () => {
                   <p>Name</p>
                   {/* <p>Address</p> */}
                   <p>Phone No</p>
+                  <p>Email</p>
                 </div>
 
                 <div className="detailsRightContainer">
@@ -1260,6 +1262,24 @@ const DealUpdate = () => {
                           value={dealDetails?.mobile}
                           onChange={handleInputChange}
                           name="mobile"
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                   <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="email"
+                          value={dealDetails?.email}
+                          onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput
                           }
@@ -1814,6 +1834,7 @@ const DealUpdate = () => {
                   dealName={dealName}
                   ownerId={ownerId}
                   idOfOwner={idOfOwner}
+                  email={dealDetails?.email}
                 />
               </div>
             )}

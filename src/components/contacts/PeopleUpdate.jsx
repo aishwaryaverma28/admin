@@ -757,6 +757,7 @@ const CompanyUpdate = () => {
                 dealName={companyName}
                 id={id}
                 type="xx_contact_person"
+                email={peopleDetails.email}
               />
             </div>
           )}
