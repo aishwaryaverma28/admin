@@ -340,7 +340,7 @@ console.log(toEmails);
           </div>
 
           <div className="notesEditor">
-            <CRMEmail onDataTransfer={handleDataTransfer} />
+            <CRMEmail onDataTransfer={handleDataTransfer} type={type} />
           </div>
           <div className="addNoteBtn email-save-cancel">
             <button

@@ -891,7 +891,6 @@ background: #FFF5DC;
   margin-top: -4.2rem;
   /* border: none !important; */
   width: 100%;
- 
 }
 
 .crm-new-border{
@@ -946,5 +945,59 @@ background: #FFF5DC;
 
 .email-close{
   background-color: #e2e9f2;
+}
+
+.quillEditor3 .ql-toolbar {
+  position: relative;
+  border: 1px solid #ccc; /* Add or adjust border styles as needed */
+  border-radius: 4px; /* Add or adjust border radius as needed */
+}
+
+.quillEditor3 .ql-toolbar.ql-snow {
+  height: auto;
+  top: 9.1rem; /* Adjust this value to move the icons down */
+  border: 1px solid #ccc;
+  z-index: 1000;
+  background: #f4f5f9;
+}
+
+.quillEditor3 .ql-toolbar button {
+  padding: 5px 8px;
+  margin: 0 2px;
+}
+
+.quillEditor3 .ql-container{
+  margin-top: -7.5%;
+  /* border: none !important; */
+  width: 100%;
+}
+
+@media only screen and (min-width: 1367px) and (max-width: 1540px) {
+  .quillEditor3 .ql-container {
+    margin-top: -4%;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width: 1541px){
+  .quillEditor3 .ql-container {
+    margin-top: -3.8%;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width: 1700px){
+  .quillEditor3 .ql-container {
+    margin-top: -3.5%;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width: 1800px){
+  .quillEditor3 .ql-container {
+    margin-top: -3.2%;
+    width: 100%;
+    border-radius: 0;
+  }
 }
 
