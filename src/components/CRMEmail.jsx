@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "./styles/BlogAdd.css";
 
 
-function CRMeditor({ onDataTransfer, initialContent }) {
+function CRMeditor({ onDataTransfer, initialContent, type }) {
   const [value, setValue] = useState("");
 
   useEffect(() => {
@@ -34,13 +34,24 @@ function CRMeditor({ onDataTransfer, initialContent }) {
   };
 
   return (
+    type === "lead" ? (
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={handleQuillChange}
+        modules={modules}
+        className="quillEditor quillEditor2 crm-new-border"
+      />
+    )
+   : (
     <ReactQuill
     theme="snow"
     value={value}
     onChange={handleQuillChange}
     modules={modules}
-    className="quillEditor quillEditor2 crm-new-border"
+    className="quillEditor quillEditor3 crm-new-border"
   />
+  )
   );
 }
 
