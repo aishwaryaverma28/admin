@@ -87,8 +87,8 @@ const DealUpdate = () => {
     // value: null,
     introducer_name: "",
     introducer_firm_name: "",
-    data_enquiry_receive: "",
-    borrower_entry: "",
+    // data_enquiry_receive: "",
+    // borrower_entry: "",
     security_value: null,
     loan_amount: null,
     deposit: null,
@@ -105,7 +105,7 @@ const DealUpdate = () => {
     deal_commission: null,
     completion_date: "",
     stage_id: null,
-    age_of_business: "",
+    age_of_business: null,
     company_type: "",
     duration: "",
     company_location: "",
@@ -225,8 +225,7 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
-        console.log(details);
-        console.log("ttt");
+        // console.log(details);
         setOwnerId(details?.owner);
         setDealName(response?.data?.data[0]?.deal_name);
 
@@ -257,8 +256,8 @@ const DealUpdate = () => {
           // value: details.value,
           introducer_name: details.introducer_name,
           introducer_firm_name: details.introducer_firm_name,
-          data_enquiry_receive: details.data_enquiry_receive,
-          borrower_entry: details.borrower_entry,
+          // data_enquiry_receive: details.data_enquiry_receive,
+          // borrower_entry: details.borrower_entry,
           security_value: details.security_value,
           loan_amount: details.loan_amount,
           deposit: details.deposit,
@@ -335,6 +334,7 @@ const DealUpdate = () => {
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
+    console.log(filteredLoanDetails);
     const matchingLoans = loan.filter((loanItem) => {
       return Object.entries(filteredLoanDetails).every(([key, value]) => {
         return loanItem[key] === value;
@@ -849,9 +849,6 @@ const DealUpdate = () => {
   // Example usage
   const stageId = dealDetails.stage_id;
   const stageName = getStageName(stageId);
-
-  console.log("hello");
-  console.log(dealDetails);
 
   return (
     <>
