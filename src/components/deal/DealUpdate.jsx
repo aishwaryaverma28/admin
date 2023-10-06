@@ -1953,9 +1953,11 @@ const DealUpdate = () => {
               {isBankOpen && (
                 <div className="detailsContent">
                   <div className="dealsLeftContainer">
-                    {banks?.map((banks, index) => (
+                    {banks?.length> 0 ?banks?.map((banks, index) => (
                       <p key={index}>{banks}</p>
-                    ))}
+                    )) : (
+                      <p className="common-fonts">No Banks Available</p>
+                    )}
                   </div>
                 </div>
               )}
