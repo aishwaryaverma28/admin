@@ -84,7 +84,7 @@ const DealUpdate = () => {
     pipeline_id: 1,
     probability: "",
     status: "",
-    value: null,
+    // value: null,
     introducer_name: "",
     introducer_firm_name: "",
     data_enquiry_receive: "",
@@ -105,13 +105,20 @@ const DealUpdate = () => {
     deal_commission: null,
     completion_date: "",
     stage_id: null,
+    age_of_business: "",
+    company_type: "",
+    duration: "",
+    company_location: "",
+    turnover: "",
+    industry_type: "",
+    individual_or_company:""
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
   const [notes, setNotes] = useState();
   const [attachedFile, setAttachedFiles] = useState();
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [editedItem, setEditedItem] = useState("");
   const [isSummaryOpen, setIsSummaryOpen] = useState(true);
@@ -218,7 +225,8 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
-        // console.log(details);
+        console.log(details);
+        console.log("ttt");
         setOwnerId(details?.owner);
         setDealName(response?.data?.data[0]?.deal_name);
 
@@ -246,7 +254,7 @@ const DealUpdate = () => {
           pipeline_id: 1,
           probability: details.probability,
           status: details.status,
-          value: details.value,
+          // value: details.value,
           introducer_name: details.introducer_name,
           introducer_firm_name: details.introducer_firm_name,
           data_enquiry_receive: details.data_enquiry_receive,
@@ -268,6 +276,13 @@ const DealUpdate = () => {
           completion_date: details.completion_date?.split("T")[0],
           stage_id: details.stage_id,
           owner: info?.id,
+          age_of_business: details.age_of_business,
+          company_type: details.company_type,
+          duration: details.duration,
+          company_location: details.company_location,
+          turnover: details.turnover,
+          industry_type: details.industry_type,
+          individual_or_company: details.individual_or_company
         });
         setLoanDetails({
           ...loanDetails,
@@ -278,7 +293,7 @@ const DealUpdate = () => {
           location_of_company: details?.company_location,
           duration: details?.duration,
           individual_or_company: details?.individual_or_company,
-          loan_amount: details?.value,
+          loan_amount: details?.loan_amount,
           loan_type: details?.loan_type,
         });
         adminInfo.first_name = response?.data?.data[0]?.ownerf_name || "";
@@ -835,6 +850,9 @@ const DealUpdate = () => {
   const stageId = dealDetails.stage_id;
   const stageName = getStageName(stageId);
 
+  console.log("hello");
+  console.log(dealDetails);
+
   return (
     <>
       <div className="backToDeal">
@@ -1025,7 +1043,7 @@ const DealUpdate = () => {
               {isSummaryOpen && (
                 <div className="detailsContent">
                   <div className="dealsLeftContainer">
-                    <p>Value</p>
+                    {/* <p>Value</p> */}
                     <p>Lable</p>
                     {/* <p>Contact Person</p> */}
                     <p>Organization</p>
@@ -1034,7 +1052,7 @@ const DealUpdate = () => {
                   </div>
 
                   <div className="detailsRightContainer">
-                    <p>
+                    {/* <p>
                       {isLoading ? (
                         <span>-</span>
                       ) : (
@@ -1051,7 +1069,7 @@ const DealUpdate = () => {
                           />
                         </span>
                       )}
-                    </p>
+                    </p> */}
 
                     <p>
                       {isLoading ? (
@@ -1211,8 +1229,16 @@ const DealUpdate = () => {
                   <div className="dealsLeftContainer">
                     <p>Name</p>
                     {/* <p>Address</p> */}
-                    <p>Phone No</p>
+                    <p>Phone No.</p>
                     <p>Email</p>
+                    <p>Age Of Buiseness</p>
+                    <p>Company Type</p>
+                    <p>Duration</p>
+                    <p>Location</p>
+                    <p>Loan Type</p>
+                    <p>Turnover</p>
+                    <p>Industry Type</p>
+                    <p>Type</p>
                   </div>
 
                   <div className="detailsRightContainer">
@@ -1287,6 +1313,202 @@ const DealUpdate = () => {
                         </span>
                       )}
                     </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="number"
+                            name="age_of_business"
+                            value={dealDetails?.age_of_business}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable ? editStylingInput : normalStylingInput
+                            }
+                            disabled={isDisabled}
+                          />
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <select
+                            name="company_type"
+                            onChange={handleInputChange}
+                            disabled={isDisabled}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            className={isDisabled ? "disabled" : ""}
+                            value={dealDetails?.company_type}
+                          >
+                            <option value="Corporation">Corporation</option>
+                            <option value="limited company">
+                              Limited Company
+                            </option>
+                            <option value="private limited">
+                              Private Limited
+                            </option>
+                            <option value="public company">
+                              Public Company
+                            </option>
+                            <option value="joint venture">Joint Venture</option>
+                            <option value="Sole Proprietorship">
+                              Sole Proprietorship
+                            </option>
+                            <option value="LLC">LLC</option>
+                          </select>
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <select
+                            className={isDisabled ? "disabled" : ""}
+                            name="duration"
+                            disabled={isDisabled}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            value={dealDetails?.duration}
+                          >
+                            <option value="Short-term">Short term</option>
+                            <option value="Medium-term">Medium term</option>
+                            <option value="Long-term">Long term</option>
+                          </select>
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="text"
+                            name="company_location"
+                            value={dealDetails?.company_location}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable ? editStylingInput : normalStylingInput
+                            }
+                            disabled={isDisabled}
+                          />
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <select
+                            className={isDisabled ? "disabled" : ""}
+                            name="loan_type"
+                            disabled={isDisabled}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            value={dealDetails?.loan_type}
+                          >
+                            <option value="Home loan">Home loan</option>
+                            <option value="Business">Business</option>
+                            <option value="Personal">Personal</option>
+                            <option value="car finance">car finance</option>
+                            <option value="business loan">business loan</option>
+                            <option value="term loan">term loan</option>
+                            <option value="secured loan">secured loan</option>
+                          </select>
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                          <input
+                            type="number"
+                            name="turnover"
+                            value={dealDetails?.turnover}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable ? editStylingInput : normalStylingInput
+                            }
+                            disabled={isDisabled}
+                          />
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                        <select
+                  className={isDisabled ? "disabled" : ""}
+                            name="industry_type"
+                            disabled={isDisabled}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            value={dealDetails?.industry_type}
+                >
+                  <option value="Textile">Textile</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Manufacturing">Manufacturing</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Mining">Mining</option>
+                  <option value="Hospitality">Hospitality</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Aerospace">Aerospace</option>
+                  <option value="Technology">Technology</option>
+                </select>
+                        </span>
+                      )}
+                    </p>
+                    <p>
+                      {isLoading ? (
+                        <span>-</span>
+                      ) : (
+                        <span>
+                        <select
+                  className={isDisabled ? "disabled" : ""}
+                            name="individual_or_company"
+                            disabled={isDisabled}
+                            onChange={handleInputChange}
+                            style={
+                              isEditable
+                                ? editStylingSelect3
+                                : normalStylingSelect3
+                            }
+                            value={dealDetails?.individual_or_company}
+                >
+                  <option value="individual">Individual</option>
+                  <option value="Company">Company</option>
+                </select>
+                        </span>
+                      )}
+                    </p>
                   </div>
                 </div>
               )}
@@ -1313,7 +1535,6 @@ const DealUpdate = () => {
                     <p>Loan Amount</p>
                     <p>Deposit</p>
                     <p>Type Of Security</p>
-                    <p>Loan Type</p>
                     <p>Lender</p>
                     <p>Lead Source</p>
                     <p>Engagement Fee</p>
@@ -1463,24 +1684,6 @@ const DealUpdate = () => {
                             type="text"
                             name="type_of_security"
                             value={dealDetails.type_of_security}
-                            onChange={handleInputChange}
-                            style={
-                              isEditable ? editStylingInput : normalStylingInput
-                            }
-                            disabled={isDisabled}
-                          />
-                        </span>
-                      )}
-                    </p>
-                    <p>
-                      {isLoading ? (
-                        <span>-</span>
-                      ) : (
-                        <span>
-                          <input
-                            type="text"
-                            name="loan_type"
-                            value={dealDetails.loan_type}
                             onChange={handleInputChange}
                             style={
                               isEditable ? editStylingInput : normalStylingInput
@@ -1759,17 +1962,17 @@ const DealUpdate = () => {
             </section>
           </div>
 
-            <div className="deal-update-btn">
-              {stateBtn === 0 ? (
-                <button disabled className="disabledBtn ">
-                  Update
-                </button>
-              ) : (
-                <button className="convertToDeal" onClick={handleUpdateClick}>
-                  Update
-                </button>
-              )}
-            </div>
+          <div className="deal-update-btn">
+            {stateBtn === 0 ? (
+              <button disabled className="disabledBtn ">
+                Update
+              </button>
+            ) : (
+              <button className="convertToDeal" onClick={handleUpdateClick}>
+                Update
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="divRightSection">

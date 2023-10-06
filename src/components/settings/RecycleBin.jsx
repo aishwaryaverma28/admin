@@ -30,9 +30,7 @@ const RecycleBin = () => {
   const [noteslen, setNoteslen] = useState(0);
   const [companylen, setCompanylen] = useState(0);
   const [peoplelen, setPeoplelen] = useState(0);
-  const [activeTab, setActiveTab] = useState(
-    localStorage.getItem("activeTab") || "Leads"
-  );
+  const [activeTab, setActiveTab] = useState("Notes");
   // const [notesDataLength, setNotesDataLength] = useState(0);
   const decryptedToken = getDecryptedToken();
   const [isDeleteDealModalOpen, setIsDeleteDealModalOpen] = useState(false);
@@ -246,11 +244,8 @@ const RecycleBin = () => {
           </div>
           <div className="recycle-top-right">
             <p className="default-days recycle-fonts">Default delete Days</p>
-            <select name="" id="" className="recycle-fonts default-days-select">
-              <option value="">30days</option>
-              <option value="">45days</option>
-              <option value="">60days</option>
-              <option value="">90days</option>
+            <select name="" id="" className="recycle-fonts default-days-select" disabled>
+              <option value="">90 days</option>
             </select>
           </div>
         </div>
