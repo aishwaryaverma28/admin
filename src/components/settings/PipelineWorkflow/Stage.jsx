@@ -135,6 +135,14 @@ const handleDrop = (e, targetIndex) => {
 };
 
 
+const handleInputChange = (e, index) => {
+  const newStages = [...stages];
+  newStages[index].display_name = e.target.value;
+  // Update the state or perform other operations with newStages array
+};
+
+
+
 //===================================================================== drag and drop function
 
 
@@ -143,23 +151,30 @@ const handleDrop = (e, targetIndex) => {
 
 {/* ===================================================================== drag and drop function */}
 {/* <ul className="item-list">
-      {stages.map((item, index) => (
-        <li
-          key={item.id}
-          draggable
-          onDragStart={(e) => handleDragStart(e, index, item.id)}
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, index)}
-        >
-          {item.display_name}
-        </li>
-      ))}
-    </ul> */}
+  {stages.map((item, index) => (
+    <li
+      key={item.id}
+      draggable
+      onDragStart={(e) => handleDragStart(e, index, item.id)}
+      onDragOver={handleDragOver}
+      onDrop={(e) => handleDrop(e, index)}
+    >
+      <input
+        type="text"
+        value={item.display_name}
+        onChange={(e) => handleInputChange(e, index)}
+      />
+    </li>
+  ))}
+</ul>  */}
+
+{/* <button className="common-fonts common-save-button" onClick={handleAddStage}>Add Stages</button> */}
+
 
 {/* ===================================================================== drag and drop function */}
 
 
-      <table>
+       <table>
         <thead>
           <tr>
             <th className="common-fonts stage-head">STAGE NAME</th>

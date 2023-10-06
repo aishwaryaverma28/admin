@@ -65,11 +65,11 @@ const UserAndTeams = () => {
       .then((response) => {
         if (response.data.leads || response.data.deals) {
           if (response?.data?.leads) {
-            const extractedIds = response.data.leads.map(lead => lead.id);
+            const extractedIds = response.data.leads.map((lead) => lead.id);
             setLeadId(extractedIds);
           }
           if (response?.data?.deals) {
-            const extractedIds = response.data.deals.map(deals => deals.id);
+            const extractedIds = response.data.deals.map((deals) => deals.id);
             setDealId(extractedIds);
           }
           HandleDeactivateUserModal(id);
@@ -87,7 +87,7 @@ const UserAndTeams = () => {
   };
   const HandleDeactivateUser = (id, firstName, lastName) => {
     setSelectedFirstName(firstName);
-    setSelectedLastName(lastName)
+    setSelectedLastName(lastName);
     HandleCheckLeadDeal(id);
   };
 
@@ -111,7 +111,7 @@ const UserAndTeams = () => {
         userAdded();
         userDeactive();
         userActive();
-        toggleActionDropdown2(id)
+        toggleActionDropdown2(id);
       })
       .catch((error) => {
         // Handle error
@@ -141,7 +141,7 @@ const UserAndTeams = () => {
         userAdded();
         userActive();
         userDeactive();
-        toggleActionDropdown2(id)
+        toggleActionDropdown2(id);
       })
       .catch((error) => {
         // Handle error
@@ -647,7 +647,11 @@ const UserAndTeams = () => {
                                     {teamMember.is_deactivated === 0 ? (
                                       <li
                                         onClick={() =>
-                                          HandleDeactivateUser(teamMember.id, teamMember.first_name, teamMember.last_name)
+                                          HandleDeactivateUser(
+                                            teamMember.id,
+                                            teamMember.first_name,
+                                            teamMember.last_name
+                                          )
                                         }
                                       >
                                         Deactivate user
@@ -806,7 +810,11 @@ const UserAndTeams = () => {
                                     <li>Make Super Admin</li>
                                     <li
                                       onClick={() =>
-                                        HandleDeactivateUser(teamMember.id, teamMember.first_name, teamMember.last_name)
+                                        HandleDeactivateUser(
+                                          teamMember.id,
+                                          teamMember.first_name,
+                                          teamMember.last_name
+                                        )
                                       }
                                     >
                                       Deactivate user

@@ -14,7 +14,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
     phone: "",
     email: "",
     password: "",
-    company:"fiduciagroup"
+    // company:"fiduciagroup"
   });
 
   const [passDes, setPassDes] = useState([]);
