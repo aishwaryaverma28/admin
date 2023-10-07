@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/DealUpdate.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
@@ -111,7 +111,7 @@ const DealUpdate = () => {
     company_location: "",
     turnover: "",
     industry_type: "",
-    individual_or_company:""
+    individual_or_company:"",
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -225,7 +225,6 @@ const DealUpdate = () => {
       })
       .then((response) => {
         const details = response?.data?.data[0];
-        // console.log(details);
         setOwnerId(details?.owner);
         setDealName(response?.data?.data[0]?.deal_name);
 
@@ -315,7 +314,17 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        setLoan(response?.data?.data);
+        const loanData = response?.data?.data.map(item => {
+          const { age_of_business, ...rest } = item;
+          const modifiedItem = {
+              ...rest, // Copy other properties from the item
+              age_of_business: age_of_business !== undefined ? age_of_business.toString() : null 
+          };
+          return modifiedItem;
+      });
+      setLoan(loanData);
+      
+
       })
 
       .catch((error) => {
@@ -334,18 +343,24 @@ const DealUpdate = () => {
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
-    console.log(filteredLoanDetails);
+    
     const matchingLoans = loan.filter((loanItem) => {
       return Object.entries(filteredLoanDetails).every(([key, value]) => {
-        return loanItem[key] === value;
+        return loanItem[key].toString().toLowerCase() === value.toString().toLowerCase();
       });
     });
+
 
     const loanOfferedByValues = matchingLoans.map(
       (loanItem) => loanItem.loan_offered_by
     );
     setBanks(loanOfferedByValues);
   };
+
+
+
+
+
 
   const userAdded = () => {
     axios
@@ -385,10 +400,6 @@ const DealUpdate = () => {
   };
 
   useEffect(() => {
-    fetchDeal();
-  }, [fieldNames]);
-
-  useEffect(() => {
     fetchLabelData();
     fetchNotes();
     fetchFields();
@@ -396,7 +407,20 @@ const DealUpdate = () => {
     userAdded();
     handleGetEmail();
     fetchBanks();
+    filterBanks();
   }, []);
+
+  useEffect(() => {
+    fetchDeal();
+  }, [fieldNames]);
+
+  useEffect(()=>{
+    filterBanks();
+  },[loanDetails])
+
+
+
+
 
   useEffect(() => {
     fetchFields() // Fetch fields first
@@ -712,6 +736,8 @@ const DealUpdate = () => {
     setIsDisabled(!isDisabled);
     setStateBtn(0);
     fetchDeal();
+    filterBanks();
+
   };
 
   const handleTabClick = (tab) => {
