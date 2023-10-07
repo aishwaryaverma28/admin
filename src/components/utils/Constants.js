@@ -21,7 +21,6 @@ const encryptedUserPathTot = localStorage.getItem("encryptedUserPathTot");
 if (encryptedUserPathTot) {
 // Decrypt the userPathTot
 const decryptedBytes = CryptoJS.AES.decrypt(encryptedUserPathTot, secretKey);
-return decryptedBytes.toString(CryptoJS.enc.Utf8);
 }
 return '';
 }
@@ -31,9 +30,11 @@ export {getDecryptedUserPath}
   export const handleLogout = () => {
     localStorage.clear();
     window.location.href = "http://core.leadplaner.com/";
+    // window.location.href = " https://fiduciagroup.leadplaner.com/";
   };
 // =============================================================apis used  
 const start = "http://core.leadplaner.com:3001/";
+// const start = "https://fiduciagroup.leadplaner.com//api/"
 const userId = localStorage.getItem('id');
 export const USER_INFO = start + "api/user/getuserinfo";
 export const USER_UPDATE = start + "api/user/update";
