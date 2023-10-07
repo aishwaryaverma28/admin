@@ -21,6 +21,7 @@ const encryptedUserPathTot = localStorage.getItem("encryptedUserPathTot");
 if (encryptedUserPathTot) {
 // Decrypt the userPathTot
 const decryptedBytes = CryptoJS.AES.decrypt(encryptedUserPathTot, secretKey);
+return decryptedBytes.toString(CryptoJS.enc.Utf8);
 }
 return '';
 }
