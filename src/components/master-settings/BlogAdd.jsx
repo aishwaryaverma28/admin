@@ -5,6 +5,7 @@ import {
   GET_TAG,
   GET_TAG_BY_SITE,
   getDecryptedToken,
+  GET_TAG_CATEGORY,
 } from "../utils/Constants";
 
 import "../styles/BlogAdd.css";
@@ -25,7 +26,7 @@ const BlogAdd = () => {
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
-  const [isIndex, setIsIndex] = useState(-1);  
+  const [isIndex, setIsIndex] = useState(-1);
   // const [selectedImage, setSelectedImage] = useState(null);
   // const [showUploadButton, setShowUploadButton] = useState(false);
   // const [showEditButton, setShowEditButton] = useState(false);
@@ -34,10 +35,12 @@ const BlogAdd = () => {
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
-  const [tagApi, setTagApi] = useState([]);
+  const [options, setOptions] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
+  const [category, setCategory] = useState([]);
   const decryptedToken = getDecryptedToken();
+  console.log(decryptedToken);
   const editorRef = useRef(); // Define the editorRef using useRef
   const [formData, setFormData] = useState({
     title: "",
@@ -47,21 +50,26 @@ const BlogAdd = () => {
     keywords: "",
   });
 
-  useEffect(() => {
+  const getTagCategory = () => {
     axios
-      .get(GET_TAG, {
+      .get(GET_TAG_CATEGORY, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        setTagApi(response);
+        setCategory(response?.data?.data);
+        console.log(response?.data?.data);
+        console.log("hyyy");
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getTagCategory();
   }, []);
-  const options = tagApi?.data?.data || [];
 
   const getTagBySite = (site) => {
     axios
@@ -71,18 +79,21 @@ const BlogAdd = () => {
         },
       })
       .then((response) => {
-        setTagApi(response);
+        setOptions(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -109,15 +120,63 @@ const BlogAdd = () => {
   };
 
   // ===================================================================functions for tags addition and removal
+  // const handleTagSelection2 = (event) => {
+  //   const id = event.target.value;
+  //   setStateBtn(1);
+  //   setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
+  //   options.map((option) => {
+  //     if (option.id == id) {
+  //       setSelectedTags((prev) => [...prev, option.tag]);
+  //     }
+  //   });
+  // };
+
   const handleTagSelection = (event) => {
-    const id = event.target.value;
-    setStateBtn(1);
-    setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-    options.map((option) => {
-      if (option.id == id) {
-        setSelectedTags((prev) => [...prev, option.tag]);
+    const { name, value } = event.target;
+
+    // Check the name of the dropdown to determine which property to update in updateForm
+    if (name === "categoryDropdown") {
+      let updatedForm = {};
+
+      if (value) {
+        updatedForm = {
+          category: value,
+          condition: "category",
+        };
+      } else {
+        updatedForm = {
+          condition: "all",
+        };
       }
-    });
+
+      // Call your API with updatedForm object
+      axios
+        .post(GET_TAG, updatedForm, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data);
+
+          setOptions(
+            response?.data?.data.map((item) => ({ id: item.id, tag: item.tag }))
+          );
+          console.log("hello");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (name === "tagDropdown") {
+      const id = event.target.value;
+      setStateBtn(1);
+      setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
+      options.map((option) => {
+        if (option.id == id) {
+          setSelectedTags((prev) => [...prev, option.tag]);
+        }
+      });
+    }
   };
 
   const handleTagRemoval = (index) => {
@@ -154,7 +213,7 @@ const BlogAdd = () => {
     }
     setStateBtn(1);
   }
-    
+
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
@@ -261,7 +320,7 @@ const BlogAdd = () => {
     setSelectSite("");
     setTagId("");
     setSelectedTags([]);
-    setTagApi([]);
+    setOptions([]);
     setSelectedDate("");
     setSectionData([]);
     setSectionTitle("");
@@ -340,7 +399,10 @@ const BlogAdd = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -368,7 +430,10 @@ const BlogAdd = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -435,11 +500,7 @@ const BlogAdd = () => {
                   >
                     Add Image
                   </button>
-                  {blogImg ? (
-                    blogImg
-                  ) : (
-                    <></>
-                  )}
+                  {blogImg ? blogImg : <></>}
                 </div>
               </div>
             </div>
@@ -518,11 +579,7 @@ const BlogAdd = () => {
                       >
                         Add Image
                       </button>
-                      {blogImg2 ? (
-                       blogImg2
-                      ) : (
-                        <></>
-                      )}
+                      {blogImg2 ? blogImg2 : <></>}
                     </div>
                     <button
                       onClick={handleAddSection}
@@ -586,7 +643,7 @@ const BlogAdd = () => {
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
 
-                        {/* <input
+                      {/* <input
                           type="text"
                           name="image"
                           id="image"
@@ -595,28 +652,24 @@ const BlogAdd = () => {
                           value={section.image}
                           onChange={(event) => handleimageChange(event, index)}
                         /> */}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(event) => handleReplaceImage(event, index)}
-                          style={{ display: "none" }}
-                          ref={(input) => (fileInputRefs[index] = input)}
-                        />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => handleReplaceImage(event, index)}
+                        style={{ display: "none" }}
+                        ref={(input) => (fileInputRefs[index] = input)}
+                      />
 
-                        <div className="blog-browse-img">
+                      <div className="blog-browse-img">
                         <button
                           className="common-fonts blog-add-img add-img-2"
                           onClick={() => fileInputRefs[index].click()}
                         >
-                        {section?.image ? ' change image': ' add image'}
+                          {section?.image ? " change image" : " add image"}
                         </button>
-                        {section?.image ? (
-                         section?.image
-                        ) : (
-                          <></>
-                        )}
-                        </div>
+                        {section?.image ? section?.image : <></>}
                       </div>
+                    </div>
 
                     <div className="formEditor">
                       <ReactEditor
@@ -647,8 +700,22 @@ const BlogAdd = () => {
                 <h3>Tags</h3>
                 <div className="contentBox">
                   <select
+                    name="categoryDropdown"
                     onChange={handleTagSelection}
                     className="tagSelectBox"
+                  >
+                    <option value="">category</option>
+
+                    {category.map((data) => (
+                      <option key={data.category} value={data.category}>
+                        {data.category}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    onChange={handleTagSelection}
+                    className="tagSelectBox"
+                    name="tagDropdown"
                   >
                     <option value="">Select a tag</option>
 
