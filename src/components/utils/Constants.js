@@ -30,7 +30,8 @@ export {getDecryptedUserPath}
   //=============================================================logout function
   export const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "http://core.leadplaner.com/";
+    // window.location.href = "http://core.leadplaner.com/";
+    window.location.href = "https://www.leadplaner.com/user/login";
     // window.location.href = " https://fiduciagroup.leadplaner.com/";
   };
 // =============================================================apis used  

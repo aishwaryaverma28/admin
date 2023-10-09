@@ -54,15 +54,15 @@ import HelpView from "./components/master-settings/HelpView";
 import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
-// import Testing from "./components/Testing";
+import Testing from "./components/Testing";
 const router = createBrowserRouter([
-  // {
-  //   path: "/:auth",
-  //   element: <Testing />,
-  //   errorElement:<Error/>,
-  // },
   {
-    path: "/",
+    path: "/:auth",
+    element: <Testing />,
+    errorElement:<Error/>,
+  },
+  {
+    path: "/login",
     element: <Login />,
     errorElement: <Error />,
   },

@@ -16,7 +16,7 @@ function Testing() {
     const encryptedToken = localStorage.getItem("jwtToken");
     if (encryptedToken) {
       const landingUrl = localStorage.getItem("landingUrl");
-      // navigate(landingUrl);
+      navigate(landingUrl);
     } else {
       setIsLoading(false); // Set loading state to false if token not found
     }
@@ -65,7 +65,7 @@ function Testing() {
           secretKey
         ).toString();
         localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
-        // navigate(landingUrl);
+        navigate(landingUrl);
       }
     }
 
