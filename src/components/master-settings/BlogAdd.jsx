@@ -40,7 +40,6 @@ const BlogAdd = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const [category, setCategory] = useState([]);
   const decryptedToken = getDecryptedToken();
-  console.log(decryptedToken);
   const editorRef = useRef(); // Define the editorRef using useRef
   const [formData, setFormData] = useState({
     title: "",
@@ -59,8 +58,6 @@ const BlogAdd = () => {
       })
       .then((response) => {
         setCategory(response?.data?.data);
-        console.log(response?.data?.data);
-        console.log("hyyy");
       })
       .catch((error) => {
         console.log(error);
@@ -69,7 +66,10 @@ const BlogAdd = () => {
 
   useEffect(() => {
     getTagCategory();
+    handleTagSelection();
   }, []);
+
+
 
   const getTagBySite = (site) => {
     axios
@@ -107,7 +107,6 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
           newSectionData[index].image = selectedImage.name;
@@ -120,21 +119,11 @@ const BlogAdd = () => {
   };
 
   // ===================================================================functions for tags addition and removal
-  // const handleTagSelection2 = (event) => {
-  //   const id = event.target.value;
-  //   setStateBtn(1);
-  //   setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-  //   options.map((option) => {
-  //     if (option.id == id) {
-  //       setSelectedTags((prev) => [...prev, option.tag]);
-  //     }
-  //   });
-  // };
+
 
   const handleTagSelection = (event) => {
-    const { name, value } = event.target;
+    const { name="categoryDropdown", value } = event?.target || {};
 
-    // Check the name of the dropdown to determine which property to update in updateForm
     if (name === "categoryDropdown") {
       let updatedForm = {};
 
@@ -157,12 +146,9 @@ const BlogAdd = () => {
           },
         })
         .then((response) => {
-          console.log(response.data.data);
-
           setOptions(
             response?.data?.data.map((item) => ({ id: item.id, tag: item.tag }))
           );
-          console.log("hello");
         })
         .catch((error) => {
           console.log(error);
@@ -179,6 +165,8 @@ const BlogAdd = () => {
     }
   };
 
+
+
   const handleTagRemoval = (index) => {
     setStateBtn(1);
     const numbersArray = tagId.split(",");
@@ -193,7 +181,6 @@ const BlogAdd = () => {
     const date = event.target.value;
     setSelectedDate(date);
     setStateBtn(1);
-    // console.log(date);
   };
 
   //===================================================================== function to track on chnage of form paramerters
@@ -269,7 +256,7 @@ const BlogAdd = () => {
     return tempDiv.textContent || tempDiv.innerText || "";
   };
   //====================================================================================== handle section data in an array of objects
-  console.log(sectionData);
+
   const handleAddSection = (e) => {
     e.preventDefault();
     const plainText = removeHtmlTags(dataFromChild);
@@ -299,7 +286,7 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-  console.log(sectionData);
+
 
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
@@ -346,7 +333,7 @@ const BlogAdd = () => {
       route: formData.url,
       alt: "",
     };
-    console.log(updatedFormData);
+
     axios
       .post(BLOG_ADD, updatedFormData, {
         headers: {
@@ -354,8 +341,8 @@ const BlogAdd = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.status);
-        if (response?.data?.status == 1) {
+
+        if (response?.data?.status === 1) {
           toast.success("Blog data added successfully", {
             position: "top-center",
             autoClose: 2000,
@@ -396,7 +383,6 @@ const BlogAdd = () => {
 
   const submitImage = (file) => {
     const selectedImage = file;
-    console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -417,7 +403,6 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setBlogImg(selectedImage.name);
         })
         .catch((err) => {
@@ -427,7 +412,6 @@ const BlogAdd = () => {
   };
   const submitImage2 = (file) => {
     const selectedImage = file;
-    console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -726,9 +710,9 @@ const BlogAdd = () => {
                     ))}
                   </select>
 
-                  <button onClick={AddTag} type="button" className="primaryBtn">
+                  {/* <button onClick={AddTag} type="button" className="primaryBtn">
                     Add
-                  </button>
+                  </button> */}
                 </div>
                 <div className="tagData">
                   {selectedTags &&

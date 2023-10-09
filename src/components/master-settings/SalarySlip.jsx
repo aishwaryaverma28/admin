@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  PAYSLIPS,getDecryptedToken
-} from "./utils/Constants";
+import { PAYSLIPS, getDecryptedToken } from "../utils/Constants";
 import ViewProfile from "./ViewProfile";
-import "./styles/EmployeeProfile.css";
+import "../styles/EmployeeProfile.css";
 import PDFConverter from "./PDFConverter";
 const SalarySlip = () => {
   const [tableData, setTableData] = useState([]);
@@ -17,21 +15,20 @@ const SalarySlip = () => {
   }, []);
 
   async function getEmployeeInfo() {
-  
     try {
       const response = await axios.get(PAYSLIPS, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       const data = response.data.data;
       setTableData(data);
       setLoading(false);
-      } catch (error) {
+    } catch (error) {
       console.error(error); // Handle the error as needed
     }
   }
-  
+
   const handleYearChange = (event) => {
     setSelectedYear(Number(event.target.value)); // Parse the selected value to a number
   };
@@ -45,8 +42,7 @@ const SalarySlip = () => {
       setFilteredTableData(filteredTableData);
     }
   }, [tableData, selectedYear]);
-  
-  
+
   return (
     <div className="salary-slip-container">
       <ViewProfile />
@@ -75,11 +71,11 @@ const SalarySlip = () => {
             </tr>
           ) : (
             filteredTableData.map((item, index) => (
-              <tr key={index} style={{ borderBottom: '2px solid #d3d6d6'}}>
+              <tr key={index} style={{ borderBottom: "2px solid #d3d6d6" }}>
                 <td className="sno">{index + 1}</td>
                 <td className="slaryMonth">
                   {item.month + (item.year ? ", " + item.year : "")}
-                  <PDFConverter id={item.id}/>
+                  <PDFConverter id={item.id} />
                 </td>
               </tr>
             ))

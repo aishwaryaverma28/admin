@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/Editor.css";
 import axios from "axios";
 import { GET_SITEPGS, getDecryptedToken } from "../utils/Constants";
-import TableWithSitePages from "../TableWithSitePages";
+import TableWithSitePages from "./TableWithSitePages";
 import { Link } from "react-router-dom";
 
 const SitePagesView = () => {

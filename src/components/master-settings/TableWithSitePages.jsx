@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./styles/EmployeeView.css";
+import "../styles/EmployeeView.css";
 import {Link} from "react-router-dom";
 const TableWithSitePages = ({ data, rowsPerPage }) => {
     const [currentPage, setCurrentPage] = useState(1);

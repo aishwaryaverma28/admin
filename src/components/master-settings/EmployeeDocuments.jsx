@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import ViewProfile from "../ViewProfile";
+import ViewProfile from "./ViewProfile";
 import "../styles/EmployeeProfile.css";
 import notUpload from "../../assets/image/notupload.svg";
 import upload from "../../assets/image/upload.svg";
