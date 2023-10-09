@@ -23,6 +23,10 @@
   padding: 0.8rem;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
 }
+
+.from-view-img{
+  padding-bottom: 30px;
+}
 .fromUrl {
   display: flex;
   justify-content: space-between;
@@ -470,7 +474,7 @@
 
 .blog-browse-img{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -508,7 +512,7 @@
 }
 
 .update-img{
-  width:10rem;
+  width:16rem;
 }
 
 .section-img-new{
