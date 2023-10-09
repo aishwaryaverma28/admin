@@ -35,7 +35,6 @@ import Mail from "./components/Mail";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import SecureRoutes from "./components/SecureRoutes";
-// import Testing from "./components/Testing";
 import UserAndTeams from "./components/settings/UserAndTeams";
 import LPSettingsGeneral from "./components/settings/LPSettingsGeneral";
 import Error from "./components/Error";
@@ -55,6 +54,7 @@ import HelpView from "./components/master-settings/HelpView";
 import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
+// import Testing from "./components/Testing";
 const router = createBrowserRouter([
   // {
   //   path: "/:auth",

@@ -20,14 +20,27 @@
   font-family: "Lexend Deca", sans-serif;
   text-transform: capitalize;
   padding: 10px 15px;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 5px;
 }
+
 .addBtn:hover {
   color: #ffffff;
   background-color: #2b74da;
   transition: all 0.8s ease-in-out;
 }
-
+.selectSec {
+  cursor: pointer;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  color: #565c5f;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Lexend Deca", sans-serif;
+  text-transform: capitalize;
+  padding: 10px 15px;
+  margin-right: 1rem;
+  border-radius: 5px;
+}
 .entries {
   border: 1px solid #b9c7ce;
   border-radius: 5px;
