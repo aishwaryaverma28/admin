@@ -53,6 +53,7 @@ export const BLOG_EDIT = start+"api/blog/edit/";
 export const BLOG_GET = start+"api/blog/get";
 export const BLOG_GETID = start + "api/blog/get/";
 export const GET_TAG = start+"api/blog/tag/getall";
+export const GET_TAG_CATEGORY = start+"api/blog/tag/getcategories";
 export const GET_TAG_BY_SITE = start+"api/blog/tag/getbysite/";
 export const SEC_GET = start+"api/blog/section/getbyblog/";
 export const IMAGE_UP = start+"api/blog/addImg";
