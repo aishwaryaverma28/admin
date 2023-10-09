@@ -9,11 +9,14 @@ const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectSite, setSelectSite] = useState("bookmyplayer");
   const decryptedToken = getDecryptedToken();
-
-  useEffect(() => {
+  const blogData = () => {
+    const siteName = {
+      siteName: selectSite,
+    };
     axios
-      .get(BLOG_GET, {
+      .post(BLOG_GET, siteName, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -24,7 +27,10 @@ const EmployeeView = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  };
+  useEffect(() => {
+    blogData();
+  }, [selectSite]);
 
   const selectRows = (e) => {
     setValue(e.target.value);
@@ -46,7 +52,9 @@ const EmployeeView = () => {
     }
     return false;
   });
-
+  function handleSiteSelection(event) {
+    setSelectSite(event.target.value);
+  }
   return (
     <>
       <header className="headerEditor">
@@ -59,6 +67,12 @@ const EmployeeView = () => {
           </label>
         </div>
         <div>
+            <select onChange={handleSiteSelection} className="selectSec">
+              <option value="bookmyplayer">bookmyplayer</option>
+              <option value="leadplaner">leadplaner</option>              
+              <option value="firstcron">firstcron</option>
+              <option value="routplaner">routplaner</option>
+            </select>
           <Link to="/lp/settings/blog/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
