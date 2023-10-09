@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { EMPLOYEE_GET, EMPLOYEE_UPDATE,getDecryptedToken } from "./utils/Constants";
-import "./styles/EmployeeUpdate.css";
+import {
+  EMPLOYEE_GET,
+  EMPLOYEE_UPDATE,
+  getDecryptedToken,
+} from "../utils/Constants";
+import "../styles/EmployeeUpdate.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const EmployeeUpdate = () => {
@@ -32,7 +36,7 @@ const EmployeeUpdate = () => {
     department: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
-     
+
   useEffect(() => {
     getEmployeeInfo();
   }, []);
@@ -40,8 +44,8 @@ const EmployeeUpdate = () => {
   async function getEmployeeInfo() {
     const response = await axios.get(EMPLOYEE_GET, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
     });
     const data = response.data.data;
     setEmpData(data);
@@ -132,17 +136,19 @@ const EmployeeUpdate = () => {
       aadhaar_no: formData.aadhaar_no,
       salary: formData.salary,
     };
-    axios.put(EMPLOYEE_UPDATE + id, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      toast.success("Employee data updated successfully", {
-        position:"top-center",
-        autoClose:2000
+    axios
+      .put(EMPLOYEE_UPDATE + id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
-    });
+      .then((response) => {
+        console.log(response);
+        toast.success("Employee data updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
   }
 
   return (
@@ -491,7 +497,7 @@ const EmployeeUpdate = () => {
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

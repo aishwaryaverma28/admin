@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import './styles/Editor.css'
-import axios from 'axios';
-import { GET_SITEPGS,getDecryptedToken} from './utils/Constants';
-import TableWithSitePages from './TableWithSitePages';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "../styles/Editor.css";
+import axios from "axios";
+import { GET_SITEPGS, getDecryptedToken } from "../utils/Constants";
+import TableWithSitePages from "../TableWithSitePages";
+import { Link } from "react-router-dom";
 
 const SitePagesView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const decryptedToken = getDecryptedToken();
   useEffect(() => {
-     axios.get(GET_SITEPGS, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      setTableData(response.data.data);
-      console.log(response.data.data);
-    });
+    axios
+      .get(GET_SITEPGS, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setTableData(response.data.data);
+        console.log(response.data.data);
+      });
   }, []);
 
   const selectRows = (e) => {
@@ -32,7 +34,10 @@ const SitePagesView = () => {
   const filteredItems = (tableData || []).filter((item) => {
     const values = Object.values(item);
     for (let i = 0; i < values.length; i++) {
-      if (values[i] && values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      if (
+        values[i] &&
+        values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
         return true;
       }
     }
@@ -41,19 +46,17 @@ const SitePagesView = () => {
 
   return (
     <>
-    <header className='headerEditor'>
-      <h2>
-    View your site
-    </h2>
-    </header>
-    <div className="buttonBox">
+      <header className="headerEditor">
+        <h2>View your site</h2>
+      </header>
+      <div className="buttonBox">
         <div className="searchBar">
           <label>
             Search: <input type="text" onChange={handleSearchTermChange} />
           </label>
         </div>
         <div>
-          <Link to= "/lp/settings/sitePages/add">
+          <Link to="/lp/settings/sitePages/add">
             <button type="button" className="addBtn">
               add <i className="fas fa-plus"></i>
             </button>
@@ -74,9 +77,8 @@ const SitePagesView = () => {
       <div className="tableContainer">
         <TableWithSitePages data={filteredItems} rowsPerPage={value} />
       </div>
-
-</>
-  )
-}
+    </>
+  );
+};
 
 export default SitePagesView;

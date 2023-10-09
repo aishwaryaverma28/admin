@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { GET_SITEPGS, PUT_SITEPGS,getDecryptedToken} from "./utils/Constants";
-import "./styles/EmployeeUpdate.css";
+import {
+  GET_SITEPGS,
+  PUT_SITEPGS,
+  getDecryptedToken,
+} from "../utils/Constants";
+import "../styles/EmployeeUpdate.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,8 +33,8 @@ const SitePagesUpdate = () => {
   async function getEmployeeInfo() {
     const response = await axios.get(GET_SITEPGS, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
     });
     const data = response.data.data;
     setEmpData(data);
@@ -82,17 +86,19 @@ const SitePagesUpdate = () => {
       description: formData.description,
       sitemap: formData.sitemap,
     };
-    axios.put(PUT_SITEPGS + id, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      toast.success("Site Pages data updated successfully", {
-        position:"top-center",
-        autoClose:2000
+    axios
+      .put(PUT_SITEPGS + id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
-    });
+      .then((response) => {
+        console.log(response);
+        toast.success("Site Pages data updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
     setStateBtn(0);
   }
 
@@ -170,7 +176,7 @@ const SitePagesUpdate = () => {
               <label for="sitemap">Sitemap</label>
 
               <input
-                 type="number"
+                type="number"
                 name="sitemap"
                 id="sitemap"
                 value={formData.sitemap}
@@ -197,7 +203,7 @@ const SitePagesUpdate = () => {
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

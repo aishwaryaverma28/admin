@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./styles/LPleads.css";
-import CRMeditor from "./CRMeditor";
+import "../styles/LPleads.css";
+import CRMeditor from "../CRMeditor";
 import axios from "axios";
 import {
   ADD_NOTES,
@@ -11,19 +11,19 @@ import {
   handleLogout,
   getDecryptedToken,
   GETNOTECOMPANY,
-  GETNOTEPEOPLE
-} from "./utils/Constants";
-import ThreeDots from "../assets/image/three-dots.svg";
-import bin from "../assets/image/TrashFill.svg";
-import unpin from "../assets/image/unpin.svg";
-import pin from "../assets/image/pin.svg";
-import GreaterArrow from "../assets/image/greater-arrow.svg";
+  GETNOTEPEOPLE,
+} from "../utils/Constants";
+import ThreeDots from "../../assets/image/three-dots.svg";
+import bin from "../../assets/image/TrashFill.svg";
+import unpin from "../../assets/image/unpin.svg";
+import pin from "../../assets/image/pin.svg";
+import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router";
 
-const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
-  const { id }  =useParams();
+const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
+  const { id } = useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
   const [notes, setNotes] = useState([]);
@@ -105,7 +105,7 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
             handleLogout();
           }
         });
-    }else if (type === "xx_company") {
+    } else if (type === "xx_company") {
       axios
         .get(GETNOTECOMPANY + id, {
           headers: {
@@ -137,7 +137,7 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
             handleLogout();
           }
         });
-    }else if (type === "xx_contact_person") {
+    } else if (type === "xx_contact_person") {
       axios
         .get(GETNOTEPEOPLE + id, {
           headers: {
@@ -179,7 +179,7 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
 
   const handleAddNote = () => {
     const updatedFormData = {
-      source_id: type==="lead" ? item.id : id,
+      source_id: type === "lead" ? item.id : id,
       type: type,
       description: dataFromChild,
       importance: "0",
@@ -197,12 +197,12 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
         fetchNotes(); // Fetch the updated notes after adding a new note
         onNotesNum();
 
-        if(response.data.status===1){
+        if (response.data.status === 1) {
           toast.success("Notes added successfully", {
             position: "top-center",
             autoClose: 2000,
           });
-        }else{
+        } else {
           toast.error("Something went wrong", {
             position: "top-center",
             autoClose: 2000,
@@ -313,8 +313,8 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
 
   const handlePinNote = (id) => {
     const noteToPin = notes.find((note) => note.id === id);
-    console.log("pin")
-    console.log(noteToPin)
+    console.log("pin");
+    console.log(noteToPin);
     if (noteToPin) {
       const updatedNote = {
         description: noteToPin.description,
@@ -349,8 +349,8 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
 
   const handleUnpinNote = (id) => {
     const noteToUnpin = notes.find((note) => note.id === id);
-    console.log("un pin")
-    console.log(noteToUnpin)
+    console.log("un pin");
+    console.log(noteToUnpin);
     if (noteToUnpin) {
       const updatedNote = {
         description: noteToUnpin.description,
@@ -383,45 +383,49 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
     }
   };
 
-   const handleClose = () => {
+  const handleClose = () => {
     setDataFromChild("");
     setOpenEditor(false);
     setStateAdd(0);
   };
 
-
   return (
     <>
-    {
-      ownerId===idOfOwner && (
+      {ownerId === idOfOwner && (
         <>
-        {!openEditor ? (
-        <div className="colapedEditor" onClick={expandEditor}>
-          <p>Click here to add a note</p>
-        </div>
-      ) : (
-        <>
-          <div className="notesEditor">
-            <CRMeditor onDataTransfer={handleDataTransfer} />
-          </div>
-          <div className="addNoteBtn">
-          <button className="common-white-button" onClick={handleClose}>Cancel</button>
-            {stateAdd === 0 ? (
-              <button disabled className="common-fonts common-inactive-button note-btn">
-                Add Note
-              </button>
-            ) : (
-              <button onClick={handleAddNote} className="common-fonts common-save-button note-btn">
-                Add Note
-              </button>
-            )}
-          </div>
+          {!openEditor ? (
+            <div className="colapedEditor" onClick={expandEditor}>
+              <p>Click here to add a note</p>
+            </div>
+          ) : (
+            <>
+              <div className="notesEditor">
+                <CRMeditor onDataTransfer={handleDataTransfer} />
+              </div>
+              <div className="addNoteBtn">
+                <button className="common-white-button" onClick={handleClose}>
+                  Cancel
+                </button>
+                {stateAdd === 0 ? (
+                  <button
+                    disabled
+                    className="common-fonts common-inactive-button note-btn"
+                  >
+                    Add Note
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAddNote}
+                    className="common-fonts common-save-button note-btn"
+                  >
+                    Add Note
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </>
       )}
-        </>
-
-      )
-    }
 
       {notes.length > 0 && (
         <div className="savedNotes">
@@ -431,10 +435,10 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
                 <div
                   className="note-content"
                   onClick={() => {
-    if (ownerId === idOfOwner) {
-      accordianClick(note.id);
-    }
-  }}
+                    if (ownerId === idOfOwner) {
+                      accordianClick(note.id);
+                    }
+                  }}
                 >
                   <div className="arrow-greater">
                     <img src={GreaterArrow} alt="" />
@@ -456,37 +460,32 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
                               note.creation_date.split("T")[1].split(".")[0]
                             : "-"}
                         </p>
-                         
-                         {
-                          ownerId === idOfOwner && (
-                            <div className="three-side-dots">
-                          {note.importance === "1" ? (
-                            <img
-                              src={pin}
-                              alt="pin"
-                              title="Pin"
-                              onClick={() => handleUnpinNote(note.id)}
-                            />
-                          ) : (
-                            <img
-                              src={unpin}
-                              alt="unpin"
-                              title="UnPin"
-                              onClick={() => handlePinNote(note.id)}
-                            />
-                          )}
+
+                        {ownerId === idOfOwner && (
+                          <div className="three-side-dots">
+                            {note.importance === "1" ? (
                               <img
-                            src={bin}
-                            alt="trash"
-                            title="Delete"
-                            onClick={() => handleDeleteNote(note.id)}
-                          />
-
-                          
-                        </div>
-                          )
-                         }
-
+                                src={pin}
+                                alt="pin"
+                                title="Pin"
+                                onClick={() => handleUnpinNote(note.id)}
+                              />
+                            ) : (
+                              <img
+                                src={unpin}
+                                alt="unpin"
+                                title="UnPin"
+                                onClick={() => handlePinNote(note.id)}
+                              />
+                            )}
+                            <img
+                              src={bin}
+                              alt="trash"
+                              title="Delete"
+                              onClick={() => handleDeleteNote(note.id)}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="notes-content">
@@ -548,7 +547,10 @@ const AddNotes = ({onNotesNum, type , item, ownerId, idOfOwner}) => {
                     Discard
                   </button>
                   {stateBtn === 0 ? (
-                    <button disabled className="common-fonts common-inactive-button note-btn">
+                    <button
+                      disabled
+                      className="common-fonts common-inactive-button note-btn"
+                    >
                       Save
                     </button>
                   ) : (

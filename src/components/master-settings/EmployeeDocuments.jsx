@@ -1,18 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import ViewProfile from "./ViewProfile";
-import "./styles/EmployeeProfile.css";
-import notUpload from "../assets/image/notupload.svg";
-import upload from "../assets/image/upload.svg";
+import ViewProfile from "../ViewProfile";
+import "../styles/EmployeeProfile.css";
+import notUpload from "../../assets/image/notupload.svg";
+import upload from "../../assets/image/upload.svg";
 import {
   EMPLOYEE_GETID,
   EMPLOYEE_UPDATE,
   REMOVE_DOC,
   UPLOAD_DOC,
-  VIEW_IMG,getDecryptedToken
-} from "./utils/Constants";
+  VIEW_IMG,
+  getDecryptedToken,
+} from "../utils/Constants";
 const decryptedToken = getDecryptedToken();
-const userId = localStorage.getItem('id');
+const userId = localStorage.getItem("id");
 
 function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -29,88 +30,85 @@ function DocumentUpload({ label, imageUrl, setImageUrl }) {
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("employeeDoc", file);
- 
+
     if (imageUrl) {
       try {
-        await axios.delete(REMOVE_DOC + imageUrl,{
+        await axios.delete(REMOVE_DOC + imageUrl, {
           headers: {
-            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-          }
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
         });
-      } catch(error) {
-        console.log(error)
-      };
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     try {
-      const response = await axios.post(UPLOAD_DOC, formData,{
+      const response = await axios.post(UPLOAD_DOC, formData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       console.log("Image uploaded successfully:", response.data);
       setImageUrl(response.data.data);
       // Perform any additional actions on successful upload
-    } catch(error) {
-      console.log(error)
-    };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleViewDocument = () => {
     if (imageUrl) {
-      window.open(
-         VIEW_IMG + imageUrl,
-        "_blank"
-      );
+      window.open(VIEW_IMG + imageUrl, "_blank");
     }
   };
 
   return (
     <div className="docImage">
-    <div className="aadhar">
-      <div className="docTitle">
-        <p className="docName">{label}</p>
-        {imageUrl ? (
-          <div className="docStatus">
-            <img src={upload} alt="upload" />
-            <p>(Uploaded)</p>
-          </div>
-        ) : (
-          <div className="docStatus">
-            <img src={notUpload} alt="notupload" />
-            <p>(Not Uploaded)</p>
-          </div>
-        )}
-      </div>
-
-      <div className="docData">
-      {!imageUrl ? <span></span> : null}
-        <input
-          type="file"
-          name="employeeDoc"
-          accept="image/*"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleImageSelect}
-        />
-
-        {imageUrl && <p className="imageUrl">{imageUrl}</p>}
-        <span>
-          {imageUrl && (
-            <button onClick={handleViewDocument} className="viewBtn">
-              <i className="fa-sharp fa-solid fa-eye"></i>
-            </button>
+      <div className="aadhar">
+        <div className="docTitle">
+          <p className="docName">{label}</p>
+          {imageUrl ? (
+            <div className="docStatus">
+              <img src={upload} alt="upload" />
+              <p>(Uploaded)</p>
+            </div>
+          ) : (
+            <div className="docStatus">
+              <img src={notUpload} alt="notupload" />
+              <p>(Not Uploaded)</p>
+            </div>
           )}
-          <button onClick={handleButtonClick} className="browseBtn">
-            Browse
-          </button>
-        </span>
-      </div>
-      
-    </div>
-    
-    {imageUrl && <img src={VIEW_IMG + imageUrl} alt="image" className="docUpImg" />}
+        </div>
 
+        <div className="docData">
+          {!imageUrl ? <span></span> : null}
+          <input
+            type="file"
+            name="employeeDoc"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleImageSelect}
+          />
+
+          {imageUrl && <p className="imageUrl">{imageUrl}</p>}
+          <span>
+            {imageUrl && (
+              <button onClick={handleViewDocument} className="viewBtn">
+                <i className="fa-sharp fa-solid fa-eye"></i>
+              </button>
+            )}
+            <button onClick={handleButtonClick} className="browseBtn">
+              Browse
+            </button>
+          </span>
+        </div>
+      </div>
+
+      {imageUrl && (
+        <img src={VIEW_IMG + imageUrl} alt="image" className="docUpImg" />
+      )}
     </div>
   );
 }
@@ -123,25 +121,25 @@ function EmployeeDocuments() {
   const [empData, setEmpData] = useState([]);
   const [initialEmpData, setInitialEmpData] = useState({});
   const [uploadMessage, setUploadMessage] = useState("");
-    
+
   useEffect(() => {
     getEmployeeInfo();
   }, []);
 
   async function getEmployeeInfo() {
     try {
-      const response = await axios.get(EMPLOYEE_GETID,{
+      const response = await axios.get(EMPLOYEE_GETID, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       const data = response.data.data;
       setEmpData(data[0]);
       setInitialEmpData(data[0]);
       setData(data[0]);
-    } catch(error){
-      console.log(error)
-    };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function setData(data) {
@@ -160,20 +158,22 @@ function EmployeeDocuments() {
       tax_image: panUrl,
       bank_image: checkUrl,
     };
-    axios.put(EMPLOYEE_UPDATE + userId, updatedFormData,{
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      setUploadMessage("Documents uploaded successfully");
-      setTimeout(() => {
-        setUploadMessage("");
-      }, 30000); // Clear message after 1 minute (60000 milliseconds)
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+    axios
+      .put(EMPLOYEE_UPDATE + userId, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setUploadMessage("Documents uploaded successfully");
+        setTimeout(() => {
+          setUploadMessage("");
+        }, 30000); // Clear message after 1 minute (60000 milliseconds)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const resetForm = () => {

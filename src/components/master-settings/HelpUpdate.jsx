@@ -1,11 +1,16 @@
-import React from "react";
-import "./styles/HelpAdd.css";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { ADD_HELP, getDecryptedToken } from "./utils/Constants";
-import { useState } from "react";
+import {
+  GET_HELP_ID,
+  UPDATE_HELP,
+  getDecryptedToken,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
+import LeftArrow from "../../assets/image/arrow-left.svg";
 
-const HelpAdd = () => {
+const HelpUpdate = () => {
+  const { id } = useParams();
   const decryptedToken = getDecryptedToken();
   const [helpData, setHelpData] = useState({
     site: "",
@@ -14,6 +19,25 @@ const HelpAdd = () => {
     details: "",
     category: "8",
   });
+  async function getHelp() {
+    const response = await axios.get(GET_HELP_ID + id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
+    });
+    const data = response?.data?.data[0];
+    setHelpData({
+      ...helpData,
+      site: data.site,
+      slug: data.slug,
+      title: data.title,
+      details: data.details,
+    });
+    console.log(data);
+  }
+  useEffect(() => {
+    getHelp();
+  }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -33,7 +57,7 @@ const HelpAdd = () => {
     // console.log(helpDataBody);
 
     axios
-      .post(ADD_HELP, helpDataBody, {
+      .put(UPDATE_HELP + id, helpDataBody, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -42,14 +66,6 @@ const HelpAdd = () => {
         toast.success("label added successfully", {
           position: "top-center",
           autoClose: 2000,
-        });
-
-        setHelpData({
-          site: "",
-          slug: "",
-          title: "",
-          details: "",
-          category: "8",
         });
       })
       .catch((error) => {
@@ -60,8 +76,16 @@ const HelpAdd = () => {
   return (
     <>
       <header className="helpHead">
-        <h2>Add Help</h2>
+        <h2>Update Help</h2>
       </header>
+      <div className="back-to-user general-refresh">
+        <Link to={"/lp/settings/helpSection/update"}>
+          <button className="common-fonts">
+            <img src={LeftArrow} alt="" />
+            <span>Back To Help Table</span>
+          </button>
+        </Link>
+      </div>
       <div className="helpContainer">
         <div className="helpBody">
           <p className="helpTitle">Question Title</p>
@@ -119,4 +143,4 @@ const HelpAdd = () => {
   );
 };
 
-export default HelpAdd;
+export default HelpUpdate;
