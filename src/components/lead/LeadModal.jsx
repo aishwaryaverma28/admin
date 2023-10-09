@@ -13,10 +13,10 @@ import {
   UPLOADED_DOCS,
   GET_ACTIVITY,
   GET_FIELDS,
-  POST_EMAIL
+  POST_EMAIL,
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
-import AddNotes from "./../AddNotes";
+import AddNotes from "../deal/AddNotes";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
@@ -53,7 +53,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [isFieldsOpen, setIsFieldsOpen] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
   const [leadName, setLeadName] = useState("");
-  const idOfOwner = parseInt(localStorage.getItem('id'));
+  const idOfOwner = parseInt(localStorage.getItem("id"));
   const [ownerId, setOwnerId] = useState(0);
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
@@ -69,7 +69,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const handleGetEmail = () => {
     const updatedFormData = {
       source: "lead",
-      source_id: selectedItem.id
+      source_id: selectedItem.id,
     };
     axios
       .post(POST_EMAIL, updatedFormData, {
@@ -139,7 +139,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
       })
       .then((response) => {
         setLeadName(response?.data?.data[0]?.lead_name);
-        setOwnerId(response.data.data[0]?.owner)
+        setOwnerId(response.data.data[0]?.owner);
         setEditedItem(response?.data?.data[0]);
         setName(
           response?.data?.data[0]?.first_name +
@@ -169,9 +169,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     fetchFields();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleGetEmail();
-  },[allEmails])
+  }, [allEmails]);
 
   useEffect(() => {
     fetchLead();
@@ -649,7 +649,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     width: "fit-content",
   };
 
-  const ownerName = userData.find((item) => item.id ===ownerId);
+  const ownerName = userData.find((item) => item.id === ownerId);
 
   return (
     <div className="modal">
@@ -680,14 +680,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                 )}
               </p>
             </div>
-            {
-              ownerId === idOfOwner && (
-                <a href="#" className="edit-details" onClick={toggleEditable}>
-              <i className="fa-solid fa-pen"></i>
-            </a>
-              )
-            }
-
+            {ownerId === idOfOwner && (
+              <a href="#" className="edit-details" onClick={toggleEditable}>
+                <i className="fa-solid fa-pen"></i>
+              </a>
+            )}
           </div>
           <div className="leadDetailsLeft">
             <div className="detailsBox">
@@ -947,23 +944,26 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             }
                             className={isDisabled ? "disabled" : ""}
                             name="owner"
-                            value={ownerName ? ownerName.id : ''}
+                            value={ownerName ? ownerName.id : ""}
                           >
-                            {userData.slice().reverse().map((item) => (
-                              <option
-                                key={item?.id}
-                                value={item?.id}
-                                className="owner-val"
-                              >
-                                {`${
-                                  item?.first_name?.charAt(0).toUpperCase() +
-                                  item?.first_name?.slice(1)
-                                } ${
-                                  item?.last_name?.charAt(0).toUpperCase() +
-                                  item?.last_name?.slice(1)
-                                }`}
-                              </option>
-                            ))}
+                            {userData
+                              .slice()
+                              .reverse()
+                              .map((item) => (
+                                <option
+                                  key={item?.id}
+                                  value={item?.id}
+                                  className="owner-val"
+                                >
+                                  {`${
+                                    item?.first_name?.charAt(0).toUpperCase() +
+                                    item?.first_name?.slice(1)
+                                  } ${
+                                    item?.last_name?.charAt(0).toUpperCase() +
+                                    item?.last_name?.slice(1)
+                                  }`}
+                                </option>
+                              ))}
                           </select>
                         )}
                       </span>
@@ -1248,8 +1248,14 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
             )}
             {activeTab === "email" && (
               <div className="email-tab-content">
-                <DealEmail id={selectedItem.id} type="lead" dealName={leadName} ownerId={ownerId}
-                  idOfOwner={idOfOwner} email={editedItem?.email}/>
+                <DealEmail
+                  id={selectedItem.id}
+                  type="lead"
+                  dealName={leadName}
+                  ownerId={ownerId}
+                  idOfOwner={idOfOwner}
+                  email={editedItem?.email}
+                />
               </div>
             )}
             {activeTab === "activity" && (

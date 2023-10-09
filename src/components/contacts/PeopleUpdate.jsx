@@ -5,7 +5,7 @@ import Building from "../../assets/image/building.svg";
 import User from "../../assets/image/user-icon.svg";
 import Calender from "../../assets/image/calendar-new.svg";
 import Copy from "../../assets/image/copy.svg";
-import AddNotes from "../AddNotes.jsx";
+import AddNotes from "../deal/AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
@@ -718,19 +718,17 @@ const CompanyUpdate = () => {
           )}
         </div>
 
-
-          <div className="deal-update-btn">
-            {stateBtn === 0 ? (
-              <button disabled className="disabledBtn ">
-                Update
-              </button>
-            ) : (
-              <button className="convertToDeal" onClick={handleUpdateClick}>
-                Update
-              </button>
-            )}
-          </div>
-
+        <div className="deal-update-btn">
+          {stateBtn === 0 ? (
+            <button disabled className="disabledBtn ">
+              Update
+            </button>
+          ) : (
+            <button className="convertToDeal" onClick={handleUpdateClick}>
+              Update
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="cpu-right">

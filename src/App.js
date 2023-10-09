@@ -6,28 +6,28 @@ import {
 } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
 import Lead from "./components/lead/Lead";
-import EmployeeProfile from "./components/EmployeeProfile";
+import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
 import TimeSheet from "./components/TimeSheet";
-import EmployeeDocuments from "./components/EmployeeDocuments";
+import EmployeeDocuments from "./components/master-settings/EmployeeDocuments";
 import SalarySlip from "./components/SalarySlip";
-import BlogAdd from "./components/BlogAdd";
-import BlogView from "./components/BlogView";
-import SitePagesAdd from "./components/SitePagesAdd";
-import HelpAdd from "./components/HelpAdd";
-import HelpUpdate from "./components/HelpUpdate";
-import UserMangAdd from "./components/UserMangAdd";
-import UserMangUpdate from "./components/UserMangUpdate";
-import EmployeeAdd from "./components/EmployeeAdd";
+import BlogAdd from "./components/master-settings/BlogAdd.jsx";
+import BlogView from "./components/master-settings/BlogView";
+import SitePagesAdd from "./components/master-settings/SitePagesAdd";
+import HelpAdd from "./components/master-settings/HelpAdd";
+import HelpUpdate from "./components/master-settings/HelpUpdate";
+import UserMangAdd from "./components/master-settings/UserMangAdd";
+import UserMangUpdate from "./components/master-settings/UserMangUpdate";
+import EmployeeAdd from "./components/master-settings/EmployeeAdd";
 import EmployeeView from "./components/EmployeeView";
-import AccessManagement from "./components/AccessManagement";
-import ReportsandAnalytics from "./components/ReportsandAnalytics";
-import City from "./components/City";
-import State from "./components/State";
-import EmployeeUpdate from "./components/EmployeeUpdate";
-import BlogUpdate from "./components/BlogUpdate";
-import SitePagesView from "./components/SitePagesView";
-import SitePagesUpdate from "./components/SitePagesUpdate";
+import AccessManagement from "./components/master-settings/AccessManagement";
+import ReportsandAnalytics from "./components/master-settings/ReportsandAnalytics";
+import City from "./components/master-settings/City";
+import State from "./components/master-settings/State";
+import EmployeeUpdate from "./components/master-settings/EmployeeUpdate";
+import BlogUpdate from "./components/master-settings/BlogUpdate";
+import SitePagesView from "./components/master-settings/SitePagesView";
+import SitePagesUpdate from "./components/master-settings/SitePagesUpdate";
 import Home from "./components/Home";
 import Contacts from "./components/contacts/Contacts.jsx";
 import Deal from "./components/deal/Deal";
@@ -51,7 +51,7 @@ import WorkFlow from "./components/settings/PipelineWorkflow/EditWorkflow";
 import SettingUsage from "./components/settings/SettingUsage";
 import SettingImpExp from "./components/settings/SettingImpExp";
 import DealUpdate from "./components/deal/DealUpdate";
-import HelpView from "./components/HelpView";
+import HelpView from "./components/master-settings/HelpView";
 import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
@@ -72,11 +72,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/reset",
-    element: <Reset/>,
+    element: <Reset />,
   },
   {
     path: "/lp",
-    element: <Leadplaner/>,
+    element: <Leadplaner />,
     errorElement: <Error />,
     children: [
       {
@@ -105,11 +105,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/contacts/company/:id",
-        element: <CompanyUpdate/>,
+        element: <CompanyUpdate />,
       },
       {
         path: "/lp/contacts/people/:id",
-        element: <PeopleUpdate/>,
+        element: <PeopleUpdate />,
       },
       {
         path: "/lp/deals",
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/deals/:id",
-        element: <DealUpdate/>,
+        element: <DealUpdate />,
       },
       {
         path: "/lp/settings",
@@ -166,7 +166,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/workflow",
-            element:  <SecureRoutes Component={WorkFlow} />,
+            element: <SecureRoutes Component={WorkFlow} />,
           },
           {
             path: "/lp/settings/settingUsage",
@@ -226,7 +226,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/helpSection/update/:id",
-            element: <HelpUpdate/>,
+            element: <HelpUpdate />,
           },
           {
             path: "/lp/settings/userManagement/add",

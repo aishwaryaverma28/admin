@@ -20,7 +20,7 @@ import {
   GET_FIELDS,
   POST_EMAIL,
 } from "../utils/Constants";
-import AddNotes from "../AddNotes";
+import AddNotes from "./AddNotes";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DealAttachments from "./DealAttachments.jsx";
@@ -111,7 +111,7 @@ const DealUpdate = () => {
     company_location: "",
     turnover: "",
     industry_type: "",
-    individual_or_company:"",
+    individual_or_company: "",
   });
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -280,7 +280,7 @@ const DealUpdate = () => {
           company_location: details.company_location,
           turnover: details.turnover,
           industry_type: details.industry_type,
-          individual_or_company: details.individual_or_company
+          individual_or_company: details.individual_or_company,
         });
         setLoanDetails({
           ...loanDetails,
@@ -314,17 +314,16 @@ const DealUpdate = () => {
         },
       })
       .then((response) => {
-        const loanData = response?.data?.data.map(item => {
+        const loanData = response?.data?.data.map((item) => {
           const { age_of_business, ...rest } = item;
           const modifiedItem = {
-              ...rest, // Copy other properties from the item
-              age_of_business: age_of_business !== undefined ? age_of_business.toString() : null 
+            ...rest, // Copy other properties from the item
+            age_of_business:
+              age_of_business !== undefined ? age_of_business.toString() : null,
           };
           return modifiedItem;
-      });
-      setLoan(loanData);
-      
-
+        });
+        setLoan(loanData);
       })
 
       .catch((error) => {
@@ -343,24 +342,21 @@ const DealUpdate = () => {
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
-    
+
     const matchingLoans = loan.filter((loanItem) => {
       return Object.entries(filteredLoanDetails).every(([key, value]) => {
-        return loanItem[key].toString().toLowerCase() === value.toString().toLowerCase();
+        return (
+          loanItem[key].toString().toLowerCase() ===
+          value.toString().toLowerCase()
+        );
       });
     });
-
 
     const loanOfferedByValues = matchingLoans.map(
       (loanItem) => loanItem.loan_offered_by
     );
     setBanks(loanOfferedByValues);
   };
-
-
-
-
-
 
   const userAdded = () => {
     axios
@@ -414,13 +410,9 @@ const DealUpdate = () => {
     fetchDeal();
   }, [fieldNames]);
 
-  useEffect(()=>{
+  useEffect(() => {
     filterBanks();
-  },[loanDetails])
-
-
-
-
+  }, [loanDetails]);
 
   useEffect(() => {
     fetchFields() // Fetch fields first
@@ -737,7 +729,6 @@ const DealUpdate = () => {
     setStateBtn(0);
     fetchDeal();
     filterBanks();
-
   };
 
   const handleTabClick = (tab) => {
@@ -1483,8 +1474,8 @@ const DealUpdate = () => {
                         <span>-</span>
                       ) : (
                         <span>
-                        <select
-                  className={isDisabled ? "disabled" : ""}
+                          <select
+                            className={isDisabled ? "disabled" : ""}
                             name="industry_type"
                             disabled={isDisabled}
                             onChange={handleInputChange}
@@ -1494,18 +1485,18 @@ const DealUpdate = () => {
                                 : normalStylingSelect3
                             }
                             value={dealDetails?.industry_type}
-                >
-                  <option value="Textile">Textile</option>
-                  <option value="Healthcare">Healthcare</option>
-                  <option value="Manufacturing">Manufacturing</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Insurance">Insurance</option>
-                  <option value="Mining">Mining</option>
-                  <option value="Hospitality">Hospitality</option>
-                  <option value="Retail">Retail</option>
-                  <option value="Aerospace">Aerospace</option>
-                  <option value="Technology">Technology</option>
-                </select>
+                          >
+                            <option value="Textile">Textile</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Insurance">Insurance</option>
+                            <option value="Mining">Mining</option>
+                            <option value="Hospitality">Hospitality</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Aerospace">Aerospace</option>
+                            <option value="Technology">Technology</option>
+                          </select>
                         </span>
                       )}
                     </p>
@@ -1514,8 +1505,8 @@ const DealUpdate = () => {
                         <span>-</span>
                       ) : (
                         <span>
-                        <select
-                  className={isDisabled ? "disabled" : ""}
+                          <select
+                            className={isDisabled ? "disabled" : ""}
                             name="individual_or_company"
                             disabled={isDisabled}
                             onChange={handleInputChange}
@@ -1525,10 +1516,10 @@ const DealUpdate = () => {
                                 : normalStylingSelect3
                             }
                             value={dealDetails?.individual_or_company}
-                >
-                  <option value="individual">Individual</option>
-                  <option value="Company">Company</option>
-                </select>
+                          >
+                            <option value="individual">Individual</option>
+                            <option value="Company">Company</option>
+                          </select>
                         </span>
                       )}
                     </p>
@@ -1976,9 +1967,9 @@ const DealUpdate = () => {
               {isBankOpen && (
                 <div className="detailsContent">
                   <div className="dealsLeftContainer">
-                    {banks?.length> 0 ?banks?.map((banks, index) => (
-                      <p key={index}>{banks}</p>
-                    )) : (
+                    {banks?.length > 0 ? (
+                      banks?.map((banks, index) => <p key={index}>{banks}</p>)
+                    ) : (
                       <p className="common-fonts">No Banks Available</p>
                     )}
                   </div>

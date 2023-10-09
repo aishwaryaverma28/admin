@@ -5,14 +5,22 @@ import Building from "../../assets/image/building.svg";
 import User from "../../assets/image/user-icon.svg";
 import Calender from "../../assets/image/calendar-new.svg";
 import Copy from "../../assets/image/copy.svg";
-import AddNotes from "../AddNotes.jsx";
+import AddNotes from "../deal/AddNotes.jsx";
 import DealEmail from "../deal/DealEmail.jsx";
 import DealActivity from "../deal/DealActivity.jsx";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_COMPANY, GET_COMPANY, POST_EMAIL, GETNOTECOMPANY, handleLogout, GET_ACTIVITY, GET_ACTIVE_TEAM_MEM } from "../utils/Constants";
+import {
+  getDecryptedToken,
+  UPDATE_COMPANY,
+  GET_COMPANY,
+  POST_EMAIL,
+  GETNOTECOMPANY,
+  handleLogout,
+  GET_ACTIVITY,
+  GET_ACTIVE_TEAM_MEM,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const CompanyUpdate = () => {
   const { id } = useParams();
@@ -38,7 +46,7 @@ const CompanyUpdate = () => {
     phone: "",
     email: "",
     city: "",
-    country:"",
+    country: "",
     address1: "",
     address2: "",
   });
@@ -69,7 +77,7 @@ const CompanyUpdate = () => {
 
   useEffect(() => {
     fetchNotes();
-    },[notes])
+  }, [notes]);
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -121,7 +129,7 @@ const CompanyUpdate = () => {
       })
       .then((response) => {
         const responseData = response?.data?.data;
-        console.log("dddw")
+        console.log("dddw");
         setUserData(responseData);
       })
       .catch((error) => {
@@ -134,8 +142,8 @@ const CompanyUpdate = () => {
   }, [allEmails]);
 
   useEffect(() => {
-  fetchCall();
-  },[activityCount])
+    fetchCall();
+  }, [activityCount]);
 
   const fetchData = () => {
     const body = {
@@ -151,7 +159,7 @@ const CompanyUpdate = () => {
       })
       .then((response) => {
         const responseData = response?.data?.data[0];
-         setCompanyName(response?.data?.data[0]?.name);
+        setCompanyName(response?.data?.data[0]?.name);
         const updatedCompanyDetails = {
           name: responseData.name,
           domain: responseData.domain,
@@ -344,493 +352,511 @@ const CompanyUpdate = () => {
 
   return (
     <div className="contact-cpu-container">
-    <div className="cpu-left-wrapper">
-    <div className="cpu-left">
-        <div className="go-back-btn cpu-back ">
-          <button
-            className="setting-font-style"
-            onClick={handleGoBack}
-            style={{ backgroundColor: "white" }}
-          >
-            <img src={arrowLeft} alt="" />
-            <span>Go Back</span>
-          </button>
-        </div>
-
-        <div className="cpu-top-details">
-          <div className="cpu-building">
-            <img src={Building} alt="" />
+      <div className="cpu-left-wrapper">
+        <div className="cpu-left">
+          <div className="go-back-btn cpu-back ">
+            <button
+              className="setting-font-style"
+              onClick={handleGoBack}
+              style={{ backgroundColor: "white" }}
+            >
+              <img src={arrowLeft} alt="" />
+              <span>Go Back</span>
+            </button>
           </div>
 
-          <div className="cpu-input-container">
-          {isLoading ? (
-            <span>-</span>
-          ) : (
-            <input
-              type="text"
-              value={companyDetails.name}
-              style={isEditable ? editStyling : normalStyling}
-              disabled={isDisabled}
-              onChange={handleInputChange}
-              name="name"
-            />
-          )}
-
-          {isLoading ? (
-            <span>-</span>
-          ) : (
-            <input
-              type="text"
-              value={companyDetails.domain}
-              style={isEditable ? editStylingInput : normalStylingInput}
-              disabled={isDisabled}
-              onChange={handleInputChange}
-              name="domain"
-            />
-          )}
-
-          {isLoading ? (
-            <span>-</span>
-          ) : (
-            <input
-              type="number"
-              value={companyDetails.phone}
-              style={isEditable ? editStylingInput : normalStylingInput}
-              disabled={isDisabled}
-              onChange={handleInputChange}
-              name="phone"
-            />
-          )}
-          </div>
-
-          <div className="cpu-icons">
-            <i className="fa-solid fa-pen cpu-pen" onClick={toggleEditable}></i>
-            <i className="fas fa-ellipsis-h cpu-dot"></i>
-          </div>
-        </div>
-
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleSummary}>
-            {isSummaryOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            About Company
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isSummaryOpen && (
-          <div className="detailsContent cpu-content">
-            <div className="dealsLeftContainer cpu-p">
-              <p>Name</p>
-              <p>Domain</p>
-              <p>Valuation</p>
-              <p>Industry</p>
+          <div className="cpu-top-details">
+            <div className="cpu-building">
+              <img src={Building} alt="" />
             </div>
 
-            <div className="detailsRightContainer">
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="name"
-                      value={companyDetails.name}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
+            <div className="cpu-input-container">
+              {isLoading ? (
+                <span>-</span>
+              ) : (
+                <input
+                  type="text"
+                  value={companyDetails.name}
+                  style={isEditable ? editStyling : normalStyling}
+                  disabled={isDisabled}
+                  onChange={handleInputChange}
+                  name="name"
+                />
+              )}
 
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="domain"
-                      value={companyDetails.domain}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
+              {isLoading ? (
+                <span>-</span>
+              ) : (
+                <input
+                  type="text"
+                  value={companyDetails.domain}
+                  style={isEditable ? editStylingInput : normalStylingInput}
+                  disabled={isDisabled}
+                  onChange={handleInputChange}
+                  name="domain"
+                />
+              )}
 
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="number"
-                      name="valuation"
-                      value={companyDetails.valuation}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
+              {isLoading ? (
+                <span>-</span>
+              ) : (
+                <input
+                  type="number"
+                  value={companyDetails.phone}
+                  style={isEditable ? editStylingInput : normalStylingInput}
+                  disabled={isDisabled}
+                  onChange={handleInputChange}
+                  name="phone"
+                />
+              )}
+            </div>
 
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <select
-                      name="industry"
-                      onChange={handleInputChange}
-                      disabled={isDisabled}
-                      style={
-                        isEditable ? editStylingSelect1 : normalStylingSelect1
-                      }
-                      className={`${isDisabled ? "disabled" : ""}`}
-                      id="cpu-tech"
-                      value={companyDetails.industry}
-                    >
-                      <option value="tech">Tech</option>
-                      <option value="non tech">Non Tech</option>
+            <div className="cpu-icons">
+              <i
+                className="fa-solid fa-pen cpu-pen"
+                onClick={toggleEditable}
+              ></i>
+              <i className="fas fa-ellipsis-h cpu-dot"></i>
+            </div>
+          </div>
+
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleSummary}>
+              {isSummaryOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              About Company
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isSummaryOpen && (
+            <div className="detailsContent cpu-content">
+              <div className="dealsLeftContainer cpu-p">
+                <p>Name</p>
+                <p>Domain</p>
+                <p>Valuation</p>
+                <p>Industry</p>
+              </div>
+
+              <div className="detailsRightContainer">
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="name"
+                        value={companyDetails.name}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="domain"
+                        value={companyDetails.domain}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="number"
+                        name="valuation"
+                        value={companyDetails.valuation}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <select
+                        name="industry"
+                        onChange={handleInputChange}
+                        disabled={isDisabled}
+                        style={
+                          isEditable ? editStylingSelect1 : normalStylingSelect1
+                        }
+                        className={`${isDisabled ? "disabled" : ""}`}
+                        id="cpu-tech"
+                        value={companyDetails.industry}
+                      >
+                        <option value="tech">Tech</option>
+                        <option value="non tech">Non Tech</option>
+                      </select>
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleDetails}>
+              {isDetailsOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Details
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isDetailsOpen && (
+            <div className="detailsContent cpu-content">
+              <div className="dealsLeftContainer cpu-p">
+                <p>Phone</p>
+                <p>Email</p>
+                <p>Country</p>
+                <p>City</p>
+                <p>Address 1</p>
+                <p>Address 2</p>
+              </div>
+
+              <div className="detailsRightContainer">
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="number"
+                        name="phone"
+                        value={companyDetails.phone}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="email"
+                        name="email"
+                        value={companyDetails.email}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="country"
+                        value={companyDetails.country}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="city"
+                        value={companyDetails.city}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="address1"
+                        value={companyDetails.address1}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="address2"
+                        value={companyDetails.address2}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value"
+                      />
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleContacts}>
+              {isContactsOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Contacts (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isContactsOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-name">Kevin doms</p>
+                  <p className="common-fonts cpu-manager">Manager at hertz </p>
+                  <p className="common-fonts cpu-mail">
+                    kevin@mail.com <img src={Copy} alt="" />
+                  </p>
+                  <p className="common-fonts cpu-mail">
+                    +62 8564239548 <img src={Copy} alt="" />
+                  </p>
+                  <div className="cpu-user-icon">
+                    <img src={User} alt="" />
+                  </div>
+                  <div className="cpu-user-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-name">Kevin doms</p>
+                  <p className="common-fonts cpu-manager">Manager at hertz </p>
+                  <p className="common-fonts cpu-mail">
+                    kevin@mail.com <img src={Copy} alt="" />
+                  </p>
+                  <p className="common-fonts cpu-mail">
+                    +62 8564239548 <img src={Copy} alt="" />
+                  </p>
+                  <div className="cpu-user-icon">
+                    <img src={User} alt="" />
+                  </div>
+                  <div className="cpu-user-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleLeads}>
+              {isLeadsOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Leads (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
+          </div>
+          {isLeadsOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
                     </select>
-                  </span>
-                )}
-              </p>
-            </div>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          <div className="summaryDiv cpu-section">
+            <p className="dealSectionHead" onClick={handleDeals}>
+              {isDealOpen ? (
+                <i class="fa-sharp fa-solid fa-angle-up"></i>
+              ) : (
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+              )}
+              Deals (2)
+            </p>
+            <p className="addProduct cpu-add">
+              <i class="fa-sharp fa-solid fa-plus"></i>Add
+            </p>
           </div>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleDetails}>
-            {isDetailsOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Details
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
+          {isDealOpen && (
+            <>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+              <div className="detailsContent cpu-content">
+                <div className="cpu-contact-box">
+                  <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
+                  <p className="common-fonts cpu-amount">
+                    Amount: <span>$120000</span>{" "}
+                  </p>
+                  <p className="common-fonts cpu-amount">
+                    Close Date: <span>July 16, 2023</span>{" "}
+                  </p>
+                  <div className="cpu-stage">
+                    <span className="common-fonts cpu-amount">stage:</span>
+                    <select name="" id="" className="cpu-select">
+                      <option value="">Select Stage</option>
+                    </select>
+                  </div>
+
+                  <div className="cpu-lead-cal">
+                    <img src={Calender} alt="" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-        {isDetailsOpen && (
-          <div className="detailsContent cpu-content">
-            <div className="dealsLeftContainer cpu-p">
-              <p>Phone</p>
-              <p>Email</p>
-              <p>Country</p>
-              <p>City</p>
-              <p>Address 1</p>
-              <p>Address 2</p>
-            </div>
 
-            <div className="detailsRightContainer">
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="number"
-                      name="phone"
-                      value={companyDetails.phone}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="email"
-                      name="email"
-                      value={companyDetails.email}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="country"
-                      value={companyDetails.country}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="city"
-                      value={companyDetails.city}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="address1"
-                      value={companyDetails.address1}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="address2"
-                      value={companyDetails.address2}
-                      onChange={handleInputChange}
-                      style={isEditable ? editStylingInput : normalStylingInput}
-                      disabled={isDisabled}
-                      className="cpu-value"
-                    />
-                  </span>
-                )}
-              </p>
-            </div>
-          </div>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleContacts}>
-            {isContactsOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Contacts (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
+        <div className="deal-update-btn">
+          {stateBtn === 0 ? (
+            <button disabled className="disabledBtn ">
+              Update
+            </button>
+          ) : (
+            <button className="convertToDeal" onClick={handleUpdateClick}>
+              Update
+            </button>
+          )}
         </div>
-        {isContactsOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-name">Kevin doms</p>
-                <p className="common-fonts cpu-manager">Manager at hertz </p>
-                <p className="common-fonts cpu-mail">
-                  kevin@mail.com <img src={Copy} alt="" />
-                </p>
-                <p className="common-fonts cpu-mail">
-                  +62 8564239548 <img src={Copy} alt="" />
-                </p>
-                <div className="cpu-user-icon">
-                  <img src={User} alt="" />
-                </div>
-                <div className="cpu-user-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-name">Kevin doms</p>
-                <p className="common-fonts cpu-manager">Manager at hertz </p>
-                <p className="common-fonts cpu-mail">
-                  kevin@mail.com <img src={Copy} alt="" />
-                </p>
-                <p className="common-fonts cpu-mail">
-                  +62 8564239548 <img src={Copy} alt="" />
-                </p>
-                <div className="cpu-user-icon">
-                  <img src={User} alt="" />
-                </div>
-                <div className="cpu-user-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleLeads}>
-            {isLeadsOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Leads (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isLeadsOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        <div className="summaryDiv cpu-section">
-          <p className="dealSectionHead" onClick={handleDeals}>
-            {isDealOpen ? (
-              <i class="fa-sharp fa-solid fa-angle-up"></i>
-            ) : (
-              <i class="fa-sharp fa-solid fa-angle-down"></i>
-            )}
-            Deals (2)
-          </p>
-          <p className="addProduct cpu-add">
-            <i class="fa-sharp fa-solid fa-plus"></i>Add
-          </p>
-        </div>
-        {isDealOpen && (
-          <>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-            <div className="detailsContent cpu-content">
-              <div className="cpu-contact-box">
-                <p className="common-fonts cpu-contact-lead">Hertz Deal</p>
-                <p className="common-fonts cpu-amount">
-                  Amount: <span>$120000</span>{" "}
-                </p>
-                <p className="common-fonts cpu-amount">
-                  Close Date: <span>July 16, 2023</span>{" "}
-                </p>
-                <div className="cpu-stage">
-                  <span className="common-fonts cpu-amount">stage:</span>
-                  <select name="" id="" className="cpu-select">
-                    <option value="">Select Stage</option>
-                  </select>
-                </div>
-
-                <div className="cpu-lead-cal">
-                  <img src={Calender} alt="" />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
       </div>
-
-          <div className="deal-update-btn">
-            {stateBtn === 0 ? (
-              <button disabled className="disabledBtn ">
-                Update
-              </button>
-            ) : (
-              <button className="convertToDeal" onClick={handleUpdateClick}>
-                Update
-              </button>
-            )}
-          </div>
-
-
-    </div>
 
       <div className="cpu-right">
         <div className="tab-navigation">
@@ -871,15 +897,22 @@ const CompanyUpdate = () => {
           )}
           {activeTab === "email" && (
             <div className="email-tab-content">
-              <DealEmail type="xx_company" id={id} dealName={companyName} email={companyDetails.email}/>
+              <DealEmail
+                type="xx_company"
+                id={id}
+                dealName={companyName}
+                email={companyDetails.email}
+              />
             </div>
           )}
           {activeTab === "activity" && (
             <div className="activity-tab-content">
-              <DealActivity  id={id}
-                  type={"xx_company"}
-                  count={fetchCall}
-                  userData={userData} />
+              <DealActivity
+                id={id}
+                type={"xx_company"}
+                count={fetchCall}
+                userData={userData}
+              />
             </div>
           )}
         </div>

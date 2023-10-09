@@ -5,11 +5,11 @@ import {
   GET_TAG,
   GET_TAG_BY_SITE,
   getDecryptedToken,
-} from "./utils/Constants";
+} from "../utils/Constants";
 
-import "./styles/BlogAdd.css";
-import ReactEditor from "./ReactEditor";
-import trash from "../assets/image/delete-icon.svg";
+import "../styles/BlogAdd.css";
+import ReactEditor from "../ReactEditor";
+import trash from "../../assets/image/delete-icon.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

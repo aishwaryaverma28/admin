@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ADD_SITEPGS,getDecryptedToken} from "./utils/Constants";
-import "./styles/EmployeeUpdate.css";
+import { ADD_SITEPGS, getDecryptedToken } from "../utils/Constants";
+import "../styles/EmployeeUpdate.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,31 +30,33 @@ const SitePagesAdd = () => {
       ...details,
     };
     console.log(updatedFormData);
-    
-    axios.post(ADD_SITEPGS, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      // setUpdateMessage("Site Page data added successfully");
-      // setTimeout(() => {
-      //   setUpdateMessage("");
-      // }, 30000); // Clear message after 1 minute (60000 milliseconds)
-      toast.success("Site Page data added successfully", {
-        position:"top-center",
-        autoClose:2000
+
+    axios
+      .post(ADD_SITEPGS, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       })
-      setDetails({
-        site: "",
-        route: "",
-        view_page: "",
-        title: "",
-        description: "",
-        sitemap: 0,
+      .then((response) => {
+        console.log(response);
+        // setUpdateMessage("Site Page data added successfully");
+        // setTimeout(() => {
+        //   setUpdateMessage("");
+        // }, 30000); // Clear message after 1 minute (60000 milliseconds)
+        toast.success("Site Page data added successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setDetails({
+          site: "",
+          route: "",
+          view_page: "",
+          title: "",
+          description: "",
+          sitemap: 0,
+        });
+        setStateBtn(0);
       });
-      setStateBtn(0);
-    });
   }
   return (
     <>
@@ -99,7 +101,7 @@ const SitePagesAdd = () => {
             </div>
           </div>
           <div className="rightForm">
-          <div className="fromFiled">
+            <div className="fromFiled">
               <label for="view_page">View Page</label>
 
               <input
@@ -134,22 +136,17 @@ const SitePagesAdd = () => {
             </div>
           </div>
           <div className="saveBtnRight">
-          {stateBtn === 0 ? (
-                      <button className="closeBtn" disabled>
-                        Save
-                      </button>
-                    ) : (
-                      <input
-                        type="submit"
-                        value="Add Site"
-                        className="secondaryBtn"
-                      />
-                    )}
-            
+            {stateBtn === 0 ? (
+              <button className="closeBtn" disabled>
+                Save
+              </button>
+            ) : (
+              <input type="submit" value="Add Site" className="secondaryBtn" />
+            )}
           </div>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

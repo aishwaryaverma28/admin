@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import './styles/Editor.css';
-import axios from 'axios';
-import { BLOG_GET,getDecryptedToken } from './utils/Constants';
-import { Link } from 'react-router-dom';
-import TablePaginationBlog from './TablePaginationBlog';
+import React, { useState, useEffect } from "react";
+import "../styles/Editor.css";
+import axios from "axios";
+import { BLOG_GET, getDecryptedToken } from "../utils/Constants";
+import { Link } from "react-router-dom";
+import TablePaginationBlog from "../TablePaginationBlog";
 
 const EmployeeView = () => {
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const decryptedToken = getDecryptedToken();
-  
+
   useEffect(() => {
-    axios.get(BLOG_GET, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      },
-    })
-    .then((response) => {
-      setTableData(response.data.data);
-    })
-    .catch((error) => {
-      console.log(error)
-    });
+    axios
+      .get(BLOG_GET, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setTableData(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
-  
 
   const selectRows = (e) => {
     setValue(e.target.value);
@@ -37,7 +37,10 @@ const EmployeeView = () => {
   const filteredItems = (tableData || []).filter((item) => {
     const values = Object.values(item);
     for (let i = 0; i < values.length; i++) {
-      if (values[i] && values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      if (
+        values[i] &&
+        values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
         return true;
       }
     }

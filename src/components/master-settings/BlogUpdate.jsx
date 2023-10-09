@@ -10,13 +10,13 @@ import {
   GET_TAG_BY_SITE,
   SEC_UPDATE,
   getDecryptedToken,
-} from "./utils/Constants";
-import ReactEditor from "./ReactEditor";
-import trash from "../assets/image/delete-icon.svg";
-import "./styles/BlogAdd.css";
+} from "../utils/Constants";
+import ReactEditor from "../ReactEditor";
+import trash from "../../assets/image/delete-icon.svg";
+import "../styles/BlogAdd.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LeftArrow from "../assets/image/arrow-left.svg";
+import LeftArrow from "../../assets/image/arrow-left.svg";
 const BlogUpdate = () => {
   const { id } = useParams();
   // section states
@@ -61,7 +61,7 @@ const BlogUpdate = () => {
     getBlogInfo();
   }, []);
 
-  const handleUpdateClick = (event,id) => {
+  const handleUpdateClick = (event, id) => {
     event.preventDefault();
     const updatedSection = sectionData.find((section) => section.id === id);
 
@@ -125,7 +125,7 @@ const BlogUpdate = () => {
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
       setSelectSite(data?.site);
-      getTagBySite(data?.site)
+      getTagBySite(data?.site);
     }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
@@ -175,7 +175,7 @@ const BlogUpdate = () => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const tagData = () => {
     const ids = tagId?.split(",");
@@ -224,7 +224,7 @@ const BlogUpdate = () => {
     setStateBtn(1);
     getTagBySite(event.target.value);
   }
-  
+
   // ==========================================================accordion of sub sections
   function accordianClick(index) {
     if (index === isIndex) {
@@ -240,7 +240,7 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
   };
-  
+
   //==============================================================section sort
   const handleSortChange = (event, index) => {
     const newSectionData = [...sectionData];
@@ -267,7 +267,7 @@ const BlogUpdate = () => {
     setSectionSort(sort);
   };
 
-    //==================================================================editor data transfer
+  //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
   };
@@ -348,7 +348,6 @@ const BlogUpdate = () => {
     }
   }
 
-  
   async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -397,7 +396,10 @@ const BlogUpdate = () => {
     console.log(selectedImage);
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -414,7 +416,7 @@ const BlogUpdate = () => {
           const part = selectedImage.name;
           setBlogImgName(part);
           setFormData((prev) => {
-            return { ...prev, image: part};
+            return { ...prev, image: part };
           });
         })
         .catch((err) => {
@@ -426,7 +428,10 @@ const BlogUpdate = () => {
     const selectedImage = file;
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -469,7 +474,10 @@ const BlogUpdate = () => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
       const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(/\.[^/.]+$/, "")}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
 
       const data = new FormData();
       data.append("file", selectedImage);
@@ -494,8 +502,6 @@ const BlogUpdate = () => {
         });
     }
   };
-
-
 
   return (
     <>
@@ -541,7 +547,7 @@ const BlogUpdate = () => {
                 onChange={handleChange}
                 disabled
               />
-              
+
               <div className="blog-browse-img">
                 <button
                   className="common-fonts blog-add-img add-img-2 update-img"
@@ -551,7 +557,6 @@ const BlogUpdate = () => {
                 </button>
                 {blogImg2 ? blogImgName : <></>}
               </div>
-              
             </div>
             <div className="fromFiled">
               <input
@@ -707,7 +712,7 @@ const BlogUpdate = () => {
                           <></>
                         )}
                       </div>
-                     </div>
+                    </div>
 
                     <div className="formEditor">
                       <ReactEditor
