@@ -39,6 +39,7 @@ const BlogUpdate = () => {
   const [selectSite, setSelectSite] = useState("");
   const [sectionData, setSectionData] = useState([]);
   const [category, setCategory] = useState([]);
+  const [urlName, setUrlName] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -140,6 +141,7 @@ const BlogUpdate = () => {
         site: data?.site,
         route: data?.url,
       });
+      setUrlName(data?.url)
       setBlogImg2(data?.image);
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
@@ -557,6 +559,14 @@ const BlogUpdate = () => {
         });
     }
   };
+;
+  const handleViewSite = (e) => {
+    e.preventDefault();
+    if(selectSite === "bookmyplayer"){
+      const newTab = window.open(`https://www.bookmyplayer.com/blog/${urlName}`, '_blank');
+      newTab.focus();
+    }
+  }
 
   return (
     <>
@@ -592,7 +602,7 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromUrl">
+            <div className="fromFiled">
               <input
                 type="text"
                 name="url"
@@ -602,8 +612,12 @@ const BlogUpdate = () => {
                 onChange={handleChange}
                 disabled
               />
-
-              <div className="blog-browse-img">
+            </div>
+            <div className="from-view-img">
+            <div className="blog-browse-img">
+            <button className="common-fonts blog-add-img add-img-2 update-img" onClick={handleViewSite}>
+              View Site
+            </button>
                 <button
                   className="common-fonts blog-add-img add-img-2 update-img"
                   onClick={handleButtonClick2}
