@@ -3,7 +3,7 @@ import "../styles/Editor.css";
 import axios from "axios";
 import { BLOG_GET, getDecryptedToken } from "../utils/Constants";
 import { Link } from "react-router-dom";
-import TablePaginationBlog from "../TablePaginationBlog";
+import TablePaginationBlog from "./TablePaginationBlog";
 
 const EmployeeView = () => {
   const [value, setValue] = useState(10);

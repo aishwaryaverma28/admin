@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { GET_ALL_SEARCH, getDecryptedToken } from "../utils/Constants";
-import TableHelp from "../TableHelp";
+import TableHelp from "./TableHelp";
 import { Link } from "react-router-dom";
 
 const HelpView = () => {

@@ -1,40 +1,38 @@
-import React,{useEffect,useState} from 'react';
-import html2pdf from 'html2pdf.js';
-import ezukaLogo from '../assets/image/ezukaLogo.png';
+import React, { useEffect, useState } from "react";
+import html2pdf from "html2pdf.js";
+import ezukaLogo from "../../assets/image/ezukaLogo.png";
 import axios from "axios";
-import {
-  PAYSLIP,getDecryptedToken 
-  } from "./utils/Constants";
+import { PAYSLIP, getDecryptedToken } from "../utils/Constants";
 
-const PDFConverter = ({id}) => {
+const PDFConverter = ({ id }) => {
   const [empdata, setEmpData] = useState(null);
   const [payData, setPayData] = useState(null);
   const decryptedToken = getDecryptedToken();
-  const [data,setData] = useState({
-    name:"",
-    month:"",
-    year:"",
-    hire_date:"",
-    emp_no:"",
-    country:"",
-    department:"",
-    working_days:"",
-    bank_details:"",
-    position:"",
-    salary:"",
-    tax:"",
-  })
+  const [data, setData] = useState({
+    name: "",
+    month: "",
+    year: "",
+    hire_date: "",
+    emp_no: "",
+    country: "",
+    department: "",
+    working_days: "",
+    bank_details: "",
+    position: "",
+    salary: "",
+    tax: "",
+  });
   const fetchData = async () => {
     try {
       const response = await axios.get(PAYSLIP + id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-        }
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
       });
       setEmpData(response.data.data.employee);
       setPayData(response.data.data.payroll);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -61,10 +59,10 @@ const PDFConverter = ({id}) => {
     }
   }, [empdata, payData]);
 
-  const handleDownload = () => {    
+  const handleDownload = () => {
     console.log(decryptedToken);
     const formattedSalary = parseFloat(data.salary).toLocaleString("en-IN");
-     const pdfName = `SalarySlip-${data.name} ${data.month},${data.year}.pdf`;
+    const pdfName = `SalarySlip-${data.name} ${data.month},${data.year}.pdf`;
     // Get the HTML content as a string
     const htmlContent = `
     <!DOCTYPE html>
@@ -185,9 +183,9 @@ const PDFConverter = ({id}) => {
     const options = {
       margin: 10,
       filename: pdfName,
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
 
     // Create the PDF using html2pdf
@@ -196,7 +194,9 @@ const PDFConverter = ({id}) => {
 
   return (
     <div>
-      <button onClick={handleDownload} className='downBtn'><i class="fa-sharp fa-solid fa-download"></i></button>
+      <button onClick={handleDownload} className="downBtn">
+        <i class="fa-sharp fa-solid fa-download"></i>
+      </button>
     </div>
   );
 };

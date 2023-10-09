@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './styles/Editor.css';
 import axios from 'axios';
 import { EMPLOYEE_GET,getDecryptedToken } from './utils/Constants';
-import TableWithPagination from './TableWithPagination';
+import TableWithPagination from './master-settings/TableWithPagination';
 import { Link } from 'react-router-dom';
 
 const EmployeeView = () => {

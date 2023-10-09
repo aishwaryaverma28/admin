@@ -10,6 +10,7 @@ import {
   GET_TAG_BY_SITE,
   SEC_UPDATE,
   getDecryptedToken,
+  GET_TAG_CATEGORY
 } from "../utils/Constants";
 import ReactEditor from "../ReactEditor";
 import trash from "../../assets/image/delete-icon.svg";
@@ -24,6 +25,7 @@ const BlogUpdate = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [isIndex, setIsIndex] = useState(-1);
+  const [options, setOptions] = useState([]);
   const fileInputRef2 = useRef(null);
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
@@ -34,9 +36,9 @@ const BlogUpdate = () => {
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
-  const [tagApi, setTagApi] = useState([]);
   const [selectSite, setSelectSite] = useState("");
   const [sectionData, setSectionData] = useState([]);
+  const [category, setCategory] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -59,7 +61,24 @@ const BlogUpdate = () => {
   const editorRef = useRef();
   useEffect(() => {
     getBlogInfo();
+    getTagCategory();
   }, []);
+
+  const getTagCategory = () => {
+    axios
+      .get(GET_TAG_CATEGORY, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setCategory(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
 
   const handleUpdateClick = (event, id) => {
     event.preventDefault();
@@ -125,7 +144,7 @@ const BlogUpdate = () => {
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
       setSelectSite(data?.site);
-      getTagBySite(data?.site);
+      // getTagBySite(data?.site);
     }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
@@ -146,14 +165,17 @@ const BlogUpdate = () => {
   };
   //==========================================================================tag part
   useEffect(() => {
+    const updatedForm = {
+      condition: "all",
+    };
     axios
-      .get(GET_TAG, {
+      .post(GET_TAG, updatedForm, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        setTagApi(response);
+        setOptions(response?.data?.data);
         tagData(); // Call tagData() after receiving the tag data
       })
       .catch((error) => {
@@ -161,7 +183,7 @@ const BlogUpdate = () => {
       });
   }, []);
 
-  const options = tagApi?.data?.data || [];
+
   const getTagBySite = (site) => {
     axios
       .get(GET_TAG_BY_SITE + site, {
@@ -170,7 +192,7 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        setTagApi(response);
+        setOptions(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -196,14 +218,47 @@ const BlogUpdate = () => {
   // console.log(selectedTags)
 
   const handleTagSelection = (event) => {
-    const id = event.target.value;
-    setStateBtn(1);
-    setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-    options.map((option) => {
-      if (option.id == id && !selectedTags.includes(option.tag)) {
-        setSelectedTags((prev) => [...prev, option.tag]);
+    const { name="categoryDropdown", value } = event?.target || {};
+
+    if (name === "categoryDropdown") {
+      let updatedForm = {};
+
+      if (value) {
+        updatedForm = {
+          category: value,
+          condition: "category",
+        };
+      } else {
+        updatedForm = {
+          condition: "all",
+        };
       }
-    });
+
+      // Call your API with updatedForm object
+      axios
+        .post(GET_TAG, updatedForm, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setOptions(
+            response?.data?.data.map((item) => ({ id: item.id, tag: item.tag }))
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (name === "tagDropdown") {
+      const id = event.target.value;
+      setStateBtn(1);
+      setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
+      options.map((option) => {
+        if (option.id == id) {
+          setSelectedTags((prev) => [...prev, option.tag]);
+        }
+      });
+    }
   };
 
   const handleTagRemoval = (index) => {
@@ -222,7 +277,7 @@ const BlogUpdate = () => {
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
     setStateBtn(1);
-    getTagBySite(event.target.value);
+    // getTagBySite(event.target.value);
   }
 
   // ==========================================================accordion of sub sections
@@ -767,9 +822,23 @@ const BlogUpdate = () => {
               <div className="tagContent">
                 <h3>Tags</h3>
                 <div className="contentBox">
+                <select
+                    name="categoryDropdown"
+                    onChange={handleTagSelection}
+                    className="tagSelectBox"
+                  >
+                    <option value="">category</option>
+
+                    {category.map((data) => (
+                      <option key={data.category} value={data.category}>
+                        {data.category}
+                      </option>
+                    ))}
+                  </select>
                   <select
                     onChange={handleTagSelection}
                     className="tagSelectBox"
+                    name="tagDropdown"
                   >
                     <option value="">Select a tag</option>
 
@@ -779,10 +848,10 @@ const BlogUpdate = () => {
                       </option>
                     ))}
                   </select>
-
+{/* 
                   <button onClick={AddTag} type="button" className="primaryBtn">
                     Add
-                  </button>
+                  </button> */}
                 </div>
                 <div className="tagData">
                   {selectedTags &&

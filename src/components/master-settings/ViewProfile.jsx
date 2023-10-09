@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./styles/EmployeeProfile.css";
+import "../styles/EmployeeProfile.css";
 
 const ViewProfile = () => {
   return (
