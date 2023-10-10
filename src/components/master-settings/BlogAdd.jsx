@@ -773,14 +773,18 @@ const BlogAdd = () => {
                   />
                   <div className="saveBtnRight">
                     {stateBtn === 0 ? (
-                      <button className="closeBtn blog-save-height" disabled>
-                        Save
-                      </button>
+                      <input
+                        type="submit"
+                        value="Publish"
+                        className="common-fonts common-inactive-button blog-publish"
+                        disabled
+
+                      />
                     ) : (
                       <input
                         type="submit"
                         value="Publish"
-                        className="secondaryBtn blog-save-height"
+                        className="common-fonts common-save-button blog-publish"
                       />
                     )}
                   </div>
@@ -804,7 +808,8 @@ const BlogAdd = () => {
                 </div>
               </div>
               <div className="tagData tag-box tag-box-2">
-                <div className="tagItems">{selectSite}</div>
+              <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
+
               </div>
             </div>
           </div>

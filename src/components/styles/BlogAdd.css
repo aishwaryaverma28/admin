@@ -598,3 +598,7 @@ width: 12.5rem;
 .blog-cross{
   margin-left: 0.2rem;
 }
+
+.blog-publish{
+  padding: 0 !important;
+}
