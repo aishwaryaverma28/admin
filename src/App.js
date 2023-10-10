@@ -8,6 +8,7 @@ import Leadplaner from "./components/Leadplaner";
 import Lead from "./components/lead/Lead";
 import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
+import BmpDashboard from "./components/bookmyplayer/BmpDashboard.jsx";
 import TimeSheet from "./components/master-settings/TimeSheet";
 import EmployeeDocuments from "./components/master-settings/EmployeeDocuments";
 import SalarySlip from "./components/master-settings/SalarySlip";
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/contacts/people/:id",
         element: <PeopleUpdate />,
+      },
+      {
+        path: "/lp/bmp",
+        element: <SecureRoutes Component={BmpDashboard} />,
       },
       {
         path: "/lp/deals",
@@ -263,7 +268,7 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/system/state",
             element: <SecureRoutes Component={State} />,
-          },
+          }
         ],
       },
     ],

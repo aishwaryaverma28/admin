@@ -47,8 +47,12 @@ function Testing() {
         var decryptedText = customDecrypt(auth, secretKey);
         setAuthData(decryptedText);
         let auth0 = decryptedText.split("$$");
-        console.log(auth0);
+        // console.log(auth0);
         const token = auth0[1];
+        const roleName= auth[3];
+        const id = auth[4];
+        localStorage.setItem("role_name", roleName);
+        localStorage.setItem("id", id);
         const encryptedToken = CryptoJS.AES.encrypt(
           token,
           secretKey
