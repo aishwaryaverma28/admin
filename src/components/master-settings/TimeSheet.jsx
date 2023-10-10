@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ViewProfile from "./ViewProfile";
 import TimeSheetTable from "./TimeSheetTable";
 import "../styles/EmployeeProfile.css";
 
@@ -183,7 +182,6 @@ const TimeSheet = () => {
   };
   return (
     <>
-      <ViewProfile />
 
       {/* <div className="buttonBox"> */}
       {/* <div className="searchBar"> <label>Search: <input type="text" onChange={handleSearchTermChange}/></label></div> */}

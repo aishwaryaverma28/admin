@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ViewProfile from "./ViewProfile";
-import profile from "../../assets/image/profile.png";
+import profile from "../../assets/image/profile-2.jpg";
 import "../styles/EmployeeProfile.css";
 import {
   EMPLOYEE_UPDATE,
@@ -12,6 +12,9 @@ import {
   handleLogout,
   GET_USER_EMPLOYEE,
 } from "../utils/Constants";
+import TimeSheet from "./TimeSheet.jsx";
+import EmployeeDocuments from "./EmployeeDocuments.jsx";
+import SalarySlip from "./SalarySlip.jsx";
 const userId = localStorage.getItem("id");
 const EmployeeProfile = () => {
   const [empData, setEmpData] = useState([]);
@@ -27,6 +30,7 @@ const EmployeeProfile = () => {
   });
   const fileInputRef = useRef(null);
   const [initialEmpData, setInitialEmpData] = useState({});
+  const [activeTab, setActiveTab] = useState("personal");
   useEffect(() => {
     getUser();
     setCurrentYear(new Date().getFullYear());
@@ -46,6 +50,7 @@ const EmployeeProfile = () => {
       const data = response?.data?.data;
       if (response?.data?.status === 1) {
         setEmpData(data[0]);
+        console.log(response.data[0])
         setInitialEmpData(data[0]);
       }
     } catch (error) {
@@ -57,7 +62,6 @@ const EmployeeProfile = () => {
     }
   }
 
-  // console.log(empData);
 
   function ageCal() {
     if (empData && empData?.creation_date) {
@@ -139,9 +143,13 @@ const EmployeeProfile = () => {
     });
   };
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
-      <ViewProfile />
+      {/* <ViewProfile />
       <div className="userProfile">
         <div className="profileImage">
           <p>profile image</p>
@@ -214,9 +222,9 @@ const EmployeeProfile = () => {
             <li>
               <p>Job Title </p>
               <span>
-                {empData && empData?.position !== undefined
-                  ? empData?.position
-                  : "-"}
+                {empData && empData?.hire_date
+                  ? empData?.hire_date.split("T")[0]
+                  : ""}
               </span>
             </li>
             <li>
@@ -341,7 +349,249 @@ const EmployeeProfile = () => {
         <button type="button" className="changesaveBtn" onClick={handleSubmit}>
           Save Changes
         </button>
-      </div>
+      </div> */}
+
+      <p className="common-fonts profile-heading">Profile</p>
+
+      <div className="user-team-setting-btn user-team-font">
+          <button
+            className={`user-team-btn ${
+              activeTab === "personal" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("personal")}
+          >
+            Personal Details
+          </button>
+          <button
+            className={`user-team-btn ${
+              activeTab === "timesheets" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("timesheets")}
+          >
+            Time Sheet
+          </button>
+          <button
+            className={`user-team-btn ${
+              activeTab === "documents" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("documents")}
+          >
+            Documents
+          </button>
+          <button
+            className={`user-team-btn ${
+              activeTab === "salary" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("salary")}
+          >
+            Salary
+          </button>
+        </div>
+        {
+          activeTab==="personal" && (
+            <>
+
+            <div className="profile-pic-btn">
+
+            <div className="profile-top-pic">
+            <img src={pic ? pic : profile} alt="image" />
+            <input
+            type="file"
+            name="employeeDoc"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleImageSelect}
+          />
+            </div>
+
+            <button onClick={handleButtonClick} className="common-fonts common-white-green-button">Change Profile Image</button>
+            </div>
+
+            
+            <div className="profile-view-all">
+              <div>
+              <div className="profile-new-box">
+              <div className="profile-employee-heading">
+                    <p className="common-fonts profile-emp-details">Employee Details</p>
+                </div>
+                <div className="profile-employee-info">
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">First Name</p>
+                    <p className="common-fonts "> {empData && empData?.first_name !== undefined
+                  ? empData?.first_name
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Middle Name</p>
+                    <p className="common-fonts ">-</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Last Name</p>
+                    <p className="common-fonts "> {empData && empData?.last_name !== undefined
+                  ? empData?.last_name
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Age</p>
+                    <p className="common-fonts ">{age}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Dob</p>
+                    <p className="common-fonts "> {empData && empData?.dob ? empData?.dob.split("T")[0] : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Working Since</p>
+                    <p className="common-fonts">{empData && empData?.hire_date
+                  ? empData?.hire_date.split("T")[0]
+                  : ""}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Job Title</p>
+                    <p className="common-fonts">{empData && empData?.hire_date
+                  ? empData?.hire_date.split("T")[0]
+                  : ""}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Permanent Address</p>
+                    <p className="common-fonts">{address}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Country</p>
+                    <p className="common-fonts">{empData && empData?.country !== undefined
+                  ? empData?.country
+                  : "-"}</p>
+                   </div>
+                </div>
+              </div>
+              <div className="profile-new-box">
+              <div className="profile-employee-heading">
+                    <p className="common-fonts profile-emp-details">Contact Details</p>
+                </div>
+                <div className="profile-employee-info">
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Personal Number</p>
+                    <p className="common-fonts"> {empData && empData?.mobile !== undefined
+                  ? empData?.mobile
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Work Phone</p>
+                    <p className="common-fonts"> {empData && empData?.mobile !== undefined
+                  ? empData?.mobile
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Work Email</p>
+                    <p className="common-fonts profile-new-email"> {empData && empData?.personal_email !== undefined
+                  ? empData?.personal_email
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Email</p>
+                    <p className="common-fonts profile-new-email"> {empData && empData?.personal_email !== undefined
+                  ? empData?.personal_email
+                  : "-"}</p>
+                   </div>
+                </div>
+              </div>
+
+              </div>
+
+              <div>
+              <div className="profile-new-box">
+              <div className="profile-employee-heading">
+                    <p className="common-fonts profile-emp-details">Manager Details</p>
+                </div>
+                <div className="profile-employee-info">
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Reporting Manager</p>
+                    <p className="common-fonts">John wick</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Contact Number</p>
+                    <p className="common-fonts">9698587415</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Email</p>
+                    <p className="common-fonts profile-new-email">johnwick001@gmail.com</p>
+                   </div>
+                </div>
+              </div>
+
+              <div className="profile-new-box">
+              <div className="profile-employee-heading">
+                    <p className="common-fonts profile-emp-details">Social Media Links</p>
+                </div>
+                <div className="profile-employee-info">
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">LinkedIn</p>
+                    <p className="common-fonts"> {empData && empData?.social1 !== undefined
+                  ? empData?.social1
+                  : "-"}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Facebook</p>
+                    <p className="common-fonts">{empData && empData?.social2 !== undefined
+                  ? empData?.social2
+                  : "-"}</p>
+                   </div>
+                </div>
+              </div>
+
+              <div className="profile-new-box">
+              <div className="profile-employee-heading">
+                    <p className="common-fonts profile-emp-details">Bank Details</p>
+                </div>
+                <div className="profile-employee-info">
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Bank Name</p>
+                    <p className="common-fonts"> {empData && empData?.bank_details
+                  ? empData?.bank_details.split(",")[0]
+                  : ""}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">Account Number</p>
+                    <p className="common-fonts"> {empData && empData?.bank_details
+                  ? empData?.bank_details.split(",")[1]
+                  : ""}</p>
+                   </div>
+                   <div className="info-of-employee">
+                    <p className="common-fonts profile-left-side">IFSC Code</p>
+                    <p className="common-fonts profile-new-email">{empData && empData?.bank_details
+                  ? empData?.bank_details.split(",")[2]
+                  : ""}</p>
+                   </div>
+                </div>
+              </div>
+
+              </div>
+            </div>
+
+            <div className="profile-bottom-btn">
+              <button className="common-fonts common-white-button" onClick={resetForm}>Cancel</button>
+              <button className="common-save-button" onClick={handleSubmit}>Save</button>
+            </div>
+           
+           
+            </>
+          )
+        }
+        {
+          activeTab==="timesheets" && (
+            <TimeSheet/>
+          )
+        }
+        {
+          activeTab==="documents" && (
+            <EmployeeDocuments/>
+          )
+        }
+        {
+          activeTab==="salary" && (
+            <SalarySlip/>
+          )
+        }
     </>
   );
 };

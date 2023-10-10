@@ -421,3 +421,105 @@
     flex-wrap: wrap;
   }
 }
+
+/* =========================new css of profile page  */
+
+.profile-heading{
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+.profile-top-pic img{
+  width: 4.375rem;
+height: 4.375rem;
+border-radius: 50%;
+}
+
+.profile-top-pic{
+  margin-top: 2rem;
+  margin-left: 1rem;
+}
+
+.profile-pic-btn{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.profile-pic-btn button{
+  margin-left: 1rem;
+  margin-top: 1.5rem;
+}
+
+.profile-view-all{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin-top: 1rem;
+
+}
+
+.profile-employee-heading{
+  border-radius: 0.3125rem 0.3125rem 0rem 0rem;
+border: 1px solid #DCDCDC;
+background: #F3F6FA;
+margin-left: 1rem;
+}
+
+.profile-emp-details{
+  padding: 1rem;
+  font-size: 1rem;
+}
+
+.profile-employee-info{
+  border-radius: 0rem 0rem 0.3125rem 0.3125rem;
+border-right: 1px solid #DCDCDC;
+border-bottom: 1px solid #DCDCDC;
+border-left: 1px solid #DCDCDC;
+background:#FFF;
+margin-left: 1rem;
+}
+
+.info-of-employee{
+  display: flex;
+  justify-content: start;
+  padding-top: 1rem;
+
+align-items: center;}
+
+.info-of-employee p:first-child{
+  color:#33475B;
+  margin-left: 1rem;
+}
+
+
+
+.profile-new-box{
+  margin-bottom: 1rem;
+  width:30rem;
+}
+
+.profile-left-side{
+  width:12rem;
+}
+
+.profile-employee-info .info-of-employee:last-child{
+  margin-bottom: 1rem;
+}
+
+.profile-new-email{
+  text-transform: none;
+}
+
+.profile-bottom-btn{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8fbf8;
+}
+
+.profile-bottom-btn button{
+  margin-right: 1rem;
+}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PAYSLIPS, getDecryptedToken } from "../utils/Constants";
-import ViewProfile from "./ViewProfile";
 import "../styles/EmployeeProfile.css";
 import PDFConverter from "./PDFConverter";
 const SalarySlip = () => {
@@ -45,7 +44,7 @@ const SalarySlip = () => {
 
   return (
     <div className="salary-slip-container">
-      <ViewProfile />
+
 
       <select
         value={selectedYear}

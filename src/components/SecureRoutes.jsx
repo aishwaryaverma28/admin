@@ -12,6 +12,7 @@ const SecureRoutes = (props) => {
 
   useEffect(() => {
     let allowed = decryptedUserPath.split(",");
+
     const currentPath = location.pathname;
   
     if (landingUrl === "/lp/admin") {
