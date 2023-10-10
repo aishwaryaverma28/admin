@@ -69,8 +69,6 @@ const BlogAdd = () => {
     handleTagSelection();
   }, []);
 
-
-
   const getTagBySite = (site) => {
     axios
       .get(GET_TAG_BY_SITE + site, {
@@ -120,9 +118,8 @@ const BlogAdd = () => {
 
   // ===================================================================functions for tags addition and removal
 
-
   const handleTagSelection = (event) => {
-    const { name="categoryDropdown", value } = event?.target || {};
+    const { name = "categoryDropdown", value } = event?.target || {};
 
     if (name === "categoryDropdown") {
       let updatedForm = {};
@@ -164,8 +161,6 @@ const BlogAdd = () => {
       });
     }
   };
-
-
 
   const handleTagRemoval = (index) => {
     setStateBtn(1);
@@ -286,8 +281,6 @@ const BlogAdd = () => {
     setStateBtn(1);
   };
 
-
-
   // =====================================================================function to handle form data when submited
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
@@ -341,7 +334,6 @@ const BlogAdd = () => {
         },
       })
       .then((response) => {
-
         if (response?.data?.status === 1) {
           toast.success("Blog data added successfully", {
             position: "top-center",
@@ -441,7 +433,7 @@ const BlogAdd = () => {
   return (
     <>
       <header className="headerEditor">
-        <h3> Add a new Blog</h3>
+        <p className="common-fonts add-new-blog"> Add a new Blog</p>
       </header>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
@@ -456,26 +448,35 @@ const BlogAdd = () => {
                 style={{ display: "none" }}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
+                Blog Title
+              </label>
               <input
                 type="text"
                 name="title"
                 id="title"
-                placeholder="Blog Title"
+                placeholder="Enter Blog Title"
                 value={formData.title}
                 onChange={handleChange}
               />
             </div>
-            <div className="fromUrl">
-              <input
-                type="text"
-                name="url"
-                id="url"
-                placeholder="Url"
-                value={formData.url}
-                onChange={handleChange}
-                disabled
-              />
+            <div className="from-filed from-filed-2">
+              <div className="blog-url-input">
+                <label htmlFor="title" className="common-fonts blogs-new-label">
+                  Url
+                </label>
+                <input
+                  type="text"
+                  name="url"
+                  id="url"
+                  placeholder="Url"
+                  value={formData.url}
+                  onChange={handleChange}
+                  disabled
+                />
+              </div>
+
               <div>
                 <div className="blog-browse-img">
                   <button
@@ -484,11 +485,17 @@ const BlogAdd = () => {
                   >
                     Add Image
                   </button>
+                  <div className="blog-new-img">
                   {blogImg ? blogImg : <></>}
+                  </div>
+                  
                 </div>
               </div>
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
+                description
+              </label>
               <input
                 type="text"
                 name="description"
@@ -498,7 +505,10 @@ const BlogAdd = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
+                meta description
+              </label>
               <input
                 type="text"
                 name="meta_description"
@@ -508,7 +518,10 @@ const BlogAdd = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
+                keywords
+              </label>
               <input
                 type="text"
                 name="keywords"
@@ -529,7 +542,13 @@ const BlogAdd = () => {
                   onChange={handleFileChange2}
                   style={{ display: "none" }}
                 />
-                <div className="fromBlogSection">
+                <div className="from-blog-section from-filed">
+                  <label
+                    htmlFor="title"
+                    className="common-fonts blogs-new-label"
+                  >
+                    Section
+                  </label>
                   <input
                     type="text"
                     name="sectionTitle"
@@ -540,14 +559,23 @@ const BlogAdd = () => {
                   />
 
                   <div className="formBtnBox">
-                    <input
-                      type="text"
-                      name="Sort"
-                      id="Sort"
-                      value={sectionSort === null ? "" : sectionSort}
-                      placeholder="Sort"
-                      onChange={handleSecSortChange}
-                    />
+                    <div className="blog-url-input-2 blog-sort">
+                      <label
+                        htmlFor="title"
+                        className="common-fonts blogs-new-label"
+                      >
+                        Sort
+                      </label>
+                      <input
+                        type="text"
+                        name="Sort"
+                        id="Sort"
+                        value={sectionSort === null ? "" : sectionSort}
+                        placeholder="Sort"
+                        onChange={handleSecSortChange}
+                      />
+                    </div>
+
                     {/* <input
                       type="text"
                       name="image"
@@ -558,16 +586,17 @@ const BlogAdd = () => {
                     /> */}
                     <div className="blog-browse-img">
                       <button
-                        className="common-fonts blog-add-img add-img-2"
+                        className="common-fonts blog-add-img add-img-2 add-img-3"
                         onClick={handleButtonClick2}
                       >
                         Add Image
                       </button>
-                      {blogImg2 ? blogImg2 : <></>}
+                      <div className="blog-new-img"> {blogImg2 ? blogImg2 : <></>}</div>
+                     
                     </div>
                     <button
                       onClick={handleAddSection}
-                      className="addSectionBtn"
+                      className="common-fonts blog-add-img add-img-2 add-img-3"
                     >
                       Add Section
                     </button>
@@ -583,7 +612,7 @@ const BlogAdd = () => {
               </div>
 
               {sectionData.map((section, index) => (
-                <div key={index} className="section">
+                <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
                   <div
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
@@ -680,7 +709,7 @@ const BlogAdd = () => {
           {/*==============================================================right side of form starts here ============================================================*/}
           <div className="addBlogRightForm">
             <div className="tags">
-              <div className="tagContent">
+              <div className="tagContent tag-box">
                 <h3>Tags</h3>
                 <div className="contentBox">
                   <select
@@ -721,7 +750,7 @@ const BlogAdd = () => {
                         {tag}
 
                         <i
-                          className="fa-solid fa-x"
+                          className="fa-solid fa-x blog-cross"
                           onClick={() => handleTagRemoval(index)}
                         ></i>
                       </div>
@@ -731,9 +760,9 @@ const BlogAdd = () => {
             </div>
 
             <div className="tags">
-              <div className="tagContent">
+              <div className="tagContent tag-box">
                 <h3>Publish</h3>
-                <div className="contentBox">
+                <div className="contentBox blog-add-date">
                   <input
                     type="date"
                     name="date"
@@ -744,14 +773,14 @@ const BlogAdd = () => {
                   />
                   <div className="saveBtnRight">
                     {stateBtn === 0 ? (
-                      <button className="closeBtn" disabled>
+                      <button className="closeBtn blog-save-height" disabled>
                         Save
                       </button>
                     ) : (
                       <input
                         type="submit"
                         value="Publish"
-                        className="secondaryBtn"
+                        className="secondaryBtn blog-save-height"
                       />
                     )}
                   </div>
@@ -759,7 +788,7 @@ const BlogAdd = () => {
               </div>
             </div>
             <div className="tags">
-              <div className="tagContent">
+              <div className="tagContent tag-box tag-box-1">
                 <h3>Site</h3>
                 <div className="contentBox">
                   <select
@@ -774,7 +803,7 @@ const BlogAdd = () => {
                   </select>
                 </div>
               </div>
-              <div className="tagData">
+              <div className="tagData tag-box tag-box-2">
                 <div className="tagItems">{selectSite}</div>
               </div>
             </div>
