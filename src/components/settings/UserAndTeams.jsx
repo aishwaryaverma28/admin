@@ -3,12 +3,14 @@ import "../styles/LPSetting.css";
 import "../styles/LPUserAndTeam.css";
 import axios from "axios";
 import {
+  USER_INFO,
   GET_TEAM_MEM,
   GET_ACTIVE_TEAM_MEM,
   GET_DEACTIVE_TEAM_MEM,
   getDecryptedToken,
   UPDATE_TEAM_MEM,
   CHECK_LEAD_DEAL,
+  handleLogout,
 } from "../utils/Constants";
 import SearchIcon from "../../assets/image/search.svg";
 import ExportIcon from "../../assets/image/export.svg";
@@ -46,6 +48,7 @@ const UserAndTeams = () => {
   const [newId, setNewId] = useState(0);
   const [leadId, setLeadId] = useState([]);
   const [dealId, setDealId] = useState([]);
+  const [orgId, setOrgId] = useState(null);
 
   const HandleDeactivateUserModal = (id) => {
     setNewId(id);
@@ -184,7 +187,7 @@ const UserAndTeams = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_TEAM_MEM, {
+      .post(GET_TEAM_MEM,{ orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -198,9 +201,27 @@ const UserAndTeams = () => {
         setLoading(false);
       });
   };
+  const userInfo = () => {
+    axios.get(USER_INFO, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    }).then((response) => {
+      const data = response?.data?.data;
+      // console.log(data[0]);
+      setOrgId(data[0]?.org_id)
+    })
+    .catch ((error) =>{
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    });
+  }
   const userActive = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_ACTIVE_TEAM_MEM,{ orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -216,7 +237,7 @@ const UserAndTeams = () => {
   };
   const userDeactive = () => {
     axios
-      .get(GET_DEACTIVE_TEAM_MEM, {
+      .post(GET_DEACTIVE_TEAM_MEM,{ orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -231,10 +252,14 @@ const UserAndTeams = () => {
       });
   };
   useEffect(() => {
+    userInfo();
+  }, []);
+
+  useEffect(() => {
     userAdded();
     userActive();
     userDeactive();
-  }, []);
+  }, [orgId]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -511,68 +536,6 @@ const UserAndTeams = () => {
                         </div>
                       </th>
                     </tr>
-                    {/*                       
-                      <tr>
-                        <td>
-                          <label class="custom-checkbox">
-                            <input type="checkbox" className="cb1" />
-                            <span class="checkmark"></span>
-                          </label>
-                        </td>
-                        <td>
-                          <div className="user-info">
-                            <div className="usericon-name-email">
-                              <div className="user-icon-round">
-                                <img src={User} alt="" />
-                              </div>
-
-                              <div className="user-name-info">
-                                <p className="user-name-value">
-                                  
-                                    Anant Sign Chauhan
-                                  
-                                </p>
-                                <p>anantsingh@123@gmail.com</p>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="select action-select">
-                                <div
-                                  className="dropdown-container"
-                                  ref={actionDropDownRef}
-                                >
-                                  <div
-                                    className="dropdown-header2"
-                                    onClick={toggleActionDropdownStatic}
-                                  >
-                                    Actions{" "}
-                                    <i
-                                      className={`fa-sharp fa-solid ${
-                                        actionopen
-                                          ? "fa-angle-up"
-                                          : "fa-angle-down"
-                                      }`}
-                                    ></i>
-                                  </div>
-                                  {actionopen && (
-                                    <ul className="dropdown-menu user-team-dropdown-position">
-                                      <li>Edit user</li>
-                                      <li>Edit permissions</li>
-                                      <li>Edit team</li>
-                                      <li>Resend email invite</li>
-                                      <li>Make Super Admin</li>
-                                      <li>Deactivate user</li>
-                                    </ul>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="user-team-font"></td>
-                        <td className="user-team-font">Super Admin</td>
-                        <td className="user-team-font">3 hours ago</td>
-                      </tr> */}
                     {filteredTeamData.map((teamMember) => (
                       <tr key={teamMember.id}>
                         <td>
@@ -1138,7 +1101,7 @@ const UserAndTeams = () => {
         )}
       </main>
       {isModalOpen && (
-        <CreateUserModal onClose={closeModal} onUserAdded={userAdded} />
+        <CreateUserModal onClose={closeModal} onUserAdded={userAdded} orgId={orgId}/>
       )}
       {isTeamModalOpen && <CreateTeamModal onCloseTeamModal={closeTeamModal} />}
 

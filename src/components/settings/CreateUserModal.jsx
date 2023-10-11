@@ -5,7 +5,7 @@ import "../styles/LPUserAndTeam.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CreateUserModal = ({ onClose, onUserAdded }) => {
+const CreateUserModal = ({ onClose, onUserAdded, orgId }) => {
   const decryptedToken = getDecryptedToken();
   const [showPassword, setShowPassword] = useState(false);
   const [details, setDetails] = useState({
@@ -14,7 +14,7 @@ const CreateUserModal = ({ onClose, onUserAdded }) => {
     phone: "",
     email: "",
     password: "",
-    // company:"fiduciagroup"
+    org_id: orgId,
   });
 
   const [passDes, setPassDes] = useState([]);
