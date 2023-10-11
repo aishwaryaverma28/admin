@@ -82,7 +82,6 @@ const BlogUpdate = () => {
 
 
   const handleUpdateClick = (event, id) => {
-    event.preventDefault();
     const updatedSection = sectionData.find((section) => section.id === id);
 
     if (!updatedSection) {
