@@ -27,6 +27,8 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
     const { name, value } = e.target;
     setCompany((prevState) => ({ ...prevState, [name]: value }));
     setStateBtn(1);
+    if(name === "postcode")
+    postcode();
   };
 
 
@@ -102,6 +104,16 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
       });
   };
 
+  const apiKey = 'XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC';
+
+  async function postcode() {
+      axios.get('https://api.os.uk/search/places/v1/postcode?postcode='+ company.postcode +'&key=' + apiKey)
+      .then((response) => {
+          var response = JSON.stringify(response.data, null, 2);
+          console.log(response);
+      });
+  }
+  
   return (
     <div className="popup-wrapper">
       <div className="product-popup-container">
@@ -216,7 +228,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                 <label htmlFor="" className="common-fonts">
                   Postal Code
                 </label>
-                <input type="number" name="postcode" onChange={handleChange} className="common-input" value={company.postcode} />
+                <input type="text" name="postcode" onChange={handleChange} className="common-input" value={company.postcode} />
               </div>
             </form>
             <div className="product-popup-bottom">
