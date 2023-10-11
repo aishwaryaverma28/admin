@@ -115,6 +115,8 @@ export const RESTORE_NOTE_TRASH = start + "api/note/restorefromtrash";
 export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
 
 //========================================================================COMPANY settings
+export const GET_ORG_DATA = start + "api/user/getorg/";
+
 export const ADD_TICKET = start + "api/user/ticket/raise";
 export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";
 export const UPDATE_TICKET = start + "api/user/ticket/update/";
