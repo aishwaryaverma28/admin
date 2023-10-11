@@ -31,8 +31,9 @@ const LPheader = () => {
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
   let allowed = decryptedUserPath.split(",");
-  // const allowed = [
+  // let allowed = [
   //   "/lp/lead",
+  //   "/lp/bmp",
   //   "/lp/admin",
   //   "/lp/home",
   //   "/lp/mail",
@@ -89,9 +90,6 @@ const LPheader = () => {
   const handleBellCLose = () => {
     setIsNotifyModalOpen(false);
   }
-
-
-
 
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
