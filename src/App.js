@@ -56,6 +56,10 @@ import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
 import Testing from "./components/Testing";
+import BmpOverview from "./components/bookmyplayer/BmpOverview";
+import FeesNBatches from "./components/bookmyplayer/FeesNBatches";
+import TraningNStrategy from "./components/bookmyplayer/TraningNStrategy";
+import Gallery from "./components/bookmyplayer/Gallery";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -114,7 +118,30 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/bmp",
-        element: <SecureRoutes Component={BmpDashboard} />,
+        element: <BmpDashboard />,
+        errorElement: <Error />,
+        children: [
+          {
+            path: "/lp/bmp", // This is the new route for /lp
+            element: <Navigate to="/lp/bmp/overview" replace />, // Redirect to /lp/home
+          },
+          {
+            path:"/lp/bmp/overview",
+            element:<BmpOverview/>,
+          },
+          {
+            path:"/lp/bmp/fees",
+            element:<FeesNBatches/>,
+          },
+          {
+            path:"/lp/bmp/training",
+            element:<TraningNStrategy/>,
+          },
+          {
+            path:"/lp/bmp/gallery",
+            element:<Gallery/>,
+          },
+        ],
       },
       {
         path: "/lp/deals",
