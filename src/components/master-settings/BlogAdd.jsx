@@ -680,7 +680,10 @@ const BlogAdd = () => {
                         >
                           {section?.image ? " change image" : " add image"}
                         </button>
+                        <div className="blog-new-img">
                         {section?.image ? section?.image : <></>}
+                        </div>
+                        
                       </div>
                     </div>
 

@@ -573,9 +573,9 @@ const BlogUpdate = () => {
   return (
     <>
       <header className="headerEditor">
-        <h3>Update Blog</h3>
+        <p className="common-fonts add-new-blog">Update Blog</p>
       </header>
-      <div className="back-to-user general-refresh">
+      <div className="back-to-user general-refresh blog-back">
         <Link to={"/lp/settings/blog/view"}>
           <button className="common-fonts">
             <img src={LeftArrow} alt="" />
@@ -594,7 +594,10 @@ const BlogUpdate = () => {
               onChange={handleFileChange2}
               style={{ display: "none" }}
             />
-            <div className="fromFiled">
+            <div className="from-filed">
+            <label htmlFor="title" className="common-fonts blogs-new-label">
+                Blog Title
+              </label>
               <input
                 type="text"
                 name="title"
@@ -604,7 +607,10 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+            <label htmlFor="title" className="common-fonts blogs-new-label">
+                Url
+              </label>
               <input
                 type="text"
                 name="url"
@@ -616,7 +622,7 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-view-img">
-              <div className="blog-browse-img">
+              <div className="blog-update-img">
                 <button
                   className="common-fonts blog-add-img add-img-2 update-img"
                   onClick={handleViewSite}
@@ -629,10 +635,16 @@ const BlogUpdate = () => {
                 >
                   Change Image
                 </button>
+                <div className="blog-new-img">
                 {blogImg2 ? blogImgName : <></>}
+                  </div>
+               
               </div>
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+            <label htmlFor="title" className="common-fonts blogs-new-label">
+                description
+              </label>
               <input
                 type="text"
                 name="description"
@@ -642,7 +654,10 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+            <label htmlFor="title" className="common-fonts blogs-new-label">
+                meta description
+              </label>
               <input
                 type="text"
                 name="meta_description"
@@ -652,7 +667,10 @@ const BlogUpdate = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="fromFiled">
+            <div className="from-filed">
+            <label htmlFor="title" className="common-fonts blogs-new-label">
+                keywords
+              </label>
               <input
                 type="text"
                 name="keywords"
@@ -664,7 +682,17 @@ const BlogUpdate = () => {
             </div>
             <>
               <div className="addSection">
-                <div className="fromBlogSection">
+              <input
+                    type="file"
+                    id="imageUpload"
+                    ref={fileInputRef3}
+                    onChange={handleFileChange3}
+                    style={{ display: "none" }}
+                  />
+                <div className="from-blog-section from-filed">
+                <label htmlFor="title" className="common-fonts blogs-new-label">
+                Section Title
+              </label>
                   <input
                     type="text"
                     name="sectionTitle"
@@ -673,16 +701,17 @@ const BlogUpdate = () => {
                     onChange={handleTitle}
                     value={sectionTitle}
                   />
-                  <input
-                    type="file"
-                    id="imageUpload"
-                    ref={fileInputRef3}
-                    onChange={handleFileChange3}
-                    style={{ display: "none" }}
-                  />
+                 
 
-                  <div className="formBtnBox">
-                    <input
+                   <div className="formBtnBox">
+                   <div className="blog-url-input-2 blog-sort">
+                   <label
+                        htmlFor="title"
+                        className="common-fonts blogs-new-label"
+                      >
+                        Sort
+                      </label>
+                      <input
                       type="text"
                       name="Sort"
                       id="Sort"
@@ -690,22 +719,27 @@ const BlogUpdate = () => {
                       placeholder="Sort"
                       onChange={handleSecSortChange}
                     />
+                   </div>
+                    
                     <div className="blog-browse-img">
                       <button
-                        className="common-fonts blog-add-img add-img-2"
+                        className="common-fonts blog-add-img add-img-2 add-img-3"
                         onClick={handleButtonClick3}
                       >
                         Add Image
                       </button>
-                      {blogImg3 ? blogImgName2 : <></>}
+                      
+                      <div className="blog-new-img">{blogImg3 ? blogImgName2 : <></>}</div>
                     </div>
                     <button
                       onClick={handleAddSection}
-                      className="addSectionBtn"
+                      className="common-fonts blog-add-img add-img-2 add-img-3"
                     >
                       Add Section
                     </button>
-                  </div>
+                  </div> 
+
+
                 </div>
 
                 <div className="formEditor">
@@ -717,7 +751,7 @@ const BlogUpdate = () => {
               </div>
 
               {sectionData.map((section, index) => (
-                <div key={index} className="section">
+                <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
                   <div
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
@@ -767,7 +801,7 @@ const BlogUpdate = () => {
                         style={{ display: "none" }}
                         ref={(input) => (fileInputRefs[index] = input)}
                       />
-                      <div className="blog-browse-img">
+                      <div className="blog-browse-img-2">
                         <button
                           className="common-fonts blog-add-img add-img-2"
                           onClick={(event) => {
@@ -838,7 +872,7 @@ const BlogUpdate = () => {
           </div>
           <div className="addBlogRightForm">
             <div className="tags">
-              <div className="tagContent">
+              <div className="tagContent tag-box">
                 <h3>Tags</h3>
                 <div className="contentBox">
                   <select
@@ -879,16 +913,16 @@ const BlogUpdate = () => {
                         {tag}
 
                         <i
-                          className="fa-solid fa-x"
+                          className="fa-solid fa-x blog-cross"
                           onClick={() => handleTagRemoval(index)}
                         ></i>
                       </div>
                     ))}
                 </div>
               </div>
-              <div className="tagContent">
+              <div className="tagContent tag-box">
                 <h3>Publish</h3>
-                <div className="contentBox">
+                <div className="contentBox blog-add-date">
                   <input
                     type="date"
                     name="date"
@@ -906,14 +940,14 @@ const BlogUpdate = () => {
                       <input
                         type="submit"
                         value="Save"
-                        className="secondaryBtn saveBtn"
+                        className="common-fonts common-save-button blog-publish"
                       />
                     )}
                   </div>
                 </div>
               </div>
               <div className="tags">
-                <div className="tagContent">
+                <div className="tagContent tag-box tag-box-1">
                   <h3>Site</h3>
                   <div className="contentBox">
                     <select
@@ -928,8 +962,8 @@ const BlogUpdate = () => {
                     </select>
                   </div>
                 </div>
-                <div className="tagData">
-                  <div className="tagItems">{selectSite}</div>
+                <div className="tagData tag-box tag-box-2">
+                <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
                 </div>
               </div>
             </div>
