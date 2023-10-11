@@ -71,6 +71,7 @@ export const REMOVE_DOC = start+"api/employee/removeDoc/";
 export const UPLOAD_DOC = start+"api/employee/uploadDoc";
 export const VIEW_IMG = start+"employee/doc/";
 export const GET_USER_EMPLOYEE = start+"api/user/getuserinfo"; 
+export const GET_USER_ID = start+"api/user/getuserinfobyid";
 //====================================================================site pages
 export const GET_SITEPGS = start+"api/site/getAll";
 export const PUT_SITEPGS = start+"api/site/edit/";

@@ -66,13 +66,13 @@ const UserAndTeams = () => {
         },
       })
       .then((response) => {
-        if (response.data.leads || response.data.deals) {
+        if (response?.data?.leads || response?.data?.deals) {
           if (response?.data?.leads) {
-            const extractedIds = response.data.leads.map((lead) => lead.id);
+            const extractedIds = response?.data?.leads.map((lead) => lead.id);
             setLeadId(extractedIds);
           }
           if (response?.data?.deals) {
-            const extractedIds = response.data.deals.map((deals) => deals.id);
+            const extractedIds = response?.data?.deals.map((deals) => deals.id);
             setDealId(extractedIds);
           }
           HandleDeactivateUserModal(id);
@@ -193,7 +193,7 @@ const UserAndTeams = () => {
         },
       })
       .then((response) => {
-        setTeamData(response.data.data);
+        setTeamData(response?.data?.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -227,7 +227,7 @@ const UserAndTeams = () => {
         },
       })
       .then((response) => {
-        setActiveData(response.data.data);
+        setActiveData(response?.data?.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -243,7 +243,7 @@ const UserAndTeams = () => {
         },
       })
       .then((response) => {
-        setDeactiveData(response.data.data);
+        setDeactiveData(response?.data?.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -1101,7 +1101,7 @@ const UserAndTeams = () => {
         )}
       </main>
       {isModalOpen && (
-        <CreateUserModal onClose={closeModal} onUserAdded={userAdded} orgId={orgId}/>
+        <CreateUserModal onClose={closeModal} onUserAdded={userAdded} userActive={userActive} orgId={orgId}/>
       )}
       {isTeamModalOpen && <CreateTeamModal onCloseTeamModal={closeTeamModal} />}
 

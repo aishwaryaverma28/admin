@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
+  GET_USER_ID,
   GET_ACTIVE_TEAM_MEM,
   GET_ALL_ROLES,
   UPDATE_TEAM_MEM,
@@ -106,15 +107,17 @@ const fetchData = async () => {
   //===========================================================api calls
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_USER_ID, {
+        userId:id
+    },
+    {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        const filteredData = response?.data?.data?.filter(
-          (item) => item.id == id
-        );
+        console.log(response?.data?.data)
+        const filteredData = response?.data?.data
         setTeamData(filteredData[0]);
         setInitialTeamData(filteredData[0]); // Store initial data here
         setLoading(false);
@@ -171,7 +174,7 @@ const fetchData = async () => {
       })
       .then((response) => {
         console.log(response);
-        toast.success("Roles saved successfully", {
+        toast.success("User data saved successfully", {
           position: "top-center",
           autoClose:2000
         });
