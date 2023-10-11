@@ -80,6 +80,7 @@ const Reassign = ({
   };
   return (
     <div className="recycle-popup-wrapper">
+    <div className="reassign-wrapper">
       <div className="recycle-popup-container reassign-container">
         <div className="recycle-popup-box">
           <p className="common-fonts restore-records">reassign data</p>
@@ -107,7 +108,9 @@ const Reassign = ({
           <ToastContainer />
         </div>
 
-        <div className="recycle-popup-btn">
+
+      </div>
+      <div className="recycle-popup-btn reassign-popup-btn">
           <button className="restore-no common-fonts" onClick={onCloseReassign}>
             Cancel
           </button>
@@ -122,7 +125,7 @@ const Reassign = ({
             Reassign
           </button>
         </div>
-      </div>
+    </div>
     </div>
   );
 };
