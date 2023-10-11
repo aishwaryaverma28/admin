@@ -14,6 +14,7 @@ import {
   GET_ACTIVITY,
   GET_FIELDS,
   POST_EMAIL,
+  USER_INFO
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "../deal/AddNotes";
@@ -24,8 +25,9 @@ import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 import DealEmail from "../deal/DealEmail.jsx";
 
-const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
+const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [orgId, setOrgId] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
@@ -55,6 +57,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [leadName, setLeadName] = useState("");
   const idOfOwner = parseInt(localStorage.getItem("id"));
   const [ownerId, setOwnerId] = useState(0);
+  const [ownerName, setOwnerName] = useState("");
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
@@ -65,6 +68,27 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     phone: "",
     id: 0,
   });
+
+  const userInfo = () => {
+    axios
+      .get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const data = response?.data?.data;
+        // console.log(data[0]);
+        setOrgId(data[0]?.org_id);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -288,7 +312,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     fetchLead();
-    userAdded();
+    userInfo();
     fetchLabelData();
   }, []);
 
@@ -298,7 +322,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_ACTIVE_TEAM_MEM,{orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -313,6 +337,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    userAdded();
+  }, [orgId]);
 
   useEffect(() => {
     fetchNotes();
@@ -344,7 +372,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     const { name, value } = e.target;
 
     if (name === "label") {
-      const selectedLabelData = mergedLabels.find(
+      const selectedLabelData = mergedLabels?.find(
         (label) => label.id === parseInt(value)
       );
       setEditedItem({
@@ -354,11 +382,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     } else if (name === "stage_id") {
       setSelectedStageId(value);
     } else if (name === "owner") {
-      const selectedUserData = userData.find(
+      const selectedUserData = userData?.find(
         (user) => user.id === parseInt(value)
       );
 
       setInfo(selectedUserData);
+      setOwnerName(selectedUserData);
 
       setSelectedUser({
         email: selectedUserData?.email || "",
@@ -630,7 +659,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   const normalStylingSelect1 = {
     backgroundColor: editedItem?.label_id
-      ? mergedLabels.find((label) => label.id === editedItem?.label_id)
+      ? mergedLabels?.find((label) => label.id === editedItem?.label_id)
           ?.colour_code
       : "",
     /* height: 32px; */
@@ -649,7 +678,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
     width: "fit-content",
   };
 
-  const ownerName = userData.find((item) => item.id === ownerId);
+  useEffect(() => {
+    setOwnerName(userData?.find((item) => item.id === ownerId));
+  }, []);
 
   return (
     <div className="modal">
@@ -947,9 +978,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded }) => {
                             value={ownerName ? ownerName.id : ""}
                           >
                             {userData
-                              .slice()
-                              .reverse()
-                              .map((item) => (
+                              ?.slice()
+                              ?.reverse()
+                              ?.map((item) => (
                                 <option
                                   key={item?.id}
                                   value={item?.id}
