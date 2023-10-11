@@ -5,7 +5,7 @@ import "../styles/LPUserAndTeam.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CreateUserModal = ({ onClose, onUserAdded, orgId }) => {
+const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
   const decryptedToken = getDecryptedToken();
   const [showPassword, setShowPassword] = useState(false);
   const [details, setDetails] = useState({
@@ -120,6 +120,7 @@ const CreateUserModal = ({ onClose, onUserAdded, orgId }) => {
         .then((response) => {
           console.log(response);
           onUserAdded(); // Call the onLeadAdded function from props
+          userActive();
           if(response.data.status===1){
             toast.success("User added successfully", {
               position: "top-center",
