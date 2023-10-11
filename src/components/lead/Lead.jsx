@@ -29,6 +29,7 @@ import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
   const [stages, setStages] = useState([]);
+  const [orgId, setOrgId] = useState(null);
   const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -65,6 +66,10 @@ const Lead = () => {
     id: 0,
   });
   const [data, setData] = useState("");
+
+
+
+
   const handleDataReceived = (newData) => {
     setData(newData);
     console.log(newData);
@@ -99,7 +104,7 @@ const Lead = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_ACTIVE_TEAM_MEM,{ orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -126,6 +131,8 @@ const Lead = () => {
         adminInfo.first_name = response?.data?.data[0]?.first_name || "";
         adminInfo.last_name = response?.data?.data[0]?.last_name || "";
         adminInfo.id = response?.data?.data[0]?.id || "";
+        const data = response?.data?.data;
+        setOrgId(data[0]?.org_id)
       }
     } catch (error) {
       console.log(error);
@@ -136,10 +143,17 @@ const Lead = () => {
     }
   }
 
+
+
   useEffect(() => {
-    userAdded();
     getUser();
   }, []);
+
+  useEffect(()=>{
+   userAdded();
+  }, [orgId])
+
+
   const fetchStatus = () => {
     axios
       .get(GET_ALL_STAGE + "/lead", {
@@ -440,33 +454,33 @@ const Lead = () => {
   const sortData = (data, option, order) => {
     switch (option) {
       case "Amount":
-        return data.slice().sort((a, b) => {
+        return data?.slice().sort((a, b) => {
           const result = a.value - b.value;
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "LeadName":
-        return data.slice().sort((a, b) => {
+        return data?.slice().sort((a, b) => {
           const result = a.lead_name
             .toLowerCase()
             .localeCompare(b.lead_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
-        return data.slice().sort((a, b) => {
+        return data?.slice().sort((a, b) => {
           const result = a.label_name
             .toLowerCase()
             .localeCompare(b.label_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
-        return data.slice().sort((a, b) => {
+        return data?.slice().sort((a, b) => {
           const result = a.ownerf_name
             .toLowerCase()
             .localeCompare(b.lead_name.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
-        return data.slice().sort(() => {
+        return data?.slice().sort(() => {
           return order === "asc" ? 1 : -1; // Toggle sorting order
         });
     }
@@ -672,7 +686,7 @@ const Lead = () => {
             stage_id: parseInt(row?.stage_id),
           }));
           // Store CSV data in state
-          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);
           setCsvData(dataWithoutLastValue);
           postCsvDataToAPI(dataWithoutLastValue);
         },
@@ -775,9 +789,9 @@ const Lead = () => {
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
                     {userData
-                      .slice()
-                      .reverse()
-                      .map((item) => (
+                      ?.slice()
+                      ?.reverse()
+                      ?.map((item) => (
                         <li
                           key={item?.id}
                           value={item?.id}
@@ -786,18 +800,18 @@ const Lead = () => {
                             handleOwnerClick(
                               item.id,
                               item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1),
-                              item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
+                                item?.first_name?.slice(1),
+                              item?.last_name?.charAt(0)?.toUpperCase() +
+                                item?.last_name?.slice(1)
                             )
                           }
                         >
                           {`${
-                            item?.first_name.charAt(0).toUpperCase() +
-                            item?.first_name.slice(1)
+                            item?.first_name?.charAt(0)?.toUpperCase() +
+                            item?.first_name?.slice(1)
                           } ${
-                            item?.last_name.charAt(0).toUpperCase() +
-                            item?.last_name.slice(1)
+                            item?.last_name?.charAt(0)?.toUpperCase() +
+                            item?.last_name?.slice(1)
                           }`}
                         </li>
                       ))}
@@ -805,6 +819,7 @@ const Lead = () => {
                 )}
               </div>
             )}
+
           </div>
           <div className="right-side--btns">
             <p>

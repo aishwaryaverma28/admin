@@ -19,6 +19,7 @@ import {
   GET_ACTIVE_TEAM_MEM,
   GET_FIELDS,
   POST_EMAIL,
+  USER_INFO,
 } from "../utils/Constants";
 import AddNotes from "./AddNotes";
 import { toast, ToastContainer } from "react-toastify";
@@ -33,6 +34,7 @@ const DealUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
   const [labelData, setLabelData] = useState([]);
+  const [orgId, setOrgId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLabelColor, setSelectedLabelColor] = useState("");
   const [stages, setStages] = useState([]);
@@ -135,6 +137,7 @@ const DealUpdate = () => {
   const [ownerId, setOwnerId] = useState(0);
   const idOfOwner = parseInt(localStorage.getItem("id"));
   const [lostModal, setLostModal] = useState(false);
+  const [ownerName, setOwnerName] = useState("");
 
   const handleLostModal = () => {
     setLostModal(true);
@@ -174,7 +177,9 @@ const DealUpdate = () => {
       });
   };
 
-  const ownerName = userData.find((item) => item.id === ownerId);
+  useEffect(() => {
+    setOwnerName(userData?.find((item) => item.id === ownerId));
+  }, []);
 
   const fetchFields = () => {
     return new Promise((resolve, reject) => {
@@ -360,11 +365,15 @@ const DealUpdate = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(
+        GET_ACTIVE_TEAM_MEM,
+        { orgId: orgId },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
       .then((response) => {
         const responseData = response?.data?.data;
         // const combinedData = [adminInfo, ...responseData];
@@ -395,16 +404,41 @@ const DealUpdate = () => {
       });
   };
 
+  const userInfo = () => {
+    axios
+      .get(USER_INFO, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const data = response?.data?.data;
+        // console.log(data[0]);
+        setOrgId(data[0]?.org_id);
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error?.response?.data?.message === "Invalid or expired token.") {
+          alert(error?.response?.data?.message);
+          handleLogout();
+        }
+      });
+  };
+
   useEffect(() => {
     fetchLabelData();
     fetchNotes();
     fetchFields();
     fetchCall();
-    userAdded();
     handleGetEmail();
     fetchBanks();
     filterBanks();
+    userInfo();
   }, []);
+
+  useEffect(() => {
+    userAdded();
+  }, [orgId]);
 
   useEffect(() => {
     fetchDeal();
@@ -845,11 +879,12 @@ const DealUpdate = () => {
         setSelectedLabelColor(selectedLabel.colour_code);
       }
     } else if (name === "owner") {
-      const selectedUserData = userData.find(
+      const selectedUserData = userData?.find(
         (user) => user.id === parseInt(value)
       );
 
       setInfo(selectedUserData);
+      setOwnerName(selectedUserData);
     }
     setDealDetails({
       ...dealDetails,
@@ -1167,20 +1202,20 @@ const DealUpdate = () => {
                             value={ownerName ? ownerName.id : ""}
                           >
                             {userData
-                              .slice()
-                              .reverse()
-                              .map((item) => (
+                              ?.slice()
+                              ?.reverse()
+                              ?.map((item) => (
                                 <option
                                   key={item?.id}
                                   value={item?.id}
                                   className="owner-val"
                                 >
                                   {`${
-                                    item?.first_name.charAt(0).toUpperCase() +
-                                    item?.first_name.slice(1)
+                                    item?.first_name?.charAt(0)?.toUpperCase() +
+                                    item?.first_name?.slice(1)
                                   } ${
-                                    item?.last_name.charAt(0).toUpperCase() +
-                                    item?.last_name.slice(1)
+                                    item?.last_name?.charAt(0)?.toUpperCase() +
+                                    item?.last_name?.slice(1)
                                   }`}
                                 </option>
                               ))}

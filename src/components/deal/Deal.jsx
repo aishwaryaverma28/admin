@@ -28,6 +28,7 @@ import MassUpdateModal from "../lead/MassUpdateModal.jsx";
 
 const Deal = () => {
   const [stages, setStages] = useState([]);
+  const [orgId, setOrgId] = useState(null);
   const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -98,7 +99,7 @@ const Deal = () => {
 
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_ACTIVE_TEAM_MEM,{orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -125,6 +126,8 @@ const Deal = () => {
         adminInfo.first_name = response?.data?.data[0]?.first_name || "";
         adminInfo.last_name = response?.data?.data[0]?.last_name || "";
         adminInfo.id = response?.data?.data[0]?.id || "";
+        const data = response?.data?.data;
+        setOrgId(data[0]?.org_id)
       }
     } catch (error) {
       console.log(error);
@@ -136,9 +139,12 @@ const Deal = () => {
   }
 
   useEffect(() => {
-    userAdded();
     getUser();
   }, []);
+
+  useEffect(()=>{
+   userAdded();
+  }, [orgId])
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
