@@ -569,6 +569,17 @@
   .reassign-save{
     margin-left: 1rem;
   }
+  .reassign-container{
+    height: 70vh;
+    overflow-y: auto;
+
+  }
+
+ .reassign-wrapper{
+  height: 80vh;
+  width: 450px;
+  margin: 0 auto;
+ }
   /* deactivate pop up ends */
 
 
