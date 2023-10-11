@@ -10,7 +10,7 @@ import {
   GET_TAG_BY_SITE,
   SEC_UPDATE,
   getDecryptedToken,
-  GET_TAG_CATEGORY
+  GET_TAG_CATEGORY,
 } from "../utils/Constants";
 import ReactEditor from "../ReactEditor";
 import trash from "../../assets/image/delete-icon.svg";
@@ -80,14 +80,16 @@ const BlogUpdate = () => {
       });
   };
 
-
-  const handleUpdateClick = (event, id) => {
+  const handleUpdateClick = (id) => {
     const updatedSection = sectionData.find((section) => section.id === id);
 
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
     }
+
+    console.log(updatedSection);
+    console.log("hello");
     const updatedFormData = {
       heading: updatedSection.heading,
       sort: updatedSection.sort,
@@ -140,7 +142,7 @@ const BlogUpdate = () => {
         site: data?.site,
         route: data?.url,
       });
-      setUrlName(data?.url)
+      setUrlName(data?.url);
       setBlogImg2(data?.image);
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
@@ -184,7 +186,6 @@ const BlogUpdate = () => {
       });
   }, []);
 
-
   const getTagBySite = (site) => {
     axios
       .get(GET_TAG_BY_SITE + site, {
@@ -219,7 +220,7 @@ const BlogUpdate = () => {
   // console.log(selectedTags)
 
   const handleTagSelection = (event) => {
-    const { name="categoryDropdown", value } = event?.target || {};
+    const { name = "categoryDropdown", value } = event?.target || {};
 
     if (name === "categoryDropdown") {
       let updatedForm = {};
@@ -558,14 +559,16 @@ const BlogUpdate = () => {
         });
     }
   };
-;
   const handleViewSite = (e) => {
     e.preventDefault();
-    if(selectSite === "bookmyplayer"){
-      const newTab = window.open(`https://www.bookmyplayer.com/blog/${urlName}`, '_blank');
+    if (selectSite === "bookmyplayer") {
+      const newTab = window.open(
+        `https://www.bookmyplayer.com/blog/${urlName}`,
+        "_blank"
+      );
       newTab.focus();
     }
-  }
+  };
 
   return (
     <>
@@ -613,10 +616,13 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-view-img">
-            <div className="blog-browse-img">
-            <button className="common-fonts blog-add-img add-img-2 update-img" onClick={handleViewSite}>
-              View Site
-            </button>
+              <div className="blog-browse-img">
+                <button
+                  className="common-fonts blog-add-img add-img-2 update-img"
+                  onClick={handleViewSite}
+                >
+                  View Site
+                </button>
                 <button
                   className="common-fonts blog-add-img add-img-2 update-img"
                   onClick={handleButtonClick2}
@@ -835,7 +841,7 @@ const BlogUpdate = () => {
               <div className="tagContent">
                 <h3>Tags</h3>
                 <div className="contentBox">
-                <select
+                  <select
                     name="categoryDropdown"
                     onChange={handleTagSelection}
                     className="tagSelectBox"
@@ -861,7 +867,7 @@ const BlogUpdate = () => {
                       </option>
                     ))}
                   </select>
-{/* 
+                  {/* 
                   <button onClick={AddTag} type="button" className="primaryBtn">
                     Add
                   </button> */}
