@@ -1,9 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
-import DocSign from '../../assets/image/docsign.png';
+import DealRecipient from "./DealRecipient.jsx";
 
 
 
-const DealDocPreview = ({ onClose }) => {
+
+const DealDocPreview = ({ onClose , fileView }) => {
+  const [imageSrc, setImageSrc] = useState(null);
+  const [recipient, setRecipient] = useState(false);
+
+  useEffect(() => {
+    if (fileView) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(fileView);
+    }
+  }, [fileView]);
+
+  const handleRecipients = () => {
+    setRecipient(true)
+  }
+  const handleRecipientsClose = () => {
+    setRecipient(false);
+  }
   return (
     <>
       <div className="help-modal-container">
@@ -21,19 +41,24 @@ const DealDocPreview = ({ onClose }) => {
                 <button className="common-white-green-button common-fonts">docusign sample file <i class="fa fa-pencil preview-pen"></i></button>
               </div>
 
-              <div>
-                <img src={DocSign} alt="" />
+              <div className="doc-preview-img">
+                <img src={imageSrc} alt="" />
               </div>
 
               <div className="preview-btn">
                 <button className="common-fonts common-white-button">Cancle</button>
-                <button className="common-fonts common-save-button">Save</button>
+                <button className="common-fonts common-save-button" onClick={handleRecipients}>Next</button>
               </div>
            </div>
         <div className="help-cross" onClick={onClose}>
           X
         </div>
       </div>
+      {
+        recipient && (
+         <DealRecipient onClose={handleRecipientsClose} onClosePrevious={onClose} />
+        )
+      }
     </>
   );
 };

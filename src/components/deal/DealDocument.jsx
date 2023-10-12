@@ -20,6 +20,7 @@ const DealDocument = ({ dealId, email }) => {
   const actionDropDownRef = useRef(null);
   const actionDropDownRef2 = useRef(null);
   const [envToken, setEnvToken] = useState("");
+  const [fileView, setFileView] = useState(null);
   const fileInputRef = useRef(null);
 
   const toggleActionDropdown = () => {
@@ -57,9 +58,7 @@ const DealDocument = ({ dealId, email }) => {
     };
   }, []);
 
-  const handlePreview = () => {
-    setPreview(true);
-  };
+
   const handlePreviewClose = () => {
     setPreview(false);
   };
@@ -109,19 +108,21 @@ const DealDocument = ({ dealId, email }) => {
   };
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
+    setFileView(file);
     if (file) {
       try {
         const base64Data = await convertToBase64(file);
-        console.log(base64Data); 
-        handleBrowseClick(base64Data);
+        console.log(base64Data);
+        // handleBrowseClick(base64Data);
+        handlePreview(base64Data);
       } catch (error) {
         console.error("Error converting file to Base64:", error);
       }
     }
   };
 
-  const handleBrowseClick = async (base64Data) => {
-   
+  const handlePreview = async (base64Data) => {
+    setPreview(true);
   };
 
   return (
@@ -228,7 +229,7 @@ const DealDocument = ({ dealId, email }) => {
           </div>
         </div>
       </div>
-      {preview && <DealDocPreview onClose={handlePreviewClose} />}
+      {preview && <DealDocPreview onClose={handlePreviewClose} fileView={fileView} />}
     </div>
   );
 };
