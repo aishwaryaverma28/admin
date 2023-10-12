@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { getDecryptedToken, ADD_COMPANY } from "../utils/Constants";
 import { toast } from "react-toastify";
@@ -22,28 +22,192 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
     industry: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
-  const [postCode, setPostCode] = useState([]);
+  const [address, setAddress] = useState([]);
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [adressInput, setAddressInput] = useState("");
+  const searchResultRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchResultRef.current &&
+        !searchResultRef.current.contains(event.target)
+      ) {
+        setShowSearchResult(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     const inputArray = [
-      "AB", "AL", "B", "BA", "BB", "BF", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "BX", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GY", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IM", "IP", "IV", "JE", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"
+      "AB",
+      "AL",
+      "B",
+      "BA",
+      "BB",
+      "BF",
+      "BD",
+      "BH",
+      "BL",
+      "BN",
+      "BR",
+      "BS",
+      "BT",
+      "BX",
+      "CA",
+      "CB",
+      "CF",
+      "CH",
+      "CM",
+      "CO",
+      "CR",
+      "CT",
+      "CV",
+      "CW",
+      "DA",
+      "DD",
+      "DE",
+      "DG",
+      "DH",
+      "DL",
+      "DN",
+      "DT",
+      "DY",
+      "E",
+      "EC",
+      "EH",
+      "EN",
+      "EX",
+      "FK",
+      "FY",
+      "G",
+      "GL",
+      "GY",
+      "GU",
+      "HA",
+      "HD",
+      "HG",
+      "HP",
+      "HR",
+      "HS",
+      "HU",
+      "HX",
+      "IG",
+      "IM",
+      "IP",
+      "IV",
+      "JE",
+      "KA",
+      "KT",
+      "KW",
+      "KY",
+      "L",
+      "LA",
+      "LD",
+      "LE",
+      "LL",
+      "LN",
+      "LS",
+      "LU",
+      "M",
+      "ME",
+      "MK",
+      "ML",
+      "N",
+      "NE",
+      "NG",
+      "NN",
+      "NP",
+      "NR",
+      "NW",
+      "OL",
+      "OX",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PO",
+      "PR",
+      "RG",
+      "RH",
+      "RM",
+      "S",
+      "SA",
+      "SE",
+      "SG",
+      "SK",
+      "SL",
+      "SM",
+      "SN",
+      "SO",
+      "SP",
+      "SR",
+      "SS",
+      "ST",
+      "SW",
+      "SY",
+      "TA",
+      "TD",
+      "TF",
+      "TN",
+      "TQ",
+      "TR",
+      "TS",
+      "TW",
+      "UB",
+      "W",
+      "WA",
+      "WC",
+      "WD",
+      "WF",
+      "WN",
+      "WR",
+      "WS",
+      "WV",
+      "YO",
+      "ZE",
     ];
 
-   
+    const query = value;
+    setSearchQuery(query);
+    setShowSearchResult(query?.length > 0);
 
     setCompany((prevState) => ({ ...prevState, [name]: value }));
     setStateBtn(1);
-    if (name === "postcode" && value.length>1 && value.length<=4) {
-      const regexPattern = new RegExp(`^(${inputArray.join('|')}|${inputArray.slice(0, 2).join('|')})\\d{1}[A-Za-z0-9]*$`);
+    if (name === "postcode" && value?.length > 1 && value?.length <= 4) {
+      const regexPattern = new RegExp(
+        `^(${inputArray.join("|")}|${inputArray
+          .slice(0, 2)
+          .join("|")})\\d{1}[A-Za-z0-9]*$`
+      );
 
-      if (regexPattern.test(value.toUpperCase())) {
-
-          postcode(value);
+      if (regexPattern.test(value?.toUpperCase())) {
+        setShowSearchResult(value?.length > 1);
+        postcode(value);
       }
-  }
+    } else {
+      setAddress([]);
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setAddressInput(e.target.value);
+    setCompany((prevState) => ({ ...prevState, [name]: value }));
+    setStateBtn(1);
+  };
+
+  const handleAdressClick = (address) => {
+    setAddressInput(address);
+    setShowSearchResult(false);
   };
 
   const resetForm = () => {
@@ -120,8 +284,6 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
   const apiKey = "XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC";
 
   async function postcode(code) {
-    console.log(code);
-    console.log("hyy");
     axios
       .get(
         "https://api.os.uk/search/places/v1/postcode?postcode=" +
@@ -130,8 +292,8 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
           apiKey
       )
       .then((response) => {
-        var response = JSON.stringify(response.data, null, 2);
-        console.log(response);
+        // var response = JSON.stringify(response.data, null, 2);
+        setAddress(response.data.results?.map((result) => result.DPA.ADDRESS));
       });
   }
 
@@ -253,6 +415,57 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  name="postcode"
+                  onChange={handleChange}
+                  className="common-input postal-input"
+                  autoComplete="off"
+                />
+              </div>
+              {showSearchResult && address?.length > 1 && (
+                <div className="search_result company-address-result" ref={searchResultRef}>
+                  {address?.map((item) => (
+                    <>
+                      <p
+                        className="common-fonts searchTitle"
+                        key={item}
+                        onClick={() => handleAdressClick(item)}
+                      >
+                        {item}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              )}
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
+                  Address 1
+                </label>
+                <input
+                  type="text"
+                  className="common-input"
+                  onChange={handleAddressChange}
+                  name="address1"
+                  value={adressInput}
+                />
+              </div>
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
+                  Address 2
+                </label>
+                <input
+                  type="text"
+                  name="address2"
+                  onChange={handleChange}
+                  className="common-input"
+                  value={company.address2}
+                />
+              </div>
+              <div className="product-popup-fields">
+                <label htmlFor="" className="common-fonts">
                   City
                 </label>
                 <input
@@ -273,42 +486,6 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                   onChange={handleChange}
                   value={company.country}
                   name="country"
-                />
-              </div>
-              <div className="product-popup-fields">
-                <label htmlFor="" className="common-fonts">
-                  Address 1
-                </label>
-                <input
-                  type="text"
-                  className="common-input"
-                  onChange={handleChange}
-                  name="address1"
-                  value={company.address1}
-                />
-              </div>
-              <div className="product-popup-fields">
-                <label htmlFor="" className="common-fonts">
-                  Address 2
-                </label>
-                <input
-                  type="text"
-                  name="address2"
-                  onChange={handleChange}
-                  className="common-input"
-                  value={company.address2}
-                />
-              </div>
-              <div className="product-popup-fields">
-                <label htmlFor="" className="common-fonts">
-                  Postal Code
-                </label>
-                <input
-                  type="text"
-                  name="postcode"
-                  onChange={handleChange}
-                  className="common-input postal-input"
-                  value={company.postcode}
                 />
               </div>
             </form>
