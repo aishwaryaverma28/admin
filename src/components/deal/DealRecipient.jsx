@@ -1,12 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
 import StageIcon from "../../assets/image/stage-icon.svg";
 import trash from "../../assets/image/TrashFill.svg";
+import axios from "axios";
+import {
+  SEND_ENVELOPE, //post api
+} from "../utils/Constants";
 
-const DealRecipient = ({ onClose, onClosePrevious }) => {
+  //   {POST API BODY
+  //     dealId: dealId,
+  //     recipatant: [
+  //         {
+  //             "email": "maheshmhaske241198@gmail.com",
+  //             "name": "Mahesh",
+  //             "recipientId": "3"
+  //         }
+  //     ],
+  //     bearerToken: token,
+  //     DocBase64: doc
+  // }
+
+const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
   const [recipients, setRecipients] = useState([
     {
-      id: 1,
-      fullName: "",
+      recipientId: 1,
+      name: "",
       email: "",
     },
   ]);
@@ -14,8 +31,8 @@ const DealRecipient = ({ onClose, onClosePrevious }) => {
   const addRecipient = () => {
     if (recipients.length < 10) {
       const newRecipient = {
-        id: recipients.length + 1,
-        fullName: "",
+        recipientId: recipients.length + 1,
+        name: "",
         email: "",
       };
       setRecipients([...recipients, newRecipient]);
@@ -52,7 +69,7 @@ const DealRecipient = ({ onClose, onClosePrevious }) => {
             </div>
 
             {recipients.map((recipient, index) => (
-              <div className="recipient-start" key={recipient.id}>
+              <div className="recipient-start" key={recipient.recipientId}>
                 <img src={StageIcon} alt="" />
                 <div className="recipient-input-flex">
                   <label htmlFor="" className="common-fonts recipient-label">

@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import DealRecipient from "./DealRecipient.jsx";
 
-
-
-
-const DealDocPreview = ({ onClose , fileView }) => {
+const DealDocPreview = ({ onClose , fileView, dealId, token, doc }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [recipient, setRecipient] = useState(false);
 
@@ -56,7 +53,7 @@ const DealDocPreview = ({ onClose , fileView }) => {
       </div>
       {
         recipient && (
-         <DealRecipient onClose={handleRecipientsClose} onClosePrevious={onClose} />
+         <DealRecipient onClose={handleRecipientsClose} onClosePrevious={onClose} dealId={dealId} token={token} doc={doc}/>
         )
       }
     </>
