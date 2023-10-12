@@ -1,22 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState} from "react";
 import trash from "../../assets/image/TrashFill.svg";
 import axios from "axios";
 import {
-  SEND_ENVELOPE, //post api
+  SEND_ENVELOPE,
 } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-  //   {POST API BODY
-  //     dealId: dealId,
-  //     recipatant: [
-  //         {
-  //             "email": "maheshmhaske241198@gmail.com",
-  //             "name": "Mahesh",
-  //             "recipientId": "3"
-  //         }
-  //     ],
-  //     bearerToken: token,
-  //     DocBase64: doc
-  // }
 
 const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
   const [recipients, setRecipients] = useState([
@@ -43,6 +33,21 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
     updatedRecipients.splice(index, 1);
     setRecipients(updatedRecipients);
   };
+
+  function handleSubmit (event){
+    event.preventDefault();
+    const updatedFormData = {
+        dealId: parseInt(dealId),
+        recipatant: recipients,
+        bearerToken: token,
+        DocBase64: doc
+    }
+    axios.post(SEND_ENVELOPE, updatedFormData).then((response) => {
+      console.log(response);
+      }).catch((error) => {
+      console.log(error);
+    })
+  }
 
   return (
     <>
@@ -110,7 +115,7 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
             </div>
 
             <div className="recipient-bottom-btn">
-              <button className="common-fonts recipient-save common-save-button">Save</button>
+              <button className="common-fonts recipient-save common-save-button" onClick={handleSubmit}>Save</button>
             </div>
           </div>
         </div>
@@ -124,6 +129,7 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
           X
         </div>
       </div>
+      <ToastContainer/>
     </>
   );
 };
