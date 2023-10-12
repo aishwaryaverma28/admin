@@ -1,60 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getDecryptedToken, ADD_COMPANY } from "../utils/Constants";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CompanyModal = ({ onClose, fetchCompany }) => {
   const decryptedToken = getDecryptedToken();
   const [company, setCompany] = useState({
-    "name": "",
-    "orgid": "",
-    "address1": "",
-    "address2": "",
-    "city": "",
-    "country": "",
-    "postcode": "",
-    "email": "",
-    "phone": "",
-    "valuation":0,
-    "valuation_in": "",
-    "domain": "",
-    "industry": ""
+    name: "",
+    orgid: "",
+    address1: "",
+    address2: "",
+    city: "",
+    country: "",
+    postcode: "",
+    email: "",
+    phone: "",
+    valuation: 0,
+    valuation_in: "",
+    domain: "",
+    industry: "",
   });
   const [stateBtn, setStateBtn] = useState(0);
+  const [postCode, setPostCode] = useState([]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const inputArray = [
+      "AB", "AL", "B", "BA", "BB", "BF", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "BX", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GY", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IM", "IP", "IV", "JE", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"
+    ];
+
+   
+
     setCompany((prevState) => ({ ...prevState, [name]: value }));
     setStateBtn(1);
-    if(name === "postcode")
-    postcode();
+    if (name === "postcode" && value.length>1 && value.length<=4) {
+      const regexPattern = new RegExp(`^(${inputArray.join('|')}|${inputArray.slice(0, 2).join('|')})\\d{1}[A-Za-z0-9]*$`);
+
+      if (regexPattern.test(value.toUpperCase())) {
+
+          postcode(value);
+      }
+  }
   };
-
-
 
   const resetForm = () => {
     setCompany({
-        "name": "",
-        "orgid": "",
-        "address1": "",
-        "address2": "",
-        "city": "",
-        "country": "",
-        "postcode": "",
-        "email": "",
-        "phone": "",
-        "valuation":0,
-        "valuation_in": "",
-        "domain": "",
-        "industry": ""
+      name: "",
+      orgid: "",
+      address1: "",
+      address2: "",
+      city: "",
+      country: "",
+      postcode: "",
+      email: "",
+      phone: "",
+      valuation: 0,
+      valuation_in: "",
+      domain: "",
+      industry: "",
     });
-  }
+  };
 
   const handleClose = () => {
     resetForm();
     onClose();
-  }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -64,37 +77,37 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
         },
       })
       .then((response) => {
-        if(response.data.status===1){
-            toast.success("Company is added successfully", {
-                position: "top-center",
-                autoClose: 2000,
-              });
-              fetchCompany();
-              onClose();
-        }else{
-            toast.error(response.data.message, {
-                position: "top-center",
-                autoClose: 2000,
-              });
+        if (response.data.status === 1) {
+          toast.success("Company is added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          fetchCompany();
+          onClose();
+        } else {
+          toast.error(response.data.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
         }
 
         setCompany({
-            "name": "",
-            "orgid": "",
-            "address1": "",
-            "address2": "",
-            "city": "",
-            "country": "",
-            "postcode": "",
-            "email": "",
-            "phone": "",
-            "valuation":0,
-            "valuation_in": "",
-            "domain": "",
-            "industry": ""
+          name: "",
+          orgid: "",
+          address1: "",
+          address2: "",
+          city: "",
+          country: "",
+          postcode: "",
+          email: "",
+          phone: "",
+          valuation: 0,
+          valuation_in: "",
+          domain: "",
+          industry: "",
         });
-        setStateBtn(0); 
-         })
+        setStateBtn(0);
+      })
       .catch((error) => {
         console.log(error);
         toast.error("some error occured", {
@@ -104,16 +117,24 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
       });
   };
 
-  const apiKey = 'XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC';
+  const apiKey = "XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC";
 
-  async function postcode() {
-      axios.get('https://api.os.uk/search/places/v1/postcode?postcode='+ company.postcode +'&key=' + apiKey)
+  async function postcode(code) {
+    console.log(code);
+    console.log("hyy");
+    axios
+      .get(
+        "https://api.os.uk/search/places/v1/postcode?postcode=" +
+          code.toUpperCase() +
+          "&key=" +
+          apiKey
+      )
       .then((response) => {
-          var response = JSON.stringify(response.data, null, 2);
-          console.log(response);
+        var response = JSON.stringify(response.data, null, 2);
+        console.log(response);
       });
   }
-  
+
   return (
     <div className="popup-wrapper">
       <div className="product-popup-container">
@@ -123,19 +144,27 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
             <form action="">
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
-                 Company Name
+                  Company Name
                 </label>
-                <input type="text" className="common-input" name="name"
+                <input
+                  type="text"
+                  className="common-input"
+                  name="name"
                   onChange={handleChange}
-                  value={company.name}  />
+                  value={company.name}
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Company Domain
                 </label>
-                <input type="text" className="common-input" name="domain"
+                <input
+                  type="text"
+                  className="common-input"
+                  name="domain"
                   onChange={handleChange}
-                  value={company.domain}/>
+                  value={company.domain}
+                />
               </div>
               {/* <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
@@ -147,20 +176,30 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               </div> */}
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
-                 Organization Id
+                  Organization Id
                 </label>
-                <input type="text" className="common-input" name="orgid"
+                <input
+                  type="text"
+                  className="common-input"
+                  name="orgid"
                   onChange={handleChange}
-                  value={company.orgid}  />
+                  value={company.orgid}
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
-                 Industry
+                  Industry
                 </label>
-                <select name="industry" id="" className="common-select" onChange={handleChange} value={company.industry}>
-                    <option value="">Select Industry</option>
-                    <option value="tech">Tech</option>
-                    <option value="non-tech">Non-Tech</option>
+                <select
+                  name="industry"
+                  id=""
+                  className="common-select"
+                  onChange={handleChange}
+                  value={company.industry}
+                >
+                  <option value="">Select Industry</option>
+                  <option value="tech">Tech</option>
+                  <option value="non-tech">Non-Tech</option>
                 </select>
               </div>
               <div className="product-popup-fields">
@@ -172,8 +211,8 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                     type="number"
                     className="common-input product-popup-input"
                     name="valuation"
-                  onChange={handleChange}
-                  value={company.valuation}
+                    onChange={handleChange}
+                    value={company.valuation}
                   />
                   <select
                     name="valuation_in"
@@ -182,9 +221,9 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                     value={company.valuation_in}
                     onChange={handleChange}
                   >
-                  <option value="">Select Currency</option>
+                    <option value="">Select Currency</option>
                     {/* <option value="usd">US Dollar (USD)</option> */}
-                     <option value="Gbp">GBP</option>
+                    <option value="Gbp">GBP</option>
                   </select>
                 </div>
               </div>
@@ -192,47 +231,91 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                 <label htmlFor="" className="common-fonts">
                   Phone
                 </label>
-                <input type="number" name="phone" value={company.phone} onChange={handleChange} className="common-input" />
+                <input
+                  type="number"
+                  name="phone"
+                  value={company.phone}
+                  onChange={handleChange}
+                  className="common-input"
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Email
                 </label>
-                <input type="email" name="email" value={company.email} onChange={handleChange} className="common-input" />
+                <input
+                  type="email"
+                  name="email"
+                  value={company.email}
+                  onChange={handleChange}
+                  className="common-input"
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   City
                 </label>
-                <input type="text" className="common-input" onChange={handleChange} value={company.city} name="city" />
+                <input
+                  type="text"
+                  className="common-input"
+                  onChange={handleChange}
+                  value={company.city}
+                  name="city"
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Country
                 </label>
-                <input type="text" className="common-input" onChange={handleChange} value={company.country} name="country" />
+                <input
+                  type="text"
+                  className="common-input"
+                  onChange={handleChange}
+                  value={company.country}
+                  name="country"
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Address 1
                 </label>
-                <input type="text" className="common-input" onChange={handleChange} name="address1" value={company.address1} />
+                <input
+                  type="text"
+                  className="common-input"
+                  onChange={handleChange}
+                  name="address1"
+                  value={company.address1}
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Address 2
                 </label>
-                <input type="text" name="address2" onChange={handleChange} className="common-input" value={company.address2} />
+                <input
+                  type="text"
+                  name="address2"
+                  onChange={handleChange}
+                  className="common-input"
+                  value={company.address2}
+                />
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Postal Code
                 </label>
-                <input type="text" name="postcode" onChange={handleChange} className="common-input" value={company.postcode} />
+                <input
+                  type="text"
+                  name="postcode"
+                  onChange={handleChange}
+                  className="common-input postal-input"
+                  value={company.postcode}
+                />
               </div>
             </form>
             <div className="product-popup-bottom">
-              <button className='common-white-button' onClick={handleClose}>Cancel</button>
+              <button className="common-white-button" onClick={handleClose}>
+                Cancel
+              </button>
               {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>
                   Save
