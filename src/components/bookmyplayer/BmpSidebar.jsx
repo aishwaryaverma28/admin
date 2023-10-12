@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const BmpSidebar = () => {
   return (
     <section className="setting-side-panel">
-      <div>BmpSidebar</div>
+      <div className="common-fonts bmp-sidebar">BmpSidebar</div>
       <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/overview">
         Overview

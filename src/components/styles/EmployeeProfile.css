@@ -26,6 +26,7 @@
 .active {
   background-color: #e2e9f2;
   color: #2b74da !important;
+  margin-right: 1rem;
 }
 .timeButton {
   padding: 1.5rem 0;
