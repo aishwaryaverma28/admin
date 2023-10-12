@@ -141,6 +141,10 @@
   width:28rem;
 }
 
+.postal-input{
+  text-transform: uppercase;
+}
+
 .product-popup-input, .product-popup-select{
   width:13.68rem;
 }
