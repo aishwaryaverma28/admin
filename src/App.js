@@ -9,9 +9,6 @@ import Lead from "./components/lead/Lead";
 import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
 import BmpDashboard from "./components/bookmyplayer/BmpDashboard.jsx";
-import TimeSheet from "./components/master-settings/TimeSheet";
-import EmployeeDocuments from "./components/master-settings/EmployeeDocuments";
-import SalarySlip from "./components/master-settings/SalarySlip";
 import BlogAdd from "./components/master-settings/BlogAdd.jsx";
 import BlogView from "./components/master-settings/BlogView";
 import SitePagesAdd from "./components/master-settings/SitePagesAdd";
@@ -56,6 +53,10 @@ import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
 import Testing from "./components/Testing";
+import BmpOverview from "./components/bookmyplayer/BmpOverview";
+import FeesNBatches from "./components/bookmyplayer/FeesNBatches";
+import TraningNStrategy from "./components/bookmyplayer/TraningNStrategy";
+import Gallery from "./components/bookmyplayer/Gallery";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -114,7 +115,30 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/bmp",
-        element: <SecureRoutes Component={BmpDashboard} />,
+        element: <BmpDashboard />,
+        errorElement: <Error />,
+        children: [
+          {
+            path: "/lp/bmp", // This is the new route for /lp
+            element: <Navigate to="/lp/bmp/overview" replace />, // Redirect to /lp/home
+          },
+          {
+            path:"/lp/bmp/overview",
+            element:<SecureRoutes Component={BmpOverview}/>,
+          },
+          {
+            path:"/lp/bmp/fees",
+            element:<SecureRoutes Component={FeesNBatches}/>,
+          },
+          {
+            path:"/lp/bmp/training",
+            element:<SecureRoutes Component={TraningNStrategy}/>,
+          },
+          {
+            path:"/lp/bmp/gallery",
+            element:<SecureRoutes Component={Gallery}/>,
+          },
+        ],
       },
       {
         path: "/lp/deals",
@@ -184,18 +208,6 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/viewProfile/employeeProfile",
             element: <SecureRoutes Component={EmployeeProfile} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/timeSheet",
-            element: <SecureRoutes Component={TimeSheet} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/documents",
-            element: <SecureRoutes Component={EmployeeDocuments} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/salarySlip",
-            element: <SecureRoutes Component={SalarySlip} />,
           },
           {
             path: "/lp/settings/blog/add",
