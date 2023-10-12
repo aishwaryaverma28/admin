@@ -78,7 +78,6 @@ export const PUT_SITEPGS = start+"api/site/edit/";
 export const ADD_SITEPGS = start+"api/site/add";
 export const PAYSLIPS = start+"api/employee/getpayslips";
 export const PAYSLIP = start+"api/employee/getpayslip/";
-
 //===================================================================leadplaner
 export const GET_LEAD = start+"api/lead/getall";
 export const GET_LEAD_ID = start+"api/lead/get/";
@@ -114,10 +113,8 @@ export const MOVENOTE_TO_TRASH = start +"api/note/movetotrash";
 export const GETNOTE_FROM_TRASH = start +"api/note/getnotesfromtrash";
 export const RESTORE_NOTE_TRASH = start + "api/note/restorefromtrash";
 export const DELETE_NOTE_TRASH = start + "api/note/deletefromtrash";
-
 //========================================================================COMPANY settings
 export const GET_ORG_DATA = start + "api/user/getorg/";
-
 export const ADD_TICKET = start + "api/user/ticket/raise";
 export const SERVICE_SUPPORT = start + "api/user/ticket/getAll/all";
 export const UPDATE_TICKET = start + "api/user/ticket/update/";
@@ -149,39 +146,28 @@ export const GET_ALL_STAGE = start + "api/deal/getAllStages";
 export const ADD_STAGE = start + "api/deal/stages/add";
 export const IMPORT_DEAL = start+"api/deal/import";
 //========================================================================= master settings
-
 export const ADD_HELP = start+"api/user/help/addquation";
 export const GET_HELP_ID = start+"api/user/help/getbyid/";
 export const UPDATE_HELP = start+"api/user/help/update/";
 export const CHECK_LEAD_DEAL = start+"api/user/getleaddealbymember";
-
-
 //===============================================================================Activity api
 export const ADD_ACTIVITY = start + "api/leaddeal/activity/add";
 export const GET_ACTIVITY = start + "api/leaddeal/activity/getbysource/";
 export const DELETE_LEAD_ACTIVITY = start + "api/leaddeal/activity/delete/";
 export const UPDATE_LEAD_ACTIVITY = start + "api/leaddeal/activity/edit/";
-
 //=================================================================================upload documents
 export const UPLOADED_DOCS = start + "api/deal/getuplaoddoc/";
 export const UPLOAD_ATTACHMENTS = start + "api/deal/uplaoddoc";
 export const VIEW_DOC = start + "deal/doc/";
-
 //==================================================================fields api
-
 export const GET_FIELDS = start + "api/lead/getleaddealactivefields/"
 export const ADD_FIELDS = start + "api/lead/changecoloumns"
-
 //==================================================owner api
-
 export const GET_OWNER_LEAD = start + "api/lead/getbyowner/"
 export const GET_OWNER_DEAL = start + "api/deal/getbyowner/"
-
-
 //=================================================================================email apis
 export const ADD_EMAIL = start + "api/lead/sendleaddealemail";
 export const POST_EMAIL =start + "api/lead/getleaddealsentemail";
-
 //=================================================================================company apis
 export const IMPORT_COMPANY = start + "api/contact/company/import";
 export const ADD_COMPANY = start + "api/contact/company/add";
@@ -197,7 +183,9 @@ export const IMPORT_PEOPLE = start + "api/contact/person/import";
 export const ADD_PEOPLE = start + "api/contact/person/add";
 export const UPDATE_PEOPLE = start + "api/contact/person/edit/";
 export const ALL_PEOPLE = start + "api/contact/person/get";
-
 //=========================================================log api
-
 export const LOG_RECORD = start + "api/user/createlog";
+//===========================================================docusign apis
+export const ENVELOPE_TOKEN = start + "api/thirdPartyApiRouter/docusign/refreshtoket/get";
+export const SEND_ENVELOPE = start + "api/thirdPartyApiRouter/docusign/envelope/send";
+export const ENVELOPE_DETAILS = start + "api/thirdPartyApiRouter/docusign/envelope/get";

@@ -2119,7 +2119,7 @@ const DealUpdate = () => {
             )}
             {activeTab === "document" && (
               <div className="attachment-tab-content">
-                <DealDocument />
+                <DealDocument dealId={id} email={dealDetails?.email}/>
               </div>
             )}
           </div>
