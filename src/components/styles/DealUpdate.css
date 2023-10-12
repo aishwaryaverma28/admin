@@ -1035,6 +1035,92 @@ border: 1px solid #ccc;
   margin-left: 1rem;
 }
 
+.recipient-modal-box{
+  width: 58rem;
+}
+.recipient-cross{
+  right: 58.5rem;
+}
 
+.signing-order{
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
 
-/* deal documentends */
+.recipient-top{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+.recipient-input-flex{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+}
+
+.recipient-start{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background:#FFF;
+padding:0.5rem;
+margin-left: 1rem;
+margin-right: 1rem;
+margin-top: 1rem;
+}
+
+.recipient-label{
+  color:#33475B;
+  margin-bottom: 0.2rem;
+}
+
+.recipient-input{
+  width: 20rem;
+}
+
+.recipient-trash{
+  padding: 0.6rem;
+border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+background:#FFF;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+}
+
+.add-recipients{
+  color: var(--ternary);
+  cursor: pointer;
+}
+
+.count-recipients{
+  color: #909DB0;
+}
+
+.count-add-recipients{
+  margin-left: 1rem;
+  margin-right: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.doc-preview-img{
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.doc-preview-img img{
+  height: 25rem;
+  width: auto;
+
+}
