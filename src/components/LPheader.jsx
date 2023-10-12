@@ -64,10 +64,7 @@ const LPheader = () => {
     "/lp/settings/reportsAndAnalytics",
     "/lp/settings/masterSettings/City",
     "/lp/settings/system/state",
-    "/lp/settings/viewProfile/employeeProfile",
-    "/lp/settings/viewProfile/timeSheet",
-    "/lp/settings/viewProfile/documents",
-    "/lp/settings/viewProfile/salarySlip",
+    "/lp/settings/viewProfile/employeeProfile"
   ];
   if (landingUrl === "/lp/admin") {
     allowed = allowed.filter((path) => path !== "/lp/home");

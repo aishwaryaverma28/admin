@@ -15,7 +15,11 @@ const SecureRoutes = (props) => {
     let allowed = [
       "/lp/lead",
       "/lp/bmp",
-      "/lp/admin",
+      "/lp/bmp/overview",
+      "/lp/bmp/fees",
+      "/lp/bmp/training",
+      "/lp/bmp/gallery",
+      // "/lp/admin",
       "/lp/home",
       "/lp/mail",
       "/lp/contacts",
@@ -45,27 +49,24 @@ const SecureRoutes = (props) => {
       "/lp/settings/reportsAndAnalytics",
       "/lp/settings/masterSettings/City",
       "/lp/settings/system/state",
-      "/lp/settings/viewProfile/employeeProfile",
-      "/lp/settings/viewProfile/timeSheet",
-      "/lp/settings/viewProfile/documents",
-      "/lp/settings/viewProfile/salarySlip",
+      "/lp/settings/viewProfile/employeeProfile"
     ];
 
     const currentPath = location.pathname;
-  
+
     if (landingUrl === "/lp/admin") {
       allowed = allowed.filter((path) => path !== "/lp/home");
     } else if (landingUrl === "/lp/home") {
       allowed = allowed.filter((path) => path !== "/lp/admin");
     }
-  
+
     if (!allowed.includes(currentPath)) {
       navigate(landingUrl);
     } else {
       setIsLoading(false);
     }
   }, [location, navigate, landingUrl, decryptedUserPath]);
-  
+
   return isLoading ? null : <Component />;
 };
 

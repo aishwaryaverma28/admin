@@ -9,9 +9,6 @@ import Lead from "./components/lead/Lead";
 import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
 import BmpDashboard from "./components/bookmyplayer/BmpDashboard.jsx";
-import TimeSheet from "./components/master-settings/TimeSheet";
-import EmployeeDocuments from "./components/master-settings/EmployeeDocuments";
-import SalarySlip from "./components/master-settings/SalarySlip";
 import BlogAdd from "./components/master-settings/BlogAdd.jsx";
 import BlogView from "./components/master-settings/BlogView";
 import SitePagesAdd from "./components/master-settings/SitePagesAdd";
@@ -127,19 +124,19 @@ const router = createBrowserRouter([
           },
           {
             path:"/lp/bmp/overview",
-            element:<BmpOverview/>,
+            element:<SecureRoutes Component={BmpOverview}/>,
           },
           {
             path:"/lp/bmp/fees",
-            element:<FeesNBatches/>,
+            element:<SecureRoutes Component={FeesNBatches}/>,
           },
           {
             path:"/lp/bmp/training",
-            element:<TraningNStrategy/>,
+            element:<SecureRoutes Component={TraningNStrategy}/>,
           },
           {
             path:"/lp/bmp/gallery",
-            element:<Gallery/>,
+            element:<SecureRoutes Component={Gallery}/>,
           },
         ],
       },
@@ -211,18 +208,6 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/viewProfile/employeeProfile",
             element: <SecureRoutes Component={EmployeeProfile} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/timeSheet",
-            element: <SecureRoutes Component={TimeSheet} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/documents",
-            element: <SecureRoutes Component={EmployeeDocuments} />,
-          },
-          {
-            path: "/lp/settings/viewProfile/salarySlip",
-            element: <SecureRoutes Component={SalarySlip} />,
           },
           {
             path: "/lp/settings/blog/add",
