@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import StageIcon from "../../assets/image/stage-icon.svg";
 import trash from "../../assets/image/TrashFill.svg";
 import axios from "axios";
 import {
@@ -61,16 +60,15 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
 
           <div>
             <div className="recipient-top">
-              <label className="custom-checkbox">
+              {/* <label className="custom-checkbox">
                 <input type="checkbox" className="cb1" name="headerCheckBox" />
                 <span className="checkmark"></span>
               </label>
-              <p className="common-fonts signing-order">Set Signing Order</p>
+              <p className="common-fonts signing-order">Set Signing Order</p> */}
             </div>
 
             {recipients.map((recipient, index) => (
               <div className="recipient-start" key={recipient.recipientId}>
-                <img src={StageIcon} alt="" />
                 <div className="recipient-input-flex">
                   <label htmlFor="" className="common-fonts recipient-label">
                     Full Name
@@ -109,6 +107,10 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
               <p className="common-fonts count-recipients">
                 {recipients.length}/10 recipients
               </p>
+            </div>
+
+            <div className="recipient-bottom-btn">
+              <button className="common-fonts recipient-save common-save-button">Save</button>
             </div>
           </div>
         </div>

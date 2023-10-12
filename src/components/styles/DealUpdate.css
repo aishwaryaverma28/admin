@@ -1124,3 +1124,9 @@ cursor: pointer;
   width: auto;
 
 }
+
+.recipient-bottom-btn{
+  position: fixed;
+  bottom:2%;
+  right: 2%;
+}
