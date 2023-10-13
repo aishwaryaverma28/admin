@@ -40,6 +40,7 @@ const BlogUpdate = () => {
   const [sectionData, setSectionData] = useState([]);
   const [category, setCategory] = useState([]);
   const [urlName, setUrlName] = useState("");
+  const [views, setViews] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -128,6 +129,7 @@ const BlogUpdate = () => {
       },
     });
     const data = response.data.data[0];
+    setViews(response?.data?.views);
     if (data) {
       setFormData({
         ...formData,
@@ -572,8 +574,9 @@ const BlogUpdate = () => {
 
   return (
     <>
-      <header className="headerEditor">
+      <header className="headerEditor update-view">
         <p className="common-fonts add-new-blog">Update Blog</p>
+        <p className="common-fonts add-new-blog">Number of views: {views}</p>
       </header>
       <div className="back-to-user general-refresh blog-back">
         <Link to={"/lp/settings/blog/view"}>

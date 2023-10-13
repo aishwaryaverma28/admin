@@ -85,6 +85,7 @@ const CPGenral = () => {
             className="common-input common-fonts cp-input"
             name = "name"
             value={company.name}
+            disabled
           />
         </div>
 
@@ -106,6 +107,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name = "name"
                value={company.name}
+               disabled
               />
             </div>
             <div className="cp-lead">
@@ -115,6 +117,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name = "city"
             value={company.city}
+            disabled
               />
             </div>
             <div className="cp-lead">
@@ -122,6 +125,7 @@ const CPGenral = () => {
               <input
                 type="text"
                 className="common-input common-fonts cp-input"
+                disabled
               />
             </div>
             <div className="cp-lead">
@@ -129,6 +133,7 @@ const CPGenral = () => {
               <input
                 type="text"
                 className="common-input common-fonts cp-input"
+                disabled
               />
             </div>
             <div className="cp-lead">
@@ -137,6 +142,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name="industry"
                 value={company.industry}
+                disabled
               />
             </div>
             <div className="cp-lead">
@@ -146,6 +152,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name="state"
                 value={company.state}
+                disabled
               />
             </div>
             <div className="cp-lead">
@@ -155,6 +162,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name="address"
                 value={company.address}
+                disabled
               />
             </div>
             <div className="cp-lead">
@@ -164,6 +172,7 @@ const CPGenral = () => {
                 className="common-input common-fonts cp-input"
                 name="postcode"
                 value={company.postcode}
+                disabled
               />
             </div>
           </div>

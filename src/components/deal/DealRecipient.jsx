@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
+const DealRecipient = ({ onClose, dealId, token, doc }) => {
   const [recipients, setRecipients] = useState([
     {
       recipientId: 1,
@@ -34,20 +34,73 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
     setRecipients(updatedRecipients);
   };
 
-  function handleSubmit (event){
+  // function handleSubmit (event){
+  //   event.preventDefault();
+  //   const updatedFormData = {
+  //       dealId: parseInt(dealId),
+  //       recipatant: recipients,
+  //       bearerToken: token,
+  //       DocBase64: doc
+  //   }
+  //   axios.post(SEND_ENVELOPE, updatedFormData).then((response) => {
+  //     console.log(response);
+  //     }).catch((error) => {
+  //     console.log(error);
+  //   })
+  // }
+
+  function handleSubmit(event) {
     event.preventDefault();
+  
+    // Create an array to store recipient objects with name and email
+    const recipientData = recipients.map((recipient) => {
+      const recipientId=Date.now();
+      return {
+        name: recipient.name,
+        email: recipient.email,
+        recipientId:recipientId
+      };
+    });
+  
     const updatedFormData = {
-        dealId: parseInt(dealId),
-        recipatant: recipients,
-        bearerToken: token,
-        DocBase64: doc
-    }
-    axios.post(SEND_ENVELOPE, updatedFormData).then((response) => {
-      console.log(response);
-      }).catch((error) => {
-      console.log(error);
-    })
+      dealId: parseInt(dealId),
+      recipatant: recipientData, 
+      bearerToken: token,
+      DocBase64: doc,
+    };
+
+    console.log(token)
+    console.log(doc)
+    console.log(recipientData)
+    console.log(dealId)
+    console.log("hyy")
+
+    
+  
+    axios
+      .post(SEND_ENVELOPE, updatedFormData)
+      .then((response) => {
+        console.log(response);
+        console.log("hello")
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+
+  const handleNameChange = (index, event) => {
+    const updatedRecipients = [...recipients];
+    updatedRecipients[index].name = event.target.value;
+    setRecipients(updatedRecipients);
+  };
+
+  // Function to handle email input change
+  const handleEmailChange = (index, event) => {
+    const updatedRecipients = [...recipients];
+    updatedRecipients[index].email = event.target.value;
+    setRecipients(updatedRecipients);
+  };
+  
 
   return (
     <>
@@ -81,6 +134,8 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
                   <input
                     type="text"
                     className="common-fonts common-input recipient-input"
+                    value={recipient.name}
+                  onChange={(event) => handleNameChange(index, event)}
                   />
                 </div>
                 <div className="recipient-input-flex">
@@ -89,7 +144,9 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
                   </label>
                   <input
                     type="email"
-                    className="common-fonts common-input recipient-input"
+                    className="common-fonts common-input recipient-input email-recipient-input"
+                    value={recipient.email}
+                  onChange={(event) => handleEmailChange(index, event)}
                   />
                 </div>
 
@@ -123,7 +180,6 @@ const DealRecipient = ({ onClose, onClosePrevious, dealId, token, doc }) => {
           className="help-cross recipient-cross"
           onClick={() => {
             onClose();
-            onClosePrevious();
           }}
         >
           X
