@@ -51,20 +51,21 @@ const DealRecipient = ({ onClose, dealId, token, doc }) => {
 
   function handleSubmit(event) {
     event.preventDefault();
+    let idCounter = 1; 
   
     // Create an array to store recipient objects with name and email
     const recipientData = recipients.map((recipient) => {
-      const recipientId=Date.now();
+      const recipientId = idCounter++;
       return {
         name: recipient.name,
         email: recipient.email,
-        recipientId:recipientId
+        recipientId:recipientId.toString()
       };
     });
   
     const updatedFormData = {
       dealId: parseInt(dealId),
-      recipatant: recipientData, 
+      recipatant: [...recipientData], 
       bearerToken: token,
       DocBase64: doc,
     };
