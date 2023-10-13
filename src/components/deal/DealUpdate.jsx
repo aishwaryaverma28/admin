@@ -19,7 +19,6 @@ import {
   GET_ACTIVE_TEAM_MEM,
   GET_FIELDS,
   POST_EMAIL,
-  USER_INFO,
 } from "../utils/Constants";
 import AddNotes from "./AddNotes";
 import { toast, ToastContainer } from "react-toastify";
@@ -34,7 +33,7 @@ const DealUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
   const [labelData, setLabelData] = useState([]);
-  const [orgId, setOrgId] = useState(null);
+  const orgId = localStorage.getItem('org_id');
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLabelColor, setSelectedLabelColor] = useState("");
   const [stages, setStages] = useState([]);
@@ -404,27 +403,6 @@ const DealUpdate = () => {
       });
   };
 
-  const userInfo = () => {
-    axios
-      .get(USER_INFO, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        const data = response?.data?.data;
-        // console.log(data[0]);
-        setOrgId(data[0]?.org_id);
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error?.response?.data?.message === "Invalid or expired token.") {
-          alert(error?.response?.data?.message);
-          handleLogout();
-        }
-      });
-  };
-
   useEffect(() => {
     fetchLabelData();
     fetchNotes();
@@ -433,7 +411,6 @@ const DealUpdate = () => {
     handleGetEmail();
     fetchBanks();
     filterBanks();
-    userInfo();
   }, []);
 
   useEffect(() => {

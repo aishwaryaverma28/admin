@@ -3,14 +3,12 @@ import "../styles/LPSetting.css";
 import "../styles/LPUserAndTeam.css";
 import axios from "axios";
 import {
-  USER_INFO,
   GET_TEAM_MEM,
   GET_ACTIVE_TEAM_MEM,
   GET_DEACTIVE_TEAM_MEM,
   getDecryptedToken,
   UPDATE_TEAM_MEM,
   CHECK_LEAD_DEAL,
-  handleLogout,
 } from "../utils/Constants";
 import SearchIcon from "../../assets/image/search.svg";
 import ExportIcon from "../../assets/image/export.svg";
@@ -48,7 +46,7 @@ const UserAndTeams = () => {
   const [newId, setNewId] = useState(0);
   const [leadId, setLeadId] = useState([]);
   const [dealId, setDealId] = useState([]);
-  const [orgId, setOrgId] = useState(null);
+  const orgId = localStorage.getItem('org_id');
 
   const HandleDeactivateUserModal = (id) => {
     setNewId(id);
@@ -201,24 +199,7 @@ const UserAndTeams = () => {
         setLoading(false);
       });
   };
-  const userInfo = () => {
-    axios.get(USER_INFO, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    }).then((response) => {
-      const data = response?.data?.data;
-      // console.log(data[0]);
-      setOrgId(data[0]?.org_id)
-    })
-    .catch ((error) =>{
-      console.log(error);
-      if (error?.response?.data?.message === "Invalid or expired token.") {
-        alert(error?.response?.data?.message);
-        handleLogout();
-      }
-    });
-  }
+  
   const userActive = () => {
     axios
       .post(GET_ACTIVE_TEAM_MEM,{ orgId: orgId}, {
@@ -251,10 +232,7 @@ const UserAndTeams = () => {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    userInfo();
-  }, []);
-
+  
   useEffect(() => {
     userAdded();
     userActive();

@@ -14,7 +14,6 @@ import {
   GET_ACTIVITY,
   GET_FIELDS,
   POST_EMAIL,
-  USER_INFO
 } from "./../utils/Constants";
 import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "../deal/AddNotes";
@@ -27,7 +26,7 @@ import DealEmail from "../deal/DealEmail.jsx";
 
 const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [orgId, setOrgId] = useState(null);
+  const orgId = localStorage.getItem('org_id');
   const [isEditable, setIsEditable] = useState(false);
   const [editedItem, setEditedItem] = useState("");
   const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
@@ -68,27 +67,6 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
     phone: "",
     id: 0,
   });
-
-  const userInfo = () => {
-    axios
-      .get(USER_INFO, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        const data = response?.data?.data;
-        // console.log(data[0]);
-        setOrgId(data[0]?.org_id);
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error?.response?.data?.message === "Invalid or expired token.") {
-          alert(error?.response?.data?.message);
-          handleLogout();
-        }
-      });
-  };
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -312,13 +290,8 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
 
   useEffect(() => {
     fetchLead();
-    userInfo();
     fetchLabelData();
   }, []);
-
-  // useEffect(() => {
-
-  // }, []);
 
   const userAdded = () => {
     axios
