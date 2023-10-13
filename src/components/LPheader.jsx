@@ -104,6 +104,7 @@ const LPheader = () => {
       });
       const data = response?.data?.data;
       if (response.data.status === 1) {
+        localStorage.setItem("org_id", data[0].org_id);
         setClientData(data[0]);
         //   setPic(VIEW_IMG + data[0].profile_image);
       }

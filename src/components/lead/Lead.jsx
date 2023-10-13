@@ -15,9 +15,7 @@ import {
   getDecryptedToken,
   GET_ALL_STAGE,
   GET_LABEL,
-  handleLogout,
   GET_ACTIVE_TEAM_MEM,
-  USER_INFO,
   GET_OWNER_LEAD,
   LOG_RECORD,
 } from "../utils/Constants";
@@ -29,7 +27,8 @@ import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
   const [stages, setStages] = useState([]);
-  const [orgId, setOrgId] = useState(null);
+  // const [orgId, setOrgId] = useState(null);
+  const orgId = localStorage.getItem('org_id');
   const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -118,36 +117,6 @@ const Lead = () => {
         console.log(error);
       });
   };
-
-  async function getUser() {
-    try {
-      const response = await axios.get(USER_INFO, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      });
-
-      if (response.data.status === 1) {
-        adminInfo.first_name = response?.data?.data[0]?.first_name || "";
-        adminInfo.last_name = response?.data?.data[0]?.last_name || "";
-        adminInfo.id = response?.data?.data[0]?.id || "";
-        const data = response?.data?.data;
-        setOrgId(data[0]?.org_id)
-      }
-    } catch (error) {
-      console.log(error);
-      if (error?.response?.data?.message === "Invalid or expired token.") {
-        alert(error?.response?.data?.message);
-        handleLogout();
-      }
-    }
-  }
-
-
-
-  useEffect(() => {
-    getUser();
-  }, []);
 
   useEffect(()=>{
    userAdded();
