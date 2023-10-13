@@ -624,3 +624,13 @@ width: 12.5rem;
 .blog-back{
   margin-left: 1rem;
 }
+
+.update-view{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.update-view p:last-child{
+  margin-right: 1rem;
+}

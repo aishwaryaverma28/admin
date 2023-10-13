@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import Device from "../../assets/image/device.svg";
 import Cloud from "../../assets/image/cloud.svg";
-import DealDocPreview from "./DealDocPreview.jsx";
+// import DealDocPreview from "./DealDocPreview.jsx";
+import DealRecipient from "./DealRecipient.jsx";
 import axios from "axios";
 import {
   ENVELOPE_TOKEN, //get api
@@ -214,7 +215,8 @@ const DealDocument = ({ dealId, email }) => {
           </div>
         </div>
       </div>
-      {preview && <DealDocPreview onClose={handlePreviewClose} fileView={fileView} dealId={dealId} token={envToken} doc={base64}/>}
+      {/* {preview && <DealDocPreview onClose={handlePreviewClose} fileView={fileView} dealId={dealId} token={envToken} doc={base64}/>} */}
+      {preview &&  <DealRecipient onClose={handlePreviewClose}  dealId={dealId} token={envToken} doc={base64}/>}
     </div>
   );
 };

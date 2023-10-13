@@ -1084,6 +1084,10 @@ margin-top: 1rem;
   width: 20rem;
 }
 
+.email-recipient-input{
+  text-transform: lowercase;
+}
+
 .recipient-trash{
   padding: 0.6rem;
 border-radius: 0.3125rem;
