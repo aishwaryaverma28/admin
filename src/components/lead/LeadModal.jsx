@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./../styles/LPleads.css";
 import axios from "axios";
 import {
@@ -42,6 +42,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [labelData, setLabelData] = useState([]);
   const [labelArray, setLabelArray] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedConvertItem, setSelectedConvertItem] = useState(null);
   const [convertModalVisible, setConvertModalVisible] = useState(false);
   const [stages, setStages] = useState([]);
@@ -57,9 +58,12 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   const idOfOwner = parseInt(localStorage.getItem("id"));
   const [ownerId, setOwnerId] = useState(0);
   const [ownerName, setOwnerName] = useState("");
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [address, setAddress] = useState([]);
   const [selectedStageId, setSelectedStageId] = useState(
     editedItem?.stage_id || ""
   );
+  const [inputAdress , setInputAddress] = useState("");
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
     last_name: "",
@@ -67,6 +71,45 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
     phone: "",
     id: 0,
   });
+
+  const searchResultRef = useRef(null);
+
+  const apiKey = "XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC";
+
+  async function postcode(code) {
+    axios
+      .get(
+        "https://api.os.uk/search/places/v1/postcode?postcode=" +
+          code.toUpperCase() +
+          "&key=" +
+          apiKey
+      )
+      .then((response) => {
+        // var response = JSON.stringify(response.data, null, 2);
+        setAddress(response.data.results?.map((result) => result.DPA.ADDRESS));
+      });
+  }
+
+
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchResultRef.current &&
+        !searchResultRef.current.contains(event.target)
+      ) {
+        setShowSearchResult(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  
 
   const handleGetEmail = () => {
     const updatedFormData = {
@@ -88,6 +131,10 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
         console.log(error);
       });
   };
+
+
+
+  
 
   const [info, setInfo] = useState({});
   const role_name = localStorage.getItem("role_name");
@@ -142,7 +189,9 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
       .then((response) => {
         setLeadName(response?.data?.data[0]?.lead_name);
         setOwnerId(response.data.data[0]?.owner);
+
         setEditedItem(response?.data?.data[0]);
+        setInputAddress( response?.data?.data[0]?.address1)
         setName(
           response?.data?.data[0]?.first_name +
             " " +
@@ -344,6 +393,144 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    const inputArray = [
+      "AB",
+      "AL",
+      "B",
+      "BA",
+      "BB",
+      "BF",
+      "BD",
+      "BH",
+      "BL",
+      "BN",
+      "BR",
+      "BS",
+      "BT",
+      "BX",
+      "CA",
+      "CB",
+      "CF",
+      "CH",
+      "CM",
+      "CO",
+      "CR",
+      "CT",
+      "CV",
+      "CW",
+      "DA",
+      "DD",
+      "DE",
+      "DG",
+      "DH",
+      "DL",
+      "DN",
+      "DT",
+      "DY",
+      "E",
+      "EC",
+      "EH",
+      "EN",
+      "EX",
+      "FK",
+      "FY",
+      "G",
+      "GL",
+      "GY",
+      "GU",
+      "HA",
+      "HD",
+      "HG",
+      "HP",
+      "HR",
+      "HS",
+      "HU",
+      "HX",
+      "IG",
+      "IM",
+      "IP",
+      "IV",
+      "JE",
+      "KA",
+      "KT",
+      "KW",
+      "KY",
+      "L",
+      "LA",
+      "LD",
+      "LE",
+      "LL",
+      "LN",
+      "LS",
+      "LU",
+      "M",
+      "ME",
+      "MK",
+      "ML",
+      "N",
+      "NE",
+      "NG",
+      "NN",
+      "NP",
+      "NR",
+      "NW",
+      "OL",
+      "OX",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PO",
+      "PR",
+      "RG",
+      "RH",
+      "RM",
+      "S",
+      "SA",
+      "SE",
+      "SG",
+      "SK",
+      "SL",
+      "SM",
+      "SN",
+      "SO",
+      "SP",
+      "SR",
+      "SS",
+      "ST",
+      "SW",
+      "SY",
+      "TA",
+      "TD",
+      "TF",
+      "TN",
+      "TQ",
+      "TR",
+      "TS",
+      "TW",
+      "UB",
+      "W",
+      "WA",
+      "WC",
+      "WD",
+      "WF",
+      "WN",
+      "WR",
+      "WS",
+      "WV",
+      "YO",
+      "ZE",
+    ];
+
+    const query = value;
+    setSearchQuery(query);
+    setShowSearchResult(query?.length > 0);
+
+    setEditedItem({
+      ...editedItem,
+      [name]: value,
+    });
+
     if (name === "label") {
       const selectedLabelData = mergedLabels?.find(
         (label) => label.id === parseInt(value)
@@ -367,14 +554,45 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
         phone: selectedUserData?.phone || "",
         id: selectedUserData?.id || "",
       });
-    } else {
+    }else if (name === "pin" && value?.length > 1 && value?.length <= 4) {
       setEditedItem({
         ...editedItem,
         [name]: value,
       });
+      const regexPattern = new RegExp(
+        `^(${inputArray.join("|")}|${inputArray
+          .slice(0, 2)
+          .join("|")})\\d{1}[A-Za-z0-9]*$`
+      );
+
+      if (regexPattern.test(value?.toUpperCase())) {
+        setShowSearchResult(value?.length > 1);
+        postcode(value);
+      }
+
+      
+    } else{
+      setAddress([])
     }
 
     setStateBtn(1);
+
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e?.target;
+    setInputAddress(e?.target?.value);
+    setEditedItem((prevState) => ({ ...prevState, [name]: value }));
+    setStateBtn(1);
+
+  };
+
+
+
+  const handleAdressClick = (address) => {
+    setInputAddress(address);
+    setEditedItem((prevState) => ({ ...prevState, "address1": address }));
+    setShowSearchResult(false);
   };
 
   const handleFields = () => {
@@ -451,6 +669,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
       type: editedItem?.type,
       label_id: editedItem?.label_id,
       address1: editedItem?.address1,
+      address2: editedItem?.address2,
       city: editedItem?.city,
       state: editedItem?.state,
       country: editedItem?.country,
@@ -1034,31 +1253,14 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
               <p className="detailHead">ADDRESS INFORMATION</p>
               <div className="detailsContent">
                 <div className="detailsLeftContainer">
-                  <p>Street</p>
                   <p>City</p>
                   <p>State</p>
                   <p>Country</p>
                   <p>Zip Code</p>
+                  <p>Address 1</p>
+                  <p>Address 2</p>
                 </div>
                 <div className="detailsRightContainer">
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <input
-                          type="text"
-                          name="address1"
-                          value={editedItem?.address1}
-                          onChange={handleInputChange}
-                          style={
-                            isEditable ? editStylingInput : normalStylingInput
-                          }
-                          disabled={isDisabled}
-                        />
-                      </span>
-                    )}
-                  </p>
                   <p>
                     {isLoading ? (
                       <span>-</span>
@@ -1113,6 +1315,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
                       </span>
                     )}
                   </p>
+                  <div className="lead-new-position">
                   <p>
                     {isLoading ? (
                       <span>-</span>
@@ -1122,6 +1325,61 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
                           type="text"
                           name="pin"
                           value={editedItem?.pin}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                          className="lead-pin-input"
+                          autoComplete="off"
+                        />
+                      </span>
+                    )}
+                  </p>
+                  {showSearchResult && address?.length > 1 && (
+                <div className="search_result company-address-result lead-address-edit-result" ref={searchResultRef}>
+                  {address?.map((item) => (
+                    <>
+                      <p
+                        className="common-fonts searchTitle"
+                        key={item}
+                        onClick={() => handleAdressClick(item)}
+                      >
+                        {item}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              )}
+                  </div>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="address1"
+                          value={inputAdress}
+                          onChange={handleAddressChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="address2"
+                          value={editedItem?.address2}
                           onChange={handleInputChange}
                           style={
                             isEditable ? editStylingInput : normalStylingInput

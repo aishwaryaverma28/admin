@@ -1285,6 +1285,24 @@
   z-index: 1;
 }
 
+.lead-new-fix{
+  position: relative;
+}
+.lead-address-edit-result{
+  z-index: 100;
+  position: absolute;
+  top:120%;
+  left:-48%;
+  overflow-x: scroll;
+  width: 250px;
+}
+
+
 .lead-pin-input{
   text-transform: uppercase;
+
+}
+
+.lead-new-position{
+  position: relative;
 }

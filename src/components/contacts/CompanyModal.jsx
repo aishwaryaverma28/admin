@@ -207,6 +207,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
 
   const handleAdressClick = (address) => {
     setAddressInput(address);
+    setCompany((prevState) => ({ ...prevState, "address1": address }));
     setShowSearchResult(false);
   };
 
