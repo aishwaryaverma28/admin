@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
+  const orgId = localStorage.getItem('org_id');
   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
   const [lname, setlName] = useState("");
@@ -33,10 +34,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     label_id: 0,
     source: "",
     stage_id: 1,
-    pin:0,
+    pin:"",
     address1:"",
     address2:"",
-    org_id:1
+    org_id:orgId
   });
 
   const resetForm = () => {
@@ -53,10 +54,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       label_id: 0,
       source: "",
       stage_id: 1,
-      pin:0,
+      pin:"",
       address1:"",
       address2:"",
-      org_id:1
+      org_id:orgId
     });
     setName("");
     setfName("");
@@ -87,15 +88,18 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   }
 
   const handleAddressChange = (e) => {
-    const { name, value } = e.target;
-    setAddressInput(e.target.value);
+    const { name, value } = e?.target;
+    setAddressInput(e?.target?.value);
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
     setIsDisable(false);
 
   };
 
+
+
   const handleAdressClick = (address) => {
     setAddressInput(address);
+    setLeadData((prevState) => ({ ...prevState, "address1": address }));
     setShowSearchResult(false);
   };
 
@@ -364,12 +368,13 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           label_id: 0,
           source: "",
           stage_id: 1,
-          pin:0,
+          pin:"",
           address1:"",
           address2:"",
-          org_id:1
+          org_id:orgId
         });
         setName("");
+        setAddressInput("");
         onLeadAdded(); // Call the onLeadAdded function from props
       })
       .catch((error) => {
@@ -409,6 +414,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 <label className="lead-label" htmlFor="registration_no">
                   Postal Code
                 </label>
+                <div className="lead-new-fix">
                 <input
                   id="pin"
                   type="text"
@@ -416,8 +422,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-input lead-pin-input"
                   onChange={handleChange}
                   autoComplete="off"
+                  value={leadData?.pin}
                 />
-                              {showSearchResult && address?.length > 1 && (
+                                              {showSearchResult && address?.length > 1 && (
                 <div className="search_result company-address-result lead-address-result" ref={searchResultRef}>
                   {address?.map((item) => (
                     <>
@@ -432,6 +439,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   ))}
                 </div>
               )}
+
+                </div>
+
+
                 <label className="lead-label" htmlFor="registration_no">
                   Address 1
                 </label>
