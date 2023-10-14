@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
 import { ADD_LEAD, getDecryptedToken, GET_ALL_STAGE } from "../utils/Constants";
@@ -15,6 +15,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [stages, setStages] = useState([]);
   const [stageId, setStageId] = useState([]);
   const [selectedStageName, setSelectedStageName] = useState("");
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [address, setAddress] = useState([]);
+  const [adressInput, setAddressInput] = useState("");
 
   const [leadData, setLeadData] = useState({
     position: "",
@@ -29,6 +33,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     label_id: 0,
     source: "",
     stage_id: 1,
+    pin:0,
+    address1:"",
+    address2:"",
+    org_id:1
   });
 
   const resetForm = () => {
@@ -45,16 +53,52 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       label_id: 0,
       source: "",
       stage_id: 1,
+      pin:0,
+      address1:"",
+      address2:"",
+      org_id:1
     });
     setName("");
     setfName("");
     setlName("");
+    setAddressInput("");
   };
+  const searchResultRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchResultRef.current &&
+        !searchResultRef.current.contains(event.target)
+      ) {
+        setShowSearchResult(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const handleClose = () => {
     resetForm();
     onClose();
   }
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setAddressInput(e.target.value);
+    setLeadData((prevState) => ({ ...prevState, [name]: value }));
+    setIsDisable(false);
+
+  };
+
+  const handleAdressClick = (address) => {
+    setAddressInput(address);
+    setShowSearchResult(false);
+  };
+
 
 
 
@@ -94,6 +138,22 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     return null;
   }
 
+  const apiKey = "XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC";
+
+  async function postcode(code) {
+    axios
+      .get(
+        "https://api.os.uk/search/places/v1/postcode?postcode=" +
+          code.toUpperCase() +
+          "&key=" +
+          apiKey
+      )
+      .then((response) => {
+        // var response = JSON.stringify(response.data, null, 2);
+        setAddress(response.data.results?.map((result) => result.DPA.ADDRESS));
+      });
+  }
+
   function handleChangeName(event) {
     setIsDisable(false);
     const empName = event.target.value;
@@ -107,8 +167,157 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const inputArray = [
+      "AB",
+      "AL",
+      "B",
+      "BA",
+      "BB",
+      "BF",
+      "BD",
+      "BH",
+      "BL",
+      "BN",
+      "BR",
+      "BS",
+      "BT",
+      "BX",
+      "CA",
+      "CB",
+      "CF",
+      "CH",
+      "CM",
+      "CO",
+      "CR",
+      "CT",
+      "CV",
+      "CW",
+      "DA",
+      "DD",
+      "DE",
+      "DG",
+      "DH",
+      "DL",
+      "DN",
+      "DT",
+      "DY",
+      "E",
+      "EC",
+      "EH",
+      "EN",
+      "EX",
+      "FK",
+      "FY",
+      "G",
+      "GL",
+      "GY",
+      "GU",
+      "HA",
+      "HD",
+      "HG",
+      "HP",
+      "HR",
+      "HS",
+      "HU",
+      "HX",
+      "IG",
+      "IM",
+      "IP",
+      "IV",
+      "JE",
+      "KA",
+      "KT",
+      "KW",
+      "KY",
+      "L",
+      "LA",
+      "LD",
+      "LE",
+      "LL",
+      "LN",
+      "LS",
+      "LU",
+      "M",
+      "ME",
+      "MK",
+      "ML",
+      "N",
+      "NE",
+      "NG",
+      "NN",
+      "NP",
+      "NR",
+      "NW",
+      "OL",
+      "OX",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PO",
+      "PR",
+      "RG",
+      "RH",
+      "RM",
+      "S",
+      "SA",
+      "SE",
+      "SG",
+      "SK",
+      "SL",
+      "SM",
+      "SN",
+      "SO",
+      "SP",
+      "SR",
+      "SS",
+      "ST",
+      "SW",
+      "SY",
+      "TA",
+      "TD",
+      "TF",
+      "TN",
+      "TQ",
+      "TR",
+      "TS",
+      "TW",
+      "UB",
+      "W",
+      "WA",
+      "WC",
+      "WD",
+      "WF",
+      "WN",
+      "WR",
+      "WS",
+      "WV",
+      "YO",
+      "ZE",
+    ];
+
+    
+    const query = value;
+    setSearchQuery(query);
+    setShowSearchResult(query?.length > 0);
+     
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
     setIsDisable(false);
+    if (name === "pin" && value?.length > 1 && value?.length <= 4) {
+      const regexPattern = new RegExp(
+        `^(${inputArray.join("|")}|${inputArray
+          .slice(0, 2)
+          .join("|")})\\d{1}[A-Za-z0-9]*$`
+      );
+
+      if (regexPattern.test(value?.toUpperCase())) {
+        setShowSearchResult(value?.length > 1);
+        postcode(value);
+      }
+    } else {
+      setAddress([]);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -155,6 +364,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           label_id: 0,
           source: "",
           stage_id: 1,
+          pin:0,
+          address1:"",
+          address2:"",
+          org_id:1
         });
         setName("");
         onLeadAdded(); // Call the onLeadAdded function from props
@@ -177,10 +390,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
           <form>
             <section class="form-area">
               <div className="form-section-1">
-                <div>
+                {/* <div>
                   <p className="lead-label2">Lead Image</p>
                   <i className="fa-solid fa-plus"></i>
-                </div>
+                </div> */}
 
                 <label htmlFor="lead_name" className="lead-label">
                   Title
@@ -192,6 +405,43 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-input"
                   onChange={handleChange}
                   value={leadData.lead_name} // Add value prop for controlled input
+                />
+                <label className="lead-label" htmlFor="registration_no">
+                  Postal Code
+                </label>
+                <input
+                  id="pin"
+                  type="text"
+                  name="pin"
+                  className="lead-input lead-pin-input"
+                  onChange={handleChange}
+                  autoComplete="off"
+                />
+                              {showSearchResult && address?.length > 1 && (
+                <div className="search_result company-address-result lead-address-result" ref={searchResultRef}>
+                  {address?.map((item) => (
+                    <>
+                      <p
+                        className="common-fonts searchTitle"
+                        key={item}
+                        onClick={() => handleAdressClick(item)}
+                      >
+                        {item}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              )}
+                <label className="lead-label" htmlFor="registration_no">
+                  Address 1
+                </label>
+                <input
+                  id="address1"
+                  type="text"
+                  name="address1"
+                  className="lead-input"
+                  onChange={handleAddressChange}
+                  value={adressInput} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="company_name">
                   organization
@@ -295,6 +545,17 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   onChange={handleChange}
                   value={leadData.email} // Add value prop for controlled input
                 />
+                <label className="lead-label" htmlFor="registration_no">
+                  Address 2
+                </label>
+                <input
+                  id="address2"
+                  type="text"
+                  name="address2"
+                  className="lead-input"
+                  onChange={handleChange}
+                  value={leadData.address2} // Add value prop for controlled input
+                />
                 <label className="lead-label" htmlFor="employees">
                   Employees
                 </label>
@@ -363,6 +624,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                     );
                   })}
                 </select>
+
               </div>
             </section>
 

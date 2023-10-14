@@ -70,14 +70,6 @@ const DealRecipient = ({ onClose, dealId, token, doc }) => {
       DocBase64: doc,
     };
 
-    console.log(token)
-    console.log(doc)
-    console.log(recipientData)
-    console.log(dealId)
-    console.log("hyy")
-
-    
-  
     axios
       .post(SEND_ENVELOPE, updatedFormData)
       .then((response) => {

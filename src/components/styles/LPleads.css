@@ -1279,3 +1279,12 @@
   max-height: 70vh;
   overflow: scroll;
 }
+
+.lead-address-result{
+  position: absolute;
+  z-index: 1;
+}
+
+.lead-pin-input{
+  text-transform: uppercase;
+}
