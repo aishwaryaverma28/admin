@@ -9,6 +9,7 @@ import ServiceRequestTab from './ServiceRequestTab';
 import EditRequest from './EditRequest';
 
 const ServiceSupport = () => {
+  const orgId = localStorage.getItem('org_id');
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null); // State for selected ticket
@@ -18,7 +19,7 @@ const ServiceSupport = () => {
 
   const getTicket = () => {
     axios
-      .get(SERVICE_SUPPORT, {
+      .post(SERVICE_SUPPORT,{org_id: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

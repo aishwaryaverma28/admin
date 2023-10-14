@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ContactSupport = () => {
+  const orgId = localStorage.getItem('org_id');
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -20,6 +21,7 @@ const ContactSupport = () => {
     mobile: "",
     category: "Technical",
     priority: "Low",
+    org_Id: orgId,
 })
 
   const handleFileChange = (event) => {

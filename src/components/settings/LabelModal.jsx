@@ -8,9 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const LabelModal = ({onClose, fetchColor}) => {
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem('org_id');
   const [labelData, setLabelData] = useState({
     name: "",
-    colour_code: ""
+    colour_code: "",
+    org_id: orgId,
   });
 
   const handleLabelInput = (e) => {
@@ -38,6 +40,7 @@ const LabelModal = ({onClose, fetchColor}) => {
     const updatedFormData = {
       "name":labelData.name,
       "colour_code":labelData.colour_code,
+      "org_id": orgId,
     };
 
     console.log(updatedFormData);
@@ -49,11 +52,12 @@ const LabelModal = ({onClose, fetchColor}) => {
         },
       })
       .then((response) => {
-      
+        if (response.data.status === 1) {
         toast.success("label added successfully", {
           position: "top-center",
           autoClose: 2000,
         })
+      }
             fetchColor();
             onClose();
       })

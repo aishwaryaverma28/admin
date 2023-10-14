@@ -11,7 +11,7 @@ import { getDecryptedToken, GET_SERVICE } from "./utils/Constants";
 const TickIcon = () => {
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
-
+  const orgId = localStorage.getItem('org_id');
   const [isLoading, setLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);

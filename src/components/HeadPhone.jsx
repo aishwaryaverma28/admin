@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HeadPhone = () => {
+  const orgId = localStorage.getItem('org_id');
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -16,6 +17,7 @@ const HeadPhone = () => {
     mobile: "",
     category: "Technical",
     priority: "Low",
+    org_Id: orgId,
   });
   // const [clientData, setClientData] = useState(null);
 
@@ -32,6 +34,7 @@ const HeadPhone = () => {
         setDetails({
           email: data[0]?.email,
           mobile: data[0]?.phone,
+          org_Id: orgId,
         })
         // setClientData(data[0]);
       }

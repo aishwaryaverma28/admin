@@ -7,6 +7,7 @@ import axios from "axios";
 import {toast, ToastContainer} from 'react-toastify';
 
 const LabelsTab = () => {
+    const orgId = localStorage.getItem('org_id');
     const [openLeadModal, setOpenLeadModal] = useState(false);
     const [labelData, setLabelData] = useState([]);
     const decryptedToken = getDecryptedToken();
@@ -23,7 +24,7 @@ const LabelsTab = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(GET_LABEL, {
+            const response = await axios.post(GET_LABEL, {org_id: parseInt(orgId)},{
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
