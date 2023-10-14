@@ -165,3 +165,165 @@
   margin-top: 1rem;
   margin-left: 1rem;
 }
+
+
+.bmp-fee-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 1rem;
+}
+
+.bmp-fee-timing{
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Style for the custom button */
+.custom-new-btn {
+  border-radius: 0.3125rem;
+  border: 1px solid #077838 !important;
+  background:#FFF;
+  padding: 7px 15px;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 2.5rem; 
+  color:#077838;
+  margin-right: 0.5rem;
+  }
+
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  ;
+}
+
+.file-input-new {
+  font-size: 100px;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  display: none;
+}
+
+.bmp-batch-btn{
+  margin-right: 1rem;
+}
+
+.bmp-new-flex{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.bmp-fee-middle{
+  margin-left: 1rem;
+}
+
+.bmp-fee-batch{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.bmp-fee-batch img{
+  margin-right: 0.5rem;
+}
+
+.bmp-fee-batch img, .bmp-fee-batch p{
+  cursor: pointer;
+}
+
+.bmp-fee-box{
+  border-radius: 0.3125rem;
+border:1px solid #DCDCDC;
+background: var(--White, #FFF);
+margin-left: 1rem;
+margin-right: 1rem;
+padding: 1rem;
+margin-top: 1rem;
+margin-bottom: 1rem;
+}
+
+.bmp-box-top{
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.bmp-fee-yrs{
+  border-radius: 1.875rem;
+background: #E9EFFF;
+border: none;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-right: 1rem;
+padding: 0.3rem 0.8rem;
+margin-top: 1rem;
+}
+
+.bmp-yrs{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.bmp-fee-label{
+  color: #33475B;
+  margin-bottom: 0.3rem;
+}
+
+.bmp-input-fields{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  margin-right: 1rem;
+}
+
+.bmp-fee-input{
+  width: 8rem;
+}
+
+.bmp-fee-input-flex{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-right: 3rem;
+}
+
+.bmp-double-flex{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+
+.bmp-fee-corner{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bmp-fee-corner p{
+  margin-right: 0.5rem;
+}
+
+.bmp-fee-corner img{
+  cursor: pointer;
+}
+
+.bmp-fee-pen{
+  margin-right: 0.5rem;
+  
+}
+
+.bmp-fee-batch p, .bmp-fee-batch img{
+  margin-top: 1rem;
+}
