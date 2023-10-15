@@ -37,8 +37,20 @@
 .contact-cp-table {
   margin-left: 1rem;
   margin-right: 1rem;
-  /* height: 70vh; */
-  /* overflow: auto; */
+  width:max-content;
+  overflow-x: auto;
+   margin-bottom: 3rem;
+}
+.people-cp-table {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  /* width:max-content;
+  overflow-x: auto; */
+   margin-bottom: 3rem;
+}
+
+.postal-cp{
+  text-transform: uppercase;
 }
 
 .contact-building {
@@ -283,6 +295,27 @@
 
 .company-domain-case{
   text-transform: lowercase;
+}
+
+.cp-table-container{
+  overflow-x: scroll;
+}
+
+.cpu-postcode{
+  text-transform: uppercase;
+}
+
+.cpu-postal-code{
+  position: relative;
+}
+
+.cpu-address-view{
+  z-index: 100;
+  position: absolute;
+  top:100%;
+  left:-90%;
+  overflow-x: scroll;
+  width: 320px;
 }
 
 

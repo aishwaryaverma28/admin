@@ -10,14 +10,20 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
+  console.log(companyData)
+  console.log("hello")
   const [searchQuery, setSearchQuery] = useState("");
+  const orgId = localStorage.getItem("org_id");
   const [selectedIds, setSelectedIds] = useState([]);
   const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
   const [jsonCompanyData, setJsonCompanyData] = useState([]);
   const decryptedToken = getDecryptedToken();
 
   const fetchCompanyData = () => {
-    axios.get(ALL_COMPANY, {
+    const body = {
+      org_id: orgId
+    }
+    axios.post(ALL_COMPANY, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       },
@@ -149,8 +155,8 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
   }, [selectedIds, filteredCompanyData]);
 
   return (
-    <div>
-      <div className="contact-search-container">
+    <>
+            <div className="contact-search-container">
         <div className="recycle-search-box">
           <input
             type="text"
@@ -170,94 +176,105 @@ const CompanyTable = ({ companyData, loading, onSelectedIdsChange  }) => {
           </button>
         </div>
       </div>
-      <div className="contact-cp-table">
-      {
-        loading ?  (
-          <p>Loading....</p>
-        ) : (
-          <table>
-          <thead>
-            <tr>
+
+      <div className="cp-table-container">
+
+<div className="contact-cp-table" >
+{
+  loading ?  (
+    <p>Loading....</p>
+  ) : (
+    <table>
+    <thead>
+      <tr>
+        <th className="contact-box">
+          <label className="custom-checkbox">
+          <input
+          type="checkbox"
+          className="cb1"
+          name=""
+          checked={isTableHeaderChecked}
+          onChange={handleTableHeaderCheckboxChange}
+        />
+            <span className="checkmark"></span>
+          </label>
+        </th>
+        <th className="common-fonts contact-th">Company Name</th>
+        <th className="common-fonts contact-th">Industry</th>
+        <th className="common-fonts contact-th">Email</th>
+        <th className="common-fonts contact-th">Phone</th>
+        <th className="common-fonts contact-th">Postal Code</th>
+        <th className="common-fonts contact-th">Address 1</th>
+        <th className="common-fonts contact-th">Address 2</th>
+        <th className="common-fonts contact-th">Country</th>
+        <th className="common-fonts contact-th">City</th>
+        <th className="common-fonts contact-th">Valuation</th>
+        <th className="common-fonts contact-th">Domain</th>
+        <th className="common-fonts contact-th">Creation Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      { filteredCompanyData.length === 0 ? (
+        <tr>
+          <td colSpan={10} style={{ textAlign: "center" }}>
+            No data found
+          </td>
+        </tr>
+      ) : (
+        filteredCompanyData.map((company) => {
+          return (
+            <tr key={company.id}>
               <th className="contact-box">
                 <label className="custom-checkbox">
                 <input
                 type="checkbox"
                 className="cb1"
                 name=""
-                checked={isTableHeaderChecked}
-                onChange={handleTableHeaderCheckboxChange}
+                checked={selectedIds.includes(company.id)}
+                onChange={() => handleCheckboxChange(company.id)}
               />
                   <span className="checkmark"></span>
                 </label>
               </th>
-              <th className="common-fonts contact-th">Company Name</th>
-              <th className="common-fonts contact-th">Industry</th>
-              <th className="common-fonts contact-th">Email</th>
-              <th className="common-fonts contact-th">Phone</th>
-              <th className="common-fonts contact-th">Country</th>
-              <th className="common-fonts contact-th">City</th>
-              <th className="common-fonts contact-th">Valuation</th>
-              <th className="common-fonts contact-th">Domain</th>
-              <th className="common-fonts contact-th">Creation Date</th>
+              <td className="common-fonts ">
+                <Link to={`/lp/contacts/company/${company.id}`}>
+                  <span className="contact-building">
+                    <img src={Building} alt="" />
+                  </span>{" "}
+                  {company.name}
+                </Link>
+              </td>
+
+              <td className="common-fonts">{company.industry}</td>
+              <td className="common-fonts person-email">
+                {company.email}
+              </td>
+              <td className="common-fonts">{company.phone}</td>
+              <td className="common-fonts postal-cp">{company.postcode}</td>
+              <td className="common-fonts">{company.address1}</td>
+              <td className="common-fonts">{company.address2}</td>
+              <td className="common-fonts">{company.country}</td>
+              <td className="common-fonts">{company.city}</td>
+              <td className="common-fonts">
+                {company.valuation} {company.valuation_in}
+              </td>
+              <td className="common-fonts company-domain-case">{company.domain}</td>
+              <td className="common-fonts">
+                {formatDate(company.creation_date.split("T")[0])}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            { filteredCompanyData.length === 0 ? (
-              <tr>
-                <td colSpan={10} style={{ textAlign: "center" }}>
-                  No data found
-                </td>
-              </tr>
-            ) : (
-              filteredCompanyData.map((company) => {
-                return (
-                  <tr key={company.id}>
-                    <th className="contact-box">
-                      <label className="custom-checkbox">
-                      <input
-                      type="checkbox"
-                      className="cb1"
-                      name=""
-                      checked={selectedIds.includes(company.id)}
-                      onChange={() => handleCheckboxChange(company.id)}
-                    />
-                        <span className="checkmark"></span>
-                      </label>
-                    </th>
-                    <td className="common-fonts ">
-                      <Link to={`/lp/contacts/company/${company.id}`}>
-                        <span className="contact-building">
-                          <img src={Building} alt="" />
-                        </span>{" "}
-                        {company.name}
-                      </Link>
-                    </td>
+          );
+        })
+      )}
+    </tbody>
+  </table>
+  )
+}
 
-                    <td className="common-fonts">{company.industry}</td>
-                    <td className="common-fonts person-email">
-                      {company.email}
-                    </td>
-                    <td className="common-fonts">{company.phone}</td>
-                    <td className="common-fonts">{company.country}</td>
-                    <td className="common-fonts">{company.city}</td>
-                    <td className="common-fonts">
-                      {company.valuation} {company.valuation_in}
-                    </td>
-                    <td className="common-fonts company-domain-case">{company.domain}</td>
-                    <td className="common-fonts">
-                      {formatDate(company.creation_date.split("T")[0])}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-        )
-      }
+</div>
+</div>
+    </>
 
-      </div>
-    </div>
   );
 };
 

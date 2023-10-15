@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import arrowLeft from "../../assets/image/arrow-left.svg";
 import Building from "../../assets/image/building.svg";
@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 const CompanyUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
+  const [searchQuery, setSearchQuery] = useState("");
   const [notes, setNotes] = useState();
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -38,6 +39,8 @@ const CompanyUpdate = () => {
   const [companyName, setCompanyName] = useState("");
   const [activityCount, setActivityCount] = useState();
   const [userData, setUserData] = useState([]);
+  const [inputAdress, setInputAddress] = useState("");
+  const [editedItem, setEditedItem] = useState("");
   const [companyDetails, setCompanyDetails] = useState({
     name: "",
     domain: "",
@@ -49,10 +52,60 @@ const CompanyUpdate = () => {
     country: "",
     address1: "",
     address2: "",
+    postcode: "",
   });
+  const [address, setAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
   const [allEmails, setAllEmails] = useState([]);
+  const [showSearchResult, setShowSearchResult] = useState(false);
+
+  const searchResultRef = useRef(null);
+
+  const apiKey = "XAEyAvpfkruAZLgil1zyBbTSHw9dGWBC";
+
+  async function postcode(code) {
+    axios
+      .get(
+        "https://api.os.uk/search/places/v1/postcode?postcode=" +
+          code.toUpperCase() +
+          "&key=" +
+          apiKey
+      )
+      .then((response) => {
+        // var response = JSON.stringify(response.data, null, 2);
+        setAddress(response.data.results?.map((result) => result.DPA.ADDRESS));
+      });
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchResultRef.current &&
+        !searchResultRef.current.contains(event.target)
+      ) {
+        setShowSearchResult(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e?.target;
+    setInputAddress(e?.target?.value);
+    setEditedItem((prevState) => ({ ...prevState, [name]: value }));
+    setStateBtn(1);
+  };
+
+  const handleAdressClick = (address) => {
+    setInputAddress(address);
+    setEditedItem((prevState) => ({ ...prevState, address1: address }));
+    setShowSearchResult(false);
+  };
 
   const fetchNotes = () => {
     axios
@@ -160,6 +213,7 @@ const CompanyUpdate = () => {
       .then((response) => {
         const responseData = response?.data?.data[0];
         setCompanyName(response?.data?.data[0]?.name);
+        setInputAddress( response?.data?.data[0]?.address1)
         const updatedCompanyDetails = {
           name: responseData.name,
           domain: responseData.domain,
@@ -171,6 +225,7 @@ const CompanyUpdate = () => {
           country: responseData.country,
           address1: responseData.address1,
           address2: responseData.address2,
+          postcode: responseData.postcode,
         };
         setCompanyDetails(updatedCompanyDetails);
         setIsLoading(false);
@@ -216,10 +271,164 @@ const CompanyUpdate = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    const inputArray = [
+      "AB",
+      "AL",
+      "B",
+      "BA",
+      "BB",
+      "BF",
+      "BD",
+      "BH",
+      "BL",
+      "BN",
+      "BR",
+      "BS",
+      "BT",
+      "BX",
+      "CA",
+      "CB",
+      "CF",
+      "CH",
+      "CM",
+      "CO",
+      "CR",
+      "CT",
+      "CV",
+      "CW",
+      "DA",
+      "DD",
+      "DE",
+      "DG",
+      "DH",
+      "DL",
+      "DN",
+      "DT",
+      "DY",
+      "E",
+      "EC",
+      "EH",
+      "EN",
+      "EX",
+      "FK",
+      "FY",
+      "G",
+      "GL",
+      "GY",
+      "GU",
+      "HA",
+      "HD",
+      "HG",
+      "HP",
+      "HR",
+      "HS",
+      "HU",
+      "HX",
+      "IG",
+      "IM",
+      "IP",
+      "IV",
+      "JE",
+      "KA",
+      "KT",
+      "KW",
+      "KY",
+      "L",
+      "LA",
+      "LD",
+      "LE",
+      "LL",
+      "LN",
+      "LS",
+      "LU",
+      "M",
+      "ME",
+      "MK",
+      "ML",
+      "N",
+      "NE",
+      "NG",
+      "NN",
+      "NP",
+      "NR",
+      "NW",
+      "OL",
+      "OX",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PO",
+      "PR",
+      "RG",
+      "RH",
+      "RM",
+      "S",
+      "SA",
+      "SE",
+      "SG",
+      "SK",
+      "SL",
+      "SM",
+      "SN",
+      "SO",
+      "SP",
+      "SR",
+      "SS",
+      "ST",
+      "SW",
+      "SY",
+      "TA",
+      "TD",
+      "TF",
+      "TN",
+      "TQ",
+      "TR",
+      "TS",
+      "TW",
+      "UB",
+      "W",
+      "WA",
+      "WC",
+      "WD",
+      "WF",
+      "WN",
+      "WR",
+      "WS",
+      "WV",
+      "YO",
+      "ZE",
+    ];
+
+    const query = value;
+    setSearchQuery(query);
+    setShowSearchResult(query?.length > 0);
+
     setCompanyDetails({
       ...companyDetails,
       [name]: value,
     });
+
+    if (name === "postcode" && value?.length > 1 && value?.length <= 4) {
+      setCompanyDetails({
+        ...companyDetails,
+        [name]: value,
+      });
+      const regexPattern = new RegExp(
+        `^(${inputArray.join("|")}|${inputArray
+          .slice(0, 2)
+          .join("|")})\\d{1}[A-Za-z0-9]*$`
+      );
+
+      if (regexPattern.test(value?.toUpperCase())) {
+        setShowSearchResult(value?.length > 1);
+        postcode(value);
+      }
+
+      
+    } else{
+      setAddress([])
+    }
     setStateBtn(1);
   };
 
@@ -546,6 +755,7 @@ const CompanyUpdate = () => {
                 <p>Email</p>
                 <p>Country</p>
                 <p>City</p>
+                <p>Postal Code</p>
                 <p>Address 1</p>
                 <p>Address 2</p>
               </div>
@@ -628,6 +838,43 @@ const CompanyUpdate = () => {
                     </span>
                   )}
                 </p>
+                <div className="cpu-postal-code">
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="postcode"
+                        value={companyDetails.postcode}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                        className="cpu-value cpu-postcode"
+                        autoComplete="off"
+                      />
+                    </span>
+                  )}
+                </p>
+                {showSearchResult && address?.length > 1 && (
+                <div className="search_result company-address-result cpu-address-view" ref={searchResultRef}>
+                  {address?.map((item) => (
+                    <>
+                      <p
+                        className="common-fonts searchTitle"
+                        key={item}
+                        onClick={() => handleAdressClick(item)}
+                      >
+                        {item}
+                      </p>
+                    </>
+                  ))}
+                </div>
+              )}
+                </div>
 
                 <p>
                   {isLoading ? (
@@ -637,8 +884,8 @@ const CompanyUpdate = () => {
                       <input
                         type="text"
                         name="address1"
-                        value={companyDetails.address1}
-                        onChange={handleInputChange}
+                        value={inputAdress}
+                          onChange={handleAddressChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
                         }

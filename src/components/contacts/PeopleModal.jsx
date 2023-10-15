@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PeopleModal = ({ onClose , fetchPeople }) => {
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem("org_id");
   const [people, setPeople] = useState({
     name: "",
     organization: "",
@@ -14,6 +15,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
     city: "",
     state: "",
     postal_code: "",
+    org_id: orgId
   });
   const [stateBtn, setStateBtn] = useState(0);
 

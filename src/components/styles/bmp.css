@@ -327,3 +327,100 @@ margin-top: 1rem;
 .bmp-fee-batch p, .bmp-fee-batch img{
   margin-top: 1rem;
 }
+
+.bmp-add-heading{
+  font-size: 1.375rem;
+}
+
+.bmp-add-new-batch{
+  padding: 1rem;
+  border-bottom: 1px solid #dcdcdc;
+  margin-bottom: 1.5rem;
+}
+
+.bmp-modal-form{
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.bmp-modal-input{
+  width: 100%;
+  margin-top: 0.2rem;
+}
+.bmp-modal-select{
+  width: 100%;
+  margin-top: 0.2rem;
+  padding: 0;
+  height: 32px;
+}
+
+.bmp-input-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.bmp-add-fields{
+  margin-bottom: 1rem;
+}
+
+.bmp-to{
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.bmp-add-days{
+border: 1px solid var(--Stroke, #DCDCDC);
+background: #FFF;
+padding: 1rem;
+border-right: none;
+}
+
+.bmp-add-days-1{
+  border-radius: 0.3125rem 0rem 0rem 0.3125rem;
+}
+.bmp-add-days-2{
+  border-radius: 0rem 0.3125rem 0.3125rem 0rem;
+  border-right: 1px solid #DCDCDC;
+}
+
+.bmp-days{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+
+.bmp-am input{
+  width: 3.375rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #DCDCDC;
+  background: #FFF;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-top: 0.2rem;
+  margin-left: 1rem;
+}
+
+.bmp-select-fee{
+  margin-right: 1rem;
+}
+
+.bmp-add-bottom-btn{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 4rem;
+}
+
+.bmp-add-bottom-btn button{
+  margin-right: 1rem;
+}
+

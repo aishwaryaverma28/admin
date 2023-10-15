@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ExportTab = () => {
   const [activeTab, setActiveTab] = useState("leads");
+  const orgId = localStorage.getItem("org_id");
   const [jsonLeadData, setJsonLeadData] = useState([]);
   const [jsonDealData, setJsonDealData] = useState([]);
   const [jsonCompanyData, setJsonCompanyData] = useState([]);
@@ -101,7 +102,10 @@ const ExportTab = () => {
     logRecord("deal");
   };
   const fetchCompanyData = () => {
-    axios.get(ALL_COMPANY, {
+    const body = {
+      org_id: orgId
+    }
+    axios.post(ALL_COMPANY, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       },
@@ -128,7 +132,10 @@ const ExportTab = () => {
     logRecord("company");
   };
   const fetchPeopleData = () => {
-    axios.get(ALL_PEOPLE, {
+    const body={
+      org_id:orgId
+    }
+    axios.post(ALL_PEOPLE,body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       },

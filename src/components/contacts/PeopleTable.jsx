@@ -15,14 +15,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PeopleTable = ({ personData, loading, onSelectedIdsChange }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const orgId = localStorage.getItem("org_id");
   const [selectedIds, setSelectedIds] = useState([]);
   const [isTableHeaderChecked, setIsTableHeaderChecked] = useState(false);
   const [jsonPeopleData, setJsonPeopleData] = useState([]);
   const decryptedToken = getDecryptedToken();
 
   const fetchPeopleData = () => {
+    const body={
+      org_id:orgId
+    }
     axios
-      .get(ALL_PEOPLE, {
+      .post(ALL_PEOPLE, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -174,7 +178,7 @@ const PeopleTable = ({ personData, loading, onSelectedIdsChange }) => {
           </button>
         </div>
       </div>
-      <div className="contact-cp-table">
+      <div className="people-cp-table">
         {loading ? (
           <p>Loading....</p>
         ) : (

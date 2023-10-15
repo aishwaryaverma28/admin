@@ -6,8 +6,10 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
+import BatchModal from "./BatchModal.jsx";
 
 const FeesNBatches = () => {
+  const [isBatchModalOpen , setIsBatchModalOpen] = useState(false);
   const data = {
     datasets: [
       {
@@ -45,13 +47,20 @@ const FeesNBatches = () => {
     }
   };
 
+  const handleBatchModal = () => {
+    setIsBatchModalOpen(true)
+  }
+  const handleBatchModalClose = () => {
+    setIsBatchModalOpen(false)
+  }
+
   return (
     <div>
       <div className="bmp-fee-container">
         <div className="bmp-fee-left">
           <p className="common-fonts bmp-fee-timing">Timimg & Fee</p>
           <div className="bmp-new-flex">
-            <button className="common-save-button common-fonts bmp-batch-btn">
+            <button className="common-save-button common-fonts bmp-batch-btn" onClick={handleBatchModal}>
               Add Batch
             </button>
             <div className="file-input-wrapper">
@@ -533,6 +542,12 @@ const FeesNBatches = () => {
         </div>
         )}
       </div>
+      {
+        isBatchModalOpen && (
+
+          <BatchModal onClose={handleBatchModalClose} />
+        )
+      }
     </div>
   );
 };

@@ -22,6 +22,7 @@ import ContactDeleteModal from "./ContactDeleteModal.jsx";
 
 const Contacts = () => {
   const [activeTab, setActiveTab] = useState("people");
+  const orgId = localStorage.getItem("org_id");
   const [number, setNumber] = useState(0);
   const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [personModalOpen, setPersonModalOpen] = useState(false);
@@ -107,8 +108,11 @@ const Contacts = () => {
   };
 
   const fetchCompany = (e) => {
+    const body = {
+      org_id: orgId
+    }
     axios
-      .get(ALL_COMPANY, {
+      .post(ALL_COMPANY,body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -126,8 +130,11 @@ const Contacts = () => {
       });
   };
   const fetchPeople = (e) => {
+    const body={
+      org_id:orgId
+    }
     axios
-      .get(ALL_PEOPLE, {
+      .post(ALL_PEOPLE,body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
