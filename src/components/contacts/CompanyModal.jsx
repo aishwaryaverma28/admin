@@ -6,9 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CompanyModal = ({ onClose, fetchCompany }) => {
   const decryptedToken = getDecryptedToken();
+  const orgNewId = localStorage.getItem("org_id");
   const [company, setCompany] = useState({
     name: "",
-    orgid: "",
+    // orgid: "",
     address1: "",
     address2: "",
     city: "",
@@ -20,6 +21,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
     valuation_in: "",
     domain: "",
     industry: "",
+    org_id:orgNewId
   });
   const [stateBtn, setStateBtn] = useState(0);
   const [address, setAddress] = useState([]);
@@ -214,7 +216,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
   const resetForm = () => {
     setCompany({
       name: "",
-      orgid: "",
+      // orgid: "",
       address1: "",
       address2: "",
       city: "",
@@ -258,7 +260,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
 
         setCompany({
           name: "",
-          orgid: "",
+          // orgid: "",
           address1: "",
           address2: "",
           city: "",
@@ -338,7 +340,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                 </select>
               </div> */}
               <div className="product-popup-fields">
-                <label htmlFor="" className="common-fonts">
+                {/* <label htmlFor="" className="common-fonts">
                   Organization Id
                 </label>
                 <input
@@ -347,7 +349,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                   name="orgid"
                   onChange={handleChange}
                   value={company.orgid}
-                />
+                /> */}
               </div>
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
