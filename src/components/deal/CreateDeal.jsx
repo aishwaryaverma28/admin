@@ -25,6 +25,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   const [isDisable, setIsDisable] = useState(true);
   const [labelData, setLabelData] = useState([]);
   const navigate = useNavigate();
+  const orgId = localStorage.getItem('org_id');
 
   const [leadData, setLeadData] = useState({
     probability: "",
@@ -110,34 +111,38 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   };
 
   const fetchStages = () => {
+      const dataId = {org_id:1}
+      console.log(dataId)
     axios
-      .get(GET_ALL_STAGE + "/deal", {
+      .get(GET_ALL_STAGE + "/deal", 
+        {
+          data: dataId,
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
+          
         },
-      })
+       }
+      )
       .then((response) => {
-        const stageNames = response?.data?.message?.map(
-          (item) => item.display_name
-        );
+        console.log(response.data.message);
+        console.log("stage");
+        const stageNames = response?.data?.message?.map((item) => item.display_name);
         const stageIdArray = response?.data?.message?.map((item) => item.id);
-
+        const statusNames = response?.data?.message?.map((item) => item.stage_name);
+  
         if (stageNames && stageNames.length > 0) {
           setStages(stageNames.reverse());
           setStageId(stageIdArray.reverse());
         }
-        const statusNames = response?.data?.message?.map(
-          (item) => item.stage_name
-        );
         if (statusNames && statusNames.length > 0) {
           setStatus(statusNames.reverse());
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
-
+  
   useEffect(() => {
     fetchStages();
     fetchCall();
