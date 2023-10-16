@@ -124,8 +124,11 @@ const Lead = () => {
 
 
   const fetchStatus = () => {
+    const body = {
+      org_id:orgId
+    }
     axios
-      .get(GET_ALL_STAGE + "/lead", {
+      .post(GET_ALL_STAGE + "/lead", body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -355,8 +358,11 @@ const Lead = () => {
   };
 
   const fetchLabelData = async () => {
+    const body = {
+      org_id:orgId
+    }
     try {
-      const response = await axios.get(GET_LABEL, {
+      const response = await axios.post(GET_LABEL, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

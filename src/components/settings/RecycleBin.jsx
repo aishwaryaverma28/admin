@@ -43,6 +43,7 @@ const RecycleBin = () => {
     useState(false);
   const [isRestoreContactModalOpen, setIsRestoreContactModalOpen] =
     useState(false);
+    const orgId = localStorage.getItem("org_id");
 
   // function to open delete popup and close delete pop up for deal tab
 
@@ -187,7 +188,8 @@ const RecycleBin = () => {
 
   const fetchCompanyData = async () => {
     const body = {
-        contactType: "xx_company"
+        contactType: "xx_company",
+        org_id:orgId
     }
     try {
       const response = await axios.post(GET_BIN_COMPANY, body,{
@@ -209,6 +211,7 @@ const RecycleBin = () => {
   const fetchPeopleData = async () => {
     const body = {
       contactType: "xx_contact_person",
+      org_id:orgId
     }
     try {
       const response = await axios.post(GET_BIN_COMPANY, body,{

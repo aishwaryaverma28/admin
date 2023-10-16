@@ -107,8 +107,11 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
 
   const fetchStages = () => {
+    const body ={
+      org_id:orgId
+    }
     axios
-      .get(GET_ALL_STAGE + "/lead", {
+      .post(GET_ALL_STAGE + "/lead", body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

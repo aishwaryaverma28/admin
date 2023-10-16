@@ -30,6 +30,7 @@ const DeleteCompany = ({deleteCount}) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
+  const orgId = localStorage.getItem("org_id");
 
   const handleDeletePopUp = ()  => {
     setIsDeleteModalOpen(true);
@@ -55,7 +56,8 @@ const DeleteCompany = ({deleteCount}) => {
 
   const fetchData = async () => {
     const body = {
-        contactType: "xx_company"
+        contactType: "xx_company",
+        org_id:orgId
     }
     try {
       const response = await axios.post(GET_BIN_COMPANY, body,{

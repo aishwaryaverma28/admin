@@ -110,7 +110,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
     e.preventDefault();
      if(minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter)
         {
-     const updated = { ...details, password: password };
+     const updated = { ...details, password: password, org_id:orgId };
       axios
         .post(ADD_USER, updated, {
           headers: {
@@ -252,7 +252,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             <label htmlFor="password">Password</label>
             <br />
             <div className="create-user-input-wrapper">
-              {passDes.some(
+              {passDes?.some(
                 (condition) => condition.id === 5 && condition.active === 1
               ) ? (
                 <input
@@ -283,7 +283,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             </div>
           </div>
 
-          {passDes.some(
+          {passDes?.some(
           (condition) => condition.id === 5 && condition.active === 1
         ) ? (
           <div className="pwd-rules">
@@ -393,7 +393,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
         )}
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
-            {passDes.some(
+            {passDes?.some(
               (condition) => condition.id === 5 && condition.active === 1
             ) ? (
               <button className="restore-yes common-fonts" onClick={handleSave}>

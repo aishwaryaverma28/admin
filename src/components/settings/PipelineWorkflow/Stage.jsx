@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Stage = ({ type }) => {
   const [stages, setStages] = useState([]);
+  const orgId = localStorage.getItem("org_id");
   const [customDocuments, setCustomDocuments] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
@@ -22,6 +23,7 @@ const Stage = ({ type }) => {
     stage_type: type,
     stage_name: "",
     position: 0,
+    org_id:orgId
   });
 
   function handleChange(e) {
@@ -44,8 +46,11 @@ const Stage = ({ type }) => {
   }
 
   const fetchStatus = () => {
+    const body = {
+      org_id: orgId
+    }
     axios
-      .get(GET_ALL_STAGE + "/" + type, {
+      .post(GET_ALL_STAGE + "/" + type,body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

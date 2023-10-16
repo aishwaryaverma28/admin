@@ -111,12 +111,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   };
 
   const fetchStages = () => {
-      const dataId = {org_id:1}
-      console.log(dataId)
+      const body = {org_id:orgId}
+
     axios
-      .get(GET_ALL_STAGE + "/deal", 
+      .post(GET_ALL_STAGE + "/deal", body,
         {
-          data: dataId,
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
           
@@ -166,8 +165,11 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   }, [selectedItem]);
 
   const fetchLabelData = async () => {
+    const body = {
+      org_id:orgId
+    }
     try {
-      const response = await axios.get(GET_LABEL, {
+      const response = await axios.post(GET_LABEL, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -260,7 +262,7 @@ console.log(filteredLoanDetails);
       (loanItem) => loanItem.loan_offered_by
     );
 console.log(loanOfferedByValues);
-    const updatedForm = { ...leadData, value: leadData.loan_amount };
+    const updatedForm = { ...leadData, value: leadData.loan_amount, org_id:orgId };
     axios
       .post(ADD_DEAL, updatedForm, {
         headers: {
