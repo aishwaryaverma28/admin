@@ -63,6 +63,7 @@ const Deal = () => {
     id: 0,
   });
   const [data, setData] = useState("");
+  const [fStageId, setFStageId] = useState(0);
   const handleDataReceived = (newData) => {
     setData(newData);
     console.log(newData);
@@ -140,6 +141,12 @@ const Deal = () => {
         },
       })
       .then((response) => {
+        console.log(response?.data?.message);
+        const ids = response?.data?.message?.map((item) => item.id);
+        if (ids && ids.length > 0) {
+          const minId = Math.min(...ids);
+          setFStageId(minId);
+        }
         const stageNames = response?.data?.message?.map(
           (item) => item.display_name
         );
@@ -695,6 +702,7 @@ const Deal = () => {
             data_enquiry_receive: formatDate(row?.data_enquiry_receive),
             borrower_entry: formatDate(row?.borrower_entry),
             completion_date: formatDate(row?.completion_date),
+            stage_id: parseInt(fStageId),
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);

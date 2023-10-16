@@ -106,7 +106,6 @@ const LPheader = () => {
       localStorage.setItem("org_id", data[0].org_id);
       if (response.data.status === 1) {
         setClientData(data[0]);
-        //   setPic(VIEW_IMG + data[0].profile_image);
       }
     } catch (error) {
       console.log(error);
