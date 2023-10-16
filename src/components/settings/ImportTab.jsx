@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
 const ImportTab = () => {
+  const orgId = localStorage.getItem("org_id");
   const decryptedToken = getDecryptedToken();
   const fileLeadInputRef = useRef(null);
   const fileDealInputRef = useRef(null);
@@ -39,6 +40,7 @@ const ImportTab = () => {
             ...row,
             value: parseInt(row?.value), // Parse the "value" field as an integer
             stage_id: parseInt(row?.stage_id),
+            org_id: parseInt(orgId),
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
@@ -113,6 +115,7 @@ const ImportTab = () => {
             data_enquiry_receive: formatDate(row?.data_enquiry_receive),
             borrower_entry: formatDate(row?.borrower_entry),
             completion_date: formatDate(row?.completion_date),
+            org_id: parseInt(orgId),
           }));
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
           postDealCsvDataToAPI(dataWithoutLastValue);
@@ -170,6 +173,7 @@ const ImportTab = () => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
             valuation: parseInt(row?.valuation),
+            org_id: parseInt(orgId),
           }));
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
           postCsvDataToAPI(dataWithoutLastValue);
@@ -221,8 +225,11 @@ const ImportTab = () => {
       Papa.parse(file, {
         header: true, // Assume the first row contains headers
         complete: (result) => {
-          // Store CSV data in state
-          const dataWithoutLastValue = result?.data?.slice(0, -1);
+          const dataWithOrgId = result?.data.map((row) => ({
+            ...row,
+            org_id: parseInt(orgId),
+          }));
+          const dataWithoutLastValue = dataWithOrgId.slice(0, -1);
           postCsvDataToAPI2(dataWithoutLastValue);
         },
         error: (error) => {
@@ -264,7 +271,7 @@ const ImportTab = () => {
   };
   const fetchImportCompanyDetails = () => {
     axios
-      .get(IMPORT_DETAILS + "comapny:imported", {
+      .get(IMPORT_DETAILS + "company:imported", {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -359,6 +366,29 @@ const ImportTab = () => {
       stage_id: 13,
       stage_name: "New",
     },
+    {
+      source: "google",
+      lead_name: "sampleName",
+      position: "samplePosition",
+      company_name: "sampleCompany",
+      registration_no: "sampleRegister",
+      employees: "sampleEmployee",
+      first_name: "sampleFname",
+      last_name: "sampleLname",
+      type: "open",
+      value: 1000,
+      address1: "sampleAddress1",
+      address2: "sampleAddress2",
+      city: "sampleCity",
+      state: "sampleState",
+      country: "sampleCountry",
+      pin: "samplePin1",
+      phone: "samplePhone",
+      email: "sample@example.com",
+      website: "https://wwww.example.com",
+      stage_id: 13,
+      stage_name: "New",
+    },
   ];
 
   const downloadLeadCSV = () => {
@@ -374,6 +404,38 @@ const ImportTab = () => {
     document.body.removeChild(a);
   };
   const jsonDealData = [
+    {
+      lead_id: 1111111,
+      deal_name: "dealName",
+      currency: "GBP",
+      organization: "Ezuka",
+      probability: "50",
+      closure_date: "2022-02-12",
+      value: 3000,
+      email: "email@Ezuka.com",
+      contact: "contact@Ezuka.com",
+      pipeline_id: 1,
+      mobile: "sampleMobileNumber",
+      introducer_name: "John Due",
+      introducer_firm_name: "Doe And Associates",
+      data_enquiry_receive: "2023-08-24",
+      borrower_entry: "2023-08-25",
+      security_value: 10000,
+      loan_amount: 50000,
+      deposit: 2500,
+      type_of_security: "Mortgage",
+      loan_type: "Fixed Rate",
+      lender: 1,
+      lead_source: "Website",
+      engagement_fee: 1500,
+      engagement_fee_paid: 500,
+      broker_fee: 2000,
+      broker_fee_paid: 1000,
+      procuration_fee: 800,
+      procuration_fee_paid: 400,
+      deal_commission: 3000,
+      completion_date: "2023-09-15",
+    },
     {
       lead_id: 1111111,
       deal_name: "dealName",
@@ -438,6 +500,21 @@ const ImportTab = () => {
       domain: "abcinc.com",
       industry: "Technology",
     },
+    {
+      name: "ABC Inc.",
+      orgid: "ORG123",
+      address1: "123 Main Street",
+      address2: "Suite 456",
+      city: "Anytown",
+      country: "UK",
+      postcode: 1234,
+      email: "abc@gmail.com",
+      phone: "samplePhone",
+      valuation: 100000,
+      valuation_in: "GBP",
+      domain: "abcinc.com",
+      industry: "Technology",
+    },
     // Add more data as needed
   ];
 
@@ -455,6 +532,15 @@ const ImportTab = () => {
   };
   const jsonPeopleData = [
     // Your JSON data here
+    {
+      name: "John Doe",
+      organization: "ABC Corporation",
+      phone: "+1-123-456-7890",
+      email: "johndoe@example.com",
+      city: "New York",
+      state: "NY",
+      postal_code: "10001",
+    },
     {
       name: "John Doe",
       organization: "ABC Corporation",

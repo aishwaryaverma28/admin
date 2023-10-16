@@ -166,6 +166,7 @@ const Contacts = () => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
             valuation: parseInt(row?.valuation),
+            org_id: parseInt(orgId),
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
@@ -222,8 +223,11 @@ const Contacts = () => {
       Papa.parse(file, {
         header: true, // Assume the first row contains headers
         complete: (result) => {
-          // Store CSV data in state
-          const dataWithoutLastValue = result?.data?.slice(0, -1);
+          const dataWithOrgId = result?.data.map((row) => ({
+            ...row,
+            org_id: parseInt(orgId),
+          }));
+          const dataWithoutLastValue = dataWithOrgId.slice(0, -1);
           setCsvData2(dataWithoutLastValue);
           postCsvDataToAPI2(dataWithoutLastValue);
         },
