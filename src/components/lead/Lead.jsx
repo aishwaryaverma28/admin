@@ -65,7 +65,7 @@ const Lead = () => {
     id: 0,
   });
   const [data, setData] = useState("");
-
+const [fStageId, setFStageId] = useState(0);
 
 
 
@@ -134,6 +134,11 @@ const Lead = () => {
         },
       })
       .then((response) => {
+        const ids = response?.data?.message?.map((item) => item.id);
+        if (ids && ids.length > 0) {
+          const minId = Math.min(...ids);
+          setFStageId(minId);
+        }
         const stageNames = response?.data?.message?.map(
           (item) => item.display_name
         );
@@ -658,7 +663,7 @@ const Lead = () => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
             value: parseInt(row?.value), // Parse the "value" field as an integer
-            stage_id: parseInt(row?.stage_id),
+            stage_id: parseInt(fStageId),
             org_id: parseInt(orgId)
           }));
           // Store CSV data in state
