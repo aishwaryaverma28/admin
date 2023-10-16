@@ -130,8 +130,11 @@ const Deal = () => {
 
   //======================================================================fetch lead data from api
   const fetchStatus = () => {
+    const body = {
+      org_id:orgId
+    }
     axios
-      .get(GET_ALL_STAGE + "/deal", {
+      .post(GET_ALL_STAGE + "/deal", body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -183,8 +186,11 @@ const Deal = () => {
   }, [deals, status]);
 
   const fetchLabelData = async () => {
+    const body = {
+      org_id:orgId
+    }
     try {
-      const response = await axios.get(GET_LABEL, {
+      const response = await axios.post(GET_LABEL, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -672,6 +678,7 @@ const Deal = () => {
             ...row,
             lead_id: parseInt(row?.lead_id),
             value: parseInt(row?.value),
+            org_id:parseInt(orgId),
             pipeline_id: parseInt(row?.pipeline_id),
             mobile: parseInt(row?.mobile),
             security_value: parseInt(row?.security_value),

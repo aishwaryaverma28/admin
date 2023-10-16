@@ -23,8 +23,11 @@ const LabelsTab = () => {
     }, []);
 
     const fetchData = async () => {
+        const body = {
+            org_id:orgId
+          }
         try {
-            const response = await axios.post(GET_LABEL, {org_id: parseInt(orgId)},{
+            const response = await axios.post(GET_LABEL, body,{
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
