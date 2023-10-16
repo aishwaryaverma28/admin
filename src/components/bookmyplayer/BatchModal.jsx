@@ -21,7 +21,7 @@ const BatchModal = ({ onClose }) => {
 
             <div>
             <label htmlFor="" className="common-fonts light-color">Age Group</label>
-            <div className="bmp-input-flex bmp-add-fields">
+            <div className="bmp-input-flex-2 bmp-add-fields">
             <input type="number" className="common-fonts common-input bmp-modal-input" />
                 <p className="common-fonts light-color bmp-to">To</p>
                 <input type="number" className="common-fonts common-input bmp-modal-input" />
@@ -45,7 +45,7 @@ const BatchModal = ({ onClose }) => {
 
             <div>
             <label htmlFor="" className="common-fonts light-color">Timings</label>
-            <div className="bmp-input-flex bmp-add-fields">
+            <div className="bmp-input-flex-2 bmp-add-fields">
             <select name="" id="" className="common-fonts common-input bmp-modal-select">
                 <option value="">HH:MM</option>
             </select >
@@ -65,7 +65,7 @@ const BatchModal = ({ onClose }) => {
             </div>
             <div>
             <label htmlFor="" className="common-fonts light-color">Fee</label>
-            <div className="bmp-input-flex bmp-add-fields">
+            <div className="bmp-input-flex-2 bmp-add-fields">
             <select name="" id="" className="common-fonts common-input bmp-modal-select bmp-select-fee">
                 <option value="">Months</option>
             </select >

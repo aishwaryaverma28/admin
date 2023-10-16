@@ -79,43 +79,51 @@ const FeesNBatches = () => {
         </div>
 
         <div className="bmp-top-right">
-          <div className="status-of-profile">
-            <p className="common-fonts">Status of profile</p>
-            <div className="progress-bar">
-              <div className="bmp-small-circle bmp-completed-stage">1</div>
-              <div className="bmp-line"></div>
-              <div className="bmp-small-circle bmp-completed-stage">2</div>
-              <div className="bmp-line"></div>
-              <div className="bmp-small-circle">3</div>
-              <div className="bmp-line"></div>
-              <div className="bmp-small-circle">4</div>
-            </div>
-          </div>
-
-          <div className="bmp-progress">
-            <div className="bmp-circle">
-              <Doughnut data={data} options={options} />
-              <div className="circle-percentage">
-                <span className="common-fonts percentage-value">70%</span>
+            <div className="status-of-profile">
+              <p className="common-fonts">Update Profile</p>
+              <div className="progress-bar">
+                <div className="bmp-small-circle bmp-completed-stage">1</div>
+                <div className="bmp-line"></div>
+                <div className="bmp-small-circle bmp-completed-stage">2</div>
+                <div className="bmp-line"></div>
+                <div className="bmp-small-circle">3</div>
+                <div className="bmp-line"></div>
+                <div className="bmp-small-circle">4</div>
               </div>
             </div>
 
             <div className="bmp-msg">
-              <p className="common-fonts bmp-now ">
-                Complete Your Profile <span>NOW!</span>
-              </p>
+              <p className="common-fonts bmp-now ">Profile Complete</p>
+              <div className="bmp-circle">
+                <Doughnut data={data} options={options} />
+                <div className="circle-percentage">
+                  <span className="common-fonts percentage-value">70%</span>
+                </div>
+              </div>
               <button className="common-fonts bmp-complete-btn">
                 Complete Now
               </button>
             </div>
           </div>
-        </div>
       </div>
 
       <div className="bmp-fee-middle">
-        <div className="bmp-fee-batch" onClick={() => handleBatchClick(1)}>
-        <img src={openBatch === 1 ? GreaterDown : GreaterArrow} alt="" />
-          <p className="common-fonts">New Batch</p>
+        <div className="bmp-fee-batch" >
+        <img src={openBatch === 1 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(1)} />
+        <div className="bmp-batch-date">
+        <p className="common-fonts" onClick={() => handleBatchClick(1)}>New Batch</p> 
+        {
+          openBatch === 1 ? (<></>) : (
+            <div className="bmp-fee-corner">
+              <p className="common-fonts">created on oct 10, 2023</p>
+              <img src={Pen} alt="" className="bmp-fee-pen" />
+              <img src={Trash} alt="" />
+            </div>
+          ) 
+        }
+
+        </div>
+          
         </div>
         
         {openBatch === 1 && (
@@ -220,9 +228,21 @@ const FeesNBatches = () => {
         </div>
         )}
 
-        <div className="bmp-fee-batch" onClick={() => handleBatchClick(2)}>
-        <img src={openBatch === 2 ? GreaterDown : GreaterArrow} alt="" />
-          <p className="common-fonts">U-17 Batch</p>
+        <div className="bmp-fee-batch" >
+        <img src={openBatch === 2 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(2)}/>
+        <div className="bmp-batch-date">
+        <p className="common-fonts" onClick={() => handleBatchClick(2)}>U-17 Batch</p> 
+        {
+          openBatch === 2 ? (<></>) : (
+            <div className="bmp-fee-corner">
+              <p className="common-fonts">created on oct 10, 2023</p>
+              <img src={Pen} alt="" className="bmp-fee-pen" />
+              <img src={Trash} alt="" />
+            </div>
+          ) 
+        }
+
+        </div>
         </div>
 
         {openBatch === 2 && (
@@ -328,9 +348,21 @@ const FeesNBatches = () => {
         )}
 
 
-        <div className="bmp-fee-batch" onClick={() => handleBatchClick(3)}>
-        <img src={openBatch === 3 ? GreaterDown : GreaterArrow} alt="" />
-          <p className="common-fonts">National Batch</p>
+        <div className="bmp-fee-batch" >
+        <img src={openBatch === 3 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(3)} />
+        <div className="bmp-batch-date">
+        <p className="common-fonts" onClick={() => handleBatchClick(3)}>National Batch</p> 
+        {
+          openBatch === 3 ? (<></>) : (
+            <div className="bmp-fee-corner">
+              <p className="common-fonts">created on oct 10, 2023</p>
+              <img src={Pen} alt="" className="bmp-fee-pen" />
+              <img src={Trash} alt="" />
+            </div>
+          ) 
+        }
+
+        </div>
         </div>
 
         {openBatch === 3 && (
@@ -437,7 +469,19 @@ const FeesNBatches = () => {
 
         <div className="bmp-fee-batch"  onClick={() => handleBatchClick(4)} >
         <img src={openBatch === 4 ? GreaterDown : GreaterArrow} alt="" />
-          <p className="common-fonts">State Batch</p>
+        <div className="bmp-batch-date">
+        <p className="common-fonts">State Batch</p> 
+        {
+          openBatch === 4 ? (<></>) : (
+            <div className="bmp-fee-corner">
+              <p className="common-fonts">created on oct 10, 2023</p>
+              <img src={Pen} alt="" className="bmp-fee-pen" />
+              <img src={Trash} alt="" />
+            </div>
+          ) 
+        }
+
+        </div>
         </div>
 
         {openBatch === 4 && (
