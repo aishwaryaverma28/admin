@@ -117,9 +117,12 @@ const RecycleBin = () => {
     }
   }, []);
   const fetchData = async () => {
+    const body = {
+      org_id:orgId
+    }
     try {
-      const response = await axios.get(
-        GET_ALL_FROM_TRASH,
+      const response = await axios.post(
+        GET_ALL_FROM_TRASH, body,
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
@@ -142,9 +145,12 @@ const RecycleBin = () => {
   };
 
   const fetchDealData = async () => {
+    const body = {
+      org_id: orgId
+    }
     try {
-      const response = await axios.get(
-        GETDEAL_FROM_TRASH,
+      const response = await axios.post(
+        GETDEAL_FROM_TRASH, body,
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header

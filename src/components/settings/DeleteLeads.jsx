@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 const DeleteLeads = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const orgId = localStorage.getItem("org_id")
   const [activeTab, setActiveTab] = useState("Leads");
   const [recycleData, setRecycleData] = useState([]);
   const decryptedToken = getDecryptedToken();
@@ -51,8 +52,11 @@ const DeleteLeads = ({deleteCount}) => {
   }, [decryptedToken]);
 
   const fetchData = async () => {
+    const body = {
+      org_id: orgId
+    }
     try {
-      const response = await axios.get(GET_ALL_LEAD_TRASH, {
+      const response = await axios.post(GET_ALL_LEAD_TRASH, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },

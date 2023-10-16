@@ -22,6 +22,7 @@ const DeleteDeal = ({deleteCount}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [activeTab, setActiveTab] = useState("Deal");
+  const orgId = localStorage.getItem("org_id");
   const [recycleData, setRecycleData] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,8 +52,11 @@ const DeleteDeal = ({deleteCount}) => {
   }, [decryptedToken]);
 
   const fetchData = async () => {
+    const body = {
+      org_id: orgId
+    }
     try {
-      const response = await axios.get(GETDEAL_FROM_TRASH, {
+      const response = await axios.post(GETDEAL_FROM_TRASH, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
