@@ -1,41 +1,39 @@
 import React, { useEffect, useState, useRef } from "react";
-import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import pound from "../../assets/image/british-pound-symbol.svg";
 import Search from "../../assets/image/search.svg";
 import Sort from "../../assets/image/sort.svg";
 import axios from "axios";
-import LeadCards from "./LeadCards";
-import CreateLead from "./CreateLead";
-import LeadDeletePopUp from "../DeleteComponent";
 import {
-  GET_LEAD,
-  IMPORT_CSV,
-  MOVELEAD_TO_TRASH,
-  getDecryptedToken,
+  GET_ALL_DEAL,
+  MOVEDEAL_TO_TRASH,
   GET_ALL_STAGE,
+  getDecryptedToken,
   GET_LABEL,
   GET_ACTIVE_TEAM_MEM,
-  GET_OWNER_LEAD,
+  IMPORT_DEAL,
+  GET_OWNER_DEAL,
   LOG_RECORD,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DealsColn from "./DealsColn";
+import CreateDeal from "./CreateDeal";
+import DealDeletePopUp from "../DeleteComponent";
 import ExcelJS from "exceljs";
 import Papa from "papaparse";
-import MassUpdateModal from "./MassUpdateModal.jsx";
+import MassUpdateModal from "../lead/MassUpdateModal.jsx";
 
-const Lead = () => {
-  const [stages, setStages] = useState([]);
-  // const [orgId, setOrgId] = useState(null);
+const Deal = () => {
   const orgId = localStorage.getItem('org_id');
+  const [stages, setStages] = useState([]);
   const [status, setStatus] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
   const pipeDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const actionSortRef = useRef(null);
   const actionOwnerRef = useRef(null);
@@ -49,15 +47,15 @@ const Lead = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [statusTotalValues, setStatusTotalValues] = useState({});
-  const [isDelete, setIsDelete] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [ownerOpen, setOwnerOpen] = useState(false);
+  const role_name = localStorage.getItem("role_name");
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [ownerOpen, setOwnerOpen] = useState(false);
-  const [display, setDisplay] = useState("Select Owner");
-  const role_name = localStorage.getItem("role_name");
+  const [display, setDisplay] = useState('Select Owner');
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     first_name: "",
@@ -65,10 +63,6 @@ const Lead = () => {
     id: 0,
   });
   const [data, setData] = useState("");
-
-
-
-
   const handleDataReceived = (newData) => {
     setData(newData);
     console.log(newData);
@@ -84,7 +78,7 @@ const Lead = () => {
 
   const handleOwnerClick = (id, firstName, lastName) => {
     axios
-      .get(GET_OWNER_LEAD + id, {
+      .get(GET_OWNER_DEAL + id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -103,7 +97,7 @@ const Lead = () => {
 
   const userAdded = () => {
     axios
-      .post(GET_ACTIVE_TEAM_MEM,{ orgId: orgId}, {
+      .post(GET_ACTIVE_TEAM_MEM,{orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -122,13 +116,25 @@ const Lead = () => {
    userAdded();
   }, [orgId])
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const toggleOwnerDropdown = () => {
+    setOwnerOpen(!ownerOpen);
+  };
+
+  //======================================================================fetch lead data from api
   const fetchStatus = () => {
     const body = {
       org_id:orgId
     }
     axios
-      .post(GET_ALL_STAGE + "/lead", body, {
+      .post(GET_ALL_STAGE + "/deal", body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -152,6 +158,24 @@ const Lead = () => {
       });
   };
 
+  const fetchLeadsData = () => {
+    axios
+      .get(GET_ALL_DEAL, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const filteredDeals = response?.data?.data.filter(
+          (obj) => obj.status !== ""
+        );
+        setDeals(filteredDeals);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     // Calculate status counts
     const counts = {};
@@ -160,202 +184,6 @@ const Lead = () => {
     });
     setStatusCounts(counts);
   }, [deals, status]);
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const toggleSortDropdown = () => {
-    setSortOpen(!sortOpen);
-  };
-  const toggleOwnerDropdown = () => {
-    setOwnerOpen(!ownerOpen);
-  };
-  //======================================================================fetch lead data from api
-  const fetchLeadsData = () => {
-    axios
-      .get(GET_LEAD, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setDeals(response?.data?.data);
-        const counts = {};
-        status.forEach((status) => {
-          counts[status] = response?.data?.data.filter(
-            (obj) => obj.status === status
-          ).length;
-        });
-        setStatusCounts(counts);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const logRecord = () => {
-    const updatedFormData = {
-      attr1: "lead:export",
-      attr4: "lead exported",
-    };
-    axios
-      .post(LOG_RECORD, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        if (response?.data?.status === 1) {
-          toast.success("export successfull", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        } else {
-          toast.error("Some Error Occured", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const exportToExcel = async () => {
-    // Check if you have data to export
-    if (!deals || deals.length === 0) {
-      console.log("No data to export.");
-      return;
-    }
-
-    // Create a new workbook and worksheet
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Leads");
-
-    // Add data to the worksheet
-    worksheet.columns = [
-      {
-        header: "Id",
-        key: "id",
-        width: 20,
-        bold: true,
-        alignment: { horizontal: "center" },
-      },
-      { header: "Address 1", key: "address1", width: 20 },
-      { header: "Address 2", key: "address2", width: 20 },
-      { header: "City", key: "city", width: 20 },
-      { header: "Company Name", key: "company_name", width: 20 },
-      { header: "Country", key: "country", width: 20 },
-      { header: "Date Created", key: "creation_date", width: 30 },
-      { header: "Doc Number", key: "doc_number", width: 20 },
-      { header: "Email", key: "email", width: 30 },
-      { header: "Employees", key: "employees", width: 20 },
-      { header: "First Name", key: "first_name", width: 20 },
-      { header: "Last Name", key: "last_name", width: 20 },
-      { header: "Is Deleted", key: "is_deleted", width: 20 },
-      { header: "Label Colour", key: "label_coloure", width: 20 },
-      { header: "Label Id", key: "label_id", width: 20 },
-      { header: "Label Name", key: "label_name", width: 20 },
-      { header: "Lead Name", key: "lead_name", width: 20 },
-      { header: "Owner", key: "owner", width: 20 },
-      { header: "Owner Email", key: "owner_email", width: 20 },
-      { header: "Owner Phone", key: "owner_phone", width: 20 },
-      { header: "Owner First Name", key: "ownerf_name", width: 20 },
-      { header: "Owner Last Name", key: "ownerl_name", width: 20 },
-      { header: "Phone", key: "phone", width: 20 },
-      { header: "Pin", key: "pin", width: 20 },
-      { header: "Position", key: "position", width: 20 },
-      { header: "Registration Number", key: "registration_no", width: 20 },
-      { header: "Source", key: "source", width: 20 },
-      { header: "State", key: "state", width: 20 },
-      { header: "Status", key: "status", width: 20 },
-      { header: "Type", key: "type", width: 20 },
-      { header: "Update Date", key: "update_date", width: 30 },
-      { header: "Value", key: "value", width: 20 },
-      { header: "Website", key: "website", width: 20 },
-      // Add more columns as needed
-    ];
-
-    deals.forEach((deal) => {
-      worksheet.addRow({
-        id: deal.id,
-        address1: deal.address1,
-        address2: deal.address2,
-        city: deal.city,
-        company_name: deal.company_name,
-        country: deal.country,
-        creation_date: deal.creation_date,
-        doc_number: deal.doc_number,
-        email: deal.email,
-        employees: deal.employees,
-        first_name: deal.first_name,
-        last_name: deal.last_name,
-        is_deleted: deal.is_deleted,
-        label_coloure: deal.label_coloure,
-        label_id: deal.label_id,
-        label_name: deal.label_name,
-        lead_name: deal.lead_name,
-        owner: deal.owner,
-        owner_email: deal.owner_email,
-        owner_phone: deal.owner_phone,
-        ownerf_name: deal.ownerf_name,
-        ownerl_name: deal.ownerl_name,
-        phone: deal.phone,
-        pin: deal.pin,
-        position: deal.position,
-        registration_no: deal.registration_no,
-        source: deal.source,
-        state: deal.state,
-        status: deal.status,
-        update_date: deal.update_date,
-        value: deal.value,
-        website: deal.website,
-        // Add more columns as needed
-      });
-    });
-
-    // // Generate a blob containing the Excel file
-    // const blob = await workbook.xlsx.writeBuffer();
-
-    // // Create a download link
-    // const url = window.URL.createObjectURL(new Blob([blob]));
-    // const a = document.createElement("a");
-    // a.href = url;
-    // a.download = "leads.xlsx";
-    // a.style.display = "none";
-
-    // // Trigger the download
-    // document.body.appendChild(a);
-    // a.click();
-
-    // // Clean up
-    // window.URL.revokeObjectURL(url);
-    // document.body.removeChild(a);
-
-    // Convert JSON data to CSV format
-    const csv = Papa.unparse(deals);
-
-    // Create a blob from the CSV data
-    const blob = new Blob([csv], { type: "text/csv" });
-
-    // Create a download link
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "leads.csv";
-    a.style.display = "none";
-
-    // Trigger the download
-    document.body.appendChild(a);
-    a.click();
-
-    // Clean up
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    logRecord();
-  };
 
   const fetchLabelData = async () => {
     const body = {
@@ -379,16 +207,17 @@ const Lead = () => {
     }
   };
 
+  const handleDeleteOpen = () => {
+    setIsDeleteOpen(true);
+  };
+  const handleDeleteClose = () => {
+    setIsDeleteOpen(false);
+  };
+
   const resetData = () => {
     fetchLeadsData();
     fetchLabelData();
-  };
-
-  const handleDeletePopUpOpen = () => {
-    setIsDelete(true);
-  };
-  const handleMassDeletePopUpClose = () => {
-    setIsDelete(false);
+    fetchStatus();
   };
 
   useEffect(() => {
@@ -397,22 +226,18 @@ const Lead = () => {
     fetchStatus();
   }, []);
 
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
-
   const filterDealData = deals?.filter((item) => {
-    const dealName = `${item?.lead_name}`.toLowerCase() || "";
-    const dealValue = `${item?.value}`.toLowerCase() || "";
-    const dealValue2 = `$${item?.value}`.toLowerCase() || "";
-    const ownerFirstName = `${item?.ownerf_name}`.toLowerCase() || "";
-    const ownerLastName = `${item?.ownerl_name}`.toLowerCase() || "";
+    const dealName = `${item?.deal_name}`?.toLowerCase() || "";
+    const dealValue = `${item?.value}`?.toLowerCase() || "";
+    const dealValue2 = `$${item?.value}`?.toLowerCase() || "";
+    const ownerFirstName = `${item?.ownerf_name}`?.toLowerCase() || "";
+    const ownerLastName = `${item?.ownerl_name}`?.toLowerCase() || "";
     const ownerFullName =
-      `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
+      `${item?.ownerf_name} ${item?.ownerl_name}`?.toLowerCase() || "";
     const closureDate =
-      `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
-    const labelName = `${item?.label_name}`.toLowerCase() || "";
-    const searchDeal = searchQuery.toLowerCase();
+      `${item?.closure_date}`.split("T")[0]?.toLowerCase() || "";
+    const labelName = `${item?.label_name}`?.toLowerCase() || "";
+    const searchDeal = searchQuery?.toLowerCase();
 
     const matchQuery =
       dealName.includes(searchDeal) ||
@@ -429,33 +254,40 @@ const Lead = () => {
   const sortData = (data, option, order) => {
     switch (option) {
       case "Amount":
-        return data?.slice().sort((a, b) => {
+        return data.slice().sort((a, b) => {
           const result = a.value - b.value;
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "LeadName":
-        return data?.slice().sort((a, b) => {
-          const result = a.lead_name
-            .toLowerCase()
-            .localeCompare(b.lead_name.toLowerCase());
+        return data.slice().sort((a, b) => {
+          const result = a.deal_name
+            ?.toLowerCase()
+            .localeCompare(b?.deal_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
-        return data?.slice().sort((a, b) => {
-          const result = a.label_name
-            .toLowerCase()
-            .localeCompare(b.label_name.toLowerCase());
+        return data.slice().sort((a, b) => {
+          const result = a?.label_name
+            ?.toLowerCase()
+            .localeCompare(b?.label_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
-        return data?.slice().sort((a, b) => {
-          const result = a.ownerf_name
-            .toLowerCase()
-            .localeCompare(b.lead_name.toLowerCase());
+        return data.slice().sort((a, b) => {
+          const result = a?.ownerf_name
+            ?.toLowerCase()
+            .localeCompare(b?.lead_name?.toLowerCase());
+          return order === "asc" ? result : -result; // Toggle sorting order
+        });
+      case "Closure":
+        return data.slice().sort((a, b) => {
+          const result = a?.closure_date
+            ?.toLowerCase()
+            .localeCompare(b?.closure_date?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
-        return data?.slice().sort(() => {
+        return data.slice().sort(() => {
           return order === "asc" ? 1 : -1; // Toggle sorting order
         });
     }
@@ -499,23 +331,220 @@ const Lead = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  // const handleButtonClick = async () => {
-  //   fileInputRef.current.click();
-  // };
+  //===========================================================for bulk import
 
+  // Function to toggle the dropdown menu
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
   };
   const togglePipeDropdown = () => {
     setPipeOpen(!pipeopen);
   };
+  const toggleSortDropdown = () => {
+    setSortOpen(!sortOpen);
+  };
+
+  const logRecord = () => {
+    const updatedFormData = {
+      attr1: "deal:export",
+      attr4: "deal exported",
+    };
+    axios
+      .post(LOG_RECORD, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+      if(response?.data?.status===1){
+        toast.success("export successfull", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }else{
+        toast.error("Some Error Occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const exportToExcel = async () => {
+    // Check if you have data to export
+    if (!deals || deals.length === 0) {
+      console.log("No data to export.");
+      return;
+    }
+
+    // Create a new workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Deals");
+
+    // Add data to the worksheet
+    worksheet.columns = [
+      { header: "Id", key: "id", width: 20 },
+      { header: "Borrower Entry", key: "borrower_entry", width: 30 },
+      { header: "Broker Fee", key: "broker_fee", width: 20 },
+      { header: "Broker Fee Paid", key: "broker_fee_paid", width: 20 },
+      { header: "Closure Date", key: "closure_date", width: 30 },
+      { header: "Completion Date", key: "completion_date", width: 30 },
+      { header: "Contact", key: "contact", width: 20 },
+      { header: "Creation Date", key: "creation_date", width: 30 },
+      { header: "Currency", key: "currency", width: 20 },
+      {
+        header: "Data Enquiry Recieve",
+        key: "data_enquiry_receive",
+        width: 30,
+      },
+      { header: "Deal Comission", key: "deal_commission", width: 20 },
+      { header: "Deal Name", key: "deal_name", width: 20 },
+      { header: "Deposite", key: "deposit", width: 20 },
+      { header: "Doc Number", key: "doc_number", width: 20 },
+      { header: "Document Verified", key: "document_verified", width: 20 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Engagement Fee", key: "engagement_fee", width: 20 },
+      { header: "Engagement Fee Paid", key: "engagement_fee_paid", width: 20 },
+      {
+        header: "Introducer Firm Name",
+        key: "introducer_firm_name",
+        width: 20,
+      },
+      { header: "Introducer Name", key: "introducer_name", width: 20 },
+      { header: "Is Deleted", key: "is_deleted", width: 20 },
+      { header: "Label Colour", key: "label_coloure", width: 20 },
+      { header: "Label Id", key: "label_id", width: 20 },
+      { header: "Label Name", key: "label_name", width: 20 },
+      { header: "Lead Id", key: "lead_id", width: 20 },
+      { header: "Lead Source", key: "lead_source", width: 20 },
+      { header: "Lender", key: "lender", width: 20 },
+      { header: "Loan Amount", key: "loan_amount", width: 20 },
+      { header: "Loan Type", key: "loan_type", width: 20 },
+      { header: "Mobile", key: "mobile", width: 20 },
+      { header: "Organization", key: "organization", width: 20 },
+      { header: "Owner", key: "owner", width: 20 },
+      { header: "Owner First Name", key: "ownerf_name", width: 20 },
+      { header: "Owner Last Name", key: "ownerl_name", width: 20 },
+      { header: "Pipeline Id", key: "pipeline_id", width: 20 },
+      { header: "Probability", key: "probability", width: 20 },
+      { header: "Procuration Fee", key: "procuration_fee", width: 20 },
+      {
+        header: "Procuration Fee Paid",
+        key: "procuration_fee_paid",
+        width: 20,
+      },
+      { header: "Security Value", key: "security_value", width: 20 },
+      { header: "Stage Id", key: "stage_id", width: 20 },
+      { header: "Stage Name", key: "stage_name", width: 20 },
+      { header: "Status", key: "status", width: 20 },
+      { header: "Type Of Security", key: "type_of_security", width: 20 },
+      { header: "Update Date", key: "update_date", width: 30 },
+      { header: "Value", key: "value", width: 20 },
+    ];
+
+    deals.forEach((deal) => {
+      worksheet.addRow({
+        id: deal.id,
+        borrower_entry: deal.borrower_entry,
+        broker_fee: deal.broker_fee,
+        broker_fee_paid: deal.broker_fee_paid,
+        closure_date: deal.closure_date,
+        completion_date: deal.completion_date,
+        contact: deal.contact,
+        creation_date: deal.creation_date,
+        currency: deal.currency,
+        data_enquiry_receive: deal.data_enquiry_receive,
+        deal_commission: deal.deal_commission,
+        deal_name: deal.deal_name,
+        deposit: deal.deposit,
+        doc_number: deal.doc_number,
+        document_verified: deal.document_verified,
+        email: deal.email,
+        engagement_fee: deal.engagement_fee,
+        engagement_fee_paid: deal.engagement_fee_paid,
+        introducer_firm_name: deal.introducer_firm_name,
+        introducer_name: deal.introducer_name,
+        is_deleted: deal.is_deleted,
+        label_coloure: deal.label_coloure,
+        label_id: deal.label_id,
+        label_name: deal.label_name,
+        lead_id: deal.lead_id,
+        lead_source: deal.lead_source,
+        lender: deal.lender,
+        loan_amount: deal.loan_amount,
+        loan_type: deal.loan_type,
+        mobile: deal.mobile,
+        organization: deal.organization,
+        owner: deal.owner,
+        ownerf_name: deal.ownerf_name,
+        ownerl_name: deal.ownerl_name,
+        pipeline_id: deal.pipeline_id,
+        probability: deal.probability,
+        procuration_fee: deal.procuration_fee,
+        procuration_fee_paid: deal.procuration_fee_paid,
+        security_value: deal.security_value,
+        stage_id: deal.stage_id,
+        stage_name: deal.stage_name,
+        status: deal.status,
+        type_of_security: deal.type_of_security,
+        update_date: deal.update_date,
+        value: deal.value,
+      });
+    });
+
+    // // Generate a blob containing the Excel file
+    // const blob = await workbook.xlsx.writeBuffer();
+
+    // // Create a download link
+    // const url = window.URL.createObjectURL(new Blob([blob]));
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = "deals.xlsx";
+    // a.style.display = "none";
+
+    // // Trigger the download
+    // document.body.appendChild(a);
+    // a.click();
+
+    // // Clean up
+    // window.URL.revokeObjectURL(url);
+    // document.body.removeChild(a);
+
+    // Convert JSON data to CSV format
+    const csv = Papa.unparse(deals);
+
+    // Create a blob from the CSV data
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    // Create a download link
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "deals.csv";
+    a.style.display = "none";
+
+    // Trigger the download
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    logRecord();
+  };
+
   const toggleActionDropdown = (option) => {
     if (option === "Export") {
+      // exportLeadsToCSV();
       exportToExcel();
     }
     setActionOpen(!actionopen);
   };
-
+  // Effect hook to add click event listener when the component mounts
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -541,7 +570,6 @@ const Lead = () => {
         setActionOpen(false);
       }
     };
-
     const handleOutsideClick4 = (event) => {
       if (
         actionSortRef.current &&
@@ -616,38 +644,29 @@ const Lead = () => {
   const handleDeleteLead = () => {
     if (selectedIds) {
       const body = {
-        leadIds: [selectedIds], // Use the stored ID
+        dealIds: selectedIds, // Use the stored ID
       };
       axios
-        .delete(MOVELEAD_TO_TRASH, {
+        .delete(MOVEDEAL_TO_TRASH, {
           data: body,
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
         })
         .then((response) => {
-          toast.success("Lead moved to trash successfully", {
+          toast.success("Deal moved to trash successfully", {
             position: "top-center",
             autoClose: 2000,
           });
+          fetchLeadsData();
+          setSelectedIds([]); // Reset the stored ID
+          handleDeleteClose();
         })
         .catch((error) => {
           console.log(error);
         });
-      fetchLeadsData();
-      setSelectedIds([]); // Reset the stored ID
-
-      handleMassDeletePopUpClose();
     }
   };
-
-  const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("leads"))
-    .map((item) => ({
-      id: item?.id,
-      name: item?.name,
-      colour_code: item?.colour_code,
-    }));
 
   const handleCsvFileImport = (e) => {
     const file = e.target.files[0];
@@ -657,11 +676,28 @@ const Lead = () => {
         complete: (result) => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
-            value: parseInt(row?.value), // Parse the "value" field as an integer
-            stage_id: parseInt(row?.stage_id),
+            lead_id: parseInt(row?.lead_id),
+            value: parseInt(row?.value),
+            org_id:parseInt(orgId),
+            pipeline_id: parseInt(row?.pipeline_id),
+            mobile: parseInt(row?.mobile),
+            security_value: parseInt(row?.security_value),
+            loan_amount: parseInt(row?.loan_amount),
+            deposit: parseInt(row?.deposit),
+            engagement_fee: parseInt(row?.engagement_fee),
+            engagement_fee_paid: parseInt(row?.engagement_fee_paid),
+            broker_fee: parseInt(row?.broker_fee),
+            broker_fee_paid: parseInt(row?.broker_fee_paid),
+            procuration_fee: parseInt(row?.procuration_fee),
+            procuration_fee_paid: parseInt(row?.procuration_fee_paid),
+            deal_commission: parseInt(row?.deal_commission),
+            closure_date: formatDate(row?.closure_date),
+            data_enquiry_receive: formatDate(row?.data_enquiry_receive),
+            borrower_entry: formatDate(row?.borrower_entry),
+            completion_date: formatDate(row?.completion_date),
           }));
           // Store CSV data in state
-          const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);
+          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
           setCsvData(dataWithoutLastValue);
           postCsvDataToAPI(dataWithoutLastValue);
         },
@@ -669,6 +705,13 @@ const Lead = () => {
           console.error("Error parsing CSV:", error.message);
         },
       });
+    }
+  };
+  const formatDate = (dateString) => {
+    // console.log(dateString);
+    if (dateString) {
+      const [day, month, year] = dateString.split("/");
+      return `${year}-${month}-${day}`;
     }
   };
   // Function to handle "Import" menu item click
@@ -679,7 +722,7 @@ const Lead = () => {
   const postCsvDataToAPI = async (csvData) => {
     try {
       const response = await axios.post(
-        IMPORT_CSV,
+        IMPORT_DEAL,
         {
           data: csvData,
         },
@@ -694,8 +737,8 @@ const Lead = () => {
           position: "top-center",
           autoClose: 2000,
         });
-        fetchLeadsData();
         // You can add further logic here if needed
+        fetchLeadsData();
       } else {
         toast.error("Some Error Occured", {
           position: "top-center",
@@ -716,7 +759,7 @@ const Lead = () => {
           <div className="left-side--btns">
             <div className="dropdown-container" ref={leadDropDownRef}>
               <div className="dropdown-header" onClick={toggleDropdown}>
-                all Leads{" "}
+                all Deals{" "}
                 <i
                   className={`fa-sharp fa-solid ${
                     leadopen ? "fa-angle-up" : "fa-angle-down"
@@ -725,9 +768,9 @@ const Lead = () => {
               </div>
               {leadopen && (
                 <ul className="dropdown-menuLead">
-                  <li>Lead 1</li>
-                  <li>Lead 2</li>
-                  <li>Lead 3</li>
+                  <li>All Won Deals</li>
+                  <li>All Lost Deals</li>
+                  <li>All Open Deals</li>
                 </ul>
               )}
             </div>
@@ -764,9 +807,9 @@ const Lead = () => {
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
                     {userData
-                      ?.slice()
-                      ?.reverse()
-                      ?.map((item) => (
+                      .slice()
+                      .reverse()
+                      .map((item) => (
                         <li
                           key={item?.id}
                           value={item?.id}
@@ -775,18 +818,18 @@ const Lead = () => {
                             handleOwnerClick(
                               item.id,
                               item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name?.slice(1),
-                              item?.last_name?.charAt(0)?.toUpperCase() +
-                                item?.last_name?.slice(1)
+                                item?.first_name.slice(1),
+                              item?.last_name.charAt(0).toUpperCase() +
+                                item?.last_name.slice(1)
                             )
                           }
                         >
                           {`${
-                            item?.first_name?.charAt(0)?.toUpperCase() +
-                            item?.first_name?.slice(1)
+                            item?.first_name.charAt(0).toUpperCase() +
+                            item?.first_name.slice(1)
                           } ${
-                            item?.last_name?.charAt(0)?.toUpperCase() +
-                            item?.last_name?.slice(1)
+                            item?.last_name.charAt(0).toUpperCase() +
+                            item?.last_name.slice(1)
                           }`}
                         </li>
                       ))}
@@ -794,7 +837,6 @@ const Lead = () => {
                 )}
               </div>
             )}
-
           </div>
           <div className="right-side--btns">
             <p>
@@ -802,7 +844,7 @@ const Lead = () => {
               {totalValue.toLocaleString("en-IN")}
             </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
-              Create Lead
+              Create Deal
             </button>
             <div className="select action-select">
               <div className="dropdown-container" ref={pipeDropDownRef}>
@@ -826,7 +868,6 @@ const Lead = () => {
                 )}
               </div>
             </div>
-
             <input
               type="file"
               accept=".csv"
@@ -834,7 +875,6 @@ const Lead = () => {
               style={{ display: "none" }}
               onChange={handleCsvFileImport}
             />
-
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
                 <div
@@ -853,39 +893,17 @@ const Lead = () => {
                     {/* <li onClick={() => toggleActionDropdown("Delete")}>
                       Mass Delete
                     </li> */}
-                    <li onClick={handleDeletePopUpOpen}>Mass Delete</li>
+                    <li onClick={handleDeleteOpen}>Mass Delete</li>
                     <li onClick={handleMassUpdate}>Mass Update</li>
                     <li>Mass Convert</li>
                     <li>Drafts</li>
                     <li>Mass Email</li>
                     <li onClick={handleImportClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
-                      Export Leads
+                      Export Deals
                     </li>
                   </ul>
                 )}
-
-                {/* <div className="popup-container">
-                    <div className="popup">
-                      <p className="popupHead">Delete Selected Deals</p>
-                      <p>Deleted deals will be in recycle bin for 90 days</p>
-                      <p className="deleteMsg">
-                        Are you sure you want to delete all selected deals?
-                      </p>
-                      <div className="popup-buttons">
-                        <button
-                          className="cancelBtn"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="confirmBtn"
-                        >
-                          Delete Lead
-                        </button>
-                      </div>
-                    </div>
-                  </div> */}
               </div>
             </div>
             <div className="deal-sort" onClick={toggleSortOrder}>
@@ -919,7 +937,7 @@ const Lead = () => {
                         setSortOpen(false);
                       }}
                     >
-                      Lead Name
+                      Deal Name
                     </li>
                     <li
                       onClick={() => {
@@ -946,7 +964,16 @@ const Lead = () => {
                         setSortOpen(false);
                       }}
                     >
-                      Lead Owner
+                      Deal Owner
+                    </li>
+                    <li
+                      onClick={() => {
+                        setSortOption("Closure");
+                        setSortOrder("asc");
+                        setSortOpen(false);
+                      }}
+                    >
+                      Closure Date
                     </li>
                   </ul>
                 )}
@@ -963,6 +990,7 @@ const Lead = () => {
           </div>
         </div>
       </section>
+
       <section className="cards-body">
         {status.map((item, index) => (
           <div className="card-column" key={index}>
@@ -992,11 +1020,12 @@ const Lead = () => {
                 {sortedDealData.map((obj) => {
                   if (obj.status === item) {
                     return (
-                      <LeadCards
+                      <DealsColn
                         key={obj.id}
                         object={obj}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
+                        // status={item} // Pass the status as a prop
                         onLeadAdded={fetchLeadsData}
                         userData={userData}
                       />
@@ -1017,16 +1046,15 @@ const Lead = () => {
         ))}
       </section>
 
-      <CreateLead
+      <CreateDeal
         isOpen={isModalOpen}
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
-        mergedLabels={mergedLabels}
       />
       <ToastContainer />
-      {isDelete && (
-        <LeadDeletePopUp
-          onClose={handleMassDeletePopUpClose}
+      {isDeleteOpen && (
+        <DealDeletePopUp
+          onClose={handleDeleteClose}
           onDeleteConfirmed={handleDeleteLead}
         />
       )}
@@ -1035,7 +1063,7 @@ const Lead = () => {
         <MassUpdateModal
           onClose={handleMassUpdateClose}
           userData={userData}
-          text="Lead"
+          text="Deal"
           ids={selectedIds}
           handleDataReceived={handleDataReceived}
           fetchLeadsData={fetchLeadsData}
@@ -1045,4 +1073,4 @@ const Lead = () => {
   );
 };
 
-export default Lead;
+export default Deal;
