@@ -659,6 +659,7 @@ const Lead = () => {
             ...row,
             value: parseInt(row?.value), // Parse the "value" field as an integer
             stage_id: parseInt(row?.stage_id),
+            org_id: parseInt(orgId)
           }));
           // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);

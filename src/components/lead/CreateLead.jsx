@@ -333,7 +333,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       ...leadData,
       first_name: fname,
       last_name: lname,
-      status:"New"
+      status:"New",
+      org_id:orgId
     };
 
     axios
