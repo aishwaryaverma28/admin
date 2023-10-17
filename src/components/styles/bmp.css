@@ -333,15 +333,17 @@
 
 .bmp-modal-form {
   margin-left: 1rem;
-  margin-right: 1rem;
+  height: 75vh;
+  overflow-y: scroll;
 }
 
 .bmp-modal-input {
-  width: 100%;
+  width: 98%;
   margin-top: 0.2rem;
 }
-.bmp-modal-select {
-  width: 100%;
+
+.bmp-modal-select-2 {
+  width: 15rem;
   margin-top: 0.2rem;
   padding: 0;
   height: 32px;
@@ -363,6 +365,10 @@
   margin-bottom: 1rem;
 }
 
+.bmp-new-timing{
+  margin-right: 0.5rem;
+}
+
 .bmp-to {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -373,6 +379,7 @@
   background: #fff;
   padding: 1rem;
   border-right: none;
+  cursor: pointer;
 }
 
 .bmp-add-days-1 {
@@ -390,20 +397,7 @@
   margin-top: 0.2rem;
 }
 
-.bmp-am input {
-  width: 3.375rem;
-  border-radius: 0.3125rem;
-  border: 1px solid #dcdcdc;
-  background: #fff;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  margin-top: 0.2rem;
-  margin-left: 1rem;
-}
+
 
 .bmp-select-fee {
   margin-right: 1rem;
@@ -414,7 +408,6 @@
   justify-content: end;
   align-items: center;
   padding: 1rem;
-  margin-top: 4rem;
 }
 
 .bmp-add-bottom-btn button {
@@ -589,6 +582,31 @@ margin-bottom: 1.5rem;
 .blueDiv{
   background:#3498db;
   color: #fff;
+}
+
+.bmp-wrapper{
+  height: 85vh;
+}
+
+.bmp-agegroup{
+  margin-right: 0.5rem;
+}
+
+.bmp-group{
+  margin-bottom: 1rem;
+}
+
+.bmp-time-input{
+  width: 6rem;
+  margin-top: 0.2rem;
+}
+
+.bmp-modal-select {
+  width: 5rem;
+  margin-top: 0.2rem;
+  padding: 0;
+  height: 32px;
+  margin-left: 0.5rem;
 }
 
 
