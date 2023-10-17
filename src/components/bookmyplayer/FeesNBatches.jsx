@@ -8,6 +8,8 @@ import Pen from "../../assets/image/pen.svg";
 import BatchModal from "./BatchModal.jsx";
 import axios from "axios";
 import {getDecryptedToken,} from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
@@ -594,6 +596,7 @@ const FeesNBatches = () => {
           <BatchModal onClose={handleBatchModalClose} />
         )
       }
+      <ToastContainer/>
     </div>
   );
 };
