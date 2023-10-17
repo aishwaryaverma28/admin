@@ -1,14 +1,16 @@
-import React from "react";
+import React,{ useState }  from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import { useState } from "react";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
 import BatchModal from "./BatchModal.jsx";
+import axios from "axios";
+import {getDecryptedToken,} from "../utils/Constants";
 
 const FeesNBatches = () => {
+  const decryptedToken = getDecryptedToken();
   const [isBatchModalOpen , setIsBatchModalOpen] = useState(false);
   const data = {
     datasets: [

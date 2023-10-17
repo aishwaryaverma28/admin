@@ -3,8 +3,11 @@ import "../styles/bmp.css";
 import Map from "../../assets/image/map.png";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+import axios from "axios";
+import {getDecryptedToken,} from "../utils/Constants";
 
 const BmpOverview = () => {
+  const decryptedToken = getDecryptedToken();
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([true]);

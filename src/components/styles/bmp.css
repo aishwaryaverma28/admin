@@ -586,7 +586,10 @@ margin-bottom: 1.5rem;
   outline: none;
 }
 
-
+.blueDiv{
+  background:#3498db;
+  color: #fff;
+}
 
 
 

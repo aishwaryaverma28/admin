@@ -189,3 +189,7 @@ export const LOG_RECORD = start + "api/user/createlog";
 export const ENVELOPE_TOKEN = start + "api/thirdPartyApiRouter/docusign/refreshtoket/get";
 export const SEND_ENVELOPE = start + "api/thirdPartyApiRouter/docusign/envelope/send";
 export const ENVELOPE_DETAILS = start + "api/thirdPartyApiRouter/docusign/envelope/get";
+
+
+//============================================================bmp apis
+export const ADD_BATCH = start + "api/bmp/academy/batch/add";
