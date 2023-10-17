@@ -71,7 +71,6 @@ const [fStageId, setFStageId] = useState(0);
 
   const handleDataReceived = (newData) => {
     setData(newData);
-    console.log(newData);
   };
 
   const handleMassUpdate = () => {

@@ -14,6 +14,7 @@ import notUpload from "../../assets/image/notupload.svg";
 
 const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem('org_id');
   const [documentList, setDocumentList] = useState([]);
   const [selectedDocuments, setSelectedDocuments] = useState([]);
   const [fileName, setFileName] = useState("");
@@ -25,7 +26,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
 
   const fetchDocuments = () => {
     axios
-      .get(REQ_DOCUMENT + type, {
+      .post(REQ_DOCUMENT + type, {org_id: orgId},{
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

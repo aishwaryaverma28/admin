@@ -3,6 +3,7 @@ import "../styles/CPGenral.css";
 import Papa from "papaparse";
 import axios from "axios";
 import {
+  GET_ALL_STAGE,
   IMPORT_CSV,
   IMPORT_DEAL,
   IMPORT_PEOPLE,
@@ -26,10 +27,51 @@ const ImportTab = () => {
   const [deal, setDeal] = useState([]);
   const [people, setPeople] = useState([]);
   const [company, setCompany] = useState([]);
-
+  const [fDealStageId, setFDealStageId] = useState(0);
+  const [fLeadStageId, setFLeadStageId] = useState(0);
   function handleTabChange(tabName) {
     setActiveTab(tabName);
   }
+
+  const fetchStatus = () => {
+    const body = {
+      org_id:orgId
+    }
+    axios
+      .post(GET_ALL_STAGE + "/deal", body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const ids = response?.data?.message?.map((item) => item.id);
+        if (ids && ids.length > 0) {
+          const minId = Math.min(...ids);
+          setFDealStageId(minId);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      axios
+      .post(GET_ALL_STAGE + "/lead", body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const ids = response?.data?.message?.map((item) => item.id);
+        if (ids && ids.length > 0) {
+          const minId = Math.min(...ids);
+          setFLeadStageId(minId);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+console.log(fLeadStageId, fDealStageId);
   const handleCsvLeadFileImport = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -39,7 +81,7 @@ const ImportTab = () => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
             value: parseInt(row?.value), // Parse the "value" field as an integer
-            stage_id: parseInt(row?.stage_id),
+            stage_id: parseInt(fLeadStageId),
             org_id: parseInt(orgId),
           }));
           // Store CSV data in state
@@ -116,6 +158,7 @@ const ImportTab = () => {
             borrower_entry: formatDate(row?.borrower_entry),
             completion_date: formatDate(row?.completion_date),
             org_id: parseInt(orgId),
+            stage_id: parseInt(fDealStageId),
           }));
           const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
           postDealCsvDataToAPI(dataWithoutLastValue);
@@ -247,7 +290,6 @@ const ImportTab = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setLead(response?.data?.data);
       })
       .catch((error) => {
@@ -262,7 +304,6 @@ const ImportTab = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setDeal(response?.data?.data);
       })
       .catch((error) => {
@@ -277,7 +318,6 @@ const ImportTab = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setCompany(response?.data?.data);
       })
       .catch((error) => {
@@ -292,7 +332,6 @@ const ImportTab = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setPeople(response?.data?.data);
       })
       .catch((error) => {
@@ -301,6 +340,7 @@ const ImportTab = () => {
   };
 
   useEffect(() => {
+    fetchStatus();
     fetchImportLeadDetails();
     fetchImportDealDetails();
     fetchImportCompanyDetails();

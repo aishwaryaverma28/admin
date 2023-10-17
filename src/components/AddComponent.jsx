@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const RecycleRestorePopUp = ({onClose, docsData, type}) => {
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem('org_id');
   const [doc, setDoc] = useState("");
-
   function handleNameChange(event) {
     setDoc(event.target.value)
   }
@@ -22,7 +22,8 @@ const RecycleRestorePopUp = ({onClose, docsData, type}) => {
       document_name: doc,
       source_type: type,
       is_required: 1,
-      is_deleted: 0
+      is_deleted: 0,
+      org_id: orgId,
   }
     axios
       .post(ADD_DOCUMENT, updatedFormData , {

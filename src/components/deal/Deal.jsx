@@ -66,7 +66,6 @@ const Deal = () => {
   const [fStageId, setFStageId] = useState(0);
   const handleDataReceived = (newData) => {
     setData(newData);
-    console.log(newData);
   };
 
   const handleMassUpdate = () => {
@@ -141,7 +140,6 @@ const Deal = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.message);
         const ids = response?.data?.message?.map((item) => item.id);
         if (ids && ids.length > 0) {
           const minId = Math.min(...ids);
@@ -716,7 +714,6 @@ const Deal = () => {
     }
   };
   const formatDate = (dateString) => {
-    // console.log(dateString);
     if (dateString) {
       const [day, month, year] = dateString.split("/");
       return `${year}-${month}-${day}`;

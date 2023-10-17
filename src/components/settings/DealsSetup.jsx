@@ -18,6 +18,7 @@ import StageModal from "./StageModal.jsx";
 
 const DealsSetup = ({ type }) => {
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem('org_id');
   const [customDocuments, setCustomDocuments] = useState([]);
   const [showBasic, setShowBasic] = useState(false);
   // const [showClients, setShowClients] = useState(false);
@@ -62,7 +63,7 @@ const DealsSetup = ({ type }) => {
 
   const fetchDocs = () => {
     axios
-      .get(REQ_DOCUMENT + type, {
+      .post(REQ_DOCUMENT + type,{org_id: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
