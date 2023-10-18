@@ -21,6 +21,7 @@ const BmpOverview = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);  
 
+
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -97,7 +98,10 @@ const BmpOverview = () => {
       instagram: academyData?.instagram,
       sport: academyData?.selectedDaysString,
     };
-    axios.put(UPDATE_ACADEMY, updatedFormData, {
+
+    console.log(updatedFormData)
+    console.log("hyy")
+    axios.put(UPDATE_ACADEMY+ academyId, updatedFormData, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
@@ -108,6 +112,8 @@ const BmpOverview = () => {
       //   autoClose:2000
       // })
       
+    }).catch((error)=>{
+      console.log(error)
     });
     setStateBtn(0);
   }

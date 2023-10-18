@@ -622,7 +622,15 @@ margin-bottom: 1.5rem;
 
 .bmp-add-photo{
   color: #33475B;
-font-size: 1rem;
+font-size: 0.9rem;
+margin-top: 0.1rem;
+}
+
+.bmp-prefer{
+  border-radius: 0.3125rem;
+background: #FFF5DC;
+padding: 0.5rem;
+margin-top: 0.5rem;
 }
 
 

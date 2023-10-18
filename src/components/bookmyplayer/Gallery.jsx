@@ -31,26 +31,9 @@ const Gallery = () => {
         <div className="bmp-fee-left">
           <p className="common-fonts bmp-fee-timing-2">Photos & Video Gallery</p>
           <p className="common-fonts bmp-add-photo">Add photos and videos of your academy.</p>
-          <p className="common-fonts bmp-add-photo">Psst! A secret People prefer videos more than photos.</p>
+          <p className="common-fonts bmp-prefer">Psst! A secret People prefer videos more than photos.</p>
           <div className="bmp-new-flex">
-            <button
-              className="common-save-button common-fonts bmp-batch-btn"
 
-            >
-              Add Batch
-            </button>
-            <div className="file-input-wrapper">
-              <label htmlFor="file-input" className="custom-new-btn">
-                Upload Broucher
-              </label>
-              <input
-                type="file"
-                id="file-input"
-                className="file-input-new"
-              
-              />
-             
-            </div>
           </div>
         </div>
 
@@ -80,6 +63,12 @@ const Gallery = () => {
               Complete Now
             </button>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <p></p>
         </div>
       </div>
     </div>

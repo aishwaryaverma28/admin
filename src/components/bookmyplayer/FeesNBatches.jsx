@@ -16,6 +16,7 @@ const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [batch, setBatch] = useState([]);
+  const id= localStorage.getItem('id')
 
   
   const data = {
@@ -31,7 +32,7 @@ const FeesNBatches = () => {
 
   const fetchBatch = () =>{
     axios
-    .get(GET_BATCH + 1, {
+    .get(GET_BATCH + id, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
       },
@@ -159,7 +160,7 @@ fetchBatch();
               <></>
             ) : (
               <div className="bmp-fee-corner">
-                <p className="common-fonts">created on oct 10, 2023</p>
+                <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
                 <img src={Pen} alt="" className="bmp-fee-pen" />
                 <img src={Trash} alt="" />
               </div>
@@ -172,7 +173,7 @@ fetchBatch();
             <div className="bmp-box-top">
               <p className="common-fonts">Age Group</p>
               <div className="bmp-fee-corner">
-                <p className="common-fonts">created on oct 10, 2023</p>
+                <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
                 <img src={Pen} alt="" className="bmp-fee-pen" />
                 <img src={Trash} alt="" />
               </div>
