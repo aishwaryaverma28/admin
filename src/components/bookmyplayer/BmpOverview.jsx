@@ -4,12 +4,12 @@ import Map from "../../assets/image/map.png";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
-import {GET_ACADEMY, getDecryptedToken,} from "../utils/Constants";
+import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem('id');
-  const [academyData, setAcademyData] = useState
+  const academyId = localStorage.getItem("id");
+  const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([true]);
@@ -17,23 +17,40 @@ const BmpOverview = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
- const academyDetails = () => {
-  axios.get(GET_ACADEMY + academyId,{
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`,
-    },
-  })
-  .then ((response) => {
-    console.log(response?.data?.data[0]);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
- }
-  
- useEffect(() => {
-  academyDetails()
- },[])
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [days, setDays] = useState("");
+
+  const academyDetails = () => {
+    axios
+      .get(GET_ACADEMY + academyId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data[0]);
+        setAcademyData(response?.data?.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    academyDetails();
+  }, []);
+
+  const handleDayClick = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(
+        selectedDays.filter((selectedDay) => selectedDay !== day)
+      );
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+  const selectedDaysString = selectedDays.join(", ");
+
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -95,6 +112,7 @@ const BmpOverview = () => {
             <input
               type="text"
               className="common-fonts common-input bmp-input"
+              name="name"
             />
           </div>
           <div className="bmp-input-flex">
@@ -124,21 +142,78 @@ const BmpOverview = () => {
               Select your sport
             </label>
             <div className="bmp-games">
-              <div className="common-fonts bmp-game-list bmp-game-active">
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Football") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Football")}
+              >
                 Football
               </div>
-              <div className="common-fonts bmp-game-list">Basketball</div>
-              <div className="common-fonts bmp-game-list">Chess</div>
-              <div className="common-fonts bmp-game-list  bmp-game-active">
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Basketball") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Basketball")}
+              >
+                Basketball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Chess") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Chess")}
+              >
+                Chess
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Tennis") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Tennis")}
+              >
                 Tennis
               </div>
-              <div className="common-fonts bmp-game-list">MMA</div>
-              <div className="common-fonts bmp-game-list">Golf</div>
-              <div className="common-fonts bmp-game-list">Hockey</div>
-              <div className="common-fonts bmp-game-list bmp-game-active">
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("MMA") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("MMA")}
+              >
+                MMA
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Golf") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Golf")}
+              >
+                Golf
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Hockey") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Hockey")}
+              >
+                Hockey
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Badminton") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Badminton")}
+              >
                 Badminton
               </div>
-              <div className="common-fonts bmp-game-list">Volleyball</div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Volleyball")}
+              >
+                Volleyball
+              </div>
             </div>
           </div>
 
@@ -276,85 +351,90 @@ const BmpOverview = () => {
               </button>
             </div>
           </div>
- 
-        <div className="bmp-right-fields">
-        <p className="common-fonts">
-              Upload Academic Logo
-            </p>
+
+          <div className="bmp-right-fields">
+            <p className="common-fonts">Upload Academic Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>
 
             <div className="bmp-upload">
+              <div className="contact-browse deal-doc-file">
+                <span
+                  className="common-fonts common-input contact-tab-input"
+                  style={{
+                    position: "relative",
+                    marginRight: "10px",
+                  }}
+                >
+                  <button
+                    className="contact-browse-btn common-fonts"
+                    onClick={() => handleButtonClick()}
+                  >
+                    Browse
+                  </button>
 
-            <div className="contact-browse deal-doc-file">
-            <span
-              className="common-fonts common-input contact-tab-input"
-              style={{
-                position: "relative",
-                marginRight: "10px",
-              }}
-            >
-              <button
-                className="contact-browse-btn common-fonts"
-                onClick={() => handleButtonClick()}
-              >
-                Browse
-              </button>
+                  <input
+                    type="file"
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "100%",
+                    }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  <span className="common-fonts upload-file-name">
+                    {fileName}
+                  </span>
+                </span>
+              </div>
 
-              <input
-                type="file"
-                style={{
-                  display: "none",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  width: "100%",
-                }}
-                ref={fileInputRef}
-                onChange={handleFileChange}
-              />
-              <span className="common-fonts upload-file-name">
-                 {fileName}
-              </span>
-            </span>
-          </div>
-
-          {selectedFile && (
-  <div className="bmp-image-preview">
-    <img
-      src={URL.createObjectURL(selectedFile)}
-      alt="Selected Preview"
-      className="bmp-preview-image"
-    />
-  </div>
-)}
-
+              {selectedFile && (
+                <div className="bmp-image-preview">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
             </div>
 
-            <p className="common-fonts bmp-social">Connect Social Media Account</p>
+            <p className="common-fonts bmp-social">
+              Connect Social Media Account
+            </p>
 
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Facebook
-          </label>
-          <input type="text" className="common-fonts common-input bmp-input" />
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Twitter
-          </label>
-          <input type="text" className="common-fonts common-input bmp-input" />
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Instagram
-          </label>
-          <input type="text" className="common-fonts common-input bmp-input" />
-        </div>
-
-
-        </div>
+            <div className="bmp-input-flex">
+              <label htmlFor="" className="common-fonts bmp-academy-name">
+                Facebook
+              </label>
+              <input
+                type="text"
+                className="common-fonts common-input bmp-input"
+              />
+            </div>
+            <div className="bmp-input-flex">
+              <label htmlFor="" className="common-fonts bmp-academy-name">
+                Twitter
+              </label>
+              <input
+                type="text"
+                className="common-fonts common-input bmp-input"
+              />
+            </div>
+            <div className="bmp-input-flex">
+              <label htmlFor="" className="common-fonts bmp-academy-name">
+                Instagram
+              </label>
+              <input
+                type="text"
+                className="common-fonts common-input bmp-input"
+              />
+            </div>
+          </div>
         </div>
       </div>
 

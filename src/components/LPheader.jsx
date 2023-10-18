@@ -78,9 +78,22 @@ const LPheader = () => {
     }else{
       setPathAddress("/lp/settings/general")
     }
-
   },[])
-
+  
+  useEffect(() => {
+    switch (landingUrl) {
+      case "/lp/bmp":
+        setPageTitle("BMP");
+        break;
+      case "/lp/admin":
+      case "/lp/home":
+        setPageTitle("Home");
+        break;
+      default:
+        setPageTitle("Lead"); // Default title
+        break;
+    }
+  }, [landingUrl]);
   const handleBell = () => {
     setIsNotifyModalOpen(true);
   }
