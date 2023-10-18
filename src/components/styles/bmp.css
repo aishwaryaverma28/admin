@@ -170,6 +170,9 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+.bmp-fee-timing-2 {
+  font-size: 1.5rem;
+}
 
 /* Style for the custom button */
 .custom-new-btn {
@@ -615,6 +618,11 @@ margin-bottom: 1.5rem;
 
 .bmp-new-select-width{
   margin-top: 0.2rem;
+}
+
+.bmp-add-photo{
+  color: #33475B;
+font-size: 1rem;
 }
 
 
