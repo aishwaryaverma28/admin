@@ -5,6 +5,8 @@ import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
 import { GET_ACADEMY,UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -19,7 +21,8 @@ const BmpOverview = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [stateBtn, setStateBtn] = useState(0);  
+  const [stateBtn, setStateBtn] = useState(0); 
+  const [selectedDaysString,setSelectedDaysString] = useState(""); 
 
 
   const academyDetails = () => {
@@ -59,7 +62,15 @@ const BmpOverview = () => {
       setSelectedDays([...selectedDays, day]);
     }
   };
-  const selectedDaysString = selectedDays.join(", ");
+
+
+  useEffect(()=>{
+     setSelectedDaysString(selectedDays.join(","));
+  },[selectedDays])
+
+  useEffect(() => {
+    setSelectedDays(academyData?.sport?.split(',') || []);
+  }, [academyData]);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -96,27 +107,40 @@ const BmpOverview = () => {
       address1: academyData?.address1,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
-      sport: academyData?.selectedDaysString,
+      sport: selectedDaysString,
     };
 
-    console.log(updatedFormData)
-    console.log("hyy")
-    axios.put(UPDATE_ACADEMY+ academyId, updatedFormData, {
+
+    axios.put(UPDATE_ACADEMY + academyId, updatedFormData, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      console.log(response);
-      // toast.success("User data updated successfully", {
-      //   position:"top-center",
-      //   autoClose:2000
-      // })
-      
-    }).catch((error)=>{
-      console.log(error)
-    });
-    setStateBtn(0);
-  }
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
+    })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .finally(() => {
+        setStateBtn(0);
+      });
+    }
+    
 
   const data = {
     datasets: [
@@ -522,6 +546,7 @@ const BmpOverview = () => {
                         <button className="common-save-button common-save" onClick={handleSubmit}>Save</button>
                       )}
       </div>
+      <ToastContainer/>
     </>
   );
 };
