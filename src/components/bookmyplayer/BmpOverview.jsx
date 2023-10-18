@@ -296,30 +296,44 @@ const BmpOverview = () => {
               </div>
             </div>
 
-            <div className="bmp-input-flex-2 bmp-add-fields bmp-time-from">
-              <select
-                name=""
-                id=""
-                className="common-fonts common-input bmp-modal-select"
-              >
-                <option value="">HH:MM</option>
-              </select>
-              <div className="bmp-am">
-                <input className="common-fonts" placeholder="AM"></input>
-              </div>
-              <p className="common-fonts light-color bmp-to">To</p>
+            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
+                      <div className="">
+                        <input
+                          className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                          placeholder="Enter Time"
+                        ></input>
+                      </div>
+                      <select
+                        name="time"
+                        id=""
+                        className="common-fonts common-input bmp-modal-select bmp-new-width"
 
-              <select
-                name=""
-                id=""
-                className="common-fonts common-input bmp-modal-select"
-              >
-                <option value="">HH:MM</option>
-              </select>
-              <div className="bmp-am">
-                <input className="common-fonts" placeholder="PM"></input>
-              </div>
-            </div>
+                      >
+                        <option value="">AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+
+                      <p className="common-fonts light-color bmp-to">To</p>
+
+                      <div className="">
+                        <input
+                          className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                          placeholder="Enter Time"
+                        ></input>
+                      </div>
+
+                      <select
+                        name=""
+                        id=""
+                        className="common-fonts common-input bmp-modal-select bmp-new-width"
+                       
+                      >
+                        <option value="">AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
           </div>
         </div>
 
