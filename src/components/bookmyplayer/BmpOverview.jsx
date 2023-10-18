@@ -4,7 +4,7 @@ import Map from "../../assets/image/map.png";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
-import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { GET_ACADEMY,UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -17,8 +17,9 @@ const BmpOverview = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [days, setDays] = useState("");
+  const [stateBtn, setStateBtn] = useState(0);  
 
   const academyDetails = () => {
     axios
@@ -30,9 +31,11 @@ const BmpOverview = () => {
       .then((response) => {
         console.log(response?.data?.data[0]);
         setAcademyData(response?.data?.data[0]);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
 
@@ -40,7 +43,13 @@ const BmpOverview = () => {
     academyDetails();
   }, []);
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (academyData[name] !== value) setStateBtn(1);
+    setAcademyData({ ...academyData, [name]: value });
+  }
   const handleDayClick = (day) => {
+    setStateBtn(1);
     if (selectedDays.includes(day)) {
       setSelectedDays(
         selectedDays.filter((selectedDay) => selectedDay !== day)
@@ -76,6 +85,32 @@ const BmpOverview = () => {
     setIsButtonVisible(false);
     setCheckboxStates([...checkboxStates, true]);
   };
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const updatedFormData = {
+      name: academyData?.name,
+      about: academyData?.about,
+      phone: academyData.phone,
+      address1: academyData?.address1,
+      facebook: academyData?.facebook,
+      instagram: academyData?.instagram,
+      sport: academyData?.selectedDaysString,
+    };
+    axios.put(UPDATE_ACADEMY, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      console.log(response);
+      // toast.success("User data updated successfully", {
+      //   position:"top-center",
+      //   autoClose:2000
+      // })
+      
+    });
+    setStateBtn(0);
+  }
 
   const data = {
     datasets: [
@@ -113,6 +148,8 @@ const BmpOverview = () => {
               type="text"
               className="common-fonts common-input bmp-input"
               name="name"
+              onChange={handleChange}
+              value={isLoading ? '-' : academyData?.name || ""}
             />
           </div>
           <div className="bmp-input-flex">
@@ -120,7 +157,9 @@ const BmpOverview = () => {
               Introduction
             </label>
             <textarea
-              name=""
+              name="about"
+              onChange={handleChange}
+              value={isLoading ? '-' : academyData?.about || ""}
               id=""
               className="common-fonts bmp-textarea"
               rows="2"
@@ -131,7 +170,9 @@ const BmpOverview = () => {
               Address
             </label>
             <textarea
-              name=""
+              name="address1"
+              onChange={handleChange}
+              value={isLoading ? '-' : academyData?.address1 || ""}
               id=""
               className="common-fonts bmp-textarea"
               rows="2"
@@ -242,6 +283,9 @@ const BmpOverview = () => {
               <input
                 type="text"
                 className="common-fonts common-input bmp-input"
+                name="phone"
+                onChange={handleChange}
+              value={isLoading ? '-' : academyData?.phone || ""}
               />
             </div>
           ))}
@@ -272,6 +316,9 @@ const BmpOverview = () => {
             </label>
             <input
               type="text"
+              name="website"
+              onChange={handleChange}
+              value={isLoading ? '-' : academyData?.website || ""}
               className="common-fonts common-input bmp-input"
             />
           </div>
@@ -401,7 +448,9 @@ const BmpOverview = () => {
                     onChange={handleFileChange}
                   />
                   <span className="common-fonts upload-file-name">
-                    {fileName}
+                    {/* {fileName} */}
+                    {academyData?.logo}
+                    {}
                   </span>
                 </span>
               </div>
@@ -428,9 +477,12 @@ const BmpOverview = () => {
               <input
                 type="text"
                 className="common-fonts common-input bmp-input"
+                name="facebook"
+                onChange={handleChange}
+              value={isLoading ? '-' : academyData?.facebook || ""}
               />
             </div>
-            <div className="bmp-input-flex">
+            {/* <div className="bmp-input-flex">
               <label htmlFor="" className="common-fonts bmp-academy-name">
                 Twitter
               </label>
@@ -438,7 +490,7 @@ const BmpOverview = () => {
                 type="text"
                 className="common-fonts common-input bmp-input"
               />
-            </div>
+            </div> */}
             <div className="bmp-input-flex">
               <label htmlFor="" className="common-fonts bmp-academy-name">
                 Instagram
@@ -446,6 +498,9 @@ const BmpOverview = () => {
               <input
                 type="text"
                 className="common-fonts common-input bmp-input"
+                name="instagram"
+                onChange={handleChange}
+                value={isLoading ? '-' : academyData?.instagram || ""}
               />
             </div>
           </div>
@@ -454,7 +509,12 @@ const BmpOverview = () => {
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button">cancel</button>
-        <button className="common-save-button common-save">Save</button>
+        {/* <button className="common-save-button common-save">Save</button> */}
+        {stateBtn === 0 ? (
+                        <button className="disabledBtn">Save</button>
+                      ) : (
+                        <button className="common-save-button common-save" onClick={handleSubmit}>Save</button>
+                      )}
       </div>
     </>
   );
