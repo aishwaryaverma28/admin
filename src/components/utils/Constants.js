@@ -35,8 +35,8 @@ export {getDecryptedUserPath}
     // window.location.href = " https://fiduciagroup.leadplaner.com/";
   };
 // =============================================================apis used  
-const start = "http://core.leadplaner.com:3001/";
-// const start = "https://fiduciagroup.leadplaner.com//api/"
+// const start = "http://core.leadplaner.com:3001/";
+const start = "https://fiduciagroup.leadplaner.com/"
 const userId = localStorage.getItem('id');
 export const USER_INFO = start + "api/user/getuserinfo";
 export const USER_UPDATE = start + "api/user/update";
