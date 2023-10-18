@@ -20,6 +20,7 @@ const BatchModal = ({ onClose, fetchBatch }) => {
   const [amountArr, setNewAmountArr] = useState([]);
   const [timingValues, setTimingValues] = useState([]);
   const [timeArr, setTimeArr] = useState([]);
+  const id=localStorage.getItem('id');
 
   const handleTimingChange = (index, value, type) => {
     const newValues = [...timingValues];
@@ -79,7 +80,7 @@ const BatchModal = ({ onClose, fetchBatch }) => {
   }, [timingValues]);
 
   const [batchDetails, setBatchDetails] = useState({
-    academy_id: 1,
+    academy_id: parseInt(id),
     age_group: "",
     weekly_days: "",
     timing: "",
@@ -122,7 +123,7 @@ const BatchModal = ({ onClose, fetchBatch }) => {
       .then((response) => {
         // Reset input fields and counts after successful API call
         setBatchDetails({
-          academy_id: 1,
+          academy_id: parseInt(id),
           age_group: "",
           weekly_days: "",
           timing: "",
