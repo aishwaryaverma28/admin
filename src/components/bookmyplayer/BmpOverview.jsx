@@ -1,13 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../styles/bmp.css";
 import Map from "../../assets/image/map.png";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
-import {getDecryptedToken,} from "../utils/Constants";
+import {GET_ACADEMY, getDecryptedToken,} from "../utils/Constants";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
+  const academyId = localStorage.getItem('id');
+  const [academyData, setAcademyData] = useState
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([true]);
@@ -15,8 +17,23 @@ const BmpOverview = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-
+ const academyDetails = () => {
+  axios.get(GET_ACADEMY + academyId,{
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`,
+    },
+  })
+  .then ((response) => {
+    console.log(response?.data?.data[0]);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+ }
   
+ useEffect(() => {
+  academyDetails()
+ },[])
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };

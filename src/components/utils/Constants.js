@@ -36,7 +36,7 @@ export {getDecryptedUserPath}
   };
 // =============================================================apis used  
 // const start = "http://core.leadplaner.com:3001/";
-const start = "https://fiduciagroup.leadplaner.com/"
+const start = "https://fiduciagroup.leadplaner.com/";
 const userId = localStorage.getItem('id');
 export const USER_INFO = start + "api/user/getuserinfo";
 export const USER_UPDATE = start + "api/user/update";
@@ -192,4 +192,7 @@ export const ENVELOPE_DETAILS = start + "api/thirdPartyApiRouter/docusign/envelo
 
 
 //============================================================bmp apis
+export const GET_ACADEMY = start + "api/bmp/academy/get/";
+export const UPDATE_ACADEMY = start + "api/bmp/academy/update/";
 export const ADD_BATCH = start + "api/bmp/academy/batch/add";
+export const GET_BATCH = start + "api/bmp/academy/batch/get/";
