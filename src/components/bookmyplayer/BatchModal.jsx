@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-const BatchModal = ({ onClose }) => {
+const BatchModal = ({ onClose, fetchBatch }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedDays, setSelectedDays] = useState([]);
   const [days, setDays] = useState("");
@@ -72,7 +72,7 @@ const BatchModal = ({ onClose }) => {
       )
       .map(
         (value) =>
-          `${value.fromTime} ${value.period}-${value.toTime} ${value.period2}`
+          `${value.fromTime}${value.period} to ${value.toTime}${value.period2}`
       );
 
     setTimeArr(filteredValues);
@@ -105,7 +105,7 @@ const BatchModal = ({ onClose }) => {
     // setStateBtn(1);
   };
 
-  const fetchCompanyData = () => {
+  const fetchBatchData = () => {
     const body = {
       ...batchDetails,
       age_group: [...newArr].join(","),
@@ -135,11 +135,12 @@ const BatchModal = ({ onClose }) => {
         setGroupCount(1);
         setTimingsCount(1);
         setFieldCount(1);
-        // onClose();
+        onClose();
         toast.success("Batch added successfully!", {
           position: "top-center",
           autoClose: 2000,
         });
+        fetchBatch();
       })
       .catch((error) => {
         toast.error("Some Error Occoured!", {
@@ -185,7 +186,7 @@ const BatchModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const selectedDaysString = selectedDays.join(", ");
+    const selectedDaysString = selectedDays.join(",");
     setBatchDetails((prevBatchDetails) => ({
       ...prevBatchDetails,
       weekly_days: selectedDaysString,
@@ -465,7 +466,7 @@ const BatchModal = ({ onClose }) => {
                 </button>
                 <button
                   className="common-fonts common-save-button"
-                  onClick={fetchCompanyData}
+                  onClick={fetchBatchData}
                 >
                   Save
                 </button>
