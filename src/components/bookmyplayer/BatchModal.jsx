@@ -6,7 +6,9 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-const BatchModal = ({ onClose, fetchBatch }) => {
+const BatchModal = ({ onClose, fetchBatch, param, obj }) => {
+  console.log(obj)
+  console.log("hyt")
   const decryptedToken = getDecryptedToken();
   const [selectedDays, setSelectedDays] = useState([]);
   const [days, setDays] = useState("");

@@ -107,6 +107,7 @@ const BmpOverview = () => {
       address1: academyData?.address1,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
+      website: academyData?.website,
       sport: selectedDaysString,
     };
 

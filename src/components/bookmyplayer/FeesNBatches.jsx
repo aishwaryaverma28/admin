@@ -16,7 +16,10 @@ const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [batch, setBatch] = useState([]);
-  const id= localStorage.getItem('id')
+  const id= localStorage.getItem('id');
+  const [param, setParam] = useState("");
+  const [batchId, setBatchId] = useState(null);
+  const [obj, setObj] = useState({});
 
   
   const data = {
@@ -80,8 +83,12 @@ fetchBatch();
     }
   };
 
-  const handleBatchModal = () => {
+  const handleBatchModal = (param, batchId = null) => {
     setIsBatchModalOpen(true);
+    setParam(param);
+    setBatchId(batchId);
+    const selectedBatch = batch.find(batchItem => batchItem.id === batchId);
+  setObj(selectedBatch);
   };
   const handleBatchModalClose = () => {
     setIsBatchModalOpen(false);
@@ -95,7 +102,7 @@ fetchBatch();
           <div className="bmp-new-flex">
             <button
               className="common-save-button common-fonts bmp-batch-btn"
-              onClick={handleBatchModal}
+              onClick={()=>handleBatchModal("post")}
             >
               Add Batch
             </button>
@@ -161,7 +168,7 @@ fetchBatch();
             ) : (
               <div className="bmp-fee-corner">
                 <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
-                <img src={Pen} alt="" className="bmp-fee-pen" />
+                <img src={Pen} alt="" className="bmp-fee-pen" onClick={()=>handleBatchModal("put", batch.id)} />
                 <img src={Trash} alt="" />
               </div>
             )}
@@ -254,7 +261,7 @@ fetchBatch();
         </>
       ))}
       </div>
-      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} />}
+      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj}/>}
       <ToastContainer />
     </div>
   );
