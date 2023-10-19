@@ -1,18 +1,47 @@
-import React from "react";
+import React,{ useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import { useState } from "react";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
 import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
+import axios from "axios";
+import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TraningNStrategy = () => {
+  const decryptedToken = getDecryptedToken();
+  const academyId = localStorage.getItem("id");
   const [openBatch, setOpenBatch] = useState(1);
+  const [academyData, setAcademyData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const academyDetails = () => {
+    axios
+      .get(GET_ACADEMY + academyId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data[0].training_strategy);
+        setAcademyData(response?.data?.data[0]);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    academyDetails();
+  }, []);
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -156,6 +185,7 @@ const TraningNStrategy = () => {
           <DeleteStrategyModal onClose={handleDeleteClose} />
         )
       }
+      <ToastContainer/>
     </div>
   );
 };
