@@ -38,13 +38,14 @@ const StrategyModal = ({ onClose }) => {
             </div>
             <div className="bmp-add-fields">
             <label htmlFor="" className="common-fonts light-color">Strategy Description</label>
-                <textarea name="" id="" rows="5" className="common-fonts bmp-strategy-input bmp-modal-input"></textarea>
+                <textarea name="" id="" rows="5" className="common-fonts bmp-strategy-input bmp-modal-input" value={formData.strategy_desc}
+                  onChange={handleDescChange}></textarea>
             </div>
           </div>
 
           <div className="bmp-add-bottom-btn">
             <button className="common-fonts common-white-button">Cancel</button>
-            <button className="common-fonts common-save-button">Save</button>
+            <button className="common-fonts common-save-button" onClick={handleSave}>Save</button>
           </div>
           
 
