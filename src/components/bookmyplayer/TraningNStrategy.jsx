@@ -8,9 +8,8 @@ import Pen from "../../assets/image/pen.svg";
 import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
 import axios from "axios";
-import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { GET_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { useEffect } from "react";
 
 const TraningNStrategy = () => {
   const decryptedToken = getDecryptedToken();
@@ -20,28 +19,6 @@ const TraningNStrategy = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  const academyDetails = () => {
-    axios
-      .get(GET_ACADEMY + academyId, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response?.data?.data[0].training_strategy);
-        setAcademyData(response?.data?.data[0]);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    academyDetails();
-  }, []);
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -69,6 +46,23 @@ const TraningNStrategy = () => {
       },
     ],
   };
+
+
+  const fetchAcademyDetails = () => {
+    axios.get(GET_ACADEMY+id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      console.log(JSON.parse(response.data.data[0].training_strategy));
+      setNewData(JSON.parse(response.data.data[0].training_strategy));
+      console.log("response")
+})
+  }
+
+  useEffect(()=>{
+    fetchAcademyDetails();
+  },[])
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -176,7 +170,7 @@ const TraningNStrategy = () => {
       </div>
       {
         isModalOpen && (
-          <StrategyModal onClose={handleModalClose} />
+          <StrategyModal onClose={handleModalClose} newData={newData} />
         )
       }
 
