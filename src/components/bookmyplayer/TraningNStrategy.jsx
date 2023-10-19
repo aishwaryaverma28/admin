@@ -56,7 +56,7 @@ const TraningNStrategy = () => {
     }).then((response) => {
       console.log(JSON.parse(response.data.data[0].training_strategy));
       setNewData(JSON.parse(response.data.data[0].training_strategy));
-      console.log("response")
+      // console.log("response")
 })
   }
 

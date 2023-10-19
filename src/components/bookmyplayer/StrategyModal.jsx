@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
 import { UPDATE_ACADEMY, getDecryptedToken, } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
-
-
 
 const StrategyModal = ({ onClose, newData}) => {
   console.log(newData)
-console.log("hello")
+// console.log("hello")
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("id");
   const [stateBtn, setStateBtn] = useState(0); 
@@ -29,15 +26,6 @@ console.log("hello")
     setStateBtn(1);
     setFormData({ ...formData, strategy_desc: e.target.value });
   };
-
-
-
-
-
-
-
-  
-
   const handleSave = () => {
     console.log(formData);
     const updatedFormData = {

@@ -4,7 +4,11 @@ import Map from "../../assets/image/map.png";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
-import { GET_ACADEMY,UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import {
+  GET_ACADEMY,
+  UPDATE_ACADEMY,
+  getDecryptedToken,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,9 +25,8 @@ const BmpOverview = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [stateBtn, setStateBtn] = useState(0); 
-  const [selectedDaysString,setSelectedDaysString] = useState(""); 
-
+  const [stateBtn, setStateBtn] = useState(0);
+  const [selectedDaysString, setSelectedDaysString] = useState("");
 
   const academyDetails = () => {
     axios
@@ -63,13 +66,12 @@ const BmpOverview = () => {
     }
   };
 
-
-  useEffect(()=>{
-     setSelectedDaysString(selectedDays.join(","));
-  },[selectedDays])
+  useEffect(() => {
+    setSelectedDaysString(selectedDays.join(","));
+  }, [selectedDays]);
 
   useEffect(() => {
-    setSelectedDays(academyData?.sport?.split(',') || []);
+    setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
 
   const handleButtonClick = () => {
@@ -111,12 +113,12 @@ const BmpOverview = () => {
       sport: selectedDaysString,
     };
 
-
-    axios.put(UPDATE_ACADEMY + academyId, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-      },
-    })
+    axios
+      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -140,8 +142,7 @@ const BmpOverview = () => {
       .finally(() => {
         setStateBtn(0);
       });
-    }
-    
+  }
 
   const data = {
     datasets: [
@@ -180,7 +181,7 @@ const BmpOverview = () => {
               className="common-fonts common-input bmp-input"
               name="name"
               onChange={handleChange}
-              value={isLoading ? '-' : academyData?.name || ""}
+              value={isLoading ? "-" : academyData?.name || ""}
             />
           </div>
           <div className="bmp-input-flex">
@@ -190,7 +191,7 @@ const BmpOverview = () => {
             <textarea
               name="about"
               onChange={handleChange}
-              value={isLoading ? '-' : academyData?.about || ""}
+              value={isLoading ? "-" : academyData?.about || ""}
               id=""
               className="common-fonts bmp-textarea"
               rows="2"
@@ -203,7 +204,7 @@ const BmpOverview = () => {
             <textarea
               name="address1"
               onChange={handleChange}
-              value={isLoading ? '-' : academyData?.address1 || ""}
+              value={isLoading ? "-" : academyData?.address1 || ""}
               id=""
               className="common-fonts bmp-textarea"
               rows="2"
@@ -316,7 +317,7 @@ const BmpOverview = () => {
                 className="common-fonts common-input bmp-input"
                 name="phone"
                 onChange={handleChange}
-              value={isLoading ? '-' : academyData?.phone || ""}
+                value={isLoading ? "-" : academyData?.phone || ""}
               />
             </div>
           ))}
@@ -349,7 +350,7 @@ const BmpOverview = () => {
               type="text"
               name="website"
               onChange={handleChange}
-              value={isLoading ? '-' : academyData?.website || ""}
+              value={isLoading ? "-" : academyData?.website || ""}
               className="common-fonts common-input bmp-input"
             />
           </div>
@@ -375,43 +376,41 @@ const BmpOverview = () => {
             </div>
 
             <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-                      <div className="">
-                        <input
-                          className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                          placeholder="Enter Time"
-                        ></input>
-                      </div>
-                      <select
-                        name="time"
-                        id=""
-                        className="common-fonts common-input bmp-modal-select bmp-new-width"
+              <div className="">
+                <input
+                  className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                  placeholder="Enter Time"
+                ></input>
+              </div>
+              <select
+                name="time"
+                id=""
+                className="common-fonts common-input bmp-modal-select bmp-new-width"
+              >
+                <option value="">AM/PM</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
 
-                      >
-                        <option value="">AM/PM</option>
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
-                      </select>
+              <p className="common-fonts light-color bmp-to">To</p>
 
-                      <p className="common-fonts light-color bmp-to">To</p>
+              <div className="">
+                <input
+                  className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                  placeholder="Enter Time"
+                ></input>
+              </div>
 
-                      <div className="">
-                        <input
-                          className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                          placeholder="Enter Time"
-                        ></input>
-                      </div>
-
-                      <select
-                        name=""
-                        id=""
-                        className="common-fonts common-input bmp-modal-select bmp-new-width"
-                       
-                      >
-                        <option value="">AM/PM</option>
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
-                      </select>
-                    </div>
+              <select
+                name=""
+                id=""
+                className="common-fonts common-input bmp-modal-select bmp-new-width"
+              >
+                <option value="">AM/PM</option>
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -510,7 +509,7 @@ const BmpOverview = () => {
                 className="common-fonts common-input bmp-input"
                 name="facebook"
                 onChange={handleChange}
-              value={isLoading ? '-' : academyData?.facebook || ""}
+                value={isLoading ? "-" : academyData?.facebook || ""}
               />
             </div>
             {/* <div className="bmp-input-flex">
@@ -531,7 +530,7 @@ const BmpOverview = () => {
                 className="common-fonts common-input bmp-input"
                 name="instagram"
                 onChange={handleChange}
-                value={isLoading ? '-' : academyData?.instagram || ""}
+                value={isLoading ? "-" : academyData?.instagram || ""}
               />
             </div>
           </div>
@@ -542,12 +541,17 @@ const BmpOverview = () => {
         <button className="common-fonts common-white-button">cancel</button>
         {/* <button className="common-save-button common-save">Save</button> */}
         {stateBtn === 0 ? (
-                        <button className="disabledBtn">Save</button>
-                      ) : (
-                        <button className="common-save-button common-save" onClick={handleSubmit}>Save</button>
-                      )}
+          <button className="disabledBtn">Save</button>
+        ) : (
+          <button
+            className="common-save-button common-save"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+        )}
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };
