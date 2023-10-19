@@ -196,3 +196,4 @@ export const GET_ACADEMY = start + "/bmp/academy/get/";
 export const UPDATE_ACADEMY = start + "/bmp/academy/update/";
 export const ADD_BATCH = start + "/bmp/academy/batch/add";
 export const GET_BATCH = start + "/bmp/academy/batch/get/";
+export const UPDATE_BATCH = start + "/bmp/academy/batch/update/";
