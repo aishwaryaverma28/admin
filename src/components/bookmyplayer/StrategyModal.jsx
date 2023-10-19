@@ -1,25 +1,64 @@
 import React, { useState } from "react";
 import "../styles/HelpModal.css";
+import axios from "axios";
+import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const StrategyModal = ({ onClose }) => {
-
+  const decryptedToken = getDecryptedToken();
+  const academyId = localStorage.getItem("id");
+  const [stateBtn, setStateBtn] = useState(0); 
   const [formData, setFormData] = useState({
     strategy_name: "",
     strategy_desc: ""
   });
 
   const handleNameChange = (e) => {
+    setStateBtn(1);
     setFormData({ ...formData, strategy_name: e.target.value });
   };
 
   const handleDescChange = (e) => {
+    setStateBtn(1);
     setFormData({ ...formData, strategy_desc: e.target.value });
   };
 
   const handleSave = () => {
-    // Here, you can access formData and do whatever you want with it
     console.log(formData);
+    const updatedFormData = {
+      training_strategy: [
+        formData
+      ]}
+    axios.put(UPDATE_ACADEMY + academyId, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
+    })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .finally(() => {
+        setStateBtn(0);
+      });
   };
   return (
     <>
@@ -45,7 +84,11 @@ const StrategyModal = ({ onClose }) => {
 
           <div className="bmp-add-bottom-btn">
             <button className="common-fonts common-white-button">Cancel</button>
-            <button className="common-fonts common-save-button" onClick={handleSave}>Save</button>
+            {stateBtn === 0 ? (
+                        <button className="disabledBtn">Save</button>
+                      ) : (
+                        <button className="common-fonts common-save-button" onClick={handleSave}>Save</button>
+                      )}
           </div>
           
 
