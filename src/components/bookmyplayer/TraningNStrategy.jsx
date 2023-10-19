@@ -1,6 +1,7 @@
-import React,{ useState, useEffect } from "react";
+import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+import { useState } from "react";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
@@ -12,13 +13,12 @@ import { GET_ACADEMY, getDecryptedToken, } from "../utils/Constants";
 import { useEffect } from "react";
 
 const TraningNStrategy = () => {
-  const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem("id");
   const [openBatch, setOpenBatch] = useState(1);
-  const [academyData, setAcademyData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const decryptedToken = getDecryptedToken();
+  const id = localStorage.getItem("id");
+  const [newData, setNewData] = useState("");
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -56,7 +56,7 @@ const TraningNStrategy = () => {
     }).then((response) => {
       console.log(JSON.parse(response.data.data[0].training_strategy));
       setNewData(JSON.parse(response.data.data[0].training_strategy));
-      console.log("response")
+      // console.log("response")
 })
   }
 
@@ -179,7 +179,6 @@ const TraningNStrategy = () => {
           <DeleteStrategyModal onClose={handleDeleteClose} />
         )
       }
-      <ToastContainer/>
     </div>
   );
 };
