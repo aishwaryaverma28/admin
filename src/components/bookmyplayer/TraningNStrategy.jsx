@@ -8,11 +8,17 @@ import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
 import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
+import axios from "axios";
+import { GET_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { useEffect } from "react";
 
 const TraningNStrategy = () => {
   const [openBatch, setOpenBatch] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const decryptedToken = getDecryptedToken();
+  const id = localStorage.getItem("id");
+  const [newData, setNewData] = useState("");
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -40,6 +46,23 @@ const TraningNStrategy = () => {
       },
     ],
   };
+
+
+  const fetchAcademyDetails = () => {
+    axios.get(GET_ACADEMY+id, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      console.log(JSON.parse(response.data.data[0].training_strategy));
+      setNewData(JSON.parse(response.data.data[0].training_strategy));
+      console.log("response")
+})
+  }
+
+  useEffect(()=>{
+    fetchAcademyDetails();
+  },[])
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -147,7 +170,7 @@ const TraningNStrategy = () => {
       </div>
       {
         isModalOpen && (
-          <StrategyModal onClose={handleModalClose} />
+          <StrategyModal onClose={handleModalClose} newData={newData} />
         )
       }
 
