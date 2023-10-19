@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
-import { toast } from "react-toastify";
+import { UPDATE_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 
-const StrategyModal = ({ onClose }) => {
+
+const StrategyModal = ({ onClose, newData}) => {
+  console.log(newData)
+console.log("hello")
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("id");
   const [stateBtn, setStateBtn] = useState(0); 
@@ -14,6 +18,7 @@ const StrategyModal = ({ onClose }) => {
     strategy_name: "",
     strategy_desc: ""
   });
+
 
   const handleNameChange = (e) => {
     setStateBtn(1);
@@ -25,11 +30,19 @@ const StrategyModal = ({ onClose }) => {
     setFormData({ ...formData, strategy_desc: e.target.value });
   };
 
+
+
+
+
+
+
+  
+
   const handleSave = () => {
     console.log(formData);
     const updatedFormData = {
-      training_strategy: [
-        formData
+      training_strategy:[
+        JSON.stringify(formData),
       ]}
     axios.put(UPDATE_ACADEMY + academyId, updatedFormData, {
       headers: {
@@ -37,6 +50,8 @@ const StrategyModal = ({ onClose }) => {
       },
     })
       .then((response) => {
+        console.log("response")
+        console.log(response)
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",
@@ -99,6 +114,7 @@ const StrategyModal = ({ onClose }) => {
           X
         </div>
       </div>
+      <ToastContainer/>
     </>
   );
 };
