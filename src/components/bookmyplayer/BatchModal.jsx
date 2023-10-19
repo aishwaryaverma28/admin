@@ -6,15 +6,18 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
-  age_group:"",
-  weekly_days:"",
-  timing:"",
-  fees:"",
-  title:""
-} , ageCount=1, timeCount=1, feeCount=1 }) => {
-  console.log(obj)
-  console.log("hyt")
+const BatchModal = ({
+  onClose,
+  batchId,
+  fetchBatch,
+  param,
+  obj,
+  ageCount = 1,
+  timeCount = 1,
+  feeCount = 1,
+}) => {
+  console.log(obj);
+  console.log("hy logo");
   const decryptedToken = getDecryptedToken();
   const [selectedDays, setSelectedDays] = useState([]);
   const [days, setDays] = useState("");
@@ -28,31 +31,33 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
   const [amountArr, setNewAmountArr] = useState([]);
   const [timingValues, setTimingValues] = useState([]);
   const [timeArr, setTimeArr] = useState([]);
-  const id=localStorage.getItem('id');
+  const id = localStorage.getItem("id");
+  const [stateBtn, setStateBtn] = useState(0);
 
   const handleTimingChange = (index, value, type) => {
     const newValues = [...timingValues];
     newValues[index] = { ...newValues[index], [type]: value };
     setTimingValues(newValues);
+    setStateBtn(1)
   };
 
   const handleGroupChange = (index, value, type) => {
     const newValues = [...inputValues];
     newValues[index] = { ...newValues[index], [type]: value };
     setInputValues(newValues);
+    setStateBtn(1)
   };
 
   const handleAmountChange = (index, value, type) => {
     const newValues = [...amountValues];
     newValues[index] = { ...newValues[index], [type]: value };
     setAmountValues(newValues);
+    setStateBtn(1)
   };
 
   useEffect(() => {
-    setSelectedDays(obj?.weekly_days?.split(',') || []);
+    setSelectedDays(obj?.weekly_days?.split(",") || []);
   }, []);
-
-
 
   useEffect(() => {
     const filteredValues = inputValues
@@ -112,14 +117,13 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const val= value;
-
+    const val = value;
 
     setBatchDetails({
       ...batchDetails,
       [name]: val,
     });
-    // setStateBtn(1);
+    setStateBtn(1);
   };
 
   const fetchBatchData = () => {
@@ -129,73 +133,10 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
       fees: [...amountArr].join(","),
       timing: [...timeArr].join(","),
     };
-    console.log(body);
-    if(param==="post"){
+    setStateBtn(0)
+    if (param === "post") {
       axios
-      .post(ADD_BATCH, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        // Reset input fields and counts after successful API call
-        setBatchDetails({
-          academy_id: parseInt(id),
-          age_group: "",
-          weekly_days: "",
-          timing: "",
-          fees: "",
-          title: "",
-        });
-        setInputValues([]);
-        setAmountValues([]);
-        setTimingValues([]);
-        setGroupCount(1);
-        setTimingsCount(1);
-        setFieldCount(1);
-        onClose();
-        if(response?.data?.status===1){
-          toast.success("Batch added successfully!", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }else{
-          toast.error(response?.data?.message
-            
-            , {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-       
-        fetchBatch();
-      })
-      .catch((error) => {
-        toast.error("Some Error Occoured!", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        setBatchDetails({
-          academy_id: 1,
-          age_group: "",
-          weekly_days: "",
-          timing: "",
-          fees: "",
-          title: "",
-        });
-        setInputValues([]);
-        setAmountValues([]);
-        setTimingValues([]);
-        setGroupCount(1);
-        setTimingsCount(1);
-        setFieldCount(1);
-        onClose();
-        
-      });
-    }else{
-      if(param==="put"){
-        axios
-        .put(UPDATE_BATCH+batchId, body, {
+        .post(ADD_BATCH, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
           },
@@ -217,24 +158,26 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
           setTimingsCount(1);
           setFieldCount(1);
           onClose();
-          if(response?.data?.status===1){
-            toast.success("Batch Updated successfully!", {
+          if (response?.data?.status === 1) {
+            toast.success("Batch added successfully!", {
               position: "top-center",
               autoClose: 2000,
             });
-          }else{
-            toast.error(response?.data?.message+" update"
-              
-              , {
-              position: "top-center",
-              autoClose: 2000,
-            });
+          } else {
+            toast.error(
+              response?.data?.message,
+
+              {
+                position: "top-center",
+                autoClose: 2000,
+              }
+            );
           }
-         
+
           fetchBatch();
         })
         .catch((error) => {
-          toast.error("Some Error Occoured in update!", {
+          toast.error("Some Error Occoured!", {
             position: "top-center",
             autoClose: 2000,
           });
@@ -253,11 +196,73 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
           setTimingsCount(1);
           setFieldCount(1);
           onClose();
-          
         });
+    } else {
+      if (param === "put") {
+        axios
+          .put(UPDATE_BATCH + batchId, body, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            },
+          })
+          .then((response) => {
+            // Reset input fields and counts after successful API call
+            setBatchDetails({
+              academy_id: parseInt(id),
+              age_group: "",
+              weekly_days: "",
+              timing: "",
+              fees: "",
+              title: "",
+            });
+            setInputValues([]);
+            setAmountValues([]);
+            setTimingValues([]);
+            setGroupCount(1);
+            setTimingsCount(1);
+            setFieldCount(1);
+            onClose();
+            if (response?.data?.status === 1) {
+              toast.success("Batch Updated successfully!", {
+                position: "top-center",
+                autoClose: 2000,
+              });
+            } else {
+              toast.error(
+                response?.data?.message + " update",
+
+                {
+                  position: "top-center",
+                  autoClose: 2000,
+                }
+              );
+            }
+
+            fetchBatch();
+          })
+          .catch((error) => {
+            toast.error("Some Error Occoured in update!", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+            setBatchDetails({
+              academy_id: 1,
+              age_group: "",
+              weekly_days: "",
+              timing: "",
+              fees: "",
+              title: "",
+            });
+            setInputValues([]);
+            setAmountValues([]);
+            setTimingValues([]);
+            setGroupCount(1);
+            setTimingsCount(1);
+            setFieldCount(1);
+            onClose();
+          });
       }
     }
-
   };
 
   const AddFields = () => {
@@ -277,6 +282,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
       // If the day is not selected, add it
       setSelectedDays([...selectedDays, day]);
     }
+    setStateBtn(1)
   };
 
   useEffect(() => {
@@ -291,8 +297,59 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
     setGroupCount(groupCount + 1);
   };
 
+  useEffect(() => {
+    if (obj) {
+      setBatchDetails({
+        academy_id: parseInt(id),
+        age_group: convertStringToInputValues(obj?.age_group),
+        weekly_days: obj?.weekly_days,
+        timing: convertStringToTimingValues(obj?.timing),
+        fees: convertStringToAmountValues(obj?.fees),
+        title: obj?.title,
+      });
+    }
+  }, [obj]);
 
- 
+  function convertStringToTimingValues(str) {
+    const timingValueStrings = str.split(","); // Split the input string by comma
+    const timingValues = timingValueStrings.map((timingValueString) => {
+      const [fromTime, toTime] = timingValueString
+        .trim()
+        .split(" to ")
+        .map((time) => time.trim().match(/\d+|\D+/g)); // Extract time and period separately
+      return {
+        fromTime: fromTime[0],
+        period: fromTime[1],
+        toTime: toTime[0],
+        period2: toTime[1],
+      };
+    });
+    return setTimingValues(timingValues);
+  }
+
+  function convertStringToInputValues(str) {
+    const inputValuesStrings = str.split(","); // Split the input string by comma
+    const inputValues = inputValuesStrings.map((inputValueString) => {
+      const [from, to] = inputValueString
+        .trim()
+        .split("-")
+        .map((age) => parseInt(age)); // Extract age range values and parse them as integers
+      return { from, to };
+    });
+    return setInputValues(inputValues);
+  }
+
+  function convertStringToAmountValues(str) {
+    const amountValueStrings = str.split(","); // Split the input string by comma
+    const amountValues = amountValueStrings.map((amountValueString) => {
+      const [month, amount] = amountValueString
+        .trim()
+        .split(" month-")
+        .map((value) => (value === "" ? undefined : parseInt(value))); // Extract month and amount values and parse amount as integers
+      return { month, amount };
+    });
+    return setAmountValues(amountValues);
+  }
 
   return (
     <>
@@ -300,7 +357,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
         <div className="help-modal-box">
           <section>
             <div className="bmp-add-new-batch">
-              <p className="common-fonts bmp-add-heading">Add Batch</p>
+              <p className="common-fonts bmp-add-heading">{param==="post" ? "Add Batch" : "Update Batch"}</p>
             </div>
 
             <div className="bmp-wrapper">
@@ -314,7 +371,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                     className="common-fonts common-input bmp-modal-input"
                     name="title"
                     onChange={handleInputChange}
-                    value={obj?.title}
+                    value={batchDetails?.title}
                   />
                 </div>
 
@@ -327,7 +384,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                       <input
                         type="number"
                         className="common-fonts common-input bmp-modal-input"
-                        value={(obj.age_group && obj.age_group.split(',')[index]?.split('-')[0]) || ""}
+                        value={inputValues[index]?.from}
                         onChange={(e) =>
                           handleGroupChange(index, e.target.value, "from")
                         }
@@ -336,8 +393,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                       <input
                         type="number"
                         className="common-fonts common-input bmp-modal-input"
-                        value={(obj?.age_group && obj?.age_group?.split(',')[index]?.split('-')[1]?.replace('yrs', '')?.trim()) || ""}
-
+                        value={inputValues[index]?.to}
                         onChange={(e) =>
                           handleGroupChange(index, e.target.value, "to")
                         }
@@ -431,7 +487,16 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                         <input
                           className="common-fonts common-input common-fonts bmp-time-input"
                           placeholder="Enter Time"
-                          value={obj?.timing && (obj?.timing?.split(',')[index]?.split('to')[0]?.replace(/[APap][Mm]/g, '').trim() || "")}
+                          // value={
+                          //   batchDetails?.timing==="" ? batchDetails?.timing :
+                          // batchDetails?.timing
+                          //   ?.split(",")
+                          //   [index]?.split("to")[0]
+                          //   ?.replace(/[APap][Mm]/g, "")
+                          //   .trim()
+                          // }
+
+                          value={timingValues[index]?.fromTime}
                           onChange={(e) =>
                             handleTimingChange(
                               index,
@@ -448,7 +513,12 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                         onChange={(e) =>
                           handleTimingChange(index, e.target.value, "period")
                         }
-                        value={obj?.timing?.split(',')[index]?.split('to')[0]?.replace(/\d+/g, '').trim()}
+                        // value={batchDetails?.timing
+                        //   ?.split(",")
+                        //   [index]?.split("to")[0]
+                        //   ?.replace(/\d+/g, "")
+                        //   .trim()}
+                        value={timingValues[index]?.period}
                       >
                         <option value="">AM/PM</option>
                         <option value="AM">AM</option>
@@ -462,10 +532,13 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                           className="common-fonts common-input common-fonts bmp-time-input"
                           placeholder="Enter Time"
                           value={
-    timingValues[index]?.toTime || 
-    (obj?.timing?.split(',')[index]?.split('to')[1]?.replace(/[APap][Mm]/g, '').trim() || ""
-    )
-  }
+                            timingValues[index]?.toTime
+                            // batchDetails?.timing
+                            //   ?.split(",")
+                            //   [index]?.split("to")[1]
+                            //   ?.replace(/[APap][Mm]/g, "")
+                            //   .trim() ||
+                          }
                           onChange={(e) =>
                             handleTimingChange(index, e.target.value, "toTime")
                           }
@@ -479,7 +552,12 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                         onChange={(e) =>
                           handleTimingChange(index, e.target.value, "period2")
                         }
-                        value={obj?.timing?.split(',')[index]?.split('to')[1]?.replace(/\d+/g, '').trim()}
+                        // value={obj?.timing
+                        //   ?.split(",")
+                        //   [index]?.split("to")[1]
+                        //   ?.replace(/\d+/g, "")
+                        //   .trim()}
+                        value={timingValues[index]?.period2}
                       >
                         <option value="">AM/PM</option>
                         <option value="AM">AM</option>
@@ -508,7 +586,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                         name=""
                         id=""
                         className="common-fonts common-input bmp-modal-select-2 bmp-select-fee"
-                        value={obj?.fees?.split(',')[index]?.split(' month-')[0] || ""}
+                        value={amountValues[index]?.month}
                         onChange={(e) =>
                           handleAmountChange(index, e.target.value, "month")
                         }
@@ -546,7 +624,7 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
                         type="text"
                         className="common-fonts common-input bmp-modal-input"
                         placeholder="Enter your amount"
-                        value={obj?.fees?.split(',')[index]?.split(' month-')[1] || ""}
+                        value={amountValues[index]?.amount}
                         onChange={(e) =>
                           handleAmountChange(index, e.target.value, "amount")
                         }
@@ -566,17 +644,26 @@ const BatchModal = ({ onClose,batchId, fetchBatch, param, obj={
               </div>
 
               <div className="bmp-add-bottom-btn">
-                <button className="common-fonts common-white-button">
+                <button className="common-fonts common-white-button" onClick={onClose}>
                   Cancel
                 </button>
-                <button
+
+                {stateBtn === 0 ? (
+                  <button
+                  className="common-fonts common-inactive-button"
+                  disabled
+                >
+                  {param === "post" ? "Save" : "Update"}
+                </button>
+                      ) : (
+                        <button
                   className="common-fonts common-save-button"
                   onClick={fetchBatchData}
                 >
-                {
-                  param==="post" ? "Save" : "Update"
-                }
+                  {param === "post" ? "Save" : "Update"}
                 </button>
+                      )}
+                
               </div>
             </div>
           </section>

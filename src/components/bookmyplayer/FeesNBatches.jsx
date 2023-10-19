@@ -24,6 +24,7 @@ const FeesNBatches = () => {
   const [timingsCount, setTimingsCount] = useState(null);
   const [fieldCount, setFieldCount] = useState(null);
 
+
   
   const data = {
     datasets: [
@@ -99,6 +100,8 @@ fetchBatch();
   const handleBatchModalClose = () => {
     setIsBatchModalOpen(false);
   };
+
+  
 
   return (
     <div>
@@ -267,7 +270,7 @@ fetchBatch();
         </>
       ))}
       </div>
-      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId}/>}
+      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId} />}
       <ToastContainer />
     </div>
   );
