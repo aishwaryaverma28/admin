@@ -20,6 +20,9 @@ const FeesNBatches = () => {
   const [param, setParam] = useState("");
   const [batchId, setBatchId] = useState(null);
   const [obj, setObj] = useState({});
+  const [groupCount, setGroupCount] = useState(null);
+  const [timingsCount, setTimingsCount] = useState(null);
+  const [fieldCount, setFieldCount] = useState(null);
 
   
   const data = {
@@ -89,6 +92,9 @@ fetchBatch();
     setBatchId(batchId);
     const selectedBatch = batch.find(batchItem => batchItem.id === batchId);
   setObj(selectedBatch);
+  setGroupCount(selectedBatch?.age_group?.split(",")?.length)
+  setTimingsCount(selectedBatch?.timing?.split(",")?.length)
+  setFieldCount(selectedBatch?.fees?.split(",")?.length)
   };
   const handleBatchModalClose = () => {
     setIsBatchModalOpen(false);
@@ -181,7 +187,7 @@ fetchBatch();
               <p className="common-fonts">Age Group</p>
               <div className="bmp-fee-corner">
                 <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
-                <img src={Pen} alt="" className="bmp-fee-pen" />
+                <img src={Pen} alt="" className="bmp-fee-pen" onClick={()=>handleBatchModal("put", batch.id)}  />
                 <img src={Trash} alt="" />
               </div>
             </div>
@@ -261,7 +267,7 @@ fetchBatch();
         </>
       ))}
       </div>
-      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj}/>}
+      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId}/>}
       <ToastContainer />
     </div>
   );
