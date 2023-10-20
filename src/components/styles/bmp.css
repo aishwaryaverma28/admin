@@ -45,8 +45,8 @@
 }
 
 .bmp-circle {
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 4rem;
+  height: 4rem;
   position: relative;
   margin: 0.2rem;
 }
@@ -60,10 +60,10 @@
   border-radius: 7.1875rem;
   background: #2b74da;
   color: #fff;
-  padding: 10px 18px;
+  padding: 8px 18px;
   outline: none;
   border: none;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .bmp-msg {
@@ -84,7 +84,8 @@
   display: flex;
   justify-content: end;
   align-items: center;
-  height: 10.625rem;
+  height: 10rem;
+  
 }
 
 .status-of-profile {
@@ -527,6 +528,13 @@ height: 1.8615rem;
   justify-content: start;
   align-items: center;
 }
+.bmp-upload-2{
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  margin-left: 1rem;
+  height: 3.75rem;
+}
 
 .bmp-batch-date{
   display: flex;
@@ -631,6 +639,40 @@ margin-top: 0.1rem;
 background: #FFF5DC;
 padding: 0.5rem;
 margin-top: 0.5rem;
+}
+
+.bmp-banner-upload{
+  font-size: 1rem;
+font-weight: 500;
+margin-left: 1rem;
+}
+
+.bmp-size{
+  margin-left: 1rem;
+}
+
+.bmp-image-preview-2 img{
+  width: 8.625rem;
+  height: 3.3125rem;
+  flex-shrink: 0;
+}
+.bmp-image-preview-2{
+  border-radius: 0.125rem;
+}
+
+.bmp-border{
+  border-radius: 0.3125rem;
+border: 1px dashed #2B74DA;
+background: #F3F6FA;
+}
+
+.bmp-main-wrapper{
+  position: relative;
+}
+
+.bmp-img-section{
+  position: absolute;
+  top:80%;
 }
 
 
