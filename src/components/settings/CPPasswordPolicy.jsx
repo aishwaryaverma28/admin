@@ -36,15 +36,15 @@ const CPPasswordPolicy = () => {
   useEffect(() => {
     setCheckboxStates(
       passDes?.map((condition) => ({
-        id: condition.id,
-        active: condition.active, // Default value
-        value: condition.value, // Default value
+        id: condition?.id,
+        active: condition?.active, // Default value
+        value: condition?.value, // Default value
       }))
     );
   }, [passDes]);
 
   const toggleActive =
-    passDes?.find((condition) => condition.id === 5)?.active === 1;
+    passDes?.find((condition) => condition?.id === 5)?.active === 1;
 
   // Update the toggleChecked state based on the toggleActive value
   useEffect(() => {
@@ -55,7 +55,7 @@ const CPPasswordPolicy = () => {
     setToggleChecked((prevToggleChecked) => {
       // Update the active value for id=5 when turning the switch on
       if (!prevToggleChecked) {
-        const index = checkboxStates?.findIndex((state) => state.id === 5);
+        const index = checkboxStates?.findIndex((state) => state?.id === 5);
         if (index !== -1) {
           const newState = [...checkboxStates];
           newState[index] = {
@@ -81,7 +81,7 @@ const CPPasswordPolicy = () => {
 
   const handleCheckboxChange = (id, value) => {
     // Find the index of the checkboxStates array where id matches
-    const index = checkboxStates?.findIndex((state) => state.id === id);
+    const index = checkboxStates?.findIndex((state) => state?.id === id);
 
     // Only update if the toggle button is enabled
     if (toggleChecked) {
@@ -90,7 +90,7 @@ const CPPasswordPolicy = () => {
         const newState = [...prevStates];
         newState[index] = {
           ...newState[index],
-          active: newState[index].active === 1 ? 0 : 1, // Toggle active value
+          active: newState[index]?.active === 1 ? 0 : 1, // Toggle active value
           value: value,
         };
         setStateBtn(1);
@@ -104,11 +104,11 @@ const CPPasswordPolicy = () => {
     event.preventDefault();
   
     // Compare checkboxStates with initial to find changed objects
-    const changedStates = checkboxStates.filter(state => {
-      const initialState = initial?.find(initialState => initialState.id === state.id);
+    const changedStates = checkboxStates?.filter(state => {
+      const initialState = initial?.find(initialState => initialState?.id === state?.id);
       return (
         initialState &&
-        (initialState.active !== state.active || initialState.value !== state.value)
+        (initialState?.active !== state?.active || initialState?.value !== state?.value)
       );
     });
       console.log("Changed states:", changedStates);
