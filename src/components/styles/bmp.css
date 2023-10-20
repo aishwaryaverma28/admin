@@ -538,8 +538,7 @@ height: 1.8615rem;
 .bmp-upload-3{
   display: flex;
   justify-content: start;
-  align-items: start;
-  flex-direction: column;
+  align-items: center;
   margin-left: 1rem;
   height: 3.75rem;
 }
@@ -677,6 +676,15 @@ border: 1px dashed #2B74DA;
 background: #F3F6FA;
 margin-left: -1rem;
 }
+.bmp-border-2{
+  border-radius: 0.3125rem;
+border: 1px dashed #2B74DA;
+background: #F3F6FA;
+margin-left: -1rem;
+padding: 1rem;
+height: 3rem;
+width:35rem;
+}
 
 .bmp-img-section{
   margin-top: 2rem;
@@ -695,6 +703,125 @@ margin-left: -1rem;
 .bmp-total-img{
   margin-left: 1rem;
 }
+
+.bmp-gap{
+  margin-top: 1rem;
+  
+}
+
+.bmp-format{
+  font-size: 0.75rem;
+  color:#33475B;
+}
+
+.bmp-new-img{
+  width: 17.5rem;
+height: 11.75rem;
+flex-shrink: 0;
+border-radius: 0.3125rem;
+background: #F3F6FA;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+padding: 1rem;
+margin-bottom: 1rem;
+position: relative;
+margin-left: 1rem;
+margin-top: 0.5rem;
+}
+
+.bmp-new-img img{
+  width: 16rem;
+height: 8.75rem;
+flex-shrink: 0;
+border-radius: 0.3125rem;
+}
+
+.bmp-img-top-icon{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.bmp-img-name{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  
+}
+
+.bmp-trash{
+  width: 0.875rem !important;
+  height: 0.875rem !important;
+}
+
+.bmp-vedio{
+width: 1rem;
+height: 1rem;
+}
+.bmp-trash img{
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.bmp-video img{
+width: 1rem;
+height: 1rem;
+}
+
+.bmp-img-top-icon{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.bmp-tour{
+  margin-left: 0.5rem;
+
+}
+
+
+
+.bmp-vedio-play img{
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.bmp-player-img{
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.bmp-vedio-play{
+  position: absolute;
+width: 3rem;
+height: 3rem;
+border-radius: 50%;
+background-color: #000;
+padding: 2px 4px;
+display: flex;
+justify-content: center;
+align-items: center;
+top:50%;
+left:50%;
+transform: translate(-50%,-50%);
+cursor: pointer;
+}
+
+.bmp-bottom-btn{
+  background-color: #f8fbf8;
+  padding:1rem;
+  margin-top: 2rem;
+}
+
+.bmp-bottom-btn button{
+  margin-right: 1rem;
+}
+
 
 
 

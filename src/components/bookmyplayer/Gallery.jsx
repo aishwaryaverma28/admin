@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import User from "../../assets/image/user-img.png";
+import Photo from "../../assets/image/gallery.svg";
+import Video from "../../assets/image/video.svg";
+import Trash from "../../assets/image/red-bin.svg";
+import Player from "../../assets/image/player.png";
+import VideoPlay from "../../assets/image/video-play.svg";
 
 const Gallery = () => {
   const fileInputRef = useRef(null);
@@ -171,10 +175,10 @@ const Gallery = () => {
 
         </div>
 
-        <div className="bmp-upload-2">
+        <div className="bmp-upload-3 bmp-gap">
             <div className="contact-browse deal-doc-file">
               <span
-                className="common-fonts common-input contact-tab-input bmp-border"
+                className="common-fonts common-input contact-tab-input bmp-border-2"
                 style={{
                   position: "relative",
                   marginRight: "10px",
@@ -202,23 +206,96 @@ const Gallery = () => {
                   onChange={handleFileChange2}
                 />
                 <span className="common-fonts upload-file-name">
-                  {fileName2}
+                  <p className="common-fonts light-color">You can upload multiple videos and images </p>
+                  <p className="common-fonts bmp-format">Upload image/videos in format png, jpg, jpeg, gif, webp, mp4 </p>
                   {}
                 </span>
               </span>
             </div>
 
             {selectedFile2 && (
-              <div className="bmp-image-preview-2">
+              <div className="bmp-new-img">
+              <div className="bmp-img-top-icon">
+              <div className="bmp-img-name">
+
+              <div className="bmp-video">
+              <img src={Video} alt=""  />
+              </div>
+             
+              <p className="common-fonts bmp-tour">academy tour.gif</p>
+              </div>
+              <div className="bmp-trash">
+                <img src={Trash} alt=""  />
+              </div>
+                
+              </div>
                 <img
                   src={URL.createObjectURL(selectedFile2)}
                   alt="Selected Preview"
-                  className="bmp-preview-image"
                 />
               </div>
             )}
           </div>
       </div>
+
+      <div className="bmp-new-img">
+              <div className="bmp-img-top-icon">
+              <div className="bmp-img-name">
+
+              <div className="bmp-video">
+              <img src={Video} alt=""  />
+              </div>
+             
+              <p className="common-fonts bmp-tour">academy tour.gif</p>
+              </div>
+              <div className="bmp-trash">
+                <img src={Trash} alt=""  />
+              </div>
+                
+              </div>
+              <div className="bmp-player-img">
+              <img
+                  src={Player}
+                  alt="Selected Preview"
+                />
+
+<div className="bmp-vedio-play">
+                  <img src={VideoPlay} alt="" />
+                </div>
+
+              </div>
+
+
+
+              </div>
+
+
+      <div className="bmp-new-img">
+              <div className="bmp-img-top-icon">
+              <div className="bmp-img-name">
+
+              <div className="bmp-video">
+              <img src={Photo} alt=""  />
+              </div>
+             
+              <p className="common-fonts bmp-tour">academy tour.gif</p>
+              </div>
+              <div className="bmp-trash">
+                <img src={Trash} alt=""  />
+              </div>
+                
+              </div>
+                <img
+                  src={Player}
+                  alt="Selected Preview"
+                />
+              </div>
+
+
+              <div className="bmp-bottom-btn">
+                <button className="common-fonts common-white-button">Cancel</button>
+                <button className="common-fonts common-save-button">Save</button>
+              </div>
 
 
 
