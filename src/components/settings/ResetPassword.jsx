@@ -189,7 +189,7 @@ console.log(passDes)
             </label>
             <div className="password-input-wrapper">
               {/* ========================================================================================================== */}
-              {passDes.some(
+              {passDes?.some(
                 (condition) => condition.id === 5 && condition.active === 1
               ) ? (
                 <input
@@ -245,7 +245,7 @@ console.log(passDes)
             </div>
           </div>
         </div>
-        {passDes.some(
+        {passDes?.some(
           (condition) => condition.id === 5 && condition.active === 1
         ) ? (
           <div className="pwd-rules">
@@ -357,7 +357,7 @@ console.log(passDes)
           <button className="restore-no common-fonts" onClick={onClose}>
             Cancel
           </button>
-          {passDes.some(
+          {passDes?.some(
             (condition) => condition.id === 5 && condition.active === 1
           ) ? (
             <button className="restore-yes common-fonts" onClick={handleSave}>

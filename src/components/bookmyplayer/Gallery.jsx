@@ -1,27 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import User from "../../assets/image/user-img.png";
 
-
 const Gallery = () => {
   const fileInputRef = useRef(null);
+  const fileInputRef2= useRef(null);
   const [fileName, setFileName] = useState("");
+  const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile2, setSelectedFile2] = useState(null);
   const [academyData, setAcademyData] = useState({});
-
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
     setSelectedFile(file);
   };
-
+  const handleFileChange2 = (event) => {
+    const file = event.target.files[0];
+    setFileName2(file.name);
+    setSelectedFile2(file);
+  };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-
+  const handleButtonClick2 = () => {
+    fileInputRef2.current.click();
+  };
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -45,15 +52,75 @@ const Gallery = () => {
     ],
   };
   return (
-    <div className='bmp-main-wrapper'>
-            <div className="bmp-fee-container">
+    <div className="bmp-main-wrapper">
+      <div className="bmp-fee-container">
         <div className="bmp-fee-left">
-          <p className="common-fonts bmp-fee-timing-2">Photos & Video Gallery</p>
-          <p className="common-fonts bmp-add-photo">Add photos and videos of your academy.</p>
-          <p className="common-fonts bmp-prefer">Psst! A secret People prefer videos more than photos.</p>
-          <div className="bmp-new-flex">
+          <p className="common-fonts bmp-fee-timing-2">
+            Photos & Video Gallery
+          </p>
+          <p className="common-fonts bmp-add-photo">
+            Add photos and videos of your academy.
+          </p>
+          <p className="common-fonts bmp-prefer">
+            Psst! A secret People prefer videos more than photos.
+          </p>
 
+
+          <div className="bmp-img-section">
+        <div>
+          <p className="common-fonts bmp-banner-upload">upload banner image</p>
+          <p className="common-fonts light-color">
+            Recommended image size 820x312
+          </p>
+          <div className="bmp-upload-2">
+            <div className="contact-browse deal-doc-file">
+              <span
+                className="common-fonts common-input contact-tab-input bmp-border"
+                style={{
+                  position: "relative",
+                  marginRight: "10px",
+                }}
+              >
+                <button
+                  className="contact-browse-btn common-fonts"
+                  onClick={() => handleButtonClick()}
+                >
+                  Browse
+                </button>
+
+                <input
+                  type="file"
+                  style={{
+                    display: "none",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    width: "100%",
+                  }}
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                />
+                <span className="common-fonts upload-file-name">
+                  {fileName}
+                  {}
+                </span>
+              </span>
+            </div>
+
+            {selectedFile && (
+              <div className="bmp-image-preview-2">
+                <img
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Selected Preview"
+                  className="bmp-preview-image"
+                />
+              </div>
+            )}
           </div>
+        </div>
+      </div>
         </div>
 
         <div className="bmp-top-right">
@@ -85,62 +152,79 @@ const Gallery = () => {
         </div>
       </div>
 
-      <div className='bmp-img-section'>
+      <div className="bmp-upload-img">
+        <div className="bmp-heading-flex">
         <div>
-          <p className='common-fonts bmp-banner-upload'>upload banner image</p>
-          <p className='common-fonts light-color bmp-size'>Recommended image size 820x312</p>
-          <div className="bmp-upload-2">
-              <div className="contact-browse deal-doc-file">
-                <span
-                  className="common-fonts common-input contact-tab-input bmp-border"
-                  style={{
-                    position: "relative",
-                    marginRight: "10px",
-                  }}
-                >
-                  <button
-                    className="contact-browse-btn common-fonts"
-                    onClick={() => handleButtonClick()}
-                  >
-                    Browse
-                  </button>
+        <p className="common-fonts bmp-banner-upload">
+            Upload Academy images/videos
+          </p>
+          <p className="common-fonts light-color bmp-size">
+            Recommended image size 820x312
+          </p>
+        </div>
+        <div className="bmp-total-img">
+                <p className="common-fonts bmp-prefer">
+                Upload minimum 25 images & videos 6/25
+          </p>
+        </div>
 
-                  <input
-                    type="file"
-                    style={{
-                      display: "none",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      bottom: 0,
-                      right: 0,
-                      width: "100%",
-                    }}
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                  />
-                  <span className="common-fonts upload-file-name">
-                     {fileName} 
-                    {}
-                  </span>
-                </span>
-              </div>
-
-              {selectedFile && (
-                <div className="bmp-image-preview-2">
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Selected Preview"
-                    className="bmp-preview-image"
-                  />
-                </div>
-              )}
-            </div>
 
         </div>
-      </div>
-    </div>
-  )
-}
 
-export default Gallery
+        <div className="bmp-upload-2">
+            <div className="contact-browse deal-doc-file">
+              <span
+                className="common-fonts common-input contact-tab-input bmp-border"
+                style={{
+                  position: "relative",
+                  marginRight: "10px",
+                }}
+              >
+                <button
+                  className="contact-browse-btn common-fonts"
+                  onClick={() => handleButtonClick2()}
+                >
+                  Browse
+                </button>
+
+                <input
+                  type="file"
+                  style={{
+                    display: "none",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    width: "100%",
+                  }}
+                  ref={fileInputRef2}
+                  onChange={handleFileChange2}
+                />
+                <span className="common-fonts upload-file-name">
+                  {fileName2}
+                  {}
+                </span>
+              </span>
+            </div>
+
+            {selectedFile2 && (
+              <div className="bmp-image-preview-2">
+                <img
+                  src={URL.createObjectURL(selectedFile2)}
+                  alt="Selected Preview"
+                  className="bmp-preview-image"
+                />
+              </div>
+            )}
+          </div>
+      </div>
+
+
+
+
+    </div>
+  );
+};
+
+export default Gallery;
