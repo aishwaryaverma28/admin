@@ -1,45 +1,59 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { UPDATE_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const StrategyModal = ({ onClose, newData}) => {
-  console.log(newData)
-// console.log("hello")
+const StrategyModal = ({ onClose, newData, name }) => {
+  console.log(newData);
+  console.log(name);
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("id");
-  const [stateBtn, setStateBtn] = useState(0); 
-  const [formData, setFormData] = useState({
-    strategy_name: "",
-    strategy_desc: ""
-  });
-
+  const [stateBtn, setStateBtn] = useState(0);
+  const [sName, setSName] = useState("");
+  const [descrip, setDescrip] = useState("");
+  const [xyz, setXyz] = useState("");
+  const [abc, setAbc] = useState("");
 
   const handleNameChange = (e) => {
     setStateBtn(1);
-    setFormData({ ...formData, strategy_name: e.target.value });
+    const newStrategyName = e.target.value;
+    setSName(newStrategyName);
+    if (name === null ||  name === "") {
+      setXyz(newStrategyName);
+    } else {
+      const joinedString = name + "$@$@$" + newStrategyName;
+      setXyz(joinedString);
+    }
   };
 
   const handleDescChange = (e) => {
     setStateBtn(1);
-    setFormData({ ...formData, strategy_desc: e.target.value });
+    const newStrategyName = e.target.value;
+    setDescrip(newStrategyName);
+    if (newData === null || newData === "") {
+      setAbc(newStrategyName);
+    } else {
+      const joinedString = name + "$@$@$" + newStrategyName;
+      setAbc(joinedString);
+    }
   };
   const handleSave = () => {
-    console.log(formData);
     const updatedFormData = {
-      training_strategy:[
-        JSON.stringify(formData),
-      ]}
-    axios.put(UPDATE_ACADEMY + academyId, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-      },
-    })
+      training_strategy: abc,
+      strategy_name: xyz,
+    };
+    console.log(updatedFormData);
+    axios
+      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
-        console.log("response")
-        console.log(response)
+        console.log("response");
+        console.log(response);
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",
@@ -68,41 +82,59 @@ const StrategyModal = ({ onClose, newData}) => {
       <div className="help-modal-container">
         <div className="help-modal-box">
           <section>
-          <div className="bmp-add-new-batch">
-          <p className="common-fonts bmp-add-heading">Add Strategy</p>
-          </div>
-
-          <div className="bmp-modal-form">
-            <div className="bmp-add-fields">
-            <label htmlFor="" className="common-fonts light-color">Strategy Name</label>
-                <input type="text" className="common-fonts common-input bmp-modal-input"  value={formData.strategy_name}
-                  onChange={handleNameChange}/>
+            <div className="bmp-add-new-batch">
+              <p className="common-fonts bmp-add-heading">Add Strategy</p>
             </div>
-            <div className="bmp-add-fields">
-            <label htmlFor="" className="common-fonts light-color">Strategy Description</label>
-                <textarea name="" id="" rows="5" className="common-fonts bmp-strategy-input bmp-modal-input" value={formData.strategy_desc}
-                  onChange={handleDescChange}></textarea>
+
+            <div className="bmp-modal-form">
+              <div className="bmp-add-fields">
+                <label htmlFor="" className="common-fonts light-color">
+                  Strategy Name
+                </label>
+                <input
+                  type="text"
+                  className="common-fonts common-input bmp-modal-input"
+                  value={sName}
+                  onChange={handleNameChange}
+                />
+              </div>
+              <div className="bmp-add-fields">
+                <label htmlFor="" className="common-fonts light-color">
+                  Strategy Description
+                </label>
+                <textarea
+                  name=""
+                  id=""
+                  rows="5"
+                  className="common-fonts bmp-strategy-input bmp-modal-input"
+                  value={descrip}
+                  onChange={handleDescChange}
+                ></textarea>
+              </div>
             </div>
-          </div>
 
-          <div className="bmp-add-bottom-btn">
-            <button className="common-fonts common-white-button">Cancel</button>
-            {stateBtn === 0 ? (
-                        <button className="disabledBtn">Save</button>
-                      ) : (
-                        <button className="common-fonts common-save-button" onClick={handleSave}>Save</button>
-                      )}
-          </div>
-          
-
+            <div className="bmp-add-bottom-btn">
+              <button className="common-fonts common-white-button">
+                Cancel
+              </button>
+              {stateBtn === 0 ? (
+                <button className="disabledBtn">Save</button>
+              ) : (
+                <button
+                  className="common-fonts common-save-button"
+                  onClick={handleSave}
+                >
+                  Save
+                </button>
+              )}
+            </div>
           </section>
-          
         </div>
         <div className="help-cross" onClick={onClose}>
           X
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

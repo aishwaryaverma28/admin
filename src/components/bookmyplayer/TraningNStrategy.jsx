@@ -19,6 +19,7 @@ const TraningNStrategy = () => {
   const decryptedToken = getDecryptedToken();
   const id = localStorage.getItem("id");
   const [newData, setNewData] = useState("");
+  const [strategyName, setStrategyName] = useState("");
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
@@ -54,9 +55,8 @@ const TraningNStrategy = () => {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
-      console.log(JSON.parse(response.data.data[0].training_strategy));
-      setNewData(JSON.parse(response.data.data[0].training_strategy));
-      // console.log("response")
+      setNewData(response.data.data[0].training_strategy);
+      setStrategyName(response.data.data[0].strategy_name);
 })
   }
 
@@ -170,7 +170,7 @@ const TraningNStrategy = () => {
       </div>
       {
         isModalOpen && (
-          <StrategyModal onClose={handleModalClose} newData={newData} />
+          <StrategyModal onClose={handleModalClose} newData={newData} name={strategyName}/>
         )
       }
 
