@@ -535,6 +535,18 @@ height: 1.8615rem;
   margin-left: 1rem;
   height: 3.75rem;
 }
+.bmp-upload-3{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  margin-left: 1rem;
+  height: 3.75rem;
+}
+
+.bmp-upload-3{
+  margin-left: 1rem;
+}
 
 .bmp-batch-date{
   display: flex;
@@ -644,12 +656,9 @@ margin-top: 0.5rem;
 .bmp-banner-upload{
   font-size: 1rem;
 font-weight: 500;
-margin-left: 1rem;
 }
 
-.bmp-size{
-  margin-left: 1rem;
-}
+
 
 .bmp-image-preview-2 img{
   width: 8.625rem;
@@ -664,16 +673,27 @@ margin-left: 1rem;
   border-radius: 0.3125rem;
 border: 1px dashed #2B74DA;
 background: #F3F6FA;
-}
-
-.bmp-main-wrapper{
-  position: relative;
+margin-left: -1rem;
 }
 
 .bmp-img-section{
-  position: absolute;
-  top:80%;
+  margin-top: 2rem;
 }
+.bmp-upload-img{
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.bmp-heading-flex{
+  display: flex;
+  justify-content: start;
+  align-items: end;
+}
+
+.bmp-total-img{
+  margin-left: 1rem;
+}
+
 
 
 

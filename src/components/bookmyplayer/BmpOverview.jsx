@@ -95,9 +95,9 @@ const BmpOverview = () => {
   };
 
   const addPhoneNumberInput = () => {
+    setCheckboxStates([false]); // Uncheck the checkbox
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
-    setCheckboxStates([...checkboxStates, true]);
   };
 
   function handleSubmit(event) {
@@ -106,6 +106,7 @@ const BmpOverview = () => {
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData.phone,
+      whatsapp: academyData.whatsapp,
       address1: academyData?.address1,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
@@ -294,10 +295,12 @@ const BmpOverview = () => {
             <div className="bmp-input-flex">
               <div className="bmp-phone-field">
                 <label htmlFor="" className="common-fonts bmp-academy-name">
-                  {index === 0 ? "Phone Number" : `Phone Number ${index + 1}`}
+                  {index === 0 ? "Phone Number" : `Whatsapp Number`}
                 </label>
 
-                <div className="bmp-whatsapp-check">
+                {
+                  index===0 && (
+                    <div className="bmp-whatsapp-check">
                   <label className="custom-checkbox">
                     <input
                       type="checkbox"
@@ -310,14 +313,18 @@ const BmpOverview = () => {
                   </label>
                   <p className="common-fonts light-color">Whatsapp Activated</p>
                 </div>
+                  )
+                }
+
+
               </div>
 
               <input
                 type="text"
                 className="common-fonts common-input bmp-input"
-                name="phone"
+                name={index===0 ?"phone" : "whatsapp"}
                 onChange={handleChange}
-                value={isLoading ? "-" : academyData?.phone || ""}
+                value={isLoading ? "-" : ( index === 0 ? academyData?.phone : academyData?.whatsapp)}
               />
             </div>
           ))}
