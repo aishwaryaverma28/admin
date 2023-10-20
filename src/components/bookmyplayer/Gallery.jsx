@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+import User from "../../assets/image/user-img.png";
+
 
 const Gallery = () => {
+  const fileInputRef = useRef(null);
+  const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [academyData, setAcademyData] = useState({});
+
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFileName(file.name);
+    setSelectedFile(file);
+  };
+
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -26,7 +45,7 @@ const Gallery = () => {
     ],
   };
   return (
-    <div>
+    <div className='bmp-main-wrapper'>
             <div className="bmp-fee-container">
         <div className="bmp-fee-left">
           <p className="common-fonts bmp-fee-timing-2">Photos & Video Gallery</p>
@@ -66,9 +85,58 @@ const Gallery = () => {
         </div>
       </div>
 
-      <div>
+      <div className='bmp-img-section'>
         <div>
-          <p></p>
+          <p className='common-fonts bmp-banner-upload'>upload banner image</p>
+          <p className='common-fonts light-color bmp-size'>Recommended image size 820x312</p>
+          <div className="bmp-upload-2">
+              <div className="contact-browse deal-doc-file">
+                <span
+                  className="common-fonts common-input contact-tab-input bmp-border"
+                  style={{
+                    position: "relative",
+                    marginRight: "10px",
+                  }}
+                >
+                  <button
+                    className="contact-browse-btn common-fonts"
+                    onClick={() => handleButtonClick()}
+                  >
+                    Browse
+                  </button>
+
+                  <input
+                    type="file"
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "100%",
+                    }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  <span className="common-fonts upload-file-name">
+                     {fileName} 
+                    {}
+                  </span>
+                </span>
+              </div>
+
+              {selectedFile && (
+                <div className="bmp-image-preview-2">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+            </div>
+
         </div>
       </div>
     </div>
