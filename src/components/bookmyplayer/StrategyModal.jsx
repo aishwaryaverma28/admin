@@ -5,7 +5,7 @@ import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const StrategyModal = ({ onClose, newData, name }) => {
+const StrategyModal = ({ onClose, newData, name, fetchData }) => {
   console.log(newData);
   console.log(name);
   const decryptedToken = getDecryptedToken();
@@ -35,7 +35,7 @@ const StrategyModal = ({ onClose, newData, name }) => {
     if (newData === null || newData === "") {
       setAbc(newStrategyName);
     } else {
-      const joinedString = name + "$@$@$" + newStrategyName;
+      const joinedString = newData + "$@$@$" + newStrategyName;
       setAbc(joinedString);
     }
   };
@@ -44,7 +44,13 @@ const StrategyModal = ({ onClose, newData, name }) => {
       training_strategy: abc,
       strategy_name: xyz,
     };
-    console.log(updatedFormData);
+    if(updatedFormData.training_strategy==="" || updatedFormData.strategy_name===""){
+      toast.error("Please Enter Name and Description Both", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      return;
+    }
     axios
       .put(UPDATE_ACADEMY + academyId, updatedFormData, {
         headers: {
@@ -59,6 +65,8 @@ const StrategyModal = ({ onClose, newData, name }) => {
             position: "top-center",
             autoClose: 2000,
           });
+          fetchData();
+          onClose();
         } else {
           toast.error("Some Error Occurred", {
             position: "top-center",
@@ -114,7 +122,7 @@ const StrategyModal = ({ onClose, newData, name }) => {
             </div>
 
             <div className="bmp-add-bottom-btn">
-              <button className="common-fonts common-white-button">
+              <button className="common-fonts common-white-button" onClick={onClose}>
                 Cancel
               </button>
               {stateBtn === 0 ? (
