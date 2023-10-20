@@ -13,6 +13,7 @@ import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UpdateStrategyModal from "./UpdateStrategyModal.jsx";
 
 const TraningNStrategy = () => {
   const [openBatch, setOpenBatch] = useState(1);
@@ -24,6 +25,14 @@ const TraningNStrategy = () => {
   const [strategyName, setStrategyName] = useState("");
   const [nameOfStrategy, setNameOfStrategy] = useState([]);
   const [descriptionOfStrategy, setDescriptionOfStrategy] = useState([]);
+  const [updateModal, setUpdateModal] = useState(false);
+
+  const handleUpdateModal = () => {
+    setUpdateModal(true);
+  }
+  const handleUpdateModalClose = () => {
+    setUpdateModal(false);
+  }
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -146,7 +155,7 @@ const TraningNStrategy = () => {
                   >
                     {strategy}
                   </p>
-                  <img src={Pen} alt="" className="bmp-fee-pen" />
+                  <img src={Pen} alt="" className="bmp-fee-pen" onClick={()=>handleUpdateModal()} />
                   <img src={Trash} alt="" onClick={handleDeleteOpen} />
                 </div>
                 {openBatch === index && (
@@ -171,6 +180,10 @@ const TraningNStrategy = () => {
       )}
 
       {isDeleteModalOpen && <DeleteStrategyModal onClose={handleDeleteClose}  />}
+
+      {
+        updateModal && <UpdateStrategyModal onClose={handleUpdateModalClose}/>
+      }
       <ToastContainer/>
     </div>
   );
