@@ -9,8 +9,10 @@ import Pen from "../../assets/image/pen.svg";
 import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
 import axios from "axios";
-import { GET_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TraningNStrategy = () => {
   const [openBatch, setOpenBatch] = useState(1);
@@ -20,19 +22,21 @@ const TraningNStrategy = () => {
   const id = localStorage.getItem("id");
   const [newData, setNewData] = useState("");
   const [strategyName, setStrategyName] = useState("");
+  const [nameOfStrategy, setNameOfStrategy] = useState([]);
+  const [descriptionOfStrategy, setDescriptionOfStrategy] = useState([]);
 
   const handleModalOpen = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
   const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
   const handleDeleteOpen = () => {
-    setIsDeleteModalOpen(true)
-  }
+    setIsDeleteModalOpen(true);
+  };
   const handleDeleteClose = () => {
-    setIsDeleteModalOpen(false)
-  }
+    setIsDeleteModalOpen(false);
+  };
 
   const handleBatchClick = (index) => {
     setOpenBatch(openBatch === index ? null : index);
@@ -48,21 +52,28 @@ const TraningNStrategy = () => {
     ],
   };
 
-
   const fetchAcademyDetails = () => {
-    axios.get(GET_ACADEMY+id, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      setNewData(response.data.data[0].training_strategy);
-      setStrategyName(response.data.data[0].strategy_name);
-})
-  }
+    axios
+      .get(GET_ACADEMY + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        setNewData(response.data.data[0].training_strategy);
+        setStrategyName(response.data.data[0].strategy_name);
+        setNameOfStrategy(response.data.data[0].strategy_name?.split("$@$@$").reverse());
+        setDescriptionOfStrategy(
+          response.data.data[0].training_strategy?.split("$@$@$").reverse()
+        );
+      });
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchAcademyDetails();
-  },[])
+  }, []);
+
+
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -80,7 +91,10 @@ const TraningNStrategy = () => {
         <div className="bmp-fee-left">
           <p className="common-fonts bmp-fee-timing">training strategy</p>
           <div className="bmp-new-flex">
-            <button className="common-save-button common-fonts bmp-batch-btn" onClick={handleModalOpen}>
+            <button
+              className="common-save-button common-fonts bmp-batch-btn"
+              onClick={handleModalOpen}
+            >
               Add Strategy
             </button>
           </div>
@@ -116,69 +130,48 @@ const TraningNStrategy = () => {
       </div>
 
       <div>
-        <div className="bmp-strategy-details">
-        <img src={openBatch === 1 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(1)} />
-          <div className="bmp-strategy-box">
-          <div className="bmp-fee-corner">
-              <p className="common-fonts" onClick={() => handleBatchClick(1)}>Technical</p>
-              <img src={Pen} alt="" className="bmp-fee-pen" />
-              <img src={Trash} alt="" onClick={handleDeleteOpen} />
+        <div>
+          {nameOfStrategy.map((strategy, index) => (
+            <div className="bmp-strategy-details" key={index}>
+              <img
+                src={openBatch === index ? GreaterDown : GreaterArrow}
+                alt=""
+                onClick={() => handleBatchClick(index)}
+              />
+              <div className="bmp-strategy-box">
+                <div className="bmp-fee-corner">
+                  <p
+                    className="common-fonts"
+                    onClick={() => handleBatchClick(index)}
+                  >
+                    {strategy}
+                  </p>
+                  <img src={Pen} alt="" className="bmp-fee-pen" />
+                  <img src={Trash} alt="" onClick={handleDeleteOpen} />
+                </div>
+                {openBatch === index && (
+                  <div className="bmp-strategy-content">
+                    <p className="common-fonts">
+                      {descriptionOfStrategy[index]}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-            {openBatch === 1 && (
-            <div className="bmp-strategy-content">
-              <p className="common-fonts">Technical assessment mainly involves skills and technique like Passing (short and long range), Controlling, Attacking, Tackling, Defensive duties</p>
-            </div>
-            )}
-
-          </div>
-          
-        </div>
-        <div className="bmp-strategy-details">
-        <img src={openBatch === 2 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(2)} />
-          <div className="bmp-strategy-box">
-          <div className="bmp-fee-corner">
-              <p className="common-fonts" onClick={() => handleBatchClick(2)}>Physical</p>
-              <img src={Pen} alt="" className="bmp-fee-pen" />
-              <img src={Trash} alt="" onClick={handleDeleteOpen} />
-            </div>
-            {openBatch === 2 && (
-            <div className="bmp-strategy-content">
-              <p className="common-fonts">Technical assessment mainly involves skills and technique like Passing (short and long range), Controlling, Attacking, Tackling, Defensive duties</p>
-            </div>
-            )}
-
-          </div>
-          
-        </div>
-        <div className="bmp-strategy-details">
-        <img src={openBatch === 3 ? GreaterDown : GreaterArrow} alt="" onClick={() => handleBatchClick(3)} />
-          <div className="bmp-strategy-box">
-          <div className="bmp-fee-corner">
-              <p className="common-fonts" onClick={() => handleBatchClick(3)}>Pchycological</p>
-              <img src={Pen} alt="" className="bmp-fee-pen" />
-              <img src={Trash} alt="" onClick={handleDeleteOpen}/>
-            </div>
-            {openBatch === 3 && (
-            <div className="bmp-strategy-content">
-              <p className="common-fonts">Technical assessment mainly involves skills and technique like Passing (short and long range), Controlling, Attacking, Tackling, Defensive duties</p>
-            </div>
-            )}
-
-          </div>
-          
+          ))}
         </div>
       </div>
-      {
-        isModalOpen && (
-          <StrategyModal onClose={handleModalClose} newData={newData} name={strategyName}/>
-        )
-      }
+      {isModalOpen && (
+        <StrategyModal
+          onClose={handleModalClose}
+          newData={newData}
+          name={strategyName}
+          fetchData={fetchAcademyDetails}
+        />
+      )}
 
-      {
-        isDeleteModalOpen && (
-          <DeleteStrategyModal onClose={handleDeleteClose} />
-        )
-      }
+      {isDeleteModalOpen && <DeleteStrategyModal onClose={handleDeleteClose}  />}
+      <ToastContainer/>
     </div>
   );
 };
