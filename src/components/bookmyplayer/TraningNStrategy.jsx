@@ -1,7 +1,6 @@
-import React from "react";
+import React,{ useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
-import { useState } from "react";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
@@ -10,7 +9,6 @@ import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
 import axios from "axios";
 import { UPDATE_ACADEMY,GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
-import { useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateStrategyModal from "./UpdateStrategyModal.jsx";
@@ -27,9 +25,11 @@ const TraningNStrategy = () => {
   const [descriptionOfStrategy, setDescriptionOfStrategy] = useState([]);
   const [updateModal, setUpdateModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [updateIndex,setUpdateIndex] = useState(null);
 
-  const handleUpdateModal = () => {
+  const handleUpdateModal = (index) => {
     setUpdateModal(true);
+    setUpdateIndex(index);
   }
   const handleUpdateModalClose = () => {
     setUpdateModal(false);
@@ -191,7 +191,12 @@ const TraningNStrategy = () => {
                     >
                       {strategy}
                     </p>
-                    <img src={Pen} alt="" className="bmp-fee-pen" onClick={handleUpdateModal} />
+                    <img
+                    src={Pen}
+                    alt=""
+                    className="bmp-fee-pen"
+                    onClick={() => handleUpdateModal(index)}
+                  />
                     <img src={Trash} alt="" onClick={() => handleDeleteOpen(index)} />
                   </div>
                   {openBatch === index && (
@@ -225,7 +230,13 @@ const TraningNStrategy = () => {
         )}
 
         {
-          updateModal && <UpdateStrategyModal onClose={handleUpdateModalClose}/>
+          updateModal && <UpdateStrategyModal
+          onClose={handleUpdateModalClose}
+          fetchData={fetchAcademyDetails}
+          updateIndex={updateIndex}
+          name={nameOfStrategy}
+          description = {descriptionOfStrategy}
+        />
         }
       <ToastContainer/>
     </div>
