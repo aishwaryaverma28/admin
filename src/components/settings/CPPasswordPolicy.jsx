@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/Password.css";
 import LockImage from "../../assets/image/lock.svg";
-import { getDecryptedToken, GET_PASSWORD, EDIT_PASSWORD } from "../utils/Constants";
+import { getDecryptedToken, GET_PASSWORD, EDIT_PASSWORD, GET_ORG_DATA } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,9 +14,12 @@ const CPPasswordPolicy = () => {
   const [initial,setInitial]= useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [checkboxStates, setCheckboxStates] = useState([]);
+  const orgId = localStorage.getItem("org_id");
+  const email = localStorage.getItem("email");
   const passGet = () => {
-    axios
-      .get(GET_PASSWORD, {
+
+      axios
+      .get(GET_PASSWORD + (orgId ? `/${orgId}` : `/${email}`) + (orgId ? "/true" : "/false"), {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -28,6 +31,9 @@ const CPPasswordPolicy = () => {
       .catch((error) => {
         console.log(error);
       });
+      
+
+
   };
   useEffect(() => {
     passGet();

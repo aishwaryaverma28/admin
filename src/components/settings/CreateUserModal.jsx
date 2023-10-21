@@ -24,10 +24,12 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
     useState(false);
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasSpecialCharacter, setHasSpecialCharacter] = useState(false);
+  const email = localStorage.getItem("email");
+
 
   const passGet = () => {
-    axios
-      .get(GET_PASSWORD, {
+      axios
+      .get(GET_PASSWORD + (orgId ? `/${orgId}` : `/${email}`) + (orgId ? "/true" : "/false"), {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -57,6 +59,9 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
       .catch((error) => {
         console.log(error);
       });
+      
+
+
   };
   useEffect(() => {
     passGet();

@@ -64,7 +64,8 @@ const LPheader = () => {
   //   "/lp/settings/reportsAndAnalytics",
   //   "/lp/settings/masterSettings/City",
   //   "/lp/settings/system/state",
-  //   "/lp/settings/viewProfile/employeeProfile"
+  //   "/lp/settings/viewProfile/employeeProfile",
+  //   "/lp/marketing"
   // ];
   if (landingUrl === "/lp/admin") {
     allowed = allowed.filter((path) => path !== "/lp/home");
@@ -352,7 +353,13 @@ const LPheader = () => {
                 </NavLink>
               </li>
             )}
-          </ul>
+
+              <li onClick={() => handleNavigationClick("Contacts")}>
+                <NavLink exact to="/lp/marketing" activeClassName="activeNav">
+                  Marketing
+                </NavLink>
+              </li>
+                      </ul>
           <span></span>
         </div>
       </nav>

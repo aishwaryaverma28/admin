@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios library
-import { UPDATE_TEAM_MEM, getDecryptedToken, GET_PASSWORD } from "../utils/Constants";
+import {
+  UPDATE_TEAM_MEM,
+  getDecryptedToken,
+  GET_PASSWORD,
+} from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,44 +21,47 @@ const ResetPassword = ({ onClose, user }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem("org_id");
+  const email = localStorage.getItem("email");
 
   const passGet = () => {
-    axios
-      .get(GET_PASSWORD, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setPassDes(response?.data?.data);
-        response?.data?.data?.forEach((condition) => {
-          switch (condition.id) {
-            case 1:
-              setMinLength(condition.active === 1);
-              break;
-            case 2:
-              setHasNumberSymbolWhitespace(condition.active === 1);
-              break;
-            case 3:
-              setHasUppercase(condition.active === 1);
-              break;
-            case 4:
-              setHasSpecialCharacter(condition.active === 1);
-              break;
-            // Add more cases for other conditions if needed
-            default:
-              break;
-          }
+      axios
+      .get(GET_PASSWORD + (orgId ? `/${orgId}` : `/${email}`) + (orgId ? "/true" : "/false"), {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
+        .then((response) => {
+          setPassDes(response?.data?.data);
+          response?.data?.data?.forEach((condition) => {
+            switch (condition.id) {
+              case 1:
+                setMinLength(condition.active === 1);
+                break;
+              case 2:
+                setHasNumberSymbolWhitespace(condition.active === 1);
+                break;
+              case 3:
+                setHasUppercase(condition.active === 1);
+                break;
+              case 4:
+                setHasSpecialCharacter(condition.active === 1);
+                break;
+              // Add more cases for other conditions if needed
+              default:
+                break;
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
   };
   useEffect(() => {
     passGet();
   }, []);
-console.log(passDes)
+  // console.log(passDes);
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
@@ -102,9 +109,13 @@ console.log(passDes)
 
   const handleSave = () => {
     if (passwordMatch) {
-      if(minLength && hasNumberSymbolWhitespace && hasUppercase && hasSpecialCharacter)
-        {
-          axios
+      if (
+        minLength &&
+        hasNumberSymbolWhitespace &&
+        hasUppercase &&
+        hasSpecialCharacter
+      ) {
+        axios
           .put(
             UPDATE_TEAM_MEM + user,
             { password: password },
@@ -119,7 +130,7 @@ console.log(passDes)
 
             toast.success("Password saved successfully", {
               position: "top-center",
-              autoClose:2000
+              autoClose: 2000,
             });
             onClose();
           })
@@ -127,20 +138,19 @@ console.log(passDes)
             // Handle error
             toast.error("Error saving password", {
               position: "top-center",
-              autoClose:2000
+              autoClose: 2000,
             });
           });
-        }
-        else{
-          toast.error("Fulfil password policy", {
-            position: "top-center",
-            autoClose:2000
-          });
-        }
+      } else {
+        toast.error("Fulfil password policy", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
     } else {
       toast.error("Passwords do not match", {
         position: "top-center",
-        autoClose:2000
+        autoClose: 2000,
       });
     }
   };
@@ -162,7 +172,7 @@ console.log(passDes)
 
           toast.success("Password saved successfully", {
             position: "top-center",
-            autoClose:2000
+            autoClose: 2000,
           });
           onClose();
         })
@@ -170,7 +180,7 @@ console.log(passDes)
           // Handle error
           toast.error("Error saving password", {
             position: "top-center",
-            autoClose:2000
+            autoClose: 2000,
           });
         });
     }
@@ -278,49 +288,50 @@ console.log(passDes)
             {passDes.map((item) =>
               item.id === 2 ? (
                 <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasNumberSymbolWhitespace}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">
-                {item.value} number, symbol, or whitespace character
-                </p>
-              </div>
-            </div>
+                  <div className="password-rules">
+                    <div>
+                      <label className="custom-checkbox password-checkbox">
+                        <input
+                          type="checkbox"
+                          className="cb1"
+                          checked={hasNumberSymbolWhitespace}
+                          readOnly
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <p className="common-fonts password-text">
+                        {item.value} number, symbol, or whitespace character
+                      </p>
+                    </div>
+                  </div>
                 </p>
               ) : null
             )}
 
-            
             {/* 1 uppercase letter */}
             {passDes.map((item) =>
               item.id === 3 ? (
                 <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasUppercase}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">{item.value} uppercase letter</p>
-              </div>
-            </div>
+                  <div className="password-rules">
+                    <div>
+                      <label className="custom-checkbox password-checkbox">
+                        <input
+                          type="checkbox"
+                          className="cb1"
+                          checked={hasUppercase}
+                          readOnly
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <p className="common-fonts password-text">
+                        {item.value} uppercase letter
+                      </p>
+                    </div>
+                  </div>
                 </p>
               ) : null
             )}
@@ -329,26 +340,27 @@ console.log(passDes)
             {passDes.map((item) =>
               item.id === 4 ? (
                 <p key={item.id} className="common-fonts password-text">
-            <div className="password-rules">
-              <div>
-                <label className="custom-checkbox password-checkbox">
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    checked={hasSpecialCharacter}
-                    readOnly
-                  />
-                  <span className="checkmark"></span>
-                </label>
-              </div>
-              <div>
-                <p className="common-fonts password-text">{item.value} special character</p>
-              </div>
-            </div>
+                  <div className="password-rules">
+                    <div>
+                      <label className="custom-checkbox password-checkbox">
+                        <input
+                          type="checkbox"
+                          className="cb1"
+                          checked={hasSpecialCharacter}
+                          readOnly
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <p className="common-fonts password-text">
+                        {item.value} special character
+                      </p>
+                    </div>
+                  </div>
                 </p>
               ) : null
             )}
-            
           </div>
         ) : (
           <></>

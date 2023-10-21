@@ -61,6 +61,7 @@ import Review from "./components/bookmyplayer/Review.jsx";
 import BMPLeads from "./components/bookmyplayer/BMPLeads.jsx";
 import BMPSupport from "./components/bookmyplayer/BMPSupport.jsx";
 import BMPHelp from "./components/bookmyplayer/BMPHelp.jsx";
+import Campaign from "./components/marketing/Campaign.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/contacts/people/:id",
         element: <PeopleUpdate />,
+      },
+      {
+        path: "/lp/marketing",
+        element: <Campaign/>,
       },
       {
         path: "/lp/bmp",
