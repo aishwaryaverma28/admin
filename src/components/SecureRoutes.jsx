@@ -49,7 +49,8 @@ const SecureRoutes = (props) => {
     //   "/lp/settings/reportsAndAnalytics",
     //   "/lp/settings/masterSettings/City",
     //   "/lp/settings/system/state",
-    //   "/lp/settings/viewProfile/employeeProfile"
+    //   "/lp/settings/viewProfile/employeeProfile",
+    //   "lp/marketing"
     // ];
 
     const currentPath = location.pathname;

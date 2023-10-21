@@ -28,36 +28,39 @@ const Reset = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passBtn, setPassBtn] = useState(false);
   const [input, setInput] = useState(false);
+  const orgId = localStorage.getItem("org_id");
 
   const passGet = () => {
     axios
-      .get(GET_PASSWORD)
-      .then((response) => {
-        setPassDes(response?.data?.data);
-        response?.data?.data?.forEach((condition) => {
-          console.log(condition);
-          switch (condition.id) {
-            case 1:
-              setMinLength(condition.active === 1);
-              break;
-            case 2:
-              setHasNumberSymbolWhitespace(condition.active === 1);
-              break;
-            case 3:
-              setHasUppercase(condition.active === 1);
-              break;
-            case 4:
-              setHasSpecialCharacter(condition.active === 1);
-              break;
-            // Add more cases for other conditions if needed
-            default:
-              break;
-          }
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    .get(GET_PASSWORD + (orgId ? `/${orgId}` : `/${email}`) + (orgId ? "/true" : "/false"))
+    .then((response) => {
+      setPassDes(response?.data?.data);
+      response?.data?.data?.forEach((condition) => {
+        console.log(condition);
+        switch (condition.id) {
+          case 1:
+            setMinLength(condition.active === 1);
+            break;
+          case 2:
+            setHasNumberSymbolWhitespace(condition.active === 1);
+            break;
+          case 3:
+            setHasUppercase(condition.active === 1);
+            break;
+          case 4:
+            setHasSpecialCharacter(condition.active === 1);
+            break;
+          // Add more cases for other conditions if needed
+          default:
+            break;
+        }
       });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  
+
   };
   useEffect(() => {
     passGet();
