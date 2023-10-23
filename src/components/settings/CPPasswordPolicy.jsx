@@ -120,7 +120,7 @@ const CPPasswordPolicy = () => {
       console.log("Changed states:", changedStates);
     axios
       .put(
-        EDIT_PASSWORD,
+        EDIT_PASSWORD+"/"+orgId,
         { data: changedStates },
         {
           headers: {
