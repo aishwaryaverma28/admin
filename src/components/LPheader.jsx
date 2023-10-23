@@ -242,7 +242,7 @@ const LPheader = () => {
                 {" "}
                 {name
                   ? name
-                  : `${clientData.first_name} ${clientData.last_name}`}
+                  : `${clientData?.first_name} ${clientData?.last_name}`}
                 <br />
                 <span>{clientData.job_title}</span>
               </p>
@@ -260,10 +260,10 @@ const LPheader = () => {
                 <img src={user} alt="user" />
                 <div className="crmUserInfo">
                   <h5 className="crmUserInfoName">
-                    {clientData.first_name + " " + clientData.last_name}
+                    {clientData?.first_name + " " + clientData?.last_name}
                   </h5>
-                  <p className="email-case">{clientData.email}</p>
-                  <p>{clientData.job_title}</p>
+                  <p className="email-case">{clientData?.email}</p>
+                  <p>{clientData?.job_title}</p>
                 </div>
               </div>
               <div className="profileNPref">Profile & Preferences</div>
