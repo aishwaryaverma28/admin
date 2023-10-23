@@ -20,6 +20,7 @@ const BmpOverview = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([true]);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
+  const [timingValues, setTimingValues] = useState([]);
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -27,6 +28,15 @@ const BmpOverview = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
+  const [timeArr, setTimeArr] = useState([]);
+  const [updatedFormData, setUpdatedFormData] = useState({});
+
+  const handleTimingChange = (index = 0, value, type) => {
+    const newValues = [...timingValues];
+    newValues[index] = { ...newValues[index], [type]: value };
+    setTimingValues(newValues);
+    setStateBtn(1);
+  };
 
   const academyDetails = () => {
     axios
@@ -36,8 +46,8 @@ const BmpOverview = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data[0]);
         setAcademyData(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -73,6 +83,24 @@ const BmpOverview = () => {
   useEffect(() => {
     setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
+
+  useEffect(() => {
+    const filteredValues = timingValues
+      .filter(
+        (value) =>
+          value &&
+          value.toTime !== undefined &&
+          value.fromTime !== undefined &&
+          value.period !== undefined &&
+          value.period2 !== undefined
+      )
+      .map(
+        (value) =>
+          `${value.fromTime}${value.period} to ${value.toTime}${value.period2}`
+      );
+
+    setTimeArr(filteredValues);
+  }, [timingValues]);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -112,6 +140,8 @@ const BmpOverview = () => {
       instagram: academyData?.instagram,
       website: academyData?.website,
       sport: selectedDaysString,
+      email: academyData?.email,
+      timing: [...timeArr],
     };
 
     axios
@@ -166,6 +196,33 @@ const BmpOverview = () => {
       enabled: false, // Hide tooltips
     },
   };
+
+  // useEffect(() => {
+  //   // Parse timing values from the API response when it's available
+  //   if (academyData && academyData.timing) {
+  //     const [fromTime, period, toTime, period2] = academyData.timing
+  //       .replace(/[^\dA-Za-z]/g, '') // Remove non-alphanumeric characters
+  //       .split(/([A-Za-z]+)/) // Split at alphabets (AM/PM)
+  //       .filter(Boolean); // Filter out empty strings
+
+  //     setTimingValues([{ fromTime, period, toTime, period2 }]);
+  //   }
+  // }, [academyData]);
+
+  useEffect(() => {
+    // Parse timing values from the API response when it's available
+    if (academyData && academyData.timing) {
+      const timingRegex = /(\d+)([APap][Mm])\s*to\s*(\d+)([APap][Mm])/;
+      const [, fromTime, period, toTime, period2] =
+        academyData.timing.match(timingRegex) || [];
+
+      if (fromTime && period && toTime && period2) {
+        setTimingValues([{ fromTime, period, toTime, period2 }]);
+      } else {
+        // Handle invalid timing format if needed
+      }
+    }
+  }, [academyData]);
 
   return (
     <>
@@ -298,33 +355,37 @@ const BmpOverview = () => {
                   {index === 0 ? "Phone Number" : `Whatsapp Number`}
                 </label>
 
-                {
-                  index===0 && (
-                    <div className="bmp-whatsapp-check">
-                  <label className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      name="headerCheckBox"
-                      checked={checkboxStates[index]} // Use the checkbox state from the array
-                      onChange={() => handleCheckboxChange(index)}
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                  <p className="common-fonts light-color">Whatsapp Activated</p>
-                </div>
-                  )
-                }
-
-
+                {index === 0 && (
+                  <div className="bmp-whatsapp-check">
+                    <label className="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        className="cb1"
+                        name="headerCheckBox"
+                        checked={checkboxStates[index]} // Use the checkbox state from the array
+                        onChange={() => handleCheckboxChange(index)}
+                      />
+                      <span className="checkmark"></span>
+                    </label>
+                    <p className="common-fonts light-color">
+                      Whatsapp Activated
+                    </p>
+                  </div>
+                )}
               </div>
 
               <input
                 type="text"
                 className="common-fonts common-input bmp-input"
-                name={index===0 ?"phone" : "whatsapp"}
+                name={index === 0 ? "phone" : "whatsapp"}
                 onChange={handleChange}
-                value={isLoading ? "-" : ( index === 0 ? academyData?.phone : academyData?.whatsapp)}
+                value={
+                  isLoading
+                    ? "-"
+                    : index === 0
+                    ? academyData?.phone
+                    : academyData?.whatsapp
+                }
               />
             </div>
           ))}
@@ -346,7 +407,11 @@ const BmpOverview = () => {
             </label>
             <input
               type="email"
+              name="email"
               className="common-fonts common-input bmp-input"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.email || ""}
+              style={{ textTransform: "none" }}
             />
           </div>
           <div className="bmp-input-flex">
@@ -387,12 +452,25 @@ const BmpOverview = () => {
                 <input
                   className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
                   placeholder="Enter Time"
+                  value={timingValues[0]?.fromTime}
+                  onChange={(e) =>
+                    handleTimingChange(0, e.target.value, "fromTime")
+                  }
                 ></input>
               </div>
               <select
-                name="time"
+                name=""
                 id=""
                 className="common-fonts common-input bmp-modal-select bmp-new-width"
+                onChange={(e) =>
+                  handleTimingChange(0, e.target.value, "period")
+                }
+                // value={obj?.timing
+                //   ?.split(",")
+                //   [index]?.split("to")[1]
+                //   ?.replace(/\d+/g, "")
+                //   .trim()}
+                value={timingValues[0]?.period}
               >
                 <option value="">AM/PM</option>
                 <option value="AM">AM</option>
@@ -405,6 +483,17 @@ const BmpOverview = () => {
                 <input
                   className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
                   placeholder="Enter Time"
+                  value={
+                    timingValues[0]?.toTime
+                    // batchDetails?.timing
+                    //   ?.split(",")
+                    //   [index]?.split("to")[1]
+                    //   ?.replace(/[APap][Mm]/g, "")
+                    //   .trim() ||
+                  }
+                  onChange={(e) =>
+                    handleTimingChange(0, e.target.value, "toTime")
+                  }
                 ></input>
               </div>
 
@@ -412,6 +501,15 @@ const BmpOverview = () => {
                 name=""
                 id=""
                 className="common-fonts common-input bmp-modal-select bmp-new-width"
+                onChange={(e) =>
+                  handleTimingChange(0, e.target.value, "period2")
+                }
+                // value={obj?.timing
+                //   ?.split(",")
+                //   [index]?.split("to")[1]
+                //   ?.replace(/\d+/g, "")
+                //   .trim()}
+                value={timingValues[0]?.period2}
               >
                 <option value="">AM/PM</option>
                 <option value="AM">AM</option>
