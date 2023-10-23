@@ -16,8 +16,6 @@ const BatchModal = ({
   timeCount = 1,
   feeCount = 1,
 }) => {
-  console.log(obj);
-  console.log("hy logo");
   const decryptedToken = getDecryptedToken();
   const [selectedDays, setSelectedDays] = useState([]);
   const [days, setDays] = useState("");
