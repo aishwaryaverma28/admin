@@ -1,8 +1,29 @@
-import React from 'react'
+import React from 'react';
+import Search from "../../assets/image/search.svg";
+import { Link } from 'react-router-dom';
 
 const CampaignListTable = () => {
   return (
     <div>
+              <div className='mrkt-top-flex'>
+          <div className="recycle-search-box">
+            <input
+              type="text"
+              className="recycle-search-input recycle-fonts"
+              placeholder="Search..."
+            />
+            <span className="recycle-search-icon">
+              <img src={Search} alt="" />
+            </span>
+          </div>
+
+          <Link to="/lp/marketing/list">
+          <div>
+          <button className="common-fonts common-save-button mrkt-new-btn">+ Create List</button>
+          </div>
+          </Link>
+         
+          </div>
           <div className='marketing-all-table mrkt-list-table'>
         <table>
             <thead>

@@ -62,6 +62,7 @@ import BMPLeads from "./components/bookmyplayer/BMPLeads.jsx";
 import BMPSupport from "./components/bookmyplayer/BMPSupport.jsx";
 import BMPHelp from "./components/bookmyplayer/BMPHelp.jsx";
 import Campaign from "./components/marketing/Campaign.jsx";
+import ListFilter from "./components/marketing/ListFilter.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/marketing",
         element: <Campaign/>,
+      },
+      {
+        path: "/lp/marketing/list",
+        element: <ListFilter/>
       },
       {
         path: "/lp/bmp",
