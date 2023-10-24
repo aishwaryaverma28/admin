@@ -137,7 +137,7 @@ select:focus {
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .common-save-button {

@@ -4,15 +4,13 @@ import AllCampaignTable from './AllCampaignTable.jsx';
 import ListTable from './ListTable.jsx';
 
 
-const WhatsappCampaign = ({sendDataToParent}) => {
+const WhatsappCampaign = () => {
   const [activeTab, setActiveTab] = useState("campaign");
 
 
 
-  const handleTabChange = (tab , buttonName) => {
+  const handleTabChange = (tab) => {
     setActiveTab(tab);
-    const data = buttonName;
-    sendDataToParent(data);
   };
   return (
     <>
