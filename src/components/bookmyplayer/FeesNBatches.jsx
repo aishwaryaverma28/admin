@@ -29,6 +29,7 @@ const FeesNBatches = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [openBatch, setOpenBatch] = useState(1);
+  
 
 
   const data = {
@@ -51,6 +52,7 @@ const FeesNBatches = () => {
         })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
       })
       .catch((error) => {
         console.log(error);
@@ -95,18 +97,16 @@ const FeesNBatches = () => {
     setOpenBatch(openBatch === index ? null : index);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
+    event.preventDefault();
     fileInputRef.current.click();
   };
 
   const handleFileChange = (event) => {
-    const selectedImage = event.target.files[0];
     submitImage(event.target.files[0]);
-    console.log(selectedImage);
   };
   const submitImage = (file) => {
     const selectedImage = file;
-    console.log(file);
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + id;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -125,7 +125,6 @@ const FeesNBatches = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.secure_url);
           setFileName(data.secure_url);
           handleSubmit(data.secure_url)
         })
@@ -204,7 +203,14 @@ const FeesNBatches = () => {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              <span id="file-name">{fileName}</span>
+              {
+                fileName ? (
+                  <span id="file-name">{fileName?.toString()?.split('/')?.pop()}</span>
+                ): (
+                  <span id="file-name">{academyData?.brochure?.toString()?.split('/')?.pop()}</span>
+                )
+              }
+            
             </div>
           </div>
         </div>

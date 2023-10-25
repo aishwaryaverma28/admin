@@ -34,11 +34,23 @@ const WhatsappView = () => {
         <div className="whatsapp-view-left">
           <div className="whatsapp-display">
             <div className="whatsapp-img-display">
-              <img src={NoImage} alt="" />
+               {selectedFile && (
+                <div className="bmp-image-preview-2 whatsapp-preview-img-2">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+
+              { !selectedFile &&
+                <img src={NoImage} alt="" />
+              }
             </div>
 
-            <div contenteditable="true">
-              {dataFromChild.length === 0 ? (
+            <div>
+              {dataFromChild=== "" ? (
                 <p className="common-fonts whatsapp-your-text">
                   Your Text Here
                 </p>
