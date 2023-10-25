@@ -6,7 +6,6 @@ import { useState } from "react";
 import Video from "../../assets/image/video.svg";
 import ReactEditor from "../ReactEditor";
 
-
 const WhatsappView = () => {
   const fileInputRef = useRef(null);
   const editorRef = useRef();
@@ -24,9 +23,25 @@ const WhatsappView = () => {
     setselectedFile(file);
   };
 
+  function sanitizeHtml(input) {
+    // Replace newline characters with <br> tags
+    const replacedNewlines = input.replace(/\n/g, '<br>');
+    
+    // Remove disallowed tags except <br> tags
+    const allowedTags = ['br']; // List of allowed tags
+    const regex = new RegExp(`<(${allowedTags.join('|')})\\b[^>]*>`, 'gi');
+    const sanitizedData = replacedNewlines.replace(regex, '');
+  
+    return sanitizedData;
+  }
+  
   const handleDataTransfer = (data) => {
-    setDataFromChild(data);
+    const sanitizedData = sanitizeHtml(data);
+    setDataFromChild(sanitizedData);
   };
+  
+  
+  
 
   // const removeHtmlTags = (htmlString) => {
   //   const tempDiv = document.createElement("div");
@@ -44,7 +59,10 @@ const WhatsappView = () => {
             </div>
 
             <div>
-              <p className="common-fonts whatsapp-your-text">{dataFromChild}</p>
+              <pre
+                className="common-fonts whatsapp-your-text"
+                 dangerouslySetInnerHTML={{ __html: dataFromChild }}
+              />
             </div>
           </div>
           <div className="whatsapp-left-btn">
@@ -61,84 +79,80 @@ const WhatsappView = () => {
           </div>
 
           <div>
-          <div className="whatsapp-top-label">
-            <label htmlFor="" className="comon-fonts whatsapp-new-label">
-              Campaign Image
-            </label>
-          </div>
-            <div className="bmp-upload-3 bmp-gap">
-         
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input whatsapp-border"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={() => handleButtonClick()}
-                >
-                  Add Image
-                </button>
-
-                <input
-                  type="file"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                  }}
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-                <span className="common-fonts upload-file-name whatsapp-new-flex">
-                <img src={Gallery} alt="" />
-                <div className="whatsapp-para">
-                <p className="common-fonts light-color">
-                    Add image from your computer
-                  </p>
-                  <p className="common-fonts bmp-format">
-                    Support .jpg, .png, .gif, .mp4 max 10 mb
-                  </p>
-                </div>
-                
-                </span>
-              </span>
+            <div className="whatsapp-top-label">
+              <label htmlFor="" className="comon-fonts whatsapp-new-label">
+                Campaign Image
+              </label>
             </div>
+            <div className="bmp-upload-3 bmp-gap">
+              <div className="contact-browse deal-doc-file">
+                <span
+                  className="common-fonts common-input contact-tab-input whatsapp-border"
+                  style={{
+                    position: "relative",
+                    marginRight: "10px",
+                  }}
+                >
+                  <button
+                    className="contact-browse-btn common-fonts"
+                    onClick={() => handleButtonClick()}
+                  >
+                    Add Image
+                  </button>
 
-            {selectedFile && (
-              <div className="bmp-image-preview-2 whatsapp-preview-img">
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Selected Preview"
-                  className="bmp-preview-image"
-                />
+                  <input
+                    type="file"
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "100%",
+                    }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  <span className="common-fonts upload-file-name whatsapp-new-flex">
+                    <img src={Gallery} alt="" />
+                    <div className="whatsapp-para">
+                      <p className="common-fonts light-color">
+                        Add image from your computer
+                      </p>
+                      <p className="common-fonts bmp-format">
+                        Support .jpg, .png, .gif, .mp4 max 10 mb
+                      </p>
+                    </div>
+                  </span>
+                </span>
               </div>
-            )}
-          </div>
+
+              {selectedFile && (
+                <div className="bmp-image-preview-2 whatsapp-preview-img">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           <div>
-          <div className="whatsapp-top-label">
-            <label htmlFor="" className="comon-fonts whatsapp-new-label-2">
-              Campaign Description
-            </label>
-            <div className="formEditor whatsapp-editor">
-                  <ReactEditor
-                    ref={editorRef} // Add this line
-                    onDataTransfer={handleDataTransfer}
-                  />
-                </div>
+            <div className="whatsapp-top-label">
+              <label htmlFor="" className="comon-fonts whatsapp-new-label-2">
+                Campaign Description
+              </label>
+              <div className="formEditor whatsapp-editor">
+                <ReactEditor
+                  ref={editorRef} // Add this line
+                  onDataTransfer={handleDataTransfer}
+                />
+              </div>
+            </div>
           </div>
-          </div>
-
-          
         </div>
       </div>
     </div>
