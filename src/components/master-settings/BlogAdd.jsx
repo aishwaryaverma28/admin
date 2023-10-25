@@ -27,10 +27,6 @@ const BlogAdd = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [isIndex, setIsIndex] = useState(-1);
-  // const [selectedImage, setSelectedImage] = useState(null);
-  // const [showUploadButton, setShowUploadButton] = useState(false);
-  // const [showEditButton, setShowEditButton] = useState(false);
-  // const [showChooseButton, setShowChooseButton] = useState(false);
   const [sectionData, setSectionData] = useState([]);
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
