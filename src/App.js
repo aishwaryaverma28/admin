@@ -63,6 +63,7 @@ import BMPSupport from "./components/bookmyplayer/BMPSupport.jsx";
 import BMPHelp from "./components/bookmyplayer/BMPHelp.jsx";
 import Campaign from "./components/marketing/Campaign.jsx";
 import ListFilter from "./components/marketing/ListFilter.jsx";
+import WhatsappView from "./components/marketing/WhatsappView.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -126,6 +127,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/marketing/list",
         element: <ListFilter/>
+      },
+      {
+        path: "/lp/marketing/campaign",
+        element: <WhatsappView/>
       },
       {
         path: "/lp/bmp",

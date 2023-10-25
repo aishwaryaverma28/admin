@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Search from "../../assets/image/search.svg";
 import User from "../../assets/image/user-icon.svg";
 import CreateModal from "./CreateModal.jsx";
-import { handleLogout } from "../utils/Constants.js";
+
 
 const ListFilter = () => {
 const [create, setCreate] = useState(false);

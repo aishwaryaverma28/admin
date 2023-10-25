@@ -22,6 +22,7 @@ button {
   width: 20vw;
   height: auto;
   background: #f8fbf8;
+  min-height: 100vh;
 
 
 }
