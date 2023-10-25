@@ -7,7 +7,7 @@ import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
 import BatchModal from "./BatchModal.jsx";
 import axios from "axios";
-import { GET_BATCH, getDecryptedToken } from "../utils/Constants";
+import { GET_BATCH,GET_ACADEMY,UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -16,6 +16,8 @@ const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
   const fileInputRef = useRef(null);
   const academyId = localStorage.getItem("id");
+  const [academyData, setAcademyData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [batch, setBatch] = useState([]);
   const id= localStorage.getItem('id');
@@ -56,9 +58,26 @@ const FeesNBatches = () => {
     });
 
   }
-
+  const academyDetails = () => {
+    axios
+      .get(GET_ACADEMY + academyId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data?.data[0])
+        setAcademyData(response?.data?.data[0]);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  };
   useEffect(() => {
 fetchBatch();
+academyDetails();
   }, []);
 
 
@@ -91,7 +110,6 @@ fetchBatch();
 
   const submitImage = (file) => {
     const selectedImage = file;
-    console.log(file);
     if (selectedImage) {
       const folder = 'bookmyplayer/academy/' + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -112,12 +130,46 @@ fetchBatch();
         .then((data) => {
           console.log(data.secure_url);
           setFileName(data.secure_url);
+          handleSubmit(data.secure_url);
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
+
+  function handleSubmit(file) {
+    console.log(file)
+    axios
+      .put(UPDATE_ACADEMY + academyId, {
+        brochure: file
+      }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+  }
+
 
   const handleBatchModal = (param, batchId = null) => {
     setIsBatchModalOpen(true);
