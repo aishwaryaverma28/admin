@@ -29,7 +29,6 @@ const BmpOverview = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
-  const [updatedFormData, setUpdatedFormData] = useState({});
 
   const handleTimingChange = (index = 0, value, type) => {
     const newValues = [...timingValues];
@@ -85,19 +84,18 @@ const BmpOverview = () => {
   };
   const submitImage = (file) => {
     const selectedImage = file;
+    console.log(file);
     if (selectedImage) {
       const folder = 'bookmyplayer/academy/' + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
-      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
       data.append("public_id", uniqueFileName);
-      data.append("overwrite", true);
 
       fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
         method: "post",
@@ -105,8 +103,8 @@ const BmpOverview = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          // setBlogImg(selectedImage.name);
+          console.log(data.secure_url);
+          setFileName(data.secure_url);
         })
         .catch((err) => {
           console.log(err);
