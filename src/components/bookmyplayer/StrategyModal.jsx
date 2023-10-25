@@ -6,8 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const StrategyModal = ({ onClose, newData, name, fetchData }) => {
-  console.log(newData);
-  console.log(name);
+  // console.log(newData);
+  // console.log(name);
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("id");
   const [stateBtn, setStateBtn] = useState(0);

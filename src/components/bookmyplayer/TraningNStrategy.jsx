@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
@@ -8,7 +8,7 @@ import Pen from "../../assets/image/pen.svg";
 import StrategyModal from "./StrategyModal.jsx";
 import DeleteStrategyModal from "./DeleteStrategyModal.jsx";
 import axios from "axios";
-import { UPDATE_ACADEMY,GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_ACADEMY, GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateStrategyModal from "./UpdateStrategyModal.jsx";
@@ -25,7 +25,7 @@ const TraningNStrategy = () => {
   const [descriptionOfStrategy, setDescriptionOfStrategy] = useState([]);
   const [updateModal, setUpdateModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
-  const [updateIndex,setUpdateIndex] = useState(null);
+  const [updateIndex, setUpdateIndex] = useState(null);
 
   const handleUpdateModal = (index) => {
     setUpdateModal(true);
@@ -43,9 +43,9 @@ const TraningNStrategy = () => {
   };
   const handleDeleteOpen = (index) => {
     setIsDeleteModalOpen(true);
-    setDeleteIndex(index); 
+    setDeleteIndex(index);
   };
-  
+
   const deleteStrategy = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...nameOfStrategy];
@@ -107,13 +107,17 @@ const TraningNStrategy = () => {
       .then((response) => {
         setNewData(response.data.data[0].training_strategy);
         setStrategyName(response.data.data[0].strategy_name);
-        setNameOfStrategy(response.data.data[0].strategy_name?.split("$@$@$").reverse());
-        setDescriptionOfStrategy(
-          response.data.data[0].training_strategy?.split("$@$@$").reverse()
-        );
+        if (response.data.data[0].training_strategy !== "" && response.data.data[0].strategy_name !== "") {
+          setNameOfStrategy(response.data.data[0].strategy_name?.split("$@$@$").reverse());
+          setDescriptionOfStrategy(
+            response.data.data[0].training_strategy?.split("$@$@$").reverse()
+          );
+        }
       });
   };
 
+  console.log(nameOfStrategy);
+  console.log(descriptionOfStrategy);
   useEffect(() => {
     fetchAcademyDetails();
   }, []);
@@ -175,71 +179,78 @@ const TraningNStrategy = () => {
       </div>
 
       <div>
-          <div>
-            {
-              nameOfStrategy?.map((strategy, index) => (
-              <div className="bmp-strategy-details" key={index}>
-                <img
-                  src={openBatch === index ? GreaterDown : GreaterArrow}
-                  alt=""
-                  onClick={() => handleBatchClick(index)}
-                />
-                <div className="bmp-strategy-box">
-                  <div className="bmp-fee-corner">
-                    <p
-                      className="common-fonts"
-                      onClick={() => handleBatchClick(index)}
-                    >
-                      {strategy}
-                    </p>
-                    <img
-                    src={Pen}
+        <div>
+          {nameOfStrategy.length === 0 ? (
+            <div className='support-no-ticket-found'>
+              <p className='common-fonts'>No Strategy found</p>
+            </div>
+          ) : (
+            <>
+              {nameOfStrategy?.map((strategy, index) => (
+                <div className="bmp-strategy-details" key={index}>
+                  <img
+                    src={openBatch === index ? GreaterDown : GreaterArrow}
                     alt=""
-                    className="bmp-fee-pen"
-                    onClick={() => handleUpdateModal(index)}
+                    onClick={() => handleBatchClick(index)}
                   />
-                    <img src={Trash} alt="" onClick={() => handleDeleteOpen(index)} />
-                  </div>
-                  {openBatch === index && (
-                    <div className="bmp-strategy-content">
-                      <p className="common-fonts">
-                        {descriptionOfStrategy[index]}
+                  <div className="bmp-strategy-box">
+                    <div className="bmp-fee-corner">
+                      <p
+                        className="common-fonts"
+                        onClick={() => handleBatchClick(index)}
+                      >
+                        {strategy}
                       </p>
+                      <img
+                        src={Pen}
+                        alt=""
+                        className="bmp-fee-pen"
+                        onClick={() => handleUpdateModal(index)}
+                      />
+                      <img src={Trash} alt="" onClick={() => handleDeleteOpen(index)} />
                     </div>
-                  )}
+                    {openBatch === index && (
+                      <div className="bmp-strategy-content">
+                        <p className="common-fonts">
+                          {descriptionOfStrategy[index]}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </>
+          )}
         </div>
-        {isModalOpen && (
-          <StrategyModal
-            onClose={handleModalClose}
-            newData={newData}
-            name={strategyName}
-            fetchData={fetchAcademyDetails}
-          />
-        )}
+      </div>
+      {isModalOpen && (
+        <StrategyModal
+          onClose={handleModalClose}
+          newData={newData}
+          name={strategyName}
+          fetchData={fetchAcademyDetails}
+        />
+      )}
 
-        {isDeleteModalOpen && (
-          <DeleteStrategyModal
-            onClose={() => {
-              setIsDeleteModalOpen(false);
-            }}
-            onDelete={handleDeleteConfirm}
-          />
-        )}
+      {isDeleteModalOpen && (
+        <DeleteStrategyModal
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onDelete={handleDeleteConfirm}
+        />
+      )}
 
-        {
-          updateModal && <UpdateStrategyModal
+      {
+        updateModal && <UpdateStrategyModal
           onClose={handleUpdateModalClose}
           fetchData={fetchAcademyDetails}
           updateIndex={updateIndex}
           name={nameOfStrategy}
-          description = {descriptionOfStrategy}
+          description={descriptionOfStrategy}
         />
-        }
-      <ToastContainer/>
+      }
+      <ToastContainer />
     </div>
   );
 };

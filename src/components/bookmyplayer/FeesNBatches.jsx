@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef,useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
@@ -14,6 +14,8 @@ import { useEffect } from "react";
 
 const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
+  const fileInputRef = useRef(null);
+  const academyId = localStorage.getItem("id");
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [batch, setBatch] = useState([]);
   const id= localStorage.getItem('id');
@@ -78,11 +80,42 @@ fetchBatch();
     setOpenBatch(openBatch === index ? null : index);
   };
 
+  const handleButtonClick = (event) => {
+    event.preventDefault();
+    fileInputRef.current.click();
+  };
+
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-      // You can also perform other operations with the file here if needed.
+    submitImage(event.target.files[0]);
+  };
+
+  const submitImage = (file) => {
+    const selectedImage = file;
+    console.log(file);
+    if (selectedImage) {
+      const folder = 'bookmyplayer/academy/' + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.secure_url);
+          setFileName(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -115,13 +148,14 @@ fetchBatch();
               Add Batch
             </button>
             <div className="file-input-wrapper">
-              <label htmlFor="file-input" className="custom-new-btn">
+              <label htmlFor="file-input" className="custom-new-btn"  onClick={handleButtonClick}>
                 Upload Broucher
               </label>
               <input
                 type="file"
                 id="file-input"
                 className="file-input-new"
+                ref={fileInputRef}
                 onChange={handleFileChange}
               />
               <span id="file-name">{fileName}</span>
