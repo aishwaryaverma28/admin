@@ -4,6 +4,8 @@ import CryptoJS from 'crypto-js';
 const secretKey = 'mySecretKey123';
 // const secretKey = "miyamura"; // Set your secret key for login
 
+const landingUrl = localStorage.getItem("landingUrl")
+
 const getDecryptedToken = () => {
   const encryptedToken = localStorage.getItem('jwtToken');
 
@@ -31,7 +33,12 @@ export {getDecryptedUserPath}
   export const handleLogout = () => {
     localStorage.clear();
     // window.location.href = "http://core.leadplaner.com/";
-    window.location.href = "https://www.leadplaner.com/user/login";
+    if(landingUrl === "/lp/bmp"){
+      window.location.href = "https://www.bookmyplayer.com/login";
+    }else{
+      window.location.href = "https://www.leadplaner.com/user/login";
+    }
+    
     // window.location.href = " https://fiduciagroup.leadplaner.com/";
   };
 // =============================================================apis used  

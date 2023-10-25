@@ -47,7 +47,6 @@ const BmpOverview = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
-        console.log(response?.data?.data[0]);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -139,9 +138,9 @@ const BmpOverview = () => {
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
       website: academyData?.website,
-      sport: selectedDaysString,
+      sport: selectedDaysString?.replace(/^,+/g, ""),
       email: academyData?.email,
-      timing: [...timeArr],
+      timing: [...timeArr] && [...timeArr].length === 0 ? "" : [...timeArr],
     };
 
     axios
