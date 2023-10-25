@@ -32,6 +32,7 @@ const LPheader = () => {
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
+  const [number, setNumber] = useState(null);
   let allowed = decryptedUserPath.split(",");
   // let allowed = [
   //   "/lp/lead",
@@ -75,14 +76,14 @@ const LPheader = () => {
     allowed = allowed.filter((path) => path !== "/lp/admin");
   }
 
-  useEffect(()=>{
-    if(landingUrl === "/lp/admin"){
-      setPathAddress("/lp/settings/viewProfile/employeeProfile")
-    }else{
-      setPathAddress("/lp/settings/general")
+  useEffect(() => {
+    if (landingUrl === "/lp/admin") {
+      setPathAddress("/lp/settings/viewProfile/employeeProfile");
+    } else {
+      setPathAddress("/lp/settings/general");
     }
-  },[])
-  
+  }, []);
+
   useEffect(() => {
     switch (landingUrl) {
       case "/lp/bmp":
@@ -99,10 +100,10 @@ const LPheader = () => {
   }, [landingUrl]);
   const handleBell = () => {
     setIsNotifyModalOpen(true);
-  }
+  };
   const handleBellCLose = () => {
     setIsNotifyModalOpen(false);
-  }
+  };
 
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
@@ -122,6 +123,7 @@ const LPheader = () => {
       localStorage.setItem("org_id", data[0].org_id);
       if (response.data.status === 1) {
         setClientData(data[0]);
+        setNumber(0);
       }
     } catch (error) {
       console.log(error);
@@ -134,18 +136,22 @@ const LPheader = () => {
 
   async function getBMPUser() {
     try {
-      const response = await axios.post(BMP_USER, {
-        userId: userId
-    },
-    {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      const response = await axios.post(
+        BMP_USER,
+        {
+          userId: userId,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      );
       const data = response.data.user;
       console.log(data);
       if (response.data.status === 1) {
         setClientData(data);
+        setNumber(1);
       }
     } catch (error) {
       console.log(error);
@@ -159,13 +165,11 @@ const LPheader = () => {
   useEffect(() => {
     if (landingUrl === "/lp/bmp") {
       getBMPUser();
-    }
-    else{
-    getUser();
+    } else {
+      getUser();
     }
   }, []);
 
-   console.log(clientData);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -271,9 +275,18 @@ const LPheader = () => {
             {clientData ? (
               <p>
                 {" "}
-                {name
+                {/* {name
                   ? name
-                  : `${clientData?.first_name} ${clientData?.last_name}`}
+                  : `${clientData?.first_name} ${clientData?.last_name}`} */}
+
+                  {
+                    number=== 0 ? (
+                      `${clientData?.first_name} ${clientData?.last_name}`
+                    ) : (
+                      `${clientData?.name}`
+                    )
+
+                  }
                 <br />
                 <span>{clientData.job_title}</span>
               </p>
@@ -291,7 +304,14 @@ const LPheader = () => {
                 <img src={user} alt="user" />
                 <div className="crmUserInfo">
                   <h5 className="crmUserInfoName">
-                    {clientData?.first_name + " " + clientData?.last_name}
+                  {
+                    number=== 0 ? (
+                      `${clientData?.first_name} ${clientData?.last_name}`
+                    ) : (
+                      `${clientData?.name}`
+                    )
+
+                  }
                   </h5>
                   <p className="email-case">{clientData?.email}</p>
                   <p>{clientData?.job_title}</p>
@@ -385,12 +405,12 @@ const LPheader = () => {
               </li>
             )}
 
-              <li onClick={() => handleNavigationClick("Contacts")}>
-                <NavLink exact to="/lp/marketing" activeClassName="activeNav">
-                  Marketing
-                </NavLink>
-              </li>
-                      </ul>
+            <li onClick={() => handleNavigationClick("Contacts")}>
+              <NavLink exact to="/lp/marketing" activeClassName="activeNav">
+                Marketing
+              </NavLink>
+            </li>
+          </ul>
           <span></span>
         </div>
       </nav>
