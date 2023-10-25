@@ -18,7 +18,7 @@ const BmpOverview = () => {
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
-  const [checkboxStates, setCheckboxStates] = useState([true]);
+  const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
   const [timingValues, setTimingValues] = useState([]);
   const fileInputRef = useRef(null);
@@ -31,6 +31,16 @@ const BmpOverview = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
   const [number, setNumber] = useState(0);
+
+  const handleCheckboxChange = (event) => {
+    const { checked } = event.target;
+    setIsWhatsappActivated(checked);
+    
+    if (checked) {
+      setPhoneNumberCount(1); 
+      setIsButtonVisible(true); 
+    }
+  };
 
   const handleTimingChange = (index = 0, value, type) => {
     const newValues = [...timingValues];
@@ -85,7 +95,7 @@ const BmpOverview = () => {
   }, []);
 
   const handleFileChange = (event) => {
-    setStateBtn(1)
+    setStateBtn(1);
     const selectedImage = event.target.files[0];
     submitImage(event.target.files[0]);
     console.log(selectedImage);
@@ -175,14 +185,8 @@ const BmpOverview = () => {
     setAlwaysOpenChecked(!alwaysOpenChecked);
   };
 
-  const handleCheckboxChange = (index) => {
-    const newCheckboxStates = [...checkboxStates]; // Create a copy of the array
-    newCheckboxStates[index] = !newCheckboxStates[index]; // Toggle the state of the clicked checkbox
-    setCheckboxStates(newCheckboxStates); // Update the state
-  };
-
   const addPhoneNumberInput = () => {
-    setCheckboxStates([false]); // Uncheck the checkbox
+    setIsWhatsappActivated(false); // Uncheck the checkbox
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
@@ -407,23 +411,22 @@ const BmpOverview = () => {
               </div>
             </div>
           </div>
-
           {[...Array(phoneNumberCount)].map((_, index) => (
-            <div className="bmp-input-flex">
+            <div className="bmp-input-flex" key={index}>
               <div className="bmp-phone-field">
                 <label htmlFor="" className="common-fonts bmp-academy-name">
                   {index === 0 ? "Phone Number" : `Whatsapp Number`}
                 </label>
 
-                {index === 0 && (
+                {index === 0 && ( // Render checkbox and label only for the first phone number input
                   <div className="bmp-whatsapp-check">
                     <label className="custom-checkbox">
                       <input
                         type="checkbox"
                         className="cb1"
                         name="headerCheckBox"
-                        checked={checkboxStates[index]} // Use the checkbox state from the array
-                        onChange={() => handleCheckboxChange(index)}
+                        checked={isWhatsappActivated}
+                       onChange={handleCheckboxChange}
                       />
                       <span className="checkmark"></span>
                     </label>
@@ -507,75 +510,77 @@ const BmpOverview = () => {
               </div>
             </div>
 
-            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-              <div className="">
-                <input
-                  className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                  placeholder="Enter Time"
-                  value={timingValues[0]?.fromTime}
+            {!alwaysOpenChecked && (
+              <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
+                <div className="">
+                  <input
+                    className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                    placeholder="Enter Time"
+                    value={timingValues[0]?.fromTime}
+                    onChange={(e) =>
+                      handleTimingChange(0, e.target.value, "fromTime")
+                    }
+                  ></input>
+                </div>
+                <select
+                  name=""
+                  id=""
+                  className="common-fonts common-input bmp-modal-select bmp-new-width"
                   onChange={(e) =>
-                    handleTimingChange(0, e.target.value, "fromTime")
+                    handleTimingChange(0, e.target.value, "period")
                   }
-                ></input>
-              </div>
-              <select
-                name=""
-                id=""
-                className="common-fonts common-input bmp-modal-select bmp-new-width"
-                onChange={(e) =>
-                  handleTimingChange(0, e.target.value, "period")
-                }
-                // value={obj?.timing
-                //   ?.split(",")
-                //   [index]?.split("to")[1]
-                //   ?.replace(/\d+/g, "")
-                //   .trim()}
-                value={timingValues[0]?.period}
-              >
-                <option value="">AM/PM</option>
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
+                  // value={obj?.timing
+                  //   ?.split(",")
+                  //   [index]?.split("to")[1]
+                  //   ?.replace(/\d+/g, "")
+                  //   .trim()}
+                  value={timingValues[0]?.period}
+                >
+                  <option value="">AM/PM</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
 
-              <p className="common-fonts light-color bmp-to">To</p>
+                <p className="common-fonts light-color bmp-to">To</p>
 
-              <div className="">
-                <input
-                  className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                  placeholder="Enter Time"
-                  value={
-                    timingValues[0]?.toTime
-                    // batchDetails?.timing
-                    //   ?.split(",")
-                    //   [index]?.split("to")[1]
-                    //   ?.replace(/[APap][Mm]/g, "")
-                    //   .trim() ||
-                  }
+                <div className="">
+                  <input
+                    className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
+                    placeholder="Enter Time"
+                    value={
+                      timingValues[0]?.toTime
+                      // batchDetails?.timing
+                      //   ?.split(",")
+                      //   [index]?.split("to")[1]
+                      //   ?.replace(/[APap][Mm]/g, "")
+                      //   .trim() ||
+                    }
+                    onChange={(e) =>
+                      handleTimingChange(0, e.target.value, "toTime")
+                    }
+                  ></input>
+                </div>
+
+                <select
+                  name=""
+                  id=""
+                  className="common-fonts common-input bmp-modal-select bmp-new-width"
                   onChange={(e) =>
-                    handleTimingChange(0, e.target.value, "toTime")
+                    handleTimingChange(0, e.target.value, "period2")
                   }
-                ></input>
+                  // value={obj?.timing
+                  //   ?.split(",")
+                  //   [index]?.split("to")[1]
+                  //   ?.replace(/\d+/g, "")
+                  //   .trim()}
+                  value={timingValues[0]?.period2}
+                >
+                  <option value="">AM/PM</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
               </div>
-
-              <select
-                name=""
-                id=""
-                className="common-fonts common-input bmp-modal-select bmp-new-width"
-                onChange={(e) =>
-                  handleTimingChange(0, e.target.value, "period2")
-                }
-                // value={obj?.timing
-                //   ?.split(",")
-                //   [index]?.split("to")[1]
-                //   ?.replace(/\d+/g, "")
-                //   .trim()}
-                value={timingValues[0]?.period2}
-              >
-                <option value="">AM/PM</option>
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-              </select>
-            </div>
+            )}
           </div>
         </div>
 
@@ -644,7 +649,9 @@ const BmpOverview = () => {
                   />
                   <span className="common-fonts upload-file-name">
                     {/* {fileName} */}
-                    {fileName2 ? fileName2 :academyData?.logo?.toString()?.split('/')?.pop()}
+                    {fileName2
+                      ? fileName2
+                      : academyData?.logo?.toString()?.split("/")?.pop()}
                     {}
                   </span>
                 </span>
@@ -669,8 +676,6 @@ const BmpOverview = () => {
                   />
                 </div>
               )}
-
-              
             </div>
 
             <p className="common-fonts bmp-social">
