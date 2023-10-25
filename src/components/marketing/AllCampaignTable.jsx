@@ -1,5 +1,6 @@
 import React from 'react';
 import Search from "../../assets/image/search.svg";
+import { Link } from 'react-router-dom';
 
 const AllCampaignTable = () => {
 
@@ -17,7 +18,9 @@ const AllCampaignTable = () => {
               <img src={Search} alt="" />
             </span>
           </div>
+          <Link to="/lp/marketing/campaign">
           <button className="common-fonts common-save-button mrkt-new-btn">+ Create Campaign</button>
+          </Link>
           </div>
                
 

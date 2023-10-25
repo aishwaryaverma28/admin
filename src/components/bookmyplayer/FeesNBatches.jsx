@@ -46,8 +46,7 @@ const FeesNBatches = () => {
     })
     .then((response) => {
       setBatch(response?.data?.data)
-      console.log(response.data.data)
-      console.log("ppyy")
+
       
     })
     .catch((error) => {
@@ -160,7 +159,7 @@ fetchBatch();
       </div>
 
       <div className="bmp-fee-middle">
-      {batch.map((batch, index) => (
+      {batch?.map((batch, index) => (
         <>
         <div className="bmp-fee-batch">
           <img
@@ -234,7 +233,7 @@ fetchBatch();
 
             <div className="bmp-double-flex">
             {
-              batch?.fees?.split(',').map((fees, index)=>{
+              batch?.fees?.split(',')?.map((fees, index)=>{
                 return (
                   <div className="bmp-fee-input-flex">
                 <div className="bmp-input-fields">
