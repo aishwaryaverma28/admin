@@ -30,6 +30,7 @@ const BmpOverview = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
   const [updatedFormData, setUpdatedFormData] = useState({});
+  const [folderName, setFolderName] = useState('');
 
   const handleTimingChange = (index = 0, value, type) => {
     const newValues = [...timingValues];
@@ -54,8 +55,29 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-
+  const createFolder = async () => {
+    const cloudinaryFolder = 'bookmyplayer/academy'; // Path to the parent folder
+    const apiUrl = 'http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder';
+const body = {
+  folderPath: cloudinaryFolder+"/newFolder"
+}
+axios.post(apiUrl, body,{
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })    
+    .then((response) => {
+      console.log(response)
+    })
+    .catch((error) => {
+      toast.error("Some Error Occoured!", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    })
+  }
   useEffect(() => {
+    createFolder();
     academyDetails();
   }, []);
 
