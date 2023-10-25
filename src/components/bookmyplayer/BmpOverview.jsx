@@ -23,12 +23,14 @@ const BmpOverview = () => {
   const [timingValues, setTimingValues] = useState([]);
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
+  const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
+  const [number, setNumber] = useState(0);
 
   const handleTimingChange = (index = 0, value, type) => {
     const newValues = [...timingValues];
@@ -46,6 +48,7 @@ const BmpOverview = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -54,16 +57,18 @@ const BmpOverview = () => {
       });
   };
   const createFolder = async () => {
-    const cloudinaryFolder = 'bookmyplayer/academy'; // Path to the parent folder
-    const apiUrl = 'http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder';
+    const cloudinaryFolder = "bookmyplayer/academy"; // Path to the parent folder
+    const apiUrl =
+      "http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder";
     const body = {
-      folderPath: cloudinaryFolder + "/" + academyId
-    }
-    axios.post(apiUrl, body, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+      folderPath: cloudinaryFolder + "/" + academyId,
+    };
+    axios
+      .post(apiUrl, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then((response) => {
         // console.log(response)
       })
@@ -72,21 +77,28 @@ const BmpOverview = () => {
           position: "top-center",
           autoClose: 2000,
         });
-      })
-  }
+      });
+  };
   useEffect(() => {
     createFolder();
     academyDetails();
   }, []);
 
   const handleFileChange = (event) => {
+    setStateBtn(1)
+    const selectedImage = event.target.files[0];
     submitImage(event.target.files[0]);
+    console.log(selectedImage);
+    if (selectedImage) {
+      setFileName2(selectedImage.name); // Set the file name
+      setSelectedFile(selectedImage); // Set the selected file
+    }
   };
   const submitImage = (file) => {
     const selectedImage = file;
     console.log(file);
     if (selectedImage) {
-      const folder = 'bookmyplayer/academy/' + academyId;
+      const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -111,7 +123,6 @@ const BmpOverview = () => {
         });
     }
   };
-
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -164,7 +175,6 @@ const BmpOverview = () => {
     setAlwaysOpenChecked(!alwaysOpenChecked);
   };
 
-
   const handleCheckboxChange = (index) => {
     const newCheckboxStates = [...checkboxStates]; // Create a copy of the array
     newCheckboxStates[index] = !newCheckboxStates[index]; // Toggle the state of the clicked checkbox
@@ -191,6 +201,7 @@ const BmpOverview = () => {
       sport: selectedDaysString?.replace(/^,+/g, ""),
       email: academyData?.email,
       timing: [...timeArr] && [...timeArr].length === 0 ? "" : [...timeArr],
+      logo: fileName,
     };
 
     axios
@@ -323,64 +334,73 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Football") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Football") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Basketball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Basketball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Chess") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Chess") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Tennis") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Tennis") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("MMA") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("MMA") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Golf") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Golf") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Hockey") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Hockey") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Badminton") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Badminton") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -423,8 +443,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                      ? academyData?.phone
-                      : academyData?.whatsapp
+                    ? academyData?.phone
+                    : academyData?.whatsapp
                 }
               />
             </div>
@@ -624,8 +644,8 @@ const BmpOverview = () => {
                   />
                   <span className="common-fonts upload-file-name">
                     {/* {fileName} */}
-                    {academyData?.logo}
-                    { }
+                    {fileName2 ? fileName2 :academyData?.logo?.toString()?.split('/')?.pop()}
+                    {}
                   </span>
                 </span>
               </div>
