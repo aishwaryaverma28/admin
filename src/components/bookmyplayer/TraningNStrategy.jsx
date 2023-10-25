@@ -176,7 +176,8 @@ const TraningNStrategy = () => {
 
       <div>
           <div>
-            {nameOfStrategy.map((strategy, index) => (
+            {
+              nameOfStrategy?.map((strategy, index) => (
               <div className="bmp-strategy-details" key={index}>
                 <img
                   src={openBatch === index ? GreaterDown : GreaterArrow}
