@@ -23,31 +23,10 @@ const WhatsappView = () => {
     setselectedFile(file);
   };
 
-  function sanitizeHtml(input) {
-    // Replace newline characters with <br> tags
-    const replacedNewlines = input.replace(/\n/g, '<br>');
-    
-    // Remove disallowed tags except <br> tags
-    const allowedTags = ['br']; // List of allowed tags
-    const regex = new RegExp(`<(${allowedTags.join('|')})\\b[^>]*>`, 'gi');
-    const sanitizedData = replacedNewlines.replace(regex, '');
-  
-    return sanitizedData;
-  }
-  
   const handleDataTransfer = (data) => {
-    const sanitizedData = sanitizeHtml(data);
+    const sanitizedData = data.replace(/\n/g, "<br>");
     setDataFromChild(sanitizedData);
   };
-  
-  
-  
-
-  // const removeHtmlTags = (htmlString) => {
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = htmlString;
-  //   return tempDiv.textContent || tempDiv.innerText || "";
-  // };
 
   return (
     <div>
@@ -58,11 +37,17 @@ const WhatsappView = () => {
               <img src={NoImage} alt="" />
             </div>
 
-            <div>
-              <pre
-                className="common-fonts whatsapp-your-text"
-                 dangerouslySetInnerHTML={{ __html: dataFromChild }}
-              />
+            <div contenteditable="true">
+              {dataFromChild.length === 0 ? (
+                <p className="common-fonts whatsapp-your-text">
+                  Your Text Here
+                </p>
+              ) : (
+                <p
+                  className="common-fonts whatsapp-your-text"
+                  dangerouslySetInnerHTML={{ __html: dataFromChild }}
+                />
+              )}
             </div>
           </div>
           <div className="whatsapp-left-btn">
