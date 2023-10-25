@@ -8,6 +8,7 @@ import logo from "../assets/image/logo.svg";
 import axios from "axios";
 import {
   USER_INFO,
+  BMP_USER,
   getDecryptedToken,
   handleLogout,
   getDecryptedUserPath,
@@ -18,6 +19,7 @@ import NotificationModal from "./NotificationModal.jsx";
 const LPheader = () => {
   const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
+  const userId = localStorage.getItem("id");
   const [pageTitle, setPageTitle] = useState("Lead");
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -130,11 +132,40 @@ const LPheader = () => {
     }
   }
 
+  async function getBMPUser() {
+    try {
+      const response = await axios.post(BMP_USER, {
+        userId: userId
+    },
+    {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      });
+      const data = response.data.user;
+      console.log(data);
+      if (response.data.status === 1) {
+        setClientData(data);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  }
+
   useEffect(() => {
+    if (landingUrl === "/lp/bmp") {
+      getBMPUser();
+    }
+    else{
     getUser();
+    }
   }, []);
 
-  // console.log(clientData);
+   console.log(clientData);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

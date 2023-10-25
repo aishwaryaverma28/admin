@@ -30,7 +30,6 @@ const BmpOverview = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
   const [updatedFormData, setUpdatedFormData] = useState({});
-  const [folderName, setFolderName] = useState('');
 
   const handleTimingChange = (index = 0, value, type) => {
     const newValues = [...timingValues];
@@ -58,28 +57,63 @@ const BmpOverview = () => {
   const createFolder = async () => {
     const cloudinaryFolder = 'bookmyplayer/academy'; // Path to the parent folder
     const apiUrl = 'http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder';
-const body = {
-  folderPath: cloudinaryFolder+"/newFolder"
-}
-axios.post(apiUrl, body,{
+    const body = {
+      folderPath: cloudinaryFolder + "/" + academyId
+    }
+    axios.post(apiUrl, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,
       },
-    })    
-    .then((response) => {
-      console.log(response)
     })
-    .catch((error) => {
-      toast.error("Some Error Occoured!", {
-        position: "top-center",
-        autoClose: 2000,
-      });
-    })
+      .then((response) => {
+        // console.log(response)
+      })
+      .catch((error) => {
+        toast.error("Some Error Occoured!", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
   }
   useEffect(() => {
     createFolder();
     academyDetails();
   }, []);
+
+  const handleFileChange = (event) => {
+    submitImage(event.target.files[0]);
+  };
+  const submitImage = (file) => {
+    const selectedImage = file;
+    if (selectedImage) {
+      const folder = 'bookmyplayer/academy/' + academyId;
+      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      //   /\.[^/.]+$/,
+      //   ""
+      // )}`;
+      const uniqueFileName = `${folder}/${selectedImage.name}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+      data.append("overwrite", true);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          // setBlogImg(selectedImage.name);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -123,7 +157,8 @@ axios.post(apiUrl, body,{
     setTimeArr(filteredValues);
   }, [timingValues]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
+    event.preventDefault();
     fileInputRef.current.click();
   };
 
@@ -131,11 +166,6 @@ axios.post(apiUrl, body,{
     setAlwaysOpenChecked(!alwaysOpenChecked);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setFileName(file.name);
-    setSelectedFile(file);
-  };
 
   const handleCheckboxChange = (index) => {
     const newCheckboxStates = [...checkboxStates]; // Create a copy of the array
@@ -295,73 +325,64 @@ axios.post(apiUrl, body,{
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Football") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Football") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Basketball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Basketball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Chess") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Chess") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Tennis") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Tennis") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("MMA") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("MMA") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Golf") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Golf") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Hockey") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Hockey") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Badminton") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Badminton") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -404,8 +425,8 @@ axios.post(apiUrl, body,{
                   isLoading
                     ? "-"
                     : index === 0
-                    ? academyData?.phone
-                    : academyData?.whatsapp
+                      ? academyData?.phone
+                      : academyData?.whatsapp
                 }
               />
             </div>
@@ -584,7 +605,7 @@ axios.post(apiUrl, body,{
                 >
                   <button
                     className="contact-browse-btn common-fonts"
-                    onClick={() => handleButtonClick()}
+                    onClick={handleButtonClick}
                   >
                     Browse
                   </button>
@@ -606,7 +627,7 @@ axios.post(apiUrl, body,{
                   <span className="common-fonts upload-file-name">
                     {/* {fileName} */}
                     {academyData?.logo}
-                    {}
+                    { }
                   </span>
                 </span>
               </div>

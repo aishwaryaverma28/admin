@@ -46,6 +46,7 @@ export {getDecryptedUserPath}
 const start = "https://fiduciagroup.leadplaner.com/api";
 const userId = localStorage.getItem('id');
 export const USER_INFO = start + "/user/getuserinfo";
+export const BMP_USER = start + "/bmp/getUser";
 export const USER_UPDATE = start + "/user/update";
 export const COUNTRIES = start+"/user/getcountries";
 export const ELIGIBLE_LOANS = start + "/user/geteligibilitycriteria";
