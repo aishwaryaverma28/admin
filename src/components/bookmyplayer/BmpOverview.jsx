@@ -659,6 +659,18 @@ const BmpOverview = () => {
                   />
                 </div>
               )}
+
+              {!selectedFile && (
+                <div className="bmp-image-preview">
+                  <img
+                    src={academyData?.logo}
+                    alt=""
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+
+              
             </div>
 
             <p className="common-fonts bmp-social">
