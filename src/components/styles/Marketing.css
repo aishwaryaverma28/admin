@@ -276,15 +276,15 @@
 
 .whatsapp-view-left {
   background-image: url("../../assets/image/whatsapp.png");
-  height: max-content;
-  min-height: 100vh;
+  height: 85vh;
   width: 38vw;
   display: flex;
   justify-content: start;
   align-items: center;
   margin-bottom: -1rem;
   flex-direction: column;
-  padding-top: 4rem;
+  padding-top: 2.5rem;
+  overflow: auto;
 }
 
 .whatsapp-display {
@@ -293,8 +293,18 @@
   width: 25.8125rem;
   position: relative;
   padding: 0.5rem;
-  height: max-content;
-  min-height: 20.375rem;
+  height: 25.375rem;
+}
+
+.whatsapp-content {
+  outline: none;
+  pointer-events: none;
+  overflow: scroll;
+}
+
+.whatsapp-dairy {
+  height: 13rem;
+  overflow: scroll;
 }
 
 .whatsapp-display::before {
@@ -314,7 +324,7 @@
   justify-content: center;
   align-items: center;
   height: 10rem;
-  width:100%;
+  width: 100%;
   border-radius: 0.3125rem;
   background: #ededed;
 }
@@ -362,6 +372,13 @@
 .whatsapp-right {
   padding: 1rem;
   padding-left: 1.5rem;
+  height: 75vh;
+  width: 62vw;
+  overflow: auto;
+}
+
+.whatsapp-right-wrapper {
+  height: 85vh;
 }
 
 .whatsapp-border {
@@ -374,50 +391,189 @@
   width: 28rem;
 }
 
-.whatsapp-preview-img img{
-    width: 14rem;
-    height:5rem;
-    flex-shrink: 0;
-    margin-top: -0.5rem;
+.whatsapp-preview-img img {
+  width: 14rem;
+  height: 5rem;
+  flex-shrink: 0;
+  margin-top: -0.5rem;
 }
-.whatsapp-preview-img-2 img{
+.whatsapp-preview-img-2 img {
   width: 24.813rem;
   height: 10rem;
   margin-top: 0.2rem;
 }
 
-.whatsapp-preview-img{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.whatsapp-preview-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.whatsapp-new-flex{
-    display: flex;
-    justify-content: start;
-    align-items: center;
+.whatsapp-new-flex {
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
-.whatsapp-new-flex img{
+.whatsapp-new-flex img {
   height: 3rem;
   width: 3rem;
   margin-right: 0.5rem;
 }
 
-.whatsapp-para p:first-child{
+.whatsapp-para p:first-child {
   margin-bottom: 0.5rem;
 }
 
-.whatsapp-new-label{
+.whatsapp-new-label {
   margin-top: 1rem;
 }
-.whatsapp-new-label-2{
+.whatsapp-new-label-2 {
   margin-top: 1.5rem;
 }
 
-
-.whatsapp-editor{
-  width:28rem;
+.whatsapp-editor {
+  width: 28rem;
 }
 
+.whatsapp-cta-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.whatsapp-cta-btn p {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.whatsapp-react-editor {
+  margin-bottom: 2rem;
+}
+
+.whatsapp-cta-btn-view {
+  margin-top: 1rem;
+}
+
+.whatsapp-btn-name {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+}
+.whatsapp-btn-name p {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+}
+
+.whatsapp-btn-div {
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.whatsapp-btn-label {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+}
+
+.whatsapp-btn-label input {
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.whatsapp-label-input {
+  width: 100%;
+}
+
+.whatsapp-down-btn {
+  padding: 1rem;
+  display: flex;
+  justify-content: end;
+}
+
+.whatsapp-new-select {
+  padding: 0;
+}
+
+.whatsapp-participant {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.whatsapp-participant select {
+  margin-top: 0.3rem;
+}
+
+.whatsapp-new-save {
+  margin-left: 1rem;
+}
+
+.whatsapp-schedule {
+  margin-top: 1.5rem;
+}
+
+.whatsapp-schedule-box {
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  width: 28rem;
+  padding: 1rem;
+  margin-top: 0.3rem;
+}
+
+.whatsapp-time-travel {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.whatsapp-to {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 2rem;
+}
+
+.whatsapp-date-label {
+  color: #33475b;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.whatsapp-date {
+  height: 2.125rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: "Lexend Deca", sans-serif;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.whatsapp-date-wrapper {
+  display: flex;
+  align-items: center;
+  width: 10rem;
+  height: 2.125rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+}
+
+.whatsapp-cta-wrapper {
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #fff;
+  padding: 1rem;
+  width: 28rem;
+}
