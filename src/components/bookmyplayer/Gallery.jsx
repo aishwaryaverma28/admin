@@ -29,9 +29,10 @@ const Gallery = () => {
   const [academyData, setAcademyData] = useState({});
   const [photosData, setPhotosData] = useState("");
   const [photoUrls, setPhotoUrls] = useState([]);
+  const [videoUrls, setVideoUrls] = useState([]);
   const [newName, setNewName] = useState("");
   const [deleteIndex, setDeleteIndex] = useState(null);
-
+  const [deleteProp, setDeleteProp] = useState(null);
 
   const academyDetails = () => {
     axios
@@ -42,9 +43,12 @@ const Gallery = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
-        setPhotosData(response?.data?.data[0].photos)
-        if (response?.data?.data[0].photos !== "" || response?.data?.data[0].photos !== null) {
+        if (response?.data?.data[0].photos !== "" && response?.data?.data[0].photos !== null) {
+          alert("hello")
           setPhotoUrls(response.data.data[0].photos?.split("$@$@$").reverse())
+        }
+        if (response?.data?.data[0].videos !== "" && response?.data?.data[0].videos !== null) {
+          setVideoUrls(response.data.data[0].videos?.split("$@$@$").reverse())
         }
       })
       .catch((error) => {
@@ -54,7 +58,6 @@ const Gallery = () => {
   useEffect(() => {
     academyDetails();
   }, []);
-  // console.log(photoUrls);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -64,7 +67,6 @@ const Gallery = () => {
   const handleFileChange = (event) => {
     const selectedImage = event.target.files[0];
     submitImage(event.target.files[0]);
-    console.log(selectedImage);
     if (selectedImage) {
       setNewName(selectedImage.name); // Set the file name
       setSelectedFile(selectedImage); // Set the selected file
@@ -73,7 +75,6 @@ const Gallery = () => {
 
   const submitImage = (file) => {
     const selectedImage = file;
-    console.log(file);
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -92,7 +93,6 @@ const Gallery = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.secure_url);
           setFileName(data.secure_url);
           handleSubmit("banner", data.secure_url)
         })
@@ -106,14 +106,16 @@ const Gallery = () => {
   };
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
-    submitImage2(event.target.files[0]);
-    // setFileName2(file.name);
-    // setSelectedFile2(file);
+    if (file.type.startsWith("image/")) {
+      submitImage2(event.target.files[0]);
+    }
+    else if (file.type.startsWith("video/")) {
+      submitVideo2(event.target.files[0]);
+  } 
   };
 
   const submitImage2 = (file) => {
     const selectedImage = file;
-    console.log(file);
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -132,7 +134,6 @@ const Gallery = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setFileName2(data.secure_url);
           const imageUrl = data.secure_url;
           if (data.secure_url) {
@@ -147,6 +148,44 @@ const Gallery = () => {
     }
   }
 
+  const submitVideo2 = (file) => {
+    const selectedImage = file;
+    if (selectedImage) {
+      const folder = "bookmyplayer/academy/" + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/video/upload", {
+        method: "post",
+        body: data,
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setFileName2(data.secure_url);
+        const imageUrl = data.secure_url;
+        if (videoUrls && videoUrls.length > 0) {
+          alert("if")
+          const updatedVideoUrls = [...videoUrls, imageUrl];
+          setVideoUrls(updatedVideoUrls);
+          handleSubmit("videos", updatedVideoUrls);
+        } else {
+          alert("else")
+          setVideoUrls([imageUrl]);
+          handleSubmit("videos", [imageUrl]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+};
 
 
   function handleSubmit(key_name, file) {
@@ -160,6 +199,12 @@ const Gallery = () => {
       const joinedString = file.join("$@$@$");
       body = {
         photos: joinedString
+      }
+    }
+    else if (key_name === "videos") {
+      const joinedString = file.join("$@$@$");
+      body = {
+        videos: joinedString
       }
     }
     axios
@@ -213,17 +258,22 @@ const Gallery = () => {
     ],
   };
 
-  const handleDeleteOpen = (index) => {
+  const handleDeleteOpen = (index, prop) => {
     setIsDeleteModalOpen(true);
     setDeleteIndex(index);
+    setDeleteProp(prop);
   };
   const handleDeleteConfirm = () => {
+    if (deleteProp === "image"){
     deleteStrategy();
+    }
+    else if (deleteProp === "video"){
+      deleteVideo();
+    }
     setIsDeleteModalOpen(false);
   };
 
   const deleteStrategy = () => {
-    console.log(deleteIndex);
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...photoUrls];
       updatedNameOfStrategy.splice(deleteIndex, 1);
@@ -249,6 +299,31 @@ const Gallery = () => {
       });
   };
 
+const deleteVideo = () => {
+    if (deleteIndex !== null) {
+      const updatedNameOfStrategy = [...videoUrls];
+      updatedNameOfStrategy.splice(deleteIndex, 1);
+      setPhotoUrls(updatedNameOfStrategy);
+      updateData(updatedNameOfStrategy);
+    }
+  };
+  const updateData = (updatedNameArray) => {
+    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
+    axios
+      .put(UPDATE_ACADEMY + academyId, {
+        videos: updatedNameString,
+      }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        academyDetails();
+      })
+      .catch((error) => {
+        console.error("API call failed:", error);
+      });
+  };
 
   return (
     <div className="bmp-main-wrapper">
@@ -442,30 +517,36 @@ const Gallery = () => {
           )}
         </div>
       </div>
-
+      {videoUrls?.length === 0 ? (
+        <div className='support-no-ticket-found'>
+          <p className='common-fonts'>No videos added</p>
+        </div>
+      ) : (
+        < div className="outerBox">
+          {
+            videoUrls?.map((video, index) => (
+     
       <div className="bmp-new-img">
         <div className="bmp-img-top-icon">
           <div className="bmp-img-name">
             <div className="bmp-video">
               <img src={Video} alt="" />
             </div>
-            <p className="common-fonts bmp-tour">academy tour.gif</p>
+            {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
           </div>
           <div className="bmp-trash">
-            <img src={Trash} alt="" />
+            <img src={Trash} alt="" onClick={() => handleDeleteOpen(index,"video")}/>
           </div>
         </div>
         <div className="bmp-player-img">
-          <img
-            src={Player}
-            alt="Selected Preview"
-          />
-          <div className="bmp-vedio-play">
-            <img src={VideoPlay} alt="" />
-          </div>
+        <video width="270" height="140" controls>
+            <source src={video} type="video/mp4" />
+          </video>
         </div>
       </div>
-
+  ))
+}</div>
+)}
 
       {photoUrls?.length === 0 ? (
         <div className='support-no-ticket-found'>
@@ -489,7 +570,7 @@ const Gallery = () => {
                     {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
                   </div>
                   <div className="bmp-trash">
-                    <img src={Trash} alt=""  onClick={() => handleDeleteOpen(index)}/>
+                    <img src={Trash} alt=""  onClick={() => handleDeleteOpen(index, "image")}/>
                   </div>
 
                 </div>
@@ -503,10 +584,10 @@ const Gallery = () => {
           }</div>
       )}
 
-      <div className="bmp-bottom-btn">
+      {/* <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button">Cancel</button>
         <button className="common-fonts common-save-button">Save</button>
-      </div>
+      </div> */}
 
       {isDeleteModalOpen && (
         <DeleteImage
@@ -514,6 +595,7 @@ const Gallery = () => {
             setIsDeleteModalOpen(false);
           }}
           onDelete={handleDeleteConfirm}
+          prop={deleteProp}
         />
       )}
 

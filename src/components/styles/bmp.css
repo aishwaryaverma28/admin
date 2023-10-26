@@ -719,7 +719,7 @@ width:35rem;
   overflow-x: scroll;
   overflow: hidden;
   display: flex;
-
+margin-bottom: 1rem;
 }
 .bmp-new-img{
 width: 17.5rem;
