@@ -8,7 +8,7 @@ import Player from "../../assets/image/player.png";
 import VideoPlay from "../../assets/image/video-play.svg";
 
 const Gallery = () => {
-  const academyId = localStorage.getItem("id");
+  const academyId = localStorage.getItem("academy_id");
   const fileInputRef = useRef(null);
   const fileInputRef2= useRef(null);
   const [fileName, setFileName] = useState("");

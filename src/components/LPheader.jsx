@@ -10,7 +10,6 @@ import {
   USER_INFO,
   BMP_USER,
   getDecryptedToken,
-  handleLogout,
   getDecryptedUserPath,
 } from "./utils/Constants";
 import HelpModal from "./HelpModal";
@@ -212,6 +211,17 @@ const LPheader = () => {
   const closeHelpModal = () => {
     setIsHelpModalOpen(false);
   };
+
+const handleLogout = () => {
+  console.log(landingUrl)
+ if(landingUrl === "/lp/bmp"){
+   localStorage.clear();
+   window.location.href = "https://www.bookmyplayer.com/login";
+ }else{
+   localStorage.clear();
+   window.location.href = "https://www.leadplaner.com/user/login";
+ }
+};
 
   return (
     <>

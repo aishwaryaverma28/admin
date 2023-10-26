@@ -9,7 +9,7 @@ const UpdateStrategyModal = ({ onClose,fetchData, updateIndex, name, description
 console.log(name);
 console.log(description)
   const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem("id");
+  const academyId = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
   const [sName, setSName] = useState(name[updateIndex]);
   const [descrip, setDescrip] = useState(description[updateIndex]);

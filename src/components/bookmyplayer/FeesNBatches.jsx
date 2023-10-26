@@ -18,7 +18,7 @@ const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [batch, setBatch] = useState([]);
-  const id = localStorage.getItem('id');
+  const id = localStorage.getItem('academy_id');
   const [param, setParam] = useState("");
   const [batchId, setBatchId] = useState(null);
   const [obj, setObj] = useState({});
@@ -249,7 +249,7 @@ const FeesNBatches = () => {
           <>
             <div className="bmp-fee-batch">
               <img
-                src={openBatch === 1 ? GreaterDown : GreaterArrow}
+                src={openBatch === index ? GreaterDown : GreaterArrow}
                 alt=""
                 onClick={() => handleBatchClick(index)}
               />
