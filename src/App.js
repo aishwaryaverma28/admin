@@ -168,7 +168,11 @@ const router = createBrowserRouter([
           },
           {
             path:"/lp/bmp/support",
-            element: <SupportTab/>,
+            element: (
+              <div style={{ padding: '1rem' }}>
+                <SupportTab />
+              </div>
+            ),
           },
           {
             path:"/lp/bmp/help",
