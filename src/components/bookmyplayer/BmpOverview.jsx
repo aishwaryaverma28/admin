@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem("id");
+  const academyId = localStorage.getItem("academy_id");
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);

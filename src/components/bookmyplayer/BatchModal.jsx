@@ -29,7 +29,7 @@ const BatchModal = ({
   const [amountArr, setNewAmountArr] = useState([]);
   const [timingValues, setTimingValues] = useState([]);
   const [timeArr, setTimeArr] = useState([]);
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
 
   const handleTimingChange = (index, value, type) => {

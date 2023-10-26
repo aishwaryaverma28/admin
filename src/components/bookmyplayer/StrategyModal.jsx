@@ -9,7 +9,7 @@ const StrategyModal = ({ onClose, newData, name, fetchData }) => {
   console.log(newData);
   console.log(name);
   const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem("id");
+  const academyId = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
   const [sName, setSName] = useState("");
   const [descrip, setDescrip] = useState("");

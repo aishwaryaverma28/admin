@@ -1,13 +1,23 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
+import axios from "axios";
+import {
+  GET_ACADEMY,
+  UPDATE_ACADEMY,
+  getDecryptedToken,
+} from "../utils/Constants";
 import "chart.js/auto";
 import Photo from "../../assets/image/gallery.svg";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 import Player from "../../assets/image/player.png";
 import VideoPlay from "../../assets/image/video-play.svg";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Gallery = () => {
+  const decryptedToken = getDecryptedToken();
+  const academyId = localStorage.getItem("academy_id");
   const fileInputRef = useRef(null);
   const fileInputRef2= useRef(null);
   const [fileName, setFileName] = useState("");
@@ -16,11 +26,93 @@ const Gallery = () => {
   const [selectedFile2, setSelectedFile2] = useState(null);
   const [academyData, setAcademyData] = useState({});
 
+  const academyDetails = () => {
+    axios
+      .get(GET_ACADEMY + academyId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setAcademyData(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);;
+      });
+  };
+  useEffect(() => {
+    academyDetails();
+  }, []);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFileName(file.name);
-    setSelectedFile(file);
+    submitImage(event.target.files[0]);
+    // setFileName(file.name);
+    // setSelectedFile(file);
   };
+
+  const submitImage = (file) => {
+    const selectedImage = file;
+    console.log(file);
+    if (selectedImage) {
+      const folder = "bookmyplayer/academy/" + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.secure_url);
+          setFileName(data.secure_url);
+          handleSubmit(data.secure_url)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  function handleSubmit(file) {
+
+    axios
+      .put(UPDATE_ACADEMY + academyId, { banner: file }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+  }
+
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
     setFileName2(file.name);
@@ -299,7 +391,7 @@ const Gallery = () => {
 
 
 
-
+              <ToastContainer />
     </div>
   );
 };

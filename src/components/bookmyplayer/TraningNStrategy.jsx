@@ -18,7 +18,7 @@ const TraningNStrategy = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("academy_id");
   const [newData, setNewData] = useState("");
   const [strategyName, setStrategyName] = useState("");
   const [nameOfStrategy, setNameOfStrategy] = useState([]);
@@ -179,7 +179,7 @@ const TraningNStrategy = () => {
 
       <div>
         <div>
-          { nameOfStrategy.length === 0? (
+          { nameOfStrategy?.length === 0? (
            <div className='support-no-ticket-found'>
           <p className='common-fonts'>No ticket found</p>
           </div>
