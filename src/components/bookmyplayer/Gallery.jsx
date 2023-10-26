@@ -8,6 +8,7 @@ import Player from "../../assets/image/player.png";
 import VideoPlay from "../../assets/image/video-play.svg";
 
 const Gallery = () => {
+  const academyId = localStorage.getItem("id");
   const fileInputRef = useRef(null);
   const fileInputRef2= useRef(null);
   const [fileName, setFileName] = useState("");
@@ -18,9 +19,40 @@ const Gallery = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFileName(file.name);
-    setSelectedFile(file);
+    submitImage(event.target.files[0]);
+    // setFileName(file.name);
+    // setSelectedFile(file);
   };
+
+  const submitImage = (file) => {
+    const selectedImage = file;
+    console.log(file);
+    if (selectedImage) {
+      const folder = "bookmyplayer/academy/" + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.secure_url);
+          setFileName(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
     setFileName2(file.name);
