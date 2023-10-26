@@ -14,7 +14,6 @@ const WhatsappView = () => {
   const [fileName, setfileName] = useState("");
   const [selectedFile, setselectedFile] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
-  const [buttonText, setButtonText] = useState("");
   const [selectedDays, setSelectedDays] = useState([]);
   const [buttons, setButtons] = useState([
     { id: 1, name: "Button 1", isVisible: true },
@@ -122,7 +121,7 @@ const WhatsappView = () => {
             buttons.map((val, index)=>{
               return (
                 <div key={val.id} className="whatsapp-left-btn">
-            <button className="common-fonts"> {buttonTexts[index]?.length !== 0 ? buttonTexts[index] : `box ${index + 1}`}</button>
+            <button className="common-fonts"> {buttonTexts[index]?.length !== 0 ? buttonTexts[index] : `Button ${index + 1}`}</button>
           </div>
               )
             })
