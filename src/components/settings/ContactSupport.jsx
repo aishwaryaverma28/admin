@@ -21,7 +21,7 @@ const ContactSupport = () => {
     mobile: "",
     category: "Technical",
     priority: "Low",
-    org_Id: orgId,
+    org_id: orgId,
 })
 
   const handleFileChange = (event) => {

@@ -14,10 +14,12 @@ import Player from "../../assets/image/player.png";
 import VideoPlay from "../../assets/image/video-play.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DeleteImage from "./DeleteImage.jsx";
 
 const Gallery = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
   const [fileName, setFileName] = useState("");
@@ -28,6 +30,7 @@ const Gallery = () => {
   const [photosData, setPhotosData] = useState("");
   const [photoUrls, setPhotoUrls] = useState([]);
   const [newName, setNewName] = useState("");
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
 
   const academyDetails = () => {
@@ -51,6 +54,7 @@ const Gallery = () => {
   useEffect(() => {
     academyDetails();
   }, []);
+  // console.log(photoUrls);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -97,49 +101,7 @@ const Gallery = () => {
         });
     }
   }
-
-  function handleSubmit(key_name, file) {
-    let body = {};
-    if (key_name === "banner") {
-      body = {
-        banner: file
-      }
-    }
-    else if (key_name === "photos") {
-      body = {
-        photos: file
-      }
-    }
-
-    axios
-      .put(UPDATE_ACADEMY + academyId, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        if (response.data.status === 1) {
-          toast.success("Details updated successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        } else {
-          toast.error("Some Error Occurred", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while updating details", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      })
-  }
-
-    const handleButtonClick2 = () => {
+  const handleButtonClick2 = () => {
     fileInputRef2.current.click();
   };
   const handleFileChange2 = (event) => {
@@ -170,14 +132,14 @@ const Gallery = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.secure_url);
+          console.log(data);
           setFileName2(data.secure_url);
           const imageUrl = data.secure_url;
-          setPhotoUrls([...photoUrls, imageUrl]);
-          console.log(photoUrls)
-          const joinedString = photoUrls.join("$@$@$");
-          console.log(joinedString);
-          // handleSubmit("photos", photoUrls);
+          if (data.secure_url) {
+            const updatedPhotoUrls = [...photoUrls, imageUrl];
+            setPhotoUrls(updatedPhotoUrls);
+            handleSubmit("photos", updatedPhotoUrls);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -185,6 +147,48 @@ const Gallery = () => {
     }
   }
 
+
+
+  function handleSubmit(key_name, file) {
+    let body = {};
+    if (key_name === "banner") {
+      body = {
+        banner: file
+      }
+    }
+    else if (key_name === "photos") {
+      const joinedString = file.join("$@$@$");
+      body = {
+        photos: joinedString
+      }
+    }
+    axios
+      .put(UPDATE_ACADEMY + academyId, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+  }
 
 
   const options = {
@@ -208,6 +212,44 @@ const Gallery = () => {
       },
     ],
   };
+
+  const handleDeleteOpen = (index) => {
+    setIsDeleteModalOpen(true);
+    setDeleteIndex(index);
+  };
+  const handleDeleteConfirm = () => {
+    deleteStrategy();
+    setIsDeleteModalOpen(false);
+  };
+
+  const deleteStrategy = () => {
+    console.log(deleteIndex);
+    if (deleteIndex !== null) {
+      const updatedNameOfStrategy = [...photoUrls];
+      updatedNameOfStrategy.splice(deleteIndex, 1);
+      setPhotoUrls(updatedNameOfStrategy);
+      updateDataAndCallAPI(updatedNameOfStrategy);
+    }
+  };
+  const updateDataAndCallAPI = (updatedNameArray) => {
+    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
+    axios
+      .put(UPDATE_ACADEMY + academyId, {
+        photos: updatedNameString,
+      }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        academyDetails();
+      })
+      .catch((error) => {
+        console.error("API call failed:", error);
+      });
+  };
+
+
   return (
     <div className="bmp-main-wrapper">
       <div className="bmp-fee-container">
@@ -260,9 +302,9 @@ const Gallery = () => {
                       onChange={handleFileChange}
                     />
                     <span className="common-fonts upload-file-name">
-                    {newName
-                      ? newName
-                      : academyData?.banner?.toString()?.split("/")?.pop()}
+                      {newName
+                        ? newName
+                        : academyData?.banner?.toString()?.split("/")?.pop()}
                     </span>
                   </span>
                 </div>
@@ -404,63 +446,76 @@ const Gallery = () => {
       <div className="bmp-new-img">
         <div className="bmp-img-top-icon">
           <div className="bmp-img-name">
-
             <div className="bmp-video">
               <img src={Video} alt="" />
             </div>
-
             <p className="common-fonts bmp-tour">academy tour.gif</p>
           </div>
           <div className="bmp-trash">
             <img src={Trash} alt="" />
           </div>
-
         </div>
         <div className="bmp-player-img">
           <img
             src={Player}
             alt="Selected Preview"
           />
-
           <div className="bmp-vedio-play">
             <img src={VideoPlay} alt="" />
           </div>
-
         </div>
-
-
-
       </div>
 
 
-      <div className="bmp-new-img">
-        <div className="bmp-img-top-icon">
-          <div className="bmp-img-name">
-
-            <div className="bmp-video">
-              <img src={Photo} alt="" />
-            </div>
-
-            <p className="common-fonts bmp-tour">academy tour.gif</p>
-          </div>
-          <div className="bmp-trash">
-            <img src={Trash} alt="" />
-          </div>
-
+      {photoUrls?.length === 0 ? (
+        <div className='support-no-ticket-found'>
+          <p className='common-fonts'>No photos added</p>
         </div>
-        <img
-          src={Player}
-          alt="Selected Preview"
-        />
-      </div>
+      ) : (
+        < div className="outerBox">
+          {
+            photoUrls?.map((photo, index) => (
+              <div className="bmp-new-img">
+                <div className="bmp-img-top-icon">
+                  <div className="bmp-img-name">
 
+                    <div className="bmp-video">
+                      <img
+                        src={photo}
+                        alt="Selected Preview"
+                      />
+                    </div>
+
+                    {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
+                  </div>
+                  <div className="bmp-trash">
+                    <img src={Trash} alt=""  onClick={() => handleDeleteOpen(index)}/>
+                  </div>
+
+                </div>
+                <img
+                  src={photo}
+                  alt="Selected Preview"
+                  key={index}
+                />
+              </div>
+            ))
+          }</div>
+      )}
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button">Cancel</button>
         <button className="common-fonts common-save-button">Save</button>
       </div>
 
-
+      {isDeleteModalOpen && (
+        <DeleteImage
+          onClose={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onDelete={handleDeleteConfirm}
+        />
+      )}
 
       <ToastContainer />
     </div>

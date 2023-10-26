@@ -147,7 +147,8 @@ const LPheader = () => {
         }
       );
       const data = response.data.user;
-      console.log(data);
+      // console.log(data);
+      localStorage.setItem("org_id", data.org_id);
       if (response.data.status === 1) {
         setClientData(data);
         setNumber(1);
