@@ -27,6 +27,7 @@ const Gallery = () => {
   const [academyData, setAcademyData] = useState({});
   const [photosData, setPhotosData] = useState("");
   const [photoUrls, setPhotoUrls] = useState([]);
+  const [newName, setNewName] = useState("");
 
 
   const academyDetails = () => {
@@ -54,11 +55,16 @@ const Gallery = () => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+
+
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    const selectedImage = event.target.files[0];
     submitImage(event.target.files[0]);
-    // setFileName(file.name);
-    // setSelectedFile(file);
+    console.log(selectedImage);
+    if (selectedImage) {
+      setNewName(selectedImage.name); // Set the file name
+      setSelectedFile(selectedImage); // Set the selected file
+    }
   };
 
   const submitImage = (file) => {
@@ -254,8 +260,9 @@ const Gallery = () => {
                       onChange={handleFileChange}
                     />
                     <span className="common-fonts upload-file-name">
-                      {fileName}
-                      { }
+                    {newName
+                      ? newName
+                      : academyData?.banner?.toString()?.split("/")?.pop()}
                     </span>
                   </span>
                 </div>
@@ -264,7 +271,16 @@ const Gallery = () => {
                   <div className="bmp-image-preview-2">
                     <img
                       src={URL.createObjectURL(selectedFile)}
-                      alt="Selected Preview"
+                      alt=""
+                      className="bmp-preview-image"
+                    />
+                  </div>
+                )}
+                {!selectedFile && (
+                  <div className="bmp-image-preview-2">
+                    <img
+                      src={academyData?.banner}
+                      alt=""
                       className="bmp-preview-image"
                     />
                   </div>
