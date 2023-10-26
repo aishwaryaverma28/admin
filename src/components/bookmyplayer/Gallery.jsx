@@ -19,12 +19,15 @@ const Gallery = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const fileInputRef = useRef(null);
-  const fileInputRef2= useRef(null);
+  const fileInputRef2 = useRef(null);
   const [fileName, setFileName] = useState("");
   const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFile2, setSelectedFile2] = useState(null);
   const [academyData, setAcademyData] = useState({});
+  const [photosData, setPhotosData] = useState("");
+  const [photoUrls, setPhotoUrls] = useState([]);
+
 
   const academyDetails = () => {
     axios
@@ -35,7 +38,10 @@ const Gallery = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
-        console.log(response?.data?.data[0]);
+        setPhotosData(response?.data?.data[0].photos)
+        if (response?.data?.data[0].photos !== "" || response?.data?.data[0].photos !== null) {
+          setPhotoUrls(response.data.data[0].photos?.split("$@$@$").reverse())
+        }
       })
       .catch((error) => {
         console.log(error);;
@@ -45,6 +51,9 @@ const Gallery = () => {
     academyDetails();
   }, []);
 
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     submitImage(event.target.files[0]);
@@ -75,7 +84,7 @@ const Gallery = () => {
         .then((data) => {
           console.log(data.secure_url);
           setFileName(data.secure_url);
-          handleSubmit(data.secure_url)
+          handleSubmit("banner", data.secure_url)
         })
         .catch((err) => {
           console.log(err);
@@ -83,10 +92,21 @@ const Gallery = () => {
     }
   }
 
-  function handleSubmit(file) {
+  function handleSubmit(key_name, file) {
+    let body = {};
+    if (key_name === "banner") {
+      body = {
+        banner: file
+      }
+    }
+    else if (key_name === "photos") {
+      body = {
+        photos: file
+      }
+    }
 
     axios
-      .put(UPDATE_ACADEMY + academyId, { banner: file }, {
+      .put(UPDATE_ACADEMY + academyId, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -113,18 +133,53 @@ const Gallery = () => {
       })
   }
 
-  const handleFileChange2 = (event) => {
-    const file = event.target.files[0];
-    setFileName2(file.name);
-    setSelectedFile2(file);
-  };
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-  const handleButtonClick2 = () => {
+    const handleButtonClick2 = () => {
     fileInputRef2.current.click();
   };
+  const handleFileChange2 = (event) => {
+    const file = event.target.files[0];
+    submitImage2(event.target.files[0]);
+    // setFileName2(file.name);
+    // setSelectedFile2(file);
+  };
+
+  const submitImage2 = (file) => {
+    const selectedImage = file;
+    console.log(file);
+    if (selectedImage) {
+      const folder = "bookmyplayer/academy/" + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.secure_url);
+          setFileName2(data.secure_url);
+          const imageUrl = data.secure_url;
+          setPhotoUrls([...photoUrls, imageUrl]);
+          console.log(photoUrls)
+          const joinedString = photoUrls.join("$@$@$");
+          console.log(joinedString);
+          // handleSubmit("photos", photoUrls);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+
 
   const options = {
     cutout: "85%", // Adjusts the thickness of the progress bar
@@ -163,60 +218,60 @@ const Gallery = () => {
 
 
           <div className="bmp-img-section">
-        <div>
-          <p className="common-fonts bmp-banner-upload">upload banner image</p>
-          <p className="common-fonts light-color">
-            Recommended image size 820x312
-          </p>
-          <div className="bmp-upload-2">
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input bmp-border"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={() => handleButtonClick()}
-                >
-                  Browse
-                </button>
+            <div>
+              <p className="common-fonts bmp-banner-upload">upload banner image</p>
+              <p className="common-fonts light-color">
+                Recommended image size 820x312
+              </p>
+              <div className="bmp-upload-2">
+                <div className="contact-browse deal-doc-file">
+                  <span
+                    className="common-fonts common-input contact-tab-input bmp-border"
+                    style={{
+                      position: "relative",
+                      marginRight: "10px",
+                    }}
+                  >
+                    <button
+                      className="contact-browse-btn common-fonts"
+                      onClick={() => handleButtonClick()}
+                    >
+                      Browse
+                    </button>
 
-                <input
-                  type="file"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                  }}
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-                <span className="common-fonts upload-file-name">
-                  {fileName}
-                  {}
-                </span>
-              </span>
-            </div>
+                    <input
+                      type="file"
+                      style={{
+                        display: "none",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        width: "100%",
+                      }}
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                    />
+                    <span className="common-fonts upload-file-name">
+                      {fileName}
+                      { }
+                    </span>
+                  </span>
+                </div>
 
-            {selectedFile && (
-              <div className="bmp-image-preview-2">
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Selected Preview"
-                  className="bmp-preview-image"
-                />
+                {selectedFile && (
+                  <div className="bmp-image-preview-2">
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected Preview"
+                      className="bmp-preview-image"
+                    />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
         </div>
 
         <div className="bmp-top-right">
@@ -250,148 +305,148 @@ const Gallery = () => {
 
       <div className="bmp-upload-img">
         <div className="bmp-heading-flex">
-        <div>
-        <p className="common-fonts bmp-banner-upload">
-            Upload Academy images/videos
-          </p>
-          <p className="common-fonts light-color bmp-size">
-            Recommended image size 820x312
-          </p>
-        </div>
-        <div className="bmp-total-img">
-                <p className="common-fonts bmp-prefer">
-                Upload minimum 25 images & videos 6/25
-          </p>
-        </div>
+          <div>
+            <p className="common-fonts bmp-banner-upload">
+              Upload Academy images/videos
+            </p>
+            <p className="common-fonts light-color bmp-size">
+              Recommended image size 820x312
+            </p>
+          </div>
+          <div className="bmp-total-img">
+            <p className="common-fonts bmp-prefer">
+              Upload minimum 25 images & videos 6/25
+            </p>
+          </div>
 
 
         </div>
 
         <div className="bmp-upload-3 bmp-gap">
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input bmp-border-2"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
+          <div className="contact-browse deal-doc-file">
+            <span
+              className="common-fonts common-input contact-tab-input bmp-border-2"
+              style={{
+                position: "relative",
+                marginRight: "10px",
+              }}
+            >
+              <button
+                className="contact-browse-btn common-fonts"
+                onClick={handleButtonClick2}
               >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={() => handleButtonClick2()}
-                >
-                  Browse
-                </button>
+                Browse
+              </button>
 
-                <input
-                  type="file"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                  }}
-                  ref={fileInputRef2}
-                  onChange={handleFileChange2}
-                />
-                <span className="common-fonts upload-file-name">
-                  <p className="common-fonts light-color">You can upload multiple videos and images </p>
-                  <p className="common-fonts bmp-format">Upload image/videos in format png, jpg, jpeg, gif, webp, mp4 </p>
-                  {}
-                </span>
+              <input
+                type="file"
+                style={{
+                  display: "none",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  width: "100%",
+                }}
+                ref={fileInputRef2}
+                onChange={handleFileChange2}
+              />
+              <span className="common-fonts upload-file-name">
+                <p className="common-fonts light-color">You can upload multiple videos and images </p>
+                <p className="common-fonts bmp-format">Upload image/videos in format png, jpg, jpeg, gif, webp, mp4 </p>
+                { }
               </span>
-            </div>
-
-            {selectedFile2 && (
-              <div className="bmp-new-img">
-              <div className="bmp-img-top-icon">
-              <div className="bmp-img-name">
-
-              <div className="bmp-video">
-              <img src={Video} alt=""  />
-              </div>
-             
-              <p className="common-fonts bmp-tour">academy tour.gif</p>
-              </div>
-              <div className="bmp-trash">
-                <img src={Trash} alt=""  />
-              </div>
-                
-              </div>
-                <img
-                  src={URL.createObjectURL(selectedFile2)}
-                  alt="Selected Preview"
-                />
-              </div>
-            )}
+            </span>
           </div>
-      </div>
 
-      <div className="bmp-new-img">
+          {selectedFile2 && (
+            <div className="bmp-new-img">
               <div className="bmp-img-top-icon">
-              <div className="bmp-img-name">
+                <div className="bmp-img-name">
 
-              <div className="bmp-video">
-              <img src={Video} alt=""  />
-              </div>
-             
-              <p className="common-fonts bmp-tour">academy tour.gif</p>
-              </div>
-              <div className="bmp-trash">
-                <img src={Trash} alt=""  />
-              </div>
-                
-              </div>
-              <div className="bmp-player-img">
-              <img
-                  src={Player}
-                  alt="Selected Preview"
-                />
+                  <div className="bmp-video">
+                    <img src={Video} alt="" />
+                  </div>
 
-<div className="bmp-vedio-play">
-                  <img src={VideoPlay} alt="" />
+                  <p className="common-fonts bmp-tour">academy tour.gif</p>
+                </div>
+                <div className="bmp-trash">
+                  <img src={Trash} alt="" />
                 </div>
 
               </div>
+              <img
+                src={URL.createObjectURL(selectedFile2)}
+                alt="Selected Preview"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="bmp-new-img">
+        <div className="bmp-img-top-icon">
+          <div className="bmp-img-name">
+
+            <div className="bmp-video">
+              <img src={Video} alt="" />
+            </div>
+
+            <p className="common-fonts bmp-tour">academy tour.gif</p>
+          </div>
+          <div className="bmp-trash">
+            <img src={Trash} alt="" />
+          </div>
+
+        </div>
+        <div className="bmp-player-img">
+          <img
+            src={Player}
+            alt="Selected Preview"
+          />
+
+          <div className="bmp-vedio-play">
+            <img src={VideoPlay} alt="" />
+          </div>
+
+        </div>
 
 
 
-              </div>
+      </div>
 
 
       <div className="bmp-new-img">
-              <div className="bmp-img-top-icon">
-              <div className="bmp-img-name">
+        <div className="bmp-img-top-icon">
+          <div className="bmp-img-name">
 
-              <div className="bmp-video">
-              <img src={Photo} alt=""  />
-              </div>
-             
-              <p className="common-fonts bmp-tour">academy tour.gif</p>
-              </div>
-              <div className="bmp-trash">
-                <img src={Trash} alt=""  />
-              </div>
-                
-              </div>
-                <img
-                  src={Player}
-                  alt="Selected Preview"
-                />
-              </div>
+            <div className="bmp-video">
+              <img src={Photo} alt="" />
+            </div>
 
+            <p className="common-fonts bmp-tour">academy tour.gif</p>
+          </div>
+          <div className="bmp-trash">
+            <img src={Trash} alt="" />
+          </div>
 
-              <div className="bmp-bottom-btn">
-                <button className="common-fonts common-white-button">Cancel</button>
-                <button className="common-fonts common-save-button">Save</button>
-              </div>
+        </div>
+        <img
+          src={Player}
+          alt="Selected Preview"
+        />
+      </div>
 
 
+      <div className="bmp-bottom-btn">
+        <button className="common-fonts common-white-button">Cancel</button>
+        <button className="common-fonts common-save-button">Save</button>
+      </div>
 
-              <ToastContainer />
+
+
+      <ToastContainer />
     </div>
   );
 };
