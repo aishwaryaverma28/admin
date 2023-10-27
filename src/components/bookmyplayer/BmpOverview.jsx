@@ -568,7 +568,7 @@ const BmpOverview = () => {
         </div>
 
         <div>
-          <ProgressBar array={progressArray}/>
+          <ProgressBar />
           <div className="bmp-right-fields">
             <p className="common-fonts">Upload Academic Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>

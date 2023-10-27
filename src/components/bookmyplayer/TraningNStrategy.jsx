@@ -96,12 +96,12 @@ const TraningNStrategy = () => {
         },
       })
       .then((response) => {
-        setNewData(response.data.data[0].training_strategy);
-        setStrategyName(response.data.data[0].strategy_name);
-        if (response.data.data[0].training_strategy !== "" && response.data.data[0].strategy_name !== "") {
-          setNameOfStrategy(response.data.data[0].strategy_name?.split("$@$@$").reverse());
+        setNewData(response?.data?.data[0]?.training_strategy);
+        setStrategyName(response?.data?.data[0]?.strategy_name);
+        if (response?.data?.data[0]?.training_strategy !== "" && response?.data?.data[0]?.strategy_name !== "") {
+          setNameOfStrategy(response?.data?.data[0]?.strategy_name?.split("$@$@$")?.reverse());
           setDescriptionOfStrategy(
-            response.data.data[0].training_strategy?.split("$@$@$").reverse()
+            response?.data?.data[0]?.training_strategy?.split("$@$@$")?.reverse()
           );
         }
       });

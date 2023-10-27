@@ -45,8 +45,8 @@ const Gallery = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
-        if (response?.data?.data[0].photos !== "" && response?.data?.data[0].photos !== null) {
-          setPhotoUrls(response.data.data[0].photos?.split("$@$@$").reverse())
+        if (response?.data?.data[0]?.photos !== "" && response?.data?.data[0]?.photos !== null) {
+          setPhotoUrls(response?.data?.data[0]?.photos?.split("$@$@$")?.reverse())
         }
         if (response?.data?.data[0].videos !== "" && response?.data?.data[0].videos !== null) {
           setVideoUrls(response.data.data[0].videos?.split("$@$@$").reverse())
