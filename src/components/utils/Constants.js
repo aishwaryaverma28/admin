@@ -128,7 +128,7 @@ export const SERVICE_SUPPORT = start + "/user/ticket/getAll/all";
 export const UPDATE_TICKET = start + "/user/ticket/update/";
 export const GET_AUDIT = start + "/setting/getAll";
 export const UPDATE_AUDIT = start + "/setting/edit/";
-export const GET_SERVICE = start + "/user/ticket/getmytickets";
+export const GET_SERVICE = start + "/user/ticket/getmytickets/";
 
 export const GET_ALL_SEARCH = start + "/user/help/searchquestion";
 export const GET_SEARCH_ID = start + "/user/help/getbyid/";

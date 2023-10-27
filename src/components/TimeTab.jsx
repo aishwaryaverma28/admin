@@ -41,7 +41,7 @@ const TickIcon = () => {
 
   const getTicket = () => {
     axios
-      .get(GET_SERVICE, {
+      .get(GET_SERVICE + orgId, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

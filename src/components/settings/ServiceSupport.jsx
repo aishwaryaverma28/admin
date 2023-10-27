@@ -3,13 +3,14 @@ import '../styles/CPGenral.css';
 import axios from 'axios';
 import {
   getDecryptedToken,
-  SERVICE_SUPPORT
+  SERVICE_SUPPORT,GET_SERVICE 
 } from '../utils/Constants';
 import ServiceRequestTab from './ServiceRequestTab';
 import EditRequest from './EditRequest';
 
 const ServiceSupport = () => {
   const orgId = localStorage.getItem('org_id');
+  const landingUrl = localStorage.getItem("landingUrl");
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null); // State for selected ticket
@@ -34,8 +35,28 @@ const ServiceSupport = () => {
       });
   };
 
+  const getMyTicket = () => {
+    axios
+      .get(GET_SERVICE + orgId, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setTicket(response?.data?.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
   useEffect(() => {
-    getTicket();
+    if (landingUrl === "/lp/bmp") {
+      getMyTicket();
+    } else {
+      getTicket();
+    }    
   }, []);
 
   const handleOpenServiceTab = (item) => {

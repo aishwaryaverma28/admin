@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles/bmp.css";
 import Map from "../../assets/image/map.png";
-import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
 import {
@@ -12,6 +11,7 @@ import {
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProgressBar from "./ProgressBar";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -33,6 +33,8 @@ const BmpOverview = () => {
   const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [number, setNumber] = useState(0);
+  const [progress, setProgress]= useState(null);
+  const [progressArray, setProgressArray] = useState([]);
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -60,7 +62,8 @@ const BmpOverview = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
-        // console.log(response?.data?.data[0]);
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
         setIsLoading(false);
       })
       .catch((error) => {
@@ -68,6 +71,7 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
+  
   const createFolder = async () => {
     const cloudinaryFolder = "bookmyplayer/academy";
     const apiUrl = CREATE_FOLDER;
@@ -196,6 +200,11 @@ const BmpOverview = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (!progressArray?.includes("1")) {
+      const pro = progressArray.push("1");
+      setProgressArray(pro);
+    }
+    const combinedProgress = progressArray.join(",");
     const updatedFormData = {
       name: academyData?.name,
       about: academyData?.about,
@@ -209,7 +218,9 @@ const BmpOverview = () => {
       email: academyData?.email,
       timing: [...timeArr] && [...timeArr].length === 0 ? "" : [...timeArr],
       logo: fileName,
+      completion_percentage: combinedProgress,
     };
+    console.log(updatedFormData)
 
     axios
       .put(UPDATE_ACADEMY + academyId, updatedFormData, {
@@ -241,28 +252,6 @@ const BmpOverview = () => {
         setStateBtn(0);
       });
   }
-
-  const data = {
-    datasets: [
-      {
-        data: [70, 30],
-        backgroundColor: ["#007bff", "#d3d3d3"],
-        hoverBackgroundColor: ["#0056b3", "#d3d3d3"],
-        borderWidth: 0,
-      },
-    ],
-  };
-
-  const options = {
-    cutout: "85%", // Adjusts the thickness of the progress bar
-    maintainAspectRatio: false,
-    legend: {
-      display: false, // Hide legend
-    },
-    tooltip: {
-      enabled: false, // Hide tooltips
-    },
-  };
 
   // useEffect(() => {
   //   // Parse timing values from the API response when it's available
@@ -579,34 +568,7 @@ const BmpOverview = () => {
         </div>
 
         <div>
-          <div className="bmp-top-right">
-            <div className="status-of-profile">
-              <p className="common-fonts">Update Profile</p>
-              <div className="progress-bar">
-                <div className="bmp-small-circle bmp-completed-stage">1</div>
-                <div className="bmp-line"></div>
-                <div className="bmp-small-circle bmp-completed-stage">2</div>
-                <div className="bmp-line"></div>
-                <div className="bmp-small-circle">3</div>
-                <div className="bmp-line"></div>
-                <div className="bmp-small-circle">4</div>
-              </div>
-            </div>
-
-            <div className="bmp-msg">
-              <p className="common-fonts bmp-now ">Profile Complete</p>
-              <div className="bmp-circle">
-                <Doughnut data={data} options={options} />
-                <div className="circle-percentage">
-                  <span className="common-fonts percentage-value">70%</span>
-                </div>
-              </div>
-              <button className="common-fonts bmp-complete-btn">
-                Complete Now
-              </button>
-            </div>
-          </div>
-
+          <ProgressBar array={progressArray}/>
           <div className="bmp-right-fields">
             <p className="common-fonts">Upload Academic Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>
