@@ -5,6 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import axios from "axios";
 import {
+  CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY,
   getDecryptedToken,
@@ -30,15 +31,16 @@ const BmpOverview = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [number, setNumber] = useState(0);
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
     setIsWhatsappActivated(checked);
-    
+
     if (checked) {
-      setPhoneNumberCount(1); 
-      setIsButtonVisible(true); 
+      setPhoneNumberCount(1);
+      setIsButtonVisible(true);
     }
   };
 
@@ -67,9 +69,8 @@ const BmpOverview = () => {
       });
   };
   const createFolder = async () => {
-    const cloudinaryFolder = "bookmyplayer/academy"; // Path to the parent folder
-    const apiUrl =
-      "http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder";
+    const cloudinaryFolder = "bookmyplayer/academy";
+    const apiUrl = CREATE_FOLDER;
     const body = {
       folderPath: cloudinaryFolder + "/" + academyId,
     };
@@ -100,13 +101,12 @@ const BmpOverview = () => {
     submitImage(event.target.files[0]);
     console.log(selectedImage);
     if (selectedImage) {
-      setFileName2(selectedImage.name); // Set the file name
-      setSelectedFile(selectedImage); // Set the selected file
+      setFileName2(selectedImage.name);
+      setSelectedFile(selectedImage);
     }
   };
   const submitImage = (file) => {
     const selectedImage = file;
-    console.log(file);
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
@@ -118,7 +118,7 @@ const BmpOverview = () => {
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
       data.append("public_id", uniqueFileName);
-
+      setIsUploading(true);
       fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
         method: "post",
         body: data,
@@ -130,6 +130,9 @@ const BmpOverview = () => {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setIsUploading(false);
         });
     }
   };
@@ -338,73 +341,64 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Football") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Football") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Basketball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Basketball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Chess") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Chess") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Tennis") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Tennis") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("MMA") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("MMA") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Golf") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Golf") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Hockey") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Hockey") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Badminton") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Badminton") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -426,7 +420,7 @@ const BmpOverview = () => {
                         className="cb1"
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
-                       onChange={handleCheckboxChange}
+                        onChange={handleCheckboxChange}
                       />
                       <span className="checkmark"></span>
                     </label>
@@ -446,8 +440,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                    ? academyData?.phone
-                    : academyData?.whatsapp
+                      ? academyData?.phone
+                      : academyData?.whatsapp
                 }
               />
             </div>
@@ -647,13 +641,16 @@ const BmpOverview = () => {
                     ref={fileInputRef}
                     onChange={handleFileChange}
                   />
-                  <span className="common-fonts upload-file-name">
-                    {/* {fileName} */}
-                    {fileName2
-                      ? fileName2
-                      : academyData?.logo?.toString()?.split("/")?.pop()}
-                    {}
-                  </span>
+                  {isUploading ? (
+                    <span className="common-fonts upload-file-name">Uploading...</span>
+                  ) : (
+                    <span className="common-fonts upload-file-name">
+                      {fileName2
+                        ? fileName2
+                        : academyData?.logo?.toString()?.split("/")?.pop()}
+                      { }
+                    </span>
+                  )}
                 </span>
               </div>
 

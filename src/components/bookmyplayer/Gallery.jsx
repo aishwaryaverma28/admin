@@ -33,6 +33,8 @@ const Gallery = () => {
   const [newName, setNewName] = useState("");
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [deleteProp, setDeleteProp] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingMulti, setIsUploadingMulti] = useState(false);
 
   const academyDetails = () => {
     axios
@@ -44,7 +46,6 @@ const Gallery = () => {
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
         if (response?.data?.data[0].photos !== "" && response?.data?.data[0].photos !== null) {
-          alert("hello")
           setPhotoUrls(response.data.data[0].photos?.split("$@$@$").reverse())
         }
         if (response?.data?.data[0].videos !== "" && response?.data?.data[0].videos !== null) {
@@ -74,6 +75,7 @@ const Gallery = () => {
   };
 
   const submitImage = (file) => {
+    setIsUploading(true);
     const selectedImage = file;
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
@@ -98,6 +100,9 @@ const Gallery = () => {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setIsUploading(false); // Upload completed, hide the loader
         });
     }
   }
@@ -111,10 +116,11 @@ const Gallery = () => {
     }
     else if (file.type.startsWith("video/")) {
       submitVideo2(event.target.files[0]);
-  } 
+    }
   };
 
   const submitImage2 = (file) => {
+    setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
@@ -144,11 +150,15 @@ const Gallery = () => {
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          setIsUploadingMulti(false);
         });
     }
   }
 
   const submitVideo2 = (file) => {
+    setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
       const folder = "bookmyplayer/academy/" + academyId;
@@ -166,26 +176,27 @@ const Gallery = () => {
         method: "post",
         body: data,
       })
-      .then((res) => res.json())
-      .then((data) => {
-        setFileName2(data.secure_url);
-        const imageUrl = data.secure_url;
-        if (videoUrls && videoUrls.length > 0) {
-          alert("if")
-          const updatedVideoUrls = [...videoUrls, imageUrl];
-          setVideoUrls(updatedVideoUrls);
-          handleSubmit("videos", updatedVideoUrls);
-        } else {
-          alert("else")
-          setVideoUrls([imageUrl]);
-          handleSubmit("videos", [imageUrl]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-};
+        .then((res) => res.json())
+        .then((data) => {
+          setFileName2(data.secure_url);
+          const imageUrl = data.secure_url;
+          if (videoUrls && videoUrls.length > 0) {
+            const updatedVideoUrls = [...videoUrls, imageUrl];
+            setVideoUrls(updatedVideoUrls);
+            handleSubmit("videos", updatedVideoUrls);
+          } else {
+            setVideoUrls([imageUrl]);
+            handleSubmit("videos", [imageUrl]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsUploadingMulti(false);
+        });
+    }
+  };
 
 
   function handleSubmit(key_name, file) {
@@ -264,10 +275,10 @@ const Gallery = () => {
     setDeleteProp(prop);
   };
   const handleDeleteConfirm = () => {
-    if (deleteProp === "image"){
-    deleteStrategy();
+    if (deleteProp === "image") {
+      deleteStrategy();
     }
-    else if (deleteProp === "video"){
+    else if (deleteProp === "video") {
       deleteVideo();
     }
     setIsDeleteModalOpen(false);
@@ -299,7 +310,7 @@ const Gallery = () => {
       });
   };
 
-const deleteVideo = () => {
+  const deleteVideo = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...videoUrls];
       updatedNameOfStrategy.splice(deleteIndex, 1);
@@ -376,11 +387,15 @@ const deleteVideo = () => {
                       ref={fileInputRef}
                       onChange={handleFileChange}
                     />
-                    <span className="common-fonts upload-file-name">
-                      {newName
-                        ? newName
-                        : academyData?.banner?.toString()?.split("/")?.pop()}
-                    </span>
+                    {isUploading ? (
+                      <span className="common-fonts upload-file-name">Uploading...</span>
+                    ) : (
+                      <span className="common-fonts upload-file-name">
+                        {newName
+                          ? newName
+                          : academyData?.banner?.toString()?.split("/")?.pop()}
+                      </span>
+                    )}
                   </span>
                 </div>
 
@@ -470,7 +485,6 @@ const deleteVideo = () => {
               >
                 Browse
               </button>
-
               <input
                 type="file"
                 style={{
@@ -485,11 +499,15 @@ const deleteVideo = () => {
                 ref={fileInputRef2}
                 onChange={handleFileChange2}
               />
-              <span className="common-fonts upload-file-name">
-                <p className="common-fonts light-color">You can upload multiple videos and images </p>
-                <p className="common-fonts bmp-format">Upload image/videos in format png, jpg, jpeg, gif, webp, mp4 </p>
-                { }
-              </span>
+              {isUploadingMulti ? (
+                <span className="common-fonts upload-file-name">Uploading...</span>
+              ) : (
+                <span className="common-fonts upload-file-name">
+                  <p className="common-fonts light-color">You can upload multiple videos and images </p>
+                  <p className="common-fonts bmp-format">Upload image/videos in format png, jpg, jpeg, gif, webp, mp4 </p>
+                  { }
+                </span>
+              )}
             </span>
           </div>
 
@@ -525,28 +543,28 @@ const deleteVideo = () => {
         < div className="outerBox">
           {
             videoUrls?.map((video, index) => (
-     
-      <div className="bmp-new-img">
-        <div className="bmp-img-top-icon">
-          <div className="bmp-img-name">
-            <div className="bmp-video">
-              <img src={Video} alt="" />
-            </div>
-            {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
-          </div>
-          <div className="bmp-trash">
-            <img src={Trash} alt="" onClick={() => handleDeleteOpen(index,"video")}/>
-          </div>
-        </div>
-        <div className="bmp-player-img">
-        <video width="270" height="140" controls>
-            <source src={video} type="video/mp4" />
-          </video>
-        </div>
-      </div>
-  ))
-}</div>
-)}
+
+              <div className="bmp-new-img">
+                <div className="bmp-img-top-icon">
+                  <div className="bmp-img-name">
+                    <div className="bmp-video">
+                      <img src={Video} alt="" />
+                    </div>
+                    {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
+                  </div>
+                  <div className="bmp-trash">
+                    <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "video")} />
+                  </div>
+                </div>
+                <div className="bmp-player-img">
+                  <video width="270" height="140" controls>
+                    <source src={video} type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            ))
+          }</div>
+      )}
 
       {photoUrls?.length === 0 ? (
         <div className='support-no-ticket-found'>
@@ -570,7 +588,7 @@ const deleteVideo = () => {
                     {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
                   </div>
                   <div className="bmp-trash">
-                    <img src={Trash} alt=""  onClick={() => handleDeleteOpen(index, "image")}/>
+                    <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
                   </div>
 
                 </div>

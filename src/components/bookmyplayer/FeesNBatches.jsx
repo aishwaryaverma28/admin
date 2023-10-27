@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
@@ -8,7 +9,7 @@ import Pen from "../../assets/image/pen.svg";
 import BatchModal from "./BatchModal.jsx";
 import axios from "axios";
 import {
-  GET_BATCH, GET_ACADEMY,
+  GET_BATCH, GET_ACADEMY, UPDATE_BATCH,
   UPDATE_ACADEMY, getDecryptedToken
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -28,9 +29,7 @@ const FeesNBatches = () => {
   const [academyData, setAcademyData] = useState({});
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
-  const [openBatch, setOpenBatch] = useState(1);
-  
-
+  const [openBatch, setOpenBatch] = useState(0);
 
   const data = {
     datasets: [
@@ -118,7 +117,6 @@ const FeesNBatches = () => {
       data.append("upload_preset", "zbxquqvw");
       data.append("cloud_name", "cloud2cdn");
       data.append("public_id", uniqueFileName);
-
       fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
         method: "post",
         body: data,
@@ -178,7 +176,36 @@ const FeesNBatches = () => {
     setIsBatchModalOpen(false);
   };
 
-
+  const handleDeleteBatch = (batchId) => {
+    axios
+      .put(UPDATE_BATCH + batchId, { is_deleted: 1 }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Batch deleted successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          // After deleting the batch, you can refresh the batch list
+          fetchBatch();
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while deleting the batch", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      });
+  };
 
   return (
     <div>
@@ -206,11 +233,10 @@ const FeesNBatches = () => {
               {
                 fileName ? (
                   <span id="file-name">{fileName?.toString()?.split('/')?.pop()}</span>
-                ): (
+                ) : (
                   <span id="file-name">{academyData?.brochure?.toString()?.split('/')?.pop()}</span>
                 )
               }
-            
             </div>
           </div>
         </div>
@@ -263,7 +289,7 @@ const FeesNBatches = () => {
                   <div className="bmp-fee-corner">
                     <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
                     <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleBatchModal("put", batch.id)} />
-                    <img src={Trash} alt="" />
+                    <img src={Trash} alt="" onClick={() => handleDeleteBatch(batch.id)} />
                   </div>
                 )}
               </div>
@@ -276,7 +302,7 @@ const FeesNBatches = () => {
                   <div className="bmp-fee-corner">
                     <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
                     <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleBatchModal("put", batch.id)} />
-                    <img src={Trash} alt="" />
+                    <img src={Trash} alt="" onClick={() => handleDeleteBatch(batch.id)} />
                   </div>
                 </div>
 
