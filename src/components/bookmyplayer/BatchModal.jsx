@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { getDecryptedToken, ADD_BATCH, UPDATE_BATCH } from "../utils/Constants";
+import { getDecryptedToken, UPDATE_ACADEMY, ADD_BATCH, UPDATE_BATCH } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -15,6 +15,7 @@ const BatchModal = ({
   ageCount = 1,
   timeCount = 1,
   feeCount = 1,
+  array
 }) => {
   const decryptedToken = getDecryptedToken();
   const [selectedDays, setSelectedDays] = useState([]);
@@ -23,6 +24,7 @@ const BatchModal = ({
   const [timingsCount, setTimingsCount] = useState(timeCount);
   const [fieldCount, setFieldCount] = useState(feeCount);
   const orgId = localStorage.getItem("org_id");
+  const academyId = localStorage.getItem("academy_id");
   const [inputValues, setInputValues] = useState([]);
   const [amountValues, setAmountValues] = useState([]);
   const [newArr, setNewArr] = useState([]);
@@ -31,6 +33,11 @@ const BatchModal = ({
   const [timeArr, setTimeArr] = useState([]);
   const id = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
+  const [ num, setNum]= useState([]);
+
+  useEffect(() => {
+    setNum(array);
+  }, [array]);
 
   const handleTimingChange = (index, value, type) => {
     const newValues = [...timingValues];
@@ -171,7 +178,7 @@ const BatchModal = ({
               }
             );
           }
-
+          handleSave();
           fetchBatch();
         })
         .catch((error) => {
@@ -235,7 +242,7 @@ const BatchModal = ({
                 }
               );
             }
-
+            handleSave();
             fetchBatch();
           })
           .catch((error) => {
@@ -261,6 +268,28 @@ const BatchModal = ({
           });
       }
     }
+  };
+
+  const handleSave = () => {
+    if (!num?.includes("2")) {
+      num.push("2");
+      setNum(num);
+    }
+    const combinedProgress = num.join(",");
+     axios
+      .put(UPDATE_ACADEMY + academyId, {
+        completion_percentage: combinedProgress,
+      }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+       console.log(response)       ;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const AddFields = () => {

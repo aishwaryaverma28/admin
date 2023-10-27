@@ -713,14 +713,18 @@ width:35rem;
   font-size: 0.75rem;
   color:#33475B;
 }
-.outerBox{
-  /* border: 2px solid red; */
-  max-width: 90%;
+
+.outerBox {
+  max-width: 85vw;
   overflow-x: scroll;
-  overflow: hidden;
   display: flex;
-margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
+.outerBox::-webkit-scrollbar {
+  width: 6px; 
+  height: 6px; 
+}
+
 .bmp-new-img{
 width: 17.5rem;
 height: 11.75rem;

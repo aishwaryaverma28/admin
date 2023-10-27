@@ -63,7 +63,9 @@ const BmpOverview = () => {
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
+        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
         setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -148,7 +150,7 @@ const BmpOverview = () => {
   }
   const handleDayClick = (day) => {
     setStateBtn(1);
-    if (selectedDays.includes(day)) {
+    if (selectedDays?.includes(day)) {
       setSelectedDays(
         selectedDays.filter((selectedDay) => selectedDay !== day)
       );
@@ -201,10 +203,10 @@ const BmpOverview = () => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
-      const pro = progressArray.push("1");
-      setProgressArray(pro);
+  progressArray.push("1");
+  setProgressArray(progressArray);
     }
-    const combinedProgress = progressArray.join(",");
+    const combinedProgress = progressArray?.join(",");
     const updatedFormData = {
       name: academyData?.name,
       about: academyData?.about,
@@ -240,6 +242,7 @@ const BmpOverview = () => {
             autoClose: 2000,
           });
         }
+        academyDetails();
       })
       .catch((error) => {
         console.log(error);
@@ -330,63 +333,63 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Football") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Basketball") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Chess") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Tennis") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("MMA") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Golf") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Hockey") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Badminton") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays.includes("Volleyball") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
                   }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
@@ -568,7 +571,7 @@ const BmpOverview = () => {
         </div>
 
         <div>
-          <ProgressBar />
+          <ProgressBar array={progressArray}/>
           <div className="bmp-right-fields">
             <p className="common-fonts">Upload Academic Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>

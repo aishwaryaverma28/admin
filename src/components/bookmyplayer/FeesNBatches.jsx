@@ -30,6 +30,8 @@ const FeesNBatches = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [openBatch, setOpenBatch] = useState(0);
+  const [progress, setProgress]= useState(null);
+  const [progressArray, setProgressArray] = useState([]);
 
   const academyDetails = () => {
     axios
@@ -57,6 +59,10 @@ const FeesNBatches = () => {
       })
       .then((response) => {
         setBatch(response?.data?.data)
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
+          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+          }
       })
       .catch((error) => {
         console.log(error);
@@ -217,7 +223,7 @@ const FeesNBatches = () => {
             </div>
           </div>
         </div>
-        <ProgressBar/>
+        <ProgressBar array={progressArray}/>
       </div>
 
       <div className="bmp-fee-middle">
@@ -331,7 +337,7 @@ const FeesNBatches = () => {
           </>
         ))}
       </div>
-      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId} />}
+      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId} array={progressArray}/>}
       <ToastContainer />
     </div>
   );

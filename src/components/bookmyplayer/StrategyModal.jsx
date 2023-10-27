@@ -5,9 +5,7 @@ import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const StrategyModal = ({ onClose, newData, name, fetchData }) => {
-  console.log(newData);
-  console.log(name);
+const StrategyModal = ({ onClose, newData, name, fetchData, array }) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
@@ -15,6 +13,11 @@ const StrategyModal = ({ onClose, newData, name, fetchData }) => {
   const [descrip, setDescrip] = useState("");
   const [xyz, setXyz] = useState("");
   const [abc, setAbc] = useState("");
+const [ num, setNum]= useState([]);
+
+useEffect(() => {
+  setNum(array);
+}, [array]);
 
   const handleNameChange = (e) => {
     setStateBtn(1);
@@ -40,9 +43,15 @@ const StrategyModal = ({ onClose, newData, name, fetchData }) => {
     }
   };
   const handleSave = () => {
+    if (!num?.includes("3")) {
+      num.push("3");
+      setNum(num);
+    }
+    const combinedProgress = num.join(",");
     const updatedFormData = {
       training_strategy: abc,
       strategy_name: xyz,
+      completion_percentage: combinedProgress,
     };
     if(updatedFormData.training_strategy==="" || updatedFormData.strategy_name===""){
       toast.error("Please Enter Name and Description Both", {
@@ -58,8 +67,6 @@ const StrategyModal = ({ onClose, newData, name, fetchData }) => {
         },
       })
       .then((response) => {
-        console.log("response");
-        console.log(response);
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",

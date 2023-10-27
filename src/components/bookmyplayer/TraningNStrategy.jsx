@@ -26,7 +26,8 @@ const TraningNStrategy = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [updateIndex, setUpdateIndex] = useState(null);
-  
+  const [progress, setProgress]= useState(null);
+  const [progressArray, setProgressArray] = useState([]);
 
   const handleUpdateModal = (index) => {
     setUpdateModal(true);
@@ -96,6 +97,10 @@ const TraningNStrategy = () => {
         },
       })
       .then((response) => {
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
+          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+          }
         setNewData(response?.data?.data[0]?.training_strategy);
         setStrategyName(response?.data?.data[0]?.strategy_name);
         if (response?.data?.data[0]?.training_strategy !== "" && response?.data?.data[0]?.strategy_name !== "") {
@@ -125,7 +130,7 @@ const TraningNStrategy = () => {
             </button>
           </div>
         </div>
-        <ProgressBar/>
+        <ProgressBar array={progressArray}/>
       </div>
 
       <div>
@@ -180,6 +185,7 @@ const TraningNStrategy = () => {
           newData={newData}
           name={strategyName}
           fetchData={fetchAcademyDetails}
+          array={progressArray}
         />
       )}
 

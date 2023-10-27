@@ -35,6 +35,8 @@ const Gallery = () => {
   const [deleteProp, setDeleteProp] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
+  const [progress, setProgress]= useState(null);
+  const [progressArray, setProgressArray] = useState([]);
 
   const academyDetails = () => {
     axios
@@ -45,6 +47,10 @@ const Gallery = () => {
       })
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
+          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+          }
         if (response?.data?.data[0]?.photos !== "" && response?.data?.data[0]?.photos !== null) {
           setPhotoUrls(response?.data?.data[0]?.photos?.split("$@$@$")?.reverse())
         }
@@ -197,24 +203,31 @@ const Gallery = () => {
     }
   };
 
-
   function handleSubmit(key_name, file) {
+    if (!progressArray?.includes("4")) {
+      progressArray.push("4");
+      setProgressArray(progressArray);
+    }    
+    const combinedProgress = progressArray.join(",");
     let body = {};
     if (key_name === "banner") {
       body = {
-        banner: file
+        banner: file,
+        completion_percentage: combinedProgress,
       }
     }
     else if (key_name === "photos") {
       const joinedString = file.join("$@$@$");
       body = {
-        photos: joinedString
+        photos: joinedString,
+        completion_percentage: combinedProgress,
       }
     }
     else if (key_name === "videos") {
       const joinedString = file.join("$@$@$");
       body = {
-        videos: joinedString
+        videos: joinedString,
+        completion_percentage: combinedProgress,
       }
     }
     axios
@@ -397,7 +410,7 @@ const Gallery = () => {
             </div>
           </div>
         </div>
-      <ProgressBar/>
+      <ProgressBar array={progressArray}/>
       </div>
 
       <div className="bmp-upload-img">
