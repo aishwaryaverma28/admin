@@ -1,11 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { ADD_TICKET, getDecryptedToken, USER_INFO } from "./utils/Constants";
+import { ADD_TICKET, BMP_USER,handleLogout, getDecryptedToken, USER_INFO } from "./utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HeadPhone = () => {
   const orgId = localStorage.getItem('org_id');
+  const userId = localStorage.getItem("id");
+  const landingUrl = localStorage.getItem("landingUrl");
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -17,7 +19,7 @@ const HeadPhone = () => {
     mobile: "",
     category: "Technical",
     priority: "Low",
-    org_Id: orgId,
+    org_id: orgId,
   });
   // const [clientData, setClientData] = useState(null);
 
@@ -34,7 +36,7 @@ const HeadPhone = () => {
         setDetails({
           email: data[0]?.email,
           mobile: data[0]?.phone,
-          org_Id: orgId,
+          org_id: orgId,
         })
         // setClientData(data[0]);
       }
@@ -42,12 +44,49 @@ const HeadPhone = () => {
       console.log(error);
       if (error?.response?.data?.message === "Invalid or expired token.") {
         alert(error?.response?.data?.message);
+        handleLogout();
       }
     }
   }
 
+  async function getBMPUser() {
+    try {
+      const response = await axios.post(
+        BMP_USER,
+        {
+          userId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      );
+      const data = response.data.user;
+      console.log(data);
+      if (response.data.status === 1) {
+        setDetails({
+          email: data?.email,
+          mobile: data?.phone,
+          org_id: orgId,
+        })
+      }
+    } catch (error) {
+      console.log(error);
+      if (error?.response?.data?.message === "Invalid or expired token.") {
+        alert(error?.response?.data?.message);
+        handleLogout();
+      }
+    }
+  }
+
+
   useEffect(() => {
+    if (landingUrl === "/lp/bmp") {
+    getBMPUser();
+  } else {
     getUser();
+  }
   }, []);
 
   const handleFileChange = (event) => {
@@ -79,7 +118,6 @@ const HeadPhone = () => {
         },
       })
       .then((response) => {
-
         if(response.data.status===1){
           toast.success("Ticket Added Successfully", {
             position: "top-center",

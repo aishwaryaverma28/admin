@@ -1,15 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "../styles/CPGenral.css";
 import axios from "axios";
 import {
+  BMP_USER,
   ADD_TICKET,
   getDecryptedToken,
+  handleLogout
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ContactSupport = () => {
   const orgId = localStorage.getItem('org_id');
+  const userId = localStorage.getItem("id");
+  const landingUrl = localStorage.getItem("landingUrl");
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const decryptedToken = getDecryptedToken();
@@ -24,6 +28,42 @@ const ContactSupport = () => {
     org_id: orgId,
 })
 
+
+async function getBMPUser() {
+  try {
+    const response = await axios.post(
+      BMP_USER,
+      {
+        userId: userId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      }
+    );
+    const data = response.data.user;
+    console.log(data);
+    if (response.data.status === 1) {
+      setDetails({
+        email: data?.email,
+        mobile: data?.phone,
+        org_id: orgId,
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    if (error?.response?.data?.message === "Invalid or expired token.") {
+      alert(error?.response?.data?.message);
+      handleLogout();
+    }
+  }
+}
+
+useEffect(() => {
+  if (landingUrl === "/lp/bmp") {
+  getBMPUser();
+} }, []);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -67,12 +107,9 @@ const ContactSupport = () => {
           autoClose:2000
         })
        }
-
       setDetails({
         title: "",
         description: "",
-        email: "",
-        mobile: "",
         category: "",
         priority: "",
       });
@@ -103,6 +140,7 @@ setStateBtn(0);
             <input
               type="text" name="title"
               onChange={handleChange}
+              value={details.title}
               className="common-fonts common-input contact-tab-input"
             />
           </div>
@@ -127,6 +165,7 @@ setStateBtn(0);
               <input
                 type="text" name="mobile"
                 onChange={handleChange}
+                value={details?.mobile}
                 className="common-fonts common-input contact-tab-input"
               />
             </div>
@@ -139,6 +178,7 @@ setStateBtn(0);
             <input
               type="email" name="email"
               onChange={handleChange}
+              value={details?.email}
               className="common-fonts common-input contact-tab-input email-case"
             />
           </div>
@@ -233,12 +273,8 @@ setStateBtn(0);
                 >
                   Save
                 </button>
-              )}
-                         
+              )}       
             </div>
-
-          
-
         </form>
       </div>
       <ToastContainer/>
