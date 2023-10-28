@@ -2,7 +2,6 @@ import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
 const ProgressBar = ({ array }) => {
-    console.log(array)
     function countElements() {
         const elementsToCheck = ["1", "2", "3", "4"];
         const count = elementsToCheck?.filter((element) => array?.includes(element))?.length;
