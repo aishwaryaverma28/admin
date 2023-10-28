@@ -42,7 +42,11 @@ const FeesNBatches = () => {
           },
         })
       .then((response) => {
-        setAcademyData(response?.data?.data[0]);
+        setAcademyData(response?.data?.data[0])        
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
+          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+          };
         console.log(response?.data?.data[0]);
       })
       .catch((error) => {
@@ -59,15 +63,10 @@ const FeesNBatches = () => {
       })
       .then((response) => {
         setBatch(response?.data?.data)
-        setProgress(response?.data?.data[0]?.completion_percentage);
-        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
-          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
-          }
       })
       .catch((error) => {
         console.log(error);
       });
-
   }
 
   useEffect(() => {

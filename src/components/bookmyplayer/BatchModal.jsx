@@ -243,7 +243,6 @@ const BatchModal = ({
               );
             }
             handleSave();
-            fetchBatch();
           })
           .catch((error) => {
             toast.error("Some Error Occoured in update!", {

@@ -66,8 +66,6 @@ const Gallery = () => {
     academyDetails();
   }, []);
 
-  console.log("photos" + photoUrls)
-  console.log("video" + videoUrls)
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
