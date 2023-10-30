@@ -221,7 +221,7 @@ const DealEmail = ({ type, id, dealName, ownerId, idOfOwner, email }) => {
 
   useEffect(() => {
     handleGetEmail();
-  }, [allEmails]);
+  }, []);
 
   return (
     <>

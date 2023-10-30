@@ -25,7 +25,7 @@ const Gallery = () => {
   const [fileName, setFileName] = useState("");
   const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedFile2, setSelectedFile2] = useState(null);
+  const [selectedFile2, setSelectedFile2] = useState([]);
   const [academyData, setAcademyData] = useState({});
   const [photosData, setPhotosData] = useState("");
   const [photoUrls, setPhotoUrls] = useState([]);
@@ -65,7 +65,23 @@ const Gallery = () => {
   useEffect(() => {
     academyDetails();
   }, []);
+  const initialPhotoUrls = [...photoUrls];
+  const initialVideoUrls = [...videoUrls];
+  const initialFileName = fileName;
+  const initialFileName2 = fileName2;
+  const initialSelectedFile = selectedFile;
+  const initialSelectedFile2 = selectedFile2;
 
+  const resetState = () => {
+    setPhotoUrls(initialPhotoUrls);
+    setVideoUrls(initialVideoUrls);
+    setFileName(initialFileName);
+    setFileName2(initialFileName2);
+    setSelectedFile(initialSelectedFile);
+    setSelectedFile2(initialSelectedFile2);
+  };
+
+  
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -101,7 +117,7 @@ const Gallery = () => {
         .then((res) => res.json())
         .then((data) => {
           setFileName(data.secure_url);
-          handleSubmit("banner", data.secure_url)
+          handleSubmit(data.secure_url)
         })
         .catch((err) => {
           console.log(err);
@@ -115,14 +131,18 @@ const Gallery = () => {
     fileInputRef2.current.click();
   };
   const handleFileChange2 = (event) => {
-    const file = event.target.files[0];
-    if (file.type.startsWith("image/")) {
-      submitImage2(event.target.files[0]);
-    }
-    else if (file.type.startsWith("video/")) {
-      submitVideo2(event.target.files[0]);
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.startsWith("image/")) {
+        submitImage2(file);
+      } else if (file.type.startsWith("video/")) {
+        submitVideo2(file);
+      }
     }
   };
+console.log(photoUrls);
+console.log(videoUrls);
 
   const submitImage2 = (file) => {
     setIsUploadingMulti(true);
@@ -148,9 +168,9 @@ const Gallery = () => {
           setFileName2(data.secure_url);
           const imageUrl = data.secure_url;
           if (data.secure_url) {
-            const updatedPhotoUrls = [...photoUrls, imageUrl];
-            setPhotoUrls(updatedPhotoUrls);
-            handleSubmit("photos", updatedPhotoUrls);
+            photoUrls.push(imageUrl)
+            setPhotoUrls(photoUrls);
+            // handleSubmit2("photos", updatedPhotoUrls);
           }
         })
         .catch((err) => {
@@ -185,14 +205,11 @@ const Gallery = () => {
         .then((data) => {
           setFileName2(data.secure_url);
           const imageUrl = data.secure_url;
-          if (videoUrls && videoUrls.length > 0) {
-            const updatedVideoUrls = [...videoUrls, imageUrl];
-            setVideoUrls(updatedVideoUrls);
-            handleSubmit("videos", updatedVideoUrls);
-          } else {
-            setVideoUrls([imageUrl]);
-            handleSubmit("videos", [imageUrl]);
-          }
+          if (data.secure_url) {
+            videoUrls.push(imageUrl)
+            setVideoUrls(videoUrls);
+            // handleSubmit2("videos", updatedVideoUrls);
+          } 
         })
         .catch((err) => {
           console.log(err);
@@ -203,33 +220,58 @@ const Gallery = () => {
     }
   };
 
-  function handleSubmit(key_name, file) {
+  function handleSubmit(file) {
     if (!progressArray?.includes("4")) {
       progressArray.push("4");
       setProgressArray(progressArray);
     }    
     const combinedProgress = progressArray.join(",");
     let body = {};
-    if (key_name === "banner") {
-      body = {
+     body = {
         banner: file,
         completion_percentage: combinedProgress,
       }
-    }
-    else if (key_name === "photos") {
-      const joinedString = file.join("$@$@$");
-      body = {
-        photos: joinedString,
+  
+    axios
+      .put(UPDATE_ACADEMY + academyId, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+  }
+
+  function handleSubmit2() {
+    if (!progressArray?.includes("4")) {
+      progressArray.push("4");
+      setProgressArray(progressArray);
+    }    
+    const combinedProgress = progressArray.join(",");    
+    let body = {
+        photos: photoUrls.join("$@$@$"),
+        videos: videoUrls.join("$@$@$"),
         completion_percentage: combinedProgress,
       }
-    }
-    else if (key_name === "videos") {
-      const joinedString = file.join("$@$@$");
-      body = {
-        videos: joinedString,
-        completion_percentage: combinedProgress,
-      }
-    }
+    
     axios
       .put(UPDATE_ACADEMY + academyId, body, {
         headers: {
@@ -428,8 +470,6 @@ const Gallery = () => {
               Upload minimum 25 images & videos 6/25
             </p>
           </div>
-
-
         </div>
 
         <div className="bmp-upload-3 bmp-gap">
@@ -460,6 +500,7 @@ const Gallery = () => {
                 }}
                 ref={fileInputRef2}
                 onChange={handleFileChange2}
+                multiple
               />
               {isUploadingMulti ? (
                 <span className="common-fonts upload-file-name">Uploading...</span>
@@ -473,7 +514,7 @@ const Gallery = () => {
             </span>
           </div>
 
-          {selectedFile2 && (
+          {/* {selectedFile2 && (
             <div className="bmp-new-img">
               <div className="bmp-img-top-icon">
                 <div className="bmp-img-name">
@@ -490,11 +531,11 @@ const Gallery = () => {
 
               </div>
               <img
-                src={URL.createObjectURL(selectedFile2)}
+                src={(selectedFile2)}
                 alt="Selected Preview"
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
       {videoUrls?.length === 0 ? (
@@ -564,10 +605,10 @@ const Gallery = () => {
           }</div>
       )}
 
-      {/* <div className="bmp-bottom-btn">
-        <button className="common-fonts common-white-button">Cancel</button>
-        <button className="common-fonts common-save-button">Save</button>
-      </div> */}
+      <div className="bmp-bottom-btn">
+        <button className="common-fonts common-white-button" onClick={resetState}>Cancel</button>
+        <button className="common-fonts common-save-button" onClick={handleSubmit2}>Save</button>
+      </div>
 
       {isDeleteModalOpen && (
         <DeleteImage
