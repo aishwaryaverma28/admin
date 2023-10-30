@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import TablePaginationBlog from "./TablePaginationBlog";
 
 const EmployeeView = () => {
+  const org_id = localStorage.getItem("org_id");
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +15,7 @@ const EmployeeView = () => {
   const blogData = () => {
     const siteName = {
       siteName: selectSite,
+      org_id: org_id,
     };
     axios
       .post(BLOG_GET, siteName, {

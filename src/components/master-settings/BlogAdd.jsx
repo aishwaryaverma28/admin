@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const BlogAdd = () => {
+  const org_id = localStorage.getItem("org_id");
   //cloudaniary images
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
@@ -47,7 +48,7 @@ const BlogAdd = () => {
 
   const getTagCategory = () => {
     axios
-      .get(GET_TAG_CATEGORY, {
+      .get(GET_TAG_CATEGORY + org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -67,7 +68,7 @@ const BlogAdd = () => {
 
   const getTagBySite = (site) => {
     axios
-      .get(GET_TAG_BY_SITE + site, {
+      .get(GET_TAG_BY_SITE + site +"/"+org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -124,10 +125,12 @@ const BlogAdd = () => {
         updatedForm = {
           category: value,
           condition: "category",
+          org_id: org_id,
         };
       } else {
         updatedForm = {
           condition: "all",
+          org_id: org_id,
         };
       }
 
@@ -321,6 +324,7 @@ const BlogAdd = () => {
       site: selectSite,
       route: formData.url,
       alt: "",
+      org_id: org_id,
     };
 
     axios

@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
 const BlogUpdate = () => {
   const { id } = useParams();
+  const org_id = localStorage.getItem("org_id");
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
@@ -68,7 +69,7 @@ const BlogUpdate = () => {
 
   const getTagCategory = () => {
     axios
-      .get(GET_TAG_CATEGORY, {
+      .get(GET_TAG_CATEGORY + org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -163,7 +164,7 @@ const BlogUpdate = () => {
   }
 
   const removeDateFromSectionData = (data) => {
-    return data.map((section) => {
+    return data?.map((section) => {
       const { date, ...newSection } = section;
       return newSection;
     });
@@ -172,6 +173,7 @@ const BlogUpdate = () => {
   useEffect(() => {
     const updatedForm = {
       condition: "all",
+      org_id: org_id,
     };
     axios
       .post(GET_TAG, updatedForm, {
@@ -190,7 +192,7 @@ const BlogUpdate = () => {
 
   const getTagBySite = (site) => {
     axios
-      .get(GET_TAG_BY_SITE + site, {
+      .get(GET_TAG_BY_SITE + site+"/"+org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -231,10 +233,12 @@ const BlogUpdate = () => {
         updatedForm = {
           category: value,
           condition: "category",
+          org_id: org_id,
         };
       } else {
         updatedForm = {
           condition: "all",
+          org_id: org_id,
         };
       }
 
@@ -247,7 +251,7 @@ const BlogUpdate = () => {
         })
         .then((response) => {
           setOptions(
-            response?.data?.data.map((item) => ({ id: item.id, tag: item.tag }))
+            response?.data?.data?.map((item) => ({ id: item.id, tag: item.tag }))
           );
         })
         .catch((error) => {
@@ -257,7 +261,7 @@ const BlogUpdate = () => {
       const id = event.target.value;
       setStateBtn(1);
       setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-      options.map((option) => {
+      options?.map((option) => {
         if (option.id == id) {
           setSelectedTags((prev) => [...prev, option.tag]);
         }
@@ -753,7 +757,7 @@ const BlogUpdate = () => {
                 </div>
               </div>
 
-              {sectionData.map((section, index) => (
+              {sectionData?.map((section, index) => (
                 <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
                   <div
                     className="sectionDropdown"
@@ -885,7 +889,7 @@ const BlogUpdate = () => {
                   >
                     <option value="">category</option>
 
-                    {category.map((data) => (
+                    {category?.map((data) => (
                       <option key={data.category} value={data.category}>
                         {data.category}
                       </option>
@@ -898,7 +902,7 @@ const BlogUpdate = () => {
                   >
                     <option value="">Select a tag</option>
 
-                    {options.map((option) => (
+                    {options?.map((option) => (
                       <option key={option.id} value={option.id}>
                         {option.tag}
                       </option>
@@ -911,7 +915,7 @@ const BlogUpdate = () => {
                 </div>
                 <div className="tagData">
                   {selectedTags &&
-                    selectedTags.map((tag, index) => (
+                    selectedTags?.map((tag, index) => (
                       <div key={index} className="tagItems">
                         {tag}
 
