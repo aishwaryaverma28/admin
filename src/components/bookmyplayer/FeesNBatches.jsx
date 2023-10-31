@@ -55,8 +55,12 @@ const FeesNBatches = () => {
   };
 
   const fetchBatch = () => {
+    const body = {
+      object_id: parseInt(id),
+      object_type: "academy"
+  }
     axios
-      .get(GET_BATCH + id, {
+      .post(GET_BATCH, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },

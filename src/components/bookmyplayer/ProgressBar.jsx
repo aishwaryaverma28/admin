@@ -13,7 +13,7 @@ const ProgressBar = ({ array }) => {
     const data = {
         datasets: [
             {
-                data: [progress, 100 - progress], // Calculate the progress and remaining percentage
+                data: [progress, 100 - progress],
                 backgroundColor: ["#007bff", "#d3d3d3"],
                 hoverBackgroundColor: ["#0056b3", "#d3d3d3"],
                 borderWidth: 0,
@@ -21,13 +21,13 @@ const ProgressBar = ({ array }) => {
         ],
     };
     const options = {
-        cutout: "85%", // Adjusts the thickness of the progress bar
+        cutout: "85%",
         maintainAspectRatio: false,
         legend: {
-            display: false, // Hide legend
+            display: false,
         },
         tooltip: {
-            enabled: false, // Hide tooltips
+            enabled: false,
         },
     };
 

@@ -103,8 +103,9 @@ const BatchModal = ({
     setTimeArr(filteredValues);
   }, [timingValues]);
 
-  const [batchDetails, setBatchDetails] = useState({
-    academy_id: parseInt(id),
+  const [batchDetails, setBatchDetails] = useState({    
+    object_id: parseInt(id),
+    object_type:"academy",
     age_group: "",
     weekly_days: "",
     timing: "",
@@ -149,7 +150,8 @@ const BatchModal = ({
         .then((response) => {
           // Reset input fields and counts after successful API call
           setBatchDetails({
-            academy_id: parseInt(id),
+            object_id: parseInt(id),
+            object_type:"academy",
             age_group: "",
             weekly_days: "",
             timing: "",
@@ -186,21 +188,22 @@ const BatchModal = ({
             position: "top-center",
             autoClose: 2000,
           });
-          setBatchDetails({
-            academy_id: 1,
-            age_group: "",
-            weekly_days: "",
-            timing: "",
-            fees: "",
-            title: "",
-          });
-          setInputValues([]);
-          setAmountValues([]);
-          setTimingValues([]);
-          setGroupCount(1);
-          setTimingsCount(1);
-          setFieldCount(1);
-          onClose();
+          // setBatchDetails({
+          //   object_id:parseInt(id),
+          //   object_type:"academy",
+          //   age_group: "",
+          //   weekly_days: "",
+          //   timing: "",
+          //   fees: "",
+          //   title: "",
+          // });
+          // setInputValues([]);
+          // setAmountValues([]);
+          // setTimingValues([]);
+          // setGroupCount(1);
+          // setTimingsCount(1);
+          // setFieldCount(1);
+          // onClose();
         });
     } else {
       if (param === "put") {
@@ -213,7 +216,8 @@ const BatchModal = ({
           .then((response) => {
             // Reset input fields and counts after successful API call
             setBatchDetails({
-              academy_id: parseInt(id),
+              object_id: parseInt(id),
+              object_type:"academy",
               age_group: "",
               weekly_days: "",
               timing: "",
@@ -249,21 +253,22 @@ const BatchModal = ({
               position: "top-center",
               autoClose: 2000,
             });
-            setBatchDetails({
-              academy_id: 1,
-              age_group: "",
-              weekly_days: "",
-              timing: "",
-              fees: "",
-              title: "",
-            });
-            setInputValues([]);
-            setAmountValues([]);
-            setTimingValues([]);
-            setGroupCount(1);
-            setTimingsCount(1);
-            setFieldCount(1);
-            onClose();
+            // setBatchDetails({
+            //   object_id: parseInt(id),
+            //   object_type:"academy",
+            //   age_group: "",
+            //   weekly_days: "",
+            //   timing: "",
+            //   fees: "",
+            //   title: "",
+            // });
+            // setInputValues([]);
+            // setAmountValues([]);
+            // setTimingValues([]);
+            // setGroupCount(1);
+            // setTimingsCount(1);
+            // setFieldCount(1);
+            // onClose();
           });
       }
     }
@@ -326,7 +331,8 @@ const BatchModal = ({
   useEffect(() => {
     if (obj) {
       setBatchDetails({
-        academy_id: parseInt(id),
+        object_id: parseInt(id),
+        object_type:"academy",
         age_group: convertStringToInputValues(obj?.age_group),
         weekly_days: obj?.weekly_days,
         timing: convertStringToTimingValues(obj?.timing),

@@ -39,8 +39,8 @@ console.log(description)
     const updatedDescriptionArray = [...description];
     updatedNameArray[updateIndex] = sName;
     updatedDescriptionArray[updateIndex] = descrip;
-    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
-    const updatedDescriptionString = updatedDescriptionArray.reverse().join('$@$@$');
+    const updatedNameString = updatedNameArray?.reverse()?.join('$@$@$');
+    const updatedDescriptionString = updatedDescriptionArray?.reverse()?.join('$@$@$');
     axios
       .put(
         UPDATE_ACADEMY + academyId,

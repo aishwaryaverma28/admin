@@ -52,8 +52,8 @@ const TraningNStrategy = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...nameOfStrategy];
       const updatedDescriptionOfStrategy = [...descriptionOfStrategy];
-      updatedNameOfStrategy.splice(deleteIndex, 1);
-      updatedDescriptionOfStrategy.splice(deleteIndex, 1);
+      updatedNameOfStrategy?.splice(deleteIndex, 1);
+      updatedDescriptionOfStrategy?.splice(deleteIndex, 1);
       setNameOfStrategy(updatedNameOfStrategy);
       setDescriptionOfStrategy(updatedDescriptionOfStrategy);
       setIsDeleteModalOpen(false);
@@ -66,8 +66,8 @@ const TraningNStrategy = () => {
   };
 
   const updateDataAndCallAPI = (updatedNameArray, updatedDescriptionArray) => {
-    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
-    const updatedDescriptionString = updatedDescriptionArray.reverse().join('$@$@$');
+    const updatedNameString = updatedNameArray?.reverse()?.join('$@$@$');
+    const updatedDescriptionString = updatedDescriptionArray?.reverse()?.join('$@$@$');
     axios
       .put(UPDATE_ACADEMY + id, {
         strategy_name: updatedNameString,
