@@ -13,7 +13,7 @@ const Review = () => {
   const [review, setReview] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
-  const [selectedDescription, setSelectedDescription] = useState("");
+  const [selectedDescription, setSelectedDescription] = useState({});
 
   const formatDate = (isoDate) => {
     const options = { year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -93,8 +93,8 @@ const Review = () => {
     getAccReview();
   }, [])
 
-  const handleNotePopUp = (comment) => {
-    setSelectedDescription(comment);
+  const handleNotePopUp = (item) => {
+    setSelectedDescription(item);
     setIsNotePopUpOpen(true);
   }
 
@@ -132,7 +132,7 @@ const Review = () => {
             </tr>
           ) : (
             review.map((item, index) => (
-              <tr key={item.id} onClick={() => handleNotePopUp(item.comment)}>
+              <tr key={item.id} onClick={() => handleNotePopUp(item)}>
                 <td className='common-fonts'>{index + 1}</td>
                 <td className='common-fonts'>{formatDate(item.creation_date)}</td>
                 <td className='common-fonts'>{item.rating} <img className="pound" src={star} alt='star'/></td>
@@ -149,7 +149,7 @@ const Review = () => {
       </table>
       {
         isNotePopUpOpen && (
-          <Comment onClose={closeNotePopUp} description={selectedDescription}/>
+          <Comment onClose={closeNotePopUp} review={selectedDescription}/>
         )
       }
       <ToastContainer/>

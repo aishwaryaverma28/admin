@@ -1,0 +1,33 @@
+.restore-comment {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.selected-comment {
+    color: #33475B;
+    font-size: 0.75rem;
+    /* margin-bottom: 1rem; */
+}
+.box-border{
+margin: 1rem 1.75rem;
+padding: 1rem;
+border-radius: 0.3125rem;
+border: 1px solid #DCDCDC;
+/* background: var(--White, #FFF); */
+}
+.comment-head{    
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.review-rating{
+    margin: 0 0.5rem;
+    font-size: 0.875rem;
+    font-size: 0.875rem;
+    padding: 0 0.5rem;
+    border-radius: 3.125rem;
+background: #F3F6FA;
+}
+.comment-save{
+    margin-left: 0.5rem;
+}
