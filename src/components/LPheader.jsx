@@ -5,6 +5,7 @@ import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
+import vector from "../assets/image/Vector.svg";
 import axios from "axios";
 import {
   USER_INFO,
@@ -351,7 +352,11 @@ const handleLogout = () => {
       {/* Bottom Navigation Start */}
       <nav className="navbar">
         <div className="navbarContainer">
-          <img src={logo} alt="" className="logo" />
+        {landingUrl === '/lp/bmp' ? (
+        <img src={vector} alt="" className="BMPlogo" />
+      ) : (
+        <img src={logo} alt="" className="logo" />
+      )}
           <input
             type="checkbox"
             name=""
