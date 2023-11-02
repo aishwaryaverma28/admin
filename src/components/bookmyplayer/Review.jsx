@@ -32,7 +32,7 @@ const Review = () => {
       },
     })
       .then((response) => {
-        console.log(response?.data?.data)
+        // console.log(response?.data?.data)
         if (response?.data?.status === 1) {
           setReview(response?.data?.data);
           reviewReply(response?.data?.data?.id)
@@ -56,7 +56,7 @@ const Review = () => {
     })
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
         }
         setIsLoading(false);
       })
@@ -78,7 +78,7 @@ const Review = () => {
     })
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
         }
         setIsLoading(false);
       })
@@ -124,23 +124,23 @@ const Review = () => {
                 Loading...
               </td>
             </tr>
-          ) : review.length === 0 ? (
+          ) : review?.length === 0 ? (
             <tr>
               <td colSpan={5} style={{ textAlign: "center" }}>
                 No data found
               </td>
             </tr>
           ) : (
-            review.map((item, index) => (
-              <tr key={item.id} onClick={() => handleNotePopUp(item)}>
+            review?.map((item, index) => (
+              <tr key={item?.id} onClick={() => handleNotePopUp(item)}>
                 <td className='common-fonts'>{index + 1}</td>
-                <td className='common-fonts'>{formatDate(item.creation_date)}</td>
-                <td className='common-fonts'>{item.rating} <img className="pound" src={star} alt='star'/></td>
-                <td className='common-fonts'>{item.name}</td>
-                <td className='common-fonts'> {item.comment.length > 50 ? (
-                      <>{item.comment.slice(0, 50)}...</>
+                <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
+                <td className='common-fonts'>{item?.rating} <img className="pound" src={star} alt='star'/></td>
+                <td className='common-fonts'>{item?.name}</td>
+                <td className='common-fonts'> {item?.comment?.length > 50 ? (
+                      <>{item?.comment?.slice(0, 50)}...</>
                     ) : (
-                      <>{item.comment}</>
+                      <>{item?.comment}</>
                     )}</td>
               </tr>
             ))

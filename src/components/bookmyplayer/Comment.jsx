@@ -2,7 +2,14 @@ import React from 'react'
 import "../styles/Comment.css";
 import star from "../../assets/image/star.svg"
 import { useState } from 'react';
+import axios from 'axios';
+import { ADD_REPLY, getDecryptedToken} from "../utils/Constants";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Comment = ({ onClose, review }) => {
+  console.log(review);
+  const decryptedToken = getDecryptedToken();
+  const academyId = localStorage.getItem("academy_id");
   const [reply, setReply] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
 
@@ -10,6 +17,37 @@ const Comment = ({ onClose, review }) => {
     setStateBtn(1);
     const newStrategyName = e.target.value;
     setReply(newStrategyName);
+  }
+
+  const handleSave = () => {
+const body ={
+  parent_id: review.id,
+  type: "academy-response",
+  object_type: "academy",
+  object_id: parseInt(academyId),
+  name: review?.name,
+  comment: reply,
+  status: 1,
+  user_id: 2
+};
+axios.post(ADD_REPLY, body, {
+  headers: {
+    Authorization: `Bearer ${decryptedToken}`,
+  },
+})
+.then((response) => {
+  if (response?.data?.status === 1) {
+    console.log(response?.data?.data)
+    toast.success("Reply send successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
+  }
+  onClose();
+})
+.catch((error) => {
+  console.log(error)
+})
   }
   return (
     <div class="recycle-popup-wrapper">
@@ -45,7 +83,7 @@ const Comment = ({ onClose, review }) => {
           ) : (
             <button
               className="common-fonts common-save-button comment-save"
-            // onClick={handleSave}
+            onClick={handleSave}
             >
               Save
             </button>

@@ -210,3 +210,4 @@ export const GET_ALL_REVIEW = start + "/bmp/academy/getreviews";
 export const GET_REVIEW_REPLY = start + "/bmp/academy/getreviewreply";
 export const GET_ACC_REVIEW = start + "/bmp/academy/getreviewreport";
 export const GET_ACC_LEAD = start + "/bmp/academy/leads/get/";
+export const ADD_REPLY = start + "/bmp/academy/review/reply";

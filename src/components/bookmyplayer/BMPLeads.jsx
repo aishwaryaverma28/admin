@@ -62,7 +62,7 @@ const BMPLeads = () => {
               Loading...
             </td>
           </tr>
-        ) : review.length === 0 ? (
+        ) : review?.length === 0 ? (
           <tr>
             <td colSpan={5} style={{ textAlign: "center" }}>
               No data found
@@ -70,15 +70,15 @@ const BMPLeads = () => {
           </tr>
         ) : (
           review.map((item, index) => (
-            <tr key={item.id} >
+            <tr key={item?.id} >
               <td className='common-fonts'>{index + 1}</td>
-              <td className='common-fonts'>{formatDate(item.creation_date)}</td>
-              <td className='common-fonts'>{item.name}</td>
-              <td className='common-fonts'>{item.phone}</td>
-              <td className='common-fonts'> {item.comment.length > 50 ? (
-                    <>{item.comment.slice(0, 50)}...</>
+              <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
+              <td className='common-fonts'>{item?.name}</td>
+              <td className='common-fonts'>{item?.phone}</td>
+              <td className='common-fonts'> {item?.description?.length > 50 ? (
+                    <>{item?.description?.slice(0, 50)}...</>
                   ) : (
-                    <>{item.comment}</>
+                    <>{item?.description}</>
                   )}</td>
             </tr>
           ))
