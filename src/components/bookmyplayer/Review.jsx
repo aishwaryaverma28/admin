@@ -111,6 +111,7 @@ const Review = () => {
             <th className='common-fonts'>DATE</th>
             <th className='common-fonts'>RATING (5 <img className="pound" src={star} alt='star'/>)</th>
             <th className='common-fonts'>NAME</th>
+            <th className='common-fonts'>REPLY</th>
             <th className='common-fonts'>COMMENT</th>
           </tr>
         </thead>
@@ -137,6 +138,7 @@ const Review = () => {
                 <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
                 <td className='common-fonts'>{item?.rating} <img className="pound" src={star} alt='star'/></td>
                 <td className='common-fonts'>{item?.name}</td>
+                <td className='common-fonts'>{item?.total_reply}</td>
                 <td className='common-fonts'> {item?.comment?.length > 50 ? (
                       <>{item?.comment?.slice(0, 50)}...</>
                     ) : (
@@ -149,7 +151,7 @@ const Review = () => {
       </table>
       {
         isNotePopUpOpen && (
-          <Comment onClose={closeNotePopUp} review={selectedDescription}/>
+          <Comment onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData}/>
         )
       }
       <ToastContainer/>

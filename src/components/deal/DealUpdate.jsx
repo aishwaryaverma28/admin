@@ -28,6 +28,7 @@ import DealActivity from "./DealActivity";
 import DealEmail from "./DealEmail.jsx";
 import DealDocument from "./DealDocument.jsx";
 import LostModal from "./LostModal.jsx";
+import BankEligibility from "./BankEligibility";
 
 const DealUpdate = () => {
   const { id } = useParams();
@@ -137,6 +138,15 @@ const DealUpdate = () => {
   const idOfOwner = parseInt(localStorage.getItem("id"));
   const [lostModal, setLostModal] = useState(false);
   const [ownerName, setOwnerName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleLostModal = () => {
     setLostModal(true);
@@ -512,7 +522,7 @@ const DealUpdate = () => {
 
   const fetchStages = () => {
     const body = {
-      org_id:orgId
+      org_id: orgId
     }
     axios
       .post(GET_ALL_STAGE + "/deal", body, {
@@ -690,7 +700,7 @@ const DealUpdate = () => {
 
   const fetchLabelData = async () => {
     const body = {
-      org_id:orgId
+      org_id: orgId
     }
     try {
       const response = await axios.post(GET_LABEL, body, {
@@ -816,7 +826,7 @@ const DealUpdate = () => {
       selectedLabelColor === ""
         ? dealDetails?.label_id
           ? mergedLabels.find((label) => label.id === dealDetails?.label_id)
-              ?.colour_code
+            ?.colour_code
           : ""
         : selectedLabelColor,
     color: "white !important",
@@ -949,20 +959,20 @@ const DealUpdate = () => {
                 const backgroundColor = isActive
                   ? "#2b74da"
                   : activeIndex > stageId
-                  ? "#077838"
-                  : "#f3f3f3";
+                    ? "#077838"
+                    : "#f3f3f3";
                 const textColor =
                   isActive ||
-                  backgroundColor === "#077838" ||
-                  backgroundColor === "#2b74da"
+                    backgroundColor === "#077838" ||
+                    backgroundColor === "#2b74da"
                     ? "white"
                     : "#1e2224";
 
                 const arrowClass = isActive
                   ? "arrow-blue"
                   : backgroundColor === "#077838"
-                  ? "arrow-green"
-                  : "";
+                    ? "arrow-green"
+                    : "";
 
                 return (
                   <div
@@ -1000,6 +1010,9 @@ const DealUpdate = () => {
           <button className="arrow-lost common-fonts" onClick={handleLostModal}>
             Lost
           </button>
+          <button className="bank-button common-fonts" onClick={openModal}>
+            All Band Criteria
+          </button>
         </div>
       </div>
 
@@ -1013,9 +1026,8 @@ const DealUpdate = () => {
             >
               <p className="common-fonts ud-stage-name">{stageName}</p>
               <i
-                className={`fa-sharp fa-solid ${
-                  actionopen ? "fa-angle-up" : "fa-angle-down"
-                }`}
+                className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                  }`}
               ></i>
             </div>
 
@@ -1193,13 +1205,11 @@ const DealUpdate = () => {
                                   value={item?.id}
                                   className="owner-val"
                                 >
-                                  {`${
-                                    item?.first_name?.charAt(0)?.toUpperCase() +
+                                  {`${item?.first_name?.charAt(0)?.toUpperCase() +
                                     item?.first_name?.slice(1)
-                                  } ${
-                                    item?.last_name?.charAt(0)?.toUpperCase() +
+                                    } ${item?.last_name?.charAt(0)?.toUpperCase() +
                                     item?.last_name?.slice(1)
-                                  }`}
+                                    }`}
                                 </option>
                               ))}
                             {/* <option value="Imp">{owner}</option> */}
@@ -2102,13 +2112,19 @@ const DealUpdate = () => {
             )}
             {activeTab === "document" && (
               <div className="attachment-tab-content">
-                <DealDocument dealId={id} email={dealDetails?.email}/>
+                <DealDocument dealId={id} email={dealDetails?.email} />
               </div>
             )}
           </div>
         </div>
       </section>
       <ToastContainer />
+      {isModalOpen && (
+        <BankEligibility
+          onClose={closeModal}
+          loan = {loan}
+        />
+      )}
       {lostModal && (
         <LostModal
           onClose={handleLostModalClose}

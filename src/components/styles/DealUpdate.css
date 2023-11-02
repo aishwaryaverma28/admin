@@ -339,7 +339,14 @@ margin-left: 0.5rem;
   border-top: 1.25rem solid transparent;
   border-bottom: 1.25rem solid transparent;
 }
-
+.bank-button{
+  margin-left: 0.6rem;
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+border: 1px solid #077838;
+  color: #077838;
+  cursor: pointer;
+}
 /* Rest of your CSS styles ... */
 
 /* arrow css starts ends */

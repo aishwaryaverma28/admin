@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ADD_REPLY, getDecryptedToken} from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const Comment = ({ onClose, review }) => {
+const Comment = ({ onClose, review, reviewData }) => {
   console.log(review);
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
@@ -43,6 +43,7 @@ axios.post(ADD_REPLY, body, {
       autoClose: 2000,
     });
   }
+  reviewData();
   onClose();
 })
 .catch((error) => {
