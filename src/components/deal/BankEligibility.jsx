@@ -27,7 +27,7 @@ const BankEligibility = ({ onClose, loan }) => {
                 <div>
                   {openIndex !== index && (
                     <div className="time-ticket-top-2">
-                      <p className="common-fonts ticket-title"> {item?.loan_offered_by}</p>
+                      <p className="common-fonts bankName"> {item?.loan_offered_by}</p>
                       <div className="ticket-img" onClick={() => toggleTicket(index)}>
                         <img src={GreaterDown} alt="" />
                       </div>
@@ -37,13 +37,42 @@ const BankEligibility = ({ onClose, loan }) => {
                 {
                   openIndex === index && (
                     <>
-                      <div className="time-ticket-top">
-                        <div className="service-user-details ">
-                          <p className="common-fonts service-user-name">Bank Name</p>
-                          <p className="common-fonts">{item?.loan_offered_by}</p>
-                          <div className="service-user-details ticket-img" onClick={() => toggleTicket(index)}>
-                            <img src={GreaterUp} alt="" />
-                          </div>
+                      <div className="time-ticket-top-2">
+                        <p className="common-fonts bankName"> {item?.loan_offered_by}</p>
+                        <div className="ticket-img" onClick={() => toggleTicket(index)}>
+                          <img src={GreaterUp} alt="" />
+                        </div>
+                      </div>
+                      <div className='bankDetails'>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Age of Buisness : </strong>{item.age_of_business}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Credit Score : </strong>{item.credit_score}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Company Type : </strong>{item.company_type}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Duration : </strong>{item.duration}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>individual / Company : </strong>{item.individual_or_company}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Industry Type : </strong>{item.industry_type}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Loan Amount : </strong>{item.loan_amount}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Loan Type : </strong>{item.loan_type}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Location of Comapny : </strong>{item.location_of_company}</p>
+                        </div>
+                        <div className='detailsRow'>
+                          <p className='detailesLine'> <strong>Turnover : </strong>{item.turnover}</p>
                         </div>
                       </div>
                     </>

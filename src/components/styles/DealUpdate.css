@@ -1141,3 +1141,24 @@ cursor: pointer;
   bottom:2%;
   right: 2%;
 }
+
+.detailsRow{
+  display: flex;
+
+}
+.detailesLine{
+  color: #33475B;
+font-family: Lexend Deca;
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 500;
+line-height: 1.5rem;
+}
+.bankName{
+  color: #1E2224;
+font-family: Lexend Deca;
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+text-transform: capitalize;
+}

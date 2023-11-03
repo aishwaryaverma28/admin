@@ -31,3 +31,7 @@ background: #F3F6FA;
 .comment-save{
     margin-left: 0.5rem;
 }
+
+.redAlert{
+    color: rgb(190, 4, 4);
+}

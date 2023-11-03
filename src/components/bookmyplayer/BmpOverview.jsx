@@ -33,8 +33,28 @@ const BmpOverview = () => {
   const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [number, setNumber] = useState(0);
-  const [progress, setProgress]= useState(null);
+  const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
+  const languages = [
+    { value: 'hn', label: 'Hindi' },
+    { value: 'en', label: 'English' },
+    { value: 'es', label: 'Spanish' },
+    { value: 'fr', label: 'French' },
+    { value: 'de', label: 'German' },
+    { value: 'it', label: 'Italian' },
+    { value: 'ja', label: 'Japanese' },
+    { value: 'ko', label: 'Korean' },
+    { value: 'pt', label: 'Portuguese' },
+    { value: 'ru', label: 'Russian' },
+    { value: 'zh', label: 'Chinese' }
+  ];
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+
+  const handleLanguageChange = (e) => {
+    setSelectedLanguage(e.target.value);
+    setStateBtn(1);
+  };
+
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -61,10 +81,11 @@ const BmpOverview = () => {
         },
       })
       .then((response) => {
+        setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
         if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
-        setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
         }
         setIsLoading(false);
       })
@@ -73,7 +94,7 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-  
+
   const createFolder = async () => {
     const cloudinaryFolder = "bookmyplayer/academy";
     const apiUrl = CREATE_FOLDER;
@@ -203,11 +224,12 @@ const BmpOverview = () => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
-  progressArray.push("1");
-  setProgressArray(progressArray);
+      progressArray.push("1");
+      setProgressArray(progressArray);
     }
     const combinedProgress = progressArray?.join(",");
     const updatedFormData = {
+      spoken_languages:selectedLanguage,
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData.phone,
@@ -571,7 +593,7 @@ const BmpOverview = () => {
         </div>
 
         <div>
-          <ProgressBar array={progressArray}/>
+          <ProgressBar array={progressArray} />
           <div className="bmp-right-fields">
             <p className="common-fonts">Upload Academic Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>
@@ -676,6 +698,16 @@ const BmpOverview = () => {
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
               />
+            </div>
+            <div className="bmp-input-flex">
+              <label className="common-fonts bmp-academy-name">Select a Language: </label>
+              <select value={selectedLanguage} onChange={handleLanguageChange} className="common-fonts common-input langSelect">
+                {languages.map((language) => (
+                  <option key={language.value} value={language.value}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>

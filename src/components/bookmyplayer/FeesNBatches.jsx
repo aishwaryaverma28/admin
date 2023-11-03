@@ -14,10 +14,14 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
+import AddBatch from "./AddBatch.jsx";
 
 const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+  //=========================================================================
+  const [isBatchOpen, setIsBatchOpen] = useState(false);
+  //=========================================================================
   const [batch, setBatch] = useState([]);
   const id = localStorage.getItem('academy_id');
   const [param, setParam] = useState("");
@@ -146,8 +150,14 @@ const FeesNBatches = () => {
         });
       })
   }
-
-
+//===================================================================
+  const handleBatchOpen = () => {
+    setIsBatchOpen(true);
+  };
+  const handleBatchClose = () => {
+    setIsBatchOpen(false);
+  };
+//=========================================================================
   const handleBatchModal = (param, batchId = null) => {
     setIsBatchModalOpen(true);
     setParam(param);
@@ -199,12 +209,20 @@ const FeesNBatches = () => {
         <div className="bmp-fee-left">
           <p className="common-fonts bmp-fee-timing">Timimg & Fee</p>
           <div className="bmp-new-flex">
-            <button
+          {/* //========================================================================= */}
+          <button
+              className="common-save-button common-fonts bmp-batch-btn"
+              onClick={handleBatchOpen}
+            >
+              Add Batch
+            </button>
+            {/* //========================================================================= */}
+            {/* <button
               className="common-save-button common-fonts bmp-batch-btn"
               onClick={() => handleBatchModal("post")}
             >
               Add Batch
-            </button>
+            </button> */}
             <div className="file-input-wrapper">
               <label htmlFor="file-input" className="custom-new-btn" onClick={handleButtonClick}>
                 Upload Broucher
@@ -341,6 +359,8 @@ const FeesNBatches = () => {
         ))}
       </div>
       {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId} array={progressArray}/>}
+
+      {isBatchOpen && <AddBatch onClose={handleBatchClose} fetchBatch={fetchBatch}/>}
       <ToastContainer />
     </div>
   );
