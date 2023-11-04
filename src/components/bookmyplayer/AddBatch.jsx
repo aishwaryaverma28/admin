@@ -5,7 +5,7 @@ import { getDecryptedToken, UPDATE_ACADEMY, ADD_BATCH } from "../utils/Constants
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddBatch = ({ onClose, fetchBatch }) => {
+const AddBatch = ({ onClose, fetchBatch, array }) => {
     const decryptedToken = getDecryptedToken();
     const [selectedDays, setSelectedDays] = useState([]);
     const [batchTitle, setBatchTitle] = useState("");
@@ -15,12 +15,19 @@ const AddBatch = ({ onClose, fetchBatch }) => {
     const [showTimeMessage, setShowTimeMessage] = useState(false);
     const [feeGroups, setFeeGroups] = useState([{ month: "", fees: "" }]);
     const [showFeeMessage, setShowFeeMessage] = useState(false);
-    const [ num, setNum]= useState([]);
-const id = localStorage.getItem("academy_id");
+    const [num, setNum] = useState([]);
+    const [stateBtn, setStateBtn] = useState(0);
+    const id = localStorage.getItem("academy_id");
+
+    useEffect(() => {
+        setNum(array);
+    }, [array]);
+
     // ===========================================================function for batch name
     const handleInputChange = (e) => {
         const title = e.target.value;
         setBatchTitle(title);
+        setStateBtn(1);
     }
     // ========================================================function for batch age
     const handleMinAgeChange = (e, index) => {
@@ -28,6 +35,7 @@ const id = localStorage.getItem("academy_id");
         ageGroupsCopy[index].minAge = e.target.value;
         setAgeGroups(ageGroupsCopy);
         setShowMaxAgeMessage(true);
+        setStateBtn(0);
     }
 
     const handleMaxAgeChange = (e, index) => {
@@ -35,6 +43,7 @@ const id = localStorage.getItem("academy_id");
         ageGroupsCopy[index].maxAge = e.target.value;
         setAgeGroups(ageGroupsCopy);
         setShowMaxAgeMessage(false);
+        setStateBtn(1);
     }
 
     const addAgeGroup = () => {
@@ -62,14 +71,16 @@ const id = localStorage.getItem("academy_id");
         feeGroupsCopy[index].month = e.target.value;
         setFeeGroups(feeGroupsCopy);
         setShowFeeMessage(true);
+        setStateBtn(0);
     }
-   
+
     const handleFeeChange = (e, index) => {
         console.log(e.target.value)
         const feeGroupsCopy = [...feeGroups];
         feeGroupsCopy[index].fees = e.target.value;
         setFeeGroups(feeGroupsCopy);
         setShowFeeMessage(false);
+        setStateBtn(1);
     }
 
     const addFeeGroup = () => {
@@ -93,6 +104,7 @@ const id = localStorage.getItem("academy_id");
         timeCopy[index].minTime = e.target.value;
         setTimes(timeCopy);
         setShowTimeMessage(true);
+        setStateBtn(0);
     }
 
     const handleMaxTimeChange = (e, index) => {
@@ -100,6 +112,7 @@ const id = localStorage.getItem("academy_id");
         timeCopy[index].maxTime = e.target.value;
         setTimes(timeCopy);
         setShowTimeMessage(false);
+        setStateBtn(1);
     }
 
     const addTimeGroup = () => {
@@ -118,71 +131,71 @@ const id = localStorage.getItem("academy_id");
         console.log("Time:", timeStrings.join(", "));
         console.log("Fee Groups:", feeGroupStrings.join(", "));
         const body = {
-                object_id: parseInt(id),
-                object_type:"academy",
-                title:batchTitle,
-                age_group: ageGroupStrings.join(", "),
-                weekly_days: selectedDays.join(", "),
-                timing: timeStrings.join(", "),
-                fees: feeGroupStrings.join(", ")
+            object_id: parseInt(id),
+            object_type: "academy",
+            title: batchTitle,
+            age_group: ageGroupStrings.join(", "),
+            weekly_days: selectedDays.join(", "),
+            timing: timeStrings.join(", "),
+            fees: feeGroupStrings.join(", ")
         }
         axios
-        .post(ADD_BATCH, body, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-          },
-        })
-        .then((response) => {
-            console.log(response)
-        if (response?.data?.status === 1) {
-            toast.success("Batch added successfully!", {
-              position: "top-center",
-              autoClose: 2000,
-            });
-            onClose();
-          } else {
-            toast.error(
-              response?.data?.message,
+            .post(ADD_BATCH, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+                },
+            })
+            .then((response) => {
+                console.log(response)
+                if (response?.data?.status === 1) {
+                    toast.success("Batch added successfully!", {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                    onClose();
+                } else {
+                    toast.error(
+                        response?.data?.message,
 
-              {
-                position: "top-center",
-                autoClose: 2000,
-              }
-            );
-          }
-          handleSave();
-          fetchBatch();
-        })
-        .catch((error) => {
-          toast.error("Some Error Occoured!", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        })
+                        {
+                            position: "top-center",
+                            autoClose: 2000,
+                        }
+                    );
+                }
+                handleSave();
+                fetchBatch();
+            })
+            .catch((error) => {
+                toast.error("Some Error Occoured!", {
+                    position: "top-center",
+                    autoClose: 2000,
+                });
+            })
     }
 
     const handleSave = () => {
         if (!num?.includes("2")) {
-          num.push("2");
-          setNum(num);
+            num.push("2");
+            setNum(num);
         }
         const combinedProgress = num.join(",");
-         axios
-          .put(UPDATE_ACADEMY + id, {
-            completion_percentage: combinedProgress,
-          }, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-            },
-          })
-          .then((response) => {
-           console.log(response)       ;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      };
-    
+        axios
+            .put(UPDATE_ACADEMY + id, {
+                completion_percentage: combinedProgress,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
 
     return (
         <>
@@ -206,23 +219,19 @@ const id = localStorage.getItem("academy_id");
                                         onChange={handleInputChange}
                                         value={batchTitle}
                                     />
-
                                 </div>
-
-
                                 <div className="bmp-agegroup">
-                                    <label htmlFor="" className="common-fonts light-color">
-                                        Age Group
+                                    <label htmlFor="" className="common-fonts light-color batchErrorLable">
+                                        Age Group {showMaxAgeMessage ? (
+                                            <p className="common-fonts redAlert">Please enter maximum age</p>
+                                        ) : (
+                                            <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
+                                                &nbsp;
+                                            </p>
+                                        )}
                                     </label>
                                     {ageGroups.map((group, index) => (
                                         <div key={index}>
-                                            {showMaxAgeMessage && index === 0 ? (
-                                                <p className="common-fonts redAlert">Please enter maximum age</p>
-                                            ) : (
-                                                <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
-                                                    &nbsp;
-                                                </p>
-                                            )}
                                             <div className="bmp-input-flex-2 bmp-add-fields">
                                                 <input
                                                     type="number"
@@ -309,18 +318,18 @@ const id = localStorage.getItem("academy_id");
                                     </div>
                                 </div>
                                 <div>
-                                    <label htmlFor="" className="common-fonts light-color">
-                                        Timings
+                                    <label htmlFor="" className="common-fonts light-color batchErrorLable">
+                                        Timings {showTimeMessage ? (
+                                            <p className="common-fonts redAlert">Please enter closing time</p>
+                                        ) : (
+                                            <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
+                                                &nbsp;
+                                            </p>
+                                        )}
+
                                     </label>
                                     {times.map((group, index) => (
                                         <div key={index}>
-                                            {showTimeMessage && index === 0 ? (
-                                                <p className="common-fonts redAlert">Please enter closing time</p>
-                                            ) : (
-                                                <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
-                                                    &nbsp;
-                                                </p>
-                                            )}
                                             <div className="bmp-input-flex-2 bmp-add-fields  bmp-new-timing">
                                                 <select
                                                     onChange={(e) => handleMinTimeChange(e, index)}
@@ -358,24 +367,23 @@ const id = localStorage.getItem("academy_id");
                                 <div className="bmp-group">
                                     <button
                                         className="common-fonts common-white-blue-button"
-                                       onClick={addTimeGroup}
+                                        onClick={addTimeGroup}
                                     >
                                         + Add Timings
                                     </button>
                                 </div>
                                 <div>
-                                    <label htmlFor="" className="common-fonts light-color">
-                                        Fee
+                                    <label htmlFor="" className="common-fonts light-color batchErrorLable">
+                                        Fee {showFeeMessage ? (
+                                            <p className="common-fonts redAlert">Please enter amount</p>
+                                        ) : (
+                                            <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
+                                                &nbsp;
+                                            </p>
+                                        )}
                                     </label>
                                     {feeGroups.map((group, index) => (
                                         <div key={index}>
-                                            {showFeeMessage && index === 0 ? (
-                                                <p className="common-fonts redAlert">Please enter amount</p>
-                                            ) : (
-                                                <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
-                                                    &nbsp;
-                                                </p>
-                                            )}
                                             <div className="bmp-input-flex-2 bmp-add-fields  bmp-new-timing">
                                                 <select
                                                     onChange={(e) => handleMonthChange(e, index)}
@@ -423,12 +431,16 @@ const id = localStorage.getItem("academy_id");
                                 <button className="common-fonts common-white-button" onClick={onClose}>
                                     Cancel
                                 </button>
-                                <button
-                                    className="common-fonts common-save-button"
-                                    onClick={fetchBatchData}
-                                >
-                                    Save
-                                </button>
+                                {stateBtn === 0 ? (
+                                    <button className="disabledBtn">Save</button>
+                                ) : (
+                                    <button
+                                        className="common-save-button common-save"
+                                        onClick={fetchBatchData}
+                                    >
+                                        Save
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </section>

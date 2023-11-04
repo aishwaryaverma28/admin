@@ -35,3 +35,7 @@ background: #F3F6FA;
 .redAlert{
     color: rgb(190, 4, 4);
 }
+.batchErrorLable{
+    display: flex;
+    justify-content: space-between;
+}

@@ -5,7 +5,6 @@ import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import GreaterDown from "../../assets/image/greater-arrow-down.svg";
 import Trash from "../../assets/image/TrashFill.svg";
 import Pen from "../../assets/image/pen.svg";
-import BatchModal from "./BatchModal.jsx";
 import axios from "axios";
 import {
   GET_BATCH, GET_ACADEMY, UPDATE_BATCH,
@@ -15,21 +14,18 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
 import AddBatch from "./AddBatch.jsx";
+import UpdateBatch from "./UpdateBatch.jsx";
 
 const FeesNBatches = () => {
   const decryptedToken = getDecryptedToken();
-  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   //=========================================================================
   const [isBatchOpen, setIsBatchOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+const [batchObject, setBatchObject] = useState({});
   //=========================================================================
   const [batch, setBatch] = useState([]);
   const id = localStorage.getItem('academy_id');
-  const [param, setParam] = useState("");
   const [batchId, setBatchId] = useState(null);
-  const [obj, setObj] = useState({});
-  const [groupCount, setGroupCount] = useState(null);
-  const [timingsCount, setTimingsCount] = useState(null);
-  const [fieldCount, setFieldCount] = useState(null);
   const [academyData, setAcademyData] = useState({});
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
@@ -51,7 +47,6 @@ const FeesNBatches = () => {
         if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
           setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
           };
-        console.log(response?.data?.data[0]);
       })
       .catch((error) => {
         console.log(error);
@@ -157,21 +152,17 @@ const FeesNBatches = () => {
   const handleBatchClose = () => {
     setIsBatchOpen(false);
   };
-//=========================================================================
-  const handleBatchModal = (param, batchId = null) => {
-    setIsBatchModalOpen(true);
-    setParam(param);
+  const handleUpdateOpen = (batchId, batch) => {
+    setIsUpdateOpen(true);
     setBatchId(batchId);
-    const selectedBatch = batch.find(batchItem => batchItem.id === batchId);
-    setObj(selectedBatch);
-    setGroupCount(selectedBatch?.age_group?.split(",")?.length)
-    setTimingsCount(selectedBatch?.timing?.split(",")?.length)
-    setFieldCount(selectedBatch?.fees?.split(",")?.length)
+    setBatchObject(batch);
   };
-  const handleBatchModalClose = () => {
-    setIsBatchModalOpen(false);
+  const handleUpdateClose = () => {
+    setIsUpdateOpen(false);
+    setBatchId(null);
   };
-
+//=========================================================================
+ 
   const handleDeleteBatch = (batchId) => {
     axios
       .put(UPDATE_BATCH + batchId, { is_deleted: 1 }, {
@@ -202,7 +193,7 @@ const FeesNBatches = () => {
         });
       });
   };
-
+  
   return (
     <div>
       <div className="bmp-fee-container">
@@ -265,7 +256,7 @@ const FeesNBatches = () => {
                 ) : (
                   <div className="bmp-fee-corner">
                     <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
-                    <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleBatchModal("put", batch.id)} />
+                    <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleUpdateOpen(batch.id, batch)} />
                     <img src={Trash} alt="" onClick={() => handleDeleteBatch(batch.id)} />
                   </div>
                 )}
@@ -278,7 +269,7 @@ const FeesNBatches = () => {
                   <p className="common-fonts">Age Group</p>
                   <div className="bmp-fee-corner">
                     <p className="common-fonts">created on {batch?.creation_date?.split('T')[0]}</p>
-                    <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleBatchModal("put", batch.id)} />
+                    <img src={Pen} alt="" className="bmp-fee-pen" onClick={() => handleUpdateOpen(batch.id, batch)} />
                     <img src={Trash} alt="" onClick={() => handleDeleteBatch(batch.id)} />
                   </div>
                 </div>
@@ -358,9 +349,8 @@ const FeesNBatches = () => {
           </>
         ))}
       </div>
-      {isBatchModalOpen && <BatchModal onClose={handleBatchModalClose} fetchBatch={fetchBatch} param={param} obj={obj} ageCount={groupCount} timeCount={timingsCount} feeCount={fieldCount} batchId={batchId} array={progressArray}/>}
-
-      {isBatchOpen && <AddBatch onClose={handleBatchClose} fetchBatch={fetchBatch}/>}
+      {isUpdateOpen && <UpdateBatch onClose={handleUpdateClose} fetchBatch={fetchBatch} batchId={batchId} batch= {batchObject}/>}
+      {isBatchOpen && <AddBatch onClose={handleBatchClose} fetchBatch={fetchBatch} array={progressArray}/>}
       <ToastContainer />
     </div>
   );
