@@ -3,15 +3,41 @@ import "../styles/Comment.css";
 import star from "../../assets/image/star.svg"
 import { useState } from 'react';
 import axios from 'axios';
-import { ADD_REPLY, getDecryptedToken} from "../utils/Constants";
+import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken} from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from 'react';
 const Comment = ({ onClose, review, reviewData }) => {
-  console.log(review);
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [reply, setReply] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [stateBtn, setStateBtn] = useState(0);
+  const [acaReply, setAcaReply] = useState([])
+  const reviewReply = () => {
+    const body = {
+      review_id: review.id
+  }
+    axios.post(GET_REVIEW_REPLY, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          console.log(response?.data?.data)
+          setAcaReply(response?.data?.data?.reverse());
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error)
+        setIsLoading(false);
+      })
+  }
+useEffect(()=> {
+  reviewReply();
+})
 
   const handleReplyChange = (e) => {
     setStateBtn(1);
@@ -43,8 +69,10 @@ axios.post(ADD_REPLY, body, {
       autoClose: 2000,
     });
   }
+  reviewReply();
   reviewData();
-  onClose();
+   setReply("");
+    // onClose();
 })
 .catch((error) => {
   console.log(error)
@@ -62,6 +90,23 @@ axios.post(ADD_REPLY, body, {
           <div>
             <p class="common-fonts comment-head">{review?.name}<span className='review-rating'>{review?.rating}<img className="pound" src={star} alt='star' /></span></p>
             <p class="common-fonts selected-comment">{review?.comment}</p>
+          </div>
+          <br/>
+          <div className='replysContainer'>
+          {isLoading ? (
+            <><p class="common-fonts selected-comment">Loading ...</p></>
+          ) : acaReply?.length === 0 ? (
+            <><p class="common-fonts selected-comment">No data found</p></>
+          ) :
+          (
+            acaReply?.map((item, index) => (
+            <>
+            <div className='replyName'>
+            <p class="common-fonts reply-head">{item?.name}</p>
+            <p class="common-fonts selected-comment">{item?.comment}</p>
+            </div>
+            </>))
+          )}
           </div>
           <br />
           <br />

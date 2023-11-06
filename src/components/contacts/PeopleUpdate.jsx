@@ -410,9 +410,9 @@ const CompanyUpdate = () => {
               )}
               Details
             </p>
-            <p className="addProduct cpu-add">
+            {/* <p className="addProduct cpu-add">
               <i class="fa-sharp fa-solid fa-plus"></i>Add
-            </p>
+            </p> */}
           </div>
           {isSummaryOpen && (
             <div className="detailsContent cpu-content">
@@ -553,9 +553,9 @@ const CompanyUpdate = () => {
               )}
               Contacts (2)
             </p>
-            <p className="addProduct cpu-add">
+            {/* <p className="addProduct cpu-add">
               <i class="fa-sharp fa-solid fa-plus"></i>Add
-            </p>
+            </p> */}
           </div>
           {isContactsOpen && (
             <>

@@ -460,6 +460,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 />
                 <label className="lead-label" htmlFor="company_name">
                   organization
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="company_name"
@@ -504,6 +505,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 />
                 <label className="lead-label" htmlFor="value">
                   Value
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <div className="currency-section">
                   <input
@@ -551,6 +553,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
                 <label className="lead-label" htmlFor="email">
                   Email
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="email"
@@ -573,6 +576,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 />
                 <label className="lead-label" htmlFor="employees">
                   Employees
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="employees"
@@ -584,6 +588,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 />
                 <label className="lead-label" htmlFor="registration_no">
                   Registration No
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="registration_no"
@@ -623,6 +628,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 </select>
                 <label className="lead-label" htmlFor="label_id">
                   Stages
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <select
                   name="stage_id"

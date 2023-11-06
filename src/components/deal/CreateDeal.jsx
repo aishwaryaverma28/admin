@@ -341,6 +341,7 @@ console.log(loanOfferedByValues);
               <div className="form-section-1">
                 <label htmlFor="deal_name" className="lead-label">
                   Title
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="deal_name"
@@ -374,6 +375,7 @@ console.log(loanOfferedByValues);
                 />
                 <label className="lead-label" htmlFor="value">
                   Loan Amount
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <div className="currency-section">
                   <input
@@ -394,6 +396,7 @@ console.log(loanOfferedByValues);
                 </div>
                 <label className="lead-label" htmlFor="probability">
                   Probability
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="probability"
@@ -412,6 +415,7 @@ console.log(loanOfferedByValues);
                 </select> */}
                 <label className="lead-label" htmlFor="closure_date">
                   Expected Closing Date
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="closure_date"
@@ -489,6 +493,7 @@ console.log(loanOfferedByValues);
               <div className="form-section-2">
                 <label className="lead-label" htmlFor="mobile">
                   Phone Number
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <div className="phone-input-section">
                   <input
@@ -503,6 +508,7 @@ console.log(loanOfferedByValues);
 
                 <label className="lead-label" htmlFor="email">
                   Email
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="email"
@@ -514,6 +520,7 @@ console.log(loanOfferedByValues);
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <select
                   name="label_id"

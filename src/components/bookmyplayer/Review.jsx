@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import {
-  GET_ALL_REVIEW,GET_ACC_REVIEW,GET_REVIEW_REPLY, getDecryptedToken,
+  GET_ALL_REVIEW, GET_ACC_REVIEW, getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,31 +32,9 @@ const Review = () => {
       },
     })
       .then((response) => {
-        // console.log(response?.data?.data)
+        console.log(response?.data?.data)
         if (response?.data?.status === 1) {
           setReview(response?.data?.data);
-          reviewReply(response?.data?.data?.id)
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error)
-        setIsLoading(false);
-      })
-  }
-
-  const reviewReply = (id) => {
-    const body = {
-      review_id: 1
-  }
-    axios.post(GET_REVIEW_REPLY, body, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-      .then((response) => {
-        if (response?.data?.status === 1) {
-          // console.log(response?.data?.data)
         }
         setIsLoading(false);
       })

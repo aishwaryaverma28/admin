@@ -31,11 +31,25 @@ background: #F3F6FA;
 .comment-save{
     margin-left: 0.5rem;
 }
-
 .redAlert{
     color: rgb(190, 4, 4);
 }
 .batchErrorLable{
     display: flex;
     justify-content: space-between;
+}
+.replysContainer{
+    height: 8rem;
+    overflow-y: scroll;
+}
+.replyName{
+    /* border: 2px solid red; */
+    border-left: 1px solid #DCDCDC;
+    margin-bottom: 0.5rem;
+    margin-left: 1rem;
+    padding: 0.5rem;
+}
+.reply-head{
+    font-weight: 500;
+    margin-bottom: 0.5rem;
 }
