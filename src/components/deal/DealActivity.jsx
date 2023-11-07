@@ -399,7 +399,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
             <div className="add-call">
               <input
                 type="text"
-                placeholder="Add Title"
+                placeholder="Add Title *"
                 name="activity_title"
                 onChange={handleChange}
               />
@@ -450,7 +450,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
 
                 <div className="activity-time-travel">
                   <div className="permission-input-box">
-                    <label className="common-fonts activity-label">Date</label>
+                    <label className="common-fonts activity-label">Date  <span className="common-fonts redAlert"> *</span></label>
 
                     <div className="custom-date-input">
                       <div className="activity-date-wrapper">
@@ -466,6 +466,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                   <div className="permission-input-box">
                     <label className="common-fonts activity-label activity-label-2">
                       Time From
+                      <span className="common-fonts redAlert"> *</span>
                     </label>
                     <select
                       name="timeFrom"
@@ -483,6 +484,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                   <div className="permission-input-box">
                     <label className="common-fonts activity-label activity-label-2">
                       Time To
+                      <span className="common-fonts redAlert"> *</span>
                     </label>
 
                     <select
@@ -520,7 +522,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                     id=""
                     className="common-fonts activity-select-area"
                   >
-                  <option value="">Select Assign to</option>
+                  <option value="">Select Assign to *</option>
                                              {userData?.map((item) => (
                             <option
                               key={item?.id}

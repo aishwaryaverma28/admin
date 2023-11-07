@@ -310,6 +310,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Company Name
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -322,6 +323,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Company Domain
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -354,6 +356,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Industry
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <select
                   name="industry"
@@ -370,6 +373,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Value
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <div className="product-two-input">
                   <input
@@ -386,7 +390,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
                     value={company.valuation_in}
                     onChange={handleChange}
                   >
-                    <option value="">Select Currency</option>
+                    <option value="">Select Currency  <span className="common-fonts redAlert"> *</span></option>
                     {/* <option value="usd">US Dollar (USD)</option> */}
                     <option value="Gbp">GBP</option>
                   </select>
@@ -395,6 +399,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Phone
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="number"
@@ -407,6 +412,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Email
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="email"
@@ -419,6 +425,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Postal Code
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -446,6 +453,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Address 1
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -470,6 +478,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   City
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -482,6 +491,7 @@ const CompanyModal = ({ onClose, fetchCompany }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Country
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"

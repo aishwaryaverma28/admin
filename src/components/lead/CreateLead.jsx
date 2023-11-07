@@ -405,7 +405,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 </div> */}
 
                 <label htmlFor="lead_name" className="lead-label">
-                  Title
+                  Title <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="lead_name"
@@ -428,7 +428,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   autoComplete="off"
                   value={leadData?.pin}
                 />
-                                              {showSearchResult && address?.length > 1 && (
+                {showSearchResult && address?.length > 1 && (
                 <div className="search_result company-address-result lead-address-result" ref={searchResultRef}>
                   {address?.map((item) => (
                     <>
@@ -447,7 +447,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 </div>
 
 
-                <label className="lead-label" htmlFor="registration_no">
+                <label className="lead-label" htmlFor="">
                   Address 1
                 </label>
                 <input
@@ -563,7 +563,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   onChange={handleChange}
                   value={leadData.email} // Add value prop for controlled input
                 />
-                <label className="lead-label" htmlFor="registration_no">
+                <label className="lead-label" htmlFor="">
                   Address 2
                 </label>
                 <input

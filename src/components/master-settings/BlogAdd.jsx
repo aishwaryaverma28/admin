@@ -451,6 +451,7 @@ const BlogAdd = () => {
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">
                 Blog Title
+                <span className="common-fonts redAlert"> *</span>
               </label>
               <input
                 type="text"
@@ -465,6 +466,7 @@ const BlogAdd = () => {
               <div className="blog-url-input">
                 <label htmlFor="title" className="common-fonts blogs-new-label">
                   Url
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -495,6 +497,7 @@ const BlogAdd = () => {
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">
                 description
+                <span className="common-fonts redAlert"> *</span>
               </label>
               <input
                 type="text"
@@ -548,6 +551,7 @@ const BlogAdd = () => {
                     className="common-fonts blogs-new-label"
                   >
                     Section
+                    <span className="common-fonts redAlert"> *</span>
                   </label>
                   <input
                     type="text"
@@ -565,6 +569,7 @@ const BlogAdd = () => {
                         className="common-fonts blogs-new-label"
                       >
                         Sort
+                        <span className="common-fonts redAlert"> *</span>
                       </label>
                       <input
                         type="text"
@@ -599,6 +604,7 @@ const BlogAdd = () => {
                       className="common-fonts blog-add-img add-img-2 add-img-3"
                     >
                       Add Section
+                      <span className="common-fonts redAlert"> *</span>
                     </button>
                   </div>
                 </div>
@@ -713,7 +719,7 @@ const BlogAdd = () => {
           <div className="addBlogRightForm">
             <div className="tags">
               <div className="tagContent tag-box">
-                <h3>Tags</h3>
+                <h3>Tags <span className="common-fonts redAlert"> *</span></h3>
                 <div className="contentBox">
                   <select
                     name="categoryDropdown"
@@ -764,7 +770,7 @@ const BlogAdd = () => {
 
             <div className="tags">
               <div className="tagContent tag-box">
-                <h3>Publish</h3>
+                <h3>Publish <span className="common-fonts redAlert"> *</span></h3>
                 <div className="contentBox blog-add-date">
                   <input
                     type="date"

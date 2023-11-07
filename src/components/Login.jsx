@@ -191,7 +191,7 @@ const Login = () => {
 
               <div className="login-page-fields">
                 <label for="" className="login-labels">
-                  Password
+                  Password *
                 </label>
                 <input
                   type="password"

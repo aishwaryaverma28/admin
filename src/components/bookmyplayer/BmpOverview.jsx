@@ -36,17 +36,29 @@ const BmpOverview = () => {
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const languages = [
-    { value: 'hn', label: 'Hindi' },
-    { value: 'en', label: 'English' },
-    { value: 'es', label: 'Spanish' },
-    { value: 'fr', label: 'French' },
-    { value: 'de', label: 'German' },
-    { value: 'it', label: 'Italian' },
-    { value: 'ja', label: 'Japanese' },
-    { value: 'ko', label: 'Korean' },
-    { value: 'pt', label: 'Portuguese' },
-    { value: 'ru', label: 'Russian' },
-    { value: 'zh', label: 'Chinese' }
+    { value: 'Hindi', label: 'Hindi' },
+    { value: 'English', label: 'English' },
+    { value: 'Russian', label: 'Russian' },
+    { value: 'Chinese', label: 'Chinese' },
+    { value: 'Spanish', label: 'Spanish' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
+    { value: 'Italian', label: 'Italian' },
+    { value: 'Japanese', label: 'Japanese' },
+    { value: 'Korean', label: 'Korean' },
+    { value: 'Portuguese', label: 'Portuguese' },
+    { value: 'Telugu', label: 'Telugu' },
+    { value: 'Kannada', label: 'Kannada' },
+    { value: 'Tamil', label: 'Tamil' },
+    { value: 'Marathi', label: 'Marathi' },
+    { value: 'Bengali', label: 'Bengali' },
+    { value: 'Urdu', label: 'Urdu' },
+    { value: 'Gujarati', label: 'Gujarati' },
+    { value: 'Malayalam', label: 'Malayalam' },
+    { value: 'Punjabi', label: 'Punjabi' },
+    { value: 'Odia', label: 'Odia' },
+    { value: 'Sindhi', label: 'Sindhi' },
+    { value: 'Bhojpuri', label: 'Bhojpuri' },
   ];
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 

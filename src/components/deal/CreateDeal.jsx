@@ -353,6 +353,7 @@ console.log(loanOfferedByValues);
                 />
                 <label className="lead-label" htmlFor="organization">
                   organization
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="organization"
@@ -427,6 +428,7 @@ console.log(loanOfferedByValues);
                 />
                 <label className="lead-label" htmlFor="status">
                   Stages
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <select
                   name="stage_id"

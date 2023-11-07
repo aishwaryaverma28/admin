@@ -116,7 +116,7 @@ axios.post(ADD_REPLY, body, {
               id=""
               rows="5"
               className="common-fonts bmp-strategy-input bmp-modal-input"
-              placeholder='Type your response here'
+              placeholder='Type your response here *'
               value={reply}
               onChange={handleReplyChange}
             ></textarea>

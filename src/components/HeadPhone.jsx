@@ -156,7 +156,7 @@ const HeadPhone = () => {
         <form action="">
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Title
+              Title <span className="common-fonts redAlert"> *</span>
             </label>
             <input
               type="text"
@@ -168,7 +168,7 @@ const HeadPhone = () => {
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Description
+              Description <span className="common-fonts redAlert"> *</span>
             </label>
             <textarea
               name="description"
@@ -180,7 +180,7 @@ const HeadPhone = () => {
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-            Moblie No.
+            Moblie No. <span className="common-fonts redAlert"> *</span>
             </label>
             <div>
               {/* <select name="" id="" className="common-input contact-tab-select">
@@ -197,7 +197,7 @@ const HeadPhone = () => {
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Confirm email address
+              Confirm email address <span className="common-fonts redAlert"> *</span>
             </label>
             <input
               type="email" name="email"
@@ -209,8 +209,8 @@ const HeadPhone = () => {
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Type of issue
-            </label>
+              Type of issue <span className="common-fonts redAlert"> *</span>
+            </label> 
             <select
              name="category"
              onChange={handleChange}

@@ -73,12 +73,12 @@ const LabelModal = ({onClose, fetchColor}) => {
         <div className="recycle-popup-box">
             <p className="common-fonts restore-records">add new label</p>
        <div>
-        <label htmlFor="" className='common-fonts'>Label name</label>
+        <label htmlFor="" className='common-fonts'>Label name  <span className="common-fonts redAlert"> *</span></label>
         <input type="text" className='common-input label-input' onChange={handleLabelInput} />
         </div>    
 
                 <div>
-            <p className='common-fonts'>Label color</p>
+            <p className='common-fonts'>Label color  <span className="common-fonts redAlert"> *</span></p>
             <div className='circle-flex'>
                 <div className='genral-circle circle1' onClick={(e) => handleColor(e, "#4164D4")}></div>
                 <div className='genral-circle circle2' onClick={(e) => handleColor(e, "#7FD6B6")}></div>

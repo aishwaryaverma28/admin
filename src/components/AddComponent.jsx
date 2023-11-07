@@ -50,7 +50,7 @@ const RecycleRestorePopUp = ({onClose, docsData, type}) => {
     <div className="recycle-popup-wrapper">        
     <div className="recycle-popup-container">
         <div className="recycle-popup-box">
-            <p className="common-fonts restore-records">Add Documents</p>
+            <p className="common-fonts restore-records">Add Documents <span className="common-fonts redAlert"> *</span></p>
                <input type="text" className='common-fonts common-input add-component-input'  name="document_name"
                 id="document_name"
                 placeholder="Please Document Name"

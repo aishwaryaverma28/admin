@@ -135,7 +135,7 @@ setStateBtn(0);
         <form>
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Title
+              Title <span className="common-fonts redAlert"> *</span>
             </label>
             <input
               type="text" name="title"
@@ -147,7 +147,7 @@ setStateBtn(0);
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Description
+              Description <span className="common-fonts redAlert"> *</span>
             </label>
             <textarea
               name="description"
@@ -159,7 +159,7 @@ setStateBtn(0);
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Moblie No.
+              Moblie No. <span className="common-fonts redAlert"> *</span>
             </label>
             <div>
               <input
@@ -173,7 +173,7 @@ setStateBtn(0);
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Confirm email address
+              Confirm email address <span className="common-fonts redAlert"> *</span>
             </label>
             <input
               type="email" name="email"
@@ -185,7 +185,7 @@ setStateBtn(0);
 
           <div className="contact-tab-fields">
             <label htmlFor="" className="common-fonts contact-tab-label">
-              Type of issue
+              Type of issue <span className="common-fonts redAlert"> *</span>
             </label>
             <select
              name="category"

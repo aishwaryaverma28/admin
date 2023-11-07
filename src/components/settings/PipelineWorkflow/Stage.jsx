@@ -89,6 +89,7 @@ const Stage = ({ type }) => {
           stage_type: type,
           stage_name: "",
           position: 0,
+          org_id: orgId
         });
         fetchStatus();
       })

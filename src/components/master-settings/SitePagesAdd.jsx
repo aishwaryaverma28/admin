@@ -68,7 +68,7 @@ const SitePagesAdd = () => {
         <div className="formDiv">
           <div className="leftForm">
             <div className="fromFiled">
-              <label htmlFor="site">Site</label>
+              <label htmlFor="site">Site  <span className="common-fonts redAlert"> *</span></label>
               <input
                 type="text"
                 name="site"
@@ -78,7 +78,7 @@ const SitePagesAdd = () => {
               />
             </div>
             <div className="fromFiled">
-              <label for="route">Route</label>
+              <label for="route">Route  <span className="common-fonts redAlert"> *</span></label>
 
               <input
                 type="text"
@@ -89,7 +89,7 @@ const SitePagesAdd = () => {
               />
             </div>
             <div className="fromFiled">
-              <label for="description">Description</label>
+              <label for="description">Description  <span className="common-fonts redAlert"> *</span></label>
 
               <input
                 type="text"
@@ -102,7 +102,7 @@ const SitePagesAdd = () => {
           </div>
           <div className="rightForm">
             <div className="fromFiled">
-              <label for="view_page">View Page</label>
+              <label for="view_page">View Page  <span className="common-fonts redAlert"> *</span></label>
 
               <input
                 type="text"
@@ -113,7 +113,7 @@ const SitePagesAdd = () => {
               />
             </div>
             <div className="fromFiled">
-              <label for="title">Title</label>
+              <label for="title">Title  <span className="common-fonts redAlert"> *</span></label>
 
               <input
                 type="text"
@@ -124,7 +124,7 @@ const SitePagesAdd = () => {
               />
             </div>
             <div className="fromFiled">
-              <label for="sitemap">Sitemap</label>
+              <label for="sitemap">Sitemap  <span className="common-fonts redAlert"> *</span></label>
 
               <input
                 type="number"

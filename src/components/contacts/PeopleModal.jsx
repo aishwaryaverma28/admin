@@ -95,6 +95,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Name
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -107,6 +108,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Organization
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="text"
@@ -119,6 +121,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Phone
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="number"
@@ -131,6 +134,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Email
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="email"
@@ -143,6 +147,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   City
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="email"
@@ -155,6 +160,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   State
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="email"
@@ -167,6 +173,7 @@ const PeopleModal = ({ onClose , fetchPeople }) => {
               <div className="product-popup-fields">
                 <label htmlFor="" className="common-fonts">
                   Postal Code
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   type="email"

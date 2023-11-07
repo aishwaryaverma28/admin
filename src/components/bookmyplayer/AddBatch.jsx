@@ -211,6 +211,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 <div className="bmp-add-fields">
                                     <label htmlFor="" className="common-fonts light-color">
                                         Batch Name
+                                        <span className="common-fonts redAlert"> *</span>
                                     </label>
                                     <input
                                         type="text"
@@ -222,7 +223,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div className="bmp-agegroup">
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                        Age Group {showMaxAgeMessage ? (
+                                       <span> Age Group <span className="common-fonts redAlert"> *</span></span> {showMaxAgeMessage ? (
                                             <p className="common-fonts redAlert">Please enter maximum age</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
@@ -263,7 +264,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
 
                                 <div className="bmp-add-fields">
                                     <label htmlFor="" className="common-fonts light-color">
-                                        Weekly days
+                                        Weekly days  <span className="common-fonts redAlert"> *</span>
                                     </label>
                                     <div className="bmp-days">
                                         <div
@@ -319,7 +320,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div>
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                        Timings {showTimeMessage ? (
+                                       <span> Timings  <span className="common-fonts redAlert"> *</span></span> {showTimeMessage ? (
                                             <p className="common-fonts redAlert">Please enter closing time</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
@@ -374,7 +375,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div>
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                        Fee {showFeeMessage ? (
+                                       <span> Fee  <span className="common-fonts redAlert"> *</span></span> {showFeeMessage ? (
                                             <p className="common-fonts redAlert">Please enter amount</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>

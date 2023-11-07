@@ -82,7 +82,7 @@ const StageModal = ({ onClose, type, fields, fetchFields }) => {
             )
           }
             <label htmlFor="" className="common-fonts" ds-stage-label>
-             New Field Name (required)
+             New Field Name <span className="common-fonts redAlert"> *</span> (required)
             </label>
             <input
               type="text"
@@ -96,7 +96,7 @@ const StageModal = ({ onClose, type, fields, fetchFields }) => {
                 <>
                   
             <label htmlFor="" className="common-fonts ds-stage-label">
-              Select Field to replace (required)
+              Select Field to replace <span className="common-fonts redAlert"> *</span>(required)
             </label>
             <select name="oldFieldName" onChange={handleChange} id="" className="fields-select ds-setup-select">
             <option value="">Select Field</option>

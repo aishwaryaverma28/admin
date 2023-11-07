@@ -198,7 +198,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
         </div>
         <form className="createUserForm">
           <div className="inputDiv">
-            <label htmlFor="first_name">First Name</label>
+            <label htmlFor="first_name">First Name <span className="common-fonts redAlert"> *</span></label>
             <br />
             <input
               type="text"
@@ -209,7 +209,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             />
           </div>
           <div className="inputDiv">
-            <label htmlFor="last_name">Last Name</label>
+            <label htmlFor="last_name">Last Name <span className="common-fonts redAlert"> *</span></label>
             <br />
             <input
               type="text"
@@ -220,7 +220,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             />
           </div>
           <div className="inputDiv">
-            <label htmlFor="phone">Contact</label>
+            <label htmlFor="phone">Contact <span className="common-fonts redAlert"> *</span></label>
             <br />
             <input
               type="text"
@@ -231,7 +231,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             />
           </div>
           <div className="inputDiv">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email <span className="common-fonts redAlert"> *</span></label>
             <br />
             <input
               type="email"
@@ -254,7 +254,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             />
           </div>
           <div className="inputDiv">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password <span className="common-fonts redAlert"> *</span></label>
             <br />
             <div className="create-user-input-wrapper">
               {passDes?.some(

@@ -698,7 +698,7 @@ const BlogUpdate = () => {
                   />
                 <div className="from-blog-section from-filed">
                 <label htmlFor="title" className="common-fonts blogs-new-label">
-                Section Title
+                Section Title<span className="common-fonts redAlert"> *</span>
               </label>
                   <input
                     type="text"
@@ -716,7 +716,7 @@ const BlogUpdate = () => {
                         htmlFor="title"
                         className="common-fonts blogs-new-label"
                       >
-                        Sort
+                        Sort<span className="common-fonts redAlert"> *</span>
                       </label>
                       <input
                       type="text"
@@ -742,7 +742,7 @@ const BlogUpdate = () => {
                       onClick={handleAddSection}
                       className="common-fonts blog-add-img add-img-2 add-img-3"
                     >
-                      Add Section
+                      Add Section<span className="common-fonts redAlert"> *</span>
                     </button>
                   </div> 
 

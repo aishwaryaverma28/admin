@@ -64,7 +64,7 @@ const HelpAdd = () => {
       </header>
       <div className="helpContainer">
         <div className="helpBody">
-          <p className="helpTitle">Question Title</p>
+          <p className="helpTitle">Question Title <span className="common-fonts redAlert"> *</span></p>
           <input
             type="text"
             placeholder="Enter Question"
@@ -72,7 +72,7 @@ const HelpAdd = () => {
             value={helpData.title}
             onChange={handleChange}
           ></input>
-          <p className="helpTitle">Answer Description</p>
+          <p className="helpTitle">Answer Description <span className="common-fonts redAlert"> *</span></p>
           <textarea
             name="details"
             type="textarea"
@@ -86,7 +86,7 @@ const HelpAdd = () => {
         <div className="helpRight">
           <div className="siteBox">
             <div className="siteHead">
-              <h3>Site</h3>
+              <h3>Site <span className="common-fonts redAlert"> *</span></h3>
             </div>
             <div className="help-content-box">
               <select
