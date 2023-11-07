@@ -45,12 +45,13 @@ const CPPasswordPolicy = () => {
         id: condition?.id,
         active: condition?.active, // Default value
         value: condition?.value, // Default value
+        term: condition.term,
       }))
     );
   }, [passDes]);
-
+console.log(checkboxStates);
   const toggleActive =
-    passDes?.find((condition) => condition?.id === 5)?.active === 1;
+    passDes?.find((condition) => condition?.term === "is_enabled")?.active === 1;
 
   // Update the toggleChecked state based on the toggleActive value
   useEffect(() => {
@@ -61,7 +62,8 @@ const CPPasswordPolicy = () => {
     setToggleChecked((prevToggleChecked) => {
       // Update the active value for id=5 when turning the switch on
       if (!prevToggleChecked) {
-        const index = checkboxStates?.findIndex((state) => state?.id === 5);
+        const index = checkboxStates?.findIndex((state) => state?.term === "is_enabled");
+        console.log(index)
         if (index !== -1) {
           const newState = [...checkboxStates];
           newState[index] = {
@@ -69,8 +71,8 @@ const CPPasswordPolicy = () => {
             active: 1,
           };
           setCheckboxStates(newState);
-          setStateBtn(1);
         }
+        setStateBtn(1);
       }
        else {
       const newState = checkboxStates?.map(state => ({

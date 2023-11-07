@@ -37,17 +37,17 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
       .then((response) => {
         setPassDes(response?.data?.data);
         response?.data?.data?.forEach((condition) => {
-          switch (condition.id) {
-            case 1:
+          switch (condition.term) {
+            case "password_length":
               setMinLength(condition.active === 1);
               break;
-            case 2:
+            case "number_symbol":
               setHasNumberSymbolWhitespace(condition.active === 1);
               break;
-            case 3:
+            case "uppercase":
               setHasUppercase(condition.active === 1);
               break;
-            case 4:
+            case "lowercase":
               setHasSpecialCharacter(condition.active === 1);
               break;
             // Add more cases for other conditions if needed
@@ -59,35 +59,34 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
       .catch((error) => {
         console.log(error);
       });
-      
-
-
   };
   useEffect(() => {
     passGet();
   }, []);
+
+  console.log(passDes);
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
     // Use the passDes array to dynamically update the password criteria
     passDes.forEach((condition) => {
-      switch (condition.id) {
-        case 1:
+      switch (condition.term) {
+        case "password_length":
           setMinLength(newPassword.length >= parseInt(condition.value));
           break;
-        case 2:
+        case "number_symbol":
           setHasNumberSymbolWhitespace(
             new RegExp(`[${condition.value}]`).test(newPassword)
           );
           break;
-        case 3:
+        case "uppercase":
           setHasUppercase(
             (newPassword.match(/[A-Z]/g) || []).length >=
               parseInt(condition.value)
           );
           break;
-        case 4:
+        case "lowercase":
           setHasSpecialCharacter(
             (newPassword.match(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/g) || [])
               .length >= parseInt(condition.value)
@@ -258,7 +257,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             <br />
             <div className="create-user-input-wrapper">
               {passDes?.some(
-                (condition) => condition.id === 5 && condition.active === 1
+                (condition) => condition.term === "is_enabled" && condition.active === 1
               ) ? (
                 <input
                   type={showPassword ? "text" : "password"}
@@ -289,13 +288,13 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
           </div>
 
           {passDes?.some(
-          (condition) => condition.id === 5 && condition.active === 1
+          (condition) => condition.term === "is_enabled" && condition.active === 1
         ) ? (
           <div className="pwd-rules">
             <p className="common-fonts pwd-policy">Password policy :</p>
             {/* Minimum 8 characters long */}
             {passDes.map((item) =>
-              item.id === 1 ? (
+              item.term === "password_length" ? (
                 <p key={item.id} className="common-fonts password-text">
                   <div className="password-rules">
                     <div>
@@ -319,7 +318,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
 
             {/* 1 number, symbol, or whitespace character */}
             {passDes.map((item) =>
-              item.id === 2 ? (
+              item.term === "number_symbol" ? (
                 <p key={item.id} className="common-fonts password-text">
             <div className="password-rules">
               <div>
@@ -346,7 +345,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
             
             {/* 1 uppercase letter */}
             {passDes.map((item) =>
-              item.id === 3 ? (
+              item.term === "uppercase" ? (
                 <p key={item.id} className="common-fonts password-text">
             <div className="password-rules">
               <div>
@@ -370,7 +369,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
 
             {/* 1 special character */}
             {passDes.map((item) =>
-              item.id === 4 ? (
+              item.term === "lowercase" ? (
                 <p key={item.id} className="common-fonts password-text">
             <div className="password-rules">
               <div>
@@ -399,7 +398,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
           <div className="submitBtnBox">
             <button className="userCancelBtn">Cancel</button>
             {passDes?.some(
-              (condition) => condition.id === 5 && condition.active === 1
+              (condition) => condition.term === "is_enabled" && condition.active === 1
             ) ? (
               <button className="restore-yes common-fonts" onClick={handleSave}>
                 Save
