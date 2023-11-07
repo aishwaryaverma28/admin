@@ -1055,6 +1055,7 @@ const Deal = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
+        text="deal"
       />
       <ToastContainer />
       {isDeleteOpen && (

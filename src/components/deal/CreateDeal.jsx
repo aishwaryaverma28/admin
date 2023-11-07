@@ -13,7 +13,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
+const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem }) => {
+  console.log(contact);
   const [stages, setStages] = useState([]);
   const [status, setStatus] = useState([]);
   const [stageId, setStageId] = useState([]);
@@ -111,24 +112,23 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
   };
 
   const fetchStages = () => {
-      const body = {org_id:orgId}
+    const body = { org_id: orgId }
 
     axios
       .post(GET_ALL_STAGE + "/deal", body,
         {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-          
-        },
-       }
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+
+          },
+        }
       )
       .then((response) => {
         console.log(response.data.message);
-        console.log("stage");
         const stageNames = response?.data?.message?.map((item) => item.display_name);
         const stageIdArray = response?.data?.message?.map((item) => item.id);
         const statusNames = response?.data?.message?.map((item) => item.stage_name);
-  
+
         if (stageNames && stageNames.length > 0) {
           setStages(stageNames.reverse());
           setStageId(stageIdArray.reverse());
@@ -141,7 +141,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
         console.error(error);
       });
   };
-  
+
   useEffect(() => {
     fetchStages();
     fetchCall();
@@ -164,9 +164,22 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     }
   }, [selectedItem]);
 
+  const data = () => {
+    setLeadData({
+      organization: contact?.name,
+      mobile: contact?.phone,
+      email: contact?.email,
+    });
+  }
+  useEffect(() => {
+    if (contact) {
+      data();
+    }
+  }, [contact]);
+
   const fetchLabelData = async () => {
     const body = {
-      org_id:orgId
+      org_id: orgId
     }
     try {
       const response = await axios.post(GET_LABEL, body, {
@@ -215,7 +228,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
     }
 
     setLeadData((prevState) => ({ ...prevState, [name]: parsedValue }));
-   if (name === "company_location") {
+    if (name === "company_location") {
       setLoanDetails((prevState) => ({
         ...prevState,
         location_of_company: parsedValue,
@@ -240,7 +253,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, selectedItem }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-console.log(loanDetails);
+    console.log(loanDetails);
     // Filter out empty or null values from loanDetails
     const filteredLoanDetails = {};
     for (const key in loanDetails) {
@@ -248,7 +261,7 @@ console.log(loanDetails);
         filteredLoanDetails[key] = loanDetails[key];
       }
     }
-console.log(filteredLoanDetails);
+    console.log(filteredLoanDetails);
     // Find objects in the loan array that match all key-value pairs in filteredLoanDetails
     const matchingLoans = loan.filter((loanItem) => {
       // Check if every key-value pair in filteredLoanDetails exists in loanItem
@@ -261,8 +274,8 @@ console.log(filteredLoanDetails);
     const loanOfferedByValues = matchingLoans.map(
       (loanItem) => loanItem.loan_offered_by
     );
-console.log(loanOfferedByValues);
-    const updatedForm = { ...leadData, value: leadData.loan_amount, org_id:orgId };
+    console.log(loanOfferedByValues);
+    const updatedForm = { ...leadData, value: leadData.loan_amount, org_id: orgId };
     axios
       .post(ADD_DEAL, updatedForm, {
         headers: {
@@ -285,33 +298,33 @@ console.log(loanOfferedByValues);
               autoClose: 3000,
             }
           );
+          setLeadData({
+            probability: "",
+            deal_name: "",
+            organization: "",
+            mobile: "",
+            email: "",
+            // value: 0,
+            label_id: 36,
+            closure_date: "",
+            stage_id: 1,
+            pipeline_id: 1,
+            lead_id: 0,
+            age_of_business: null,
+            company_type: "",
+            industry_type: "",
+            turnover: null,
+            company_location: "",
+            duration: "",
+            individual_or_company: "",
+            loan_amount: null,
+            loan_type: "",
+          });
         }
-
-        setLeadData({
-          probability: "",
-          deal_name: "",
-          organization: "",
-          mobile: "",
-          email: "",
-          // value: 0,
-          label_id: 36,
-          closure_date: "",
-          stage_id: 1,
-          pipeline_id: 1,
-          lead_id: 0,
-          age_of_business: null,
-          company_type: "",
-          industry_type: "",
-          turnover: null,
-          company_location: "",
-          duration: "",
-          individual_or_company: "",
-          loan_amount: null,
-          loan_type: "",
-        });
+        data();
         // setName("");
         onLeadAdded();
-        navigate("/lp/deals");
+        // navigate("/lp/deals");
       })
       .catch((error) => {
         console.log(error);
@@ -319,7 +332,7 @@ console.log(loanOfferedByValues);
   };
 
   const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("deals"))
+    .filter((item) => item?.entity?.includes(text))
     .map((item) => ({
       id: item?.id,
       name: item?.name,
@@ -371,8 +384,8 @@ console.log(loanOfferedByValues);
                   type="text"
                   className="lead-input"
                   placeholder="Please Enter Name"
-                  // onChange={handleChangeName}
-                  // value={name} // Add value prop for controlled input
+                // onChange={handleChangeName}
+                // value={name} // Add value prop for controlled input
                 />
                 <label className="lead-label" htmlFor="value">
                   Loan Amount
@@ -436,7 +449,7 @@ console.log(loanOfferedByValues);
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                <option value="">Select Stages</option>
+                  <option value="">Select Stages</option>
                   {stages?.map((item, index) => {
                     return (
                       <option key={index} value={stageId[index]}>
@@ -530,7 +543,7 @@ console.log(loanOfferedByValues);
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                <option value="">Select Label</option>
+                  <option value="">Select Label</option>
                   {mergedLabels.map((item) => {
                     return (
                       <option key={item?.id} value={item?.id}>

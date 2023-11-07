@@ -222,7 +222,7 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
 
   useEffect(() => {
     handleGetEmail();
-  }, [allEmails]);
+  }, []);
 
   useEffect(() => {
     fetchLead();

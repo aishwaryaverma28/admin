@@ -406,60 +406,60 @@ const [fStageId, setFStageId] = useState(0);
   };
 
   const filterDealData = deals?.filter((item) => {
-    const dealName = `${item?.lead_name}`.toLowerCase() || "";
-    const dealValue = `${item?.value}`.toLowerCase() || "";
-    const dealValue2 = `$${item?.value}`.toLowerCase() || "";
-    const ownerFirstName = `${item?.ownerf_name}`.toLowerCase() || "";
-    const ownerLastName = `${item?.ownerl_name}`.toLowerCase() || "";
+    const dealName = `${item?.lead_name}`?.toLowerCase() || "";
+    const dealValue = `${item?.value}`?.toLowerCase() || "";
+    const dealValue2 = `$${item?.value}`?.toLowerCase() || "";
+    const ownerFirstName = `${item?.ownerf_name}`?.toLowerCase() || "";
+    const ownerLastName = `${item?.ownerl_name}`?.toLowerCase() || "";
     const ownerFullName =
-      `${item?.ownerf_name} ${item?.ownerl_name}`.toLowerCase() || "";
+      `${item?.ownerf_name} ${item?.ownerl_name}`?.toLowerCase() || "";
     const closureDate =
       `${item?.closure_date}`.split("T")[0].toLowerCase() || "";
     const labelName = `${item?.label_name}`.toLowerCase() || "";
     const searchDeal = searchQuery.toLowerCase();
 
     const matchQuery =
-      dealName.includes(searchDeal) ||
-      dealValue.includes(searchDeal) ||
-      dealValue2.includes(searchDeal) ||
-      ownerFirstName.includes(searchDeal) ||
-      ownerLastName.includes(searchDeal) ||
-      ownerFullName.includes(searchDeal) ||
-      closureDate.includes(searchDeal) ||
-      labelName.includes(searchDeal);
+      dealName?.includes(searchDeal) ||
+      dealValue?.includes(searchDeal) ||
+      dealValue2?.includes(searchDeal) ||
+      ownerFirstName?.includes(searchDeal) ||
+      ownerLastName?.includes(searchDeal) ||
+      ownerFullName?.includes(searchDeal) ||
+      closureDate?.includes(searchDeal) ||
+      labelName?.includes(searchDeal);
     return matchQuery;
   });
 
   const sortData = (data, option, order) => {
     switch (option) {
       case "Amount":
-        return data?.slice().sort((a, b) => {
-          const result = a.value - b.value;
+        return data?.slice()?.sort((a, b) => {
+          const result = a?.value - b?.value;
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "LeadName":
-        return data?.slice().sort((a, b) => {
-          const result = a.lead_name
-            .toLowerCase()
-            .localeCompare(b.lead_name.toLowerCase());
+        return data?.slice()?.sort((a, b) => {
+          const result = a?.lead_name
+            ?.toLowerCase()
+            .localeCompare(b?.lead_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
-        return data?.slice().sort((a, b) => {
-          const result = a.label_name
-            .toLowerCase()
-            .localeCompare(b.label_name.toLowerCase());
+        return data?.slice()?.sort((a, b) => {
+          const result = a?.label_name
+            ?.toLowerCase()
+            .localeCompare(b?.label_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
-        return data?.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a.ownerf_name
-            .toLowerCase()
-            .localeCompare(b.lead_name.toLowerCase());
+            ?.toLowerCase()
+            ?.localeCompare(b?.lead_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
-        return data?.slice().sort(() => {
+        return data?.slice()?.sort(() => {
           return order === "asc" ? 1 : -1; // Toggle sorting order
         });
     }
@@ -803,7 +803,7 @@ const [fStageId, setFStageId] = useState(0);
           </div>
           <div className="right-side--btns">
             <p>
-              sub total: <img className="pound" src={pound} />
+              sub total: <img className="pound" src={pound} alt="pound"/>
               {totalValue.toLocaleString("en-IN")}
             </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
@@ -860,9 +860,9 @@ const [fStageId, setFStageId] = useState(0);
                     </li> */}
                     <li onClick={handleDeletePopUpOpen}>Mass Delete</li>
                     <li onClick={handleMassUpdate}>Mass Update</li>
-                    <li>Mass Convert</li>
-                    <li>Drafts</li>
-                    <li>Mass Email</li>
+                    {/* <li>Mass Convert</li> */}
+                    {/* <li>Drafts</li> */}
+                    {/* <li>Mass Email</li> */}
                     <li onClick={handleImportClick}>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Leads
@@ -1013,7 +1013,7 @@ const [fStageId, setFStageId] = useState(0);
               <div className="bottom-fixed">
                 <p>
                   {" "}
-                  Total Value: <img className="pound" src={pound} />
+                  Total Value: <img className="pound" src={pound} alt="pound"/>
                   {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
                 </p>
               </div>
@@ -1026,7 +1026,7 @@ const [fStageId, setFStageId] = useState(0);
         isOpen={isModalOpen}
         onClose={closeModal}
         onLeadAdded={fetchLeadsData}
-        mergedLabels={mergedLabels}
+        text="lead"
       />
       <ToastContainer />
       {isDelete && (

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { ADD_LEAD, getDecryptedToken, GET_ALL_STAGE } from "../utils/Constants";
+import { ADD_LEAD, getDecryptedToken, GET_ALL_STAGE, GET_LABEL } from "../utils/Constants";
 import { countryPhoneCodes, worldCurrencies } from "../utils/CodeCurrency";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
+const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) => {
   const orgId = localStorage.getItem('org_id');
   const [name, setName] = useState("");
   const [fname, setfName] = useState("");
@@ -20,7 +20,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [address, setAddress] = useState([]);
   const [adressInput, setAddressInput] = useState("");
-
+  const [labelData, setLabelData] = useState([]);
   const [leadData, setLeadData] = useState({
     position: "",
     lead_name: "",
@@ -34,10 +34,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     label_id: 0,
     source: "",
     stage_id: 1,
-    pin:"",
-    address1:"",
-    address2:"",
-    org_id:orgId
+    pin: "",
+    address1: "",
+    address2: "",
+    org_id: orgId
   });
 
   const resetForm = () => {
@@ -54,10 +54,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       label_id: 0,
       source: "",
       stage_id: 1,
-      pin:"",
-      address1:"",
-      address2:"",
-      org_id:orgId
+      pin: "",
+      address1: "",
+      address2: "",
+      org_id: orgId
     });
     setName("");
     setfName("");
@@ -65,6 +65,35 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     setAddressInput("");
   };
   const searchResultRef = useRef(null);
+  const data = () => {
+    setLeadData({
+      company_name: contact?.name,
+      type: contact?.industry,
+      phone: contact?.phone,
+      email: contact?.email,
+      pin: contact?.postcode,
+      address1: contact?.address1,
+      address2: contact?.address2,
+    });
+  }
+  useEffect(() => {
+    if (contact) {
+      data();
+    }
+  }, [contact]);
+  const nameUpdate = () => {
+    setName(pplname.name);
+    if (pplname.name.length >= 1) {
+      setfName(pplname.name[0]);
+      setlName(pplname.name[pplname.name.length - 1]);
+    }
+  }
+  useEffect(() => {
+    if (pplname) {
+      nameUpdate();
+    }
+  }, [pplname]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -95,6 +124,36 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
   };
 
+  const fetchLabelData = async () => {
+    const body = {
+      org_id: orgId
+    }
+    try {
+      const response = await axios.post(GET_LABEL, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      });
+      if (response.data.status === 1) {
+        setLabelData(response.data.data);
+      } else {
+        if (response.data.message === "Token has expired") {
+          alert(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  const mergedLabels = labelData
+    .filter((item) => item?.entity?.includes(text))
+    .map((item) => ({
+      id: item?.id,
+      name: item?.name,
+      colour_code: item?.colour_code,
+    }));
 
 
   const handleAdressClick = (address) => {
@@ -107,8 +166,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
 
   const fetchStages = () => {
-    const body ={
-      org_id:orgId
+    const body = {
+      org_id: orgId
     }
     axios
       .post(GET_ALL_STAGE + "/lead", body, {
@@ -139,6 +198,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
 
   useEffect(() => {
     fetchStages();
+    fetchLabelData();
   }, []);
 
   if (!isOpen) {
@@ -151,9 +211,9 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
     axios
       .get(
         "https://api.os.uk/search/places/v1/postcode?postcode=" +
-          code.toUpperCase() +
-          "&key=" +
-          apiKey
+        code.toUpperCase() +
+        "&key=" +
+        apiKey
       )
       .then((response) => {
         // var response = JSON.stringify(response.data, null, 2);
@@ -304,11 +364,11 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       "ZE",
     ];
 
-    
+
     const query = value;
     setSearchQuery(query);
     setShowSearchResult(query?.length > 0);
-     
+
     setLeadData((prevState) => ({ ...prevState, [name]: value }));
     setIsDisable(false);
     if (name === "pin" && value?.length > 1 && value?.length <= 4) {
@@ -333,8 +393,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
       ...leadData,
       first_name: fname,
       last_name: lname,
-      status:"New",
-      org_id:orgId
+      status: "New",
+      org_id: orgId
     };
 
     axios
@@ -344,42 +404,43 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
         },
       })
       .then((response) => {
-        if(response.data.status===0){
+        if (response.data.status === 0) {
           toast.error(
-               "Please check all fields",
+            "Please check all fields",
             {
               position: "top-center",
               autoClose: 3000,
             }
           );
-         }else{
+        } else {
           toast.success("Lead data added successfully", {
             position: "top-center",
             autoClose: 2000,
           });
-         }
-
-        setLeadData({
-          position: "",
-          lead_name: "",
-          company_name: "",
-          registration_no: "",
-          employees: "",
-          type: "",
-          phone: "",
-          email: "",
-          value: 0,
-          label_id: 0,
-          source: "",
-          stage_id: 1,
-          pin:"",
-          address1:"",
-          address2:"",
-          org_id:orgId
-        });
-        setName("");
-        setAddressInput("");
-        onLeadAdded(); // Call the onLeadAdded function from props
+          setLeadData({
+            position: "",
+            lead_name: "",
+            company_name: "",
+            registration_no: "",
+            employees: "",
+            type: "",
+            phone: "",
+            email: "",
+            value: 0,
+            label_id: 0,
+            source: "",
+            stage_id: 1,
+            pin: "",
+            address1: "",
+            address2: "",
+            org_id: orgId
+          });
+          setName("");
+          setAddressInput("");
+        }
+        data();
+nameUpdate();
+        onLeadAdded();
       })
       .catch((error) => {
         console.log(error);
@@ -419,30 +480,30 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   Postal Code
                 </label>
                 <div className="lead-new-fix">
-                <input
-                  id="pin"
-                  type="text"
-                  name="pin"
-                  className="lead-input lead-pin-input"
-                  onChange={handleChange}
-                  autoComplete="off"
-                  value={leadData?.pin}
-                />
-                {showSearchResult && address?.length > 1 && (
-                <div className="search_result company-address-result lead-address-result" ref={searchResultRef}>
-                  {address?.map((item) => (
-                    <>
-                      <p
-                        className="common-fonts searchTitle"
-                        key={item}
-                        onClick={() => handleAdressClick(item)}
-                      >
-                        {item}
-                      </p>
-                    </>
-                  ))}
-                </div>
-              )}
+                  <input
+                    id="pin"
+                    type="text"
+                    name="pin"
+                    className="lead-input lead-pin-input"
+                    onChange={handleChange}
+                    autoComplete="off"
+                    value={leadData?.pin}
+                  />
+                  {showSearchResult && address?.length > 1 && (
+                    <div className="search_result company-address-result lead-address-result" ref={searchResultRef}>
+                      {address?.map((item) => (
+                        <>
+                          <p
+                            className="common-fonts searchTitle"
+                            key={item}
+                            onClick={() => handleAdressClick(item)}
+                          >
+                            {item}
+                          </p>
+                        </>
+                      ))}
+                    </div>
+                  )}
 
                 </div>
 
@@ -472,6 +533,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                 />
                 <label className="lead-label" htmlFor="name">
                   Lead Owner
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="name"
@@ -517,7 +579,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                     value={leadData.value} // Add value prop for controlled input
                   />
                   <select name="" id="" className="currency-value">
-                    {worldCurrencies.map((currency, index) => (
+                    {worldCurrencies?.map((currency, index) => (
                       <option key={index} value={currency.code}>
                         {`${currency.code} ${currency.currency}`}
                       </option>
@@ -606,7 +668,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   type="text"
                   name=""
                   className="lead-input"
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
@@ -617,8 +679,8 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                <option value="">Select Label</option>
-                  {mergedLabels.map((item) => {
+                  <option value="">Select Label</option>
+                  {mergedLabels?.map((item) => {
                     return (
                       <option key={item?.id} value={item?.id}>
                         {item?.name}
@@ -636,7 +698,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, mergedLabels }) => {
                   className="lead-priority"
                   onChange={handleChange}
                 >
-                <option value="">Select Stages</option>
+                  <option value="">Select Stages</option>
                   {stages?.map((item, index) => {
                     return (
                       <option key={index} value={stageId[index]}>

@@ -21,10 +21,13 @@ import {
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CreateLead from "../lead/CreateLead.jsx";
+import CreateDeal from "../deal/CreateDeal.jsx";
 
 const CompanyUpdate = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
+  const orgId = localStorage.getItem('org_id');
   const [notes, setNotes] = useState();
   const [isDisabled, setIsDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -50,10 +53,25 @@ const CompanyUpdate = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("notes");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalDealOpen, setIsModalDealOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const openDealModal = () => {
+    setIsModalDealOpen(true);
+  };
+
+  const closeDealModal = () => {
+    setIsModalDealOpen(false);
+  };
   const userAdded = () => {
     axios
-      .get(GET_ACTIVE_TEAM_MEM, {
+      .post(GET_ACTIVE_TEAM_MEM,{orgId: orgId}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -607,7 +625,7 @@ const CompanyUpdate = () => {
               )}
               Leads (2)
             </p>
-            <p className="addProduct cpu-add">
+            <p className="addProduct cpu-add" onClick={openModal}>
               <i class="fa-sharp fa-solid fa-plus"></i>Add
             </p>
           </div>
@@ -666,7 +684,7 @@ const CompanyUpdate = () => {
               )}
               Deals (2)
             </p>
-            <p className="addProduct cpu-add">
+            <p className="addProduct cpu-add" onClick={openDealModal}>
               <i class="fa-sharp fa-solid fa-plus"></i>Add
             </p>
           </div>
@@ -790,6 +808,17 @@ const CompanyUpdate = () => {
           )}
         </div>
       </div>
+      <CreateLead
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        pplname={peopleDetails}
+        text="contact"        
+      />
+      <CreateDeal
+        isOpen={isModalDealOpen}
+        onClose={closeDealModal}
+        text="contact"        
+      />
       <ToastContainer />
     </div>
   );
