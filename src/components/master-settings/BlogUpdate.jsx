@@ -487,6 +487,7 @@ const BlogUpdate = () => {
         });
     }
   };
+  
   const submitImage3 = (file) => {
     const selectedImage = file;
     if (selectedImage) {

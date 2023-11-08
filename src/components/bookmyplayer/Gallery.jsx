@@ -37,7 +37,8 @@ const Gallery = () => {
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
   const [progress, setProgress]= useState(null);
   const [progressArray, setProgressArray] = useState([]);
-
+  const [alertShown, setAlertShown] = useState(false);
+  const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -85,13 +86,26 @@ const Gallery = () => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split('.');
+    if (nameParts.length > 1) {
+        const namePart = nameParts.slice(0, -1).join('.');
+        const processedName = namePart.replace(/[^\w-]/g, '-');
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, '-');
+    }
+};
 
   const handleFileChange = (event) => {
     const selectedImage = event.target.files[0];
-    submitImage(event.target.files[0]);
     if (selectedImage) {
-      setNewName(selectedImage.name); // Set the file name
-      setSelectedFile(selectedImage); // Set the selected file
+      if (!allowedImageTypes.includes(selectedImage.type)) {
+        alert("Please choose a valid image file (JPEG, PNG, GIF).");
+        return;
+      }
+      submitImage(event.target.files[0]);      
+      setNewName(selectedImage.name);
     }
   };
 
@@ -99,6 +113,10 @@ const Gallery = () => {
     setIsUploading(true);
     const selectedImage = file;
     if (selectedImage) {
+      if (selectedImage.size > 2 * 1024 * 1024) {
+        alert("Image size should be less than 2MB. Please choose a smaller image.");
+        return;
+      }
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
@@ -116,17 +134,19 @@ const Gallery = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setFileName(data.secure_url);
-          handleSubmit(data.secure_url)
+          setSelectedFile(selectedImage);
+          setFileName(processImageName(selectedImage.name));
+          handleSubmit(processImageName(selectedImage.name));
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => {
-          setIsUploading(false); // Upload completed, hide the loader
+          setIsUploading(false);
         });
     }
   }
+  
   const handleButtonClick2 = () => {
     fileInputRef2.current.click();
   };
@@ -422,32 +442,33 @@ console.log(videoUrls);
                       <span className="common-fonts upload-file-name">Uploading...</span>
                     ) : (
                       <span className="common-fonts upload-file-name">
-                        {newName
-                          ? newName
-                          : academyData?.banner?.toString()?.split("/")?.pop()}
+                        {fileName
+                          ? fileName
+                          : academyData?.banner}
                       </span>
                     )}
                   </span>
                 </div>
 
                 {selectedFile && (
-                  <div className="bmp-image-preview-2">
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt=""
-                      className="bmp-preview-image"
-                    />
-                  </div>
-                )}
-                {!selectedFile && (
-                  <div className="bmp-image-preview-2">
-                    <img
-                      src={academyData?.banner}
-                      alt=""
-                      className="bmp-preview-image"
-                    />
-                  </div>
-                )}
+                <div className="bmp-image-preview">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+
+              {!selectedFile && (
+                <div className="bmp-image-preview">
+                  <img
+                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.banner}`}
+                    alt=""
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
               </div>
             </div>
           </div>
@@ -551,7 +572,7 @@ console.log(videoUrls);
                 <div className="bmp-img-top-icon">
                   <div className="bmp-img-name">
                     <div className="bmp-video">
-                      <img src={Video} alt="" />
+                      <img src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${video}`} alt="" />
                     </div>
                     {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
                   </div>
@@ -583,8 +604,8 @@ console.log(videoUrls);
 
                     <div className="bmp-video">
                       <img
-                        src={photo}
-                        alt="Selected Preview"
+                      src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                      alt="Selected Preview"
                       />
                     </div>
 

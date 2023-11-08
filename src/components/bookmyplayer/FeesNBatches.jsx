@@ -32,7 +32,7 @@ const [batchObject, setBatchObject] = useState({});
   const [openBatch, setOpenBatch] = useState(0);
   const [progress, setProgress]= useState(null);
   const [progressArray, setProgressArray] = useState([]);
-
+  const allowedImageTypes = ["application/pdf"];
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + id,
@@ -85,14 +85,35 @@ const [batchObject, setBatchObject] = useState({});
     event.preventDefault();
     fileInputRef.current.click();
   };
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split('.');
+    if (nameParts.length > 1) {
+        const namePart = nameParts.slice(0, -1).join('.');
+        const processedName = namePart.replace(/[^\w-]/g, '-');
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, '-');
+    }
+};
 
   const handleFileChange = (event) => {
+    const selectedImage = event.target.files[0];
+    if (selectedImage) {
+      if (!allowedImageTypes.includes(selectedImage.type)) {
+        alert("Please choose a valid PDF file to upload.");
+        return;
+      }
     submitImage(event.target.files[0]);
+    }
   };
   const submitImage = (file) => {
     const selectedImage = file;
     if (selectedImage) {
-      const folder = "bookmyplayer/academy/" + id;
+      if (selectedImage.size > 5 * 1024 * 1024) {
+        alert("PDF size should be less than 5MB. Please choose a smaller PDF.");
+        return;
+      }
+           const folder = "bookmyplayer/academy/" + id;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -108,8 +129,8 @@ const [batchObject, setBatchObject] = useState({});
       })
         .then((res) => res.json())
         .then((data) => {
-          setFileName(data.secure_url);
-          handleSubmit(data.secure_url)
+          setFileName(processImageName(selectedImage.name));
+          handleSubmit(processImageName(selectedImage.name));
         })
         .catch((err) => {
           console.log(err);

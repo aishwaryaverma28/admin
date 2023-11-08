@@ -35,6 +35,7 @@ const BmpOverview = () => {
   const [number, setNumber] = useState(0);
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
+  const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const languages = [
     { value: 'Hindi', label: 'Hindi' },
     { value: 'English', label: 'English' },
@@ -133,20 +134,35 @@ const BmpOverview = () => {
     createFolder();
     academyDetails();
   }, []);
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split('.');
+    if (nameParts.length > 1) {
+        const namePart = nameParts.slice(0, -1).join('.');
+        const processedName = namePart.replace(/[^\w-]/g, '-');
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, '-');
+    }
+};
 
   const handleFileChange = (event) => {
     setStateBtn(1);
     const selectedImage = event.target.files[0];
-    submitImage(event.target.files[0]);
-    console.log(selectedImage);
     if (selectedImage) {
-      setFileName2(selectedImage.name);
-      setSelectedFile(selectedImage);
+      if (!allowedImageTypes.includes(selectedImage.type)) {
+        alert("Please choose a valid image file (JPEG, PNG, GIF).");
+        return;
+      }
+      submitImage(event.target.files[0]);
     }
   };
   const submitImage = (file) => {
     const selectedImage = file;
     if (selectedImage) {
+      if (selectedImage.size > 2 * 1024 * 1024) {
+        alert("Image size should be less than 2MB. Please choose a smaller image.");
+        return;
+      }
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
@@ -164,8 +180,9 @@ const BmpOverview = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.secure_url);
-          setFileName(data.secure_url);
+          console.log(selectedImage);
+          setSelectedFile(selectedImage);
+          setFileName(processImageName(selectedImage.name));
         })
         .catch((err) => {
           console.log(err);
@@ -644,9 +661,9 @@ const BmpOverview = () => {
                     <span className="common-fonts upload-file-name">Uploading...</span>
                   ) : (
                     <span className="common-fonts upload-file-name">
-                      {fileName2
-                        ? fileName2
-                        : academyData?.logo?.toString()?.split("/")?.pop()}
+                      {fileName
+                        ? fileName
+                        : academyData?.logo}
                       { }
                     </span>
                   )}
@@ -666,7 +683,7 @@ const BmpOverview = () => {
               {!selectedFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={academyData?.logo}
+                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.logo}`}
                     alt=""
                     className="bmp-preview-image"
                   />
