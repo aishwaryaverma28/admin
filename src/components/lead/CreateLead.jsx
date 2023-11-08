@@ -29,7 +29,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) =>
     employees: "",
     type: "",
     phone: "",
-    email: "",
+    email: null,
     value: 0,
     label_id: 0,
     source: "",
@@ -49,7 +49,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) =>
       employees: "",
       type: "",
       phone: "",
-      email: "",
+      email: null,
       value: 0,
       label_id: 0,
       source: "",
@@ -425,7 +425,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) =>
             employees: "",
             type: "",
             phone: "",
-            email: "",
+            email: null,
             value: 0,
             label_id: 0,
             source: "",
@@ -437,9 +437,10 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) =>
           });
           setName("");
           setAddressInput("");
+          onLeadAdded();
         }
         data();
-nameUpdate();
+        nameUpdate();
         onLeadAdded();
       })
       .catch((error) => {
@@ -466,7 +467,8 @@ nameUpdate();
                 </div> */}
 
                 <label htmlFor="lead_name" className="lead-label">
-                  Title <span className="common-fonts redAlert"> *</span>
+                  Title 
+                  <span className="common-fonts redAlert"> *</span>
                 </label>
                 <input
                   id="lead_name"
@@ -521,7 +523,7 @@ nameUpdate();
                 />
                 <label className="lead-label" htmlFor="company_name">
                   organization
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="company_name"
@@ -567,7 +569,7 @@ nameUpdate();
                 />
                 <label className="lead-label" htmlFor="value">
                   Value
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <div className="currency-section">
                   <input
@@ -615,7 +617,7 @@ nameUpdate();
 
                 <label className="lead-label" htmlFor="email">
                   Email
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span>/ */}
                 </label>
                 <input
                   id="email"
@@ -638,7 +640,7 @@ nameUpdate();
                 />
                 <label className="lead-label" htmlFor="employees">
                   Employees
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="employees"
@@ -650,7 +652,7 @@ nameUpdate();
                 />
                 <label className="lead-label" htmlFor="registration_no">
                   Registration No
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="registration_no"

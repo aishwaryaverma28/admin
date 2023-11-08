@@ -366,7 +366,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
                 />
                 <label className="lead-label" htmlFor="organization">
                   organization
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="organization"
@@ -389,7 +389,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
                 />
                 <label className="lead-label" htmlFor="value">
                   Loan Amount
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <div className="currency-section">
                   <input
@@ -410,7 +410,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
                 </div>
                 <label className="lead-label" htmlFor="probability">
                   Probability
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="probability"
@@ -429,7 +429,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
                 </select> */}
                 <label className="lead-label" htmlFor="closure_date">
                   Expected Closing Date
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="closure_date"
@@ -508,7 +508,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
               <div className="form-section-2">
                 <label className="lead-label" htmlFor="mobile">
                   Phone Number
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <div className="phone-input-section">
                   <input
@@ -523,7 +523,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
 
                 <label className="lead-label" htmlFor="email">
                   Email
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <input
                   id="email"
@@ -535,7 +535,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
                 />
                 <label className="lead-label" htmlFor="label_id">
                   Lables
-                  <span className="common-fonts redAlert"> *</span>
+                  {/* <span className="common-fonts redAlert"> *</span> */}
                 </label>
                 <select
                   name="label_id"
