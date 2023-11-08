@@ -154,7 +154,7 @@ const DealsColn = ({
               </p>
             </div>
             <div className="lead-value">
-            <img className="pound" src={pound}/>{object.value.toLocaleString("en-IN")}
+            <img className="pound" src={pound}/>{object?.value?.toLocaleString("en-IN")}
             </div>
             <div className="contact-details">
               <div className="mail">

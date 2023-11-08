@@ -1240,7 +1240,7 @@ const DealUpdate = () => {
                         <span>
                           <input
                             type="date"
-                            value={dealDetails?.closure_date.split("T")[0]}
+                            value={dealDetails?.closure_date?.split("T")[0]}
                             name="closure_date"
                             onChange={handleInputChange}
                             style={
