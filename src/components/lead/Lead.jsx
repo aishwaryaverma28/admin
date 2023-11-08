@@ -804,7 +804,7 @@ const [fStageId, setFStageId] = useState(0);
           <div className="right-side--btns">
             <p>
               sub total: <img className="pound" src={pound} alt="pound"/>
-              {totalValue.toLocaleString("en-IN")}
+              {totalValue?.toLocaleString("en-IN")}
             </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Lead

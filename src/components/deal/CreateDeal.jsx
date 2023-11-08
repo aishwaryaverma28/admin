@@ -320,6 +320,7 @@ const CreateDeal = ({ isOpen, onClose, onLeadAdded, text, contact, selectedItem 
             loan_amount: null,
             loan_type: "",
           });
+          onClose();
         }
         data();
         // setName("");
