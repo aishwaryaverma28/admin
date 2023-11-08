@@ -438,6 +438,7 @@ const CreateLead = ({ isOpen, onClose, onLeadAdded, pplname, text, contact }) =>
           setName("");
           setAddressInput("");
           onLeadAdded();
+          onClose();
         }
         data();
         nameUpdate();
