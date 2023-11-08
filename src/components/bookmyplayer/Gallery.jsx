@@ -38,7 +38,10 @@ const Gallery = () => {
   const [progress, setProgress]= useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const [alertShown, setAlertShown] = useState(false);
+  const [alertVideoShown, setAlertVideoShown] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+  const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime", "video/webm", "video/ogg"];
+
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -53,10 +56,10 @@ const Gallery = () => {
           setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
           }
         if (response?.data?.data[0]?.photos !== "" && response?.data?.data[0]?.photos !== null) {
-          setPhotoUrls(response?.data?.data[0]?.photos?.split("$@$@$")?.reverse())
+          setPhotoUrls(response?.data?.data[0]?.photos?.split(",")?.reverse())
         }
         if (response?.data?.data[0].videos !== "" && response?.data?.data[0].videos !== null) {
-          setVideoUrls(response.data.data[0].videos?.split("$@$@$").reverse())
+          setVideoUrls(response.data.data[0].videos?.split(",").reverse())
         }
       })
       .catch((error) => {
@@ -147,13 +150,36 @@ const Gallery = () => {
     }
   }
   
+  const showAlertOnce = (message) => {
+    if (!alertVideoShown) {
+      alert(message);
+      setAlertVideoShown(true);
+    }
+  };
+
   const handleButtonClick2 = () => {
     fileInputRef2.current.click();
+    setAlertVideoShown(false);
+    setAlertShown(false);
   };
   const handleFileChange2 = (event) => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      if (!allowedFileTypes.includes(file.type)) {
+        if (!alertShown) {
+          alert("Please choose a valid video file.");
+          setAlertShown(true);
+        }
+        return;
+      }
+      else if (!allowedFileTypes.includes(file.type)) {
+        if (!alertShown) {
+          alert("Please choose a valid image file.");
+          setAlertShown(true);
+        }
+        return;
+      }
       if (file.type.startsWith("image/")) {
         submitImage2(file);
       } else if (file.type.startsWith("video/")) {
@@ -161,13 +187,19 @@ const Gallery = () => {
       }
     }
   };
-console.log(photoUrls);
-console.log(videoUrls);
+  
+// console.log(photoUrls);
+// console.log(videoUrls);
 
   const submitImage2 = (file) => {
     setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
+      if (selectedImage.size > 10 * 1024 * 1024) {
+        showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
+        setIsUploadingMulti(false);
+        return;
+      }
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
@@ -185,8 +217,8 @@ console.log(videoUrls);
       })
         .then((res) => res.json())
         .then((data) => {
-          setFileName2(data.secure_url);
-          const imageUrl = data.secure_url;
+          setFileName2(processImageName(selectedImage.name));
+          const imageUrl = processImageName(selectedImage.name);
           if (data.secure_url) {
             photoUrls.push(imageUrl)
             setPhotoUrls(photoUrls);
@@ -206,6 +238,11 @@ console.log(videoUrls);
     setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
+      if (selectedImage.size > 10 * 1024 * 1024) {
+        showAlertOnce("Video size should be less than 10MB. Please choose a smaller video.");
+        setIsUploadingMulti(false);
+        return;
+      }
       const folder = "bookmyplayer/academy/" + academyId;
       const uniqueFileName = `${folder}/${selectedImage.name.replace(
         /\.[^/.]+$/,
@@ -223,8 +260,8 @@ console.log(videoUrls);
       })
         .then((res) => res.json())
         .then((data) => {
-          setFileName2(data.secure_url);
-          const imageUrl = data.secure_url;
+          setFileName2(processImageName(selectedImage.name));
+          const imageUrl = processImageName(selectedImage.name);
           if (data.secure_url) {
             videoUrls.push(imageUrl)
             setVideoUrls(videoUrls);
@@ -287,8 +324,8 @@ console.log(videoUrls);
     }    
     const combinedProgress = progressArray.join(",");    
     let body = {
-        photos: photoUrls.join("$@$@$"),
-        videos: videoUrls.join("$@$@$"),
+        photos: photoUrls.join(","),
+        videos: videoUrls.join(","),
         completion_percentage: combinedProgress,
       }
     
@@ -310,6 +347,7 @@ console.log(videoUrls);
             autoClose: 2000,
           });
         }
+        setAlertVideoShown(false);
       })
       .catch((error) => {
         console.log(error);
@@ -344,7 +382,7 @@ console.log(videoUrls);
     }
   };
   const updateDataAndCallAPI = (updatedNameArray) => {
-    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
+    const updatedNameString = updatedNameArray.reverse().join(',');
     axios
       .put(UPDATE_ACADEMY + academyId, {
         photos: updatedNameString,
@@ -370,7 +408,7 @@ console.log(videoUrls);
     }
   };
   const updateData = (updatedNameArray) => {
-    const updatedNameString = updatedNameArray.reverse().join('$@$@$');
+    const updatedNameString = updatedNameArray.reverse().join(',');
     axios
       .put(UPDATE_ACADEMY + academyId, {
         videos: updatedNameString,
@@ -572,7 +610,7 @@ console.log(videoUrls);
                 <div className="bmp-img-top-icon">
                   <div className="bmp-img-name">
                     <div className="bmp-video">
-                      <img src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${video}`} alt="" />
+                      <img src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`} alt="" />
                     </div>
                     {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
                   </div>
@@ -582,7 +620,7 @@ console.log(videoUrls);
                 </div>
                 <div className="bmp-player-img">
                   <video width="270" height="140" controls>
-                    <source src={video} type="video/mp4" />
+                    <source src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`} type="video/mp4" />
                   </video>
                 </div>
               </div>
@@ -617,7 +655,7 @@ console.log(videoUrls);
 
                 </div>
                 <img
-                  src={photo}
+                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                   alt="Selected Preview"
                   key={index}
                 />
