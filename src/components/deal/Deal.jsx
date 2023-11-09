@@ -141,21 +141,21 @@ const Deal = () => {
       })
       .then((response) => {
         const ids = response?.data?.message?.map((item) => item.id);
-        if (ids && ids.length > 0) {
+        if (ids && ids?.length > 0) {
           const minId = Math.min(...ids);
           setFStageId(minId);
         }
         const stageNames = response?.data?.message?.map(
-          (item) => item.display_name
+          (item) => item?.display_name
         );
-        if (stageNames && stageNames.length > 0) {
-          setStages(stageNames.reverse());
+        if (stageNames && stageNames?.length > 0) {
+          setStages(stageNames?.reverse());
         }
         const statusNames = response?.data?.message?.map(
-          (item) => item.stage_name
+          (item) => item?.stage_name
         );
-        if (statusNames && statusNames.length > 0) {
-          setStatus(statusNames.reverse());
+        if (statusNames && statusNames?.length > 0) {
+          setStatus(statusNames?.reverse());
         }
       })
       .catch((error) => {
@@ -172,7 +172,7 @@ const Deal = () => {
       })
       .then((response) => {
         const filteredDeals = response?.data?.data.filter(
-          (obj) => obj.status !== ""
+          (obj) => obj?.status !== ""
         );
         setDeals(filteredDeals);
       })
@@ -184,8 +184,8 @@ const Deal = () => {
   useEffect(() => {
     // Calculate status counts
     const counts = {};
-    status.forEach((status) => {
-      counts[status] = deals.filter((obj) => obj.status === status).length;
+    status?.forEach((status) => {
+      counts[status] = deals?.filter((obj) => obj?.status === status)?.length;
     });
     setStatusCounts(counts);
   }, [deals, status]);
@@ -200,11 +200,11 @@ const Deal = () => {
           Authorization: `Bearer ${decryptedToken}`,
         },
       });
-      if (response.data.status === 1) {
-        setLabelData(response.data.data);
+      if (response?.data?.status === 1) {
+        setLabelData(response?.data?.data);
       } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
+        if (response?.data?.message === "Token has expired") {
+          alert(response?.data?.message);
         }
       }
     } catch (error) {
@@ -245,54 +245,54 @@ const Deal = () => {
     const searchDeal = searchQuery?.toLowerCase();
 
     const matchQuery =
-      dealName.includes(searchDeal) ||
-      dealValue.includes(searchDeal) ||
-      dealValue2.includes(searchDeal) ||
-      ownerFirstName.includes(searchDeal) ||
-      ownerLastName.includes(searchDeal) ||
-      ownerFullName.includes(searchDeal) ||
-      closureDate.includes(searchDeal) ||
-      labelName.includes(searchDeal);
+      dealName?.includes(searchDeal) ||
+      dealValue?.includes(searchDeal) ||
+      dealValue2?.includes(searchDeal) ||
+      ownerFirstName?.includes(searchDeal) ||
+      ownerLastName?.includes(searchDeal) ||
+      ownerFullName?.includes(searchDeal) ||
+      closureDate?.includes(searchDeal) ||
+      labelName?.includes(searchDeal);
     return matchQuery;
   });
 
   const sortData = (data, option, order) => {
     switch (option) {
       case "Amount":
-        return data.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a.value - b.value;
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "LeadName":
-        return data.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a.deal_name
             ?.toLowerCase()
             .localeCompare(b?.deal_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Label":
-        return data.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a?.label_name
             ?.toLowerCase()
             .localeCompare(b?.label_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Owner":
-        return data.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a?.ownerf_name
             ?.toLowerCase()
             .localeCompare(b?.lead_name?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       case "Closure":
-        return data.slice().sort((a, b) => {
+        return data?.slice()?.sort((a, b) => {
           const result = a?.closure_date
             ?.toLowerCase()
             .localeCompare(b?.closure_date?.toLowerCase());
           return order === "asc" ? result : -result; // Toggle sorting order
         });
       default:
-        return data.slice().sort(() => {
+        return data?.slice()?.sort(() => {
           return order === "asc" ? 1 : -1; // Toggle sorting order
         });
     }
@@ -304,8 +304,8 @@ const Deal = () => {
   useEffect(() => {
     const calculateTotalValue = () => {
       let sum = 0;
-      deals.forEach((lead) => {
-        const value = Number(lead.value); // Parse value as a number
+      deals?.forEach((lead) => {
+        const value = Number(lead?.value); // Parse value as a number
         if (!isNaN(value)) {
           sum += value;
         }
@@ -318,10 +318,10 @@ const Deal = () => {
   useEffect(() => {
     const calculateStatusTotalValues = () => {
       const statusTotals = {};
-      status.forEach((status) => {
+      status?.forEach((status) => {
         const totalValueForStatus = deals
-          .filter((deal) => deal.status === status)
-          .reduce((sum, deal) => sum + Number(deal.value), 0);
+          ?.filter((deal) => deal?.status === status)
+          ?.reduce((sum, deal) => sum + Number(deal?.value), 0);
         statusTotals[status] = totalValueForStatus;
       });
       setStatusTotalValues(statusTotals);
@@ -381,7 +381,7 @@ const Deal = () => {
 
   const exportToExcel = async () => {
     // Check if you have data to export
-    if (!deals || deals.length === 0) {
+    if (!deals || deals?.length === 0) {
       console.log("No data to export.");
       return;
     }
@@ -451,53 +451,53 @@ const Deal = () => {
       { header: "Value", key: "value", width: 20 },
     ];
 
-    deals.forEach((deal) => {
-      worksheet.addRow({
-        id: deal.id,
-        borrower_entry: deal.borrower_entry,
-        broker_fee: deal.broker_fee,
-        broker_fee_paid: deal.broker_fee_paid,
-        closure_date: deal.closure_date,
-        completion_date: deal.completion_date,
-        contact: deal.contact,
-        creation_date: deal.creation_date,
-        currency: deal.currency,
-        data_enquiry_receive: deal.data_enquiry_receive,
-        deal_commission: deal.deal_commission,
-        deal_name: deal.deal_name,
-        deposit: deal.deposit,
-        doc_number: deal.doc_number,
-        document_verified: deal.document_verified,
-        email: deal.email,
-        engagement_fee: deal.engagement_fee,
-        engagement_fee_paid: deal.engagement_fee_paid,
-        introducer_firm_name: deal.introducer_firm_name,
-        introducer_name: deal.introducer_name,
-        is_deleted: deal.is_deleted,
-        label_coloure: deal.label_coloure,
-        label_id: deal.label_id,
-        label_name: deal.label_name,
-        lead_id: deal.lead_id,
-        lead_source: deal.lead_source,
-        lender: deal.lender,
-        loan_amount: deal.loan_amount,
-        loan_type: deal.loan_type,
-        mobile: deal.mobile,
-        organization: deal.organization,
-        owner: deal.owner,
-        ownerf_name: deal.ownerf_name,
-        ownerl_name: deal.ownerl_name,
-        pipeline_id: deal.pipeline_id,
-        probability: deal.probability,
-        procuration_fee: deal.procuration_fee,
-        procuration_fee_paid: deal.procuration_fee_paid,
-        security_value: deal.security_value,
-        stage_id: deal.stage_id,
-        stage_name: deal.stage_name,
-        status: deal.status,
-        type_of_security: deal.type_of_security,
-        update_date: deal.update_date,
-        value: deal.value,
+    deals?.forEach((deal) => {
+      worksheet?.addRow({
+        id: deal?.id,
+        borrower_entry: deal?.borrower_entry,
+        broker_fee: deal?.broker_fee,
+        broker_fee_paid: deal?.broker_fee_paid,
+        closure_date: deal?.closure_date,
+        completion_date: deal?.completion_date,
+        contact: deal?.contact,
+        creation_date: deal?.creation_date,
+        currency: deal?.currency,
+        data_enquiry_receive: deal?.data_enquiry_receive,
+        deal_commission: deal?.deal_commission,
+        deal_name: deal?.deal_name,
+        deposit: deal?.deposit,
+        doc_number: deal?.doc_number,
+        document_verified: deal?.document_verified,
+        email: deal?.email,
+        engagement_fee: deal?.engagement_fee,
+        engagement_fee_paid: deal?.engagement_fee_paid,
+        introducer_firm_name: deal?.introducer_firm_name,
+        introducer_name: deal?.introducer_name,
+        is_deleted: deal?.is_deleted,
+        label_coloure: deal?.label_coloure,
+        label_id: deal?.label_id,
+        label_name: deal?.label_name,
+        lead_id: deal?.lead_id,
+        lead_source: deal?.lead_source,
+        lender: deal?.lender,
+        loan_amount: deal?.loan_amount,
+        loan_type: deal?.loan_type,
+        mobile: deal?.mobile,
+        organization: deal?.organization,
+        owner: deal?.owner,
+        ownerf_name: deal?.ownerf_name,
+        ownerl_name: deal?.ownerl_name,
+        pipeline_id: deal?.pipeline_id,
+        probability: deal?.probability,
+        procuration_fee: deal?.procuration_fee,
+        procuration_fee_paid: deal?.procuration_fee_paid,
+        security_value: deal?.security_value,
+        stage_id: deal?.stage_id,
+        stage_name: deal?.stage_name,
+        status: deal?.status,
+        type_of_security: deal?.type_of_security,
+        update_date: deal?.update_date,
+        value: deal?.value,
       });
     });
 
@@ -609,8 +609,8 @@ const Deal = () => {
   }, []);
 
   const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    if (selectedIds?.includes(id)) {
+      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
     } else {
       setSelectedIds([...selectedIds, id]);
     }
@@ -619,20 +619,20 @@ const Deal = () => {
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
       const idsWithStatus = deals
-        .filter((deal) => deal.status === status)
-        .map((deal) => deal.id);
-      return idsWithStatus.every((id) => selectedIds.includes(id));
+        ?.filter((deal) => deal?.status === status)
+        ?.map((deal) => deal?.id);
+      return idsWithStatus?.every((id) => selectedIds?.includes(id));
     }
     return false;
   };
 
   const handleHeaderCheckboxChange = (status) => {
     const idsWithStatus = deals
-      .filter((deal) => deal.status === status)
-      .map((deal) => deal.id);
+      ?.filter((deal) => deal?.status === status)
+      ?.map((deal) => deal?.id);
 
     if (areAllChildCheckboxesChecked(status)) {
-      setSelectedIds(selectedIds.filter((id) => !idsWithStatus.includes(id)));
+      setSelectedIds(selectedIds?.filter((id) => !idsWithStatus?.includes(id)));
       setSelectedStatusesData((prevData) => ({
         ...prevData,
         [status]: false,
@@ -703,7 +703,7 @@ const Deal = () => {
             stage_id: parseInt(fStageId),
           }));
           // Store CSV data in state
-          const dataWithoutLastValue = dataWithIntValues.slice(0, -1);
+          const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);
           setCsvData(dataWithoutLastValue);
           postCsvDataToAPI(dataWithoutLastValue);
         },
@@ -715,7 +715,7 @@ const Deal = () => {
   };
   const formatDate = (dateString) => {
     if (dateString) {
-      const [day, month, year] = dateString.split("/");
+      const [day, month, year] = dateString?.split("/");
       return `${year}-${month}-${day}`;
     }
   };
@@ -737,7 +737,7 @@ const Deal = () => {
           },
         }
       );
-      if (response.data.status === 1) {
+      if (response?.data?.status === 1) {
         toast.success("Import successfull", {
           position: "top-center",
           autoClose: 2000,
@@ -812,29 +812,29 @@ const Deal = () => {
                 {ownerOpen && (
                   <ul className="dropdown-menu owner-menu">
                     {userData
-                      .slice()
-                      .reverse()
-                      .map((item) => (
+                      ?.slice()
+                      ?.reverse()
+                      ?.map((item) => (
                         <li
                           key={item?.id}
                           value={item?.id}
                           className="owner-val"
                           onClick={() =>
                             handleOwnerClick(
-                              item.id,
-                              item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1),
-                              item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
+                              item?.id,
+                              item?.first_name?.charAt(0)?.toUpperCase() +
+                                item?.first_name?.slice(1),
+                              item?.last_name?.charAt(0)?.toUpperCase() +
+                                item?.last_name?.slice(1)
                             )
                           }
                         >
                           {`${
-                            item?.first_name.charAt(0).toUpperCase() +
-                            item?.first_name.slice(1)
+                            item?.first_name?.charAt(0)?.toUpperCase() +
+                            item?.first_name?.slice(1)
                           } ${
-                            item?.last_name.charAt(0).toUpperCase() +
-                            item?.last_name.slice(1)
+                            item?.last_name?.charAt(0)?.toUpperCase() +
+                            item?.last_name?.slice(1)
                           }`}
                         </li>
                       ))}
@@ -845,8 +845,8 @@ const Deal = () => {
           </div>
           <div className="right-side--btns">
             <p>
-              sub total: <img className="pound" src={pound} />
-              {totalValue.toLocaleString("en-IN")}
+              sub total: <img className="pound" src={pound} alt="pound"/>
+              {totalValue?.toLocaleString("en-IN")}
             </p>
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Deal
@@ -997,7 +997,7 @@ const Deal = () => {
       </section>
 
       <section className="cards-body">
-        {status.map((item, index) => (
+        {status?.map((item, index) => (
           <div className="card-column" key={index}>
             <div className="card-details">
               <div className="main-cards">
@@ -1022,11 +1022,11 @@ const Deal = () => {
                     </label>
                   )}
                 </div>
-                {sortedDealData.map((obj) => {
-                  if (obj.status === item) {
+                {sortedDealData?.map((obj) => {
+                  if (obj?.status === item) {
                     return (
                       <DealsColn
-                        key={obj.id}
+                        key={obj?.id}
                         object={obj}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}

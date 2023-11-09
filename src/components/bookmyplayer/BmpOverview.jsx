@@ -22,9 +22,11 @@ const BmpOverview = () => {
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
   const [timingValues, setTimingValues] = useState([]);
+  const [selectedStartTime, setSelectedStartTime] = useState('');
+  const [selectedEndTime, setSelectedEndTime] = useState('');
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
-  const [fileName2, setFileName2] = useState("");
+  // const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
@@ -32,7 +34,7 @@ const BmpOverview = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [number, setNumber] = useState(0);
+  // const [number, setNumber] = useState(0);
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -79,13 +81,30 @@ const BmpOverview = () => {
     }
   };
 
-  const handleTimingChange = (index = 0, value, type) => {
-    const newValues = [...timingValues];
-    newValues[index] = { ...newValues[index], [type]: value };
-    setTimingValues(newValues);
-    setStateBtn(1);
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hours = 0; hours < 24; hours++) {
+      for (let minutes = 0; minutes < 60; minutes += 30) {
+        const hour = hours < 10 ? `0${hours}` : `${hours}`;
+        const minute = minutes === 0 ? '00' : `${minutes}`;
+        const time = `${hour}:${minute}`;
+        options.push(time);
+      }
+    }
+    return options;
   };
 
+  const timeOptions = generateTimeOptions();
+
+  const handleTimeChange = (event) => {
+    setSelectedStartTime(event.target.value);
+    setStateBtn(1);
+  };
+  const handleEndTimeChange = (event) => {
+    setSelectedEndTime(event.target.value);
+    setStateBtn(1);
+  };
+ 
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -134,16 +153,32 @@ const BmpOverview = () => {
     createFolder();
     academyDetails();
   }, []);
+  useEffect(() => {
+    // Parse timing values from the API response when it's available
+    if (academyData && academyData.timing) {
+      if (academyData.timing === "Always_open") {
+        setAlwaysOpenChecked(true);
+      } else {
+        const timingParts = academyData.timing.split(" to ");
+        if (timingParts.length === 2) {
+          const [startTime, endTime] = timingParts;
+          setAlwaysOpenChecked(false);
+          setSelectedStartTime(startTime);
+          setSelectedEndTime(endTime);
+        }
+      }
+    }
+  }, [academyData]);
   const processImageName = (imageName) => {
     const nameParts = imageName.split('.');
     if (nameParts.length > 1) {
-        const namePart = nameParts.slice(0, -1).join('.');
-        const processedName = namePart.replace(/[^\w-]/g, '-');
-        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+      const namePart = nameParts.slice(0, -1).join('.');
+      const processedName = namePart.replace(/[^\w-]/g, '-');
+      return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
-        return imageName.replace(/[^\w-]/g, '-');
+      return imageName.replace(/[^\w-]/g, '-');
     }
-};
+  };
 
   const handleFileChange = (event) => {
     setStateBtn(1);
@@ -242,6 +277,7 @@ const BmpOverview = () => {
 
   const handleAlwaysOpenCheckboxChange = () => {
     setAlwaysOpenChecked(!alwaysOpenChecked);
+    setStateBtn(1);
   };
 
   const addPhoneNumberInput = () => {
@@ -249,7 +285,7 @@ const BmpOverview = () => {
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
-
+  const startAndEndTime = alwaysOpenChecked ? "Always_open" : `${selectedStartTime} to ${selectedEndTime}`;
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -257,8 +293,8 @@ const BmpOverview = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray?.join(",");
-    const updatedFormData = {
-      spoken_languages:selectedLanguage,
+        const updatedFormData = {
+      spoken_languages: selectedLanguage,
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData.phone,
@@ -269,7 +305,7 @@ const BmpOverview = () => {
       website: academyData?.website,
       sport: selectedDaysString?.replace(/^,+/g, ""),
       email: academyData?.email,
-      timing: [...timeArr] && [...timeArr].length === 0 ? "" : [...timeArr],
+      timing: startAndEndTime,
       logo: fileName,
       completion_percentage: combinedProgress,
     };
@@ -549,72 +585,22 @@ const BmpOverview = () => {
 
             {!alwaysOpenChecked && (
               <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-                <div className="">
-                  <input
-                    className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                    placeholder="Enter Time"
-                    value={timingValues[0]?.fromTime}
-                    onChange={(e) =>
-                      handleTimingChange(0, e.target.value, "fromTime")
-                    }
-                  ></input>
-                </div>
-                <select
-                  name=""
-                  id=""
-                  className="common-fonts common-input bmp-modal-select bmp-new-width"
-                  onChange={(e) =>
-                    handleTimingChange(0, e.target.value, "period")
-                  }
-                  // value={obj?.timing
-                  //   ?.split(",")
-                  //   [index]?.split("to")[1]
-                  //   ?.replace(/\d+/g, "")
-                  //   .trim()}
-                  value={timingValues[0]?.period}
-                >
-                  <option value="">AM/PM</option>
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
+                <select className="common-fonts common-input bmp-modal-select-2 overviewTime" value={selectedStartTime} onChange={handleTimeChange}>
+                  <option value="">Select Opening time</option>
+                  {timeOptions.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))}
                 </select>
-
                 <p className="common-fonts light-color bmp-to">To</p>
-
-                <div className="">
-                  <input
-                    className="common-fonts common-input common-fonts bmp-time-input bmp-new-width"
-                    placeholder="Enter Time"
-                    value={
-                      timingValues[0]?.toTime
-                      // batchDetails?.timing
-                      //   ?.split(",")
-                      //   [index]?.split("to")[1]
-                      //   ?.replace(/[APap][Mm]/g, "")
-                      //   .trim() ||
-                    }
-                    onChange={(e) =>
-                      handleTimingChange(0, e.target.value, "toTime")
-                    }
-                  ></input>
-                </div>
-
-                <select
-                  name=""
-                  id=""
-                  className="common-fonts common-input bmp-modal-select bmp-new-width"
-                  onChange={(e) =>
-                    handleTimingChange(0, e.target.value, "period2")
-                  }
-                  // value={obj?.timing
-                  //   ?.split(",")
-                  //   [index]?.split("to")[1]
-                  //   ?.replace(/\d+/g, "")
-                  //   .trim()}
-                  value={timingValues[0]?.period2}
-                >
-                  <option value="">AM/PM</option>
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
+                <select className="common-fonts common-input bmp-modal-select-2 overviewTime" value={selectedEndTime} onChange={handleEndTimeChange}>
+                  <option value="">Select closing time</option>
+                  {timeOptions.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}

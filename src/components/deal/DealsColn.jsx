@@ -81,8 +81,8 @@ const DealsColn = ({
     const handleDocumentClick = (event) => {
       if (
         isMenuOpen &&
-        !menuButtonRef.current.contains(event.target) &&
-        !menuRef.current.contains(event.target)
+        !menuButtonRef?.current?.contains(event?.target) &&
+        !menuRef?.current?.contains(event?.target)
       ) {
         setIsMenuOpen(false);
       }
@@ -96,8 +96,8 @@ const DealsColn = ({
   }, [isMenuOpen]);
 
   const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    if (selectedIds?.includes(id)) {
+      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
     } else {
       setSelectedIds([...selectedIds, id]);
     }
@@ -105,15 +105,15 @@ const DealsColn = ({
 
   // Add a useEffect to update selectedIds when the status changes
   useEffect(() => {
-    if (selectedIds.includes(object.id) && object.status !== status) {
+    if (selectedIds?.includes(object?.id) && object?.status !== status) {
       setSelectedIds((prevSelectedIds) =>
-        prevSelectedIds.filter((selectedId) => selectedId !== object.id)
+        prevSelectedIds?.filter((selectedId) => selectedId !== object?.id)
       );
     }
-    if (!selectedIds.includes(object.id) && object.status === status) {
-      setSelectedIds([...selectedIds, object.id]);
+    if (!selectedIds?.includes(object?.id) && object?.status === status) {
+      setSelectedIds([...selectedIds, object?.id]);
     }
-  }, [object.status, status]);
+  }, [object?.status, status]);
 
   const handleDeleteLead = () => {
     if (deleteLeadId) {
@@ -150,30 +150,30 @@ const DealsColn = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading">
-                <Link to={"/lp/deals/" + object.id}>{object.deal_name}</Link>
+                <Link to={"/lp/deals/" + object?.id}>{object?.deal_name}</Link>
               </p>
             </div>
             <div className="lead-value">
-            <img className="pound" src={pound}/>{object?.value?.toLocaleString("en-IN")}
+            <img className="pound" src={pound} alt="pound"/>{object?.value?.toLocaleString("en-IN")}
             </div>
             <div className="contact-details">
               <div className="mail">
                 <img src={user} alt="" />
-                <p>{object.ownerf_name + " " + object.ownerl_name}</p>
+                <p>{object?.ownerf_name + " " + object?.ownerl_name}</p>
               </div>
             </div>
             <div>
               <p className="clouserDate">
-                {object.closure_date?.split("T")[0]}
+                {object?.closure_date?.split("T")[0]}
               </p>
             </div>
             <div className="priorityBox">
               <p
-                key={object.label_id}
+                key={object?.label_id}
                 className="leads-priority"
-                style={{ backgroundColor: object.label_coloure }}
+                style={{ backgroundColor: object?.label_coloure }}
               >
-                {object.label_name}
+                {object?.label_name}
               </p>
             </div>
           </div>
@@ -187,8 +187,8 @@ const DealsColn = ({
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
                   <li>Convert to Lead</li>
-                  <li onClick={() => handleAssignModal(object.id)}>Assign</li>
-                  <li onClick={() => handleDeleteOpen(object.id)}>Delete</li>
+                  <li onClick={() => handleAssignModal(object?.id)}>Assign</li>
+                  <li onClick={() => handleDeleteOpen(object?.id)}>Delete</li>
                   {/* <li>object 3</li> */}
                 </ul>
               )}
@@ -196,10 +196,10 @@ const DealsColn = ({
             <label class="custom-checkbox">
               <input
                 type="checkbox"
-                className={`cb1 ${object.status}-card-checkbox`}
-                name={object.id}
-                checked={selectedIds.includes(object.id)}
-                onChange={() => handleChildCheckboxChange(object.id)}
+                className={`cb1 ${object?.status}-card-checkbox`}
+                name={object?.id}
+                checked={selectedIds?.includes(object?.id)}
+                onChange={() => handleChildCheckboxChange(object?.id)}
               />
               <span class="checkmark"></span>
             </label>

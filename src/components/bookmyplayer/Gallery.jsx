@@ -113,8 +113,7 @@ const Gallery = () => {
   };
 
   const submitImage = (file) => {
-    setIsUploading(true);
-    const selectedImage = file;
+     const selectedImage = file;
     if (selectedImage) {
       if (selectedImage.size > 2 * 1024 * 1024) {
         alert("Image size should be less than 2MB. Please choose a smaller image.");
@@ -125,6 +124,7 @@ const Gallery = () => {
         /\.[^/.]+$/,
         ""
       )}`;
+      setIsUploading(true);
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
