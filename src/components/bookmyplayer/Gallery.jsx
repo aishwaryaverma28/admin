@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
 import ProgressBar from "./ProgressBar";
+import Training from "./Training.jsx";
 
 const Gallery = () => {
   const decryptedToken = getDecryptedToken();
@@ -41,6 +42,13 @@ const Gallery = () => {
   const [alertVideoShown, setAlertVideoShown] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime", "video/webm", "video/ogg"];
+   
+  const [activeTab, setActiveTab] = useState("academy");
+
+  const handleTabClick = (tab) =>{
+    setActiveTab(tab)
+  }
+
 
   const academyDetails = () => {
     axios
@@ -439,8 +447,37 @@ const Gallery = () => {
             Psst! A secret People prefer videos more than photos.
           </p>
 
+          <div className="contacts-top-flex ">
+        <div className="genral-setting-btn genral-setting-fonts aaa">
+          <button
+            className={`genral-btn  ${
+              activeTab === "academy" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("academy")}
+          >
+            <span className="mrkt-whatsapp">Academy & Banner</span>
+          </button>
+          <button
+            className={`genral-btn contact-genral-btn ${
+              activeTab === "training" ? "genral-active" : ""
+            }`}
+            onClick={() => handleTabClick("training")}
+          >
+            <span className="mrkt-whatsapp">Training Ground & Tournaments</span>
+          </button>
+        </div>
 
-          <div className="bmp-img-section">
+
+        </div>
+        </div>
+      <ProgressBar array={progressArray}/>
+      </div>
+
+      {
+        activeTab === "academy" && (
+          <>
+          <div className="bmp-upload-img">
+      <div className="bmp-img-section">
             <div>
               <p className="common-fonts bmp-banner-upload">upload banner image</p>
               <p className="common-fonts light-color">
@@ -510,11 +547,6 @@ const Gallery = () => {
               </div>
             </div>
           </div>
-        </div>
-      <ProgressBar array={progressArray}/>
-      </div>
-
-      <div className="bmp-upload-img">
         <div className="bmp-heading-flex">
           <div>
             <p className="common-fonts bmp-banner-upload">
@@ -678,6 +710,17 @@ const Gallery = () => {
           prop={deleteProp}
         />
       )}
+
+          </>
+        )
+      }
+
+      {
+        activeTab === "training" && (
+          <Training/>
+        )
+      }
+
 
       <ToastContainer />
     </div>

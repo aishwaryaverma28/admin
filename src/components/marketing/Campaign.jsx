@@ -6,7 +6,6 @@ import WhatsappCampaign from "./WhatsappCampaign.jsx";
 
 const Campaign = () => {
   const [activeTab, setActiveTab] = useState("whatsapp");
-;
 
   const handleTabClick = (tab) =>{
     setActiveTab(tab)
