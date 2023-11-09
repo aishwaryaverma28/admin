@@ -53,3 +53,30 @@ background: #F3F6FA;
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
+/* Style for the autocomplete dropdown */
+.relativeInput{
+    position: relative;
+}
+.autocomplete-dropdown {
+    position: absolute;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    z-index: 1000;
+  }
+  
+  /* Style for each suggestion item in the dropdown */
+  .autocomplete-dropdown div {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  /* Highlight the suggestion item on hover */
+  .autocomplete-dropdown div:hover {
+    background-color: #f2f2f2;
+  }

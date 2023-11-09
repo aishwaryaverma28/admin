@@ -12,6 +12,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -64,7 +65,15 @@ const BmpOverview = () => {
     { value: 'Bhojpuri', label: 'Bhojpuri' },
   ];
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-
+  const [address, setAddress] = useState(''); // Store the selected address
+  const [mapLink, setMapLink] = useState('');
+  const handleSelect = async (selectedAddress) => {
+    setAddress(selectedAddress);
+    setStateBtn(1);
+    // You can use the selected address to generate a Google Maps link
+    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(selectedAddress)}`;
+    setMapLink(mapLink);
+  };
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
     setStateBtn(1);
@@ -104,7 +113,7 @@ const BmpOverview = () => {
     setSelectedEndTime(event.target.value);
     setStateBtn(1);
   };
- 
+
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -115,6 +124,7 @@ const BmpOverview = () => {
       .then((response) => {
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
+        setAddress(response?.data?.data[0]?.address1 || '');
         setProgress(response?.data?.data[0]?.completion_percentage);
         if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
           setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
@@ -293,13 +303,14 @@ const BmpOverview = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray?.join(",");
-        const updatedFormData = {
+    const updatedFormData = {
       spoken_languages: selectedLanguage,
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData.phone,
       whatsapp: academyData.whatsapp,
-      address1: academyData?.address1,
+      address1: address,
+      map:mapLink,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
       website: academyData?.website,
@@ -405,14 +416,34 @@ const BmpOverview = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Address
             </label>
-            <textarea
-              name="address1"
-              onChange={handleChange}
-              value={isLoading ? "-" : academyData?.address1 || ""}
-              id=""
-              className="common-fonts bmp-textarea"
-              rows="2"
-            ></textarea>
+            <PlacesAutocomplete
+              value={address}
+              onChange={setAddress}
+              onSelect={handleSelect}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div className="relativeInput">
+                  <input
+                    type="text"
+                    className="common-fonts common-input bmp-input "
+                    {...getInputProps({
+                      placeholder: 'Enter your address',
+                    })}
+                  />
+                   <div {...(suggestions.length > 0 ? { className: "autocomplete-dropdown" } : {})}>
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map((suggestion) => (
+                      <div
+                        {...getSuggestionItemProps(suggestion)}
+                        key={suggestion.placeId}
+                      >
+                        {suggestion.description}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </PlacesAutocomplete>
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
