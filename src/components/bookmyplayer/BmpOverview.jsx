@@ -12,6 +12,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
+import loadScript from 'load-script';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 const BmpOverview = () => {
@@ -22,7 +23,7 @@ const BmpOverview = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
-  const [timingValues, setTimingValues] = useState([]);
+  // const [timingValues, setTimingValues] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState('');
   const [selectedEndTime, setSelectedEndTime] = useState('');
   const fileInputRef = useRef(null);
@@ -33,7 +34,7 @@ const BmpOverview = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
-  const [timeArr, setTimeArr] = useState([]);
+  // const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   // const [number, setNumber] = useState(0);
   const [progress, setProgress] = useState(null);
@@ -67,6 +68,9 @@ const BmpOverview = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [address, setAddress] = useState(''); // Store the selected address
   const [mapLink, setMapLink] = useState('');
+  const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
+
+ 
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
     setStateBtn(1);
@@ -78,7 +82,7 @@ const BmpOverview = () => {
     setSelectedLanguage(e.target.value);
     setStateBtn(1);
   };
-
+  
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -179,6 +183,20 @@ const BmpOverview = () => {
       }
     }
   }, [academyData]);
+  useEffect(() => {
+    // Load the Google Maps JavaScript API script
+    if (!googleScriptLoaded) {
+      loadScript('https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places', (error, script) => {
+        if (error) {
+          console.error('Error loading Google Maps JavaScript API:', error);
+        } else {
+          setGoogleScriptLoaded(true);
+        }
+        return <div>Loading Google Maps...</div>;
+      });
+    }
+  }, [googleScriptLoaded]);
+ 
   const processImageName = (imageName) => {
     const nameParts = imageName.split('.');
     if (nameParts.length > 1) {
@@ -262,23 +280,23 @@ const BmpOverview = () => {
     setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
 
-  useEffect(() => {
-    const filteredValues = timingValues
-      .filter(
-        (value) =>
-          value &&
-          value.toTime !== undefined &&
-          value.fromTime !== undefined &&
-          value.period !== undefined &&
-          value.period2 !== undefined
-      )
-      .map(
-        (value) =>
-          `${value.fromTime}${value.period} to ${value.toTime}${value.period2}`
-      );
+  // useEffect(() => {
+  //   const filteredValues = timingValues
+  //     .filter(
+  //       (value) =>
+  //         value &&
+  //         value.toTime !== undefined &&
+  //         value.fromTime !== undefined &&
+  //         value.period !== undefined &&
+  //         value.period2 !== undefined
+  //     )
+  //     .map(
+  //       (value) =>
+  //         `${value.fromTime}${value.period} to ${value.toTime}${value.period2}`
+  //     );
 
-    setTimeArr(filteredValues);
-  }, [timingValues]);
+  //   setTimeArr(filteredValues);
+  // }, [timingValues]);
 
   const handleButtonClick = (event) => {
     event.preventDefault();
@@ -366,20 +384,20 @@ const BmpOverview = () => {
   //   }
   // }, [academyData]);
 
-  useEffect(() => {
-    // Parse timing values from the API response when it's available
-    if (academyData && academyData.timing) {
-      const timingRegex = /(\d+)([APap][Mm])\s*to\s*(\d+)([APap][Mm])/;
-      const [, fromTime, period, toTime, period2] =
-        academyData.timing.match(timingRegex) || [];
+  // useEffect(() => {
+  //   // Parse timing values from the API response when it's available
+  //   if (academyData && academyData.timing) {
+  //     const timingRegex = /(\d+)([APap][Mm])\s*to\s*(\d+)([APap][Mm])/;
+  //     const [, fromTime, period, toTime, period2] =
+  //       academyData.timing.match(timingRegex) || [];
 
-      if (fromTime && period && toTime && period2) {
-        setTimingValues([{ fromTime, period, toTime, period2 }]);
-      } else {
-        // Handle invalid timing format if needed
-      }
-    }
-  }, [academyData]);
+  //     if (fromTime && period && toTime && period2) {
+  //       setTimingValues([{ fromTime, period, toTime, period2 }]);
+  //     } else {
+  //       // Handle invalid timing format if needed
+  //     }
+  //   }
+  // }, [academyData]);
 
   return (
     <>

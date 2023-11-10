@@ -203,7 +203,7 @@ const Gallery = () => {
     setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
-      if (selectedImage.size > 10 * 1024 * 1024) {
+      if (selectedImage.size > 2 * 1024 * 1024) {
         showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
         setIsUploadingMulti(false);
         return;
@@ -477,9 +477,9 @@ const Gallery = () => {
         activeTab === "academy" && (
           <>
           <div className="bmp-upload-img">
-      <div className="bmp-img-section">
+      <div>
             <div>
-              <p className="common-fonts bmp-banner-upload">upload banner image</p>
+              <p className="common-fonts bmp-banner-upload">Upload banner image</p>
               <p className="common-fonts light-color">
                 Recommended image size 820x312
               </p>
