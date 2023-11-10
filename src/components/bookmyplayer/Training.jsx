@@ -15,14 +15,23 @@ const Training = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
-  const [fileName2, setFileName2] = useState("");
-  const fileInputRef2 = useRef(null);
+  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
   const [alertShown, setAlertShown] = useState(false);
   const [photoUrls, setPhotoUrls] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [deleteProp, setDeleteProp] = useState(null);
   const [alertVideoShown, setAlertVideoShown] = useState(false);
+  const [isUploadingMulti2, setIsUploadingMulti2] = useState(false);
+  const [fileName2, setFileName2] = useState("");
+  const fileInputRef2 = useRef(null);
+  const [alertShown2, setAlertShown2] = useState(false);
+  const [photoUrls2, setPhotoUrls2] = useState([]);
+  const [isDeleteModalOpen2, setIsDeleteModalOpen2] = useState(false);
+  const [deleteIndex2, setDeleteIndex2] = useState(null);
+  const [deleteProp2, setDeleteProp2] = useState(null);
+  const [alertVideoShown2, setAlertVideoShown2] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const academyDetails = () => {
     axios
@@ -34,6 +43,9 @@ const Training = () => {
       .then((response) => {
         if (response?.data?.data[0]?.training_ground_photos !== "" && response?.data?.data[0]?.training_ground_photos !== null) {
           setPhotoUrls(response?.data?.data[0]?.training_ground_photos?.split(",")?.reverse())
+        }
+        if (response?.data?.data[0]?.tournament_photos !== "" && response?.data?.data[0]?.tournament_photos !== null) {
+          setPhotoUrls2(response?.data?.data[0]?.tournament_photos?.split(",")?.reverse())
         }
       })
       .catch((error) => {
@@ -60,11 +72,11 @@ const Training = () => {
     }
   };
 
-  const handleButtonClick2 = () => {
-    fileInputRef2.current.click();
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
     setAlertShown(false);
   };
-  const handleFileChange2 = (event) => {
+  const handleFileChange = (event) => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -76,11 +88,11 @@ const Training = () => {
         return;
       }
       if (file.type.startsWith("image/")) {
-        submitImage2(file);
+        submitImage(file);
       }
     }
   };
-  const submitImage2 = (file) => {
+  const submitImage = (file) => {
     setIsUploadingMulti(true);
     const selectedImage = file;
     if (selectedImage) {
@@ -106,7 +118,7 @@ const Training = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setFileName2(processImageName(selectedImage.name));
+          setFileName(processImageName(selectedImage.name));
           const imageUrl = processImageName(selectedImage.name);
           if (data.secure_url) {
             photoUrls.push(imageUrl)
@@ -145,7 +157,7 @@ const Training = () => {
     const updatedNameString = updatedNameArray.reverse().join(',');
     axios
       .put(UPDATE_ACADEMY + academyId, {
-        photos: updatedNameString,
+        training_ground_photos : updatedNameString,
       }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
@@ -159,18 +171,119 @@ const Training = () => {
       });
   };
 // {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
+
+const handleButtonClick2 = () => {
+  fileInputRef2.current.click();
+  setAlertShown2(false);
+};
+const handleFileChange2 = (event) => {
+  const files = event.target.files;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!allowedImageTypes.includes(file.type)) {
+      if (!alertShown2) {
+        alert("Please choose a valid image file.");
+        setAlertShown2(true);
+      }
+      return;
+    }
+    if (file.type.startsWith("image/")) {
+      submitImage2(file);
+    }
+  }
+};
+const submitImage2 = (file) => {
+  setIsUploadingMulti2(true);
+  const selectedImage = file;
+  if (selectedImage) {
+    if (selectedImage.size > 2 * 1024 * 1024) {
+      showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
+      setIsUploadingMulti2(false);
+      return;
+    }
+    const folder = "bookmyplayer/academy/" + academyId;
+    const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      /\.[^/.]+$/,
+      ""
+    )}`;
+    const data = new FormData();
+    data.append("file", selectedImage);
+    data.append("upload_preset", "zbxquqvw");
+    data.append("cloud_name", "cloud2cdn");
+    data.append("public_id", uniqueFileName);
+
+    fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFileName(processImageName(selectedImage.name));
+        const imageUrl = processImageName(selectedImage.name);
+        if (data.secure_url) {
+          photoUrls2.push(imageUrl)
+          setPhotoUrls2(photoUrls2);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsUploadingMulti2(false);
+      });
+  }
+}
+const handleDeleteOpen2 = (index, prop) => {
+  setIsDeleteModalOpen2(true);
+  setDeleteIndex2(index);
+  setDeleteProp2(prop);
+};
+const handleDeleteConfirm2 = () => {
+  if (deleteProp2 === "image") {
+    deleteStrategy2();
+  }
+  setIsDeleteModalOpen2(false);
+};
+console.log(photoUrls2)
+const deleteStrategy2 = () => {
+  if (deleteIndex2 !== null) {
+    const updatedNameOfStrategy = [...photoUrls2];
+    updatedNameOfStrategy.splice(deleteIndex2, 1);
+    setPhotoUrls2(updatedNameOfStrategy);
+    updateDataAndCallAPI2(updatedNameOfStrategy);
+  }
+};
+const updateDataAndCallAPI2 = (updatedNameArray) => {
+  const updatedNameString = updatedNameArray.reverse().join(',');
+  axios
+    .put(UPDATE_ACADEMY + academyId, {
+      tournament_photos: updatedNameString,
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      },
+    })
+    .then((response) => {
+      academyDetails();
+    })
+    .catch((error) => {
+      console.error("API call failed:", error);
+    });
+};
+// {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
   const initialPhotoUrls = [...photoUrls];
-  const initialFileName2 = fileName2;
+  const initialFileName = fileName;
 
   const resetState = () => {
     setPhotoUrls(initialPhotoUrls);
-    setFileName2(initialFileName2);
+    setFileName(initialFileName);
   };
 
-  function handleSubmit2() {
+  function handleSubmit() {
 
     let body = {
       training_ground_photos: photoUrls.join(","),
+      tournament_photos: photoUrls2.join(","),
     }
 
     axios
@@ -204,7 +317,7 @@ const Training = () => {
 
   return (
     <div>
-      {/* <>
+      <>
         <div className="bmpTab2ImgSection">
           <div className="bmp-heading-flex">
             <div>
@@ -212,7 +325,7 @@ const Training = () => {
                 Upload training ground images
               </p>
               <p className="common-fonts light-color bmp-size">
-                Recommended image size 820x312
+              Recommended image size less than 2Mb
               </p>
             </div>
             <div className="bmp-total-img">
@@ -232,7 +345,7 @@ const Training = () => {
               >
                 <button
                   className="contact-browse-btn common-fonts"
-                  onClick={handleButtonClick2}
+                  onClick={handleButtonClick}
                 >
                   Browse
                 </button>
@@ -247,105 +360,8 @@ const Training = () => {
                     right: 0,
                     width: "100%",
                   }}
-                  ref={fileInputRef2}
-                  onChange={handleFileChange2}
-                  multiple
-                />
-                {isUploadingMulti ? (
-                  <span className="common-fonts upload-file-name">Uploading...</span>
-                ) : (
-                  <span className="common-fonts upload-file-name">
-                    <p className="common-fonts light-color">You can upload multiple images </p>
-                    <p className="common-fonts bmp-format">Upload image in format png, jpg, jpeg, webp </p>
-                    { }
-                  </span>
-                )}
-              </span>
-            </div>
-          </div>
-        </div>
-        {photoUrls?.length === 0 ? (
-          <div className='support-no-ticket-found'>
-            <p className='common-fonts'>No photos added</p>
-          </div>
-        ) : (
-          < div className="outerBox">
-            {
-              photoUrls?.map((photo, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
-
-                      <div className="bmp-video">
-                        <img
-                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                          alt="Selected Preview"
-                        />
-                      </div>
-
-                      <p className="common-fonts bmp-tour">academy tour.gif</p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
-                    </div>
-
-                  </div>
-                  <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                    alt="Selected Preview"
-                    key={index}
-                  />
-                </div>
-              ))
-            }</div>
-        )}
-      </> */}
-{/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
-      {/* <>
-        <div className="bmpTab2ImgSection">
-          <div className="bmp-heading-flex">
-            <div>
-              <p className="common-fonts bmp-banner-upload">
-                Upload training ground images
-              </p>
-              <p className="common-fonts light-color bmp-size">
-                Recommended image size 820x312
-              </p>
-            </div>
-            <div className="bmp-total-img">
-              <p className="common-fonts bmp-prefer">
-                Upload minimum 25 images & videos 6/25
-              </p>
-            </div>
-          </div>
-          <div className="bmp-upload-3 bmp-gap">
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input bmp-border-2"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={handleButtonClick2}
-                >
-                  Browse
-                </button>
-                <input
-                  type="file"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                  }}
-                  ref={fileInputRef2}
-                  onChange={handleFileChange2}
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
                   multiple
                 />
                 {isUploadingMulti ? (
@@ -397,10 +413,107 @@ const Training = () => {
             }</div>
         )}
       </>
+{/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
+      <>
+        <div className="bmpTab2ImgSection">
+          <div className="bmp-heading-flex">
+            <div>
+              <p className="common-fonts bmp-banner-upload">
+                Upload Tournament images
+              </p>
+              <p className="common-fonts light-color bmp-size">
+                Recommended image size less than 2Mb
+              </p>
+            </div>
+            <div className="bmp-total-img">
+              <p className="common-fonts bmp-prefer">
+                Upload minimum 25 images & videos 6/25
+              </p>
+            </div>
+          </div>
+          <div className="bmp-upload-3 bmp-gap">
+            <div className="contact-browse deal-doc-file">
+              <span
+                className="common-fonts common-input contact-tab-input bmp-border-2"
+                style={{
+                  position: "relative",
+                  marginRight: "10px",
+                }}
+              >
+                <button
+                  className="contact-browse-btn common-fonts"
+                  onClick={handleButtonClick2}
+                >
+                  Browse
+                </button>
+                <input
+                  type="file"
+                  style={{
+                    display: "none",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    width: "100%",
+                  }}
+                  ref={fileInputRef2}
+                  onChange={handleFileChange2}
+                  multiple
+                />
+                {isUploadingMulti2 ? (
+                  <span className="common-fonts upload-file-name">Uploading...</span>
+                ) : (
+                  <span className="common-fonts upload-file-name">
+                    <p className="common-fonts light-color">You can upload multiple images </p>
+                    <p className="common-fonts bmp-format">Upload image in format png, jpg, jpeg, webp </p>
+                    { }
+                  </span>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+        {photoUrls2?.length === 0 ? (
+          <div className='support-no-ticket-found'>
+            <p className='common-fonts'>No photos added</p>
+          </div>
+        ) : (
+          < div className="outerBox">
+            {
+              photoUrls2?.map((photo, index) => (
+                <div className="bmp-new-img">
+                  <div className="bmp-img-top-icon">
+                    <div className="bmp-img-name">
+
+                      <div className="bmp-video">
+                        <img
+                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                          alt="Selected Preview"
+                        />
+                      </div>
+
+                      <p className="common-fonts bmp-tour">academy tour.gif</p>
+                    </div>
+                    <div className="bmp-trash">
+                      <img src={Trash} alt="" onClick={() => handleDeleteOpen2(index, "image")} />
+                    </div>
+
+                  </div>
+                  <img
+                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                    alt="Selected Preview"
+                    key={index}
+                  />
+                </div>
+              ))
+            }</div>
+        )}
+      </>
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button" onClick={resetState}>Cancel</button>
-        <button className="common-fonts common-save-button" onClick={handleSubmit2}>Save</button>
+        <button className="common-fonts common-save-button" onClick={handleSubmit}>Save</button>
       </div>
       {isDeleteModalOpen && (
         <DeleteImage
@@ -410,7 +523,16 @@ const Training = () => {
           onDelete={handleDeleteConfirm}
           prop={deleteProp}
         />
-      )} */}
+      )}
+      {isDeleteModalOpen2 && (
+        <DeleteImage
+          onClose={() => {
+            setIsDeleteModalOpen2(false);
+          }}
+          onDelete={handleDeleteConfirm2}
+          prop={deleteProp2}
+        />
+      )}
     </div>
   )
 }

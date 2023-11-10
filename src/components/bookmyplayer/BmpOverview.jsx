@@ -438,6 +438,9 @@ const BmpOverview = () => {
               value={address}
               onChange={setAddress}
               onSelect={handleSelect}
+              searchOptions={{
+                componentRestrictions: { country: "IN" },
+              }}
             >
               {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                 <div className="relativeInput">
