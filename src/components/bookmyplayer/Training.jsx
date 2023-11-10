@@ -396,7 +396,7 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
                         />
                       </div>
 
-                      <p className="common-fonts bmp-tour">academy tour.gif</p>
+                      <p className="common-fonts bmp-tour">photo.gif</p>
                     </div>
                     <div className="bmp-trash">
                       <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
@@ -493,7 +493,7 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
                         />
                       </div>
 
-                      <p className="common-fonts bmp-tour">academy tour.gif</p>
+                      <p className="common-fonts bmp-tour">photo.gif</p>
                     </div>
                     <div className="bmp-trash">
                       <img src={Trash} alt="" onClick={() => handleDeleteOpen2(index, "image")} />
