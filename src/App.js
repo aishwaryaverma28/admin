@@ -65,6 +65,7 @@ import Campaign from "./components/marketing/Campaign.jsx";
 import ListFilter from "./components/marketing/ListFilter.jsx";
 import WhatsappView from "./components/marketing/WhatsappView.jsx";
 import SupportTab from "./components/settings/SupportTab.jsx";
+import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -134,14 +135,18 @@ const router = createBrowserRouter([
         element: <WhatsappView/>
       },
       {
+        path: "/lp/bmp/admin",
+        element: <BmpAdmin />,
+      },
+      {
         path: "/lp/bmp",
         element: <BmpDashboard />,
         errorElement: <Error />,
         children: [
-          {
-            path: "/lp/bmp", // This is the new route for /lp
-            element: <Navigate to="/lp/bmp/overview" replace />, // Redirect to /lp/home
-          },
+          // {
+          //   path: "/lp/bmp",
+          //   element: <Navigate to="/lp/bmp/overview" replace />,
+          // },
           {
             path:"/lp/bmp/overview",
             element:<SecureRoutes Component={BmpOverview}/>,
@@ -160,23 +165,23 @@ const router = createBrowserRouter([
           },
           {
             path:"/lp/bmp/reviews",
-            element:<Review/>,
+            element:<SecureRoutes Component={Review}/>,
           },
           {
             path:"/lp/bmp/leads",
-            element:<BMPLeads/>,
+            element:<SecureRoutes Component={BMPLeads}/>,
           },
           {
             path:"/lp/bmp/support",
             element: (
               <div style={{ padding: '1rem' }}>
-                <SupportTab />
+                <SecureRoutes Component={SupportTab} />
               </div>
             ),
           },
           {
             path:"/lp/bmp/help",
-            element:<BMPHelp/>,
+            element:<SecureRoutes Component={BMPHelp}/>,
           },
         ],
       },

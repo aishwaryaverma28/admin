@@ -37,6 +37,7 @@ const BmpOverview = () => {
   // const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   // const [number, setNumber] = useState(0);
+  const [updatedFields, setUpdatedFields] = useState([]);
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -73,6 +74,7 @@ const BmpOverview = () => {
  
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
+    updateField('address1');
     setStateBtn(1);
     // You can use the selected address to generate a Google Maps link
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(selectedAddress)}`;
@@ -80,9 +82,15 @@ const BmpOverview = () => {
   };
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
+    updateField('spoken_languages');
     setStateBtn(1);
   };
   
+  const updateField = (fieldName) => {
+    if (!updatedFields.includes(fieldName)) {
+      setUpdatedFields([...updatedFields, fieldName]);
+    }
+  };
 
   const handleCheckboxChange = (event) => {
     const { checked } = event.target;
@@ -111,10 +119,12 @@ const BmpOverview = () => {
 
   const handleTimeChange = (event) => {
     setSelectedStartTime(event.target.value);
+    updateField('timing');
     setStateBtn(1);
   };
   const handleEndTimeChange = (event) => {
     setSelectedEndTime(event.target.value);
+    updateField('timing');
     setStateBtn(1);
   };
 
@@ -258,7 +268,10 @@ const BmpOverview = () => {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    if (academyData[name] !== value) setStateBtn(1);
+    if (academyData[name] !== value){
+       setStateBtn(1);
+       updateField(name);
+    }
     setAcademyData({ ...academyData, [name]: value });
   }
   const handleDayClick = (day) => {
@@ -267,8 +280,10 @@ const BmpOverview = () => {
       setSelectedDays(
         selectedDays.filter((selectedDay) => selectedDay !== day)
       );
+      updateField('sport');
     } else {
       setSelectedDays([...selectedDays, day]);
+      updateField('sport');
     }
   };
 
@@ -280,24 +295,7 @@ const BmpOverview = () => {
     setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
 
-  // useEffect(() => {
-  //   const filteredValues = timingValues
-  //     .filter(
-  //       (value) =>
-  //         value &&
-  //         value.toTime !== undefined &&
-  //         value.fromTime !== undefined &&
-  //         value.period !== undefined &&
-  //         value.period2 !== undefined
-  //     )
-  //     .map(
-  //       (value) =>
-  //         `${value.fromTime}${value.period} to ${value.toTime}${value.period2}`
-  //     );
-
-  //   setTimeArr(filteredValues);
-  // }, [timingValues]);
-
+  
   const handleButtonClick = (event) => {
     event.preventDefault();
     fileInputRef.current.click();
@@ -371,33 +369,6 @@ const BmpOverview = () => {
         setStateBtn(0);
       });
   }
-
-  // useEffect(() => {
-  //   // Parse timing values from the API response when it's available
-  //   if (academyData && academyData.timing) {
-  //     const [fromTime, period, toTime, period2] = academyData.timing
-  //       .replace(/[^\dA-Za-z]/g, '') // Remove non-alphanumeric characters
-  //       .split(/([A-Za-z]+)/) // Split at alphabets (AM/PM)
-  //       .filter(Boolean); // Filter out empty strings
-
-  //     setTimingValues([{ fromTime, period, toTime, period2 }]);
-  //   }
-  // }, [academyData]);
-
-  // useEffect(() => {
-  //   // Parse timing values from the API response when it's available
-  //   if (academyData && academyData.timing) {
-  //     const timingRegex = /(\d+)([APap][Mm])\s*to\s*(\d+)([APap][Mm])/;
-  //     const [, fromTime, period, toTime, period2] =
-  //       academyData.timing.match(timingRegex) || [];
-
-  //     if (fromTime && period && toTime && period2) {
-  //       setTimingValues([{ fromTime, period, toTime, period2 }]);
-  //     } else {
-  //       // Handle invalid timing format if needed
-  //     }
-  //   }
-  // }, [academyData]);
 
   return (
     <>
