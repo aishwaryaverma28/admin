@@ -86,7 +86,7 @@ const LPheader = () => {
 
   useEffect(() => {
     switch (landingUrl) {
-      case "/lp/bmp":
+      case "/lp/bmp/overview":
         setPageTitle("BMP");
         break;
       case "/lp/admin":
@@ -164,7 +164,7 @@ const LPheader = () => {
   }
 
   useEffect(() => {
-    if (landingUrl === "/lp/bmp") {
+    if (landingUrl === "/lp/bmp/overview") {
       getBMPUser();
     } else {
       getUser();
@@ -216,7 +216,7 @@ const LPheader = () => {
 
 const handleLogout = () => {
   console.log(landingUrl)
- if(landingUrl === "/lp/bmp"){
+ if(landingUrl === '/lp/bmp/overview' || '/lp/bmp/admin'){
    localStorage.clear();
    window.location.href = "https://www.bookmyplayer.com/login";
  }else{
@@ -352,7 +352,7 @@ const handleLogout = () => {
       {/* Bottom Navigation Start */}
       <nav className="navbar">
         <div className="navbarContainer">
-        {landingUrl === '/lp/bmp' ? (
+        {landingUrl === '/lp/bmp/overview' || '/lp/bmp/admin'? (
         <img src={vector} alt="" className="BMPlogo" />
       ) : (
         <img src={logo} alt="" className="logo" />
