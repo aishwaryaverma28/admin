@@ -24,13 +24,14 @@ const Training = () => {
   const [deleteProp, setDeleteProp] = useState(null);
   const [alertVideoShown, setAlertVideoShown] = useState(false);
   const [isUploadingMulti2, setIsUploadingMulti2] = useState(false);
-  const [fileName2, setFileName2] = useState("");
   const fileInputRef2 = useRef(null);
   const [alertShown2, setAlertShown2] = useState(false);
   const [photoUrls2, setPhotoUrls2] = useState([]);
   const [isDeleteModalOpen2, setIsDeleteModalOpen2] = useState(false);
   const [deleteIndex2, setDeleteIndex2] = useState(null);
   const [deleteProp2, setDeleteProp2] = useState(null);
+  const [updatedFields, setUpdatedFields] = useState([]);
+  const [stateBtn, setStateBtn] = useState(0);
   const [alertVideoShown2, setAlertVideoShown2] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const academyDetails = () => {
@@ -47,6 +48,9 @@ const Training = () => {
         if (response?.data?.data[0]?.tournament_photos !== "" && response?.data?.data[0]?.tournament_photos !== null) {
           setPhotoUrls2(response?.data?.data[0]?.tournament_photos?.split(",")?.reverse())
         }
+        if (response?.data?.data[0].updated_column !== "" && response?.data?.data[0].updated_column !== null) {
+          updatedFields(response.data.data[0].updated_column?.split(",").reverse())
+        }
       })
       .catch((error) => {
         console.log(error);;
@@ -55,6 +59,11 @@ const Training = () => {
   useEffect(() => {
     academyDetails();
   }, []);
+  const updateField = (fieldName) => {
+    if (!updatedFields.includes(fieldName)) {
+      setUpdatedFields([...updatedFields, fieldName]);
+    }
+  };
   const processImageName = (imageName) => {
     const nameParts = imageName.split('.');
     if (nameParts.length > 1) {
@@ -123,6 +132,8 @@ const Training = () => {
           if (data.secure_url) {
             photoUrls.push(imageUrl)
             setPhotoUrls(photoUrls);
+            updateField('training_ground_photos');
+            setStateBtn(1);
           }
         })
         .catch((err) => {
@@ -157,7 +168,7 @@ const Training = () => {
     const updatedNameString = updatedNameArray.reverse().join(',');
     axios
       .put(UPDATE_ACADEMY + academyId, {
-        training_ground_photos : updatedNameString,
+        training_ground_photos: updatedNameString,
       }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
@@ -170,107 +181,109 @@ const Training = () => {
         console.error("API call failed:", error);
       });
   };
-// {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
+  // {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
 
-const handleButtonClick2 = () => {
-  fileInputRef2.current.click();
-  setAlertShown2(false);
-};
-const handleFileChange2 = (event) => {
-  const files = event.target.files;
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (!allowedImageTypes.includes(file.type)) {
-      if (!alertShown2) {
-        alert("Please choose a valid image file.");
-        setAlertShown2(true);
-      }
-      return;
-    }
-    if (file.type.startsWith("image/")) {
-      submitImage2(file);
-    }
-  }
-};
-const submitImage2 = (file) => {
-  setIsUploadingMulti2(true);
-  const selectedImage = file;
-  if (selectedImage) {
-    if (selectedImage.size > 2 * 1024 * 1024) {
-      showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
-      setIsUploadingMulti2(false);
-      return;
-    }
-    const folder = "bookmyplayer/academy/" + academyId;
-    const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      /\.[^/.]+$/,
-      ""
-    )}`;
-    const data = new FormData();
-    data.append("file", selectedImage);
-    data.append("upload_preset", "zbxquqvw");
-    data.append("cloud_name", "cloud2cdn");
-    data.append("public_id", uniqueFileName);
-
-    fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setFileName(processImageName(selectedImage.name));
-        const imageUrl = processImageName(selectedImage.name);
-        if (data.secure_url) {
-          photoUrls2.push(imageUrl)
-          setPhotoUrls2(photoUrls2);
+  const handleButtonClick2 = () => {
+    fileInputRef2.current.click();
+    setAlertShown2(false);
+  };
+  const handleFileChange2 = (event) => {
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!allowedImageTypes.includes(file.type)) {
+        if (!alertShown2) {
+          alert("Please choose a valid image file.");
+          setAlertShown2(true);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
+        return;
+      }
+      if (file.type.startsWith("image/")) {
+        submitImage2(file);
+      }
+    }
+  };
+  const submitImage2 = (file) => {
+    setIsUploadingMulti2(true);
+    const selectedImage = file;
+    if (selectedImage) {
+      if (selectedImage.size > 2 * 1024 * 1024) {
+        showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
         setIsUploadingMulti2(false);
+        return;
+      }
+      const folder = "bookmyplayer/academy/" + academyId;
+      const uniqueFileName = `${folder}/${selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      )}`;
+      const data = new FormData();
+      data.append("file", selectedImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setFileName(processImageName(selectedImage.name));
+          const imageUrl = processImageName(selectedImage.name);
+          if (data.secure_url) {
+            photoUrls2.push(imageUrl)
+            setPhotoUrls2(photoUrls2);
+            updateField('tournament_photos');
+            setStateBtn(1);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsUploadingMulti2(false);
+        });
+    }
+  }
+  const handleDeleteOpen2 = (index, prop) => {
+    setIsDeleteModalOpen2(true);
+    setDeleteIndex2(index);
+    setDeleteProp2(prop);
+  };
+  const handleDeleteConfirm2 = () => {
+    if (deleteProp2 === "image") {
+      deleteStrategy2();
+    }
+    setIsDeleteModalOpen2(false);
+  };
+  console.log(photoUrls2)
+  const deleteStrategy2 = () => {
+    if (deleteIndex2 !== null) {
+      const updatedNameOfStrategy = [...photoUrls2];
+      updatedNameOfStrategy.splice(deleteIndex2, 1);
+      setPhotoUrls2(updatedNameOfStrategy);
+      updateDataAndCallAPI2(updatedNameOfStrategy);
+    }
+  };
+  const updateDataAndCallAPI2 = (updatedNameArray) => {
+    const updatedNameString = updatedNameArray.reverse().join(',');
+    axios
+      .put(UPDATE_ACADEMY + academyId, {
+        tournament_photos: updatedNameString,
+      }, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        academyDetails();
+      })
+      .catch((error) => {
+        console.error("API call failed:", error);
       });
-  }
-}
-const handleDeleteOpen2 = (index, prop) => {
-  setIsDeleteModalOpen2(true);
-  setDeleteIndex2(index);
-  setDeleteProp2(prop);
-};
-const handleDeleteConfirm2 = () => {
-  if (deleteProp2 === "image") {
-    deleteStrategy2();
-  }
-  setIsDeleteModalOpen2(false);
-};
-console.log(photoUrls2)
-const deleteStrategy2 = () => {
-  if (deleteIndex2 !== null) {
-    const updatedNameOfStrategy = [...photoUrls2];
-    updatedNameOfStrategy.splice(deleteIndex2, 1);
-    setPhotoUrls2(updatedNameOfStrategy);
-    updateDataAndCallAPI2(updatedNameOfStrategy);
-  }
-};
-const updateDataAndCallAPI2 = (updatedNameArray) => {
-  const updatedNameString = updatedNameArray.reverse().join(',');
-  axios
-    .put(UPDATE_ACADEMY + academyId, {
-      tournament_photos: updatedNameString,
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-      },
-    })
-    .then((response) => {
-      academyDetails();
-    })
-    .catch((error) => {
-      console.error("API call failed:", error);
-    });
-};
-// {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
+  };
+  // {/* //////////////////////////////////////////////////////////////////code for tournaments////////////////////////////////////////////////////////////////////////////////////// */}
   const initialPhotoUrls = [...photoUrls];
   const initialFileName = fileName;
 
@@ -284,6 +297,7 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
     let body = {
       training_ground_photos: photoUrls.join(","),
       tournament_photos: photoUrls2.join(","),
+      updated_column:updatedFields?.join(","),
     }
 
     axios
@@ -325,7 +339,7 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
                 Upload training ground images
               </p>
               <p className="common-fonts light-color bmp-size">
-              Recommended image size less than 2Mb
+                Recommended image size less than 2Mb
               </p>
             </div>
             <div className="bmp-total-img">
@@ -396,7 +410,11 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
                         />
                       </div>
 
-                      <p className="common-fonts bmp-tour">photo.gif</p>
+                      <p className="common-fonts bmp-tour">{photo?.length > 20 ? (
+                        <>{photo?.slice(20)}...</>
+                      ) : (
+                        <>{photo}</>
+                      )}</p>
                     </div>
                     <div className="bmp-trash">
                       <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
@@ -413,7 +431,7 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
             }</div>
         )}
       </>
-{/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
+      {/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
       <>
         <div className="bmpTab2ImgSection">
           <div className="bmp-heading-flex">
@@ -493,7 +511,11 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
                         />
                       </div>
 
-                      <p className="common-fonts bmp-tour">photo.gif</p>
+                      <p className="common-fonts bmp-tour">{photo?.length > 20 ? (
+                        <>{photo?.slice(20)}...</>
+                      ) : (
+                        <>{photo}</>
+                      )}</p>
                     </div>
                     <div className="bmp-trash">
                       <img src={Trash} alt="" onClick={() => handleDeleteOpen2(index, "image")} />
@@ -513,7 +535,16 @@ const updateDataAndCallAPI2 = (updatedNameArray) => {
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button" onClick={resetState}>Cancel</button>
-        <button className="common-fonts common-save-button" onClick={handleSubmit}>Save</button>
+        {stateBtn === 0 ? (
+          <button className="disabledBtn">Save</button>
+        ) : (
+          <button
+            className="common-fonts common-save-button"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+        )}
       </div>
       {isDeleteModalOpen && (
         <DeleteImage

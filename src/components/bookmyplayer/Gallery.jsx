@@ -28,7 +28,6 @@ const Gallery = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFile2, setSelectedFile2] = useState([]);
   const [academyData, setAcademyData] = useState({});
-  const [photosData, setPhotosData] = useState("");
   const [photoUrls, setPhotoUrls] = useState([]);
   const [videoUrls, setVideoUrls] = useState([]);
   const [newName, setNewName] = useState("");
@@ -39,7 +38,9 @@ const Gallery = () => {
   const [progress, setProgress]= useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const [alertShown, setAlertShown] = useState(false);
+  const [stateBtn, setStateBtn] = useState(0);
   const [alertVideoShown, setAlertVideoShown] = useState(false);
+  const [updatedFields, setUpdatedFields] = useState([]);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4", "video/quicktime", "video/webm", "video/ogg"];
    
@@ -69,6 +70,9 @@ const Gallery = () => {
         if (response?.data?.data[0].videos !== "" && response?.data?.data[0].videos !== null) {
           setVideoUrls(response.data.data[0].videos?.split(",").reverse())
         }
+        if (response?.data?.data[0].updated_column !== "" && response?.data?.data[0].updated_column !== null) {
+          updatedFields(response.data.data[0].updated_column?.split(",").reverse())
+        }
       })
       .catch((error) => {
         console.log(error);;
@@ -93,7 +97,12 @@ const Gallery = () => {
     setSelectedFile2(initialSelectedFile2);
   };
 
-  
+  const updateField = (fieldName) => {
+    if (!updatedFields.includes(fieldName)) {
+      setUpdatedFields([...updatedFields, fieldName]);
+    }
+  };
+
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -147,6 +156,8 @@ const Gallery = () => {
         .then((data) => {
           setSelectedFile(selectedImage);
           setFileName(processImageName(selectedImage.name));
+          updateField('banner');
+          setStateBtn(1);
           handleSubmit(processImageName(selectedImage.name));
         })
         .catch((err) => {
@@ -230,6 +241,8 @@ const Gallery = () => {
           if (data.secure_url) {
             photoUrls.push(imageUrl)
             setPhotoUrls(photoUrls);
+            updateField('photos');
+            setStateBtn(1);
             // handleSubmit2("photos", updatedPhotoUrls);
           }
         })
@@ -273,6 +286,8 @@ const Gallery = () => {
           if (data.secure_url) {
             videoUrls.push(imageUrl)
             setVideoUrls(videoUrls);
+            updateField('videos');
+            setStateBtn(1);
             // handleSubmit2("videos", updatedVideoUrls);
           } 
         })
@@ -295,6 +310,7 @@ const Gallery = () => {
      body = {
         banner: file,
         completion_percentage: combinedProgress,
+        updated_column:updatedFields?.join(","),
       }
   
     axios
@@ -334,6 +350,7 @@ const Gallery = () => {
     let body = {
         photos: photoUrls.join(","),
         videos: videoUrls.join(","),
+        updated_column:updatedFields?.join(","),
         completion_percentage: combinedProgress,
       }
     
@@ -644,7 +661,13 @@ const Gallery = () => {
                     <div className="bmp-video">
                       <img src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`} alt="" />
                     </div>
-                    {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
+                    <p className="common-fonts bmp-tour">
+                    {video?.length > 20 ? (
+                      <>{video?.slice(20)}...</>
+                    ) : (
+                      <>{video}</>
+                    )}
+                    </p>
                   </div>
                   <div className="bmp-trash">
                     <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "video")} />
@@ -679,7 +702,13 @@ const Gallery = () => {
                       />
                     </div>
 
-                    {/* <p className="common-fonts bmp-tour">academy tour.gif</p> */}
+                    <p className="common-fonts bmp-tour">
+                    {photo?.length > 20 ? (
+                      <>{photo?.slice(20)}...</>
+                    ) : (
+                      <>{photo}</>
+                    )}
+                    </p>
                   </div>
                   <div className="bmp-trash">
                     <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
@@ -698,7 +727,17 @@ const Gallery = () => {
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button" onClick={resetState}>Cancel</button>
-        <button className="common-fonts common-save-button" onClick={handleSubmit2}>Save</button>
+        {stateBtn === 0 ? (
+          <button className="disabledBtn">Save</button>
+        ) : (
+          <button
+            className="common-fonts common-save-button"
+            onClick={handleSubmit2}
+          >
+            Save
+          </button>
+        )}
+        {/* <button className="common-fonts common-save-button" onClick={handleSubmit2}>Save</button> */}
       </div>
 
       {isDeleteModalOpen && (

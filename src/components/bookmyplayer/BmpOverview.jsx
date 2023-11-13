@@ -23,20 +23,16 @@ const BmpOverview = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
-  // const [timingValues, setTimingValues] = useState([]);
   const [selectedStartTime, setSelectedStartTime] = useState('');
   const [selectedEndTime, setSelectedEndTime] = useState('');
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
-  // const [fileName2, setFileName2] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [selectedDaysString, setSelectedDaysString] = useState("");
-  // const [timeArr, setTimeArr] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-  // const [number, setNumber] = useState(0);
   const [updatedFields, setUpdatedFields] = useState([]);
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
@@ -76,7 +72,6 @@ const BmpOverview = () => {
     setAddress(selectedAddress);
     updateField('address1');
     setStateBtn(1);
-    // You can use the selected address to generate a Google Maps link
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(selectedAddress)}`;
     setMapLink(mapLink);
   };
@@ -255,6 +250,7 @@ const BmpOverview = () => {
         .then((data) => {
           console.log(selectedImage);
           setSelectedFile(selectedImage);
+          updateField('logo');
           setFileName(processImageName(selectedImage.name));
         })
         .catch((err) => {
@@ -335,6 +331,7 @@ const BmpOverview = () => {
       timing: startAndEndTime,
       logo: fileName,
       completion_percentage: combinedProgress,
+      updated_column:updatedFields?.join(","),
     };
     console.log(updatedFormData)
 
