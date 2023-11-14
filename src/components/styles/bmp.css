@@ -840,12 +840,74 @@ cursor: pointer;
 
 .bmp_admin_table{
   margin:1rem;
-  height: 80vh;
+  height: 50vh;
   overflow: auto;
 }
 
 .bmp_admin_table table th{
   text-align: left;
+  color:#1E2224;
+font-family: Lexend Deca;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+text-transform: uppercase;
+background-color: #F8FAFB;
+}
+
+.bmp_admin_table table td{
+  color:#1E2224;
+font-family: Lexend Deca;
+font-size: 0.875rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-transform: capitalize;
+}
+
+.bmp_admin_table table td:nth-child(1),
+.bmp_admin_table table td:nth-child(2){
+  border-right: 1px solid transparent;
+}
+
+.academy_top{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.academy_search_box{
+  margin-left: 1rem;
+  margin-top: -0.5rem;
+}
+
+.academy_rejected{
+  margin-top: -1rem;
+}
+
+.academy_new_blue_logo{
+  display: flex;
+  justify-content:start;
+  align-items: center;
+} 
+
+
+.academy_new_blue_logo img{
+  width: 1.5625rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+}
+
+.academy_new_blue_logo p{
+  color:#2B74DA;
+  font-family: Lexend Deca;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
 }
 
 

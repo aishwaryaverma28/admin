@@ -1,53 +1,78 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { GETALL_ACADEMY,getDecryptedToken } from '../utils/Constants.js';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Academies from './Academies.jsx';
 
 
 const BmpAdmin = () => {
-  const decryptedToken = getDecryptedToken();
-  const [data, setData] = useState([]);
+  const [activeTab, setActiveTab] = useState("academies");
 
-  const getAllAcademy = () => {
-    axios.get(GETALL_ACADEMY, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
-      setData(response?.data?.data);
-    }).catch((error)=>{
-      console.log(error);
-    });
+  const handleTabClick = (tab) =>{
+    setActiveTab(tab)
   }
 
-  useEffect(() => {
-    getAllAcademy();
-  }, []);
+
   return (
-    <div className='bmp_admin_table'>
-      <table>
-      <thead>
 
-      <tr>
-          <th>id</th>
-          <th>Academy Name</th>
-        </tr>
+    <div>
+    <div className="genral-setting-btn genral-setting-fonts aaa">
+      <button
+        className={`genral-btn  ${
+          activeTab === "academies" ? "genral-active" : ""
+        }`}
+        onClick={() => handleTabClick("academies")}
+      >
+        <span className="mrkt-whatsapp">Academies</span>
+      </button>
 
-      </thead>
+      <button
+        className={`genral-btn contact-genral-btn ${
+          activeTab === "players" ? "genral-active" : ""
+        }`}
+        onClick={() => handleTabClick("players")}
+      >
+        <span className="mrkt-whatsapp">Players</span>
+      </button>
+            
+      <button
+        className={`genral-btn contact-genral-btn ${
+          activeTab === "coaches" ? "genral-active" : ""
+        }`}
+        onClick={() => handleTabClick("coaches")}
+      >
+        <span className="mrkt-whatsapp">Coaches</span>
+      </button>
+            
+      <button
+        className={`genral-btn contact-genral-btn ${
+          activeTab === "club" ? "genral-active" : ""
+        }`}
+        onClick={() => handleTabClick("club")}
+      >
+        <span className="mrkt-whatsapp">Clubs</span>
+      </button>
 
-      <tbody>
-      {data.map((data) => (
-        <tr key={data?.id}>
-          <td>{data?.id}</td>
-          <td>{data?.name}</td>
-        </tr>
-      ))}
-
-
-      </tbody>
-        
-      </table>
+            
+      <button
+        className={`genral-btn contact-genral-btn ${
+          activeTab === "league" ? "genral-active" : ""
+        }`}
+        onClick={() => handleTabClick("league")}
+      >
+        <span className="mrkt-whatsapp">Leagues</span>
+      </button>
     </div>
+
+
+      {
+        activeTab === "academies"  && (
+         <Academies/>
+        )
+
+      }
+
+
+
+    </div>
+
   )
 }
 
