@@ -7,6 +7,7 @@ import {
   CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY,
+  RESTRICTED_KEYWORDS,
   getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -66,7 +67,7 @@ const BmpOverview = () => {
   const [address, setAddress] = useState(''); // Store the selected address
   const [mapLink, setMapLink] = useState('');
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
-
+  const [keywords, setKeywords] = useState([]);
 
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
@@ -145,7 +146,21 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-
+  const getAllKeywords = () => {
+    axios.get(RESTRICTED_KEYWORDS, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+      setKeywords(newKeywords);
+    })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+console.log(keywords);
   const createFolder = async () => {
     const cloudinaryFolder = "bookmyplayer/academy";
     const apiUrl = CREATE_FOLDER;
@@ -171,6 +186,7 @@ const BmpOverview = () => {
   useEffect(() => {
     createFolder();
     academyDetails();
+    getAllKeywords();
   }, []);
   useEffect(() => {
     // Parse timing values from the API response when it's available
@@ -265,14 +281,60 @@ const BmpOverview = () => {
     }
   };
 
+  // function handleChange(event) {
+  //   const { name, value } = event.target;
+  //   let redText = false;
+  //   // Check if any word in the introduction matches with keywords
+  //   const words = value.split(' ');
+  //   let textRestrict = "";
+  //   words.forEach((word) => {
+  //     if (keywords.includes(word?.toLowerCase())) {
+  //       textRestrict = word;
+  //       redText = true;
+  //     }
+  //   });
+
+  //   // Show alert and set style if any keyword found
+  //   if (redText) {
+  //     alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+  //     event.target.style.color = 'red';
+  //     setStateBtn(0);
+  //   } else {
+  //     event.target.style.color = ''; // Reset text color
+  //   }
+
+  //   if (academyData[name] !== value) {
+  //     setStateBtn(1);
+  //     updateField(name);
+  //   }
+  //   setAcademyData({ ...academyData, [name]: value });
+  // }
   function handleChange(event) {
     const { name, value } = event.target;
+    let redText = false;
+    let disableSaveButton = false;
+    const words = value.split(' ');
+    let textRestrict = "";
+    words.forEach((word) => {
+      if (keywords.includes(word?.toLowerCase())) {
+        textRestrict = word;
+        redText = true;
+        disableSaveButton = true;
+      }
+    });
+    if (redText) {
+      alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+      event.target.style.color = 'red';
+    } else {
+      event.target.style.color = '';
+    }  
     if (academyData[name] !== value) {
-      setStateBtn(1);
+      setStateBtn(disableSaveButton ? 0 : 1);
       updateField(name);
     }
     setAcademyData({ ...academyData, [name]: value });
   }
+  
   const handleDayClick = (day) => {
     setStateBtn(1);
     if (selectedDays?.includes(day)) {
@@ -534,7 +596,7 @@ const BmpOverview = () => {
               </div>
 
               <input
-                type="text"
+                type="number"
                 className="common-fonts common-input bmp-input"
                 name={index === 0 ? "phone" : "whatsapp"}
                 onChange={handleChange}

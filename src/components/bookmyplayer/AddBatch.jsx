@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_ACADEMY, ADD_BATCH } from "../utils/Constants";
+import { getDecryptedToken, UPDATE_ACADEMY, RESTRICTED_KEYWORDS, ADD_BATCH } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,8 +17,26 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
     const [showFeeMessage, setShowFeeMessage] = useState(false);
     const [num, setNum] = useState([]);
     const [stateBtn, setStateBtn] = useState(0);
+    const [keywords, setKeywords] = useState([]);
     const id = localStorage.getItem("academy_id");
 
+    const getAllKeywords = () => {
+        axios.get(RESTRICTED_KEYWORDS, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+                setKeywords(newKeywords);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    useEffect(() => {
+        getAllKeywords();
+    }, [])
     useEffect(() => {
         setNum(array);
     }, [array]);
@@ -26,8 +44,25 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
     // ===========================================================function for batch name
     const handleInputChange = (e) => {
         const title = e.target.value;
+        let redText = false;
+        let disableSaveButton = false;
+    const words = title.split(' ');
+    let textRestrict = "";
+    words.forEach((word) => {
+      if (keywords.includes(word?.toLowerCase())) {
+        textRestrict = word;
+        redText = true;
+        disableSaveButton = true;
+      }
+    });
+    if (redText) {
+      alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+      e.target.style.color = 'red';
+    } else {
+      e.target.style.color = '';
+    }
         setBatchTitle(title);
-        setStateBtn(1);
+        setStateBtn(disableSaveButton ? 0 : 1);
     }
     // ========================================================function for batch age
     const handleMinAgeChange = (e, index) => {
@@ -223,7 +258,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div className="bmp-agegroup">
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                       <span> Age Group <span className="common-fonts redAlert"> *</span></span> {showMaxAgeMessage ? (
+                                        <span> Age Group <span className="common-fonts redAlert"> *</span></span> {showMaxAgeMessage ? (
                                             <p className="common-fonts redAlert">Please enter maximum age</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
@@ -320,7 +355,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div>
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                       <span> Timings  <span className="common-fonts redAlert"> *</span></span> {showTimeMessage ? (
+                                        <span> Timings  <span className="common-fonts redAlert"> *</span></span> {showTimeMessage ? (
                                             <p className="common-fonts redAlert">Please enter closing time</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>
@@ -375,7 +410,7 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
                                 </div>
                                 <div>
                                     <label htmlFor="" className="common-fonts light-color batchErrorLable">
-                                       <span> Fee  <span className="common-fonts redAlert"> *</span></span> {showFeeMessage ? (
+                                        <span> Fee  <span className="common-fonts redAlert"> *</span></span> {showFeeMessage ? (
                                             <p className="common-fonts redAlert">Please enter amount</p>
                                         ) : (
                                             <p className="common-fonts light-color" style={{ visibility: 'hidden' }}>

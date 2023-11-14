@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_BATCH } from "../utils/Constants";
+import { getDecryptedToken, RESTRICTED_KEYWORDS, UPDATE_BATCH } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,7 +19,24 @@ const UpdateBatch = ({ onClose, fetchBatch, batchId, batch }) => {
     const [showFeeMessage, setShowFeeMessage] = useState(false);
     const [stateBtn, setStateBtn] = useState(0);
     const id = localStorage.getItem("academy_id");
-
+    const [keywords, setKeywords] = useState([]);
+    const getAllKeywords = () => {
+        axios.get(RESTRICTED_KEYWORDS, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+                setKeywords(newKeywords);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    useEffect(() => {
+        getAllKeywords();
+    }, [])
     useEffect(() => {
       // Set the initial state using values from the 'batch' prop
       if (batch) {
@@ -47,8 +64,25 @@ const UpdateBatch = ({ onClose, fetchBatch, batchId, batch }) => {
    // ===========================================================function for batch name
    const handleInputChange = (e) => {
     const title = e.target.value;
+    let redText = false;
+    let disableSaveButton = false;
+const words = title.split(' ');
+let textRestrict = "";
+words.forEach((word) => {
+  if (keywords.includes(word?.toLowerCase())) {
+    textRestrict = word;
+    redText = true;
+    disableSaveButton = true;
+  }
+});
+if (redText) {
+  alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+  e.target.style.color = 'red';
+} else {
+  e.target.style.color = '';
+}
     setBatchTitle(title);
-    setStateBtn(1);
+    setStateBtn(disableSaveButton ? 0 : 1);
 }
 // ========================================================function for batch age
 const handleMinAgeChange = (e, index) => {
