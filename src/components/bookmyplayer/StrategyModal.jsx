@@ -13,34 +13,34 @@ const StrategyModal = ({ onClose, newData, name, fetchData, array }) => {
   const [descrip, setDescrip] = useState("");
   const [xyz, setXyz] = useState("");
   const [abc, setAbc] = useState("");
-const [ num, setNum]= useState([]);
-const [keywords, setKeywords] = useState([]);
+  const [num, setNum] = useState([]);
+  const [keywords, setKeywords] = useState([]);
 
-const getAllKeywords = () => {
-  axios.get(RESTRICTED_KEYWORDS, {
+  const getAllKeywords = () => {
+    axios.get(RESTRICTED_KEYWORDS, {
       headers: {
-          Authorization: `Bearer ${decryptedToken}`,
+        Authorization: `Bearer ${decryptedToken}`,
       },
-  })
+    })
       .then((response) => {
-          const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-          setKeywords(newKeywords);
+        const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+        setKeywords(newKeywords);
       })
       .catch((error) => {
-          console.log(error);
+        console.log(error);
       });
-}
-useEffect(() => {
-  getAllKeywords();
-}, [])
-useEffect(() => {
-  setNum(array);
-}, [array]);
+  }
+  useEffect(() => {
+    getAllKeywords();
+  }, [])
+  useEffect(() => {
+    setNum(array);
+  }, [array]);
 
   const handleNameChange = (e) => {
     const newStrategyName = e.target.value;
     let redText = false;
-        let disableSaveButton = false;
+    let disableSaveButton = false;
     const words = newStrategyName.split(' ');
     let textRestrict = "";
     words.forEach((word) => {
@@ -58,7 +58,7 @@ useEffect(() => {
     }
     setStateBtn(disableSaveButton ? 0 : 1);
     setSName(newStrategyName);
-    if (name === null ||  name === "") {
+    if (name === null || name === "") {
       setXyz(newStrategyName);
     } else {
       const joinedString = name + "$@$@$" + newStrategyName;
@@ -67,8 +67,25 @@ useEffect(() => {
   };
 
   const handleDescChange = (e) => {
-    setStateBtn(1);
     const newStrategyName = e.target.value;
+    let redText = false;
+    let disableSaveButton = false;
+    const words = newStrategyName.split(' ');
+    let textRestrict = "";
+    words.forEach((word) => {
+      if (keywords.includes(word?.toLowerCase())) {
+        textRestrict = word;
+        redText = true;
+        disableSaveButton = true;
+      }
+    });
+    if (redText) {
+      alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+      e.target.style.color = 'red';
+    } else {
+      e.target.style.color = '';
+    }
+    setStateBtn(disableSaveButton ? 0 : 1);
     setDescrip(newStrategyName);
     if (newData === null || newData === "") {
       setAbc(newStrategyName);
@@ -88,13 +105,14 @@ useEffect(() => {
       strategy_name: xyz,
       completion_percentage: combinedProgress,
     };
-    if(updatedFormData.training_strategy==="" || updatedFormData.strategy_name===""){
+    if (updatedFormData.training_strategy === "" || updatedFormData.strategy_name === "") {
       toast.error("Please Enter Name and Description Both", {
         position: "top-right",
         autoClose: 2000,
       });
       return;
     }
+    // console.log(updatedFormData);
     axios
       .put(UPDATE_ACADEMY + academyId, updatedFormData, {
         headers: {

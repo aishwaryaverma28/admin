@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { UPDATE_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_ACADEMY, RESTRICTED_KEYWORDS, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,16 +15,67 @@ console.log(description)
   const [descrip, setDescrip] = useState(description[updateIndex]);
   const [initialName, setInitialName] = useState(name[updateIndex]);
   const [initialDescrip, setInitialDescrip] = useState(description[updateIndex]);
+  const [keywords, setKeywords] = useState([]);
+  const getAllKeywords = () => {
+    axios.get(RESTRICTED_KEYWORDS, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+        setKeywords(newKeywords);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    getAllKeywords();
+  }, [])
 
   const handleNameChange = (e) => {
-    setStateBtn(1);
-    const newStrategyName = e.target.value;
+    const newStrategyName = e.target.value;let redText = false;
+    let disableSaveButton = false;
+    const words = newStrategyName.split(' ');
+    let textRestrict = "";
+    words.forEach((word) => {
+      if (keywords.includes(word?.toLowerCase())) {
+        textRestrict = word;
+        redText = true;
+        disableSaveButton = true;
+      }
+    });
+    if (redText) {
+      alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+      e.target.style.color = 'red';
+    } else {
+      e.target.style.color = '';
+    }
+    setStateBtn(disableSaveButton ? 0 : 1);
     setSName(newStrategyName);
   };
 
   const handleDescChange = (e) => {
-    setStateBtn(1);
     const newStrategyName = e.target.value;
+    let redText = false;
+    let disableSaveButton = false;
+    const words = newStrategyName.split(' ');
+    let textRestrict = "";
+    words.forEach((word) => {
+      if (keywords.includes(word?.toLowerCase())) {
+        textRestrict = word;
+        redText = true;
+        disableSaveButton = true;
+      }
+    });
+    if (redText) {
+      alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
+      e.target.style.color = 'red';
+    } else {
+      e.target.style.color = '';
+    }
+    setStateBtn(disableSaveButton ? 0 : 1);
     setDescrip(newStrategyName);
   };
 
