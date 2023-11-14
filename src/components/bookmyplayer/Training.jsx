@@ -111,10 +111,13 @@ const Training = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
+      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      //   /\.[^/.]+$/,
+      //   ""
+      // )}`;
+      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
+      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
@@ -213,10 +216,13 @@ const Training = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
+      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      //   /\.[^/.]+$/,
+      //   ""
+      // )}`;
+      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
+      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");

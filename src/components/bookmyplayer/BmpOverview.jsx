@@ -67,7 +67,7 @@ const BmpOverview = () => {
   const [mapLink, setMapLink] = useState('');
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
 
- 
+
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
     updateField('address1');
@@ -80,7 +80,7 @@ const BmpOverview = () => {
     updateField('spoken_languages');
     setStateBtn(1);
   };
-  
+
   const updateField = (fieldName) => {
     if (!updatedFields.includes(fieldName)) {
       setUpdatedFields([...updatedFields, fieldName]);
@@ -201,7 +201,7 @@ const BmpOverview = () => {
       });
     }
   }, [googleScriptLoaded]);
- 
+
   const processImageName = (imageName) => {
     const nameParts = imageName.split('.');
     if (nameParts.length > 1) {
@@ -232,10 +232,13 @@ const BmpOverview = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
+      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      //   /\.[^/.]+$/,
+      //   ""
+      // )}`;
+      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
+      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
@@ -264,9 +267,9 @@ const BmpOverview = () => {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    if (academyData[name] !== value){
-       setStateBtn(1);
-       updateField(name);
+    if (academyData[name] !== value) {
+      setStateBtn(1);
+      updateField(name);
     }
     setAcademyData({ ...academyData, [name]: value });
   }
@@ -291,7 +294,7 @@ const BmpOverview = () => {
     setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
 
-  
+
   const handleButtonClick = (event) => {
     event.preventDefault();
     fileInputRef.current.click();
@@ -322,7 +325,7 @@ const BmpOverview = () => {
       phone: academyData.phone,
       whatsapp: academyData.whatsapp,
       address1: address,
-      map:mapLink,
+      map: mapLink,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
       website: academyData?.website,
@@ -331,7 +334,7 @@ const BmpOverview = () => {
       timing: startAndEndTime,
       logo: fileName,
       completion_percentage: combinedProgress,
-      updated_column:updatedFields?.join(","),
+      updated_column: updatedFields?.join(","),
     };
     console.log(updatedFormData)
 
@@ -419,7 +422,7 @@ const BmpOverview = () => {
                       placeholder: 'Enter your address',
                     })}
                   />
-                   <div {...(suggestions.length > 0 ? { className: "autocomplete-dropdown" } : {})}>
+                  <div {...(suggestions.length > 0 ? { className: "autocomplete-dropdown" } : {})}>
                     {loading && <div>Loading...</div>}
                     {suggestions.map((suggestion) => (
                       <div
