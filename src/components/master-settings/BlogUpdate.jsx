@@ -409,6 +409,12 @@ const BlogUpdate = () => {
         return { ...prev, url: modifiedValue };
       });
     }
+    else if (name === "keywords") {
+      modifiedValue = modifiedValue.toLowerCase();
+      setFormData((prev) => {
+        return { ...prev, keywords: modifiedValue };
+      });
+    }
   }
 
   async function handleFormSubmit(event) {

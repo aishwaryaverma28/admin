@@ -32,6 +32,7 @@ const LPheader = () => {
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
+  console.log(landingUrl);
   const [number, setNumber] = useState(null);
   let allowed = decryptedUserPath.split(",");
   // let allowed = [
@@ -90,6 +91,8 @@ const LPheader = () => {
         setPageTitle("BMP");
         break;
       case "/lp/admin":
+        setPageTitle("Home");
+        break;
       case "/lp/home":
         setPageTitle("Home");
         break;
@@ -164,12 +167,15 @@ const LPheader = () => {
   }
 
   useEffect(() => {
-    if (landingUrl === "/lp/bmp/overview") {
+    if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
       getBMPUser();
+    } else if (landingUrl === "/lp/home" || landingUrl === '/lp/admin') {
+      getUser();
     } else {
       getUser();
     }
   }, []);
+  
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -216,7 +222,7 @@ const LPheader = () => {
 
 const handleLogout = () => {
   console.log(landingUrl)
- if(landingUrl === '/lp/bmp/overview' || '/lp/bmp/admin'){
+ if(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin'){
    localStorage.clear();
    window.location.href = "https://www.bookmyplayer.com/login";
  }else{
@@ -352,7 +358,7 @@ const handleLogout = () => {
       {/* Bottom Navigation Start */}
       <nav className="navbar">
         <div className="navbarContainer">
-        {landingUrl === '/lp/bmp/overview' || '/lp/bmp/admin'? (
+        {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (
         <img src={vector} alt="" className="BMPlogo" />
       ) : (
         <img src={logo} alt="" className="logo" />

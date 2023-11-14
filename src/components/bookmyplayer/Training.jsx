@@ -319,6 +319,7 @@ const Training = () => {
           });
         }
         setAlertVideoShown(false);
+        setStateBtn(0);
       })
       .catch((error) => {
         console.log(error);

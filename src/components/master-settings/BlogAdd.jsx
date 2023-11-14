@@ -192,6 +192,13 @@ const BlogAdd = () => {
         return { ...prev, url: modifiedValue };
       });
     }
+    else if (name === "keywords") {
+      modifiedValue = modifiedValue.toLowerCase();
+      setFormData((prev) => {
+        return { ...prev, keywords: modifiedValue };
+      });
+    }
+   
     setStateBtn(1);
   }
 
@@ -532,6 +539,7 @@ const BlogAdd = () => {
                 value={formData.keywords}
                 placeholder="Blog Keywords"
                 onChange={handleChange}
+                className="keywordsLower"
               />
             </div>
             {/* <BlogSection/> */}

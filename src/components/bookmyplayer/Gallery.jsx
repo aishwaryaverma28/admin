@@ -373,6 +373,7 @@ const Gallery = () => {
           });
         }
         setAlertVideoShown(false);
+        setStateBtn(0);
       })
       .catch((error) => {
         console.log(error);
