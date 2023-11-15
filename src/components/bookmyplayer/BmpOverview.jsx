@@ -67,7 +67,7 @@ const BmpOverview = () => {
   const [address, setAddress] = useState(''); // Store the selected address
   const [mapLink, setMapLink] = useState('');
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
-  const [keywords, setKeywords] = useState([]);
+  const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
 
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
@@ -146,21 +146,21 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-  const getAllKeywords = () => {
-    axios.get(RESTRICTED_KEYWORDS, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-      setKeywords(newKeywords);
-    })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-console.log(keywords);
+//   const getAllKeywords = () => {
+//     axios.get(RESTRICTED_KEYWORDS, {
+//       headers: {
+//         Authorization: `Bearer ${decryptedToken}`,
+//       },
+//     })
+//     .then((response) => {
+//       const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+//       setKeywords(newKeywords);
+//     })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   }
+// console.log(keywords);
   const createFolder = async () => {
     const cloudinaryFolder = "bookmyplayer/academy";
     const apiUrl = CREATE_FOLDER;
@@ -186,7 +186,7 @@ console.log(keywords);
   useEffect(() => {
     createFolder();
     academyDetails();
-    getAllKeywords();
+    // getAllKeywords();
   }, []);
   useEffect(() => {
     // Parse timing values from the API response when it's available

@@ -17,26 +17,26 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
     const [showFeeMessage, setShowFeeMessage] = useState(false);
     const [num, setNum] = useState([]);
     const [stateBtn, setStateBtn] = useState(0);
-    const [keywords, setKeywords] = useState([]);
+    const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
     const id = localStorage.getItem("academy_id");
 
-    const getAllKeywords = () => {
-        axios.get(RESTRICTED_KEYWORDS, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-                setKeywords(newKeywords);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    useEffect(() => {
-        getAllKeywords();
-    }, [])
+    // const getAllKeywords = () => {
+    //     axios.get(RESTRICTED_KEYWORDS, {
+    //         headers: {
+    //             Authorization: `Bearer ${decryptedToken}`,
+    //         },
+    //     })
+    //         .then((response) => {
+    //             const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+    //             setKeywords(newKeywords);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+    // useEffect(() => {
+    //     getAllKeywords();
+    // }, [])
     useEffect(() => {
         setNum(array);
     }, [array]);

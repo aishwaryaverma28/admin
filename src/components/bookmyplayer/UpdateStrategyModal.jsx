@@ -15,24 +15,24 @@ console.log(description)
   const [descrip, setDescrip] = useState(description[updateIndex]);
   const [initialName, setInitialName] = useState(name[updateIndex]);
   const [initialDescrip, setInitialDescrip] = useState(description[updateIndex]);
-  const [keywords, setKeywords] = useState([]);
-  const getAllKeywords = () => {
-    axios.get(RESTRICTED_KEYWORDS, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-      .then((response) => {
-        const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-        setKeywords(newKeywords);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  useEffect(() => {
-    getAllKeywords();
-  }, [])
+  const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
+  // const getAllKeywords = () => {
+  //   axios.get(RESTRICTED_KEYWORDS, {
+  //     headers: {
+  //       Authorization: `Bearer ${decryptedToken}`,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+  //       setKeywords(newKeywords);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+  // useEffect(() => {
+  //   getAllKeywords();
+  // }, [])
 
   const handleNameChange = (e) => {
     const newStrategyName = e.target.value;let redText = false;

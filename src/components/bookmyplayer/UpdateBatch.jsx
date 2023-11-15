@@ -19,24 +19,24 @@ const UpdateBatch = ({ onClose, fetchBatch, batchId, batch }) => {
     const [showFeeMessage, setShowFeeMessage] = useState(false);
     const [stateBtn, setStateBtn] = useState(0);
     const id = localStorage.getItem("academy_id");
-    const [keywords, setKeywords] = useState([]);
-    const getAllKeywords = () => {
-        axios.get(RESTRICTED_KEYWORDS, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-                setKeywords(newKeywords);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    useEffect(() => {
-        getAllKeywords();
-    }, [])
+    const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
+    // const getAllKeywords = () => {
+    //     axios.get(RESTRICTED_KEYWORDS, {
+    //         headers: {
+    //             Authorization: `Bearer ${decryptedToken}`,
+    //         },
+    //     })
+    //         .then((response) => {
+    //             const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+    //             setKeywords(newKeywords);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+    // useEffect(() => {
+    //     getAllKeywords();
+    // }, [])
     useEffect(() => {
       // Set the initial state using values from the 'batch' prop
       if (batch) {

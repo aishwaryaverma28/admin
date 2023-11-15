@@ -692,6 +692,7 @@ const BlogUpdate = () => {
                 value={formData.keywords}
                 placeholder="Blog Keywords"
                 onChange={handleChange}
+                className="keywordsLower"
               />
             </div>
             <>
