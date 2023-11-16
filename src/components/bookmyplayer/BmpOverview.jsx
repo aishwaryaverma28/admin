@@ -14,8 +14,9 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
-import loadScript from 'load-script';
-import PlacesAutocomplete from 'react-places-autocomplete';
+import loadScript from "load-script";
+import PlacesAutocomplete from "react-places-autocomplete";
+import Dash from "../../assets/image/red-dash.svg";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -25,8 +26,8 @@ const BmpOverview = () => {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
-  const [selectedStartTime, setSelectedStartTime] = useState('');
-  const [selectedEndTime, setSelectedEndTime] = useState('');
+  const [selectedStartTime, setSelectedStartTime] = useState("");
+  const [selectedEndTime, setSelectedEndTime] = useState("");
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -40,58 +41,65 @@ const BmpOverview = () => {
   const [progressArray, setProgressArray] = useState([]);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const languages = [
-    { value: 'Hindi', label: 'Hindi' },
-    { value: 'English', label: 'English' },
-    { value: 'Russian', label: 'Russian' },
-    { value: 'Chinese', label: 'Chinese' },
-    { value: 'Spanish', label: 'Spanish' },
-    { value: 'French', label: 'French' },
-    { value: 'German', label: 'German' },
-    { value: 'Italian', label: 'Italian' },
-    { value: 'Japanese', label: 'Japanese' },
-    { value: 'Korean', label: 'Korean' },
-    { value: 'Portuguese', label: 'Portuguese' },
-    { value: 'Telugu', label: 'Telugu' },
-    { value: 'Kannada', label: 'Kannada' },
-    { value: 'Tamil', label: 'Tamil' },
-    { value: 'Marathi', label: 'Marathi' },
-    { value: 'Bengali', label: 'Bengali' },
-    { value: 'Urdu', label: 'Urdu' },
-    { value: 'Gujarati', label: 'Gujarati' },
-    { value: 'Malayalam', label: 'Malayalam' },
-    { value: 'Punjabi', label: 'Punjabi' },
-    { value: 'Odia', label: 'Odia' },
-    { value: 'Sindhi', label: 'Sindhi' },
-    { value: 'Bhojpuri', label: 'Bhojpuri' },
+    { value: "Hindi", label: "Hindi" },
+    { value: "English", label: "English" },
+    { value: "Russian", label: "Russian" },
+    { value: "Chinese", label: "Chinese" },
+    { value: "Spanish", label: "Spanish" },
+    { value: "French", label: "French" },
+    { value: "German", label: "German" },
+    { value: "Italian", label: "Italian" },
+    { value: "Japanese", label: "Japanese" },
+    { value: "Korean", label: "Korean" },
+    { value: "Portuguese", label: "Portuguese" },
+    { value: "Telugu", label: "Telugu" },
+    { value: "Kannada", label: "Kannada" },
+    { value: "Tamil", label: "Tamil" },
+    { value: "Marathi", label: "Marathi" },
+    { value: "Bengali", label: "Bengali" },
+    { value: "Urdu", label: "Urdu" },
+    { value: "Gujarati", label: "Gujarati" },
+    { value: "Malayalam", label: "Malayalam" },
+    { value: "Punjabi", label: "Punjabi" },
+    { value: "Odia", label: "Odia" },
+    { value: "Sindhi", label: "Sindhi" },
+    { value: "Bhojpuri", label: "Bhojpuri" },
   ];
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [address, setAddress] = useState('');
-  const [mapLink, setMapLink] = useState('');
-  const [coordinate, setCoordinate] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [address, setAddress] = useState("");
+  const [mapLink, setMapLink] = useState("");
+  const [coordinate, setCoordinate] = useState("");
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
-  const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
+  const [keywords, setKeywords] = useState([
+    "murder",
+    "kill",
+    "killer",
+    "kill you",
+  ]);
 
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
-    updateField('address1');
+    updateField("address1");
     setStateBtn(1);
-    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(selectedAddress)}`;
+    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
+      selectedAddress
+    )}`;
     setMapLink(mapLink);
-    updateField('map');
+    updateField("map");
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: selectedAddress }, (results, status) => {
-      if (status === 'OK' && results.length > 0) {
+      if (status === "OK" && results.length > 0) {
         const location = results[0].geometry.location;
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
-        setCoordinate(`${selectedLatitude},${selectedLongitude}`);    
-        updateField('coordinate');
-  }
-});
+        setCoordinate(`${selectedLatitude},${selectedLongitude}`);
+        updateField("coordinate");
+      }
+    });
   };
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
-    updateField('spoken_languages');
+    updateField("spoken_languages");
     setStateBtn(1);
   };
 
@@ -116,7 +124,7 @@ const BmpOverview = () => {
     for (let hours = 0; hours < 24; hours++) {
       for (let minutes = 0; minutes < 60; minutes += 30) {
         const hour = hours < 10 ? `0${hours}` : `${hours}`;
-        const minute = minutes === 0 ? '00' : `${minutes}`;
+        const minute = minutes === 0 ? "00" : `${minutes}`;
         const time = `${hour}:${minute}`;
         options.push(time);
       }
@@ -128,12 +136,12 @@ const BmpOverview = () => {
 
   const handleTimeChange = (event) => {
     setSelectedStartTime(event.target.value);
-    updateField('timing');
+    updateField("timing");
     setStateBtn(1);
   };
   const handleEndTimeChange = (event) => {
     setSelectedEndTime(event.target.value);
-    updateField('timing');
+    updateField("timing");
     setStateBtn(1);
   };
 
@@ -147,10 +155,15 @@ const BmpOverview = () => {
       .then((response) => {
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
-        setAddress(response?.data?.data[0]?.address1 || '');
+        setAddress(response?.data?.data[0]?.address1 || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
-        if (response?.data?.data[0]?.completion_percentage !== "" && response?.data?.data[0]?.completion_percentage !== null) {
-          setProgressArray(response?.data?.data[0]?.completion_percentage.split(","));
+        if (
+          response?.data?.data[0]?.completion_percentage !== "" &&
+          response?.data?.data[0]?.completion_percentage !== null
+        ) {
+          setProgressArray(
+            response?.data?.data[0]?.completion_percentage.split(",")
+          );
         }
         setIsLoading(false);
       })
@@ -159,21 +172,21 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-//   const getAllKeywords = () => {
-//     axios.get(RESTRICTED_KEYWORDS, {
-//       headers: {
-//         Authorization: `Bearer ${decryptedToken}`,
-//       },
-//     })
-//     .then((response) => {
-//       const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
-//       setKeywords(newKeywords);
-//     })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   }
-// console.log(keywords);
+  //   const getAllKeywords = () => {
+  //     axios.get(RESTRICTED_KEYWORDS, {
+  //       headers: {
+  //         Authorization: `Bearer ${decryptedToken}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const newKeywords = response?.data?.data.map(keywordObj => keywordObj.keyword);
+  //       setKeywords(newKeywords);
+  //     })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // console.log(keywords);
   const createFolder = async () => {
     const cloudinaryFolder = "bookmyplayer/academy";
     const apiUrl = CREATE_FOLDER;
@@ -219,25 +232,28 @@ const BmpOverview = () => {
   useEffect(() => {
     // Load the Google Maps JavaScript API script
     if (!googleScriptLoaded) {
-      loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN', (error, script) => {
-        if (error) {
-          console.error('Error loading Google Maps JavaScript API:', error);
-        } else {
-          setGoogleScriptLoaded(true);
+      loadScript(
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
+        (error, script) => {
+          if (error) {
+            console.error("Error loading Google Maps JavaScript API:", error);
+          } else {
+            setGoogleScriptLoaded(true);
+          }
+          return <div>Loading Google Maps...</div>;
         }
-        return <div>Loading Google Maps...</div>;
-      });
+      );
     }
   }, [googleScriptLoaded]);
 
   const processImageName = (imageName) => {
-    const nameParts = imageName.split('.');
+    const nameParts = imageName.split(".");
     if (nameParts.length > 1) {
-      const namePart = nameParts.slice(0, -1).join('.');
-      const processedName = namePart.replace(/[^\w-]/g, '-');
+      const namePart = nameParts.slice(0, -1).join(".");
+      const processedName = namePart.replace(/[^\w-]/g, "-");
       return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
-      return imageName.replace(/[^\w-]/g, '-');
+      return imageName.replace(/[^\w-]/g, "-");
     }
   };
 
@@ -256,7 +272,9 @@ const BmpOverview = () => {
     const selectedImage = file;
     if (selectedImage) {
       if (selectedImage.size > 2 * 1024 * 1024) {
-        alert("Image size should be less than 2MB. Please choose a smaller image.");
+        alert(
+          "Image size should be less than 2MB. Please choose a smaller image."
+        );
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
@@ -264,8 +282,14 @@ const BmpOverview = () => {
       //   /\.[^/.]+$/,
       //   ""
       // )}`;
-      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
-      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const imageNameWithoutExtension = selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      );
+      const sanitizedImageName = imageNameWithoutExtension.replace(
+        /[^\w-]/g,
+        "-"
+      );
       const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
@@ -281,7 +305,7 @@ const BmpOverview = () => {
         .then((data) => {
           console.log(selectedImage);
           setSelectedFile(selectedImage);
-          updateField('logo');
+          updateField("logo");
           setFileName(processImageName(selectedImage.name));
         })
         .catch((err) => {
@@ -325,7 +349,7 @@ const BmpOverview = () => {
     const { name, value } = event.target;
     let redText = false;
     let disableSaveButton = false;
-    const words = value.split(' ');
+    const words = value.split(" ");
     let textRestrict = "";
     words.forEach((word) => {
       if (keywords.includes(word?.toLowerCase())) {
@@ -336,27 +360,27 @@ const BmpOverview = () => {
     });
     if (redText) {
       alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
-      event.target.style.color = 'red';
+      event.target.style.color = "red";
     } else {
-      event.target.style.color = '';
-    }  
+      event.target.style.color = "";
+    }
     if (academyData[name] !== value) {
       setStateBtn(disableSaveButton ? 0 : 1);
       updateField(name);
     }
     setAcademyData({ ...academyData, [name]: value });
   }
-  
+
   const handleDayClick = (day) => {
     setStateBtn(1);
     if (selectedDays?.includes(day)) {
       setSelectedDays(
         selectedDays.filter((selectedDay) => selectedDay !== day)
       );
-      updateField('sport');
+      updateField("sport");
     } else {
       setSelectedDays([...selectedDays, day]);
-      updateField('sport');
+      updateField("sport");
     }
   };
 
@@ -367,7 +391,6 @@ const BmpOverview = () => {
   useEffect(() => {
     setSelectedDays(academyData?.sport?.split(",") || []);
   }, [academyData]);
-
 
   const handleButtonClick = (event) => {
     event.preventDefault();
@@ -384,7 +407,9 @@ const BmpOverview = () => {
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
-  const startAndEndTime = alwaysOpenChecked ? "Always_open" : `${selectedStartTime} to ${selectedEndTime}`;
+  const startAndEndTime = alwaysOpenChecked
+    ? "Always_open"
+    : `${selectedStartTime} to ${selectedEndTime}`;
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -393,7 +418,7 @@ const BmpOverview = () => {
     }
     const combinedProgress = progressArray?.join(",");
     const updatedFormData = {
-      academy_id:academyId,
+      academy_id: academyId,
       spoken_languages: selectedLanguage,
       name: academyData?.name,
       about: academyData?.about,
@@ -412,7 +437,7 @@ const BmpOverview = () => {
       completion_percentage: combinedProgress,
       updated_column: updatedFields?.join(","),
     };
-    console.log(updatedFormData)
+    console.log(updatedFormData);
 
     axios
       .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
@@ -489,16 +514,25 @@ const BmpOverview = () => {
                 componentRestrictions: { country: "IN" },
               }}
             >
-              {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+              {({
+                getInputProps,
+                suggestions,
+                getSuggestionItemProps,
+                loading,
+              }) => (
                 <div className="relativeInput">
                   <input
                     type="text"
                     className="common-fonts common-input bmp-input "
                     {...getInputProps({
-                      placeholder: 'Enter your address',
+                      placeholder: "Enter your address",
                     })}
                   />
-                  <div {...(suggestions.length > 0 ? { className: "autocomplete-dropdown" } : {})}>
+                  <div
+                    {...(suggestions.length > 0
+                      ? { className: "autocomplete-dropdown" }
+                      : {})}
+                  >
                     {loading && <div>Loading...</div>}
                     {suggestions.map((suggestion) => (
                       <div
@@ -519,64 +553,73 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -618,8 +661,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                      ? academyData?.phone
-                      : academyData?.whatsapp
+                    ? academyData?.phone
+                    : academyData?.whatsapp
                 }
               />
             </div>
@@ -662,6 +705,15 @@ const BmpOverview = () => {
             />
           </div>
 
+          <div className="bmp-input-flex">
+            <label className="common-fonts bmp-academy-name">
+              Experience:{" "}
+            </label>
+            <select className="common-fonts common-input langSelect">
+              <option value="">Select Experience</option>
+            </select>
+          </div>
+
           <div className="bmp-input-flex bmp-last-time">
             <div className="bmp-phone-field">
               <label htmlFor="" className="common-fonts bmp-academy-name">
@@ -684,7 +736,11 @@ const BmpOverview = () => {
 
             {!alwaysOpenChecked && (
               <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-                <select className="common-fonts common-input bmp-modal-select-2 overviewTime" value={selectedStartTime} onChange={handleTimeChange}>
+                <select
+                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  value={selectedStartTime}
+                  onChange={handleTimeChange}
+                >
                   <option value="">Select Opening time</option>
                   {timeOptions.map((time, index) => (
                     <option key={index} value={time}>
@@ -693,7 +749,11 @@ const BmpOverview = () => {
                   ))}
                 </select>
                 <p className="common-fonts light-color bmp-to">To</p>
-                <select className="common-fonts common-input bmp-modal-select-2 overviewTime" value={selectedEndTime} onChange={handleEndTimeChange}>
+                <select
+                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  value={selectedEndTime}
+                  onChange={handleEndTimeChange}
+                >
                   <option value="">Select closing time</option>
                   {timeOptions.map((time, index) => (
                     <option key={index} value={time}>
@@ -743,13 +803,13 @@ const BmpOverview = () => {
                     onChange={handleFileChange}
                   />
                   {isUploading ? (
-                    <span className="common-fonts upload-file-name">Uploading...</span>
+                    <span className="common-fonts upload-file-name">
+                      Uploading...
+                    </span>
                   ) : (
                     <span className="common-fonts upload-file-name">
-                      {fileName
-                        ? fileName
-                        : academyData?.logo}
-                      { }
+                      {fileName ? fileName : academyData?.logo}
+                      {}
                     </span>
                   )}
                 </span>
@@ -813,15 +873,49 @@ const BmpOverview = () => {
                 value={isLoading ? "-" : academyData?.instagram || ""}
               />
             </div>
-            <div className="bmp-input-flex">
-              <label className="common-fonts bmp-academy-name">Select a Language: </label>
-              <select value={selectedLanguage} onChange={handleLanguageChange} className="common-fonts common-input langSelect">
-                {languages.map((language) => (
-                  <option key={language.value} value={language.value}>
-                    {language.label}
-                  </option>
-                ))}
-              </select>
+
+            <div className="bmp_overview_language_flex">
+              <p className="common-fonts bmp-social">Language</p>
+
+              <button className="common-white-blue-button">
+                + Add Language
+              </button>
+            </div>
+
+            <div className="bmp-input-flex bmp_language_box">
+              <div>
+                <label className="common-fonts bmp-academy-name">
+                  Language
+                </label>
+                <select
+                  value={selectedLanguage}
+                  onChange={handleLanguageChange}
+                  className="common-fonts common-input langSelect level_input"
+                >
+                  <option value="">Select your language</option>
+                  {languages.map((language) => (
+                    <option key={language.value} value={language.value}>
+                      {language.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="common-fonts bmp-academy-name">Level</label>
+                <select
+                  value={selectedLanguage}
+                  onChange={handleLanguageChange}
+                  className="common-fonts common-input langSelect level_input"
+                >
+                  <option value="">Select your Level</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="bmp_overview_language_map">
+              <p className="common-fonts">Hindi (Proficient)</p>
+              <img src={Dash} alt="" />
             </div>
           </div>
         </div>
