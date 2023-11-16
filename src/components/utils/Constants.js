@@ -201,6 +201,7 @@ export const ENVELOPE_DETAILS = start + "/thirdPartyApiRouter/docusign/envelope/
 
 //============================================================bmp apis
 export const GET_ACADEMY = start + "/bmp/academy/get/";
+export const UPDATE_ACADEMY_TABLE2 = start+ "/bmp/academy/addupdaterequest";
 export const UPDATE_ACADEMY = start + "/bmp/academy/update/";
 export const ADD_BATCH = start + "/bmp/batch/add";
 export const GET_BATCH = start + "/bmp/batch/get";
@@ -213,3 +214,4 @@ export const GET_ACC_LEAD = start + "/bmp/academy/leads/get/";
 export const ADD_REPLY = start + "/bmp/academy/review/reply";
 export const GETALL_ACADEMY = start + "/bmp/academy/getall"
 export const RESTRICTED_KEYWORDS = start + "/bmp/getrestrictedkeywords";
+export const GET_ACADEMY_STATUS = start + "/bmp/academy/getall";

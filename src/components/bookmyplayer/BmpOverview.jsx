@@ -7,6 +7,7 @@ import {
   CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY,
+  UPDATE_ACADEMY_TABLE2,
   RESTRICTED_KEYWORDS,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -76,6 +77,17 @@ const BmpOverview = () => {
     setStateBtn(1);
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(selectedAddress)}`;
     setMapLink(mapLink);
+    updateField('map');
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: selectedAddress }, (results, status) => {
+      if (status === 'OK' && results.length > 0) {
+        const location = results[0].geometry.location;
+        const selectedLatitude = location.lat();
+        const selectedLongitude = location.lng();
+        setCoordinate(`${selectedLatitude},${selectedLongitude}`);    
+        updateField('coordinate');
+  }
+});
   };
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
@@ -381,6 +393,7 @@ const BmpOverview = () => {
     }
     const combinedProgress = progressArray?.join(",");
     const updatedFormData = {
+      academy_id:academyId,
       spoken_languages: selectedLanguage,
       name: academyData?.name,
       about: academyData?.about,
@@ -388,7 +401,7 @@ const BmpOverview = () => {
       whatsapp: academyData.whatsapp,
       address1: address,
       map: mapLink,
-      // coordinate:,
+      coordinate: coordinate,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
       website: academyData?.website,
@@ -402,7 +415,7 @@ const BmpOverview = () => {
     console.log(updatedFormData)
 
     axios
-      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+      .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },

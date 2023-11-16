@@ -12,7 +12,6 @@ const SecureRoutes = (props) => {
 
   useEffect(() => {
     let allowed = decryptedUserPath.split(",");
-    console.log(allowed);
     // let allowed = [
     //   "/lp/bmp/overview",
     //   "/lp/bmp/fees", "/lp/bmp/training", "/lp/bmp/gallery", "/lp/bmp/reviews", "/lp/bmp/leads","/lp/bmp/support","/lp/bmp/help",

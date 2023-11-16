@@ -66,6 +66,7 @@ import ListFilter from "./components/marketing/ListFilter.jsx";
 import WhatsappView from "./components/marketing/WhatsappView.jsx";
 import SupportTab from "./components/settings/SupportTab.jsx";
 import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
+import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -143,13 +144,17 @@ const router = createBrowserRouter([
         element: <BmpDashboard />,
         errorElement: <Error />,
         children: [
-          // {
-          //   path: "/lp/bmp",
-          //   element: <Navigate to="/lp/bmp/overview" replace />,
-          // },
+          {
+            path: "/lp/bmp",
+            element: <Navigate to="/lp/bmp/overview" replace />,
+          },
           {
             path:"/lp/bmp/overview",
             element:<SecureRoutes Component={BmpOverview}/>,
+          },
+          {
+            path: "/lp/bmp/overview/:id",
+            element: <OverviewById/>,
           },
           {
             path:"/lp/bmp/fees",
