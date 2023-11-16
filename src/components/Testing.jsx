@@ -59,7 +59,7 @@ function Testing() {
           secretKey
         ).toString();
         localStorage.setItem("jwtToken", encryptedToken);
-        if (auth0[5]) {
+        if (auth0[5] !== "") {
           localStorage.setItem("academy_id", auth0[5]);
         }
         const landingUrl = auth0[0];

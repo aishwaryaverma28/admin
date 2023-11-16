@@ -64,8 +64,9 @@ const BmpOverview = () => {
     { value: 'Bhojpuri', label: 'Bhojpuri' },
   ];
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [address, setAddress] = useState(''); // Store the selected address
+  const [address, setAddress] = useState('');
   const [mapLink, setMapLink] = useState('');
+  const [coordinate, setCoordinate] = useState('');
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
   const [keywords, setKeywords] = useState(["murder", "kill", "killer", "kill you"]);
 
@@ -189,7 +190,6 @@ const BmpOverview = () => {
     // getAllKeywords();
   }, []);
   useEffect(() => {
-    // Parse timing values from the API response when it's available
     if (academyData && academyData.timing) {
       if (academyData.timing === "Always_open") {
         setAlwaysOpenChecked(true);
@@ -207,7 +207,7 @@ const BmpOverview = () => {
   useEffect(() => {
     // Load the Google Maps JavaScript API script
     if (!googleScriptLoaded) {
-      loadScript('https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places', (error, script) => {
+      loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN', (error, script) => {
         if (error) {
           console.error('Error loading Google Maps JavaScript API:', error);
         } else {
@@ -388,6 +388,7 @@ const BmpOverview = () => {
       whatsapp: academyData.whatsapp,
       address1: address,
       map: mapLink,
+      // coordinate:,
       facebook: academyData?.facebook,
       instagram: academyData?.instagram,
       website: academyData?.website,
