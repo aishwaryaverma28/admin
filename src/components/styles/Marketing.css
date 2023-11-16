@@ -19,7 +19,12 @@
 
 .marketing-all-table table td:nth-child(1),
 .marketing-all-table table td:nth-child(2),
-.marketing-all-table table td:nth-child(3) {
+.marketing-all-table table td:nth-child(3),
+.marketing-all-table table td:nth-child(4) {
+  border-right: 1px solid transparent;
+}
+
+.market-review-table table td:nth-child(5){
   border-right: 1px solid transparent;
 }
 
