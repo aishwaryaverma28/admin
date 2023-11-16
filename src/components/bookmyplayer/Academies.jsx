@@ -12,6 +12,14 @@ const Academies = () => {
   const [activeTab, setActiveTab] = useState("all");
   const decryptedToken = getDecryptedToken();
   const [data, setData] = useState([]);
+  const [pendingData, setPendingData] = useState([]);
+  const [rejectedData, setRejectedData] = useState([]);
+  const [arrayLength, setArrayLength] = useState(0);
+
+  const handleArrayLength = (length) => {
+    setArrayLength(length);
+  };
+
 
   const getAllAcademy = () => {
     axios.post(GET_ACADEMY_STATUS, {
@@ -26,9 +34,37 @@ const Academies = () => {
       console.log(error);
     });
   }
+  const getPendingAcademy = () => {
+    axios.post(GET_ACADEMY_STATUS, {
+      status: 0
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      setPendingData(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+  const getRejectedAcademy = () => {
+    axios.post(GET_ACADEMY_STATUS, {
+      status: 2
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+      }
+    }).then((response) => {
+      setRejectedData(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   useEffect(() => {
     getAllAcademy();
+    getPendingAcademy();
+    getRejectedAcademy();
   }, []);
 
   const handleTabClick = (tab) => {
@@ -50,7 +86,7 @@ const Academies = () => {
             }`}
           onClick={() => handleTabClick("pending")}
         >
-          <span className="mrkt-whatsapp">Pending</span>
+          <span className="mrkt-whatsapp">Pending ({pendingData?.length})</span>
         </button>
 
         <button
@@ -58,7 +94,7 @@ const Academies = () => {
             }`}
           onClick={() => handleTabClick("rejected")}
         >
-          <span className="mrkt-whatsapp">Rejected</span>
+          <span className="mrkt-whatsapp">Rejected ({rejectedData?.length})</span>
         </button>
 
       </div>
@@ -80,7 +116,7 @@ const Academies = () => {
             </div>
 
 
-            <div className='bmp_admin_table'>
+            <div className='bmp_admin_table bmp_admin_table_2'>
               <table>
                 <thead>
 
@@ -95,18 +131,29 @@ const Academies = () => {
                 <tbody>
                   {data?.map((data) => (
                     <tr key={data?.id}>
-                      <Link to={"/lp/bmp/overview/" + data?.id}>
-                      <td>{data?.id}</td>
+                      
                       <td>
+                      <Link to={"/lp/bmp/overview/" + data?.id}>
+                      {data?.id}
+                      </Link>
+                      </td>
+
+
+      
+                      <td>
+                      <Link to={"/lp/bmp/overview/" + data?.id}>
                         <div className='academy_new_blue_logo'>
                           <img src={Logo} alt="" />
                           <p> {data?.name}</p>
                         </div>
-
+                        </Link>
                       </td>
 
-                      <td>2023-10-05</td>
-                    </Link>
+                      
+
+                      <td><Link to={"/lp/bmp/overview/" + data?.id}>2023-10-05</Link></td>
+
+
                     </tr>
                   ))}
 
@@ -122,7 +169,7 @@ const Academies = () => {
 
 }
 {
-  activeTab === "pending" && <PendingAcademies />
+  activeTab === "pending" && <PendingAcademies sendLengthToParent={handleArrayLength} />
 
 }
 {
