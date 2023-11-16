@@ -81,7 +81,7 @@ const Review = () => {
   }
 
   return (
-    <div className='marketing-all-table'>
+    <div className='marketing-all-table market-review-table'>
       <table>
         <thead>
           <tr>
