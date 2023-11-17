@@ -89,6 +89,9 @@ const LPheader = () => {
       case "/lp/bmp/overview":
         setPageTitle("BMP");
         break;
+        case "/lp/bmp/admin":
+        setPageTitle("Manager");
+        break;
       case "/lp/admin":
         setPageTitle("Home");
         break;
@@ -109,8 +112,13 @@ const LPheader = () => {
 
   const isPathAllowed = (path) => {
     if (allowed.length === 0) {
-      return true; // All paths are allowed when allowed array is empty
+      return true;
     }
+    const userRole = localStorage.getItem("role_name");
+    if (userRole === "Academy_Admin" && path === "/lp/bmp") {
+      return false;
+    }
+
     return allowed.includes(path);
   };
 
@@ -174,7 +182,7 @@ const LPheader = () => {
       getUser();
     }
   }, []);
-  
+
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -219,16 +227,16 @@ const LPheader = () => {
     setIsHelpModalOpen(false);
   };
 
-const handleLogout = () => {
-  console.log(landingUrl)
- if(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin'){
-   localStorage.clear();
-   window.location.href = "https://www.bookmyplayer.com/login";
- }else{
-   localStorage.clear();
-   window.location.href = "https://www.leadplaner.com/user/login";
- }
-};
+  const handleLogout = () => {
+    console.log(landingUrl)
+    if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
+      localStorage.clear();
+      window.location.href = "https://www.bookmyplayer.com/login";
+    } else {
+      localStorage.clear();
+      window.location.href = "https://www.leadplaner.com/user/login";
+    }
+  };
 
   return (
     <>
@@ -296,14 +304,14 @@ const handleLogout = () => {
                   ? name
                   : `${clientData?.first_name} ${clientData?.last_name}`} */}
 
-                  {
-                    number=== 0 ? (
-                      `${clientData?.first_name} ${clientData?.last_name}`
-                    ) : (
-                      `${clientData?.name}`
-                    )
+                {
+                  number === 0 ? (
+                    `${clientData?.first_name} ${clientData?.last_name}`
+                  ) : (
+                    `${clientData?.name}`
+                  )
 
-                  }
+                }
                 <br />
                 <span>{clientData.job_title}</span>
               </p>
@@ -321,14 +329,14 @@ const handleLogout = () => {
                 <img src={user} alt="user" />
                 <div className="crmUserInfo">
                   <h5 className="crmUserInfoName">
-                  {
-                    number=== 0 ? (
-                      `${clientData?.first_name} ${clientData?.last_name}`
-                    ) : (
-                      `${clientData?.name}`
-                    )
+                    {
+                      number === 0 ? (
+                        `${clientData?.first_name} ${clientData?.last_name}`
+                      ) : (
+                        `${clientData?.name}`
+                      )
 
-                  }
+                    }
                   </h5>
                   <p className="email-case">{clientData?.email}</p>
                   <p>{clientData?.job_title}</p>
@@ -357,11 +365,11 @@ const handleLogout = () => {
       {/* Bottom Navigation Start */}
       <nav className="navbar">
         <div className="navbarContainer">
-        {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (
-        <img src={vector} alt="" className="BMPlogo" />
-      ) : (
-        <img src={logo} alt="" className="logo" />
-      )}
+          {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (
+            <img src={vector} alt="" className="BMPlogo" />
+          ) : (
+            <img src={logo} alt="" className="logo" />
+          )}
           <input
             type="checkbox"
             name=""
@@ -425,12 +433,13 @@ const handleLogout = () => {
                 </NavLink>
               </li>
             )}
-
-            <li onClick={() => handleNavigationClick("Contacts")}>
-              <NavLink exact to="/lp/marketing" activeClassName="activeNav">
-                Marketing
-              </NavLink>
-            </li>
+            {isPathAllowed("/lp/marketing") && (
+              <li onClick={() => handleNavigationClick("Marketing")}>
+                <NavLink exact to="/lp/marketing" activeClassName="activeNav">
+                  Marketing
+                </NavLink>
+              </li>
+            )}
           </ul>
           <span></span>
         </div>

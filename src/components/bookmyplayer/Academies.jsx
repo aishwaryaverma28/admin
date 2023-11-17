@@ -15,11 +15,11 @@ const Academies = () => {
   const [pendingData, setPendingData] = useState([]);
   const [rejectedData, setRejectedData] = useState([]);
   const [arrayLength, setArrayLength] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
 
   const handleArrayLength = (length) => {
     setArrayLength(length);
   };
-
 
   const getAllAcademy = () => {
     axios.post(GET_ACADEMY_STATUS, {
@@ -70,6 +70,18 @@ const Academies = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab)
   }
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  const filteredData = data.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+      String(item.id).includes(searchInput.toLowerCase())
+    )
+  });
+
   return (
     <div className='academy_rejected'>
       <div className="genral-setting-btn genral-setting-fonts aaa">
@@ -108,6 +120,8 @@ const Academies = () => {
                   type="text"
                   className="recycle-search-input recycle-fonts"
                   placeholder="Search..."
+                  value={searchInput}
+                  onChange={handleSearchInputChange}
                 />
                 <span className="recycle-search-icon">
                   <img src={SearchIcon} alt="" />
@@ -129,57 +143,35 @@ const Academies = () => {
                 </thead>
 
                 <tbody>
-                  {data?.map((data) => (
+                  {filteredData.map((data) => (
                     <tr key={data?.id}>
-                      
                       <td>
-                      <Link to={"/lp/bmp/overview/" + data?.id}>
-                      {data?.id}
-                      </Link>
-                      </td>
-
-
-      
-                      <td>
-                      <Link to={"/lp/bmp/overview/" + data?.id}>
-                        <div className='academy_new_blue_logo'>
-                          <img src={Logo} alt="" />
-                          <p> {data?.name}</p>
-                        </div>
+                        <Link to={"/lp/bmp/overview/" + data?.id}>
+                          {data?.id}
                         </Link>
                       </td>
-
-                      
-
+                      <td>
+                        <Link to={"/lp/bmp/overview/" + data?.id}>
+                          <div className='academy_new_blue_logo'>
+                            <img src={Logo} alt="" />
+                            <p> {data?.name}</p>
+                          </div>
+                        </Link>
+                      </td>
                       <td><Link to={"/lp/bmp/overview/" + data?.id}>2023-10-05</Link></td>
-
-
                     </tr>
                   ))}
-
-
-              </tbody>
-
-            </table>
-          </div>
-
-
-    </>
-  )
-
-}
-{
-  activeTab === "pending" && <PendingAcademies sendLengthToParent={handleArrayLength} />
-
-}
-{
-  activeTab === "rejected" && <RejectedAcademy />
-
-}
-
-
-
-
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      {
+        activeTab === "pending" && <PendingAcademies sendLengthToParent={handleArrayLength} />
+      }
+      {
+        activeTab === "rejected" && <RejectedAcademy />
+      }
     </div >
   )
 }
