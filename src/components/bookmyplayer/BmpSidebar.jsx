@@ -1,21 +1,25 @@
 import React from "react";
 import "../styles/LPSetting.css";
 import "../styles/bmp.css";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LeftArrow from "../../assets/image/arrow-left.svg";
 
 const BmpSidebar = () => {
   const userRole = localStorage.getItem("role_name");
+  const navigate = useNavigate();
+  const handleBackToTable = () => {
+    localStorage.removeItem("academy_id");
+    navigate("/lp/bmp/admin");
+  };
+
   return (
     <section className="setting-side-panel">
       {userRole === "Academy_Admin" && (
         <div className="back-to-user general-refresh blog-back">
-          <Link to={"/lp/bmp/admin"}>
-            <button className="common-fonts">
-              <img src={LeftArrow} alt="" />
-              <span>Back To Table</span>
-            </button>
-          </Link>
+          <button className="common-fonts" onClick={handleBackToTable}>
+            <img src={LeftArrow} alt="" />
+            <span>Back To Table</span>
+          </button>
         </div>
       )}
       <p className="prefrence-options setting-font-style bmp-profile-txt common-fonts">
