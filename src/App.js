@@ -67,6 +67,7 @@ import WhatsappView from "./components/marketing/WhatsappView.jsx";
 import SupportTab from "./components/settings/SupportTab.jsx";
 import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
 import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
+import Approval from "./components/bookmyplayer/Approval.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -171,6 +172,10 @@ const router = createBrowserRouter([
           {
             path:"/lp/bmp/reviews",
             element:<SecureRoutes Component={Review}/>,
+          },
+          {
+            path:"/lp/bmp/approval",
+            element:<Approval/>,
           },
           {
             path:"/lp/bmp/leads",

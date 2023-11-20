@@ -81,7 +81,14 @@ const Review = () => {
   }
 
   return (
-    <div className='marketing-all-table market-review-table'>
+    <>
+
+<div>
+      <p className='comon-fonts bmp_lead_text'>Reviews</p>
+    </div>
+
+
+<div className='marketing-all-table market-review-table review-table'>
       <table>
         <thead>
           <tr>
@@ -134,6 +141,9 @@ const Review = () => {
       }
       <ToastContainer/>
     </div>
+
+    </>
+
   )
 }
 
