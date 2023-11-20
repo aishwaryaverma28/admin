@@ -51,6 +51,11 @@ const BmpSidebar = () => {
       </p>
 
       <p className="prefrence-options setting-font-style">
+        <NavLink exact to="/lp/bmp/approval">
+          Approval Status
+        </NavLink>
+      </p>
+      <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/reviews">
           Reviews
         </NavLink>

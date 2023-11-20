@@ -215,3 +215,4 @@ export const ADD_REPLY = start + "/bmp/academy/review/reply";
 export const GETALL_ACADEMY = start + "/bmp/academy/getall"
 export const RESTRICTED_KEYWORDS = start + "/bmp/getrestrictedkeywords";
 export const GET_ACADEMY_STATUS = start + "/bmp/academy/getall";
+export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
