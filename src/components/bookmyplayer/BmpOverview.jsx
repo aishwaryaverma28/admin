@@ -264,8 +264,8 @@ const BmpOverview = () => {
     // Load the Google Maps JavaScript API script
     if (!googleScriptLoaded) {
       loadScript(
-        // "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULI91iOQw&libraries=places&language=en&region=IN",
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
+        // "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULI91iOQw&libraries=places&language=en&region=IN",
         (error, script) => {
           if (error) {
             console.error("Error loading Google Maps JavaScript API:", error);
