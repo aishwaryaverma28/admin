@@ -21,6 +21,7 @@ const OverviewById = () => {
   localStorage.setItem("academy_id", id);
   const decryptedToken = getDecryptedToken();
   const [academyData, setAcademyData] = useState({});
+  const [academyDataOld, setAcademyDataOld] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
@@ -39,10 +40,12 @@ const OverviewById = () => {
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
   const [mappedLanguages, setMappedLanguages] = useState([]);
-  const [languageString, setLanguageString] = useState('');
+  const [languageString, setLanguageString] = useState("");
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
+  const [number, setNumber] = useState(0);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+  let joinLanguage;
   const languages = [
     { value: "Hindi", label: "Hindi" },
     { value: "English", label: "English" },
@@ -99,17 +102,27 @@ const OverviewById = () => {
       setMappedLanguages([...mappedLanguages, newLanguage]);
 
       // Create a string with all languages and levels
-      const languageString = mappedLanguages
+      joinLanguage = mappedLanguages
         .concat(newLanguage)
         .map((lang) => `${lang.language}(${lang.level})`)
-        .join(', ');
-      setLanguageString(languageString);
+        .join(", ");
+      setLanguageString(joinLanguage);
     }
   };
   const handleDeleteLanguage = (index) => {
+    setStateBtn(1);
     const updatedLanguages = [...mappedLanguages];
-    updatedLanguages.splice(index, 1);
-    setMappedLanguages(updatedLanguages);
+    const newArr = [...updatedLanguages.slice(0, index), ...updatedLanguages.slice(index + 1)];
+    if(newArr.length===0){
+      setNumber(1)
+    }else{
+      setNumber(0)
+    }
+    setMappedLanguages([...newArr]);
+
+    joinLanguage = newArr.map((lang) => `${lang.language}(${lang.level})`)
+    .join(", ");
+  setLanguageString(joinLanguage);
   };
 
   const handleSelect = async (selectedAddress) => {
@@ -185,8 +198,26 @@ const OverviewById = () => {
       .then((response) => {
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
+        setAcademyDataOld(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
+        console.log("hyy");
         setAddress(response?.data?.data[0]?.address1 || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
+
+        const languages =
+          response?.data?.data[0]?.spoken_languages?.split(", ");
+
+        const newLanguage = languages.map((lang) => {
+          const [language, level] = lang.split("(");
+          return {
+            language: language.trim(),
+            level: level.substring(0, level.length - 1).trim(),
+          };
+        });
+
+        setMappedLanguages([...newLanguage])
+
+
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
           response?.data?.data[0]?.completion_percentage !== null
@@ -398,33 +429,127 @@ const OverviewById = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray?.join(",");
-    const spokenLanguagesChanged = languageString !== academyData?.spoken_language;
-    const updatedFormData = {
-      name: academyData?.name,
-      about: academyData?.about,
-      phone: academyData?.phone,
-      whatsapp: academyData?.whatsapp,
-      experience:academyData?.experience,
-      address1: address,
-      map: mapLink,
-      coordinate: coordinate,
-      facebook: academyData?.facebook,
-      instagram: academyData?.instagram,
-      website: academyData?.website,
-      sport: selectedDaysString?.replace(/^,+/g, ""),
-      email: academyData?.email,
-      timing: startAndEndTime,
-      logo: fileName,
-      completion_percentage: combinedProgress,
-    };
+    const spokenLanguagesChanged =
+      languageString !== academyData?.spoken_languages;
 
-    if (spokenLanguagesChanged) {
+    const sportsChanged =  selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
+
+    const addressChanged = address !== academyData?.address;
+
+  
+
+ 
+    // const updatedFormData = {
+    //   name: academyData?.name,
+    //   about: academyData?.about,
+    //   phone: academyData?.phone,
+    //   whatsapp: academyData?.whatsapp,
+    //   experience: academyData?.experience,
+    //   address1: address,
+    //   map: mapLink,
+    //   coordinate: coordinate,
+    //   facebook: academyData?.facebook,
+    //   instagram: academyData?.instagram,
+    //   website: academyData?.website,
+    //   sport: selectedDaysString?.replace(/^,+/g, ""),
+    //   email: academyData?.email,
+    //   timing: startAndEndTime,
+    //   logo: fileName,
+    //   completion_percentage: combinedProgress,
+    // };
+
+    // if (spokenLanguagesChanged) {
+    //   updatedFormData.spoken_languages = languageString;
+    // }
+
+    
+// Initialize an empty object to hold updated form data
+const updatedFormData = {};
+
+// Function to check if a field has changed
+const hasChanged = (field) => academyData?.[field] !== academyDataOld?.[field];
+
+
+
+// Check each field if it has changed and update the corresponding field in updatedFormData
+if (hasChanged('name')) {
+  updatedFormData.name = academyData.name;
+}
+if (hasChanged('about')) {
+  updatedFormData.about = academyData.about;
+}
+
+if (hasChanged('phone')) {
+  updatedFormData.phone = academyData.phone;
+}
+
+if (hasChanged('whatsapp')) {
+  updatedFormData.whatsapp = academyData.whatsapp;
+}
+
+if (hasChanged('experience')) {
+  updatedFormData.experience = academyData.experience;
+}
+
+
+
+
+if (hasChanged('facebook')) {
+  updatedFormData.facebook = academyData.facebook;
+}
+
+if (hasChanged('instagram')) {
+  updatedFormData.instagram = academyData.instagram;
+}
+
+if (hasChanged('website')) {
+  updatedFormData.website = academyData.website;
+}
+
+if (hasChanged('email')) {
+  updatedFormData.email = academyData.email;
+}
+
+if (hasChanged('timing')) {
+  updatedFormData.timing = startAndEndTime;
+}
+
+if (hasChanged('logo')) {
+  updatedFormData.logo = fileName;
+}
+
+if (hasChanged('completion_percentage')) {
+  updatedFormData.completion_percentage = combinedProgress;
+}
+
+ if (spokenLanguagesChanged) {
       updatedFormData.spoken_languages = languageString;
-    }
-    console.log(updatedFormData);
+  }
+
+  if (sportsChanged && selectedDaysString?.replace(/^,+/g, "")!=="" ) {
+    updatedFormData.sport = selectedDaysString?.replace(/^,+/g, "");
+}
+
+if (addressChanged && address!=="") {
+  
+updatedFormData.address1 = address;
+updatedFormData.map = mapLink;
+updatedFormData.coordinate = coordinate;
+
+}
+
+
+
+
+
+
+
+console.log(updatedFormData)
+console.log("hrrr")
+
 
     axios
-      .put(UPDATE_ACADEMY+id, updatedFormData, {
+      .put(UPDATE_ACADEMY + id, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -457,432 +582,435 @@ const OverviewById = () => {
 
   return (
     <>
-    <div className="bmp-container">
-      <div>
-        <p className="common-fonts bmp-top">Address & Contact details</p>
+      <div className="bmp-container">
+        <div>
+          <p className="common-fonts bmp-top">Address & Contact details</p>
 
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Academy name
-          </label>
-          <input
-            type="text"
-            className="common-fonts common-input bmp-input"
-            name="name"
-            onChange={handleChange}
-            value={isLoading ? "-" : academyData?.name || ""}
-          />
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Introduction
-          </label>
-          <textarea
-            name="about"
-            onChange={handleChange}
-            value={isLoading ? "-" : academyData?.about || ""}
-            id=""
-            className="common-fonts bmp-textarea"
-            rows="2"
-          ></textarea>
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Address
-          </label>
-          <PlacesAutocomplete
-            value={address}
-            onChange={setAddress}
-            onSelect={handleSelect}
-            searchOptions={{
-              componentRestrictions: { country: "IN" },
-            }}
-          >
-            {({
-              getInputProps,
-              suggestions,
-              getSuggestionItemProps,
-              loading,
-            }) => (
-              <div className="relativeInput">
-                <input
-                  type="text"
-                  className="common-fonts common-input bmp-input "
-                  {...getInputProps({
-                    placeholder: "Enter your address",
-                  })}
-                />
-                <div
-                  {...(suggestions.length > 0
-                    ? { className: "autocomplete-dropdown" }
-                    : {})}
-                >
-                  {loading && <div>Loading...</div>}
-                  {suggestions.map((suggestion) => (
-                    <div
-                      {...getSuggestionItemProps(suggestion)}
-                      key={suggestion.placeId}
-                    >
-                      {suggestion.description}
-                    </div>
-                  ))}
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Academy name
+            </label>
+            <input
+              type="text"
+              className="common-fonts common-input bmp-input"
+              name="name"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.name || ""}
+            />
+          </div>
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Introduction
+            </label>
+            <textarea
+              name="about"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.about || ""}
+              id=""
+              className="common-fonts bmp-textarea"
+              rows="2"
+            ></textarea>
+          </div>
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Address
+            </label>
+            <PlacesAutocomplete
+              value={address}
+              onChange={setAddress}
+              onSelect={handleSelect}
+              searchOptions={{
+                componentRestrictions: { country: "IN" },
+              }}
+            >
+              {({
+                getInputProps,
+                suggestions,
+                getSuggestionItemProps,
+                loading,
+              }) => (
+                <div className="relativeInput">
+                  <input
+                    type="text"
+                    className="common-fonts common-input bmp-input "
+                    {...getInputProps({
+                      placeholder: "Enter your address",
+                    })}
+                  />
+                  <div
+                    {...(suggestions.length > 0
+                      ? { className: "autocomplete-dropdown" }
+                      : {})}
+                  >
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map((suggestion) => (
+                      <div
+                        {...getSuggestionItemProps(suggestion)}
+                        key={suggestion.placeId}
+                      >
+                        {suggestion.description}
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              )}
+            </PlacesAutocomplete>
+          </div>
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Select your sport
+            </label>
+            <div className="bmp-games">
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Football")}
+              >
+                Football
               </div>
-            )}
-          </PlacesAutocomplete>
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Select your sport
-          </label>
-          <div className="bmp-games">
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Football") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Football")}
-            >
-              Football
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Basketball")}
-            >
-              Basketball
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Chess")}
-            >
-              Chess
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Tennis")}
-            >
-              Tennis
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("MMA")}
-            >
-              MMA
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Golf")}
-            >
-              Golf
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Hockey")}
-            >
-              Hockey
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Badminton")}
-            >
-              Badminton
-            </div>
-            <div
-              className={`common-fonts bmp-game-list ${
-                selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-              }`}
-              onClick={() => handleDayClick("Volleyball")}
-            >
-              Volleyball
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Basketball")}
+              >
+                Basketball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Chess")}
+              >
+                Chess
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Tennis")}
+              >
+                Tennis
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("MMA")}
+              >
+                MMA
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Golf")}
+              >
+                Golf
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Hockey")}
+              >
+                Hockey
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Badminton")}
+              >
+                Badminton
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
+                }`}
+                onClick={() => handleDayClick("Volleyball")}
+              >
+                Volleyball
+              </div>
             </div>
           </div>
-        </div>
-        {[...Array(phoneNumberCount)].map((_, index) => (
-          <div className="bmp-input-flex" key={index}>
+          {[...Array(phoneNumberCount)].map((_, index) => (
+            <div className="bmp-input-flex" key={index}>
+              <div className="bmp-phone-field">
+                <label htmlFor="" className="common-fonts bmp-academy-name">
+                  {index === 0 ? "Phone Number" : `Whatsapp Number`}
+                </label>
+
+                {index === 0 && ( // Render checkbox and label only for the first phone number input
+                  <div className="bmp-whatsapp-check">
+                    <label className="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        className="cb1"
+                        name="headerCheckBox"
+                        checked={isWhatsappActivated}
+                        onChange={handleCheckboxChange}
+                      />
+                      <span className="checkmark"></span>
+                    </label>
+                    <p className="common-fonts light-color">
+                      Whatsapp Activated
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <input
+                type="number"
+                className="common-fonts common-input bmp-input"
+                name={index === 0 ? "phone" : "whatsapp"}
+                onChange={handleChange}
+                value={
+                  isLoading
+                    ? "-"
+                    : index === 0
+                    ? academyData?.phone
+                    : academyData?.whatsapp
+                }
+              />
+            </div>
+          ))}
+
+          {isButtonVisible && (
+            <div>
+              <button
+                className="common-fonts common-white-blue-button bmp-add-phone"
+                onClick={addPhoneNumberInput}
+              >
+                + Add Phone Number
+              </button>
+            </div>
+          )}
+
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              className="common-fonts common-input bmp-input"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.email || ""}
+              style={{ textTransform: "none" }}
+            />
+          </div>
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+              Website
+            </label>
+            <input
+              type="text"
+              name="website"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.website || ""}
+              className="common-fonts common-input bmp-input"
+            />
+          </div>
+
+          <div className="bmp-input-flex">
+            <label className="common-fonts bmp-academy-name">
+              Experience:{" "}
+            </label>
+            <select
+              className="common-fonts common-input langSelect"
+              name="experience"
+              onChange={handleChange}
+            >
+              <option value="">Select Experience</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="20+">20+</option>
+            </select>
+          </div>
+
+          <div className="bmp-input-flex bmp-last-time">
             <div className="bmp-phone-field">
               <label htmlFor="" className="common-fonts bmp-academy-name">
-                {index === 0 ? "Phone Number" : `Whatsapp Number`}
+                Open Timings
               </label>
+              <div className="bmp-whatsapp-check">
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    className="cb1"
+                    name="headerCheckBox"
+                    checked={alwaysOpenChecked}
+                    onChange={handleAlwaysOpenCheckboxChange}
+                  />
+                  <span className="checkmark"></span>
+                </label>
+                <p className="common-fonts light-color">Always Open</p>
+              </div>
+            </div>
 
-              {index === 0 && ( // Render checkbox and label only for the first phone number input
-                <div className="bmp-whatsapp-check">
-                  <label className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      className="cb1"
-                      name="headerCheckBox"
-                      checked={isWhatsappActivated}
-                      onChange={handleCheckboxChange}
-                    />
-                    <span className="checkmark"></span>
-                  </label>
-                  <p className="common-fonts light-color">
-                    Whatsapp Activated
-                  </p>
+            {!alwaysOpenChecked && (
+              <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
+                <select
+                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  value={selectedStartTime}
+                  onChange={handleTimeChange}
+                >
+                  <option value="">Select Opening time</option>
+                  {timeOptions.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+                <p className="common-fonts light-color bmp-to">To</p>
+                <select
+                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  value={selectedEndTime}
+                  onChange={handleEndTimeChange}
+                >
+                  <option value="">Select closing time</option>
+                  {timeOptions.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <ProgressBar array={progressArray} />
+          <div className="bmp-right-fields">
+            <p className="common-fonts">Upload Academic Logo</p>
+            <p className="common-fonts">Recommended image size 190x190</p>
+
+            <div className="bmp-upload">
+              <div className="contact-browse deal-doc-file">
+                <span
+                  className="common-fonts common-input contact-tab-input"
+                  style={{
+                    position: "relative",
+                    marginRight: "10px",
+                  }}
+                >
+                  <button
+                    className="contact-browse-btn common-fonts"
+                    onClick={handleButtonClick}
+                  >
+                    Browse
+                  </button>
+
+                  <input
+                    type="file"
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "100%",
+                    }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  {isUploading ? (
+                    <span className="common-fonts upload-file-name">
+                      Uploading...
+                    </span>
+                  ) : (
+                    <span className="common-fonts upload-file-name">
+                      {fileName ? fileName : academyData?.logo}
+                      {}
+                    </span>
+                  )}
+                </span>
+              </div>
+
+              {selectedFile && (
+                <div className="bmp-image-preview">
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt="Selected Preview"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              )}
+
+              {!selectedFile && (
+                <div className="bmp-image-preview">
+                  <img
+                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${id}/${academyData?.logo}`}
+                    alt=""
+                    className="bmp-preview-image"
+                  />
                 </div>
               )}
             </div>
 
-            <input
-              type="number"
-              className="common-fonts common-input bmp-input"
-              name={index === 0 ? "phone" : "whatsapp"}
-              onChange={handleChange}
-              value={
-                isLoading
-                  ? "-"
-                  : index === 0
-                  ? academyData?.phone
-                  : academyData?.whatsapp
-              }
-            />
-          </div>
-        ))}
+            <p className="common-fonts bmp-social">
+              Connect Social Media Account
+            </p>
 
-        {isButtonVisible && (
-          <div>
-            <button
-              className="common-fonts common-white-blue-button bmp-add-phone"
-              onClick={addPhoneNumberInput}
-            >
-              + Add Phone Number
-            </button>
-          </div>
-        )}
-
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            className="common-fonts common-input bmp-input"
-            onChange={handleChange}
-            value={isLoading ? "-" : academyData?.email || ""}
-            style={{ textTransform: "none" }}
-          />
-        </div>
-        <div className="bmp-input-flex">
-          <label htmlFor="" className="common-fonts bmp-academy-name">
-            Website
-          </label>
-          <input
-            type="text"
-            name="website"
-            onChange={handleChange}
-            value={isLoading ? "-" : academyData?.website || ""}
-            className="common-fonts common-input bmp-input"
-          />
-        </div>
-
-        <div className="bmp-input-flex">
-          <label className="common-fonts bmp-academy-name">
-            Experience:{" "}
-          </label>
-          <select className="common-fonts common-input langSelect" name="experience"
-            onChange={handleChange}>
-            <option value="">Select Experience</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-            <option value="20+">20+</option>
-          </select>
-        </div>
-
-        <div className="bmp-input-flex bmp-last-time">
-          <div className="bmp-phone-field">
-            <label htmlFor="" className="common-fonts bmp-academy-name">
-              Open Timings
-            </label>
-            <div className="bmp-whatsapp-check">
-              <label className="custom-checkbox">
-                <input
-                  type="checkbox"
-                  className="cb1"
-                  name="headerCheckBox"
-                  checked={alwaysOpenChecked}
-                  onChange={handleAlwaysOpenCheckboxChange}
-                />
-                <span className="checkmark"></span>
+            <div className="bmp-input-flex">
+              <label htmlFor="" className="common-fonts bmp-academy-name">
+                Facebook
               </label>
-              <p className="common-fonts light-color">Always Open</p>
+              <input
+                type="text"
+                className="common-fonts common-input bmp-input"
+                name="facebook"
+                onChange={handleChange}
+                value={isLoading ? "-" : academyData?.facebook || ""}
+              />
             </div>
-          </div>
-
-          {!alwaysOpenChecked && (
-            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-              <select
-                className="common-fonts common-input bmp-modal-select-2 overviewTime"
-                value={selectedStartTime}
-                onChange={handleTimeChange}
-              >
-                <option value="">Select Opening time</option>
-                {timeOptions.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-              <p className="common-fonts light-color bmp-to">To</p>
-              <select
-                className="common-fonts common-input bmp-modal-select-2 overviewTime"
-                value={selectedEndTime}
-                onChange={handleEndTimeChange}
-              >
-                <option value="">Select closing time</option>
-                {timeOptions.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <ProgressBar array={progressArray} />
-        <div className="bmp-right-fields">
-          <p className="common-fonts">Upload Academic Logo</p>
-          <p className="common-fonts">Recommended image size 190x190</p>
-
-          <div className="bmp-upload">
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={handleButtonClick}
-                >
-                  Browse
-                </button>
-
-                <input
-                  type="file"
-                  style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                  }}
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-                {isUploading ? (
-                  <span className="common-fonts upload-file-name">
-                    Uploading...
-                  </span>
-                ) : (
-                  <span className="common-fonts upload-file-name">
-                    {fileName ? fileName : academyData?.logo}
-                    {}
-                  </span>
-                )}
-              </span>
+            <div className="bmp-input-flex">
+              <label htmlFor="" className="common-fonts bmp-academy-name">
+                Instagram
+              </label>
+              <input
+                type="text"
+                className="common-fonts common-input bmp-input"
+                name="instagram"
+                onChange={handleChange}
+                value={isLoading ? "-" : academyData?.instagram || ""}
+              />
             </div>
 
-            {selectedFile && (
-              <div className="bmp-image-preview">
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Selected Preview"
-                  className="bmp-preview-image"
-                />
-              </div>
-            )}
+            <div className="bmp_overview_language_flex">
+              <p className="common-fonts bmp-social">Language</p>
 
-            {!selectedFile && (
-              <div className="bmp-image-preview">
-                <img
-                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${id}/${academyData?.logo}`}
-                  alt=""
-                  className="bmp-preview-image"
-                />
-              </div>
-            )}
-          </div>
-
-          <p className="common-fonts bmp-social">
-            Connect Social Media Account
-          </p>
-
-          <div className="bmp-input-flex">
-            <label htmlFor="" className="common-fonts bmp-academy-name">
-              Facebook
-            </label>
-            <input
-              type="text"
-              className="common-fonts common-input bmp-input"
-              name="facebook"
-              onChange={handleChange}
-              value={isLoading ? "-" : academyData?.facebook || ""}
-            />
-          </div>
-          <div className="bmp-input-flex">
-            <label htmlFor="" className="common-fonts bmp-academy-name">
-              Instagram
-            </label>
-            <input
-              type="text"
-              className="common-fonts common-input bmp-input"
-              name="instagram"
-              onChange={handleChange}
-              value={isLoading ? "-" : academyData?.instagram || ""}
-            />
-          </div>
-
-          <div className="bmp_overview_language_flex">
-            <p className="common-fonts bmp-social">Language</p>
-
-            <button
+              <button
                 className="common-white-blue-button"
                 onClick={handleAddLanguage}
               >
                 + Add Language
               </button>
-          </div>
+            </div>
 
-          <div className="bmp-input-flex bmp_language_box">
+            <div className="bmp-input-flex bmp_language_box">
               <div>
                 <label className="common-fonts bmp-academy-name">
                   Language
@@ -922,31 +1050,30 @@ const OverviewById = () => {
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>
-                <img src={Dash} alt="" onClick={handleDeleteLanguage}  />
+                <img src={Dash} alt="" onClick={()=>handleDeleteLanguage(index)} />
               </div>
             ))}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div className="bmp-bottom-btn">
-      <button className="common-fonts common-white-button">cancel</button>
-      {/* <button className="common-save-button common-save">Save</button> */}
-      {stateBtn === 0 ? (
-        <button className="disabledBtn">Save</button>
-      ) : (
-        <button
-          className="common-save-button common-save"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
-      )}
-    </div>
-    <ToastContainer />
-  </>
+      <div className="bmp-bottom-btn">
+        <button className="common-fonts common-white-button">cancel</button>
+        {/* <button className="common-save-button common-save">Save</button> */}
+        {stateBtn === 0 ? (
+          <button className="disabledBtn">Save</button>
+        ) : (
+          <button
+            className="common-save-button common-save"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+        )}
+      </div>
+      <ToastContainer />
+    </>
+  );
+};
 
-  )
-}
-
-export default OverviewById
+export default OverviewById;
