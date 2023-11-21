@@ -44,6 +44,7 @@ const OverviewById = () => {
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const [number, setNumber] = useState(0);
+  const [number1, setNumber1] = useState(0);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   let joinLanguage;
   const languages = [
@@ -112,17 +113,21 @@ const OverviewById = () => {
   const handleDeleteLanguage = (index) => {
     setStateBtn(1);
     const updatedLanguages = [...mappedLanguages];
-    const newArr = [...updatedLanguages.slice(0, index), ...updatedLanguages.slice(index + 1)];
-    if(newArr.length===0){
-      setNumber(1)
-    }else{
-      setNumber(0)
+    const newArr = [
+      ...updatedLanguages.slice(0, index),
+      ...updatedLanguages.slice(index + 1),
+    ];
+    if (newArr.length === 0) {
+      setNumber(1);
+    } else {
+      setNumber(0);
     }
     setMappedLanguages([...newArr]);
 
-    joinLanguage = newArr.map((lang) => `${lang.language}(${lang.level})`)
-    .join(", ");
-  setLanguageString(joinLanguage);
+    joinLanguage = newArr
+      .map((lang) => `${lang.language}(${lang.level})`)
+      .join(", ");
+    setLanguageString(joinLanguage);
   };
 
   const handleSelect = async (selectedAddress) => {
@@ -215,8 +220,7 @@ const OverviewById = () => {
           };
         });
 
-        setMappedLanguages([...newLanguage])
-
+        setMappedLanguages([...newLanguage]);
 
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
@@ -348,6 +352,11 @@ const OverviewById = () => {
           setSelectedFile(selectedImage);
           updateField("logo");
           setFileName(processImageName(selectedImage.name));
+          if(processImageName(selectedImage.name).length===0){
+            setNumber1(1)
+          }else{
+            setNumber1(0)
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -394,6 +403,8 @@ const OverviewById = () => {
       setSelectedDays([...selectedDays, day]);
       updateField("sport");
     }
+
+
   };
 
   useEffect(() => {
@@ -432,13 +443,17 @@ const OverviewById = () => {
     const spokenLanguagesChanged =
       languageString !== academyData?.spoken_languages;
 
-    const sportsChanged =  selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
+    const sportsChanged =
+      selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
 
     const addressChanged = address !== academyData?.address;
 
-  
+    const timingChanged = startAndEndTime !== academyData?.timing;
 
- 
+    const logoChanged = fileName !== academyData?.fileName;
+
+    const progressChanged = combinedProgress !== academyData?.completion_percentage;
+
     // const updatedFormData = {
     //   name: academyData?.name,
     //   about: academyData?.about,
@@ -462,91 +477,89 @@ const OverviewById = () => {
     //   updatedFormData.spoken_languages = languageString;
     // }
 
-    
-// Initialize an empty object to hold updated form data
-const updatedFormData = {};
+    // Initialize an empty object to hold updated form data
+    const updatedFormData = {};
 
-// Function to check if a field has changed
-const hasChanged = (field) => academyData?.[field] !== academyDataOld?.[field];
+    // Function to check if a field has changed
+    const hasChanged = (field) =>
+      academyData?.[field] !== academyDataOld?.[field];
+
+    // Check each field if it has changed and update the corresponding field in updatedFormData
+    if (hasChanged("name")) {
+      updatedFormData.name = academyData.name;
+    }
+    if (hasChanged("about")) {
+      updatedFormData.about = academyData.about;
+    }
+
+    if (hasChanged("phone")) {
+      updatedFormData.phone = academyData.phone;
+    }
+
+    if (hasChanged("whatsapp")) {
+      updatedFormData.whatsapp = academyData.whatsapp;
+    }
+
+    if (hasChanged("experience")) {
+      updatedFormData.experience = academyData.experience;
+    }
+
+    if (hasChanged("facebook")) {
+      updatedFormData.facebook = academyData.facebook;
+    }
+
+    if (hasChanged("instagram")) {
+      updatedFormData.instagram = academyData.instagram;
+    }
+
+    if (hasChanged("website")) {
+      updatedFormData.website = academyData.website;
+    }
+
+    if (hasChanged("email")) {
+      updatedFormData.email = academyData.email;
+    }
+
+    if (hasChanged("timing")) {
+      updatedFormData.timing = startAndEndTime;
+    }
 
 
-
-// Check each field if it has changed and update the corresponding field in updatedFormData
-if (hasChanged('name')) {
-  updatedFormData.name = academyData.name;
-}
-if (hasChanged('about')) {
-  updatedFormData.about = academyData.about;
-}
-
-if (hasChanged('phone')) {
-  updatedFormData.phone = academyData.phone;
-}
-
-if (hasChanged('whatsapp')) {
-  updatedFormData.whatsapp = academyData.whatsapp;
-}
-
-if (hasChanged('experience')) {
-  updatedFormData.experience = academyData.experience;
-}
-
-
-
-
-if (hasChanged('facebook')) {
-  updatedFormData.facebook = academyData.facebook;
-}
-
-if (hasChanged('instagram')) {
-  updatedFormData.instagram = academyData.instagram;
-}
-
-if (hasChanged('website')) {
-  updatedFormData.website = academyData.website;
-}
-
-if (hasChanged('email')) {
-  updatedFormData.email = academyData.email;
-}
-
-if (hasChanged('timing')) {
-  updatedFormData.timing = startAndEndTime;
-}
-
-if (hasChanged('logo')) {
-  updatedFormData.logo = fileName;
-}
-
-if (hasChanged('completion_percentage')) {
-  updatedFormData.completion_percentage = combinedProgress;
-}
-
- if (spokenLanguagesChanged) {
+    if (spokenLanguagesChanged && languageString !== "") {
       updatedFormData.spoken_languages = languageString;
-  }
+    }
 
-  if (sportsChanged && selectedDaysString?.replace(/^,+/g, "")!=="" ) {
-    updatedFormData.sport = selectedDaysString?.replace(/^,+/g, "");
-}
+    if (number === 1) {
+      updatedFormData.spoken_languages = languageString;
+    }
 
-if (addressChanged && address!=="") {
-  
-updatedFormData.address1 = address;
-updatedFormData.map = mapLink;
-updatedFormData.coordinate = coordinate;
+    if (sportsChanged) {
+      updatedFormData.sport = selectedDaysString?.replace(/^,+/g, "");
+    }
+    if (timingChanged) {
+      updatedFormData.timing = startAndEndTime;
+    }
 
-}
+    if (logoChanged && fileName!=="") {
+      updatedFormData.logo = fileName;
+    }
+    
+    if (progressChanged && combinedProgress!=="") {
+      updatedFormData.completion_percentage=combinedProgress;
+    }
 
+    if(number1===1){
+      updatedFormData.logo = fileName;
+    }
 
+    // if (addressChanged && address !== "") {
+    //   updatedFormData.address1 = address;
+    //   updatedFormData.map = mapLink;
+    //   updatedFormData.coordinate = coordinate;
+    // }
 
-
-
-
-
-console.log(updatedFormData)
-console.log("hrrr")
-
+    console.log(updatedFormData);
+    console.log("hrrr");
 
     axios
       .put(UPDATE_ACADEMY + id, updatedFormData, {
@@ -1050,7 +1063,11 @@ console.log("hrrr")
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>
-                <img src={Dash} alt="" onClick={()=>handleDeleteLanguage(index)} />
+                <img
+                  src={Dash}
+                  alt=""
+                  onClick={() => handleDeleteLanguage(index)}
+                />
               </div>
             ))}
           </div>
