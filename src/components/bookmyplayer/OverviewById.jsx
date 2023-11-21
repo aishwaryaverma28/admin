@@ -400,7 +400,6 @@ const OverviewById = () => {
     const combinedProgress = progressArray?.join(",");
     const spokenLanguagesChanged = languageString !== academyData?.spoken_language;
     const updatedFormData = {
-      academy_id: id,
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData?.phone,
@@ -417,7 +416,6 @@ const OverviewById = () => {
       timing: startAndEndTime,
       logo: fileName,
       completion_percentage: combinedProgress,
-      updated_column: updatedFields?.join(","),
     };
 
     if (spokenLanguagesChanged) {
@@ -425,36 +423,36 @@ const OverviewById = () => {
     }
     console.log(updatedFormData);
 
-    // axios
-    //   .post(UPDATE_ACADEMY, updatedFormData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-    //     },
-    //   })
-    //   .then((response) => {
-    //     if (response.data.status === 1) {
-    //       toast.success("Details updated successfully", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     } else {
-    //       toast.error("Some Error Occurred", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     }
-    //     academyDetails();
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     toast.error("An error occurred while updating details", {
-    //       position: "top-center",
-    //       autoClose: 2000,
-    //     });
-    //   })
-    //   .finally(() => {
-    //     setStateBtn(0);
-    //   });
+    axios
+      .put(UPDATE_ACADEMY+id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        academyDetails();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .finally(() => {
+        setStateBtn(0);
+      });
   }
 
   return (

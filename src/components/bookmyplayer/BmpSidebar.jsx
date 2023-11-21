@@ -7,6 +7,7 @@ import LeftArrow from "../../assets/image/arrow-left.svg";
 const BmpSidebar = () => {
   const userRole = localStorage.getItem("role_name");
   const navigate = useNavigate();
+  const id = localStorage.getItem("academy_id");
   const handleBackToTable = () => {
     localStorage.removeItem("academy_id");
     navigate("/lp/bmp/admin");
@@ -26,9 +27,19 @@ const BmpSidebar = () => {
         Profile
       </p>
       <p className="prefrence-options setting-font-style">
-        <NavLink exact to="/lp/bmp/overview">
+
+      {
+        userRole === "Academy_Admin" ? (
+          <NavLink exact to={`/lp/bmp/overview/${id}`}>
           Overview
         </NavLink>
+        ) : (
+          <NavLink exact to={`/lp/bmp/overview`}>
+          Overview
+        </NavLink>
+        )
+      }
+
       </p>
       <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/fees">

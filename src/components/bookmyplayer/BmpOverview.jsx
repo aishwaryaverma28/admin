@@ -471,7 +471,6 @@ const BmpOverview = () => {
       timing: startAndEndTime,
       logo: fileName,
       completion_percentage: combinedProgress,
-      updated_column: updatedFields?.join(","),
     };
     console.log(updatedFormData);
     console.log("hyyy");
