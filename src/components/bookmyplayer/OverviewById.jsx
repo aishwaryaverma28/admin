@@ -130,18 +130,31 @@ const OverviewById = () => {
     setLanguageString(joinLanguage);
   };
 
-  const handleSelect = async (selectedAddress) => {
+  useEffect(() => {
+    if (!googleScriptLoaded) {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN`;
+      script.async = true;
+      script.onload = () => setGoogleScriptLoaded(true);
+      script.onerror = (error) => console.error("Error loading Google Maps:", error);
+      document.head.appendChild(script);
+  
+      return () => {
+        document.head.removeChild(script);
+      };
+    }
+  }, [googleScriptLoaded]);
+  
+  const handleSelect = (selectedAddress) => {
     setAddress(selectedAddress);
-    updateField("address1");
     setStateBtn(1);
-    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
-      selectedAddress
-    )}`;
-    setMapLink(mapLink);
-    updateField("map");
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: selectedAddress }, (results, status) => {
-      if (status === "OK" && results.length > 0) {
+  
+    const placesService = new window.google.maps.places.PlacesService(
+      document.createElement("div")
+    );
+  
+    placesService.textSearch({ query: selectedAddress }, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         const location = results[0].geometry.location;
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
@@ -149,8 +162,14 @@ const OverviewById = () => {
         updateField("coordinate");
       }
     });
+  
+    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
+      selectedAddress
+    )}`;
+    setMapLink(mapLink);
+    updateField("map");
   };
-
+  
   const updateField = (fieldName) => {
     if (!updatedFields.includes(fieldName)) {
       setUpdatedFields([...updatedFields, fieldName]);
@@ -628,6 +647,7 @@ const OverviewById = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Address
             </label>
+            {googleScriptLoaded && (
             <PlacesAutocomplete
               value={address}
               onChange={setAddress}
@@ -668,6 +688,7 @@ const OverviewById = () => {
                 </div>
               )}
             </PlacesAutocomplete>
+            )}
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
