@@ -91,6 +91,7 @@ const BmpOverview = () => {
 
   const handleAddLanguage = () => {
     setStateBtn(1);
+    updateField("spoken_languages");
     if (selectedLanguageName && selectedLevel) {
       const newLanguage = {
         language: selectedLanguageName,
@@ -131,11 +132,6 @@ const BmpOverview = () => {
         updateField("coordinate");
       }
     });
-  };
-  const handleLanguageChange = (e) => {
-    setSelectedLanguage(e.target.value);
-    updateField("spoken_languages");
-    setStateBtn(1);
   };
 
   const updateField = (fieldName) => {

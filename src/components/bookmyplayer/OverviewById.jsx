@@ -36,6 +36,10 @@ const OverviewById = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [updatedFields, setUpdatedFields] = useState([]);
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedLanguageName, setSelectedLanguageName] = useState("");
+  const [mappedLanguages, setMappedLanguages] = useState([]);
+  const [languageString, setLanguageString] = useState('');
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -76,6 +80,38 @@ const OverviewById = () => {
     "kill you",
   ]);
 
+  const handlelanguageNameChange = (e) => {
+    setSelectedLanguageName(e.target.value);
+  };
+
+  const handleLevelChange = (e) => {
+    setSelectedLevel(e.target.value);
+  };
+
+  const handleAddLanguage = () => {
+    setStateBtn(1);
+    updateField("spoken_languages");
+    if (selectedLanguageName && selectedLevel) {
+      const newLanguage = {
+        language: selectedLanguageName,
+        level: selectedLevel,
+      };
+      setMappedLanguages([...mappedLanguages, newLanguage]);
+
+      // Create a string with all languages and levels
+      const languageString = mappedLanguages
+        .concat(newLanguage)
+        .map((lang) => `${lang.language}(${lang.level})`)
+        .join(', ');
+      setLanguageString(languageString);
+    }
+  };
+  const handleDeleteLanguage = (index) => {
+    const updatedLanguages = [...mappedLanguages];
+    updatedLanguages.splice(index, 1);
+    setMappedLanguages(updatedLanguages);
+  };
+
   const handleSelect = async (selectedAddress) => {
     setAddress(selectedAddress);
     updateField("address1");
@@ -95,11 +131,6 @@ const OverviewById = () => {
         updateField("coordinate");
       }
     });
-  };
-  const handleLanguageChange = (e) => {
-    setSelectedLanguage(e.target.value);
-    updateField("spoken_languages");
-    setStateBtn(1);
   };
 
   const updateField = (fieldName) => {
@@ -369,7 +400,7 @@ const OverviewById = () => {
     const combinedProgress = progressArray?.join(",");
     const updatedFormData = {
       academy_id: id,
-      spoken_languages: selectedLanguage,
+      spoken_languages: languageString,
       name: academyData?.name,
       about: academyData?.about,
       phone: academyData?.phone,
@@ -841,46 +872,57 @@ const OverviewById = () => {
           <div className="bmp_overview_language_flex">
             <p className="common-fonts bmp-social">Language</p>
 
-            <button className="common-white-blue-button">
-              + Add Language
-            </button>
+            <button
+                className="common-white-blue-button"
+                onClick={handleAddLanguage}
+              >
+                + Add Language
+              </button>
           </div>
 
           <div className="bmp-input-flex bmp_language_box">
-            <div>
-              <label className="common-fonts bmp-academy-name">
-                Language
-              </label>
-              <select
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-                className="common-fonts common-input langSelect level_input"
-              >
-                <option value="">Select your language</option>
-                {languages.map((language) => (
-                  <option key={language.value} value={language.value}>
-                    {language.label}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <label className="common-fonts bmp-academy-name">
+                  Language
+                </label>
+                <select
+                  value={selectedLanguageName}
+                  onChange={handlelanguageNameChange}
+                  className="common-fonts common-input langSelect level_input"
+                >
+                  <option value="">Select your language</option>
+                  {languages.map((language) => (
+                    <option key={language.value} value={language.value}>
+                      {language.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="common-fonts bmp-academy-name">Level</label>
+                <select
+                  value={selectedLevel}
+                  onChange={handleLevelChange}
+                  className="common-fonts common-input langSelect level_input"
+                >
+                  <option value="">Select your Level</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Mastery">Mastery</option>
+                </select>
+              </div>
             </div>
 
-            <div>
-              <label className="common-fonts bmp-academy-name">Level</label>
-              <select
-                value={selectedLanguage}
-                onChange={handleLanguageChange}
-                className="common-fonts common-input langSelect level_input"
-              >
-                <option value="">Select your Level</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="bmp_overview_language_map">
-            <p className="common-fonts">Hindi (Proficient)</p>
-            <img src={Dash} alt="" />
-          </div>
+            {mappedLanguages.map((mappedLanguage, index) => (
+              <div className="bmp_overview_language_map" key={index}>
+                <p className="common-fonts">
+                  {mappedLanguage.language} ({mappedLanguage.level})
+                </p>
+                <img src={Dash} alt="" onClick={handleDeleteLanguage}  />
+              </div>
+            ))}
         </div>
       </div>
     </div>
