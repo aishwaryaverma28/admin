@@ -561,6 +561,7 @@ const BmpOverview = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Address
             </label>
+            {googleScriptLoaded && (
             <PlacesAutocomplete
               value={address}
               onChange={setAddress}
@@ -601,6 +602,7 @@ const BmpOverview = () => {
                 </div>
               )}
             </PlacesAutocomplete>
+            )}
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
