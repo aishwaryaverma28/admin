@@ -303,7 +303,6 @@ const Training = () => {
     let body = {
       training_ground_photos: photoUrls.join(","),
       tournament_photos: photoUrls2.join(","),
-      updated_column:updatedFields?.join(","),
     }
 
     axios

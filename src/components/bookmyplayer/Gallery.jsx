@@ -376,7 +376,6 @@ const Gallery = () => {
     body = {
       banner: file,
       completion_percentage: combinedProgress,
-      updated_column: updatedFields?.join(","),
     };
 
     axios
@@ -416,7 +415,6 @@ const Gallery = () => {
     let body = {
       photos: photoUrls.join(","),
       videos: videoUrls.join(","),
-      updated_column: updatedFields?.join(","),
       completion_percentage: combinedProgress,
     };
 
