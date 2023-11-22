@@ -31,6 +31,7 @@ const BmpReviewsView = () => {
       }
     }).then((response) => {
       setData(response?.data?.data);
+      console.log(response?.data?.data)
     }).catch((error) => {
       console.log(error);
     });
@@ -140,7 +141,7 @@ const BmpReviewsView = () => {
 
                   <tr>
                     <th>id</th>
-                    <th>Academy Name</th>
+                    <th>Name</th>
                     <th>Last Updated</th>
                   </tr>
 
