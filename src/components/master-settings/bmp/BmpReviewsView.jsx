@@ -141,7 +141,7 @@ const BmpReviewsView = () => {
 
                   <tr>
                     <th>id</th>
-                    <th>Name</th>
+                    <th>Academy Name</th>
                     <th>Last Updated</th>
                   </tr>
 
