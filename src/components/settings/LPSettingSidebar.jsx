@@ -324,6 +324,49 @@ const LPSettingSidebar = () => {
           )}
 
 
+
+            <div
+              className="master-arrow"
+              onClick={() => toggleMasterSubMenu("review")}
+            >
+              <p className="company-options master-settings-options setting-font-style">
+                Review
+              </p>
+              <img
+                src={masterSubMenu === "review" ? GreaterUp : GreaterDown}
+                alt=""
+              />
+            </div>
+
+
+          {masterSubMenu === "review" && (
+            <div className="sub-sub-menu">
+
+                <p className="company-options setting-font-style blog-options">
+                  <NavLink
+                    exact
+                    to="/lp/settings/blog/add"
+                    activeClassName="activeLink"
+                  >
+                    Add
+                  </NavLink>
+                </p>
+
+                <p className="company-options setting-font-style">
+                  <NavLink
+                    exact
+                    to="/lp/settings/blog/view"
+                    activeClassName="activeLink"
+                  >
+                    View
+                  </NavLink>
+                </p>
+
+            </div>
+          )}
+
+
+
           {(isPathAllowed("/lp/settings/sitePages/add") ||
             isPathAllowed("/lp/settings/sitePages/view")) && (
             <div
