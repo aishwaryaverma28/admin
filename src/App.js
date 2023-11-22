@@ -67,6 +67,8 @@ import SupportTab from "./components/settings/SupportTab.jsx";
 import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
 import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
 import Approval from "./components/bookmyplayer/Approval.jsx";
+import BmpReviewsView from "./components/master-settings/bmp/BmpReviewsView.jsx";
+import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -274,6 +276,14 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/blog/view/:id",
             element: <BlogUpdate />,
+          },
+          {
+            path: "/lp/settings/review/view",
+            element: <BmpReviewsView />,
+          },
+          {
+            path: "/lp/settings/review/view/:id",
+            element: <BmpReviewsUpdate />,
           },
           {
             path: "/lp/settings/sitePages/add",

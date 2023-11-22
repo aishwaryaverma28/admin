@@ -342,7 +342,7 @@ const LPSettingSidebar = () => {
           {masterSubMenu === "review" && (
             <div className="sub-sub-menu">
 
-                <p className="company-options setting-font-style blog-options">
+                {/* <p className="company-options setting-font-style blog-options">
                   <NavLink
                     exact
                     to="/lp/settings/blog/add"
@@ -350,12 +350,12 @@ const LPSettingSidebar = () => {
                   >
                     Add
                   </NavLink>
-                </p>
+                </p> */}
 
                 <p className="company-options setting-font-style">
                   <NavLink
                     exact
-                    to="/lp/settings/blog/view"
+                    to="/lp/settings/review/view"
                     activeClassName="activeLink"
                   >
                     View

@@ -82,65 +82,62 @@ const Review = () => {
 
   return (
     <>
-
-<div>
-      <p className='comon-fonts bmp_lead_text'>Reviews</p>
-    </div>
-
-
-<div className='marketing-all-table market-review-table review-table'>
-      <table>
-        <thead>
-          <tr>
-            <th className='common-fonts'>S No</th>
-            <th className='common-fonts'>DATE</th>
-            <th className='common-fonts'>RATING (5 <img className="pound" src={star} alt='star'/>)</th>
-            <th className='common-fonts'>NAME</th>
-            <th className='common-fonts'>REPLY</th>
-            <th className='common-fonts'>COMMENT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading ? (
+      <div>
+        <p className='comon-fonts bmp_lead_text'>Reviews</p>
+      </div>
+      <div className='marketing-all-table market-review-table review-table'>
+        <table>
+          <thead>
             <tr>
-              <td
-                colSpan={5}
-                style={{ padding: "1.5rem", textAlign: "center" }}
-              >
-                Loading...
-              </td>
+              <th className='common-fonts'>S No</th>
+              <th className='common-fonts'>DATE</th>
+              <th className='common-fonts'>RATING (5 <img className="pound" src={star} alt='star' />)</th>
+              <th className='common-fonts'>NAME</th>
+              <th className='common-fonts'>REPLY</th>
+              <th className='common-fonts'>COMMENT</th>
             </tr>
-          ) : review?.length === 0 ? (
-            <tr>
-              <td colSpan={5} style={{ textAlign: "center" }}>
-                No data found
-              </td>
-            </tr>
-          ) : (
-            review?.map((item, index) => (
-              <tr key={item?.id} onClick={() => handleNotePopUp(item)}>
-                <td className='common-fonts'>{index + 1}</td>
-                <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
-                <td className='common-fonts'>{item?.rating} <img className="pound" src={star} alt='star'/></td>
-                <td className='common-fonts'>{item?.name}</td>
-                <td className='common-fonts'>{item?.total_reply}</td>
-                <td className='common-fonts'> {item?.comment?.length > 50 ? (
-                      <>{item?.comment?.slice(0, 50)}...</>
-                    ) : (
-                      <>{item?.comment}</>
-                    )}</td>
+          </thead>
+          <tbody>
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  style={{ padding: "1.5rem", textAlign: "center" }}
+                >
+                  Loading...
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-      {
-        isNotePopUpOpen && (
-          <Comment onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData}/>
-        )
-      }
-      <ToastContainer/>
-    </div>
+            ) : review?.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center" }}>
+                  No data found
+                </td>
+              </tr>
+            ) : (
+              review?.map((item, index) => (
+                <tr key={item?.id} onClick={() => handleNotePopUp(item)}>
+                  <td className='common-fonts'>{index + 1}</td>
+                  <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
+                  <td className='common-fonts'>{item?.rating} <img className="pound" src={star} alt='star' /></td>
+                  <td className='common-fonts'>{item?.name}</td>
+                  <td className='common-fonts'>{item?.total_reply}</td>
+                  <td className='common-fonts'> {item?.comment?.length > 50 ? (
+                    <>{item?.comment?.slice(0, 50)}...</>
+                  ) : (
+                    <>{item?.comment}</>
+                  )}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+        {
+          isNotePopUpOpen && (
+            <Comment onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData} />
+          )
+        }
+        <ToastContainer />
+      </div>
 
     </>
 
