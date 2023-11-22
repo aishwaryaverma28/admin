@@ -323,6 +323,7 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
+
           {(isPathAllowed("/lp/settings/sitePages/add") ||
             isPathAllowed("/lp/settings/sitePages/view")) && (
             <div
