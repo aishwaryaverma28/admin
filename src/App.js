@@ -68,6 +68,7 @@ import SupportTab from "./components/settings/SupportTab.jsx";
 import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
 import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
 import Approval from "./components/bookmyplayer/Approval.jsx";
+import MapComponent from "./components/bookmyplayer/MapComponent.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -156,6 +157,10 @@ const router = createBrowserRouter([
           {
             path: "/lp/bmp/overview/:id",
             element: <OverviewById/>,
+          },
+          {
+            path: "/lp/bmp/map",
+            element: <MapComponent/>,
           },
           {
             path:"/lp/bmp/fees",
