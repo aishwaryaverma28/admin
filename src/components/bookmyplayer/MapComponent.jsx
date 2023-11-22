@@ -5,12 +5,11 @@ const MapComponent = () => {
     const [suggestedAddresses, setSuggestedAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectedCoordinates, setSelectedCoordinates] = useState(null);
-
+    const [showLoading, setShowLoading] = useState(false);
     const handleAddressChange = (event) => {
         const newAddress = event.target.value;
         setAddress(newAddress);
-
-        // Call Google Maps Geocoding API to get suggested addresses
+        setShowLoading(newAddress.length > 0);
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(newAddress)}&key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN`)
             .then(response => response.json())
             .then(data => {
@@ -47,28 +46,31 @@ const MapComponent = () => {
                     onChange={handleAddressChange}
                     placeholder="Type your address"
                 />
-                <ul className="autocomplete-dropdown">
-                    {suggestedAddresses.map((suggestion, index) => (
-                        <li key={index} className="differentLink" onClick={() => handleAddressSelect(suggestion)}>
-                            {suggestion}
-                        </li>
-                    ))}
-                </ul>
+                {showLoading && (
+                    <ul className="autocomplete-dropdown">
+                        {suggestedAddresses.map((suggestion, index) => (
+                            <li key={index} className="differentLink" onClick={() => handleAddressSelect(suggestion)}>
+                                {suggestion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
             </div>
             {selectedAddress && <p>Selected Address: {selectedAddress}</p>}
             {selectedCoordinates && (
                 <>
-                <p>coordinate:{`${selectedCoordinates.lat},${selectedCoordinates.lng}`}</p>
-                <p>
-                    Map Link:{' '}
-                    <a
-                        href={`https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Open in Google Maps
-                    </a>
-                </p>
+                    <p>coordinate:{`${selectedCoordinates.lat},${selectedCoordinates.lng}`}</p>
+                    <p>
+                        Map Link:{' '}
+                        <a
+                            href={`https://www.google.com/maps?q=${selectedCoordinates.lat},${selectedCoordinates.lng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Open in Google Maps
+                        </a>
+                    </p>
                 </>
             )}
         </div>

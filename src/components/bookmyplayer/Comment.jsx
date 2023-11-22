@@ -37,7 +37,7 @@ const Comment = ({ onClose, review, reviewData }) => {
   }
 useEffect(()=> {
   reviewReply();
-})
+},[])
 
   const handleReplyChange = (e) => {
     setStateBtn(1);

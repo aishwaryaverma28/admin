@@ -227,8 +227,9 @@ const BlogAdd = () => {
 
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
+    const plainText = removeHtmlTags(data);
     const newSectionData = [...sectionData];
-    newSectionData[index].section = data;
+    newSectionData[index].section = plainText;
     setSectionData(newSectionData);
     setStateBtn(1);
   };

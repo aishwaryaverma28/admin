@@ -89,16 +89,15 @@ const BlogUpdate = () => {
       console.error(`Section with id ${id} not found.`);
       return;
     }
-
-    console.log(updatedSection);
-    console.log("hello");
+    const plainText = removeHtmlTags(updatedSection.section);
     const updatedFormData = {
       heading: updatedSection.heading,
       sort: updatedSection.sort,
       image: updatedSection.image,
-      section: updatedSection.section,
+      section: plainText,
       blogid: updatedSection.blogid,
     };
+    console.log(updatedFormData);
     axios
       .put(SEC_UPDATE + updatedSection.id, updatedFormData, {
         headers: {
@@ -349,8 +348,8 @@ const BlogUpdate = () => {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
       image: blogImg3.split("blog/")[1]?.replace(/\.jpg$/, ""),
-      // section: plainText,
-      section: `${dataFromChild}`,
+      section: plainText,
+      // section: `${dataFromChild}`,
       site: "",
       alt: "",
     };

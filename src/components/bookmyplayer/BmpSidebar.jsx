@@ -86,11 +86,6 @@ const BmpSidebar = () => {
           Help
         </NavLink>
       </p>
-      <p className="prefrence-options setting-font-style">
-        <NavLink exact to="/lp/bmp/map">
-          Map
-        </NavLink>
-      </p>
     </section>
   );
 };

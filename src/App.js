@@ -59,7 +59,6 @@ import TraningNStrategy from "./components/bookmyplayer/TraningNStrategy";
 import Gallery from "./components/bookmyplayer/Gallery";
 import Review from "./components/bookmyplayer/Review.jsx";
 import BMPLeads from "./components/bookmyplayer/BMPLeads.jsx";
-import BMPSupport from "./components/bookmyplayer/BMPSupport.jsx";
 import BMPHelp from "./components/bookmyplayer/BMPHelp.jsx";
 import Campaign from "./components/marketing/Campaign.jsx";
 import ListFilter from "./components/marketing/ListFilter.jsx";
@@ -68,7 +67,6 @@ import SupportTab from "./components/settings/SupportTab.jsx";
 import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
 import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
 import Approval from "./components/bookmyplayer/Approval.jsx";
-import MapComponent from "./components/bookmyplayer/MapComponent.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -157,10 +155,6 @@ const router = createBrowserRouter([
           {
             path: "/lp/bmp/overview/:id",
             element: <OverviewById/>,
-          },
-          {
-            path: "/lp/bmp/map",
-            element: <MapComponent/>,
           },
           {
             path:"/lp/bmp/fees",
