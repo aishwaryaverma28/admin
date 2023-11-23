@@ -2,26 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
-    GET_ALL_REVIEW, GET_ACC_REVIEW, getDecryptedToken,
-  } from "../../utils/Constants";
-  import { toast, ToastContainer } from "react-toastify";
-  import "react-toastify/dist/ReactToastify.css";
-  import star from "../../../assets/image/star.svg"
-  
-const BmpReviewsUpdate = () => {
-    const { id } = useParams();
-    const decryptedToken = getDecryptedToken();
-  const academyId = localStorage.getItem("academy_id");
-  const [review, setReview] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
-  const [selectedDescription, setSelectedDescription] = useState({});
+  GET_ALL_REVIEW, GET_ACC_REVIEW, getDecryptedToken,
+} from "../../utils/Constants";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import star from "../../../assets/image/star.svg"
+import ReviewUpdatePending from "./ReviewUpdatePending";
 
-  const formatDate = (isoDate) => {
-    const options = { year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', options);
-  };
+const BmpReviewsUpdate = () => {
+  const { id } = useParams();
+  const decryptedToken = getDecryptedToken();
+  const [activeTab, setActiveTab] = useState("all");
+  const [review, setReview] = useState([]);
+  const [pendingData, setPendingData] = useState([]);
+  const [approveData, setApproveData] = useState([]);
 
   const reviewData = () => {
     const body = {
@@ -35,19 +29,24 @@ const BmpReviewsUpdate = () => {
     })
       .then((response) => {
         if (response?.data?.status === 1) {
-          setReview(response?.data?.data);
+          const allReviews = response?.data?.data;
+          const pendingReviews = allReviews.filter(item => item.status === 0);
+          const approveReviews = allReviews.filter(item => item.status === 1);
+          setReview(allReviews);
+          setPendingData(pendingReviews);
+          setApproveData(approveReviews);
+
+          console.log(allReviews);
         }
-        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error)
-        setIsLoading(false);
       })
   }
 
   const getAccReview = () => {
     const body = {
-      object_id: parseInt(academyId),
+      object_id: parseInt(id),
       object_type: "academy"
     }
     axios.post(GET_ACC_REVIEW, body, {
@@ -59,11 +58,9 @@ const BmpReviewsUpdate = () => {
         if (response?.data?.status === 1) {
           console.log(response?.data?.data)
         }
-        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error)
-        setIsLoading(false);
       })
   }
 
@@ -72,74 +69,51 @@ const BmpReviewsUpdate = () => {
     getAccReview();
   }, [])
 
-  const handleNotePopUp = (item) => {
-    setSelectedDescription(item);
-    setIsNotePopUpOpen(true);
+  const handleTabClick = (tab) => {
+    setActiveTab(tab)
   }
-
-  const closeNotePopUp = () => {
-    setIsNotePopUpOpen(false);
-  }
-
+  
   return (
     <>
-      <div>
-        <p className='comon-fonts bmp_lead_text'>Reviews</p>
-      </div>
-      <div className='marketing-all-table market-review-table review-table'>
-        <table>
-          <thead>
-            <tr>
-              <th className='common-fonts'>S No</th>
-              <th className='common-fonts'>DATE</th>
-              <th className='common-fonts'>RATING (5 <img className="pound" src={star} alt='star' />)</th>
-              <th className='common-fonts'>NAME</th>
-              <th className='common-fonts'>REPLY</th>
-              <th className='common-fonts'>COMMENT</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  style={{ padding: "1.5rem", textAlign: "center" }}
-                >
-                  Loading...
-                </td>
-              </tr>
-            ) : review?.length === 0 ? (
-              <tr>
-                <td colSpan={5} style={{ textAlign: "center" }}>
-                  No data found
-                </td>
-              </tr>
-            ) : (
-              review?.map((item, index) => (
-                <tr key={item?.id} onClick={() => handleNotePopUp(item)}>
-                  <td className='common-fonts'>{index + 1}</td>
-                  <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
-                  <td className='common-fonts'>{item?.rating} <img className="pound" src={star} alt='star' /></td>
-                  <td className='common-fonts'>{item?.name}</td>
-                  <td className='common-fonts'>{item?.total_reply}</td>
-                  <td className='common-fonts'> {item?.comment?.length > 50 ? (
-                    <>{item?.comment?.slice(0, 50)}...</>
-                  ) : (
-                    <>{item?.comment}</>
-                  )}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        {/* {
-          isNotePopUpOpen && (
-            <Comment onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData} />
-          )
-        } */}
-        <ToastContainer />
-      </div>
+      <div className='academy_rejected'>
+        <div>
+          <p className='comon-fonts bmp_lead_text'>Reviews</p>
+        </div>
+        <div className="genral-setting-btn genral-setting-fonts aaa">
+          <button
+            className={`genral-btn  ${activeTab === "all" ? "genral-active" : ""
+              }`}
+            onClick={() => handleTabClick("all")}
+          >
+            <span className="mrkt-whatsapp">All ({review?.length})</span>
+          </button>
 
+          <button
+            className={`genral-btn contact-genral-btn ${activeTab === "pending" ? "genral-active" : ""
+              }`}
+            onClick={() => handleTabClick("pending")}
+          >
+            <span className="mrkt-whatsapp">Pending ({pendingData?.length})</span>
+          </button>
+
+          <button
+            className={`genral-btn contact-genral-btn ${activeTab === "approve" ? "genral-active" : ""
+              }`}
+            onClick={() => handleTabClick("approve")}
+          >
+            <span className="mrkt-whatsapp">Approve ({approveData?.length})</span>
+          </button>
+        </div>
+        {
+          activeTab === "all" && <ReviewUpdatePending data={review} reviewData={reviewData}/>
+          }
+          {
+        activeTab === "pending" && <ReviewUpdatePending data={pendingData} reviewData={reviewData}/>
+      }
+      {
+        activeTab === "approve" && <ReviewUpdatePending data={approveData} reviewData={reviewData}/>
+      }
+      </div>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { BMP_ACADEMY_ALL_REVIEWS, getDecryptedToken } from '../../utils/Constants.js';
 import SearchIcon from "../../../assets/image/search.svg";
@@ -9,7 +9,7 @@ import ApproveReview from './ApproveReview.jsx';
 
 
 const BmpReviewsView = () => {
-    const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("all");
   const decryptedToken = getDecryptedToken();
   const [data, setData] = useState([]);
   const [pendingData, setPendingData] = useState([]);
@@ -23,38 +23,38 @@ const BmpReviewsView = () => {
 
   const getAllAcademy = () => {
     axios.post(BMP_ACADEMY_ALL_REVIEWS, {
-        object_type: "academy",
-        status: 10
+      object_type: "academy",
+      status: 10
     }, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       setData(response?.data?.data);
-      console.log(response?.data?.data)
+      // console.log(response?.data?.data)
     }).catch((error) => {
       console.log(error);
     });
   }
   const getPendingAcademy = () => {
     axios.post(BMP_ACADEMY_ALL_REVIEWS, {
-        object_type: "academy",
-        status: 0
+      object_type: "academy",
+      status: 0
     }, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
       }
     }).then((response) => {
       setPendingData(response?.data?.data);
-      console.log(response?.data?.data);
+      // console.log(response?.data?.data);
     }).catch((error) => {
       console.log(error);
     });
   }
   const getApproveAcademy = () => {
     axios.post(BMP_ACADEMY_ALL_REVIEWS, {
-        object_type: "academy",
-        status: 1
+      object_type: "academy",
+      status: 1
     }, {
       headers: {
         Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
@@ -88,7 +88,7 @@ const BmpReviewsView = () => {
   });
 
   return (
-<div className='academy_rejected'>
+    <div className='academy_rejected'>
       <div className="genral-setting-btn genral-setting-fonts aaa">
         <button
           className={`genral-btn  ${activeTab === "all" ? "genral-active" : ""
