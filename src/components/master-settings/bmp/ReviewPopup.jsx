@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ADD_REPLY, UPDATE_ACADEMY_REVIEW, GET_REVIEW_REPLY, getDecryptedToken } from "../../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Pen from "../../../assets/image/small-pen.svg";
 
 
 const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
@@ -146,11 +147,11 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
 
     return (
         <div class="recycle-popup-wrapper">
-            <div class="recycle-popup-container">
+            <div class="review_new_container">
                 <div className='review-top-flex'>
                     <div class="recycle-popup-box">
-                        <p class="common-fonts restore-comment">Respond To Review</p>
-                        <p class="common-fonts selected-comment">Write a response message on review</p>
+                        <p class="common-fonts restore-comment">Respond to review</p>
+                        <p class="common-fonts selected-comment write_review">Write a response message on review</p>
                     </div>
                     <div className='common-fonts review-modal-cross' onClick={onClose}>X</div>
                 </div>
@@ -158,8 +159,8 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     <div>
                         <div className='review-top-flex'>
                             <p class="common-fonts comment-head">{review?.name}<span className='review-rating'>{review?.rating}<img className="pound" src={star} alt='star' /></span></p>
-                            <div className='review-top-flex' onClick={handleEditClick}>
-                                <i className="fa-solid fa-pen"></i>
+                            <div className='review-top-flex pen-flex' onClick={handleEditClick}>
+                                <img src={Pen} alt="" />
                                 <p className="common-fonts selected-comment">Edit</p>
                             </div>
                         </div>
@@ -173,10 +174,10 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                                     value={editedComment}
                                     onChange={handleEditCommentChange}
                                 ></textarea>
-                                <div class="recycle-popup-btn">
-                                    <button class="restore-no common-fonts" onClick={handleCancelEdit}>Cancel</button>
+                                <div class="review-popup-btn">
+                                    <button class="common-white-button common-fonts" onClick={handleCancelEdit}>Cancel</button>
                                     {stateReviewBtn === 0 ? (
-                                        <button className="disabledBtn">Save</button>
+                                        <button className="common-inactive-button review-inactive">Save</button>
                                     ) : (
                                         <button
                                             className="common-fonts common-save-button comment-save"
@@ -223,10 +224,10 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                             value={reply}
                             onChange={handleReplyChange}
                         ></textarea>
-                        <div class="recycle-popup-btn">
+                        <div class="review-popup-btn">
 
                             {stateBtn === 0 ? (
-                                <button className="disabledBtn">Save</button>
+                                <button className="common-inactive-button review-inactive">Save</button>
                             ) : (
                                 <button
                                     className="common-fonts common-save-button comment-save"
@@ -239,9 +240,9 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     </div>
                 </div>
                 <div class="recycle-popup-btn">
-                    <button class="restore-no common-fonts" onClick={handleDisapprove}>Disapprove</button>
+                    <button class="common-delete-button common-fonts" onClick={handleDisapprove}>Disapprove</button>
                     <button
-                        className="common-fonts common-save-button comment-save"
+                        className="common-fonts common-white-green-button comment-save"
                         onClick={handleApprove}
                     >
                         Approve
