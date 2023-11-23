@@ -945,6 +945,19 @@
   cursor: pointer;
 }
 
+.review-top-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items:start;
+}
+
+.review-modal-cross{
+  padding: 1rem 1.75rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
 .bmp_approval {
   font-size: 1.2rem;
   margin-top: 1rem;
