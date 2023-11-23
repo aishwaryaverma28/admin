@@ -35,8 +35,6 @@ const BmpReviewsUpdate = () => {
           setReview(allReviews);
           setPendingData(pendingReviews);
           setApproveData(approveReviews);
-
-          console.log(allReviews);
         }
       })
       .catch((error) => {
@@ -105,13 +103,13 @@ const BmpReviewsUpdate = () => {
           </button>
         </div>
         {
-          activeTab === "all" && <ReviewUpdatePending data={review} reviewData={reviewData}/>
+          activeTab === "all" && <ReviewUpdatePending data={review} reviewData={reviewData} academyId={id}/>
           }
           {
-        activeTab === "pending" && <ReviewUpdatePending data={pendingData} reviewData={reviewData}/>
+        activeTab === "pending" && <ReviewUpdatePending data={pendingData} reviewData={reviewData} academyId={id}/>
       }
       {
-        activeTab === "approve" && <ReviewUpdatePending data={approveData} reviewData={reviewData}/>
+        activeTab === "approve" && <ReviewUpdatePending data={approveData} reviewData={reviewData} academyId={id}/>
       }
       </div>
     </>

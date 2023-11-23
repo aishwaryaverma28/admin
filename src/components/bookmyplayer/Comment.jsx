@@ -1,12 +1,11 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import "../styles/Comment.css";
 import star from "../../assets/image/star.svg"
-import { useState } from 'react';
 import axios from 'axios';
 import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken} from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from 'react';
+
 const Comment = ({ onClose, review, reviewData }) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");

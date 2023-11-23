@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import star from "../../../assets/image/star.svg"
 import ReviewPopup from './ReviewPopup';
-const ReviewUpdatePending = ({ data, reviewData}) => {
+const ReviewUpdatePending = ({ data, reviewData, academyId}) => {
     const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
     const [selectedDescription, setSelectedDescription] = useState({});
     const formatDate = (isoDate) => {
@@ -57,7 +57,7 @@ const ReviewUpdatePending = ({ data, reviewData}) => {
             </table>
             {
           isNotePopUpOpen && (
-            <ReviewPopup onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData} />
+            <ReviewPopup onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData} academyId={academyId}/>
           )
         }
         </div>
