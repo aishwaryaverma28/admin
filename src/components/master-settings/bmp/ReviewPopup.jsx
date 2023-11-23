@@ -114,18 +114,24 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                                 <textarea
                                     name=""
                                     id=""
-                                    rows="5"
+                                    rows="3"
                                     className="common-fonts bmp-strategy-input bmp-modal-input"
                                     placeholder='Type your response here *'
                                     value={review.comment}
-                                    onChange={handleReplyChange}
                                 ></textarea>
-                                <button className="common-fonts common-save-button comment-save" onClick={handleSaveEdit}>
-                                    Save
-                                </button>
-                                <button className="common-fonts restore-no" onClick={handleCancelEdit}>
-                                    Cancel
-                                </button>
+                                <div class="recycle-popup-btn">
+                                    <button class="restore-no common-fonts" onClick={handleCancelEdit}>Cancel</button>
+                                    {stateBtn === 0 ? (
+                                        <button className="disabledBtn">Save</button>
+                                    ) : (
+                                        <button
+                                            className="common-fonts common-save-button comment-save"
+                                            onClick={handleSaveEdit}
+                                        >
+                                            Save
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         ) : (
                             <>
@@ -166,15 +172,15 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     </div>
                 </div>
                 <div class="recycle-popup-btn">
-                    <button class="restore-no common-fonts" onClick={onClose}>Close</button>
+                    <button class="restore-no common-fonts" onClick={onClose}>Disapprove</button>
                     {stateBtn === 0 ? (
-                        <button className="disabledBtn">Save</button>
+                        <button className="disabledBtn">Approve</button>
                     ) : (
                         <button
                             className="common-fonts common-save-button comment-save"
                             onClick={handleSave}
                         >
-                            Save
+                            Approve
                         </button>
                     )}
                 </div>
