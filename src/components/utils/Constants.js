@@ -219,4 +219,4 @@ export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
 
 //==============================================================bmp reviews
 export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
-export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update";
+export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";

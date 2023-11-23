@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import star from "../../../assets/image/star.svg"
 import ReviewPopup from './ReviewPopup';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const ReviewUpdatePending = ({ data, reviewData, academyId}) => {
     const [isNotePopUpOpen, setIsNotePopUpOpen] = useState(false);
     const [selectedDescription, setSelectedDescription] = useState({});
@@ -60,6 +62,7 @@ const ReviewUpdatePending = ({ data, reviewData, academyId}) => {
             <ReviewPopup onClose={closeNotePopUp} review={selectedDescription} reviewData={reviewData} academyId={academyId}/>
           )
         }
+        <ToastContainer />
         </div>
     )
 }

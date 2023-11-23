@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import star from "../../../assets/image/star.svg"
 import axios from 'axios';
-import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken } from "../../utils/Constants";
+import { ADD_REPLY, UPDATE_ACADEMY_REVIEW, GET_REVIEW_REPLY, getDecryptedToken } from "../../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,9 +11,11 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const decryptedToken = getDecryptedToken();
     const [reply, setReply] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [stateReviewBtn, setStateReviewBtn] = useState(0);
     const [stateBtn, setStateBtn] = useState(0);
     const [acaReply, setAcaReply] = useState([])
     const [isEditing, setIsEditing] = useState(false);
+    const [editedComment, setEditedComment] = useState(review.comment);
     const reviewReply = () => {
         const body = {
             review_id: review.id
@@ -40,15 +42,31 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     }, [])
 
     const handleEditClick = () => {
-        setIsEditing(true);
+        setIsEditing((prevState) => !prevState);
     }
 
     const handleCancelEdit = () => {
         setIsEditing(false);
     }
     const handleSaveEdit = () => {
-        // Save edited comment logic here
+        axios.put(UPDATE_ACADEMY_REVIEW + review.id, { comment: editedComment }, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+            }
+        }).then((response) => {
+            console.log(response);
+            toast.success("review updated successfully", {
+                position: "top-center",
+                autoClose: 2000,
+            })
+        }).catch((error) => {
+            console.log(error);
+        })
         setIsEditing(false);
+    }
+    const handleEditCommentChange = (e) => {
+        setEditedComment(e.target.value);
+        setStateReviewBtn(1);
     }
     const handleReplyChange = (e) => {
         setStateBtn(1);
@@ -59,7 +77,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const handleSave = () => {
         const body = {
             parent_id: review.id,
-            type: "academy-response",
+            type: "bmp-response",
             object_type: "academy",
             object_id: parseInt(academyId),
             name: review?.name,
@@ -89,6 +107,42 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 console.log(error)
             })
     }
+    const handleDisapprove = () => {
+        axios.put(UPDATE_ACADEMY_REVIEW + review.id, { status: 0 }, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+            }
+        }).then((response) => {
+            console.log(response);
+            if (response?.data?.status === 1) {
+            toast.success("review disapproved successfully", {
+                position: "top-center",
+                autoClose: 2000,
+            })}
+            onClose();
+        }).catch((error) => {
+            console.log(error);
+        })
+        reviewData();
+    }
+    const handleApprove = () => {
+        axios.put(UPDATE_ACADEMY_REVIEW + review.id, { status: 1 }, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+            }
+        }).then((response) => {
+            console.log(response);
+            if (response?.data?.status === 1) {
+            toast.success("review approved successfully", {
+                position: "top-center",
+                autoClose: 2000,
+            })}
+            onClose();
+        }).catch((error) => {
+            console.log(error);
+        })
+        reviewData();
+    }
 
     return (
         <div class="recycle-popup-wrapper">
@@ -116,12 +170,12 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                                     id=""
                                     rows="3"
                                     className="common-fonts bmp-strategy-input bmp-modal-input"
-                                    placeholder='Type your response here *'
-                                    value={review.comment}
+                                    value={editedComment}
+                                    onChange={handleEditCommentChange}
                                 ></textarea>
                                 <div class="recycle-popup-btn">
                                     <button class="restore-no common-fonts" onClick={handleCancelEdit}>Cancel</button>
-                                    {stateBtn === 0 ? (
+                                    {stateReviewBtn === 0 ? (
                                         <button className="disabledBtn">Save</button>
                                     ) : (
                                         <button
@@ -169,20 +223,29 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                             value={reply}
                             onChange={handleReplyChange}
                         ></textarea>
+                        <div class="recycle-popup-btn">
+
+                            {stateBtn === 0 ? (
+                                <button className="disabledBtn">Save</button>
+                            ) : (
+                                <button
+                                    className="common-fonts common-save-button comment-save"
+                                    onClick={handleSave}
+                                >
+                                    Save
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div class="recycle-popup-btn">
-                    <button class="restore-no common-fonts" onClick={onClose}>Disapprove</button>
-                    {stateBtn === 0 ? (
-                        <button className="disabledBtn">Approve</button>
-                    ) : (
-                        <button
-                            className="common-fonts common-save-button comment-save"
-                            onClick={handleSave}
-                        >
-                            Approve
-                        </button>
-                    )}
+                    <button class="restore-no common-fonts" onClick={handleDisapprove}>Disapprove</button>
+                    <button
+                        className="common-fonts common-save-button comment-save"
+                        onClick={handleApprove}
+                    >
+                        Approve
+                    </button>
                 </div>
             </div>
         </div>
