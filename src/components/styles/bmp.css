@@ -1101,3 +1101,44 @@
 .red-border-box{
   border: 1px solid red;
 }
+
+.review_new_container{
+  background-color: #fff;
+  width: 45.625rem;
+  height: 32rem;
+  overflow: auto;
+  margin: 0 auto;
+}
+
+.write_review{
+  margin-top: -0.5rem;
+}
+
+.pen-flex{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pen-flex img{
+margin-right: 0.3rem;
+}
+
+.review-popup-btn{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  border-radius: 0rem 0rem 0.3125rem 0.3125rem;
+  background: #FFF;
+  margin-top: 1rem;
+}
+
+
+.review-popup-btn button:first-child{
+  margin-left: 1rem;
+}
+
+.review-inactive{
+  margin-left: 0.5rem;
+}
