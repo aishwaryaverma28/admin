@@ -279,7 +279,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/review/view",
-            element: <BmpReviewsView />,
+            element: <SecureRoutes Component={BmpReviewsView} />,
           },
           {
             path: "/lp/settings/review/view/:id",

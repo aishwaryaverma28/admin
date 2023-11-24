@@ -106,7 +106,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 reviewReply();
                 reviewData();
                 setReply("");
-                // onClose();
+                setStateBtn(0);
             })
             .catch((error) => {
                 console.log(error)

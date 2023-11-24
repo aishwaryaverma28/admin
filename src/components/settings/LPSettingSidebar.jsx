@@ -79,182 +79,182 @@ const LPSettingSidebar = () => {
       </div>
       {(isPathAllowed("/lp/settings/general") ||
         isPathAllowed("/lp/settings/notification")) && (
-        <div>
-          <div
-            className="setting-arrow"
-            onClick={() => toggleSubMenu("yourPreferences")}
-          >
-            <p className="prefrence setting-font-style">Your Prefrences</p>
-            <img
-              src={openSubMenu === "yourPreferences" ? GreaterUp : GreaterDown}
-              alt=""
-            />
+          <div>
+            <div
+              className="setting-arrow"
+              onClick={() => toggleSubMenu("yourPreferences")}
+            >
+              <p className="prefrence setting-font-style">Your Prefrences</p>
+              <img
+                src={openSubMenu === "yourPreferences" ? GreaterUp : GreaterDown}
+                alt=""
+              />
+            </div>
+            {openSubMenu === "yourPreferences" && (
+              <>
+                {isPathAllowed("/lp/settings/general") && (
+                  <p className="prefrence-options setting-font-style">
+                    <NavLink exact to="/lp/settings/general">
+                      General
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/notification") && (
+                  <p className="prefrence-options setting-font-style">
+                    <NavLink exact to="/lp/settings/notification">
+                      Notification
+                    </NavLink>
+                  </p>
+                )}
+                {/* Add more submenu items here as needed */}
+              </>
+            )}
           </div>
-          {openSubMenu === "yourPreferences" && (
-            <>
-              {isPathAllowed("/lp/settings/general") && (
-                <p className="prefrence-options setting-font-style">
-                  <NavLink exact to="/lp/settings/general">
-                    General
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/notification") && (
-                <p className="prefrence-options setting-font-style">
-                  <NavLink exact to="/lp/settings/notification">
-                    Notification
-                  </NavLink>
-                </p>
-              )}
-              {/* Add more submenu items here as needed */}
-            </>
-          )}
-        </div>
-      )}
+        )}
       {(isPathAllowed("/lp/settings/usernteams") ||
         isPathAllowed("/lp/settings/privacyConcent")) && (
-        <div>
-          <div
-            className="setting-arrow"
-            onClick={() => toggleSubMenu("account")}
-          >
-            <p className="account-setup setting-font-style">Account Setup</p>
-            <img
-              src={openSubMenu === "account" ? GreaterUp : GreaterDown}
-              alt=""
-            />
+          <div>
+            <div
+              className="setting-arrow"
+              onClick={() => toggleSubMenu("account")}
+            >
+              <p className="account-setup setting-font-style">Account Setup</p>
+              <img
+                src={openSubMenu === "account" ? GreaterUp : GreaterDown}
+                alt=""
+              />
+            </div>
+            {openSubMenu === "account" && (
+              <>
+                {isPathAllowed("/lp/settings/usernteams") && (
+                  <p className="account-options setting-font-style">
+                    {" "}
+                    <NavLink
+                      exact
+                      to="/lp/settings/usernteams"
+                      activeClassName="activeLink"
+                    >
+                      Users & Teams
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/privacyConcent") && (
+                  <p className="account-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/privacyConcent"
+                      activeClassName="activeLink"
+                    >
+                      Privacy & Consent
+                    </NavLink>
+                  </p>
+                )}
+              </>
+            )}
           </div>
-          {openSubMenu === "account" && (
-            <>
-              {isPathAllowed("/lp/settings/usernteams") && (
-                <p className="account-options setting-font-style">
-                  {" "}
-                  <NavLink
-                    exact
-                    to="/lp/settings/usernteams"
-                    activeClassName="activeLink"
-                  >
-                    Users & Teams
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/privacyConcent") && (
-                <p className="account-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/privacyConcent"
-                    activeClassName="activeLink"
-                  >
-                    Privacy & Consent
-                  </NavLink>
-                </p>
-              )}
-            </>
-          )}
-        </div>
-      )}
+        )}
       {(isPathAllowed("/lp/settings/companysettings") ||
         isPathAllowed("/lp/settings/settingLeads") ||
         isPathAllowed("/lp/settings/settingDeal") ||
         isPathAllowed("/lp/settings/workflow") ||
         isPathAllowed("/lp/settings/settingUsage") ||
         isPathAllowed("/lp/settings/recyclebin")) && (
-        <div>
-          <div
-            className="setting-arrow"
-            onClick={() => toggleSubMenu("company")}
-          >
-            <p className="company-setup setting-font-style">Company</p>
-            <img
-              src={openSubMenu === "company" ? GreaterUp : GreaterDown}
-              alt=""
-            />
-          </div>
+          <div>
+            <div
+              className="setting-arrow"
+              onClick={() => toggleSubMenu("company")}
+            >
+              <p className="company-setup setting-font-style">Company</p>
+              <img
+                src={openSubMenu === "company" ? GreaterUp : GreaterDown}
+                alt=""
+              />
+            </div>
 
-          {openSubMenu === "company" && (
-            <>
-              {isPathAllowed("/lp/settings/companysettings") && (
-                <p className="company-options setting-font-style">
-                  {" "}
-                  <NavLink
-                    exact
-                    to="/lp/settings/companysettings"
-                    activeClassName="activeLink"
-                  >
-                    Company Settings
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/settingLeads") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/settingLeads"
-                    activeClassName="activeLink"
-                  >
-                    Leads
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/settingDeal") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/settingDeal"
-                    activeClassName="activeLink"
-                  >
-                    Deals
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/settingUsage") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/settingUsage"
-                    activeClassName="activeLink"
-                  >
-                    Usage
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/settingImpExp") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/settingImpExp"
-                    activeClassName="activeLink"
-                  >
-                    Import & Export
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/workflow") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/workflow"
-                    activeClassName="activeLink"
-                  >
-                    WorkFlow
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/recyclebin") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/recyclebin"
-                    activeClassName="activeLink"
-                  >
-                    Recycle Bin
-                  </NavLink>
-                </p>
-              )}
-            </>
-          )}
-        </div>
-      )}
+            {openSubMenu === "company" && (
+              <>
+                {isPathAllowed("/lp/settings/companysettings") && (
+                  <p className="company-options setting-font-style">
+                    {" "}
+                    <NavLink
+                      exact
+                      to="/lp/settings/companysettings"
+                      activeClassName="activeLink"
+                    >
+                      Company Settings
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/settingLeads") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/settingLeads"
+                      activeClassName="activeLink"
+                    >
+                      Leads
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/settingDeal") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/settingDeal"
+                      activeClassName="activeLink"
+                    >
+                      Deals
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/settingUsage") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/settingUsage"
+                      activeClassName="activeLink"
+                    >
+                      Usage
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/settingImpExp") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/settingImpExp"
+                      activeClassName="activeLink"
+                    >
+                      Import & Export
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/workflow") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/workflow"
+                      activeClassName="activeLink"
+                    >
+                      WorkFlow
+                    </NavLink>
+                  </p>
+                )}
+                {isPathAllowed("/lp/settings/recyclebin") && (
+                  <p className="company-options setting-font-style">
+                    <NavLink
+                      exact
+                      to="/lp/settings/recyclebin"
+                      activeClassName="activeLink"
+                    >
+                      Recycle Bin
+                    </NavLink>
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        )}
       <div>
         {isPathAllowed("/lp/settings/viewProfile/employeeProfile") && (
           <div
@@ -282,19 +282,19 @@ const LPSettingSidebar = () => {
 
           {(isPathAllowed("/lp/settings/blog/add") ||
             isPathAllowed("/lp/settings/blog/view")) && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("blog")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Blog
-              </p>
-              <img
-                src={masterSubMenu === "blog" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("blog")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  Blog
+                </p>
+                <img
+                  src={masterSubMenu === "blog" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+            )}
 
           {masterSubMenu === "blog" && (
             <div className="sub-sub-menu">
@@ -323,26 +323,24 @@ const LPSettingSidebar = () => {
             </div>
           )}
 
+          {isPathAllowed("/lp/settings/review/view") && (
+            <>
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("review")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  Review
+                </p>
+                <img
+                  src={masterSubMenu === "review" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+              {masterSubMenu === "review" && (
+                <div className="sub-sub-menu">
 
-
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("review")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Review
-              </p>
-              <img
-                src={masterSubMenu === "review" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-
-
-          {masterSubMenu === "review" && (
-            <div className="sub-sub-menu">
-
-                {/* <p className="company-options setting-font-style blog-options">
+                  {/* <p className="company-options setting-font-style blog-options">
                   <NavLink
                     exact
                     to="/lp/settings/blog/add"
@@ -351,37 +349,37 @@ const LPSettingSidebar = () => {
                     Add
                   </NavLink>
                 </p> */}
-
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/review/view"
-                    activeClassName="activeLink"
-                  >
-                    View
-                  </NavLink>
-                </p>
-
-            </div>
+                  {isPathAllowed("/lp/settings/review/view") && (
+                    <p className="company-options setting-font-style">
+                      <NavLink
+                        exact
+                        to="/lp/settings/review/view"
+                        activeClassName="activeLink"
+                      >
+                        View
+                      </NavLink>
+                    </p>
+                  )}
+                </div>
+              )}
+            </>
           )}
-
-
 
           {(isPathAllowed("/lp/settings/sitePages/add") ||
             isPathAllowed("/lp/settings/sitePages/view")) && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("site")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Site
-              </p>
-              <img
-                src={masterSubMenu === "site" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("site")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  Site
+                </p>
+                <img
+                  src={masterSubMenu === "site" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+            )}
 
           {masterSubMenu === "site" && (
             <div className="sub-sub-menu">
@@ -412,19 +410,19 @@ const LPSettingSidebar = () => {
 
           {(isPathAllowed("/lp/settings/helpSection/add") ||
             isPathAllowed("/lp/settings/helpSection/update")) && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("help")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Help
-              </p>
-              <img
-                src={masterSubMenu === "help" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("help")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  Help
+                </p>
+                <img
+                  src={masterSubMenu === "help" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+            )}
 
           {masterSubMenu === "help" && (
             <div className="sub-sub-menu">
@@ -455,19 +453,19 @@ const LPSettingSidebar = () => {
 
           {(isPathAllowed("/lp/settings/userManagement/add") ||
             isPathAllowed("/lp/settings/userManagement/update")) && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("user")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                User Management
-              </p>
-              <img
-                src={masterSubMenu === "user" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("user")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  User Management
+                </p>
+                <img
+                  src={masterSubMenu === "user" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+            )}
 
           {masterSubMenu === "user" && (
             <div className="sub-sub-menu">
@@ -498,19 +496,19 @@ const LPSettingSidebar = () => {
 
           {(isPathAllowed("/lp/settings/employee/add") ||
             isPathAllowed("/lp/settings/employee/view")) && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("employee")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Employee
-              </p>
-              <img
-                src={masterSubMenu === "employee" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
+              <div
+                className="master-arrow"
+                onClick={() => toggleMasterSubMenu("employee")}
+              >
+                <p className="company-options master-settings-options setting-font-style">
+                  Employee
+                </p>
+                <img
+                  src={masterSubMenu === "employee" ? GreaterUp : GreaterDown}
+                  alt=""
+                />
+              </div>
+            )}
           {masterSubMenu === "employee" && (
             <div className="sub-sub-menu">
               {isPathAllowed("/lp/settings/employee/add") && (
