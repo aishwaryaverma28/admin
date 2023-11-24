@@ -62,12 +62,12 @@ const fetchData = async () => {
           },
       });
       if (response.data.status === 1) {
-        setTableData(response.data.data);
-        const extractedNames = response.data.data.map(item => item.name);
+        setTableData(response?.data?.data);
+        const extractedNames = response?.data?.data?.map(item => item?.name);
         setAssignRoles(extractedNames);
       } else {
           if (response.data.message === "Token has expired") {
-              alert(response.data.message);
+              alert(response?.data?.message);
               handleLogout();
           }
       }
@@ -137,7 +137,7 @@ const fetchData = async () => {
         },
       })
       .then((response) => {
-        const filteredRoles = response?.data?.data.filter(item => item.company === "fiduciagroup");
+        const filteredRoles = response?.data?.data?.filter(item => item?.company === "fiduciagroup");
 
         setRoles(filteredRoles);
       })
@@ -385,10 +385,10 @@ const fetchData = async () => {
               </thead>
               <tbody>
               {
-                tableData.map((data)=>{
+                tableData?.map((data)=>{
                   return(
-                    <tr className="common-fonts permission-table-heading" key={data.id}>
-                  <td>{data.name}</td>
+                    <tr className="common-fonts permission-table-heading" key={data?.id}>
+                  <td>{data?.name}</td>
                   <td>contacts</td>
                   <td>
                     <div className="custom-date-input">
