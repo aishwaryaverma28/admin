@@ -17,6 +17,10 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const [acaReply, setAcaReply] = useState([])
     const [isEditing, setIsEditing] = useState(false);
     const [editedComment, setEditedComment] = useState(review.comment);
+    const [editedCommentIndex, setEditedCommentIndex] = useState(null);
+    const [isReplyEditing, setIsReplyEditing] = useState(false);
+    const [editedReplyComment, setEditedReplyComment] = useState(null);
+
     const reviewReply = () => {
         const body = {
             review_id: review.id
@@ -116,10 +120,11 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         }).then((response) => {
             console.log(response);
             if (response?.data?.status === 1) {
-            toast.success("review disapproved successfully", {
-                position: "top-center",
-                autoClose: 2000,
-            })}
+                toast.success("review disapproved successfully", {
+                    position: "top-center",
+                    autoClose: 2000,
+                })
+            }
             onClose();
         }).catch((error) => {
             console.log(error);
@@ -134,10 +139,11 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         }).then((response) => {
             console.log(response);
             if (response?.data?.status === 1) {
-            toast.success("review approved successfully", {
-                position: "top-center",
-                autoClose: 2000,
-            })}
+                toast.success("review approved successfully", {
+                    position: "top-center",
+                    autoClose: 2000,
+                })
+            }
             onClose();
         }).catch((error) => {
             console.log(error);
@@ -145,6 +151,27 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         reviewData();
     }
 
+    const handleEditReplyClick = (index) => {
+        setEditedReplyComment(acaReply[index]?.comment);
+        setEditedCommentIndex(index);
+        setIsReplyEditing(true);
+    };
+    
+    const handleCancelReplyEdit = () => {
+        setIsReplyEditing(false);
+        setEditedReplyComment("");
+        setEditedCommentIndex(null);
+    };
+    const handleSaveReplyEdit = (index) => {
+        setIsReplyEditing(false);
+        setEditedReplyComment("");
+        setEditedCommentIndex(null);
+    };
+    const handleEditReplyChange = (e,index) => {
+        const newReplyData = [...acaReply];
+        newReplyData[index].comment = e.target.value;
+        setAcaReply(newReplyData);
+    }
     return (
         <div class="recycle-popup-wrapper">
             <div class="review_new_container">
@@ -204,12 +231,45 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                         ) :
                             (
                                 acaReply?.map((item, index) => (
-                                    <>
-                                        <div className='replyName'>
-                                            <p class="common-fonts reply-head">{item?.name}</p>
-                                            <p class="common-fonts selected-comment">{item?.comment}</p>
+                                    <div className='replyName' key={index}>
+                                        <div className='review-top-flex'>
+                                            <p className="common-fonts reply-head">{item?.name}</p>
+                                            <div className='review-top-flex pen-flex' onClick={() => handleEditReplyClick(index)}>
+                                                <img src={Pen} alt="" />
+                                                <p className="common-fonts selected-comment" >
+                                                    Edit
+                                                </p>
+                                            </div>
                                         </div>
-                                    </>))
+                                        {isReplyEditing && editedCommentIndex === index ? (
+                                            <div className="bmp-add-fields">
+                                                <textarea
+                                                    name=""
+                                                    id=""
+                                                    rows="3"
+                                                    className="common-fonts bmp-strategy-input bmp-modal-input"
+                                                    value={item?.comment}
+                                                    onChange={e => handleEditReplyChange(e, index)}
+                                                ></textarea>
+                                                <div className="review-popup-btn">
+                                                    <button className="common-white-button common-fonts" onClick={handleCancelReplyEdit}>Cancel</button>
+                                                    {stateReviewBtn === 0 ? (
+                                                        <button className="common-inactive-button review-inactive">Save</button>
+                                                    ) : (
+                                                        <button
+                                                            className="common-fonts common-save-button comment-save"
+                                                            onClick={() => handleSaveReplyEdit(index)}
+                                                        >
+                                                            Save
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <p className="common-fonts selected-comment">{item?.comment}</p>
+                                        )}
+                                    </div>
+                                ))
                             )}
                     </div>
                     <br />
