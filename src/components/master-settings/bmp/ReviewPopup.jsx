@@ -14,12 +14,12 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [stateReviewBtn, setStateReviewBtn] = useState(0);
     const [stateBtn, setStateBtn] = useState(0);
+    const [stateReplyBtn, setStateReplyBtn] = useState(0);
     const [acaReply, setAcaReply] = useState([])
     const [isEditing, setIsEditing] = useState(false);
     const [editedComment, setEditedComment] = useState(review.comment);
     const [editedCommentIndex, setEditedCommentIndex] = useState(null);
     const [isReplyEditing, setIsReplyEditing] = useState(false);
-    const [editedReplyComment, setEditedReplyComment] = useState(null);
 
     const reviewReply = () => {
         const body = {
@@ -152,25 +152,39 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     }
 
     const handleEditReplyClick = (index) => {
-        setEditedReplyComment(acaReply[index]?.comment);
         setEditedCommentIndex(index);
-        setIsReplyEditing(true);
+        setIsReplyEditing((prevState) => !prevState);
+        setStateReplyBtn(0);
     };
     
     const handleCancelReplyEdit = () => {
+        reviewReply();
         setIsReplyEditing(false);
-        setEditedReplyComment("");
         setEditedCommentIndex(null);
     };
-    const handleSaveReplyEdit = (index) => {
+    const handleSaveReplyEdit = (id, comment) => {
+        axios.put(UPDATE_ACADEMY_REVIEW + id, { comment: comment }, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+            }
+        }).then((response) => {
+            console.log(response);
+            toast.success("reply updated successfully", {
+                position: "top-center",
+                autoClose: 2000,
+            })
+        }).catch((error) => {
+            console.log(error);
+        })
         setIsReplyEditing(false);
-        setEditedReplyComment("");
         setEditedCommentIndex(null);
+        setStateReplyBtn(0);
     };
     const handleEditReplyChange = (e,index) => {
         const newReplyData = [...acaReply];
         newReplyData[index].comment = e.target.value;
         setAcaReply(newReplyData);
+        setStateReplyBtn(1);
     }
     return (
         <div class="recycle-popup-wrapper">
@@ -196,7 +210,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                                 <textarea
                                     name=""
                                     id=""
-                                    rows="3"
+                                    rows="2"
                                     className="common-fonts bmp-strategy-input bmp-modal-input"
                                     value={editedComment}
                                     onChange={handleEditCommentChange}
@@ -246,19 +260,19 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                                                 <textarea
                                                     name=""
                                                     id=""
-                                                    rows="3"
+                                                    rows="2"
                                                     className="common-fonts bmp-strategy-input bmp-modal-input"
                                                     value={item?.comment}
                                                     onChange={e => handleEditReplyChange(e, index)}
                                                 ></textarea>
                                                 <div className="review-popup-btn">
                                                     <button className="common-white-button common-fonts" onClick={handleCancelReplyEdit}>Cancel</button>
-                                                    {stateReviewBtn === 0 ? (
+                                                    {stateReplyBtn === 0 ? (
                                                         <button className="common-inactive-button review-inactive">Save</button>
                                                     ) : (
                                                         <button
                                                             className="common-fonts common-save-button comment-save"
-                                                            onClick={() => handleSaveReplyEdit(index)}
+                                                            onClick={() => handleSaveReplyEdit(item.id, item.comment)}
                                                         >
                                                             Save
                                                         </button>
@@ -278,7 +292,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                         <textarea
                             name=""
                             id=""
-                            rows="5"
+                            rows="3"
                             className="common-fonts bmp-strategy-input bmp-modal-input"
                             placeholder='Type your response here *'
                             value={reply}
