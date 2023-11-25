@@ -20,6 +20,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const [editedComment, setEditedComment] = useState(review.comment);
     const [editedCommentIndex, setEditedCommentIndex] = useState(null);
     const [isReplyEditing, setIsReplyEditing] = useState(false);
+    
 
     const reviewReply = () => {
         const body = {
@@ -155,6 +156,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         setEditedCommentIndex(index);
         setIsReplyEditing((prevState) => !prevState);
         setStateReplyBtn(0);
+        
     };
     
     const handleCancelReplyEdit = () => {
@@ -237,7 +239,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     </div>
 
                     <br />
-                    <div className='replysContainer replyHeightChanged'>
+                    <div className={`replysContainer ${isReplyEditing ? 'expanded' : 'collapsed'} replyHeightChanged`}>
                         {isLoading ? (
                             <><p class="common-fonts selected-comment">Loading ...</p></>
                         ) : acaReply?.length === 0 ? (
