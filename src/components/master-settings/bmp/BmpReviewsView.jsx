@@ -88,7 +88,7 @@ const BmpReviewsView = () => {
   });
 
   return (
-    <div className='academy_rejected'>
+    <div className='academy_rejected review_academy_top'>
       <div className="genral-setting-btn genral-setting-fonts aaa">
         <button
           className={`genral-btn  ${activeTab === "all" ? "genral-active" : ""

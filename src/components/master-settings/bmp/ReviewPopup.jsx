@@ -237,7 +237,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     </div>
 
                     <br />
-                    <div className='replysContainer'>
+                    <div className='replysContainer replyHeightChanged'>
                         {isLoading ? (
                             <><p class="common-fonts selected-comment">Loading ...</p></>
                         ) : acaReply?.length === 0 ? (
@@ -288,6 +288,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                     </div>
                     <br />
                     <br />
+                    <br/>
                     <div className="bmp-add-fields">
                         <textarea
                             name=""

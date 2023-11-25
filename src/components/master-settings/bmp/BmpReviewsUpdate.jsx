@@ -4,10 +4,9 @@ import axios from "axios";
 import {
   GET_ALL_REVIEW, GET_ACC_REVIEW, getDecryptedToken,
 } from "../../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import star from "../../../assets/image/star.svg"
 import ReviewUpdatePending from "./ReviewUpdatePending";
+import arrowLeft from "../../../assets/image/arrow-left.svg";
 
 const BmpReviewsUpdate = () => {
   const { id } = useParams();
@@ -74,6 +73,14 @@ const BmpReviewsUpdate = () => {
   return (
     <>
       <div className='academy_rejected'>
+      <div className="go-back-btn ">
+        <Link to={"/lp/settings/review/view"}>
+        <button className="setting-font-style">
+          <img src={arrowLeft} alt="" />
+          <span>Go Back</span>
+        </button>
+        </Link>
+      </div>
         <div>
           <p className='comon-fonts bmp_lead_text'>Reviews</p>
         </div>

@@ -377,7 +377,7 @@
 }
 
 .bmp-add-fields {
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .bmp-new-timing {
@@ -1142,3 +1142,9 @@ margin-right: 0.3rem;
 .review-inactive{
   margin-left: 0.5rem;
 }
+ .review_academy_top{
+  margin-top: 0rem;
+ }
+ .replyHeightChanged{
+  height: 9.5rem;
+ }
