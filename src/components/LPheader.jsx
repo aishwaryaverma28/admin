@@ -15,12 +15,14 @@ import {
 } from "./utils/Constants";
 import HelpModal from "./HelpModal";
 import NotificationModal from "./NotificationModal.jsx";
-
+import { useDispatch } from 'react-redux';
+import { addItem } from "./utils/userInfoSlice.js";
 const LPheader = () => {
   const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
   const userId = localStorage.getItem("id");
   const [pageTitle, setPageTitle] = useState("Lead");
+  const dispatch = useDispatch();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -157,12 +159,13 @@ const LPheader = () => {
           },
         }
       );
-      const data = response.data.user;
+      const data = response?.data?.user;
       // console.log(data);
       localStorage.setItem("org_id", data.org_id);
       if (response.data.status === 1) {
         setClientData(data);
         setNumber(1);
+        dispatch(addItem(data));
       }
     } catch (error) {
       console.log(error);
@@ -237,6 +240,10 @@ const LPheader = () => {
       window.location.href = "https://www.leadplaner.com/user/login";
     }
   };
+
+  const handleAddInfo = () => {
+
+  }
 
   return (
     <>

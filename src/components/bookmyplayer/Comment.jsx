@@ -5,14 +5,17 @@ import axios from 'axios';
 import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken} from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {useSelector} from "react-redux";
 
 const Comment = ({ onClose, review, reviewData }) => {
   const decryptedToken = getDecryptedToken();
+  const userName = useSelector(store => store.user.items);
   const academyId = localStorage.getItem("academy_id");
   const [reply, setReply] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [stateBtn, setStateBtn] = useState(0);
   const [acaReply, setAcaReply] = useState([])
+  console.log(userName);
   const reviewReply = () => {
     const body = {
       review_id: review.id
