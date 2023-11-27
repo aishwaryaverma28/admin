@@ -142,21 +142,21 @@ const BmpOverview = () => {
       script.onload = () => setGoogleScriptLoaded(true);
       script.onerror = (error) => console.error("Error loading Google Maps:", error);
       document.head.appendChild(script);
-  
+
       return () => {
         document.head.removeChild(script);
       };
     }
   }, [googleScriptLoaded]);
-  
+
   const handleSelect = (selectedAddress) => {
     setAddress(selectedAddress);
     setStateBtn(1);
-  
+
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-  
+
     placesService.textSearch({ query: selectedAddress }, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         const location = results[0].geometry.location;
@@ -166,14 +166,14 @@ const BmpOverview = () => {
         updateField("coordinate");
       }
     });
-  
+
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
       selectedAddress
     )}`;
     setMapLink(mapLink);
     updateField("map");
   };
-  
+
 
   const updateField = (fieldName) => {
     if (!updatedFields.includes(fieldName)) {
@@ -515,20 +515,20 @@ const BmpOverview = () => {
 
 
     const sportsChanged =
-    selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
+      selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
 
     const spokenLanguagesChanged =
-    languageString !== academyData?.spoken_languages;
+      languageString !== academyData?.spoken_languages;
 
-  const addressChanged = address !== academyData?.address1;
-  const maplinkChanged = mapLink !== academyData?.map;
-  const coordinateChanged = coordinate !== academyData?.coordinate;
+    const addressChanged = address !== academyData?.address1;
+    const maplinkChanged = mapLink !== academyData?.map;
+    const coordinateChanged = coordinate !== academyData?.coordinate;
 
-  const timingChanged = startAndEndTime !== academyData?.timing;
+    const timingChanged = startAndEndTime !== academyData?.timing;
 
-  const logoChanged = fileName !== academyData?.fileName;
+    const logoChanged = fileName !== academyData?.fileName;
 
-  const progressChanged = combinedProgress !== academyData?.completion_percentage;
+    const progressChanged = combinedProgress !== academyData?.completion_percentage;
     // const updatedFormData = {
     //   academy_id: academyId,
     //   spoken_languages: languageString,
@@ -553,7 +553,7 @@ const BmpOverview = () => {
     console.log(updatedFormData);
 
     const hasChanged = (field) =>
-    academyData?.[field] !== academyDataOld?.[field];
+      academyData?.[field] !== academyDataOld?.[field];
 
     if (hasChanged("name")) {
       updatedFormData.name = academyData.name;
@@ -610,15 +610,15 @@ const BmpOverview = () => {
       updatedFormData.timing = startAndEndTime;
     }
 
-    if (logoChanged && fileName!=="") {
+    if (logoChanged && fileName !== "") {
       updatedFormData.logo = fileName;
     }
-    
-    if (progressChanged && combinedProgress!=="") {
-      updatedFormData.completion_percentage=combinedProgress;
+
+    if (progressChanged && combinedProgress !== "") {
+      updatedFormData.completion_percentage = combinedProgress;
     }
 
-    if(number1===1){
+    if (number1 === 1) {
       updatedFormData.logo = fileName;
     }
 
@@ -632,17 +632,17 @@ const BmpOverview = () => {
       updatedFormData.coordinate = coordinate;
     }
 
-    if(number2===1){
+    if (number2 === 1) {
       updatedFormData.address1 = address;
     }
-    if(number3===1){
+    if (number3 === 1) {
       updatedFormData.map = mapLink;
     }
-    if(number4===1){
+    if (number4 === 1) {
       updatedFormData.coordinate = coordinate;
     }
 
-
+    updatedFormData.academy_id = academyId;
     console.log(updatedFormData);
     console.log("overr");
 
@@ -714,46 +714,46 @@ const BmpOverview = () => {
               Address
             </label>
             {googleScriptLoaded && (
-            <PlacesAutocomplete
-              value={address}
-              onChange={setAddress}
-              onSelect={handleSelect}
-              searchOptions={{
-                componentRestrictions: { country: "IN" },
-              }}
-            >
-              {({
-                getInputProps,
-                suggestions,
-                getSuggestionItemProps,
-                loading,
-              }) => (
-                <div className="relativeInput">
-                  <input
-                    type="text"
-                    className="common-fonts common-input bmp-input "
-                    {...getInputProps({
-                      placeholder: "Enter your address",
-                    })}
-                  />
-                  <div
-                    {...(suggestions.length > 0
-                      ? { className: "autocomplete-dropdown" }
-                      : {})}
-                  >
-                    {loading && <div>Loading...</div>}
-                    {suggestions.map((suggestion) => (
-                      <div
-                        {...getSuggestionItemProps(suggestion)}
-                        key={suggestion.placeId}
-                      >
-                        {suggestion.description}
-                      </div>
-                    ))}
+              <PlacesAutocomplete
+                value={address}
+                onChange={setAddress}
+                onSelect={handleSelect}
+                searchOptions={{
+                  componentRestrictions: { country: "IN" },
+                }}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading,
+                }) => (
+                  <div className="relativeInput">
+                    <input
+                      type="text"
+                      className="common-fonts common-input bmp-input "
+                      {...getInputProps({
+                        placeholder: "Enter your address",
+                      })}
+                    />
+                    <div
+                      {...(suggestions.length > 0
+                        ? { className: "autocomplete-dropdown" }
+                        : {})}
+                    >
+                      {loading && <div>Loading...</div>}
+                      {suggestions.map((suggestion) => (
+                        <div
+                          {...getSuggestionItemProps(suggestion)}
+                          key={suggestion.placeId}
+                        >
+                          {suggestion.description}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </PlacesAutocomplete>
+                )}
+              </PlacesAutocomplete>
             )}
           </div>
           <div className="bmp-input-flex">
@@ -762,73 +762,64 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -870,8 +861,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                    ? academyData?.phone
-                    : academyData?.whatsapp
+                      ? academyData?.phone
+                      : academyData?.whatsapp
                 }
               />
             </div>
@@ -1043,7 +1034,7 @@ const BmpOverview = () => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileName ? fileName : academyData?.logo}
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
@@ -1159,7 +1150,7 @@ const BmpOverview = () => {
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>
-                <img src={Dash} alt="" onClick={handleDeleteLanguage}  />
+                <img src={Dash} alt="" onClick={handleDeleteLanguage} />
               </div>
             ))}
           </div>
