@@ -243,7 +243,8 @@ const Gallery = () => {
   };
 
   // console.log(photoUrls);
-  // console.log(videoUrls);
+  console.log(videoUrls);
+  console.log("oopy");
 
   const submitImage2 = (file) => {
     setIsUploadingMulti(true);
@@ -729,13 +730,14 @@ const Gallery = () => {
                     <div className="bmp-img-name">
                       <div className="bmp-video">
                         <img
-                          src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
+                          // src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
+                          src={Video}
                           alt=""
                         />
                       </div>
                       <p className="common-fonts bmp-tour">
                         {video?.length > 20 ? (
-                          <>{video?.slice(20)}...</>
+                          <>{video?.slice(0, 20) + '...'}</>
                         ) : (
                           <>{video}</>
                         )}
