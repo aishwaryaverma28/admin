@@ -272,10 +272,10 @@ const OverviewById = () => {
         // console.log(response)
       })
       .catch((error) => {
-        toast.error("Some Error Occoured!", {
-          position: "top-center",
-          autoClose: 2000,
-        });
+        // toast.error("Some Error Occoured!", {
+        //   position: "top-center",
+        //   autoClose: 2000,
+        // });
       });
   };
   useEffect(() => {
