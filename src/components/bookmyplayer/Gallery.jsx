@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {
   GET_ACADEMY,
-  UPDATE_ACADEMY,
+  UPDATE_ACADEMY,UPDATE_ACADEMY_TABLE2,
   getDecryptedToken,
 } from "../utils/Constants";
 import "chart.js/auto";
@@ -404,14 +404,16 @@ const Gallery = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray.join(",");
+    console.log(combinedProgress);
     let body = {
+      academy_id: academyId,
       photos: photoUrls.join(","),
       videos: videoUrls.join(","),
       completion_percentage: combinedProgress,
     };
 
     axios
-      .put(UPDATE_ACADEMY + academyId, body, {
+      .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -815,7 +817,7 @@ const Gallery = () => {
               Cancel
             </button>
             {stateBtn === 0 ? (
-              <button className="disabledBtn">Save</button>
+              <button className="disabledBtn" disabled>Save</button>
             ) : (
               <button
                 className="common-fonts common-save-button"
