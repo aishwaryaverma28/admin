@@ -69,16 +69,6 @@ const Gallery = () => {
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
-        const info = response?.data?.data[0]?.updated_column;
-        const arr= info?.split(",");
-      
-        if(arr.includes("photos") && roleName==="Academy_Admin"){
-          setBorder(true)
-        }else{
-          setBorder(false);
-        }
-
-
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
           response?.data?.data[0]?.completion_percentage !== null
@@ -112,6 +102,7 @@ const Gallery = () => {
         console.log(error);
       });
   };
+  console.log(progressArray);
   useEffect(() => {
     academyDetails();
   }, []);
