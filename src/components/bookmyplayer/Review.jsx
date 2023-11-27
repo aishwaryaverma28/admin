@@ -32,7 +32,7 @@ const Review = () => {
       },
     })
       .then((response) => {
-        console.log(response?.data?.data)
+        // console.log(response?.data?.data)
         if (response?.data?.status === 1) {
           setReview(response?.data?.data);
         }

@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import "../styles/Comment.css";
 import star from "../../assets/image/star.svg"
 import axios from 'axios';
-import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken} from "../utils/Constants";
+import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const Comment = ({ onClose, review, reviewData }) => {
   const decryptedToken = getDecryptedToken();
@@ -15,11 +15,11 @@ const Comment = ({ onClose, review, reviewData }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [stateBtn, setStateBtn] = useState(0);
   const [acaReply, setAcaReply] = useState([])
-  console.log(userName);
+  // console.log(userName[0].name);
   const reviewReply = () => {
     const body = {
       review_id: review.id
-  }
+    }
     axios.post(GET_REVIEW_REPLY, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,
@@ -27,7 +27,7 @@ const Comment = ({ onClose, review, reviewData }) => {
     })
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
           setAcaReply(response?.data?.data?.reverse());
         }
         setIsLoading(false);
@@ -37,9 +37,9 @@ const Comment = ({ onClose, review, reviewData }) => {
         setIsLoading(false);
       })
   }
-useEffect(()=> {
-  reviewReply();
-},[])
+  useEffect(() => {
+    reviewReply();
+  }, [])
 
   const handleReplyChange = (e) => {
     setStateBtn(1);
@@ -48,37 +48,37 @@ useEffect(()=> {
   }
 
   const handleSave = () => {
-const body ={
-  parent_id: review.id,
-  type: "academy-response",
-  object_type: "academy",
-  object_id: parseInt(academyId),
-  name: review?.name,
-  comment: reply,
-  status: 1,
-  user_id: 2
-};
-axios.post(ADD_REPLY, body, {
-  headers: {
-    Authorization: `Bearer ${decryptedToken}`,
-  },
-})
-.then((response) => {
-  if (response?.data?.status === 1) {
-    console.log(response?.data?.data)
-    toast.success("Reply send successfully!", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-  }
-  reviewReply();
-  reviewData();
-   setReply("");
-    // onClose();
-})
-.catch((error) => {
-  console.log(error)
-})
+    const body = {
+      parent_id: review.id,
+      type: "academy-response",
+      object_type: "academy",
+      object_id: parseInt(academyId),
+      name: userName[0]?.name,
+      comment: reply,
+      status: 1,
+      user_id: 2
+    };
+    axios.post(ADD_REPLY, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          console.log(response?.data?.data)
+          toast.success("Reply send successfully!", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        reviewReply();
+        reviewData();
+        setReply("");
+        // onClose();
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
   return (
     <div class="recycle-popup-wrapper">
@@ -93,22 +93,22 @@ axios.post(ADD_REPLY, body, {
             <p class="common-fonts comment-head">{review?.name}<span className='review-rating'>{review?.rating}<img className="pound" src={star} alt='star' /></span></p>
             <p class="common-fonts selected-comment">{review?.comment}</p>
           </div>
-          <br/>
+          <br />
           <div className='replysContainer'>
-          {isLoading ? (
-            <><p class="common-fonts selected-comment">Loading ...</p></>
-          ) : acaReply?.length === 0 ? (
-            <><p class="common-fonts selected-comment">No data found</p></>
-          ) :
-          (
-            acaReply?.map((item, index) => (
-            <>
-            <div className='replyName'>
-            <p class="common-fonts reply-head">{item?.name}</p>
-            <p class="common-fonts selected-comment">{item?.comment}</p>
-            </div>
-            </>))
-          )}
+            {isLoading ? (
+              <><p class="common-fonts selected-comment">Loading ...</p></>
+            ) : acaReply?.length === 0 ? (
+              <><p class="common-fonts selected-comment">No data found</p></>
+            ) :
+              (
+                acaReply?.map((item, index) => (
+                  <>
+                    <div className='replyName'>
+                      <p class="common-fonts reply-head">{item?.name}</p>
+                      <p class="common-fonts selected-comment">{item?.comment}</p>
+                    </div>
+                  </>))
+              )}
           </div>
           <br />
           <br />
@@ -131,7 +131,7 @@ axios.post(ADD_REPLY, body, {
           ) : (
             <button
               className="common-fonts common-save-button comment-save"
-            onClick={handleSave}
+              onClick={handleSave}
             >
               Save
             </button>

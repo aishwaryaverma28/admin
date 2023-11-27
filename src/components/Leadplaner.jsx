@@ -8,11 +8,11 @@ export default function Leadplaner() {
   return (
     <div>
       <Provider store={store}>
-      <LPUserProvider>
-     <LPheader/>
-     <Outlet/>
-     </LPUserProvider>
-     </Provider>
+        <LPUserProvider>
+          <LPheader />
+          <Outlet />
+        </LPUserProvider>
+      </Provider>
     </div>
   )
 }

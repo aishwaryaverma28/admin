@@ -220,3 +220,21 @@ export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
 //==============================================================bmp reviews
 export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
 export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";
+
+/* 
+post api : {{ezukal_3000}}/api/bmp/academy/addupdaterequest
+body: {
+    "academy_id": 510,
+    "name":"tets name"
+}
+
+post api : {{ezukal_3000}}/api/bmp/academy/getupdatedinfo
+body: {
+    "academy_id": 510
+}
+
+put api : {{ezukal_3000}}/api/bmp/academy/updateupdatedinfo/1
+body: {
+    "status": 2
+}
+*/

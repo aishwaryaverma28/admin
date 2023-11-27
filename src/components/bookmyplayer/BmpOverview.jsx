@@ -6,7 +6,6 @@ import axios from "axios";
 import {
   CREATE_FOLDER,
   GET_ACADEMY,
-  UPDATE_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
   RESTRICTED_KEYWORDS,
   getDecryptedToken,
