@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calender from "../../assets/image/calendar.svg";
 import axios from 'axios';
-import { GET_APPROVAL, getDecryptedToken } from '../utils/Constants.js';
-import { useState } from 'react';
+import { GET_APPROVAL, UPDATE_ACADMEY_STATUS, getDecryptedToken } from '../utils/Constants.js';
 import ApprovalModal from './ApprovalModal.jsx';
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Approval = () => {
   const decryptedToken = getDecryptedToken();
   const [data, setData] = useState([]);
@@ -12,27 +12,103 @@ const Approval = () => {
   const academyId = localStorage.getItem("academy_id");
   const [isOpen, setIsOpen] = useState(false);
   const [item, setItem] = useState([]);
+  const [revokeId, setRevokeId] = useState(null);
 
   const openModal = (data) => {
-     setIsOpen(true);
-     setItem(data);
+    setIsOpen(true);
+    setItem(data);
   }
 
   const closeModal = () => {
     setIsOpen(false);
 
- }
+  }
 
   const approvalData = () => {
     axios.post(GET_APPROVAL, {
       "academy_id": academyId
     }, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}`
       }
     }).then((response) => {
-      setData(response?.data?.data);
-      console.log(response?.data?.data);
+      const newData = response?.data?.data.map((item) => {
+        const approvedFields = (
+          item.status === 1 &&
+          (
+            [
+              'spoken_languages',
+              'name',
+              'about',
+              'phone',
+              'whatsapp',
+              'experience',
+              'address1',
+              'map',
+              'coordinate',
+              'facebook',
+              'instagram',
+              'website',
+              'sport',
+              'email',
+              'timing',
+              'logo',
+            ].some((key) => item[key] !== null)
+          )
+        ) ? 'overview' : (
+          item.status === 1 &&
+          [
+            'photos',
+            'videos',
+            'training_ground_photos',
+            'tournament_photos',
+          ].some((key) => item[key] !== null)
+        ) ? 'gallery' : '';
+
+        const rejectedFields = (
+          item.status === 2 &&
+          (
+            [
+              'spoken_languages',
+              'name',
+              'about',
+              'phone',
+              'whatsapp',
+              'experience',
+              'address1',
+              'map',
+              'coordinate',
+              'facebook',
+              'instagram',
+              'website',
+              'sport',
+              'email',
+              'timing',
+              'logo',
+            ].some((key) => item[key] !== null)
+          )
+        ) ? 'overview' : (
+          item.status === 2 &&
+          [
+            'photos',
+            'videos',
+            'training_ground_photos',
+            'tournament_photos',
+          ].some((key) => item[key] !== null)
+        ) ? 'gallery' : '';
+
+        if (item.status === 0) {
+          setRevokeId(item.id);
+        }
+
+        return {
+          ...item,
+          approvedFields,
+          rejectedFields,
+        };
+      });
+      const filteredData = newData.filter((item) => item.status !== 3);
+      setData(filteredData);
       setIsLoading(false);
     }).catch((error) => {
       console.log(error);
@@ -40,76 +116,102 @@ const Approval = () => {
     });
   }
 
-  useEffect(()=>{
-   approvalData();
-  },[])
+  useEffect(() => {
+    approvalData();
+  }, []);
+
+  const handleRevoke = () => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 3 },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          console.log(response?.data?.data)
+          toast.success("Reply send successfully!", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        setRevokeId(null);
+        approvalData();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
   return (
     <>
 
-<div>
-      <p className='common-fonts bmp_approval'>Approval Status</p>
-    </div>
-
-    <div className='bmp_approval_btn'>
       <div>
-        <button className='common-fonts bmp_date_button'><img src={Calender} alt="" />Any Date</button>
+        <p className='common-fonts bmp_approval'>Approval Status</p>
       </div>
 
-      <div>
-         <button className='common-fonts common-delete-button bmp_revoke'>Revoke</button>
-         <button className='common-fonts common-save-button'>Proceed</button>
+      <div className='bmp_approval_btn'>
+        <div>
+          <button className='common-fonts bmp_date_button'><img src={Calender} alt="" />Any Date</button>
+        </div>
+
+        <div>
+          {revokeId === null ? (
+            <button className='common-fonts common-delete-button bmp_disable_revoke' disabled>Revoke</button>
+          ) : (
+            <button className='common-fonts common-delete-button bmp_revoke' onClick={handleRevoke} >Revoke</button>
+          )}
+          <button className='common-fonts common-save-button'>Proceed</button>
+        </div>
       </div>
-    </div>
 
-    <div className='bmp_approval_table'>
-    <table>
-      <thead>
-        <tr>
-          <th className='common-fonts'>Sno.</th>
-          <th className='common-fonts'>Date</th>
-          <th className='common-fonts'>Rejected Fields</th>
-          <th className='common-fonts'>Approved Fields</th>
-          <th className='common-fonts'>Remarks</th>
-        </tr>
-      </thead>
-      <tbody>
+      <div className='bmp_approval_table'>
+        <table>
+          <thead>
+            <tr>
+              <th className='common-fonts'>Sno.</th>
+              <th className='common-fonts'>Date</th>
+              <th className='common-fonts'>Rejected Fields</th>
+              <th className='common-fonts'>Approved Fields</th>
+              <th className='common-fonts'>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
 
-      {isLoading ? (
-          <tr>
-            <td
-              colSpan={5}
-              style={{ padding: "1.5rem", textAlign: "center" }}
-            >
-              Loading...
-            </td>
-          </tr>
-        ) : data?.length === 0 ? (
-          <tr>
-            <td colSpan={5} style={{ textAlign: "center" }}>
-              No data found
-            </td>
-          </tr>
-        ) : (
-          data?.map((item, index) => (
-        <tr key={item.id} onClick={() => openModal(item)}>
-          <td className='common-fonts'>1</td>
-          <td className='common-fonts'>2023-10-05</td>
-          <td className='common-fonts'>overview, training & strategy</td>
-          <td className='common-fonts'>photos & videos, fee & batches</td>
-          <td className='common-fonts'>Lorem ipsum dolor sit amet consectetur. Sit eu quam rhoncus commodo et pellentesque sagittis. Viverra</td>
-        </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan={5}
+                  style={{ padding: "1.5rem", textAlign: "center" }}
+                >
+                  Loading...
+                </td>
+              </tr>
+            ) : data?.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ textAlign: "center" }}>
+                  No data found
+                </td>
+              </tr>
+            ) : (
+              data?.map((item, index) => (
+                <tr key={item.id} onClick={() => openModal(item)}>
+                  <td className='common-fonts'>{index + 1}</td>
+                  <td className='common-fonts'>{item?.update_date?.split("T")[0]}</td>
+                  <td className='common-fonts' style={{ color: item.status === 0 ? 'red' : 'inherit' }}>{item.status === 0 ? 'Pending' : item.rejectedFields}</td>
+                  <td className='common-fonts' style={{ color: item.status === 0 ? 'red' : 'inherit' }}>{item.status === 0 ? 'Pending' : item.approvedFields}</td>
+                  <td className='common-fonts'>{item.rejection_reason}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
 
-    </div>
-    {
-      isOpen && (
-        <ApprovalModal onClose={closeModal} item={item} />
-      )
-    }
-
+      </div>
+      {
+        isOpen && (
+          <ApprovalModal onClose={closeModal} item={item} />
+        )
+      }
+      <ToastContainer />
     </>
 
   )

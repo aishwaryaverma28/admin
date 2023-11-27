@@ -216,6 +216,7 @@ export const GETALL_ACADEMY = start + "/bmp/academy/getall"
 export const RESTRICTED_KEYWORDS = start + "/bmp/getrestrictedkeywords";
 export const GET_ACADEMY_STATUS = start + "/bmp/academy/getall";
 export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
+export const UPDATE_ACADMEY_STATUS = start + "/bmp/academy/updateupdatedinfo/"
 
 //==============================================================bmp reviews
 export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
