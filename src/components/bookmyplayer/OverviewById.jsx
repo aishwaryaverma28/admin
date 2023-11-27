@@ -45,6 +45,9 @@ const OverviewById = () => {
   const [progressArray, setProgressArray] = useState([]);
   const [number, setNumber] = useState(0);
   const [number1, setNumber1] = useState(0);
+  const [number2, setNumber2] = useState(0);
+  const [number3, setNumber3] = useState(0);
+  const [number4, setNumber4] = useState(0);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   let joinLanguage;
   const languages = [
@@ -147,6 +150,11 @@ const OverviewById = () => {
   
   const handleSelect = (selectedAddress) => {
     setAddress(selectedAddress);
+    if(selectedAddress.length===0){
+      setNumber2(1)
+    }else{
+      setNumber2(0)
+    }
     setStateBtn(1);
   
     const placesService = new window.google.maps.places.PlacesService(
@@ -159,6 +167,13 @@ const OverviewById = () => {
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
         setCoordinate(`${selectedLatitude},${selectedLongitude}`);
+
+        if(`${selectedLatitude},${selectedLongitude}`.length===0){
+          setNumber4(1)
+        }else{
+          setNumber4(0)
+        }
+        
         updateField("coordinate");
       }
     });
@@ -167,6 +182,11 @@ const OverviewById = () => {
       selectedAddress
     )}`;
     setMapLink(mapLink);
+    if(mapLink.length===0){
+      setNumber3(1)
+    }else{
+      setNumber3(0)
+    }
     updateField("map");
   };
   
@@ -226,6 +246,7 @@ const OverviewById = () => {
         console.log(response?.data?.data[0]);
         console.log("hyy");
         setAddress(response?.data?.data[0]?.address1 || "");
+
         setProgress(response?.data?.data[0]?.completion_percentage);
 
         const languages =
@@ -465,7 +486,9 @@ const OverviewById = () => {
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
 
-    const addressChanged = address !== academyData?.address;
+    const addressChanged = address !== academyData?.address1;
+    const maplinkChanged = mapLink !== academyData?.map;
+    const coordinateChanged = coordinate !== academyData?.coordinate;
 
     const timingChanged = startAndEndTime !== academyData?.timing;
 
@@ -571,11 +594,26 @@ const OverviewById = () => {
       updatedFormData.logo = fileName;
     }
 
-    // if (addressChanged && address !== "") {
-    //   updatedFormData.address1 = address;
-    //   updatedFormData.map = mapLink;
-    //   updatedFormData.coordinate = coordinate;
-    // }
+    if (addressChanged && address !== "") {
+      updatedFormData.address1 = address;
+    }
+    if (maplinkChanged && mapLink !== "") {
+      updatedFormData.map = mapLink;
+    }
+    if (coordinateChanged && coordinate !== "") {
+      updatedFormData.coordinate = coordinate;
+    }
+
+    if(number2===1){
+      updatedFormData.address1 = address;
+    }
+    if(number3===1){
+      updatedFormData.map = mapLink;
+    }
+    if(number4===1){
+      updatedFormData.coordinate = coordinate;
+    }
+
 
     console.log(updatedFormData);
     console.log("hrrr");
