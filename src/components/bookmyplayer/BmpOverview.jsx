@@ -22,6 +22,7 @@ const BmpOverview = () => {
   const academyId = localStorage.getItem("academy_id");
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
+  const [academyDataOld, setAcademyDataOld] = useState({});
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
   const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
@@ -42,6 +43,12 @@ const BmpOverview = () => {
   const [selectedLevel, setSelectedLevel] = useState("");
   const [mappedLanguages, setMappedLanguages] = useState([]);
   const [languageString, setLanguageString] = useState('');
+  const [number, setNumber] = useState(0);
+  const [number1, setNumber1] = useState(0);
+  const [number2, setNumber2] = useState(0);
+  const [number3, setNumber3] = useState(0);
+  const [number4, setNumber4] = useState(0);
+  let joinLanguage;
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const languages = [
     { value: "Hindi", label: "Hindi" },
@@ -106,10 +113,25 @@ const BmpOverview = () => {
       setLanguageString(languageString);
     }
   };
+
   const handleDeleteLanguage = (index) => {
+    setStateBtn(1);
     const updatedLanguages = [...mappedLanguages];
-    updatedLanguages.splice(index, 1);
-    setMappedLanguages(updatedLanguages);
+    const newArr = [
+      ...updatedLanguages.slice(0, index),
+      ...updatedLanguages.slice(index + 1),
+    ];
+    if (newArr.length === 0) {
+      setNumber(1);
+    } else {
+      setNumber(0);
+    }
+    setMappedLanguages([...newArr]);
+
+    joinLanguage = newArr
+      .map((lang) => `${lang.language}(${lang.level})`)
+      .join(", ");
+    setLanguageString(joinLanguage);
   };
 
   useEffect(() => {
@@ -205,8 +227,26 @@ const BmpOverview = () => {
       .then((response) => {
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
+        setAcademyDataOld(response?.data?.data[0]);
+        console.log(response?.data?.data[0]);
+        console.log("hyy");
         setAddress(response?.data?.data[0]?.address1 || "");
+
         setProgress(response?.data?.data[0]?.completion_percentage);
+
+        const languages =
+          response?.data?.data[0]?.spoken_languages?.split(", ");
+
+        const newLanguage = languages.map((lang) => {
+          const [language, level] = lang.split("(");
+          return {
+            language: language.trim(),
+            level: level.substring(0, level.length - 1).trim(),
+          };
+        });
+
+        setMappedLanguages([...newLanguage]);
+
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
           response?.data?.data[0]?.completion_percentage !== null
@@ -472,27 +512,139 @@ const BmpOverview = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray?.join(",");
-    const updatedFormData = {
-      academy_id: academyId,
-      spoken_languages: languageString,
-      name: academyData?.name,
-      about: academyData?.about,
-      phone: academyData?.phone,
-      whatsapp: academyData?.whatsapp,
-      experience: academyData?.experience,
-      address1: address,
-      map: mapLink,
-      coordinate: coordinate,
-      facebook: academyData?.facebook,
-      instagram: academyData?.instagram,
-      website: academyData?.website,
-      sport: selectedDaysString?.replace(/^,+/g, ""),
-      email: academyData?.email,
-      timing: startAndEndTime,
-      logo: fileName,
-      completion_percentage: combinedProgress,
-    };
+
+
+    const sportsChanged =
+    selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
+
+    const spokenLanguagesChanged =
+    languageString !== academyData?.spoken_languages;
+
+  const addressChanged = address !== academyData?.address1;
+  const maplinkChanged = mapLink !== academyData?.map;
+  const coordinateChanged = coordinate !== academyData?.coordinate;
+
+  const timingChanged = startAndEndTime !== academyData?.timing;
+
+  const logoChanged = fileName !== academyData?.fileName;
+
+  const progressChanged = combinedProgress !== academyData?.completion_percentage;
+    // const updatedFormData = {
+    //   academy_id: academyId,
+    //   spoken_languages: languageString,
+    //   name: academyData?.name,
+    //   about: academyData?.about,
+    //   phone: academyData?.phone,
+    //   whatsapp: academyData?.whatsapp,
+    //   experience: academyData?.experience,
+    //   address1: address,
+    //   map: mapLink,
+    //   coordinate: coordinate,
+    //   facebook: academyData?.facebook,
+    //   instagram: academyData?.instagram,
+    //   website: academyData?.website,
+    //   sport: selectedDaysString?.replace(/^,+/g, ""),
+    //   email: academyData?.email,
+    //   timing: startAndEndTime,
+    //   logo: fileName,
+    //   completion_percentage: combinedProgress,
+    // };
+    const updatedFormData = {};
     console.log(updatedFormData);
+
+    const hasChanged = (field) =>
+    academyData?.[field] !== academyDataOld?.[field];
+
+    if (hasChanged("name")) {
+      updatedFormData.name = academyData.name;
+    }
+    if (hasChanged("about")) {
+      updatedFormData.about = academyData.about;
+    }
+
+    if (hasChanged("phone")) {
+      updatedFormData.phone = academyData.phone;
+    }
+
+    if (hasChanged("whatsapp")) {
+      updatedFormData.whatsapp = academyData.whatsapp;
+    }
+
+    if (hasChanged("experience")) {
+      updatedFormData.experience = academyData.experience;
+    }
+
+    if (hasChanged("facebook")) {
+      updatedFormData.facebook = academyData.facebook;
+    }
+
+    if (hasChanged("instagram")) {
+      updatedFormData.instagram = academyData.instagram;
+    }
+
+    if (hasChanged("website")) {
+      updatedFormData.website = academyData.website;
+    }
+
+    if (hasChanged("email")) {
+      updatedFormData.email = academyData.email;
+    }
+
+    if (hasChanged("timing")) {
+      updatedFormData.timing = startAndEndTime;
+    }
+
+
+    if (spokenLanguagesChanged && languageString !== "") {
+      updatedFormData.spoken_languages = languageString;
+    }
+
+    if (number === 1) {
+      updatedFormData.spoken_languages = languageString;
+    }
+
+    if (sportsChanged) {
+      updatedFormData.sport = selectedDaysString?.replace(/^,+/g, "");
+    }
+    if (timingChanged) {
+      updatedFormData.timing = startAndEndTime;
+    }
+
+    if (logoChanged && fileName!=="") {
+      updatedFormData.logo = fileName;
+    }
+    
+    if (progressChanged && combinedProgress!=="") {
+      updatedFormData.completion_percentage=combinedProgress;
+    }
+
+    if(number1===1){
+      updatedFormData.logo = fileName;
+    }
+
+    if (addressChanged && address !== "") {
+      updatedFormData.address1 = address;
+    }
+    if (maplinkChanged && mapLink !== "") {
+      updatedFormData.map = mapLink;
+    }
+    if (coordinateChanged && coordinate !== "") {
+      updatedFormData.coordinate = coordinate;
+    }
+
+    if(number2===1){
+      updatedFormData.address1 = address;
+    }
+    if(number3===1){
+      updatedFormData.map = mapLink;
+    }
+    if(number4===1){
+      updatedFormData.coordinate = coordinate;
+    }
+
+
+    console.log(updatedFormData);
+    console.log("overr");
 
     axios
       .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
@@ -1018,7 +1170,7 @@ const BmpOverview = () => {
         <button className="common-fonts common-white-button">cancel</button>
         {/* <button className="common-save-button common-save">Save</button> */}
         {stateBtn === 0 ? (
-          <button className="disabledBtn">Save</button>
+          <button disabled className="disabledBtn">Save</button>
         ) : (
           <button
             className="common-save-button common-save"
