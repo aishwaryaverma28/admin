@@ -26,87 +26,78 @@ const Approval = () => {
 
   const approvalData = () => {
     axios.post(GET_APPROVAL, {
-      "academy_id": academyId
+      academy_id: academyId
     }, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
     }).then((response) => {
       const newData = response?.data?.data.map((item) => {
-        const approvedFields = (
-          item.status === 1 &&
-          (
-            [
-              'spoken_languages',
-              'name',
-              'about',
-              'phone',
-              'whatsapp',
-              'experience',
-              'address1',
-              'map',
-              'coordinate',
-              'facebook',
-              'instagram',
-              'website',
-              'sport',
-              'email',
-              'timing',
-              'logo',
-            ].some((key) => item[key] !== null)
-          )
-        ) ? 'overview' : (
-          item.status === 1 &&
-          [
-            'photos',
-            'videos',
-            'training_ground_photos',
-            'tournament_photos',
-          ].some((key) => item[key] !== null)
-        ) ? 'gallery' : '';
-
-        const rejectedFields = (
-          item.status === 2 &&
-          (
-            [
-              'spoken_languages',
-              'name',
-              'about',
-              'phone',
-              'whatsapp',
-              'experience',
-              'address1',
-              'map',
-              'coordinate',
-              'facebook',
-              'instagram',
-              'website',
-              'sport',
-              'email',
-              'timing',
-              'logo',
-            ].some((key) => item[key] !== null)
-          )
-        ) ? 'overview' : (
-          item.status === 2 &&
-          [
-            'photos',
-            'videos',
-            'training_ground_photos',
-            'tournament_photos',
-          ].some((key) => item[key] !== null)
-        ) ? 'gallery' : '';
-
+        const hasOverview = [
+          'spoken_languages',
+          'name',
+          'about',
+          'phone',
+          'whatsapp',
+          'experience',
+          'address1',
+          'map',
+          'coordinate',
+          'facebook',
+          'instagram',
+          'website',
+          'sport',
+          'email',
+          'timing',
+          'logo',
+        ].some((key) => item[key] !== null);
+  
+        const hasGallery = [
+          'photos',
+          'videos',
+          'training_ground_photos',
+          'tournament_photos',
+        ].some((key) => item[key] !== null);
+        console.log(hasOverview);
+        console.log(hasGallery);
+  
+        let approvedFields = '';
+        let rejectedFields = '';
+  
+        if (item.status === 1) {
+          if (hasOverview && !hasGallery) {
+            approvedFields = 'overview';
+            rejectedFields = 'overview';
+          } else if (!hasOverview && hasGallery) {
+            approvedFields = 'gallery';
+            rejectedFields = 'gallery';
+          } else if (hasOverview && hasGallery) {
+            approvedFields = 'overview, gallery';
+            rejectedFields = 'overview, gallery';
+          }
+        }
+  
+        if (item.status === 2) {
+          if (hasOverview && !hasGallery) {
+            rejectedFields = 'overview';
+          } else if (!hasOverview && hasGallery) {
+            rejectedFields = 'gallery';
+          } else if (hasOverview && hasGallery) {
+            rejectedFields = 'overview, gallery';
+          }
+        }
+  
         if (item.status === 0) {
           setRevokeId(item.id);
         }
-
+  
         return {
           ...item,
           approvedFields,
           rejectedFields,
         };
       });
+  
       const filteredData = newData.filter((item) => item.status !== 3);
       setData(filteredData);
       setIsLoading(false);
@@ -159,7 +150,7 @@ const Approval = () => {
           ) : (
             <button className='common-fonts common-delete-button bmp_revoke' onClick={handleRevoke} >Revoke</button>
           )}
-          <button className='common-fonts common-save-button'>Proceed</button>
+          {/* <button className='common-fonts common-save-button'>Proceed</button> */}
         </div>
       </div>
 

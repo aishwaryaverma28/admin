@@ -7,6 +7,7 @@ import {
   CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
+  GET_UPDATED_ACADEMY_INFO,
   RESTRICTED_KEYWORDS,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -20,6 +21,8 @@ import Dash from "../../assets/image/red-dash.svg";
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const [status, setStatus] = useState(null);
+  const [newAcadmeyData,setNewAcadmeyData] = useState(null);
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [academyDataOld, setAcademyDataOld] = useState({});
@@ -86,7 +89,26 @@ const BmpOverview = () => {
     "killer",
     "kill you",
   ]);
-
+  const updatedAcadmeyInfo = () => {
+    axios.post(GET_UPDATED_ACADEMY_INFO, {
+      academy_id: academyId,
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    }).then((response) => {
+      const statusValue = response?.data?.data[0]?.status;
+      setStatus(statusValue);  
+      const rawData = response?.data?.data[0];
+      const filteredData = Object.fromEntries(
+        Object.entries(rawData).filter(([key, value]) => value !== null)
+      );  
+      setNewAcadmeyData(filteredData);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+    
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
@@ -228,10 +250,7 @@ const BmpOverview = () => {
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
-        console.log(response?.data?.data[0]);
-        console.log("hyy");
         setAddress(response?.data?.data[0]?.address1 || "");
-
         setProgress(response?.data?.data[0]?.completion_percentage);
 
         const languages =
@@ -303,6 +322,7 @@ const BmpOverview = () => {
   useEffect(() => {
     createFolder();
     academyDetails();
+    updatedAcadmeyInfo();
     // getAllKeywords();
   }, []);
   useEffect(() => {
@@ -394,7 +414,6 @@ const BmpOverview = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(selectedImage);
           setSelectedFile(selectedImage);
           updateField("logo");
           setFileName(processImageName(selectedImage.name));
@@ -529,29 +548,7 @@ const BmpOverview = () => {
     const logoChanged = fileName !== academyData?.fileName;
 
     const progressChanged = combinedProgress !== academyData?.completion_percentage;
-    // const updatedFormData = {
-    //   academy_id: academyId,
-    //   spoken_languages: languageString,
-    //   name: academyData?.name,
-    //   about: academyData?.about,
-    //   phone: academyData?.phone,
-    //   whatsapp: academyData?.whatsapp,
-    //   experience: academyData?.experience,
-    //   address1: address,
-    //   map: mapLink,
-    //   coordinate: coordinate,
-    //   facebook: academyData?.facebook,
-    //   instagram: academyData?.instagram,
-    //   website: academyData?.website,
-    //   sport: selectedDaysString?.replace(/^,+/g, ""),
-    //   email: academyData?.email,
-    //   timing: startAndEndTime,
-    //   logo: fileName,
-    //   completion_percentage: combinedProgress,
-    // };
     const updatedFormData = {};
-    console.log(updatedFormData);
-
     const hasChanged = (field) =>
       academyData?.[field] !== academyDataOld?.[field];
 
@@ -644,7 +641,7 @@ const BmpOverview = () => {
 
     updatedFormData.academy_id = academyId;
     console.log(updatedFormData);
-    console.log("overr");
+    console.log("update body");
 
     axios
       .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {

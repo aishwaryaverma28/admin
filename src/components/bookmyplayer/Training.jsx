@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {
   GET_ACADEMY,
+  UPDATE_ACADEMY_TABLE2,
   UPDATE_ACADEMY,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -301,12 +302,13 @@ const Training = () => {
   function handleSubmit() {
 
     let body = {
+      academy_id: academyId,
       training_ground_photos: photoUrls.join(","),
       tournament_photos: photoUrls2.join(","),
     }
 
     axios
-      .put(UPDATE_ACADEMY + academyId, body, {
+      .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },

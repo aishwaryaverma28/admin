@@ -217,7 +217,7 @@ export const RESTRICTED_KEYWORDS = start + "/bmp/getrestrictedkeywords";
 export const GET_ACADEMY_STATUS = start + "/bmp/academy/getall";
 export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
 export const UPDATE_ACADMEY_STATUS = start + "/bmp/academy/updateupdatedinfo/"
-
+export const GET_UPDATED_ACADEMY_INFO = start + "/bmp/academy/getupdatedinfo";
 //==============================================================bmp reviews
 export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
 export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";

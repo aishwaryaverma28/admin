@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {
   GET_ACADEMY,
-  UPDATE_ACADEMY,UPDATE_ACADEMY_TABLE2,
+  UPDATE_ACADEMY, UPDATE_ACADEMY_TABLE2,
   getDecryptedToken,
 } from "../utils/Constants";
 import "chart.js/auto";
@@ -533,17 +533,15 @@ const Gallery = () => {
           <div className="contacts-top-flex ">
             <div className="genral-setting-btn genral-setting-fonts aaa">
               <button
-                className={`genral-btn  ${
-                  activeTab === "academy" ? "genral-active" : ""
-                }`}
+                className={`genral-btn  ${activeTab === "academy" ? "genral-active" : ""
+                  }`}
                 onClick={() => handleTabClick("academy")}
               >
                 <span className="mrkt-whatsapp">Academy & Banner</span>
               </button>
               <button
-                className={`genral-btn contact-genral-btn ${
-                  activeTab === "training" ? "genral-active" : ""
-                }`}
+                className={`genral-btn contact-genral-btn ${activeTab === "training" ? "genral-active" : ""
+                  }`}
                 onClick={() => handleTabClick("training")}
               >
                 <span className="mrkt-whatsapp">
@@ -690,7 +688,7 @@ const Gallery = () => {
                         Upload image/videos in format png, jpg, jpeg, gif, webp,
                         mp4{" "}
                       </p>
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
