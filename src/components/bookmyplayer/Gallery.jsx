@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   GET_ACADEMY,
   UPDATE_ACADEMY, UPDATE_ACADEMY_TABLE2,
+  GET_UPDATED_ACADEMY_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
 import "chart.js/auto";
@@ -20,6 +21,8 @@ import Training from "./Training.jsx";
 const Gallery = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const [status, setStatus] = useState(null);
+  const [newAcadmeyData, setNewAcadmeyData] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
@@ -58,7 +61,26 @@ const Gallery = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  const updatedAcadmeyInfo = () => {
+    axios.post(GET_UPDATED_ACADEMY_INFO, {
+      academy_id: academyId,
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    }).then((response) => {
+      const statusValue = response?.data?.data[0]?.status;
+      setStatus(statusValue);
 
+      const rawData = response?.data?.data[0];
+      const filteredData = Object.fromEntries(
+        Object.entries(rawData).filter(([key, value]) => value !== null && !['creation_date', 'update_date', 'status', 'id', "academy_id"].includes(key))
+      );
+      setNewAcadmeyData(filteredData);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -102,9 +124,9 @@ const Gallery = () => {
         console.log(error);
       });
   };
-  console.log(progressArray);
   useEffect(() => {
     academyDetails();
+    updatedAcadmeyInfo();
   }, []);
   const initialPhotoUrls = [...photoUrls];
   const initialVideoUrls = [...videoUrls];
@@ -411,7 +433,13 @@ const Gallery = () => {
       videos: videoUrls.join(","),
       completion_percentage: combinedProgress,
     };
-
+    Object.keys(newAcadmeyData).forEach((key) => {
+      if (body.hasOwnProperty(key)) {
+        console.log(newAcadmeyData[key]);
+        body[key] = newAcadmeyData[key];
+      }
+    });
+    console.log(body);
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
@@ -839,7 +867,7 @@ const Gallery = () => {
         </>
       )}
 
-      {activeTab === "training" && <Training />}
+      {activeTab === "training" && <Training status={status} newAcadmeyData={newAcadmeyData}/>}
 
       <ToastContainer />
     </div>

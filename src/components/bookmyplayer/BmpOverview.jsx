@@ -22,7 +22,7 @@ const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [status, setStatus] = useState(null);
-  const [newAcadmeyData,setNewAcadmeyData] = useState(null);
+  const [newAcadmeyData, setNewAcadmeyData] = useState(null);
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [academyDataOld, setAcademyDataOld] = useState({});
@@ -98,17 +98,17 @@ const BmpOverview = () => {
       },
     }).then((response) => {
       const statusValue = response?.data?.data[0]?.status;
-      setStatus(statusValue);  
+      setStatus(statusValue);
+
       const rawData = response?.data?.data[0];
       const filteredData = Object.fromEntries(
-        Object.entries(rawData).filter(([key, value]) => value !== null)
-      );  
+        Object.entries(rawData).filter(([key, value]) => value !== null && !['creation_date', 'update_date', 'status', 'id', "academy_id"].includes(key))
+      );
       setNewAcadmeyData(filteredData);
     }).catch((error) => {
       console.log(error);
     });
   }
-    
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
@@ -640,6 +640,12 @@ const BmpOverview = () => {
     }
 
     updatedFormData.academy_id = academyId;
+    Object.keys(newAcadmeyData).forEach((key) => {
+      if (!updatedFormData.hasOwnProperty(key)) {
+        console.log(newAcadmeyData[key]);
+        updatedFormData[key] = newAcadmeyData[key];
+      }
+    });
     console.log(updatedFormData);
     console.log("update body");
 

@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
 
 
-const Training = () => {
+const Training = ({status, newAcadmeyData}) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
@@ -300,17 +300,22 @@ const Training = () => {
   };
 
   function handleSubmit() {
-
     let body = {
       academy_id: academyId,
       training_ground_photos: photoUrls.join(","),
       tournament_photos: photoUrls2.join(","),
     }
-
+    Object.keys(newAcadmeyData).forEach((key) => {
+      if (body.hasOwnProperty(key)) {
+        console.log(newAcadmeyData[key]);
+        body[key] = newAcadmeyData[key];
+      }
+    });
+    console.log(body);
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
