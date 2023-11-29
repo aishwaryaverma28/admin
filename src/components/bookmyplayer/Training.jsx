@@ -11,8 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
 
-
-const Training = ({status, newAcadmeyData}) => {
+const Training = ({ status, newAcadmeyData }) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
@@ -33,6 +32,7 @@ const Training = ({status, newAcadmeyData}) => {
   const [deleteProp2, setDeleteProp2] = useState(null);
   const [updatedFields, setUpdatedFields] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
+  const [academyData, setAcademyData] = useState({});
   const [alertVideoShown2, setAlertVideoShown2] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const academyDetails = () => {
@@ -43,18 +43,37 @@ const Training = ({status, newAcadmeyData}) => {
         },
       })
       .then((response) => {
-        if (response?.data?.data[0]?.training_ground_photos !== "" && response?.data?.data[0]?.training_ground_photos !== null) {
-          setPhotoUrls(response?.data?.data[0]?.training_ground_photos?.split(",")?.reverse())
+        setAcademyData(response?.data?.data[0]);
+
+        if (
+          response?.data?.data[0]?.training_ground_photos !== "" &&
+          response?.data?.data[0]?.training_ground_photos !== null
+        ) {
+          setPhotoUrls(
+            response?.data?.data[0]?.training_ground_photos
+              ?.split(",")
+              ?.reverse()
+          );
         }
-        if (response?.data?.data[0]?.tournament_photos !== "" && response?.data?.data[0]?.tournament_photos !== null) {
-          setPhotoUrls2(response?.data?.data[0]?.tournament_photos?.split(",")?.reverse())
+        if (
+          response?.data?.data[0]?.tournament_photos !== "" &&
+          response?.data?.data[0]?.tournament_photos !== null
+        ) {
+          setPhotoUrls2(
+            response?.data?.data[0]?.tournament_photos?.split(",")?.reverse()
+          );
         }
-        if (response?.data?.data[0].updated_column !== "" && response?.data?.data[0].updated_column !== null) {
-          updatedFields(response.data.data[0].updated_column?.split(",").reverse())
+        if (
+          response?.data?.data[0].updated_column !== "" &&
+          response?.data?.data[0].updated_column !== null
+        ) {
+          updatedFields(
+            response.data.data[0].updated_column?.split(",").reverse()
+          );
         }
       })
       .catch((error) => {
-        console.log(error);;
+        console.log(error);
       });
   };
   useEffect(() => {
@@ -66,13 +85,13 @@ const Training = ({status, newAcadmeyData}) => {
     }
   };
   const processImageName = (imageName) => {
-    const nameParts = imageName.split('.');
+    const nameParts = imageName.split(".");
     if (nameParts.length > 1) {
-      const namePart = nameParts.slice(0, -1).join('.');
-      const processedName = namePart.replace(/[^\w-]/g, '-');
+      const namePart = nameParts.slice(0, -1).join(".");
+      const processedName = namePart.replace(/[^\w-]/g, "-");
       return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
-      return imageName.replace(/[^\w-]/g, '-');
+      return imageName.replace(/[^\w-]/g, "-");
     }
   };
   const showAlertOnce = (message) => {
@@ -107,7 +126,9 @@ const Training = ({status, newAcadmeyData}) => {
     const selectedImage = file;
     if (selectedImage) {
       if (selectedImage.size > 2 * 1024 * 1024) {
-        showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
+        showAlertOnce(
+          "Image size should be less than 2MB. Please choose a smaller image."
+        );
         setIsUploadingMulti(false);
         return;
       }
@@ -116,8 +137,14 @@ const Training = ({status, newAcadmeyData}) => {
       //   /\.[^/.]+$/,
       //   ""
       // )}`;
-      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
-      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const imageNameWithoutExtension = selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      );
+      const sanitizedImageName = imageNameWithoutExtension.replace(
+        /[^\w-]/g,
+        "-"
+      );
       const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
@@ -134,9 +161,9 @@ const Training = ({status, newAcadmeyData}) => {
           setFileName(processImageName(selectedImage.name));
           const imageUrl = processImageName(selectedImage.name);
           if (data.secure_url) {
-            photoUrls.push(imageUrl)
+            photoUrls.push(imageUrl);
             setPhotoUrls(photoUrls);
-            updateField('training_ground_photos');
+            updateField("training_ground_photos");
             setStateBtn(1);
           }
         })
@@ -147,7 +174,7 @@ const Training = ({status, newAcadmeyData}) => {
           setIsUploadingMulti(false);
         });
     }
-  }
+  };
   const handleDeleteOpen = (index, prop) => {
     setIsDeleteModalOpen(true);
     setDeleteIndex(index);
@@ -159,7 +186,7 @@ const Training = ({status, newAcadmeyData}) => {
     }
     setIsDeleteModalOpen(false);
   };
-  console.log(photoUrls)
+  console.log(photoUrls);
   const deleteStrategy = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...photoUrls];
@@ -169,15 +196,19 @@ const Training = ({status, newAcadmeyData}) => {
     }
   };
   const updateDataAndCallAPI = (updatedNameArray) => {
-    const updatedNameString = updatedNameArray.reverse().join(',');
+    const updatedNameString = updatedNameArray.reverse().join(",");
     axios
-      .put(UPDATE_ACADEMY + academyId, {
-        training_ground_photos: updatedNameString,
-      }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      .put(
+        UPDATE_ACADEMY + academyId,
+        {
+          training_ground_photos: updatedNameString,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      )
       .then((response) => {
         academyDetails();
       })
@@ -212,7 +243,9 @@ const Training = ({status, newAcadmeyData}) => {
     const selectedImage = file;
     if (selectedImage) {
       if (selectedImage.size > 2 * 1024 * 1024) {
-        showAlertOnce("Image size should be less than 2MB. Please choose a smaller image.");
+        showAlertOnce(
+          "Image size should be less than 2MB. Please choose a smaller image."
+        );
         setIsUploadingMulti2(false);
         return;
       }
@@ -221,8 +254,14 @@ const Training = ({status, newAcadmeyData}) => {
       //   /\.[^/.]+$/,
       //   ""
       // )}`;
-      const imageNameWithoutExtension = selectedImage.name.replace(/\.[^/.]+$/, "");
-      const sanitizedImageName = imageNameWithoutExtension.replace(/[^\w-]/g, '-');
+      const imageNameWithoutExtension = selectedImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      );
+      const sanitizedImageName = imageNameWithoutExtension.replace(
+        /[^\w-]/g,
+        "-"
+      );
       const uniqueFileName = `${folder}/${sanitizedImageName}`;
       const data = new FormData();
       data.append("file", selectedImage);
@@ -239,9 +278,9 @@ const Training = ({status, newAcadmeyData}) => {
           setFileName(processImageName(selectedImage.name));
           const imageUrl = processImageName(selectedImage.name);
           if (data.secure_url) {
-            photoUrls2.push(imageUrl)
+            photoUrls2.push(imageUrl);
             setPhotoUrls2(photoUrls2);
-            updateField('tournament_photos');
+            updateField("tournament_photos");
             setStateBtn(1);
           }
         })
@@ -252,7 +291,7 @@ const Training = ({status, newAcadmeyData}) => {
           setIsUploadingMulti2(false);
         });
     }
-  }
+  };
   const handleDeleteOpen2 = (index, prop) => {
     setIsDeleteModalOpen2(true);
     setDeleteIndex2(index);
@@ -264,7 +303,7 @@ const Training = ({status, newAcadmeyData}) => {
     }
     setIsDeleteModalOpen2(false);
   };
-  console.log(photoUrls2)
+  console.log(photoUrls2);
   const deleteStrategy2 = () => {
     if (deleteIndex2 !== null) {
       const updatedNameOfStrategy = [...photoUrls2];
@@ -274,15 +313,19 @@ const Training = ({status, newAcadmeyData}) => {
     }
   };
   const updateDataAndCallAPI2 = (updatedNameArray) => {
-    const updatedNameString = updatedNameArray.reverse().join(',');
+    const updatedNameString = updatedNameArray.reverse().join(",");
     axios
-      .put(UPDATE_ACADEMY + academyId, {
-        tournament_photos: updatedNameString,
-      }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      .put(
+        UPDATE_ACADEMY + academyId,
+        {
+          tournament_photos: updatedNameString,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          },
+        }
+      )
       .then((response) => {
         academyDetails();
       })
@@ -300,11 +343,35 @@ const Training = ({status, newAcadmeyData}) => {
   };
 
   function handleSubmit() {
-    let body = {
-      academy_id: academyId,
-      training_ground_photos: photoUrls.join(","),
-      tournament_photos: photoUrls2.join(","),
+    // let body = {
+    //   academy_id: academyId,
+    //   training_ground_photos: photoUrls.join(","),
+    //   tournament_photos: photoUrls2.join(","),
+    // }
+
+    let body = {};
+
+    body.academy_id = academyId;
+
+    const photoUrlsChanged =
+      photoUrls.slice().sort().join(",") !==
+      academyData?.training_ground_photos.split(",").slice().sort().join(",");
+
+    const photoUrlsChanged2 =
+      photoUrls2.slice().sort().join(",") !==
+      academyData?.tournament_photos.split(",").slice().sort().join(",");
+
+    if (photoUrlsChanged && photoUrls.slice().sort().join(",").length !== "") {
+      body.training_ground_photos = photoUrls.join(",");
     }
+
+    if (
+      photoUrlsChanged2 &&
+      photoUrls2.slice().sort().join(",").length !== ""
+    ) {
+      body.tournament_photos = photoUrls2.join(",");
+    }
+
     Object.keys(newAcadmeyData).forEach((key) => {
       if (body.hasOwnProperty(key)) {
         console.log(newAcadmeyData[key]);
@@ -312,6 +379,7 @@ const Training = ({status, newAcadmeyData}) => {
       }
     });
     console.log(body);
+    console.log("updated training body");
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
@@ -339,7 +407,7 @@ const Training = ({status, newAcadmeyData}) => {
           position: "top-center",
           autoClose: 2000,
         });
-      })
+      });
   }
 
   return (
@@ -392,12 +460,18 @@ const Training = ({status, newAcadmeyData}) => {
                   multiple
                 />
                 {isUploadingMulti ? (
-                  <span className="common-fonts upload-file-name">Uploading...</span>
+                  <span className="common-fonts upload-file-name">
+                    Uploading...
+                  </span>
                 ) : (
                   <span className="common-fonts upload-file-name">
-                    <p className="common-fonts light-color">You can upload multiple images </p>
-                    <p className="common-fonts bmp-format">Upload image in format png, jpg, jpeg, webp </p>
-                    { }
+                    <p className="common-fonts light-color">
+                      You can upload multiple images{" "}
+                    </p>
+                    <p className="common-fonts bmp-format">
+                      Upload image in format png, jpg, jpeg, webp{" "}
+                    </p>
+                    {}
                   </span>
                 )}
               </span>
@@ -405,43 +479,46 @@ const Training = ({status, newAcadmeyData}) => {
           </div>
         </div>
         {photoUrls?.length === 0 ? (
-          <div className='support-no-ticket-found'>
-            <p className='common-fonts'>No photos added</p>
+          <div className="support-no-ticket-found">
+            <p className="common-fonts">No photos added</p>
           </div>
         ) : (
-          < div className="outerBox">
-            {
-              photoUrls?.map((photo, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
+          <div className="outerBox">
+            {photoUrls?.map((photo, index) => (
+              <div className="bmp-new-img">
+                <div className="bmp-img-top-icon">
+                  <div className="bmp-img-name">
+                    <div className="bmp-video">
+                      <img
+                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                        alt="Selected Preview"
+                      />
+                    </div>
 
-                      <div className="bmp-video">
-                        <img
-                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                          alt="Selected Preview"
-                        />
-                      </div>
-
-                      <p className="common-fonts bmp-tour">{photo?.length > 20 ? (
+                    <p className="common-fonts bmp-tour">
+                      {photo?.length > 20 ? (
                         <>{photo?.slice(20)}...</>
                       ) : (
                         <>{photo}</>
-                      )}</p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img src={Trash} alt="" onClick={() => handleDeleteOpen(index, "image")} />
-                    </div>
-
+                      )}
+                    </p>
                   </div>
-                  <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                    alt="Selected Preview"
-                    key={index}
-                  />
+                  <div className="bmp-trash">
+                    <img
+                      src={Trash}
+                      alt=""
+                      onClick={() => handleDeleteOpen(index, "image")}
+                    />
+                  </div>
                 </div>
-              ))
-            }</div>
+                <img
+                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                  alt="Selected Preview"
+                  key={index}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </>
       {/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
@@ -493,12 +570,18 @@ const Training = ({status, newAcadmeyData}) => {
                   multiple
                 />
                 {isUploadingMulti2 ? (
-                  <span className="common-fonts upload-file-name">Uploading...</span>
+                  <span className="common-fonts upload-file-name">
+                    Uploading...
+                  </span>
                 ) : (
                   <span className="common-fonts upload-file-name">
-                    <p className="common-fonts light-color">You can upload multiple images </p>
-                    <p className="common-fonts bmp-format">Upload image in format png, jpg, jpeg, webp </p>
-                    { }
+                    <p className="common-fonts light-color">
+                      You can upload multiple images{" "}
+                    </p>
+                    <p className="common-fonts bmp-format">
+                      Upload image in format png, jpg, jpeg, webp{" "}
+                    </p>
+                    {}
                   </span>
                 )}
               </span>
@@ -506,48 +589,56 @@ const Training = ({status, newAcadmeyData}) => {
           </div>
         </div>
         {photoUrls2?.length === 0 ? (
-          <div className='support-no-ticket-found'>
-            <p className='common-fonts'>No photos added</p>
+          <div className="support-no-ticket-found">
+            <p className="common-fonts">No photos added</p>
           </div>
         ) : (
-          < div className="outerBox">
-            {
-              photoUrls2?.map((photo, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
+          <div className="outerBox">
+            {photoUrls2?.map((photo, index) => (
+              <div className="bmp-new-img">
+                <div className="bmp-img-top-icon">
+                  <div className="bmp-img-name">
+                    <div className="bmp-video">
+                      <img
+                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                        alt="Selected Preview"
+                      />
+                    </div>
 
-                      <div className="bmp-video">
-                        <img
-                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                          alt="Selected Preview"
-                        />
-                      </div>
-
-                      <p className="common-fonts bmp-tour">{photo?.length > 20 ? (
+                    <p className="common-fonts bmp-tour">
+                      {photo?.length > 20 ? (
                         <>{photo?.slice(20)}...</>
                       ) : (
                         <>{photo}</>
-                      )}</p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img src={Trash} alt="" onClick={() => handleDeleteOpen2(index, "image")} />
-                    </div>
-
+                      )}
+                    </p>
                   </div>
-                  <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                    alt="Selected Preview"
-                    key={index}
-                  />
+                  <div className="bmp-trash">
+                    <img
+                      src={Trash}
+                      alt=""
+                      onClick={() => handleDeleteOpen2(index, "image")}
+                    />
+                  </div>
                 </div>
-              ))
-            }</div>
+                <img
+                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                  alt="Selected Preview"
+                  key={index}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </>
 
       <div className="bmp-bottom-btn">
-        <button className="common-fonts common-white-button" onClick={resetState}>Cancel</button>
+        <button
+          className="common-fonts common-white-button"
+          onClick={resetState}
+        >
+          Cancel
+        </button>
         {stateBtn === 0 ? (
           <button className="disabledBtn">Save</button>
         ) : (
@@ -578,7 +669,7 @@ const Training = ({status, newAcadmeyData}) => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Training
+export default Training;
