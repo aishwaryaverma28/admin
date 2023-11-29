@@ -113,11 +113,7 @@ const handleButtonClick = () => {
             setIsUploadingMulti(false);
             return;
           }
-          const folder = "bookmyplayer/academy/";
-          // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-          //   /\.[^/.]+$/,
-          //   ""
-          // )}`;
+          const folder = "bookmyplayer/league/";
           const imageNameWithoutExtension = selectedImage.name.replace(
             /\.[^/.]+$/,
             ""
