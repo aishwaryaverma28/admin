@@ -69,6 +69,9 @@ import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
 import Approval from "./components/bookmyplayer/Approval.jsx";
 import BmpReviewsView from "./components/master-settings/bmp/BmpReviewsView.jsx";
 import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.jsx";
+import AddTournament from "./components/master-settings/tournament/AddTournament.jsx";
+import ViewTournament from "./components/master-settings/tournament/ViewTournament.jsx";
+import UpdateTournament from "./components/master-settings/tournament/UpdateTournament.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -278,16 +281,16 @@ const router = createBrowserRouter([
             element: <BlogUpdate />,
           },
           {
-            path: "/lp/settings/blog/add",
-            element: <SecureRoutes Component={BlogAdd} />,
+            path: "/lp/settings/tournament/add",
+            element: <AddTournament/>,
           },
           {
-            path: "/lp/settings/blog/view",
-            element: <SecureRoutes Component={BlogView} />,
+            path: "/lp/settings/tournament/view",
+            element: <ViewTournament/>,
           },
           {
-            path: "/lp/settings/blog/view/:id",
-            element: <BlogUpdate />,
+            path: "/lp/settings/blog/tournament/:id",
+            element: <UpdateTournament />,
           },
 
           {
