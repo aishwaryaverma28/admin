@@ -45,7 +45,7 @@ const BmpOverview = () => {
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
   const [mappedLanguages, setMappedLanguages] = useState([]);
-  const [languageString, setLanguageString] = useState('');
+  const [languageString, setLanguageString] = useState("");
   const [number, setNumber] = useState(0);
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
@@ -90,25 +90,42 @@ const BmpOverview = () => {
     "kill you",
   ]);
   const updatedAcadmeyInfo = () => {
-    axios.post(GET_UPDATED_ACADEMY_INFO, {
-      academy_id: academyId,
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    }).then((response) => {
-      const statusValue = response?.data?.data[0]?.status;
-      setStatus(statusValue);
+    axios
+      .post(
+        GET_UPDATED_ACADEMY_INFO,
+        {
+          academy_id: academyId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const statusValue = response?.data?.data[0]?.status;
+        setStatus(statusValue);
 
-      const rawData = response?.data?.data[0];
-      const filteredData = Object.fromEntries(
-        Object.entries(rawData).filter(([key, value]) => value !== null && !['creation_date', 'update_date', 'status', 'id', "academy_id"].includes(key))
-      );
-      setNewAcadmeyData(filteredData);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
+        const rawData = response?.data?.data[0];
+        const filteredData = Object.fromEntries(
+          Object.entries(rawData).filter(
+            ([key, value]) =>
+              value !== null &&
+              ![
+                "creation_date",
+                "update_date",
+                "status",
+                "id",
+                "academy_id",
+              ].includes(key)
+          )
+        );
+        setNewAcadmeyData(filteredData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
@@ -131,7 +148,7 @@ const BmpOverview = () => {
       const languageString = mappedLanguages
         .concat(newLanguage)
         .map((lang) => `${lang.language}(${lang.level})`)
-        .join(', ');
+        .join(", ");
       setLanguageString(languageString);
     }
   };
@@ -162,7 +179,8 @@ const BmpOverview = () => {
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN`;
       script.async = true;
       script.onload = () => setGoogleScriptLoaded(true);
-      script.onerror = (error) => console.error("Error loading Google Maps:", error);
+      script.onerror = (error) =>
+        console.error("Error loading Google Maps:", error);
       document.head.appendChild(script);
 
       return () => {
@@ -173,6 +191,11 @@ const BmpOverview = () => {
 
   const handleSelect = (selectedAddress) => {
     setAddress(selectedAddress);
+    if (selectedAddress.length === 0) {
+      setNumber2(1);
+    } else {
+      setNumber2(0);
+    }
     setStateBtn(1);
 
     const placesService = new window.google.maps.places.PlacesService(
@@ -180,11 +203,21 @@ const BmpOverview = () => {
     );
 
     placesService.textSearch({ query: selectedAddress }, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+      if (
+        status === window.google.maps.places.PlacesServiceStatus.OK &&
+        results.length > 0
+      ) {
         const location = results[0].geometry.location;
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
         setCoordinate(`${selectedLatitude},${selectedLongitude}`);
+
+        if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
+          setNumber4(1);
+        } else {
+          setNumber4(0);
+        }
+
         updateField("coordinate");
       }
     });
@@ -193,9 +226,13 @@ const BmpOverview = () => {
       selectedAddress
     )}`;
     setMapLink(mapLink);
+    if (mapLink.length === 0) {
+      setNumber3(1);
+    } else {
+      setNumber3(0);
+    }
     updateField("map");
   };
-
 
   const updateField = (fieldName) => {
     if (!updatedFields.includes(fieldName)) {
@@ -325,6 +362,7 @@ const BmpOverview = () => {
     updatedAcadmeyInfo();
     // getAllKeywords();
   }, []);
+  
   useEffect(() => {
     if (academyData && academyData.timing) {
       if (academyData.timing === "Always_open") {
@@ -417,6 +455,11 @@ const BmpOverview = () => {
           setSelectedFile(selectedImage);
           updateField("logo");
           setFileName(processImageName(selectedImage.name));
+          if (processImageName(selectedImage.name).length === 0) {
+            setNumber1(1);
+          } else {
+            setNumber1(0);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -518,11 +561,9 @@ const BmpOverview = () => {
     setIsButtonVisible(false);
   };
 
-
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
-
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -532,12 +573,12 @@ const BmpOverview = () => {
     }
     const combinedProgress = progressArray?.join(",");
 
-
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
 
     const spokenLanguagesChanged =
       languageString !== academyData?.spoken_languages;
+
 
     const addressChanged = address !== academyData?.address1;
     const maplinkChanged = mapLink !== academyData?.map;
@@ -547,7 +588,8 @@ const BmpOverview = () => {
 
     const logoChanged = fileName !== academyData?.fileName;
 
-    const progressChanged = combinedProgress !== academyData?.completion_percentage;
+    const progressChanged =
+      combinedProgress !== academyData?.completion_percentage;
     const updatedFormData = {};
     const hasChanged = (field) =>
       academyData?.[field] !== academyDataOld?.[field];
@@ -590,7 +632,6 @@ const BmpOverview = () => {
     if (hasChanged("timing")) {
       updatedFormData.timing = startAndEndTime;
     }
-
 
     if (spokenLanguagesChanged && languageString !== "") {
       updatedFormData.spoken_languages = languageString;
@@ -640,6 +681,7 @@ const BmpOverview = () => {
     }
 
     updatedFormData.academy_id = academyId;
+
     Object.keys(newAcadmeyData).forEach((key) => {
       if (!updatedFormData.hasOwnProperty(key)) {
         console.log(newAcadmeyData[key]);
@@ -765,64 +807,73 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${
+                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
+                }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -864,8 +915,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                      ? academyData?.phone
-                      : academyData?.whatsapp
+                    ? academyData?.phone
+                    : academyData?.whatsapp
                 }
               />
             </div>
@@ -1037,7 +1088,7 @@ const BmpOverview = () => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileName ? fileName : academyData?.logo}
-                      { }
+                      {}
                     </span>
                   )}
                 </span>
@@ -1164,7 +1215,9 @@ const BmpOverview = () => {
         <button className="common-fonts common-white-button">cancel</button>
         {/* <button className="common-save-button common-save">Save</button> */}
         {stateBtn === 0 ? (
-          <button disabled className="disabledBtn">Save</button>
+          <button disabled className="disabledBtn">
+            Save
+          </button>
         ) : (
           <button
             className="common-save-button common-save"

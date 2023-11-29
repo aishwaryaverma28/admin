@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {
   GET_ACADEMY,
-  UPDATE_ACADEMY, UPDATE_ACADEMY_TABLE2,
+  UPDATE_ACADEMY,
+  UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -44,6 +45,8 @@ const Gallery = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const [alertVideoShown, setAlertVideoShown] = useState(false);
   const [updatedFields, setUpdatedFields] = useState([]);
+  const [number, setNumber] = useState(0);
+  const [number1, setNumber1] = useState(0);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const allowedFileTypes = [
     "image/jpeg",
@@ -62,25 +65,42 @@ const Gallery = () => {
     setActiveTab(tab);
   };
   const updatedAcadmeyInfo = () => {
-    axios.post(GET_UPDATED_ACADEMY_INFO, {
-      academy_id: academyId,
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    }).then((response) => {
-      const statusValue = response?.data?.data[0]?.status;
-      setStatus(statusValue);
+    axios
+      .post(
+        GET_UPDATED_ACADEMY_INFO,
+        {
+          academy_id: academyId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const statusValue = response?.data?.data[0]?.status;
+        setStatus(statusValue);
 
-      const rawData = response?.data?.data[0];
-      const filteredData = Object.fromEntries(
-        Object.entries(rawData).filter(([key, value]) => value !== null && !['creation_date', 'update_date', 'status', 'id', "academy_id"].includes(key))
-      );
-      setNewAcadmeyData(filteredData);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
+        const rawData = response?.data?.data[0];
+        const filteredData = Object.fromEntries(
+          Object.entries(rawData).filter(
+            ([key, value]) =>
+              value !== null &&
+              ![
+                "creation_date",
+                "update_date",
+                "status",
+                "id",
+                "academy_id",
+              ].includes(key)
+          )
+        );
+        setNewAcadmeyData(filteredData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -128,6 +148,7 @@ const Gallery = () => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
+  
   const initialPhotoUrls = [...photoUrls];
   const initialVideoUrls = [...videoUrls];
   const initialFileName = fileName;
@@ -426,13 +447,44 @@ const Gallery = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray.join(",");
-    console.log(combinedProgress);
-    let body = {
-      academy_id: academyId,
-      photos: photoUrls.join(","),
-      videos: videoUrls.join(","),
-      completion_percentage: combinedProgress,
-    };
+    // let body = {
+    //   academy_id: academyId,
+    //   photos: photoUrls.join(","),
+    //   videos: videoUrls.join(","),
+    //   completion_percentage: combinedProgress,
+    // };
+
+    let body = {};
+
+    body.academy_id = academyId;
+
+    const progressChanged =
+      combinedProgress !== academyData?.completion_percentage;
+
+
+    const photoUrlsChanged =
+      photoUrls.slice().sort().join(",") !==
+      academyData?.photos.split(",").slice().sort().join(",");
+
+    const videoUrlsChanged =
+      videoUrls.slice().sort().join(",") !==
+      academyData?.videos.split(",").slice().sort().join(",");
+
+    if (photoUrlsChanged && photoUrls.slice().sort().join(",").length !== "") {
+      body.photos = photoUrls.join(",");
+    }
+
+    if (videoUrlsChanged && videoUrls.slice().sort().join(",").length !== "") {
+      body.videos = videoUrls.join(",");
+    }
+
+    if (progressChanged && combinedProgress !== "") {
+      body.completion_percentage = combinedProgress;
+    }
+
+    console.log(body);
+    console.log("updated gallery body");
+
     Object.keys(newAcadmeyData).forEach((key) => {
       if (body.hasOwnProperty(key)) {
         console.log(newAcadmeyData[key]);
@@ -561,15 +613,17 @@ const Gallery = () => {
           <div className="contacts-top-flex ">
             <div className="genral-setting-btn genral-setting-fonts aaa">
               <button
-                className={`genral-btn  ${activeTab === "academy" ? "genral-active" : ""
-                  }`}
+                className={`genral-btn  ${
+                  activeTab === "academy" ? "genral-active" : ""
+                }`}
                 onClick={() => handleTabClick("academy")}
               >
                 <span className="mrkt-whatsapp">Academy & Banner</span>
               </button>
               <button
-                className={`genral-btn contact-genral-btn ${activeTab === "training" ? "genral-active" : ""
-                  }`}
+                className={`genral-btn contact-genral-btn ${
+                  activeTab === "training" ? "genral-active" : ""
+                }`}
                 onClick={() => handleTabClick("training")}
               >
                 <span className="mrkt-whatsapp">
@@ -716,7 +770,7 @@ const Gallery = () => {
                         Upload image/videos in format png, jpg, jpeg, gif, webp,
                         mp4{" "}
                       </p>
-                      { }
+                      {}
                     </span>
                   )}
                 </span>
@@ -765,7 +819,7 @@ const Gallery = () => {
                       </div>
                       <p className="common-fonts bmp-tour">
                         {video?.length > 20 ? (
-                          <>{video?.slice(0, 20) + '...'}</>
+                          <>{video?.slice(0, 20) + "..."}</>
                         ) : (
                           <>{video}</>
                         )}
@@ -843,7 +897,9 @@ const Gallery = () => {
               Cancel
             </button>
             {stateBtn === 0 ? (
-              <button className="disabledBtn" disabled>Save</button>
+              <button className="disabledBtn" disabled>
+                Save
+              </button>
             ) : (
               <button
                 className="common-fonts common-save-button"
@@ -867,7 +923,9 @@ const Gallery = () => {
         </>
       )}
 
-      {activeTab === "training" && <Training status={status} newAcadmeyData={newAcadmeyData}/>}
+      {activeTab === "training" && (
+        <Training status={status} newAcadmeyData={newAcadmeyData} />
+      )}
 
       <ToastContainer />
     </div>
