@@ -190,13 +190,12 @@ const handleButtonClick = () => {
                         value={formData.details}
                         onChange={handleChange}
                     ></textarea>
-                    <div className="bmp-upload-3 bmp-gap">
-                        <div className="contact-browse deal-doc-file">
+                    <div className="tour_new_file bmp-gap">
+                        <div className="contact-browse deal-doc-file tour_upload">
                             <span
-                                className="common-fonts common-input contact-tab-input bmp-border-2"
+                                className="common-fonts common-input contact-tab-input tour-border"
                                 style={{
                                     position: "relative",
-                                    marginRight: "10px",
                                 }}
                             >
                                 <button
@@ -241,7 +240,7 @@ const handleButtonClick = () => {
                 </div>
                 <div className="helpRight tourHead">
                     <div className="tournamentRight">
-                        <label htmlFor="" className="common-fonts bmp-academy-name">
+                        <label htmlFor="" className="common-fonts bmp-academy-name tour_address">
                             Address
                         </label>
                         {googleScriptLoaded && (
@@ -262,7 +261,7 @@ const handleButtonClick = () => {
                                     <div className="relativeInput">
                                         <input
                                             type="text"
-                                            className='tournamentInput'
+                                            className='tournamentInput tour_input'
                                             {...getInputProps({
                                                 placeholder: "Enter your address",
                                             })}

@@ -11,4 +11,29 @@
     border-radius: 0.3125rem;
     border: 1px solid #dcdcdc;
     background: #f3f6fa;
+   
+}
+
+.tour_input{
+    margin-top: 0.8rem;
+}
+
+.tour_upload{
+    width:100%;
+}
+
+.tour-border{
+    border-radius: 0.3125rem;
+    border: 1px dashed #2bda82;
+    background: #f3f6fa;
+    padding: 1rem;
+    height: 3rem;
+    width: 100%;
+}
+
+.tour_new_file{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    height: 3.75rem;
 }
