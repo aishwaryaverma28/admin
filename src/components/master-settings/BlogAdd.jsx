@@ -41,6 +41,7 @@ const BlogAdd = () => {
   const [formData, setFormData] = useState({
     title: "",
     url: "",
+    sport:"",
     description: "",
     meta_description: "",
     keywords: "",
@@ -300,6 +301,7 @@ const BlogAdd = () => {
       ...formData,
       title: "",
       url: "",
+      sport:"",
       description: "",
       meta_description: "",
       keywords: "",
@@ -513,6 +515,19 @@ const BlogAdd = () => {
                 id="description"
                 placeholder="Description"
                 value={formData.description}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="from-filed">
+              <label htmlFor="sport" className="common-fonts blogs-new-label">
+                Blog Sport
+              </label>
+              <input
+                type="text"
+                name="sport"
+                id="sport"
+                placeholder="Enter Blog Sport"
+                value={formData.sport}
                 onChange={handleChange}
               />
             </div>

@@ -45,6 +45,7 @@ const BlogUpdate = () => {
   const [formData, setFormData] = useState({
     title: "",
     url: "",
+    sport: "",
     description: "",
     meta_description: "",
     keywords: "",
@@ -136,6 +137,7 @@ const BlogUpdate = () => {
         title: data?.title,
         url: data?.url,
         description: data?.description,
+        sport: data?.sport,
         meta_description: data?.meta_description,
         keywords: data?.keywords,
         tag: data?.tag,
@@ -421,6 +423,7 @@ const BlogUpdate = () => {
     const updatedFormData = {
       title: formData?.title,
       url: formData?.url,
+      sport: formData?.sport,
       description: formData?.description,
       meta_description: formData?.meta_description,
       keywords: formData?.keywords,
@@ -664,6 +667,19 @@ const BlogUpdate = () => {
                 id="description"
                 value={formData.description}
                 placeholder="Description"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="from-filed">
+              <label htmlFor="sport" className="common-fonts blogs-new-label">
+                Blog Sport
+              </label>
+              <input
+                type="text"
+                name="sport"
+                id="sport"
+                placeholder="Enter Blog Sport"
+                value={formData.sport}
                 onChange={handleChange}
               />
             </div>
