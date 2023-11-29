@@ -1,0 +1,14 @@
+.tourHead{
+    margin-top: 0;
+}
+.tournamentRight{
+    padding: 0rem 1rem;
+  width: 100%;
+}
+.tournamentInput{
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #dcdcdc;
+    background: #f3f6fa;
+}
