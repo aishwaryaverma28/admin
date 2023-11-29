@@ -21,6 +21,7 @@ import Dash from "../../assets/image/red-dash.svg";
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const role_name = localStorage.getItem("role_name");
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
   const [academyData, setAcademyData] = useState({});
@@ -739,6 +740,7 @@ const BmpOverview = () => {
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
+              disabled={status === 0 && role_name === 'Academy'}
             />
           </div>
           <div className="bmp-input-flex">
@@ -752,6 +754,7 @@ const BmpOverview = () => {
               id=""
               className="common-fonts bmp-textarea"
               rows="2"
+              disabled={status === 0 && role_name === 'Academy'}
             ></textarea>
           </div>
           <div className="bmp-input-flex">
@@ -777,6 +780,7 @@ const BmpOverview = () => {
                     <input
                       type="text"
                       className="common-fonts common-input bmp-input "
+                      disabled={status === 0 && role_name === 'Academy'}
                       {...getInputProps({
                         placeholder: "Enter your address",
                       })}
@@ -896,6 +900,7 @@ const BmpOverview = () => {
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
                         onChange={handleCheckboxChange}
+                        disabled={status === 0 && role_name === 'Academy'}
                       />
                       <span className="checkmark"></span>
                     </label>
@@ -910,6 +915,7 @@ const BmpOverview = () => {
                 type="number"
                 className="common-fonts common-input bmp-input"
                 name={index === 0 ? "phone" : "whatsapp"}
+                disabled={status === 0 && role_name === 'Academy'}
                 onChange={handleChange}
                 value={
                   isLoading
@@ -927,6 +933,7 @@ const BmpOverview = () => {
               <button
                 className="common-fonts common-white-blue-button bmp-add-phone"
                 onClick={addPhoneNumberInput}
+                disabled={status === 0 && role_name === 'Academy'}
               >
                 + Add Phone Number
               </button>
@@ -944,6 +951,7 @@ const BmpOverview = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
+              disabled={status === 0 && role_name === 'Academy'}
             />
           </div>
           <div className="bmp-input-flex">
@@ -956,6 +964,7 @@ const BmpOverview = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
               className="common-fonts common-input bmp-input"
+              disabled={status === 0 && role_name === 'Academy'}
             />
           </div>
 
@@ -967,6 +976,7 @@ const BmpOverview = () => {
               className="common-fonts common-input langSelect"
               name="experience"
               onChange={handleChange}
+              disabled={status === 0 && role_name === 'Academy'}
             >
               <option value="">Select Experience</option>
               <option value="1">1</option>
@@ -1006,6 +1016,7 @@ const BmpOverview = () => {
                     name="headerCheckBox"
                     checked={alwaysOpenChecked}
                     onChange={handleAlwaysOpenCheckboxChange}
+                    disabled={status === 0 && role_name === 'Academy'}
                   />
                   <span className="checkmark"></span>
                 </label>
@@ -1063,6 +1074,7 @@ const BmpOverview = () => {
                   <button
                     className="contact-browse-btn common-fonts"
                     onClick={handleButtonClick}
+                    disabled={status === 0 && role_name === 'Academy'}
                   >
                     Browse
                   </button>
@@ -1129,6 +1141,7 @@ const BmpOverview = () => {
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
+                disabled={status === 0 && role_name === 'Academy'}
               />
             </div>
             {/* <div className="bmp-input-flex">
@@ -1150,6 +1163,7 @@ const BmpOverview = () => {
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
+                disabled={status === 0 && role_name === 'Academy'}
               />
             </div>
 
@@ -1159,6 +1173,7 @@ const BmpOverview = () => {
               <button
                 className="common-white-blue-button"
                 onClick={handleAddLanguage}
+                disabled={status === 0 && role_name === 'Academy'}
               >
                 + Add Language
               </button>
@@ -1173,6 +1188,7 @@ const BmpOverview = () => {
                   value={selectedLanguageName}
                   onChange={handlelanguageNameChange}
                   className="common-fonts common-input langSelect level_input"
+                  disabled={status === 0 && role_name === 'Academy'}
                 >
                   <option value="">Select your language</option>
                   {languages.map((language) => (
@@ -1189,6 +1205,7 @@ const BmpOverview = () => {
                   value={selectedLevel}
                   onChange={handleLevelChange}
                   className="common-fonts common-input langSelect level_input"
+                  disabled={status === 0 && role_name === 'Academy'}
                 >
                   <option value="">Select your Level</option>
                   <option value="Beginner">Beginner</option>

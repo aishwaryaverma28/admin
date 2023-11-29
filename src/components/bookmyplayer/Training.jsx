@@ -14,6 +14,7 @@ import DeleteImage from "./DeleteImage.jsx";
 const Training = ({ status, newAcadmeyData }) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const role_name = localStorage.getItem("role_name");
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
   const [fileName, setFileName] = useState("");
   const fileInputRef = useRef(null);
@@ -441,6 +442,7 @@ const Training = ({ status, newAcadmeyData }) => {
                 <button
                   className="contact-browse-btn common-fonts"
                   onClick={handleButtonClick}
+                  disabled={status === 0 && role_name === 'Academy'}
                 >
                   Browse
                 </button>
@@ -551,6 +553,7 @@ const Training = ({ status, newAcadmeyData }) => {
                 <button
                   className="contact-browse-btn common-fonts"
                   onClick={handleButtonClick2}
+                  disabled={status === 0 && role_name === 'Academy'}
                 >
                   Browse
                 </button>

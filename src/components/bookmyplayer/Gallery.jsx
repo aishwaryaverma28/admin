@@ -22,6 +22,7 @@ import Training from "./Training.jsx";
 const Gallery = () => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
+  const role_name = localStorage.getItem("role_name");
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -739,6 +740,7 @@ const Gallery = () => {
                   <button
                     className="contact-browse-btn common-fonts"
                     onClick={handleButtonClick2}
+                    disabled={status === 0 && role_name === 'Academy'}
                   >
                     Browse
                   </button>
