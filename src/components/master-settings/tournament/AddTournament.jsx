@@ -17,8 +17,13 @@ const AddTournament = () => {
     const [alertVideoShown, setAlertVideoShown] = useState(false);
     //==================================================logo upload
     const [selectedFile, setSelectedFile] = useState(null);
+    const [fileLogoName, setFileLogoName] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const fileLogoInputRef = useRef(null);
+//=======================================================banner upload
+const [selectedBannerFile, setSelectedBannerFile] = useState(null);
+const [fileBannerName, setFileBannerName] = useState("");
+    const fileBannerInputRef = useRef(null);
 
     const [stateBtn, setStateBtn] = useState(0);
     const [address, setAddress] = useState("");
@@ -210,7 +215,7 @@ const AddTournament = () => {
             .then((res) => res.json())
             .then((data) => {
               setSelectedFile(selectedImage);
-              setFileName(processImageName(selectedImage.name));
+              setFileLogoName(processImageName(selectedImage.name));
             })
             .catch((err) => {
               console.log(err);
@@ -221,6 +226,68 @@ const AddTournament = () => {
         }
       };
     
+//=======================================================banner upload
+const handleBannerButtonClick = (event) => {
+    event.preventDefault();
+    fileBannerInputRef.current.click();
+  };
+const handleBannerFileChange = (event) => {
+    setStateBtn(1);
+    const selectedBannerImage = event.target.files[0];
+    if (selectedBannerImage) {
+      if (!allowedImageTypes.includes(selectedBannerImage.type)) {
+        alert("Please choose a valid image file (JPEG, PNG, GIF).");
+        return;
+      }
+      submitBannerImage(event.target.files[0]);
+    }
+  };
+  const submitBannerImage = (file) => {
+    const selectedBannerImage = file;
+    if (selectedBannerImage) {
+      if (selectedBannerImage.size > 2 * 1024 * 1024) {
+        alert(
+          "Image size should be less than 2MB. Please choose a smaller image."
+        );
+        return;
+      }
+      const folder = "bookmyplayer/league";
+      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+      //   /\.[^/.]+$/,
+      //   ""
+      // )}`;
+      const imageNameWithoutExtension = selectedBannerImage.name.replace(
+        /\.[^/.]+$/,
+        ""
+      );
+      const sanitizedImageName = imageNameWithoutExtension.replace(
+        /[^\w-]/g,
+        "-"
+      );
+      const uniqueFileName = `${folder}/${sanitizedImageName}`;
+      const data = new FormData();
+      data.append("file", selectedBannerImage);
+      data.append("upload_preset", "zbxquqvw");
+      data.append("cloud_name", "cloud2cdn");
+      data.append("public_id", uniqueFileName);
+      setIsUploading(true);
+      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setSelectedBannerFile(selectedBannerImage);
+          setFileBannerName(processImageName(selectedBannerImage.name));
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setIsUploading(false);
+        });
+    }
+  };
 
 //===================================================================form function
     function handleChange(event) {
@@ -412,6 +479,72 @@ const AddTournament = () => {
                             )}
 
                             {!selectedFile && (
+                                <div className="bmp-image-preview">
+                                    <img
+                                    src=''
+                                        // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${academyData?.logo}`}
+                                        alt="logo"
+                                        className="bmp-preview-image"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="tournamentRight">
+                      <p className="helpTitle">Upload Tournament Banner</p>
+                        <div className="bmp-upload">
+                            <div className="contact-browse deal-doc-file">
+                                <span
+                                    className="common-fonts common-input contact-tab-input"
+                                    style={{
+                                        position: "relative",
+                                        marginRight: "10px",
+                                    }}
+                                >
+                                    <button
+                                        className="contact-browse-btn common-fonts"
+                                        onClick={handleBannerButtonClick}
+                                    >
+                                        Browse
+                                    </button>
+                                    <input
+                                        type="file"
+                                        style={{
+                                            display: "none",
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            bottom: 0,
+                                            right: 0,
+                                            width: "100%",
+                                        }}
+                                        ref={fileBannerInputRef}
+                                        onChange={handleBannerFileChange}
+                                    />
+                                    {isUploading ? (
+                                        <span className="common-fonts upload-file-name">
+                                            Uploading...
+                                        </span>
+                                    ) : (
+                                        <span className="common-fonts upload-file-name">
+                                            {/* {fileName ? fileName : academyData?.logo} */}
+                                            { }
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+
+                            {selectedBannerFile && (
+                                <div className="bmp-image-preview">
+                                    <img
+                                        src={URL.createObjectURL(selectedBannerFile)}
+                                        alt="Selected Preview"
+                                        className="bmp-preview-image"
+                                    />
+                                </div>
+                            )}
+
+                            {!selectedBannerFile && (
                                 <div className="bmp-image-preview">
                                     <img
                                     src=''
