@@ -7,6 +7,7 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import { toast, ToastContainer } from "react-toastify";
 const AddTournament = () => {
     const decryptedToken = getDecryptedToken();
+    //==============================================multiple photo upload
     const fileInputRef = useRef(null);
     const [photoUrls, setPhotoUrls] = useState([]);
     const [fileName, setFileName] = useState("");
@@ -14,6 +15,11 @@ const AddTournament = () => {
     const [alertShown, setAlertShown] = useState(false);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const [alertVideoShown, setAlertVideoShown] = useState(false);
+    //==================================================logo upload
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileLogoInputRef = useRef(null);
+
     const [stateBtn, setStateBtn] = useState(0);
     const [address, setAddress] = useState("");
     const [mapLink, setMapLink] = useState("");
@@ -24,7 +30,7 @@ const AddTournament = () => {
         url: "",
         sport: "",
     });
-//========================================================google address
+    //========================================================google address
     useEffect(() => {
         if (!googleScriptLoaded) {
             const script = document.createElement("script");
@@ -65,55 +71,123 @@ const AddTournament = () => {
         )}`;
         setMapLink(mapLink);
     };
-//==============================================================multiple image upload
-const processImageName = (imageName) => {
-    const nameParts = imageName.split(".");
-    if (nameParts.length > 1) {
-      const namePart = nameParts.slice(0, -1).join(".");
-      const processedName = namePart.replace(/[^\w-]/g, "-");
-      return `${processedName}.${nameParts[nameParts.length - 1]}`;
-    } else {
-      return imageName.replace(/[^\w-]/g, "-");
-    }
-  };
-  const showAlertOnce = (message) => {
-    if (!alertVideoShown) {
-      alert(message);
-      setAlertVideoShown(true);
-    }
-  };
-const handleButtonClick = () => {
+    //==============================================================multiple image upload
+    const processImageName = (imageName) => {
+        const nameParts = imageName.split(".");
+        if (nameParts.length > 1) {
+            const namePart = nameParts.slice(0, -1).join(".");
+            const processedName = namePart.replace(/[^\w-]/g, "-");
+            return `${processedName}.${nameParts[nameParts.length - 1]}`;
+        } else {
+            return imageName.replace(/[^\w-]/g, "-");
+        }
+    };
+    const showAlertOnce = (message) => {
+        if (!alertVideoShown) {
+            alert(message);
+            setAlertVideoShown(true);
+        }
+    };
+    const handleButtonClick = () => {
         fileInputRef.current.click();
         setAlertShown(false);
-      };
-      const handleFileChange = (event) => {
+    };
+    const handleFileChange = (event) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          if (!allowedImageTypes.includes(file.type)) {
-            if (!alertShown) {
-              alert("Please choose a valid image file.");
-              setAlertShown(true);
+            const file = files[i];
+            if (!allowedImageTypes.includes(file.type)) {
+                if (!alertShown) {
+                    alert("Please choose a valid image file.");
+                    setAlertShown(true);
+                }
+                return;
             }
-            return;
-          }
-          if (file.type.startsWith("image/")) {
-            submitImage(file);
-          }
+            if (file.type.startsWith("image/")) {
+                submitImage(file);
+            }
         }
-      };
-      const submitImage = (file) => {
+    };
+    const submitImage = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
         if (selectedImage) {
-          if (selectedImage.size > 2 * 1024 * 1024) {
-            showAlertOnce(
-              "Image size should be less than 2MB. Please choose a smaller image."
+            if (selectedImage.size > 2 * 1024 * 1024) {
+                showAlertOnce(
+                    "Image size should be less than 2MB. Please choose a smaller image."
+                );
+                setIsUploadingMulti(false);
+                return;
+            }
+            const folder = "bookmyplayer/league/";
+            const imageNameWithoutExtension = selectedImage.name.replace(
+                /\.[^/.]+$/,
+                ""
             );
-            setIsUploadingMulti(false);
+            const sanitizedImageName = imageNameWithoutExtension.replace(
+                /[^\w-]/g,
+                "-"
+            );
+            const uniqueFileName = `${folder}/${sanitizedImageName}`;
+            const data = new FormData();
+            data.append("file", selectedImage);
+            data.append("upload_preset", "zbxquqvw");
+            data.append("cloud_name", "cloud2cdn");
+            data.append("public_id", uniqueFileName);
+
+            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+                method: "post",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setFileName(processImageName(selectedImage.name));
+                    const imageUrl = processImageName(selectedImage.name);
+                    if (data.secure_url) {
+                        photoUrls.push(imageUrl);
+                        setPhotoUrls(photoUrls);
+                        setStateBtn(1);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    setIsUploadingMulti(false);
+                });
+        }
+    };
+
+    //=======================================================logo upload
+    const handleLogoButtonClick = (event) => {
+        event.preventDefault();
+        fileLogoInputRef.current.click();
+      };
+    const handleLogoFileChange = (event) => {
+        setStateBtn(1);
+        const selectedImage = event.target.files[0];
+        if (selectedImage) {
+          if (!allowedImageTypes.includes(selectedImage.type)) {
+            alert("Please choose a valid image file (JPEG, PNG, GIF).");
             return;
           }
-          const folder = "bookmyplayer/league/";
+          submitLogoImage(event.target.files[0]);
+        }
+      };
+      const submitLogoImage = (file) => {
+        const selectedImage = file;
+        if (selectedImage) {
+          if (selectedImage.size > 2 * 1024 * 1024) {
+            alert(
+              "Image size should be less than 2MB. Please choose a smaller image."
+            );
+            return;
+          }
+          const folder = "bookmyplayer/league";
+          // const uniqueFileName = `${folder}/${selectedImage.name.replace(
+          //   /\.[^/.]+$/,
+          //   ""
+          // )}`;
           const imageNameWithoutExtension = selectedImage.name.replace(
             /\.[^/.]+$/,
             ""
@@ -128,30 +202,27 @@ const handleButtonClick = () => {
           data.append("upload_preset", "zbxquqvw");
           data.append("cloud_name", "cloud2cdn");
           data.append("public_id", uniqueFileName);
-    
+          setIsUploading(true);
           fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
             method: "post",
             body: data,
           })
             .then((res) => res.json())
             .then((data) => {
+              setSelectedFile(selectedImage);
               setFileName(processImageName(selectedImage.name));
-              const imageUrl = processImageName(selectedImage.name);
-              if (data.secure_url) {
-                photoUrls.push(imageUrl);
-                setPhotoUrls(photoUrls);
-                setStateBtn(1);
-              }
             })
             .catch((err) => {
               console.log(err);
             })
             .finally(() => {
-              setIsUploadingMulti(false);
+              setIsUploading(false);
             });
         }
       };
+    
 
+//===================================================================form function
     function handleChange(event) {
         const { name, value } = event.target;
         setFormData((prev) => {
@@ -287,6 +358,72 @@ const handleButtonClick = () => {
                         )}
                     </div>
                     <div className="tournamentRight">
+                      <p className="helpTitle">Upload Tournament Logo</p>
+                        <div className="bmp-upload">
+                            <div className="contact-browse deal-doc-file">
+                                <span
+                                    className="common-fonts common-input contact-tab-input"
+                                    style={{
+                                        position: "relative",
+                                        marginRight: "10px",
+                                    }}
+                                >
+                                    <button
+                                        className="contact-browse-btn common-fonts"
+                                        onClick={handleLogoButtonClick}
+                                    >
+                                        Browse
+                                    </button>
+                                    <input
+                                        type="file"
+                                        style={{
+                                            display: "none",
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            bottom: 0,
+                                            right: 0,
+                                            width: "100%",
+                                        }}
+                                        ref={fileLogoInputRef}
+                                        onChange={handleLogoFileChange}
+                                    />
+                                    {isUploading ? (
+                                        <span className="common-fonts upload-file-name">
+                                            Uploading...
+                                        </span>
+                                    ) : (
+                                        <span className="common-fonts upload-file-name">
+                                            {/* {fileName ? fileName : academyData?.logo} */}
+                                            { }
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+
+                            {selectedFile && (
+                                <div className="bmp-image-preview">
+                                    <img
+                                        src={URL.createObjectURL(selectedFile)}
+                                        alt="Selected Preview"
+                                        className="bmp-preview-image"
+                                    />
+                                </div>
+                            )}
+
+                            {!selectedFile && (
+                                <div className="bmp-image-preview">
+                                    <img
+                                    src=''
+                                        // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${academyData?.logo}`}
+                                        alt="logo"
+                                        className="bmp-preview-image"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="tournamentRight">
                         <p className="helpTitle">Tournament Title<span className="common-fonts redAlert"> *</span></p>
                         <input
                             type="text"
@@ -299,6 +436,50 @@ const handleButtonClick = () => {
                     </div>
                 </div>
             </div>
+            {photoUrls?.length === 0 ? (
+            <div className={`support-no-ticket-found`}>
+              <p className="common-fonts">No photos added</p>
+            </div>
+          ) : (
+            <div 
+            // className={`outerBox ${border ? "red-border-box" : ""}`}
+            >
+              {photoUrls?.map((photo, index) => (
+                <div className="bmp-new-img">
+                  <div className="bmp-img-top-icon">
+                    <div className="bmp-img-name">
+                      <div className="bmp-video">
+                        <img
+                        //   src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                          alt="Selected Preview"
+                        />
+                      </div>
+
+                      <p className="common-fonts bmp-tour">
+                        {photo?.length > 20 ? (
+                          <>{photo?.slice(20)}...</>
+                        ) : (
+                          <>{photo}</>
+                        )}
+                      </p>
+                    </div>
+                    <div className="bmp-trash">
+                      <img
+                        // src={Trash}
+                        alt=""
+                        // onClick={() => handleDeleteOpen(index, "image")}
+                      />
+                    </div>
+                  </div>
+                  <img
+                    // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                    alt="Selected Preview"
+                    key={index}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
             <div className="help-bottom-btn">
                 <button className="common-fonts common-delete-button">Cancel</button>
                 <button
