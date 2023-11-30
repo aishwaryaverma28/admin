@@ -448,17 +448,8 @@ const Gallery = () => {
       setProgressArray(progressArray);
     }
     const combinedProgress = progressArray.join(",");
-    // let body = {
-    //   academy_id: academyId,
-    //   photos: photoUrls.join(","),
-    //   videos: videoUrls.join(","),
-    //   completion_percentage: combinedProgress,
-    // };
-
     let body = {};
-
     body.academy_id = academyId;
-
     const progressChanged =
       combinedProgress !== academyData?.completion_percentage;
 

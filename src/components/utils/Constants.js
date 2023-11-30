@@ -223,7 +223,10 @@ export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
 export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";
 
 //===============================================================league apis
-export const GET_ALL_LEAGUE = start + "/bmp/league/getall"
+export const GET_ALL_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/getall";
+export const ADD_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/add";
+export const GET_LEAGUE_BY_ID = "http://core.leadplaner.com:3001/api/bmp/league/get/"
+export const UPDATE_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/update/"
 /* 
 post api : {{ezukal_3000}}/api/bmp/academy/addupdaterequest
 body: {

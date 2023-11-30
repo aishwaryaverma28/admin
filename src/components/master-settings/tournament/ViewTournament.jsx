@@ -10,7 +10,7 @@ const ViewTournament = () => {
   const [tableData, setTableData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const decryptedToken = getDecryptedToken();
-console.log(decryptedToken)
+
   function handleFormSubmit() {
     axios
       .get(GET_ALL_LEAGUE, {
@@ -53,7 +53,39 @@ console.log(decryptedToken)
   });
 
   return (
-    <div>ViewTournament</div>
+    <>
+      <header className="headerEditor">
+                <p className="common-fonts add-new-blog"> View Tournaments</p>
+            </header>
+      <div className="buttonBox">
+        <div className="searchBar">
+          <label>
+            Search: <input type="text" onChange={handleSearchTermChange} />
+          </label>
+        </div>
+        <div>
+          <Link to="/lp/settings/helpSection/add">
+            <button type="button" className="addBtn">
+              add <i className="fas fa-plus"></i>
+            </button>
+          </Link>
+          <label className="entriesLable">
+            Show
+            <select onChange={selectRows} className="entries">
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+            </select>
+            Entries
+          </label>
+        </div>
+      </div>
+
+      <div className="tableContainer">
+        <TournamentTable data={filteredItems} rowsPerPage={value} />
+      </div>
+    </>
   )
 }
 
