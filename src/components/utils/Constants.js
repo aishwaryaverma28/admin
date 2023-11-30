@@ -222,6 +222,8 @@ export const GET_UPDATED_ACADEMY_INFO = start + "/bmp/academy/getupdatedinfo";
 export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
 export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";
 
+//===============================================================league apis
+export const GET_ALL_LEAGUE = start + "/bmp/league/getall"
 /* 
 post api : {{ezukal_3000}}/api/bmp/academy/addupdaterequest
 body: {

@@ -39,7 +39,7 @@ const BlogAdd = () => {
   const decryptedToken = getDecryptedToken();
   const editorRef = useRef(); // Define the editorRef using useRef
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
     url: "",
     sport:"",
     description: "",

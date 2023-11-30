@@ -20,9 +20,9 @@ const AddTournament = () => {
     const [fileLogoName, setFileLogoName] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const fileLogoInputRef = useRef(null);
-//=======================================================banner upload
-const [selectedBannerFile, setSelectedBannerFile] = useState(null);
-const [fileBannerName, setFileBannerName] = useState("");
+    //=======================================================banner upload
+    const [selectedBannerFile, setSelectedBannerFile] = useState(null);
+    const [fileBannerName, setFileBannerName] = useState("");
     const fileBannerInputRef = useRef(null);
 
     const [stateBtn, setStateBtn] = useState(0);
@@ -34,6 +34,18 @@ const [fileBannerName, setFileBannerName] = useState("");
         title: "",
         url: "",
         sport: "",
+        website: "",
+        intro: "",
+        phone: "",
+        email: "",
+        pathway: "",
+        advantages: "",
+        rules: "",
+        description: "",
+        level: "",
+        category: "",
+        keywords: "",
+        contact: "",
     });
     //========================================================google address
     useEffect(() => {
@@ -167,129 +179,121 @@ const [fileBannerName, setFileBannerName] = useState("");
     const handleLogoButtonClick = (event) => {
         event.preventDefault();
         fileLogoInputRef.current.click();
-      };
+    };
     const handleLogoFileChange = (event) => {
         setStateBtn(1);
         const selectedImage = event.target.files[0];
         if (selectedImage) {
-          if (!allowedImageTypes.includes(selectedImage.type)) {
-            alert("Please choose a valid image file (JPEG, PNG, GIF).");
-            return;
-          }
-          submitLogoImage(event.target.files[0]);
+            if (!allowedImageTypes.includes(selectedImage.type)) {
+                alert("Please choose a valid image file (JPEG, PNG, GIF).");
+                return;
+            }
+            submitLogoImage(event.target.files[0]);
         }
-      };
-      const submitLogoImage = (file) => {
+    };
+    const submitLogoImage = (file) => {
         const selectedImage = file;
         if (selectedImage) {
-          if (selectedImage.size > 2 * 1024 * 1024) {
-            alert(
-              "Image size should be less than 2MB. Please choose a smaller image."
+            if (selectedImage.size > 2 * 1024 * 1024) {
+                alert(
+                    "Image size should be less than 2MB. Please choose a smaller image."
+                );
+                return;
+            }
+            const folder = "bookmyplayer/league";
+            const imageNameWithoutExtension = selectedImage.name.replace(
+                /\.[^/.]+$/,
+                ""
             );
-            return;
-          }
-          const folder = "bookmyplayer/league";
-          // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-          //   /\.[^/.]+$/,
-          //   ""
-          // )}`;
-          const imageNameWithoutExtension = selectedImage.name.replace(
-            /\.[^/.]+$/,
-            ""
-          );
-          const sanitizedImageName = imageNameWithoutExtension.replace(
-            /[^\w-]/g,
-            "-"
-          );
-          const uniqueFileName = `${folder}/${sanitizedImageName}`;
-          const data = new FormData();
-          data.append("file", selectedImage);
-          data.append("upload_preset", "zbxquqvw");
-          data.append("cloud_name", "cloud2cdn");
-          data.append("public_id", uniqueFileName);
-          setIsUploading(true);
-          fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-            method: "post",
-            body: data,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              setSelectedFile(selectedImage);
-              setFileLogoName(processImageName(selectedImage.name));
+            const sanitizedImageName = imageNameWithoutExtension.replace(
+                /[^\w-]/g,
+                "-"
+            );
+            const uniqueFileName = `${folder}/${sanitizedImageName}`;
+            const data = new FormData();
+            data.append("file", selectedImage);
+            data.append("upload_preset", "zbxquqvw");
+            data.append("cloud_name", "cloud2cdn");
+            data.append("public_id", uniqueFileName);
+            setIsUploading(true);
+            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+                method: "post",
+                body: data,
             })
-            .catch((err) => {
-              console.log(err);
-            })
-            .finally(() => {
-              setIsUploading(false);
-            });
+                .then((res) => res.json())
+                .then((data) => {
+                    setSelectedFile(selectedImage);
+                    setFileLogoName(processImageName(selectedImage.name));
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    setIsUploading(false);
+                });
         }
-      };
-    
-//=======================================================banner upload
-const handleBannerButtonClick = (event) => {
-    event.preventDefault();
-    fileBannerInputRef.current.click();
-  };
-const handleBannerFileChange = (event) => {
-    setStateBtn(1);
-    const selectedBannerImage = event.target.files[0];
-    if (selectedBannerImage) {
-      if (!allowedImageTypes.includes(selectedBannerImage.type)) {
-        alert("Please choose a valid image file (JPEG, PNG, GIF).");
-        return;
-      }
-      submitBannerImage(event.target.files[0]);
-    }
-  };
-  const submitBannerImage = (file) => {
-    const selectedBannerImage = file;
-    if (selectedBannerImage) {
-      if (selectedBannerImage.size > 2 * 1024 * 1024) {
-        alert(
-          "Image size should be less than 2MB. Please choose a smaller image."
-        );
-        return;
-      }
-      const folder = "bookmyplayer/league";
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
-      const imageNameWithoutExtension = selectedBannerImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      );
-      const sanitizedImageName = imageNameWithoutExtension.replace(
-        /[^\w-]/g,
-        "-"
-      );
-      const uniqueFileName = `${folder}/${sanitizedImageName}`;
-      const data = new FormData();
-      data.append("file", selectedBannerImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-      setIsUploading(true);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setSelectedBannerFile(selectedBannerImage);
-          setFileBannerName(processImageName(selectedBannerImage.name));
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setIsUploading(false);
-        });
-    }
-  };
+    };
 
-//===================================================================form function
+    //=======================================================banner upload
+    const handleBannerButtonClick = (event) => {
+        event.preventDefault();
+        fileBannerInputRef.current.click();
+    };
+    const handleBannerFileChange = (event) => {
+        setStateBtn(1);
+        const selectedBannerImage = event.target.files[0];
+        if (selectedBannerImage) {
+            if (!allowedImageTypes.includes(selectedBannerImage.type)) {
+                alert("Please choose a valid image file (JPEG, PNG, GIF).");
+                return;
+            }
+            submitBannerImage(event.target.files[0]);
+        }
+    };
+    const submitBannerImage = (file) => {
+        const selectedBannerImage = file;
+        if (selectedBannerImage) {
+            if (selectedBannerImage.size > 2 * 1024 * 1024) {
+                alert(
+                    "Image size should be less than 2MB. Please choose a smaller image."
+                );
+                return;
+            }
+            const folder = "bookmyplayer/league";
+            const imageNameWithoutExtension = selectedBannerImage.name.replace(
+                /\.[^/.]+$/,
+                ""
+            );
+            const sanitizedImageName = imageNameWithoutExtension.replace(
+                /[^\w-]/g,
+                "-"
+            );
+            const uniqueFileName = `${folder}/${sanitizedImageName}`;
+            const data = new FormData();
+            data.append("file", selectedBannerImage);
+            data.append("upload_preset", "zbxquqvw");
+            data.append("cloud_name", "cloud2cdn");
+            data.append("public_id", uniqueFileName);
+            setIsUploading(true);
+            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
+                method: "post",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setSelectedBannerFile(selectedBannerImage);
+                    setFileBannerName(processImageName(selectedBannerImage.name));
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    setIsUploading(false);
+                });
+        }
+    };
+
+    //===================================================================form function
     function handleChange(event) {
         const { name, value } = event.target;
         setFormData((prev) => {
@@ -306,6 +310,11 @@ const handleBannerFileChange = (event) => {
             <header className="headerEditor">
                 <p className="common-fonts add-new-blog"> Add a new Tournament</p>
             </header>
+            {/* {
+     "logo": "path/to/logo.png",
+    "banner": "path/to/banner.png",
+    "photos": "path/to/photo1.png,path/to/photo2.png",
+} */}
             <div className="helpContainer">
                 <div className="helpBody">
                     <div>
@@ -318,114 +327,70 @@ const handleBannerFileChange = (event) => {
                             onChange={handleChange}
                         ></input>
                     </div>
-                    <p className="helpTitle">Tournament Introduction<span className="common-fonts redAlert"> *</span></p>
-                    <textarea
-                        name="details"
-                        type="textarea"
-                        rows="5"
-                        cols="5"
-                        placeholder="Enter Tournament Introduction"
-                        value={formData.details}
-                        onChange={handleChange}
-                    ></textarea>
-                    <div className="tour_new_file bmp-gap">
-                        <div className="contact-browse deal-doc-file tour_upload">
-                            <span
-                                className="common-fonts common-input contact-tab-input tour-border"
-                                style={{
-                                    position: "relative",
-                                }}
-                            >
-                                <button
-                                    className="contact-browse-btn common-fonts"
-                                    onClick={handleButtonClick}
-                                >
-                                    Browse
-                                </button>
-                                <input
-                                    type="file"
-                                    style={{
-                                        display: "none",
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        bottom: 0,
-                                        right: 0,
-                                        width: "100%",
-                                    }}
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                    multiple
-                                />
-                                {isUploadingMulti ? (
-                                    <span className="common-fonts upload-file-name">
-                                        Uploading...
-                                    </span>
-                                ) : (
-                                    <span className="common-fonts upload-file-name">
-                                        <p className="common-fonts light-color">
-                                            You can upload multiple images{" "}
-                                        </p>
-                                        <p className="common-fonts bmp-format">
-                                            Upload image in format png, jpg, jpeg, webp{" "}
-                                        </p>
-                                        { }
-                                    </span>
-                                )}
-                            </span>
-                        </div>
+                    <div>
+                        <p className="helpTitle">Introduction<span className="common-fonts redAlert"> *</span></p>
+                        <textarea
+                            name="intro"
+                            type="textarea"
+                            rows="3"
+                            cols="3"
+                            placeholder="Enter Tournament Introduction"
+                            value={formData.intro}
+                            onChange={handleChange}
+                        ></textarea>
                     </div>
-                </div>
-                <div className="helpRight tourHead">
-                    <div className="tournamentRight">
-                        <label htmlFor="" className="common-fonts bmp-academy-name tour_address">
-                            Address
-                        </label>
-                        {googleScriptLoaded && (
-                            <PlacesAutocomplete
-                                value={address}
-                                onChange={setAddress}
-                                onSelect={handleSelect}
-                                searchOptions={{
-                                    componentRestrictions: { country: "IN" },
-                                }}
-                            >
-                                {({
-                                    getInputProps,
-                                    suggestions,
-                                    getSuggestionItemProps,
-                                    loading,
-                                }) => (
-                                    <div className="relativeInput">
-                                        <input
-                                            type="text"
-                                            className='tournamentInput tour_input'
-                                            {...getInputProps({
-                                                placeholder: "Enter your address",
-                                            })}
-                                        />
-                                        <div
-                                            {...(suggestions.length > 0
-                                                ? { className: "autocomplete-dropdown" }
-                                                : {})}
-                                        >
-                                            {loading && <div>Loading...</div>}
-                                            {suggestions.map((suggestion) => (
-                                                <div
-                                                    {...getSuggestionItemProps(suggestion)}
-                                                    key={suggestion.placeId}
-                                                >
-                                                    {suggestion.description}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </PlacesAutocomplete>
-                        )}
+
+                    <div>
+                        <p className="helpTitle">Description</p>
+                        <textarea
+                            name="description"
+                            type="textarea"
+                            rows="3"
+                            cols="3"
+                            placeholder="Enter Tournament Description"
+                            value={formData.description}
+                            onChange={handleChange}
+                        ></textarea>
                     </div>
-                    <div className="tournamentRight">
-                      <p className="helpTitle">Upload Tournament Logo</p>
+                    <div>
+                        <p className="helpTitle">Pathway</p>
+                        <textarea
+                            name="pathway"
+                            type="textarea"
+                            rows="3"
+                            cols="3"
+                            placeholder="Enter Tournament Pathway"
+                            value={formData.pathway}
+                            onChange={handleChange}
+                        ></textarea>
+                    </div>
+                    <div>
+                        <p className="helpTitle">Advantages</p>
+                        <textarea
+                            name="advantages"
+                            type="textarea"
+                            rows="3"
+                            cols="3"
+                            placeholder="Enter Tournament Advantages"
+                            value={formData.advantages}
+                            onChange={handleChange}
+                        ></textarea>
+                    </div>
+                    <div>
+                        <p className="helpTitle">Rules</p>
+                        <textarea
+                            name="rules"
+                            type="textarea"
+                            rows="3"
+                            cols="3"
+                            placeholder="Enter Tournament Rules"
+                            value={formData.rules}
+                            onChange={handleChange}
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <p className="helpTitle">Upload Logo</p>
                         <div className="bmp-upload">
                             <div className="contact-browse deal-doc-file">
                                 <span
@@ -481,7 +446,7 @@ const handleBannerFileChange = (event) => {
                             {!selectedFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                    src=''
+                                        src=''
                                         // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${academyData?.logo}`}
                                         alt="logo"
                                         className="bmp-preview-image"
@@ -490,8 +455,8 @@ const handleBannerFileChange = (event) => {
                             )}
                         </div>
                     </div>
-                    <div className="tournamentRight">
-                      <p className="helpTitle">Upload Tournament Banner</p>
+                    <div>
+                        <p className="helpTitle">Upload Banner</p>
                         <div className="bmp-upload">
                             <div className="contact-browse deal-doc-file">
                                 <span
@@ -547,7 +512,7 @@ const handleBannerFileChange = (event) => {
                             {!selectedBannerFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                    src=''
+                                        src=''
                                         // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${academyData?.logo}`}
                                         alt="logo"
                                         className="bmp-preview-image"
@@ -556,63 +521,187 @@ const handleBannerFileChange = (event) => {
                             )}
                         </div>
                     </div>
-                    <div className="tournamentRight">
-                        <p className="helpTitle">Tournament Title<span className="common-fonts redAlert"> *</span></p>
+                    <div className="tour_new_file bmp-gap">
+                        <div className="contact-browse deal-doc-file tour_upload">
+                            <span
+                                className="common-fonts common-input contact-tab-input tour-border"
+                                style={{
+                                    position: "relative",
+                                }}
+                            >
+                                <button
+                                    className="contact-browse-btn common-fonts"
+                                    onClick={handleButtonClick}
+                                >
+                                    Browse
+                                </button>
+                                <input
+                                    type="file"
+                                    style={{
+                                        display: "none",
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        right: 0,
+                                        width: "100%",
+                                    }}
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    multiple
+                                />
+                                {isUploadingMulti ? (
+                                    <span className="common-fonts upload-file-name">
+                                        Uploading...
+                                    </span>
+                                ) : (
+                                    <span className="common-fonts upload-file-name">
+                                        <p className="common-fonts light-color">
+                                            You can upload multiple images{" "}
+                                        </p>
+                                        <p className="common-fonts bmp-format">
+                                            Upload image in format png, jpg, jpeg, webp{" "}
+                                        </p>
+                                        { }
+                                    </span>
+                                )}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="helpRight tourHead">
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Website</p>
                         <input
-                            type="text"
                             className='tournamentInput'
-                            placeholder="Enter Tournament Title"
-                            name="title"
-                            value={formData.name}
+                            type="text"
+                            placeholder="Enter Tournament Website"
+                            name="website"
+                            value={formData.website}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Sport</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Sport"
+                            name="sport"
+                            value={formData.sport}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Phone</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Phone"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Email</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Level</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Level"
+                            name="level"
+                            value={formData.level}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Category</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Category"
+                            name="category"
+                            value={formData.category}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Keywords</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Keywords"
+                            name="keywords"
+                            value={formData.keywords}
+                            onChange={handleChange}
+                        ></input>
+                    </div>
+                    <div className='tournamentRight'>
+                        <p className="helpTitle">Contact Person</p>
+                        <input
+                            className='tournamentInput'
+                            type="text"
+                            placeholder="Enter Tournament Contact Person"
+                            name="contact"
+                            value={formData.contact}
                             onChange={handleChange}
                         ></input>
                     </div>
                 </div>
             </div>
             {photoUrls?.length === 0 ? (
-            <div className={`support-no-ticket-found`}>
-              <p className="common-fonts">No photos added</p>
-            </div>
-          ) : (
-            <div 
-            // className={`outerBox ${border ? "red-border-box" : ""}`}
-            >
-              {photoUrls?.map((photo, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
-                      <div className="bmp-video">
-                        <img
-                        //   src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                          alt="Selected Preview"
-                        />
-                      </div>
-
-                      <p className="common-fonts bmp-tour">
-                        {photo?.length > 20 ? (
-                          <>{photo?.slice(20)}...</>
-                        ) : (
-                          <>{photo}</>
-                        )}
-                      </p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img
-                        // src={Trash}
-                        alt=""
-                        // onClick={() => handleDeleteOpen(index, "image")}
-                      />
-                    </div>
-                  </div>
-                  <img
-                    // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                    alt="Selected Preview"
-                    key={index}
-                  />
+                <div className={`support-no-ticket-found`}>
+                    <p className="common-fonts">No photos added</p>
                 </div>
-              ))}
-            </div>
-          )}
+            ) : (
+                <div className={`outerBox`}>
+                    {photoUrls?.map((photo, index) => (
+                        <div className="bmp-new-img">
+                            <div className="bmp-img-top-icon">
+                                <div className="bmp-img-name">
+                                    <div className="bmp-video">
+                                        <img
+                                            //   src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                                            alt="Selected Preview"
+                                        />
+                                    </div>
+
+                                    <p className="common-fonts bmp-tour">
+                                        {photo?.length > 20 ? (
+                                            <>{photo?.slice(20)}...</>
+                                        ) : (
+                                            <>{photo}</>
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="bmp-trash">
+                                    <img
+                                        // src={Trash}
+                                        alt=""
+                                    // onClick={() => handleDeleteOpen(index, "image")}
+                                    />
+                                </div>
+                            </div>
+                            <img
+                                // src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                                alt="Selected Preview"
+                                key={index}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
             <div className="help-bottom-btn">
                 <button className="common-fonts common-delete-button">Cancel</button>
                 <button
