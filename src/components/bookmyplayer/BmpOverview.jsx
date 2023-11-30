@@ -334,31 +334,31 @@ const BmpOverview = () => {
   //       });
   //   }
   // console.log(keywords);
-  const createFolder = async () => {
-    const cloudinaryFolder = "bookmyplayer/academy";
-    const apiUrl = CREATE_FOLDER;
-    const body = {
-      folderPath: cloudinaryFolder + "/" + academyId,
-    };
-    axios
-      .post(apiUrl, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        // console.log(response)
-      })
-      .catch((error) => {
-        // toast.error("Some Error Occoured!", {
-        //   position: "top-center",
-        //   autoClose: 2000,
-        // });
-        console.log(error);
-      });
-  };
+  // const createFolder = async () => {
+  //   const cloudinaryFolder = "bookmyplayer/academy";
+  //   const apiUrl = CREATE_FOLDER;
+  //   const body = {
+  //     folderPath: cloudinaryFolder + "/" + academyId,
+  //   };
+  //   axios
+  //     .post(apiUrl, body, {
+  //       headers: {
+  //         Authorization: `Bearer ${decryptedToken}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       // console.log(response)
+  //     })
+  //     .catch((error) => {
+  //       // toast.error("Some Error Occoured!", {
+  //       //   position: "top-center",
+  //       //   autoClose: 2000,
+  //       // });
+  //       console.log(error);
+  //     });
+  // };
   useEffect(() => {
-    createFolder();
+    // createFolder();
     academyDetails();
     updatedAcadmeyInfo();
     // getAllKeywords();
@@ -427,11 +427,7 @@ const BmpOverview = () => {
         );
         return;
       }
-      const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
+      const folder = "bookmyplayer/academy/" + academyId+"/";
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -441,6 +437,7 @@ const BmpOverview = () => {
         "-"
       );
       const uniqueFileName = `${folder}/${sanitizedImageName}`;
+      console.log(uniqueFileName);
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
@@ -470,7 +467,6 @@ const BmpOverview = () => {
         });
     }
   };
-
   // function handleChange(event) {
   //   const { name, value } = event.target;
   //   let redText = false;
