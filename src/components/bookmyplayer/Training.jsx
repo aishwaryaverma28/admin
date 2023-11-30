@@ -372,13 +372,13 @@ const Training = ({ status, newAcadmeyData }) => {
     ) {
       body.tournament_photos = photoUrls2.join(",");
     }
-
-    Object.keys(newAcadmeyData).forEach((key) => {
-      if (body.hasOwnProperty(key)) {
-        console.log(newAcadmeyData[key]);
-        body[key] = newAcadmeyData[key];
-      }
-    });
+    if (newAcadmeyData !== null) {
+      Object.keys(newAcadmeyData).forEach((key) => {
+        if (!body.hasOwnProperty(key)) {
+          body[key] = newAcadmeyData[key];
+        }
+      });
+    }
     console.log(body);
     console.log("updated training body");
     axios

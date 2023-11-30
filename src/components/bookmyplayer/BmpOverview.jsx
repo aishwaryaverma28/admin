@@ -334,31 +334,8 @@ const BmpOverview = () => {
   //       });
   //   }
   // console.log(keywords);
-  // const createFolder = async () => {
-  //   const cloudinaryFolder = "bookmyplayer/academy";
-  //   const apiUrl = CREATE_FOLDER;
-  //   const body = {
-  //     folderPath: cloudinaryFolder + "/" + academyId,
-  //   };
-  //   axios
-  //     .post(apiUrl, body, {
-  //       headers: {
-  //         Authorization: `Bearer ${decryptedToken}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       // console.log(response)
-  //     })
-  //     .catch((error) => {
-  //       // toast.error("Some Error Occoured!", {
-  //       //   position: "top-center",
-  //       //   autoClose: 2000,
-  //       // });
-  //       console.log(error);
-  //     });
-  // };
+  
   useEffect(() => {
-    // createFolder();
     academyDetails();
     updatedAcadmeyInfo();
     // getAllKeywords();
@@ -380,7 +357,6 @@ const BmpOverview = () => {
     }
   }, [academyData]);
   useEffect(() => {
-    // Load the Google Maps JavaScript API script
     if (!googleScriptLoaded) {
       loadScript(
         "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
@@ -427,7 +403,7 @@ const BmpOverview = () => {
         );
         return;
       }
-      const folder = "bookmyplayer/academy/" + academyId+"/";
+      const folder = "bookmyplayer/academy/" + academyId;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -437,7 +413,6 @@ const BmpOverview = () => {
         "-"
       );
       const uniqueFileName = `${folder}/${sanitizedImageName}`;
-      console.log(uniqueFileName);
       const data = new FormData();
       data.append("file", selectedImage);
       data.append("upload_preset", "zbxquqvw");
@@ -467,34 +442,7 @@ const BmpOverview = () => {
         });
     }
   };
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-  //   let redText = false;
-  //   // Check if any word in the introduction matches with keywords
-  //   const words = value.split(' ');
-  //   let textRestrict = "";
-  //   words.forEach((word) => {
-  //     if (keywords.includes(word?.toLowerCase())) {
-  //       textRestrict = word;
-  //       redText = true;
-  //     }
-  //   });
 
-  //   // Show alert and set style if any keyword found
-  //   if (redText) {
-  //     alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
-  //     event.target.style.color = 'red';
-  //     setStateBtn(0);
-  //   } else {
-  //     event.target.style.color = ''; // Reset text color
-  //   }
-
-  //   if (academyData[name] !== value) {
-  //     setStateBtn(1);
-  //     updateField(name);
-  //   }
-  //   setAcademyData({ ...academyData, [name]: value });
-  // }
   function handleChange(event) {
     const { name, value } = event.target;
     let redText = false;
@@ -561,7 +509,7 @@ const BmpOverview = () => {
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
-
+console.log(newAcadmeyData);
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -679,12 +627,13 @@ const BmpOverview = () => {
 
     updatedFormData.academy_id = academyId;
 
-    Object.keys(newAcadmeyData).forEach((key) => {
-      if (!updatedFormData.hasOwnProperty(key)) {
-        console.log(newAcadmeyData[key]);
-        updatedFormData[key] = newAcadmeyData[key];
-      }
-    });
+    if (newAcadmeyData !== null) {
+      Object.keys(newAcadmeyData).forEach((key) => {
+        if (!updatedFormData.hasOwnProperty(key)) {
+          updatedFormData[key] = newAcadmeyData[key];
+        }
+      });
+    }
     console.log(updatedFormData);
     console.log("update body");
 

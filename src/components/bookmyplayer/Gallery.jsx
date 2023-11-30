@@ -474,15 +474,13 @@ const Gallery = () => {
       body.completion_percentage = combinedProgress;
     }
 
-    console.log(body);
-    console.log("updated gallery body");
-
-    Object.keys(newAcadmeyData).forEach((key) => {
-      if (body.hasOwnProperty(key)) {
-        console.log(newAcadmeyData[key]);
-        body[key] = newAcadmeyData[key];
-      }
-    });
+    if (newAcadmeyData !== null) {
+      Object.keys(newAcadmeyData).forEach((key) => {
+        if (!body.hasOwnProperty(key)) {
+         body[key] = newAcadmeyData[key];
+        }
+      });
+    }
     console.log(body);
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
