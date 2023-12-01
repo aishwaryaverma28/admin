@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "../../styles/HelpModal.css";
 import {
   getDecryptedToken, UPDATE_LEAGUE
 } from "../../utils/Constants";
 import axios from "axios";
+import Trash from "../../../assets/image/red-bin.svg"
 
 const TournamentModal = ({ onClose, id }) => {
   const decryptedToken = getDecryptedToken();
@@ -234,7 +235,13 @@ const TournamentModal = ({ onClose, id }) => {
     }
   };
 
-  //===================================================================form function
+  //===================================================================form function  
+const handleDelete = (index) => {
+  const updatedPhotoUrls = [...photoUrls];
+  const deletedPhoto = updatedPhotoUrls.splice(index, 1)[0];
+  setPhotoUrls(updatedPhotoUrls);
+  setStateBtn(1);
+}
 
   const onSave = (e) => {
     e.preventDefault();
@@ -250,6 +257,10 @@ const TournamentModal = ({ onClose, id }) => {
     })
       .then((response) => {
         console.log(response);
+        setStateBtn(0);
+      })
+      .catch((error) => {
+        console.log(error);
       })
 
   }
@@ -259,6 +270,9 @@ const TournamentModal = ({ onClose, id }) => {
     <>
       <div className="help-modal-container">
         <div className="help-modal-box">
+        <header className="headerEditor">
+        <p className="common-fonts add-new-blog"> Upload Tournament Images</p>
+      </header>
           <div>
             <p className="helpTitle">Upload Logo</p>
             <div className="bmp-upload">
@@ -463,9 +477,9 @@ const TournamentModal = ({ onClose, id }) => {
                                 </div>
                                 <div className="bmp-trash">
                                     <img
-                                        // src={Trash}
+                                        src={Trash}
                                         alt=""
-                                    // onClick={() => handleDeleteOpen(index, "image")}
+                                    onClick={() => handleDelete(index)}
                                     />
                                 </div>
                             </div>

@@ -6,6 +6,7 @@ import {
 } from "../../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import LeftArrow from "../../../assets/image/arrow-left.svg";
+import Trash from "../../../assets/image/red-bin.svg"
 const UpdateTournament = () => {
   const { id } = useParams();
   const decryptedToken = getDecryptedToken();
@@ -27,6 +28,8 @@ const UpdateTournament = () => {
   const [fileBannerName, setFileBannerName] = useState("");
   const [isBannerUploading, setIsBannerUploading] = useState(false);
   const fileBannerInputRef = useRef(null);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stateBtn, setStateBtn] = useState(0);
   const [formData, setFormData] = useState({
@@ -286,6 +289,13 @@ const submitBannerImage = (file) => {
 };
 
 //===================================================================form function
+const handleDelete = (index) => {
+    const updatedPhotoUrls = [...photoUrls];
+    const deletedPhoto = updatedPhotoUrls.splice(index, 1)[0];
+    setPhotoUrls(updatedPhotoUrls);
+    setStateBtn(1);
+}
+
 function handleChange(event) {
   const { name, value } = event.target;
   setFormData((prev) => {
@@ -309,8 +319,11 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
 })
 .then((response) => {
   console.log(response);
+  setStateBtn(0);
 })
-
+.catch((error) => {
+    console.log(error);
+  })
 }
   return (
     <>
@@ -695,9 +708,9 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                                 </div>
                                 <div className="bmp-trash">
                                     <img
-                                        // src={Trash}
+                                        src={Trash}
                                         alt=""
-                                    // onClick={() => handleDeleteOpen(index, "image")}
+                                    onClick={() => handleDelete(index)}
                                     />
                                 </div>
                             </div>

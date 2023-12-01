@@ -59,8 +59,8 @@ const AddTournament = () => {
           position: "top-center",
           autoClose: 1000,
         });
-
         setTimeout(modalOpen,1500);
+        setStateBtn(0);
       })
       .catch((error) => {
         toast.error("some error occured", {
