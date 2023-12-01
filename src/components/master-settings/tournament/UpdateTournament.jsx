@@ -29,8 +29,6 @@ const UpdateTournament = () => {
   const [isBannerUploading, setIsBannerUploading] = useState(false);
   const fileBannerInputRef = useRef(null);
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const [stateBtn, setStateBtn] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
