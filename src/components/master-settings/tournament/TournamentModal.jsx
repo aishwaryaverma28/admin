@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
 import "../../styles/HelpModal.css";
-import {
-  getDecryptedToken, UPDATE_LEAGUE
-} from "../../utils/Constants";
+import { getDecryptedToken, UPDATE_LEAGUE } from "../../utils/Constants";
 import axios from "axios";
-import Trash from "../../../assets/image/red-bin.svg"
+import Trash from "../../../assets/image/red-bin.svg";
+import { toast, ToastContainer } from "react-toastify";
 
 const TournamentModal = ({ onClose, id }) => {
   const decryptedToken = getDecryptedToken();
@@ -28,7 +27,7 @@ const TournamentModal = ({ onClose, id }) => {
   const [isBannerUploading, setIsBannerUploading] = useState(false);
   const fileBannerInputRef = useRef(null);
 
-  console.log(id)
+  console.log(id);
 
   //==============================================================multiple image upload
   const processImageName = (imageName) => {
@@ -235,13 +234,13 @@ const TournamentModal = ({ onClose, id }) => {
     }
   };
 
-  //===================================================================form function  
-const handleDelete = (index) => {
-  const updatedPhotoUrls = [...photoUrls];
-  const deletedPhoto = updatedPhotoUrls.splice(index, 1)[0];
-  setPhotoUrls(updatedPhotoUrls);
-  setStateBtn(1);
-}
+  //===================================================================form function
+  const handleDelete = (index) => {
+    const updatedPhotoUrls = [...photoUrls];
+    const deletedPhoto = updatedPhotoUrls.splice(index, 1)[0];
+    setPhotoUrls(updatedPhotoUrls);
+    setStateBtn(1);
+  };
 
   const onSave = (e) => {
     e.preventDefault();
@@ -250,38 +249,48 @@ const handleDelete = (index) => {
       banner: fileBannerName,
       photos: photoUrls.join(","),
     };
-    axios.put(UPDATE_LEAGUE + id, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-      },
-    })
+    axios
+      .put(UPDATE_LEAGUE + id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
       .then((response) => {
         console.log(response);
+
+        toast.success(response?.data?.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+
         setStateBtn(0);
       })
       .catch((error) => {
-        console.log(error);
-      })
-
-  }
-
+                toast.error("some error occured", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      });
+  };
 
   return (
     <>
       <div className="help-modal-container">
         <div className="help-modal-box">
-        <header className="headerEditor">
-        <p className="common-fonts add-new-blog"> Upload Tournament Images</p>
-      </header>
+          <header className="headerEditor">
+            <p className="common-fonts add-new-blog">
+              {" "}
+              Upload Tournament Images
+            </p>
+          </header>
           <div>
-            <p className="helpTitle">Upload Logo</p>
+            <p className="helpTitle tour_upload_logo">Upload Logo</p>
             <div className="bmp-upload">
               <div className="contact-browse deal-doc-file">
                 <span
-                  className="common-fonts common-input contact-tab-input"
+                  className="common-fonts tour_modal_input contact-tab-input"
                   style={{
                     position: "relative",
-                    marginRight: "10px",
                   }}
                 >
                   <button
@@ -311,7 +320,7 @@ const handleDelete = (index) => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileLogoName ? fileLogoName : ""}
-                      { }
+                      {}
                     </span>
                   )}
                 </span>
@@ -339,14 +348,13 @@ const handleDelete = (index) => {
             </div>
           </div>
           <div>
-            <p className="helpTitle">Upload Banner</p>
+            <p className="helpTitle tour_upload_logo">Upload Banner</p>
             <div className="bmp-upload">
               <div className="contact-browse deal-doc-file">
                 <span
-                  className="common-fonts common-input contact-tab-input"
+                  className="common-fonts tour_modal_input contact-tab-input"
                   style={{
                     position: "relative",
-                    marginRight: "10px",
                   }}
                 >
                   <button
@@ -376,7 +384,7 @@ const handleDelete = (index) => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileBannerName ? fileBannerName : ""}
-                      { }
+                      {}
                     </span>
                   )}
                 </span>
@@ -406,7 +414,7 @@ const handleDelete = (index) => {
           <div className="tour_new_file bmp-gap">
             <div className="contact-browse deal-doc-file tour_upload">
               <span
-                className="common-fonts common-input contact-tab-input tour-border"
+                className="common-fonts tour_modal_input tour_modal_input_2 contact-tab-input tour-border"
                 style={{
                   position: "relative",
                 }}
@@ -444,72 +452,77 @@ const handleDelete = (index) => {
                     <p className="common-fonts bmp-format">
                       Upload image in format png, jpg, jpeg, webp{" "}
                     </p>
-                    { }
+                    {}
                   </span>
                 )}
               </span>
             </div>
           </div>
           {photoUrls?.length === 0 ? (
-                <div className={`support-no-ticket-found`}>
-                    <p className="common-fonts">No photos added</p>
-                </div>
-            ) : (
-                <div className={`outerBox`}>
-                    {photoUrls?.map((photo, index) => (
-                        <div className="bmp-new-img">
-                            <div className="bmp-img-top-icon">
-                                <div className="bmp-img-name">
-                                    <div className="bmp-video">
-                                        <img
-                                              src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
-                                            alt="Selected Preview"
-                                        />
-                                    </div>
+            <div className={`support-no-ticket-found`}>
+              <p className="common-fonts">No photos added</p>
+            </div>
+          ) : (
+            <div className={`outerBox`}>
+              {photoUrls?.map((photo, index) => (
+                <div className="bmp-new-img tour_new_img">
+                  <div className="bmp-img-top-icon">
+                    <div className="bmp-img-name">
+                      <div className="bmp-video">
+                        <img
+                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                          alt="Selected Preview"
+                        />
+                      </div>
 
-                                    <p className="common-fonts bmp-tour">
-                                        {photo?.length > 20 ? (
-                                            <>{photo?.slice(20)}...</>
-                                        ) : (
-                                            <>{photo}</>
-                                        )}
-                                    </p>
-                                </div>
-                                <div className="bmp-trash">
-                                    <img
-                                        src={Trash}
-                                        alt=""
-                                    onClick={() => handleDelete(index)}
-                                    />
-                                </div>
-                            </div>
-                            <img
-                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
-                                alt="Selected Preview"
-                                key={index}
-                            />
-                        </div>
-                    ))}
-                     </div>
-            )}
-            {stateBtn === 0 ? (
+                      <p className="common-fonts bmp-tour">
+                        {photo?.length > 20 ? (
+                          <>{photo?.slice(20)}...</>
+                        ) : (
+                          <>{photo}</>
+                        )}
+                      </p>
+                    </div>
+                    <div className="bmp-trash">
+                      <img
+                        src={Trash}
+                        alt=""
+                        onClick={() => handleDelete(index)}
+                      />
+                    </div>
+                  </div>
+                  <img
+                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                    alt="Selected Preview"
+                    key={index}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          {stateBtn === 0 ? (
+            <div className="tour_save">
               <button className="disabledBtn" disabled>
                 Save
               </button>
-            ) : (
-                <button
-                    className="common-fonts common-save-button help-save"
-                    onClick={onSave}
-                >
-                    Save
-                </button>
-            )}
+            </div>
+          ) : (
+            <div className="tour_save">
+              <button
+                className="common-fonts common-save-button help-save"
+                onClick={onSave}
+              >
+                Save
+              </button>
+            </div>
+          )}
         </div>
-        
+
         <div className="help-cross" onClick={onClose}>
           X
         </div>
       </div>
+      <ToastContainer/>
     </>
   );
 };
