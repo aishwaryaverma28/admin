@@ -4,6 +4,7 @@ import "../../styles/Tournament.css";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import TournamentModal from "./TournamentModal.jsx";
 const AddTournament = () => {
   const decryptedToken = getDecryptedToken();
   //==============================================multiple photo upload
@@ -24,6 +25,8 @@ const AddTournament = () => {
   const [fileBannerName, setFileBannerName] = useState("");
   const [isBannerUploading, setIsBannerUploading] = useState(false);
   const fileBannerInputRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState(0);
 
   const [stateBtn, setStateBtn] = useState(0);
   // const [address, setAddress] = useState("");
@@ -88,6 +91,16 @@ const AddTournament = () => {
   //     )}`;
   //     setMapLink(mapLink);
   // };
+
+
+  const modalOpen = () => {
+    setOpen(true);
+  }
+  const modalClose = () => {
+    setOpen(false);
+  }
+
+
   //==============================================================multiple image upload
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
@@ -317,10 +330,19 @@ const AddTournament = () => {
         },
       })
       .then((response) => {
-        console.log(response);
+        setId(response?.data?.data?.insertId)
+        toast.success(response?.data?.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+
+        setTimeout(modalOpen,2500);
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("some error occured", {
+          position: "top-center",
+          autoClose: 2000,
+        });
       });
   };
   return (
@@ -757,6 +779,11 @@ const AddTournament = () => {
         )}
       </div>
       <ToastContainer />
+      {
+        open && (
+          <TournamentModal onClose={modalClose} id={id} />
+        )
+      }
     </>
   );
 };
