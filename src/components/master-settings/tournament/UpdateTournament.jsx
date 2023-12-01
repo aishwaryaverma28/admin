@@ -75,7 +75,12 @@ const getTournamnet = () => {
     })
     setFileLogoName(data?.logo);
     setFileBannerName(data?.banner);
-    setPhotoUrls(data?.photos?.split(","))
+    if (
+        response?.data?.data[0]?.photos !== "" &&
+        response?.data?.data[0]?.photos !== null
+      ) {
+      setPhotoUrls(data?.photos?.split(","))
+      }
   })
 }
 useEffect(() => {
@@ -317,10 +322,19 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
 })
 .then((response) => {
   console.log(response);
+  toast.success(response?.data?.message, {
+    position: "top-center",
+    autoClose: 1000,
+  });
+
   setStateBtn(0);
 })
 .catch((error) => {
     console.log(error);
+    toast.error("some error occured", {
+        position: "top-center",
+        autoClose: 1000,
+      });
   })
 }
   return (

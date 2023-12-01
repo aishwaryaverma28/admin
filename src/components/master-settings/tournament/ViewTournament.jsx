@@ -19,7 +19,6 @@ const ViewTournament = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data);
         setTableData(response?.data?.data);
       })
       .catch((error) => {

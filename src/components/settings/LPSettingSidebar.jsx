@@ -339,16 +339,6 @@ const LPSettingSidebar = () => {
               </div>
               {masterSubMenu === "review" && (
                 <div className="sub-sub-menu">
-
-                  {/* <p className="company-options setting-font-style blog-options">
-                  <NavLink
-                    exact
-                    to="/lp/settings/blog/add"
-                    activeClassName="activeLink"
-                  >
-                    Add
-                  </NavLink>
-                </p> */}
                   {isPathAllowed("/lp/settings/review/view") && (
                     <p className="company-options setting-font-style">
                       <NavLink
@@ -365,45 +355,50 @@ const LPSettingSidebar = () => {
             </>
           )}
 
-          
 
-              <div
-                className="master-arrow"
-                onClick={() => toggleMasterSubMenu("tournament")}
-              >
-                <p className="company-options master-settings-options setting-font-style">
-                  Tournament
-                </p>
-                <img
-                  src={masterSubMenu === "tournament" ? GreaterUp : GreaterDown}
-                  alt=""
-                />
-              </div>
-              {masterSubMenu === "tournament" && (
-                <div className="sub-sub-menu">
-
-       <p className="company-options setting-font-style blog-options">
-                  <NavLink
-                    exact
-                    to="/lp/settings/tournament/add"
-                    activeClassName="activeLink"
-                  >
-                    Add
-                  </NavLink>
-                </p> 
-
-                    <p className="company-options setting-font-style">
-                      <NavLink
-                        exact
-                        to="/lp/settings/tournament/view"
-                        activeClassName="activeLink"
-                      >
-                        View
-                      </NavLink>
-                    </p>
+          {(isPathAllowed("/lp/settings/tournament/add") ||
+            isPathAllowed("/lp/settings/tournament/view")) && (
+              <>
+                <div
+                  className="master-arrow"
+                  onClick={() => toggleMasterSubMenu("tournament")}
+                >
+                  <p className="company-options master-settings-options setting-font-style">
+                    Tournament
+                  </p>
+                  <img
+                    src={masterSubMenu === "tournament" ? GreaterUp : GreaterDown}
+                    alt=""
+                  />
                 </div>
-              )}
-
+                {masterSubMenu === "tournament" && (
+                  <div className="sub-sub-menu">
+                    {isPathAllowed("/lp/settings/tournament/add") && (
+                      <p className="company-options setting-font-style blog-options">
+                        <NavLink
+                          exact
+                          to="/lp/settings/tournament/add"
+                          activeClassName="activeLink"
+                        >
+                          Add
+                        </NavLink>
+                      </p>
+                    )}
+                    {isPathAllowed("/lp/settings/tournament/view") && (
+                      <p className="company-options setting-font-style">
+                        <NavLink
+                          exact
+                          to="/lp/settings/tournament/view"
+                          activeClassName="activeLink"
+                        >
+                          View
+                        </NavLink>
+                      </p>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
 
           {(isPathAllowed("/lp/settings/sitePages/add") ||
             isPathAllowed("/lp/settings/sitePages/view")) && (

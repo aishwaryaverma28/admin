@@ -282,11 +282,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/lp/settings/tournament/add",
-            element: <AddTournament/>,
+            element: <SecureRoutes Component={AddTournament}/>,
           },
           {
             path: "/lp/settings/tournament/view",
-            element: <ViewTournament/>,
+            element: <SecureRoutes Component={ViewTournament}/>,
           },
           {
             path: "/lp/settings/blog/tournament/:id",
