@@ -37,3 +37,42 @@
     align-items: center;
     height: 3.75rem;
 }
+
+.tour_upload_logo{
+    margin-left: 1rem;
+}
+
+.tour_modal_input {
+    border-radius: 0.3125rem;
+    border: 1px solid #dcdcdc;
+    background: #f3f6fa;
+    padding: 0.7rem;
+    cursor: pointer;
+    height: 2rem;
+    width: 24rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .tour_modal_input_2{
+    height: 3rem;
+  }
+
+  .tour_save{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+
+  .tour_save button{
+    margin-right: 1rem;
+    position: absolute;
+    top:88%;
+  }
+
+  .tour_new_img {
+    width:45.5%;
+    height: 11.75rem;
+
+  }
+  
