@@ -1151,3 +1151,7 @@ margin-right: 0.3rem;
  .replyHeightChanged{
   height: 9.5rem;
  }
+
+ .bmp_disable{
+  color:#909DB0 !important;
+ }
