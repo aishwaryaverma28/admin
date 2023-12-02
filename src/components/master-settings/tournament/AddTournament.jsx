@@ -189,7 +189,7 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Phone<span className="common-fonts redAlert"> *</span>
+              Phone
             </p>
             <input
               className="tournamentInput"
@@ -202,7 +202,7 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Email<span className="common-fonts redAlert"> *</span>
+              Email
             </p>
             <input
               className="tournamentInput"
@@ -254,7 +254,7 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Contact Person<span className="common-fonts redAlert"> *</span>
+              Contact Person
             </p>
             <input
               className="tournamentInput"

@@ -353,7 +353,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
             <div className="helpContainer">
                 <div className="helpBody">
                     <div>
-                        <p className="helpTitle">Tournament Title<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Tournament Title</p>
                         <input
                             type="text"
                             placeholder="Enter Tournament Title"
@@ -363,7 +363,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div>
-                        <p className="helpTitle">Introduction<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Introduction</p>
                         <textarea
                             name="intro"
                             type="textarea"
@@ -376,7 +376,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                     </div>
 
                     <div>
-                        <p className="helpTitle">Description<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Description</p>
                         <textarea
                             name="description"
                             type="textarea"
@@ -388,7 +388,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></textarea>
                     </div>
                     <div>
-                        <p className="helpTitle">Pathway<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Pathway</p>
                         <textarea
                             name="pathway"
                             type="textarea"
@@ -400,7 +400,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></textarea>
                     </div>
                     <div>
-                        <p className="helpTitle">Advantages<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Advantages</p>
                         <textarea
                             name="advantages"
                             type="textarea"
@@ -412,7 +412,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></textarea>
                     </div>
                     <div>
-                        <p className="helpTitle">Rules<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Rules</p>
                         <textarea
                             name="rules"
                             type="textarea"
@@ -604,7 +604,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                 </div>
                 <div className="helpRight tourHead">
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Website<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Website</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -615,7 +615,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Sport<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Sport</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -626,7 +626,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Phone<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Phone</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -637,7 +637,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Email<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Email</p>
                         <input
                             className='tournamentInput'
                             type="email"
@@ -648,7 +648,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Level<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Level</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -659,7 +659,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Category<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Category</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -670,7 +670,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Keywords<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Keywords</p>
                         <input
                             className='tournamentInput'
                             type="text"
@@ -681,7 +681,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <p className="helpTitle">Contact Person<span className="common-fonts redAlert"> *</span></p>
+                        <p className="helpTitle">Contact Person</p>
                         <input
                             className='tournamentInput'
                             type="text"
