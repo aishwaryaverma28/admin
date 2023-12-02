@@ -17,6 +17,7 @@ import ProgressBar from "./ProgressBar";
 import loadScript from "load-script";
 import PlacesAutocomplete from "react-places-autocomplete";
 import Dash from "../../assets/image/red-dash.svg";
+import Dash2 from "../../assets/image/dash2.svg";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -334,13 +335,13 @@ const BmpOverview = () => {
   //       });
   //   }
   // console.log(keywords);
-  
+
   useEffect(() => {
     academyDetails();
     updatedAcadmeyInfo();
     // getAllKeywords();
   }, []);
-  
+
   useEffect(() => {
     if (academyData && academyData.timing) {
       if (academyData.timing === "Always_open") {
@@ -509,7 +510,7 @@ const BmpOverview = () => {
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
-console.log(newAcadmeyData);
+  console.log(newAcadmeyData);
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -523,7 +524,6 @@ console.log(newAcadmeyData);
 
     const spokenLanguagesChanged =
       languageString !== academyData?.spoken_languages;
-
 
     const addressChanged = address !== academyData?.address1;
     const maplinkChanged = mapLink !== academyData?.map;
@@ -681,11 +681,13 @@ console.log(newAcadmeyData);
             </label>
             <input
               type="text"
-              className="common-fonts common-input bmp-input"
+              className={`common-fonts common-input bmp-input ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
-              disabled={status === 0 && role_name === 'Academy'}
+              disabled={status === 0 && role_name === "Academy"}
             />
           </div>
           <div className="bmp-input-flex">
@@ -697,9 +699,11 @@ console.log(newAcadmeyData);
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about || ""}
               id=""
-              className="common-fonts bmp-textarea"
+              className={`common-fonts bmp-textarea ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}
               rows="2"
-              disabled={status === 0 && role_name === 'Academy'}
+              disabled={status === 0 && role_name === "Academy"}
             ></textarea>
           </div>
           <div className="bmp-input-flex">
@@ -714,6 +718,7 @@ console.log(newAcadmeyData);
                 searchOptions={{
                   componentRestrictions: { country: "IN" },
                 }}
+              disabled={status === 0 && role_name === "Academy"}
               >
                 {({
                   getInputProps,
@@ -724,8 +729,12 @@ console.log(newAcadmeyData);
                   <div className="relativeInput">
                     <input
                       type="text"
-                      className="common-fonts common-input bmp-input "
-                      disabled={status === 0 && role_name === 'Academy'}
+                      className={`common-fonts common-input bmp-input ${
+                        status === 0 && role_name === "Academy"
+                          ? "bmp_disable"
+                          : ""
+                      }`}
+                      disabled={status === 0 && role_name === "Academy"}
                       {...getInputProps({
                         placeholder: "Enter your address",
                       })}
@@ -756,73 +765,100 @@ console.log(newAcadmeyData);
             </label>
             <div className="bmp-games">
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Football") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Basketball") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Chess") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Tennis") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("MMA") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Golf") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Hockey") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Badminton") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                }`}
+      className={`common-fonts bmp-game-list ${
+        selectedDays?.includes("Volleyball") &&
+        !(status === 0 && role_name === "Academy")
+          ? "bmp-game-active"
+          : ""
+      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -841,11 +877,15 @@ console.log(newAcadmeyData);
                     <label className="custom-checkbox">
                       <input
                         type="checkbox"
-                        className="cb1"
+                        className={`cb1 ${
+                          status === 0 && role_name === "Academy"
+                            ? "bmp_disable"
+                            : ""
+                        }`}
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
                         onChange={handleCheckboxChange}
-                        disabled={status === 0 && role_name === 'Academy'}
+                        disabled={status === 0 && role_name === "Academy"}
                       />
                       <span className="checkmark"></span>
                     </label>
@@ -858,9 +898,11 @@ console.log(newAcadmeyData);
 
               <input
                 type="number"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${
+                  status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
                 name={index === 0 ? "phone" : "whatsapp"}
-                disabled={status === 0 && role_name === 'Academy'}
+                disabled={status === 0 && role_name === "Academy"}
                 onChange={handleChange}
                 value={
                   isLoading
@@ -876,9 +918,11 @@ console.log(newAcadmeyData);
           {isButtonVisible && (
             <div>
               <button
-                className="common-fonts common-white-blue-button bmp-add-phone"
+                className={`common-fonts common-white-blue-button bmp-add-phone ${
+                  status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
                 onClick={addPhoneNumberInput}
-                disabled={status === 0 && role_name === 'Academy'}
+                disabled={status === 0 && role_name === "Academy"}
               >
                 + Add Phone Number
               </button>
@@ -892,11 +936,13 @@ console.log(newAcadmeyData);
             <input
               type="email"
               name="email"
-              className="common-fonts common-input bmp-input"
+              className={`common-fonts common-input bmp-input ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
-              disabled={status === 0 && role_name === 'Academy'}
+              disabled={status === 0 && role_name === "Academy"}
             />
           </div>
           <div className="bmp-input-flex">
@@ -908,8 +954,10 @@ console.log(newAcadmeyData);
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className="common-fonts common-input bmp-input"
-              disabled={status === 0 && role_name === 'Academy'}
+              className={`common-fonts common-input bmp-input ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}
+              disabled={status === 0 && role_name === "Academy"}
             />
           </div>
 
@@ -918,10 +966,12 @@ console.log(newAcadmeyData);
               Experience:{" "}
             </label>
             <select
-              className="common-fonts common-input langSelect"
+              className={`common-fonts common-input langSelect ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}
               name="experience"
               onChange={handleChange}
-              disabled={status === 0 && role_name === 'Academy'}
+              disabled={status === 0 && role_name === "Academy"}
             >
               <option value="">Select Experience</option>
               <option value="1">1</option>
@@ -957,11 +1007,15 @@ console.log(newAcadmeyData);
                 <label className="custom-checkbox">
                   <input
                     type="checkbox"
-                    className="cb1"
+                    className={`cb1 ${
+                      status === 0 && role_name === "Academy"
+                        ? "bmp_disable"
+                        : ""
+                    }`}
                     name="headerCheckBox"
                     checked={alwaysOpenChecked}
                     onChange={handleAlwaysOpenCheckboxChange}
-                    disabled={status === 0 && role_name === 'Academy'}
+                    disabled={status === 0 && role_name === "Academy"}
                   />
                   <span className="checkmark"></span>
                 </label>
@@ -1017,9 +1071,13 @@ console.log(newAcadmeyData);
                   }}
                 >
                   <button
-                    className="contact-browse-btn common-fonts"
+                    className={`common-fonts contact-browse-btn ${
+                      status === 0 && role_name === "Academy"
+                        ? "bmp_disable"
+                        : ""
+                    }`}
                     onClick={handleButtonClick}
-                    disabled={status === 0 && role_name === 'Academy'}
+                    disabled={status === 0 && role_name === "Academy"}
                   >
                     Browse
                   </button>
@@ -1043,7 +1101,7 @@ console.log(newAcadmeyData);
                       Uploading...
                     </span>
                   ) : (
-                    <span className="common-fonts upload-file-name">
+                    <span className={`common-fonts upload-file-name ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}>
                       {fileName ? fileName : academyData?.logo}
                       {}
                     </span>
@@ -1082,11 +1140,11 @@ console.log(newAcadmeyData);
               </label>
               <input
                 type="text"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
-                disabled={status === 0 && role_name === 'Academy'}
+                disabled={status === 0 && role_name === "Academy"}
               />
             </div>
             {/* <div className="bmp-input-flex">
@@ -1104,11 +1162,11 @@ console.log(newAcadmeyData);
               </label>
               <input
                 type="text"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
-                disabled={status === 0 && role_name === 'Academy'}
+                disabled={status === 0 && role_name === "Academy"}
               />
             </div>
 
@@ -1116,9 +1174,11 @@ console.log(newAcadmeyData);
               <p className="common-fonts bmp-social">Language</p>
 
               <button
-                className="common-white-blue-button"
+              
+                className={`common-white-blue-button ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+
                 onClick={handleAddLanguage}
-                disabled={status === 0 && role_name === 'Academy'}
+                disabled={status === 0 && role_name === "Academy"}
               >
                 + Add Language
               </button>
@@ -1132,8 +1192,9 @@ console.log(newAcadmeyData);
                 <select
                   value={selectedLanguageName}
                   onChange={handlelanguageNameChange}
-                  className="common-fonts common-input langSelect level_input"
-                  disabled={status === 0 && role_name === 'Academy'}
+                  className={`common-fonts common-input langSelect level_input ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+
+                  disabled={status === 0 && role_name === "Academy"}
                 >
                   <option value="">Select your language</option>
                   {languages.map((language) => (
@@ -1149,8 +1210,8 @@ console.log(newAcadmeyData);
                 <select
                   value={selectedLevel}
                   onChange={handleLevelChange}
-                  className="common-fonts common-input langSelect level_input"
-                  disabled={status === 0 && role_name === 'Academy'}
+                  className={`common-fonts common-input langSelect level_input ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+                  disabled={status === 0 && role_name === "Academy"}
                 >
                   <option value="">Select your Level</option>
                   <option value="Beginner">Beginner</option>
@@ -1163,10 +1224,18 @@ console.log(newAcadmeyData);
 
             {mappedLanguages.map((mappedLanguage, index) => (
               <div className="bmp_overview_language_map" key={index}>
-                <p className="common-fonts">
+                <p className={`common-fonts ${
+                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+              }`}>
                   {mappedLanguage.language} ({mappedLanguage.level})
-                </p>
-                <img src={Dash} alt="" onClick={handleDeleteLanguage} />
+                </p>{
+                  status === 0 && role_name === "Academy" ? (
+                    <img src={Dash2} alt="" onClick={handleDeleteLanguage} />
+                  ) : (
+                    <img src={Dash} alt="" onClick={handleDeleteLanguage} />
+                  )
+                }
+                
               </div>
             ))}
           </div>
@@ -1182,8 +1251,9 @@ console.log(newAcadmeyData);
           </button>
         ) : (
           <button
-            className="common-save-button common-save"
+            className={`${status === 0 && role_name === 'Academy' ? "bmp_disable disabledBtn":"common-save-button common-save"}`}
             onClick={handleSubmit}
+            disabled={status === 0 && role_name === 'Academy'}
           >
             Save
           </button>
