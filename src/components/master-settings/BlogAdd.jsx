@@ -37,7 +37,7 @@ const BlogAdd = () => {
   const [stateBtn, setStateBtn] = useState(0);
   const [category, setCategory] = useState([]);
   const decryptedToken = getDecryptedToken();
-  const editorRef = useRef(); // Define the editorRef using useRef
+  const editorRef = useRef();
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -51,7 +51,7 @@ const BlogAdd = () => {
     axios
       .get(GET_TAG_CATEGORY + org_id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -71,7 +71,7 @@ const BlogAdd = () => {
     axios
       .get(GET_TAG_BY_SITE + site +"/"+org_id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -103,7 +103,6 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
           newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
@@ -134,8 +133,6 @@ const BlogAdd = () => {
           org_id: org_id,
         };
       }
-
-      // Call your API with updatedForm object
       axios
         .post(GET_TAG, updatedForm, {
           headers: {

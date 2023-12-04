@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/EmployeeView.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 const TablePaginationBlog = ({ data, rowsPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -51,6 +51,17 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
 
     return pageNumbers;
   };
+  const formatDateWithTimestamp = (timestamp) => {
+    const utcDate = new Date(timestamp);
+    const istDate = new Date(utcDate.getTime() + (5.5 * 60 * 60 * 1000));
+    const formattedDate = istDate.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  
+    return formattedDate;
+  };
 
   return (
     <div>
@@ -62,17 +73,16 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
             <th>Section Count</th>
             {/* <th>Site</th> */}
             <th>Date</th>
-            
+
           </tr>
         </thead>
         <tbody>
           {currentRows.map((row, index) => (
             <tr key={index}>
               <td className="employeeId">{row.id}</td>
-              <td className="employeeName"><Link to={"/lp/settings/blog/view/"+row.id}>{row.title}</Link></td>
+              <td className="employeeName"><Link to={"/lp/settings/blog/view/" + row.id}>{row.title}</Link></td>
               <td className="sectionCount">{row.section_count}</td>
-              {/* <td className="sectionCount">{row.site}</td>               */}
-              <td className="employeeDate">{row.date ? row.date.split("T")[0] : ""}</td>              
+              <td className="employeeDate">{row.date ? formatDateWithTimestamp(row.date) : ""}</td>
             </tr>
           ))}
         </tbody>

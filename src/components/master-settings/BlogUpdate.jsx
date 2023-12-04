@@ -122,7 +122,12 @@ const BlogUpdate = () => {
         console.log(error);
       });
   };
-
+  const formatDateForInput = (timestamp) => {
+    const utcDate = new Date(timestamp);
+    const istDate = new Date(utcDate.getTime() + (5.5 * 60 * 60 * 1000));
+    const formattedDate = istDate.toISOString().split("T")[0];
+    return formattedDate;
+  };
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GETID + id, {
       headers: {
@@ -142,7 +147,7 @@ const BlogUpdate = () => {
         keywords: data?.keywords,
         tag: data?.tag,
         image: data?.image,
-        date: data?.date?.split("T")[0],
+        date: data?.date ? formatDateForInput(data.date) : "",
         site: data?.site,
         route: data?.url,
       });
@@ -193,7 +198,7 @@ const BlogUpdate = () => {
 
   const getTagBySite = (site) => {
     axios
-      .get(GET_TAG_BY_SITE + site+"/"+org_id, {
+      .get(GET_TAG_BY_SITE + site + "/" + org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
@@ -378,10 +383,7 @@ const BlogUpdate = () => {
       });
     setSectionTitle("");
     setSectionSort(parseInt(sectionSort) + 1);
-    // setChildData("");
     setDataFromChild("");
-    // setShowEditButton(false);
-    // setSelectedImage("");
     setStateBtn(1);
     editorRef.current.clearEditorContent();
     setBlogImg3("");
@@ -389,7 +391,6 @@ const BlogUpdate = () => {
 
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
-    // e.preventDefault();
     const newSectionData = [...sectionData];
     newSectionData.splice(index, 1);
     setSectionData(newSectionData);
@@ -495,7 +496,7 @@ const BlogUpdate = () => {
         });
     }
   };
-  
+
   const submitImage3 = (file) => {
     const selectedImage = file;
     if (selectedImage) {
@@ -611,7 +612,7 @@ const BlogUpdate = () => {
               style={{ display: "none" }}
             />
             <div className="from-filed">
-            <label htmlFor="title" className="common-fonts blogs-new-label">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
                 Blog Title
               </label>
               <input
@@ -624,7 +625,7 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-filed">
-            <label htmlFor="title" className="common-fonts blogs-new-label">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
                 Url
               </label>
               <input
@@ -652,13 +653,13 @@ const BlogUpdate = () => {
                   Change Image
                 </button>
                 <div className="blog-new-img">
-                {blogImg2 ? blogImgName : <></>}
-                  </div>
-               
+                  {blogImg2 ? blogImgName : <></>}
+                </div>
+
               </div>
             </div>
             <div className="from-filed">
-            <label htmlFor="title" className="common-fonts blogs-new-label">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
                 description
               </label>
               <input
@@ -684,7 +685,7 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-filed">
-            <label htmlFor="title" className="common-fonts blogs-new-label">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
                 meta description
               </label>
               <input
@@ -697,7 +698,7 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-filed">
-            <label htmlFor="title" className="common-fonts blogs-new-label">
+              <label htmlFor="title" className="common-fonts blogs-new-label">
                 keywords
               </label>
               <input
@@ -712,17 +713,17 @@ const BlogUpdate = () => {
             </div>
             <>
               <div className="addSection">
-              <input
-                    type="file"
-                    id="imageUpload"
-                    ref={fileInputRef3}
-                    onChange={handleFileChange3}
-                    style={{ display: "none" }}
-                  />
+                <input
+                  type="file"
+                  id="imageUpload"
+                  ref={fileInputRef3}
+                  onChange={handleFileChange3}
+                  style={{ display: "none" }}
+                />
                 <div className="from-blog-section from-filed">
-                <label htmlFor="title" className="common-fonts blogs-new-label">
-                Section Title<span className="common-fonts redAlert"> *</span>
-              </label>
+                  <label htmlFor="title" className="common-fonts blogs-new-label">
+                    Section Title<span className="common-fonts redAlert"> *</span>
+                  </label>
                   <input
                     type="text"
                     name="sectionTitle"
@@ -731,26 +732,26 @@ const BlogUpdate = () => {
                     onChange={handleTitle}
                     value={sectionTitle}
                   />
-                 
 
-                   <div className="formBtnBox">
-                   <div className="blog-url-input-2 blog-sort">
-                   <label
+
+                  <div className="formBtnBox">
+                    <div className="blog-url-input-2 blog-sort">
+                      <label
                         htmlFor="title"
                         className="common-fonts blogs-new-label"
                       >
                         Sort<span className="common-fonts redAlert"> *</span>
                       </label>
                       <input
-                      type="text"
-                      name="Sort"
-                      id="Sort"
-                      value={sectionSort}
-                      placeholder="Sort"
-                      onChange={handleSecSortChange}
-                    />
-                   </div>
-                    
+                        type="text"
+                        name="Sort"
+                        id="Sort"
+                        value={sectionSort}
+                        placeholder="Sort"
+                        onChange={handleSecSortChange}
+                      />
+                    </div>
+
                     <div className="blog-browse-img">
                       <button
                         className="common-fonts blog-add-img add-img-2 add-img-3"
@@ -758,7 +759,7 @@ const BlogUpdate = () => {
                       >
                         Add Image
                       </button>
-                      
+
                       <div className="blog-new-img">{blogImg3 ? blogImgName2 : <></>}</div>
                     </div>
                     <button
@@ -767,7 +768,7 @@ const BlogUpdate = () => {
                     >
                       Add Section<span className="common-fonts redAlert"> *</span>
                     </button>
-                  </div> 
+                  </div>
 
 
                 </div>
@@ -957,8 +958,8 @@ const BlogUpdate = () => {
                     type="date"
                     name="date"
                     id="date"
-                    value={formData.date}
-                    placeholder="please publish date"
+                    value={formData?.date || ""}
+                    placeholder="Please select a publish date"
                     onChange={handleChange}
                   />
                   <div className="saveBtnRight">
@@ -993,7 +994,7 @@ const BlogUpdate = () => {
                   </div>
                 </div>
                 <div className="tagData tag-box tag-box-2">
-                <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
+                  <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
                 </div>
               </div>
             </div>

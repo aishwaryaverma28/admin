@@ -5,9 +5,9 @@ import Map from "../../assets/image/map.png";
 import "chart.js/auto";
 import axios from "axios";
 import {
-  CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY,
+  GET_UPDATED_ACADEMY_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -19,7 +19,11 @@ import Dash from "../../assets/image/red-dash.svg";
 const OverviewById = () => {
   const { id } = useParams();
   localStorage.setItem("academy_id", id);
+  const role_name = localStorage.getItem("role_name");
   const decryptedToken = getDecryptedToken();
+  const [status, setStatus] = useState(null);
+  const [newAcadmeyData, setNewAcadmeyData] = useState(null);
+  const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
   const [academyData, setAcademyData] = useState({});
   const [academyDataOld, setAcademyDataOld] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
@@ -86,7 +90,46 @@ const OverviewById = () => {
     "killer",
     "kill you",
   ]);
-
+  const updatedAcadmeyInfo = () => {
+    axios
+      .post(
+        GET_UPDATED_ACADEMY_INFO,
+        {
+          academy_id: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const statusValue = response?.data?.data[0]?.status;
+        setStatus(statusValue);
+        const rawData = response?.data?.data[0];
+        const filteredData = Object.fromEntries(
+          Object.entries(rawData).filter(
+            ([key, value]) =>
+              value !== null &&
+              ![
+                "creation_date",
+                "update_date",
+                "status",
+                "id",
+                "academy_id",
+              ].includes(key)
+          )
+        );
+        setNewAcadmeyData(filteredData);
+        const keys = Object.keys(filteredData);
+      setKeysOfNewAcadmeyData(keys);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  console.log(newAcadmeyData);
+  console.log(keysOfNewAcadmeyData);
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
@@ -104,8 +147,6 @@ const OverviewById = () => {
         level: selectedLevel,
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
-
-      // Create a string with all languages and levels
       joinLanguage = mappedLanguages
         .concat(newLanguage)
         .map((lang) => `${lang.language}(${lang.level})`)
@@ -244,11 +285,8 @@ const OverviewById = () => {
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
         console.log(response?.data?.data[0]);
-        console.log("hyy");
         setAddress(response?.data?.data[0]?.address1 || "");
-
         setProgress(response?.data?.data[0]?.completion_percentage);
-
         const languages =
           response?.data?.data[0]?.spoken_languages?.split(", ");
 
@@ -277,31 +315,9 @@ const OverviewById = () => {
         setIsLoading(false);
       });
   };
-  const createFolder = async () => {
-    const cloudinaryFolder = "bookmyplayer/academy";
-    const apiUrl = CREATE_FOLDER;
-    const body = {
-      folderPath: cloudinaryFolder + "/" + id,
-    };
-    axios
-      .post(apiUrl, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        // console.log(response)
-      })
-      .catch((error) => {
-        // toast.error("Some Error Occoured!", {
-        //   position: "top-center",
-        //   autoClose: 2000,
-        // });
-      });
-  };
   useEffect(() => {
-    createFolder();
     academyDetails();
+    updatedAcadmeyInfo();
   }, []);
   useEffect(() => {
     if (academyData && academyData.timing) {
@@ -319,7 +335,6 @@ const OverviewById = () => {
     }
   }, [academyData]);
   useEffect(() => {
-    // Load the Google Maps JavaScript API script
     if (!googleScriptLoaded) {
       loadScript(
         "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
@@ -981,7 +996,7 @@ const OverviewById = () => {
             <div className="bmp-upload">
               <div className="contact-browse deal-doc-file">
                 <span
-                  className="common-fonts common-input contact-tab-input"
+                  className={`common-fonts common-input contact-tab-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("logo") ? "redBorderLine" : ""}`}
                   style={{
                     position: "relative",
                     marginRight: "10px",

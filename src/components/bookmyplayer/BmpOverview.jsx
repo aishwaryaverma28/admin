@@ -4,7 +4,6 @@ import Map from "../../assets/image/map.png";
 import "chart.js/auto";
 import axios from "axios";
 import {
-  CREATE_FOLDER,
   GET_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
@@ -145,8 +144,6 @@ const BmpOverview = () => {
         level: selectedLevel,
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
-
-      // Create a string with all languages and levels
       const languageString = mappedLanguages
         .concat(newLanguage)
         .map((lang) => `${lang.language}(${lang.level})`)
@@ -184,7 +181,6 @@ const BmpOverview = () => {
       script.onerror = (error) =>
         console.error("Error loading Google Maps:", error);
       document.head.appendChild(script);
-
       return () => {
         document.head.removeChild(script);
       };
@@ -199,11 +195,9 @@ const BmpOverview = () => {
       setNumber2(0);
     }
     setStateBtn(1);
-
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-
     placesService.textSearch({ query: selectedAddress }, (results, status) => {
       if (
         status === window.google.maps.places.PlacesServiceStatus.OK &&
@@ -213,13 +207,11 @@ const BmpOverview = () => {
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
         setCoordinate(`${selectedLatitude},${selectedLongitude}`);
-
         if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
           setNumber4(1);
         } else {
           setNumber4(0);
         }
-
         updateField("coordinate");
       }
     });
@@ -502,7 +494,7 @@ const BmpOverview = () => {
   };
 
   const addPhoneNumberInput = () => {
-    setIsWhatsappActivated(false); // Uncheck the checkbox
+    setIsWhatsappActivated(false);
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };

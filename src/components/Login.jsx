@@ -1,24 +1,6 @@
-// employee login
-// {
-//     "username": "employee",
-//     "password": "123"
-// }
-// =========================
-// hr login
-// {
-//     "username": "hr",
-//     "password": "123"
-// }
-// ==================
-// client login
-// {
-//     "username": "client",
-//     "password": "123"
-// }
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { LOGIN, OTP } from "./utils/Constants";
+import { LOGIN, BMP_LOGIN, OTP } from "./utils/Constants";
 import { useNavigate } from "react-router-dom";
 import "./styles/Login.css";
 import LoginHeader from "./LoginHeader";
@@ -33,13 +15,12 @@ const Login = () => {
   const navigate = useNavigate();
     
   useEffect(() => {
-    // Check if a JWT token is already stored in localStorage
     const encryptedToken = localStorage.getItem("jwtToken");
     if (encryptedToken) {
       const landingUrl = localStorage.getItem("landingUrl");
       navigate(landingUrl);
     }
-  }, []); // Empty dependency array to run only once on component mount
+  }, []);
 
   const handleUserName = (e) => {
     setEmail(e.target.value);
@@ -100,6 +81,57 @@ const Login = () => {
         }
       });
   };
+  const handleSubmit2 = (e) => {
+    e.preventDefault();
+    const updateForm = {
+      username: email,
+      otp: password,
+    };
+    axios
+      .post(BMP_LOGIN, updateForm)
+      .then((response) => {
+        const data = response?.data;
+        const status = response?.data?.status;
+        console.log(data);
+        if (status === 0) {
+          alert(data.message);
+        } else if (status === 1) {
+          const token = response?.data?.token;
+          const encryptedToken = CryptoJS.AES.encrypt(
+            token,
+            secretKey
+          ).toString();
+          localStorage.setItem("jwtToken", encryptedToken);
+          const role_name = data?.user?.name;
+          localStorage.setItem("role_name", role_name);
+          localStorage.setItem("id", data?.user?.id);
+          const landingUrl = response?.data?.landingurl;
+          localStorage.setItem("landingUrl", landingUrl);
+          const userPath = data?.user?.permissions?.split(",");
+          userPath.push(landingUrl);
+          const userPathTot = userPath.join(",");
+          const encryptedUserPathTot = CryptoJS.AES.encrypt(
+            userPathTot,
+            secretKey
+          ).toString();
+          localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
+          navigate(landingUrl);
+        }
+      })
+      .catch((error) => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message === "Invalid or expired token."
+        ) {
+          alert("Your session has expired. Please login again.");
+          localStorage.removeItem("jwtToken");
+          navigate("/");
+        } else {
+          console.log(error);
+        }
+      });
+  };
   const forgetPass = (e) => {
     e.preventDefault();
     if(email==="")
@@ -136,7 +168,6 @@ const Login = () => {
         }
       });
   }
-  // Conditionally render the login form or null based on the presence of the token
   const renderLoginForm = () => {
     const encryptedToken = localStorage.getItem("jwtToken");
     return encryptedToken ? null : (

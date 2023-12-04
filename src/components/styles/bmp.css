@@ -539,6 +539,9 @@
   justify-content: start;
   align-items: center;
 }
+.redBorderLine{
+  border: 1px solid #FF8C89;
+}
 .bmp-upload-2 {
   display: flex;
   justify-content: start;

@@ -200,13 +200,13 @@ export const ENVELOPE_DETAILS = start + "/thirdPartyApiRouter/docusign/envelope/
 
 
 //============================================================bmp apis
+export const BMP_LOGIN = start +  "/bmp/login";
 export const GET_ACADEMY = start + "/bmp/academy/get/";
 export const UPDATE_ACADEMY_TABLE2 = start+ "/bmp/academy/addupdaterequest";
 export const UPDATE_ACADEMY = start + "/bmp/academy/update/";
 export const ADD_BATCH = start + "/bmp/batch/add";
 export const GET_BATCH = start + "/bmp/batch/get";
 export const UPDATE_BATCH = start + "/bmp/batch/update/";
-export const CREATE_FOLDER = "http://core.leadplaner.com:3001/api/bmp/cloudinary/createFolder";
 export const GET_ALL_REVIEW = start + "/bmp/academy/getreviews";
 export const GET_REVIEW_REPLY = start + "/bmp/academy/getreviewreply";
 export const GET_ACC_REVIEW = start + "/bmp/academy/getreviewreport";
