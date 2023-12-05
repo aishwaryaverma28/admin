@@ -502,7 +502,7 @@ const BmpOverview = () => {
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
-  console.log(newAcadmeyData);
+  
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -648,6 +648,7 @@ const BmpOverview = () => {
           });
         }
         academyDetails();
+        updatedAcadmeyInfo();
       })
       .catch((error) => {
         console.log(error);

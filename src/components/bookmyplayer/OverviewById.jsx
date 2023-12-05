@@ -7,6 +7,8 @@ import axios from "axios";
 import {
   GET_ACADEMY,
   UPDATE_ACADEMY,
+  UPDATE_ACADMEY_STATUS,
+  GET_APPROVAL,
   GET_UPDATED_ACADEMY_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -21,6 +23,7 @@ const OverviewById = () => {
   localStorage.setItem("academy_id", id);
   const role_name = localStorage.getItem("role_name");
   const decryptedToken = getDecryptedToken();
+  const [revokeId, setRevokeId] = useState(null);
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
@@ -90,6 +93,8 @@ const OverviewById = () => {
     "killer",
     "kill you",
   ]);
+
+  //===================================================================extra functions for approve n disapprove
   const updatedAcadmeyInfo = () => {
     axios
       .post(
@@ -104,6 +109,8 @@ const OverviewById = () => {
         }
       )
       .then((response) => {
+        console.log(response?.data?.data[0])
+        if(response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null){
         const statusValue = response?.data?.data[0]?.status;
         setStatus(statusValue);
         const rawData = response?.data?.data[0];
@@ -123,23 +130,118 @@ const OverviewById = () => {
         setNewAcadmeyData(filteredData);
         const keys = Object.keys(filteredData);
         setKeysOfNewAcadmeyData(keys);
+            }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  console.log(newAcadmeyData);
   const updateAcadmeyData = () => {
     if (newAcadmeyData && Object.keys(newAcadmeyData).length > 0) {
       setAcademyData((prevAcadmeyData) => {
         return { ...prevAcadmeyData, ...newAcadmeyData };
       });
     }
+    if (keysOfNewAcadmeyData.includes("sport")) {
+      setSelectedDays(newAcadmeyData?.sport?.split(",") || []);
+    }
+    if (keysOfNewAcadmeyData.includes("spoken_languages")) {
+      const languages = newAcadmeyData?.spoken_languages?.split(", ");
+      const newLanguage = languages?.map((lang) => {
+        const [language, level] = lang.split("(");
+        return {
+          language: language.trim(),
+          level: level.substring(0, level.length - 1).trim(),
+        };
+      });
+      setMappedLanguages([...newLanguage]);
+      
+    }
+    if (keysOfNewAcadmeyData.includes("timing")) {
+      if (academyData && academyData.timing) {
+        if (academyData.timing === "Always_open") {
+          setAlwaysOpenChecked(true);
+        } else {
+          const timingParts = academyData.timing.split(" to ");
+          if (timingParts.length === 2) {
+            const [startTime, endTime] = timingParts;
+            setAlwaysOpenChecked(false);
+            setSelectedStartTime(startTime);
+            setSelectedEndTime(endTime);
+          }
+        }
+      }
+    }
+    if (keysOfNewAcadmeyData.includes("logo")) {
+      setFileName(newAcadmeyData.logo);
+    }
   };
   useEffect(() => {
-    updateAcadmeyData();
-  }, [newAcadmeyData]);
-  console.log(academyData);
+    if (status === 0 && role_name === "Academy_Admin") {
+      updateAcadmeyData();
+      approvalData();
+    }
+  }, [newAcadmeyData, status, role_name]);
+
+// console.log(newAcadmeyData);
+// console.log(academyData);
+// console.log(status);
+
+  const approvalData = () => {
+    axios.post(GET_APPROVAL, {
+      academy_id: id
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }).then((response) => {
+      const newData = response?.data?.data?.map((item) => {
+        if (item.status === 0) {
+          setRevokeId(item.id);
+        }
+      })
+    })
+  }
+  //==============================================================acadmey data
+  const academyDetails = () => {
+    axios
+      .get(GET_ACADEMY + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
+        setAcademyData(response?.data?.data[0]);
+        setAcademyDataOld(response?.data?.data[0]);
+        setAddress(response?.data?.data[0]?.address1 || "");
+        setProgress(response?.data?.data[0]?.completion_percentage);
+        if (
+          response?.data?.data[0]?.completion_percentage !== "" &&
+          response?.data?.data[0]?.completion_percentage !== null
+        ) {
+          setProgressArray(
+            response?.data?.data[0]?.completion_percentage.split(",")
+          );
+        }
+        const languages =
+          response?.data?.data[0]?.spoken_languages?.split(", ");
+
+        const newLanguage = languages?.map((lang) => {
+          const [language, level] = lang.split("(");
+          return {
+            language: language.trim(),
+            level: level.substring(0, level.length - 1).trim(),
+          };
+        });
+        setMappedLanguages([...newLanguage]);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  };
   //=======================================================================language
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
@@ -156,10 +258,7 @@ const OverviewById = () => {
         level: selectedLevel,
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
-      joinLanguage = mappedLanguages
-        .concat(newLanguage)
-        .map((lang) => `${lang.language}(${lang.level})`)
-        .join(", ");
+      joinLanguage = mappedLanguages?.concat(newLanguage)?.map((lang) => `${lang.language}(${lang.level})`)?.join(", ");
       setLanguageString(joinLanguage);
     }
   };
@@ -182,7 +281,7 @@ const OverviewById = () => {
       .join(", ");
     setLanguageString(joinLanguage);
   };
-//=================================================================google address
+  //=================================================================google address
   useEffect(() => {
     if (!googleScriptLoaded) {
       const script = document.createElement("script");
@@ -206,28 +305,23 @@ const OverviewById = () => {
       setNumber2(0)
     }
     setStateBtn(1);
-
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-
     placesService.textSearch({ query: selectedAddress }, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         const location = results[0].geometry.location;
         const selectedLatitude = location.lat();
         const selectedLongitude = location.lng();
         setCoordinate(`${selectedLatitude},${selectedLongitude}`);
-
         if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
           setNumber4(1)
         } else {
           setNumber4(0)
         }
-
         updateField("coordinate");
       }
     });
-
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
       selectedAddress
     )}`;
@@ -282,48 +376,7 @@ const OverviewById = () => {
     setStateBtn(1);
   };
 
-  const academyDetails = () => {
-    axios
-      .get(GET_ACADEMY + id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
-        setAcademyData(response?.data?.data[0]);
-        setAcademyDataOld(response?.data?.data[0]);
-        console.log(response?.data?.data[0]);
-        setAddress(response?.data?.data[0]?.address1 || "");
-        setProgress(response?.data?.data[0]?.completion_percentage);
-        const languages =
-          response?.data?.data[0]?.spoken_languages?.split(", ");
 
-        const newLanguage = languages.map((lang) => {
-          const [language, level] = lang.split("(");
-          return {
-            language: language.trim(),
-            level: level.substring(0, level.length - 1).trim(),
-          };
-        });
-
-        setMappedLanguages([...newLanguage]);
-
-        if (
-          response?.data?.data[0]?.completion_percentage !== "" &&
-          response?.data?.data[0]?.completion_percentage !== null
-        ) {
-          setProgressArray(
-            response?.data?.data[0]?.completion_percentage.split(",")
-          );
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
   useEffect(() => {
     academyDetails();
     updatedAcadmeyInfo();
@@ -505,20 +558,14 @@ const OverviewById = () => {
     const combinedProgress = progressArray?.join(",");
     const spokenLanguagesChanged =
       languageString !== academyData?.spoken_languages;
-
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
-
     const addressChanged = address !== academyData?.address1;
     const maplinkChanged = mapLink !== academyData?.map;
     const coordinateChanged = coordinate !== academyData?.coordinate;
-
     const timingChanged = startAndEndTime !== academyData?.timing;
-
     const logoChanged = fileName !== academyData?.fileName;
-
     const progressChanged = combinedProgress !== academyData?.completion_percentage;
-
     const updatedFormData = {};
     const hasChanged = (field) =>
       academyData?.[field] !== academyDataOld?.[field];
@@ -528,67 +575,51 @@ const OverviewById = () => {
     if (hasChanged("about")) {
       updatedFormData.about = academyData.about;
     }
-
     if (hasChanged("phone")) {
       updatedFormData.phone = academyData.phone;
     }
-
     if (hasChanged("whatsapp")) {
       updatedFormData.whatsapp = academyData.whatsapp;
     }
-
     if (hasChanged("experience")) {
       updatedFormData.experience = academyData.experience;
     }
-
     if (hasChanged("facebook")) {
       updatedFormData.facebook = academyData.facebook;
     }
-
     if (hasChanged("instagram")) {
       updatedFormData.instagram = academyData.instagram;
     }
-
     if (hasChanged("website")) {
       updatedFormData.website = academyData.website;
     }
-
     if (hasChanged("email")) {
       updatedFormData.email = academyData.email;
     }
-
     if (hasChanged("timing")) {
       updatedFormData.timing = startAndEndTime;
     }
-
-
     if (spokenLanguagesChanged && languageString !== "") {
       updatedFormData.spoken_languages = languageString;
     }
-
     if (number === 1) {
       updatedFormData.spoken_languages = languageString;
     }
-
     if (sportsChanged) {
       updatedFormData.sport = selectedDaysString?.replace(/^,+/g, "");
     }
     if (timingChanged) {
       updatedFormData.timing = startAndEndTime;
     }
-
     if (logoChanged && fileName !== "") {
       updatedFormData.logo = fileName;
     }
-
     if (progressChanged && combinedProgress !== "") {
       updatedFormData.completion_percentage = combinedProgress;
     }
-
     if (number1 === 1) {
       updatedFormData.logo = fileName;
     }
-
     if (addressChanged && address !== "") {
       updatedFormData.address1 = address;
     }
@@ -598,7 +629,6 @@ const OverviewById = () => {
     if (coordinateChanged && coordinate !== "") {
       updatedFormData.coordinate = coordinate;
     }
-
     if (number2 === 1) {
       updatedFormData.address1 = address;
     }
@@ -608,9 +638,6 @@ const OverviewById = () => {
     if (number4 === 1) {
       updatedFormData.coordinate = coordinate;
     }
-    console.log(updatedFormData);
-    console.log("hrrr");
-
     axios
       .put(UPDATE_ACADEMY + id, updatedFormData, {
         headers: {
@@ -642,13 +669,112 @@ const OverviewById = () => {
         setStateBtn(0);
       });
   }
+  //==========================================================================approve function
+  const handleApprove = () => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        ApproveSubmit();
+      }).catch((error) => {
+        console.log(error);
+      })
+    setRevokeId(null);
+  }
+  const ApproveSubmit = () => {
+    if (!progressArray?.includes("1")) {
+      progressArray.push("1");
+      setProgressArray(progressArray);
+    }
+    const combinedProgress = progressArray?.join(",");
 
+    const updatedFormData = {
+      completion_percentage: combinedProgress,
+      name: academyData.name,
+      about: academyData.about,
+      phone: academyData.phone,
+      whatsapp: academyData.whatsapp,
+      sport: selectedDaysString?.replace(/^,+/g, ""),
+      experience: academyData.experience,
+      facebook: academyData.facebook,
+      instagram:academyData.instagram,
+      website:academyData.website,
+      email: academyData.email,
+      timing: startAndEndTime,
+      spoken_languages: languageString,
+      logo: fileName,
+      // address1: address,
+      // map: mapLink,
+      // coordinate: coordinate
+    }
+    axios
+      .put(UPDATE_ACADEMY + id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        updatedAcadmeyInfo();
+        academyDetails();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+      .finally(() => {
+        setStateBtn(0);
+      });
+  }
+
+  //==========================================================================approve function
+  const handleDisapprove = () => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+
+      }).catch((error) => {
+        console.log(error);
+      })
+    setRevokeId(null);
+    updatedAcadmeyInfo();
+    academyDetails();
+  }
   return (
     <>
       <div className="bmp-container">
         <div>
           <p className="common-fonts bmp-top">Address & Contact details</p>
-
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Academy name
@@ -707,7 +833,7 @@ const OverviewById = () => {
                         : {})}
                     >
                       {loading && <div>Loading...</div>}
-                      {suggestions.map((suggestion) => (
+                      {suggestions?.map((suggestion) => (
                         <div
                           {...getSuggestionItemProps(suggestion)}
                           key={suggestion.placeId}
@@ -791,7 +917,7 @@ const OverviewById = () => {
               </div>
             </div>
           </div>
-          {[...Array(phoneNumberCount)].map((_, index) => (
+          {[...Array(phoneNumberCount)]?.map((_, index) => (
             <div className="bmp-input-flex" key={index}>
               <div className="bmp-phone-field">
                 <label htmlFor="" className="common-fonts bmp-academy-name">
@@ -932,7 +1058,7 @@ const OverviewById = () => {
                   onChange={handleTimeChange}
                 >
                   <option value="">Select Opening time</option>
-                  {timeOptions.map((time, index) => (
+                  {timeOptions?.map((time, index) => (
                     <option key={index} value={time}>
                       {time}
                     </option>
@@ -945,7 +1071,7 @@ const OverviewById = () => {
                   onChange={handleEndTimeChange}
                 >
                   <option value="">Select closing time</option>
-                  {timeOptions.map((time, index) => (
+                  {timeOptions?.map((time, index) => (
                     <option key={index} value={time}>
                       {time}
                     </option>
@@ -1077,7 +1203,7 @@ const OverviewById = () => {
                   className="common-fonts common-input langSelect level_input"
                 >
                   <option value="">Select your language</option>
-                  {languages.map((language) => (
+                  {languages?.map((language) => (
                     <option key={language.value} value={language.value}>
                       {language.label}
                     </option>
@@ -1101,7 +1227,7 @@ const OverviewById = () => {
               </div>
             </div>
 
-            {mappedLanguages.map((mappedLanguage, index) => (
+            {mappedLanguages?.map((mappedLanguage, index) => (
               <div className={`bmp_overview_language_map ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}`} key={index}>
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
@@ -1117,19 +1243,19 @@ const OverviewById = () => {
         </div>
       </div>
 
-      <div className="bmp-bottom-btn">        
+      <div className="bmp-bottom-btn">
         {status === 0 && role_name === "Academy_Admin" ? <>
-          <button
+          <button onClick={handleApprove}
             className="common-save-button common-save">
             Approve
           </button>
-          <button
+          <button onClick={handleDisapprove}
             className="common-save-button common-delete-button">
             Disapprove
           </button>
         </>
           : <>
-          <button className="common-fonts common-white-button">cancel</button>
+            <button className="common-fonts common-white-button">cancel</button>
             {stateBtn === 0 ? (
               <button className="disabledBtn">Save</button>
             ) : (
