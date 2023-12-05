@@ -32,7 +32,7 @@ const TournamentModal = ({ onClose, id }) => {
   //==============================================================multiple image upload
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
-    if (nameParts.length > 1) {
+    if (nameParts?.length > 1) {
       const namePart = nameParts.slice(0, -1).join(".");
       const processedName = namePart.replace(/[^\w-]/g, "-");
       return `${processedName}.${nameParts[nameParts.length - 1]}`;

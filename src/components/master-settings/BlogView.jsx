@@ -24,7 +24,7 @@ const EmployeeView = () => {
         },
       })
       .then((response) => {
-        setTableData(response.data.data);
+        setTableData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -44,10 +44,10 @@ const EmployeeView = () => {
 
   const filteredItems = (tableData || []).filter((item) => {
     const values = Object.values(item);
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < values?.length; i++) {
       if (
         values[i] &&
-        values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())
+        values[i]?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase())
       ) {
         return true;
       }

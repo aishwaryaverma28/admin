@@ -358,7 +358,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Title"
                             name="name"
-                            value={formData.name}
+                            value={formData?.name}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -370,7 +370,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             rows="3"
                             cols="3"
                             placeholder="Enter Tournament Introduction"
-                            value={formData.intro}
+                            value={formData?.intro}
                             onChange={handleChange}
                         ></textarea>
                     </div>
@@ -383,7 +383,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             rows="3"
                             cols="3"
                             placeholder="Enter Tournament Description"
-                            value={formData.description}
+                            value={formData?.description}
                             onChange={handleChange}
                         ></textarea>
                     </div>
@@ -395,7 +395,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             rows="3"
                             cols="3"
                             placeholder="Enter Tournament Pathway"
-                            value={formData.pathway}
+                            value={formData?.pathway}
                             onChange={handleChange}
                         ></textarea>
                     </div>
@@ -407,7 +407,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             rows="3"
                             cols="3"
                             placeholder="Enter Tournament Advantages"
-                            value={formData.advantages}
+                            value={formData?.advantages}
                             onChange={handleChange}
                         ></textarea>
                     </div>
@@ -419,7 +419,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             rows="3"
                             cols="3"
                             placeholder="Enter Tournament Rules"
-                            value={formData.rules}
+                            value={formData?.rules}
                             onChange={handleChange}
                         ></textarea>
                     </div>
@@ -610,7 +610,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Website"
                             name="website"
-                            value={formData.website}
+                            value={formData?.website}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -621,7 +621,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Sport"
                             name="sport"
-                            value={formData.sport}
+                            value={formData?.sport}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -632,7 +632,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Phone"
                             name="phone"
-                            value={formData.phone}
+                            value={formData?.phone}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -643,7 +643,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="email"
                             placeholder="Enter Tournament Email"
                             name="email"
-                            value={formData.email}
+                            value={formData?.email}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -654,7 +654,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Level"
                             name="level"
-                            value={formData.level}
+                            value={formData?.level}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -665,7 +665,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Category"
                             name="category"
-                            value={formData.category}
+                            value={formData?.category}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -676,7 +676,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Keywords"
                             name="keywords"
-                            value={formData.keywords}
+                            value={formData?.keywords}
                             onChange={handleChange}
                         ></input>
                     </div>
@@ -687,7 +687,7 @@ axios.put(UPDATE_LEAGUE + id, updatedFormData,{
                             type="text"
                             placeholder="Enter Tournament Contact Person"
                             name="contact"
-                            value={formData.contact}
+                            value={formData?.contact}
                             onChange={handleChange}
                         ></input>
                     </div>

@@ -77,12 +77,12 @@ const TablePaginationBlog = ({ data, rowsPerPage }) => {
           </tr>
         </thead>
         <tbody>
-          {currentRows.map((row, index) => (
+          {currentRows?.map((row, index) => (
             <tr key={index}>
-              <td className="employeeId">{row.id}</td>
-              <td className="employeeName"><Link to={"/lp/settings/blog/view/" + row.id}>{row.title}</Link></td>
-              <td className="sectionCount">{row.section_count}</td>
-              <td className="employeeDate">{row.date ? formatDateWithTimestamp(row.date) : ""}</td>
+              <td className="employeeId">{row?.id}</td>
+              <td className="employeeName"><Link to={"/lp/settings/blog/view/" + row.id}>{row?.title}</Link></td>
+              <td className="sectionCount">{row?.section_count}</td>
+              <td className="employeeDate">{row?.date ? formatDateWithTimestamp(row?.date) : ""}</td>
             </tr>
           ))}
         </tbody>

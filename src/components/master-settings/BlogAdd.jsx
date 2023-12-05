@@ -141,7 +141,7 @@ const BlogAdd = () => {
         })
         .then((response) => {
           setOptions(
-            response?.data?.data.map((item) => ({ id: item.id, tag: item.tag }))
+            response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
           );
         })
         .catch((error) => {
@@ -151,9 +151,9 @@ const BlogAdd = () => {
       const id = event.target.value;
       setStateBtn(1);
       setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-      options.map((option) => {
-        if (option.id == id) {
-          setSelectedTags((prev) => [...prev, option.tag]);
+      options?.map((option) => {
+        if (option?.id == id) {
+          setSelectedTags((prev) => [...prev, option?.tag]);
         }
       });
     }
@@ -161,11 +161,11 @@ const BlogAdd = () => {
 
   const handleTagRemoval = (index) => {
     setStateBtn(1);
-    const numbersArray = tagId.split(",");
-    numbersArray.splice(index, 1);
-    const updatedNumbersString = numbersArray.join(",");
+    const numbersArray = tagId?.split(",");
+    numbersArray?.splice(index, 1);
+    const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
-    const tagUpdate = selectedTags.splice(index, 1);
+    const tagUpdate = selectedTags?.splice(index, 1);
   };
 
   //===================================================================== function to add date in the form data
@@ -272,8 +272,6 @@ const BlogAdd = () => {
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
     setDataFromChild("");
-    // setShowEditButton(false);
-    // setSelectedImage("");
     setStateBtn(1);
     setBlogImg2("");
     editorRef.current.clearEditorContent();
@@ -313,10 +311,6 @@ const BlogAdd = () => {
     setBlogImg("");
     setSectionSort("");
     setDataFromChild("");
-    // setShowUploadButton(false);
-    // setShowEditButton(false);
-    // setShowChooseButton(false);
-    // setSelectedImage(null);
   };
 
   function handleFormSubmit(event) {
@@ -324,12 +318,11 @@ const BlogAdd = () => {
     const updatedFormData = {
       ...formData,
       tag: tagId,
-      // image: imageName,
       image: blogImg,
       date: selectedDate,
       sections: sectionData,
       site: selectSite,
-      route: formData.url,
+      route: formData?.url,
       alt: "",
       org_id: org_id,
     };
@@ -429,7 +422,7 @@ const BlogAdd = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setBlogImg2(selectedImage.name);
+          setBlogImg2(selectedImage?.name);
         })
         .catch((err) => {
           console.log(err);
@@ -465,7 +458,7 @@ const BlogAdd = () => {
                 name="title"
                 id="title"
                 placeholder="Enter Blog Title"
-                value={formData.title}
+                value={formData?.title}
                 onChange={handleChange}
               />
             </div>
@@ -480,7 +473,7 @@ const BlogAdd = () => {
                   name="url"
                   id="url"
                   placeholder="Url"
-                  value={formData.url}
+                  value={formData?.url}
                   onChange={handleChange}
                   disabled
                 />
@@ -511,7 +504,7 @@ const BlogAdd = () => {
                 name="description"
                 id="description"
                 placeholder="Description"
-                value={formData.description}
+                value={formData?.description}
                 onChange={handleChange}
               />
             </div>
@@ -524,7 +517,7 @@ const BlogAdd = () => {
                 name="sport"
                 id="sport"
                 placeholder="Enter Blog Sport"
-                value={formData.sport}
+                value={formData?.sport}
                 onChange={handleChange}
               />
             </div>
@@ -537,7 +530,7 @@ const BlogAdd = () => {
                 name="meta_description"
                 id="meta_description"
                 placeholder="Blog Meta Description"
-                value={formData.meta_description}
+                value={formData?.meta_description}
                 onChange={handleChange}
               />
             </div>
@@ -549,7 +542,7 @@ const BlogAdd = () => {
                 type="text"
                 name="keywords"
                 id="keywords"
-                value={formData.keywords}
+                value={formData?.keywords}
                 placeholder="Blog Keywords"
                 onChange={handleChange}
                 className="keywordsLower"
@@ -638,15 +631,15 @@ const BlogAdd = () => {
                 </div>
               </div>
 
-              {sectionData.map((section, index) => (
+              {sectionData?.map((section, index) => (
                 <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
                   <div
                     className="sectionDropdown"
                     onClick={() => accordianClick(index)}
                   >
                     <div className="accHead">
-                      <h3>{section.sort}</h3>
-                      <h3>{section.heading}</h3>
+                      <h3>{section?.sort}</h3>
+                      <h3>{section?.heading}</h3>
                     </div>
                     {isIndex === index ? (
                       <span>
@@ -670,7 +663,7 @@ const BlogAdd = () => {
                         id="Sort"
                         placeholder="Sort"
                         className="SubsectionSort"
-                        value={section.sort}
+                        value={section?.sort}
                         onChange={(event) => handleSortChange(event, index)}
                       />
                       <input
@@ -679,19 +672,10 @@ const BlogAdd = () => {
                         id="heading"
                         placeholder="Section Title"
                         className="sectionHead"
-                        value={section.heading}
+                        value={section?.heading}
                         onChange={(event) => handleSecTitleChange(event, index)}
                       />
 
-                      {/* <input
-                          type="text"
-                          name="image"
-                          id="image"
-                          placeholder="image"
-                          className="sectionHead"
-                          value={section.image}
-                          onChange={(event) => handleimageChange(event, index)}
-                        /> */}
                       <input
                         type="file"
                         accept="image/*"
@@ -719,7 +703,7 @@ const BlogAdd = () => {
                         onDataTransfer={(data) =>
                           handleEditorChange(data, index)
                         }
-                        initialContent={section.section}
+                        initialContent={section?.section}
                       />
                     </div>
                     <div className="deleteContainer">
@@ -749,9 +733,9 @@ const BlogAdd = () => {
                   >
                     <option value="">category</option>
 
-                    {category.map((data) => (
-                      <option key={data.category} value={data.category}>
-                        {data.category}
+                    {category?.map((data) => (
+                      <option key={data?.category} value={data?.category}>
+                        {data?.category}
                       </option>
                     ))}
                   </select>
@@ -762,9 +746,9 @@ const BlogAdd = () => {
                   >
                     <option value="">Select a tag</option>
 
-                    {options.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.tag}
+                    {options?.map((option) => (
+                      <option key={option?.id} value={option?.id}>
+                        {option?.tag}
                       </option>
                     ))}
                   </select>
@@ -775,7 +759,7 @@ const BlogAdd = () => {
                 </div>
                 <div className="tagData">
                   {selectedTags &&
-                    selectedTags.map((tag, index) => (
+                    selectedTags?.map((tag, index) => (
                       <div key={index} className="tagItems">
                         {tag}
 

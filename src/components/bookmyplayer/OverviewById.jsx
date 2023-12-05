@@ -122,22 +122,31 @@ const OverviewById = () => {
         );
         setNewAcadmeyData(filteredData);
         const keys = Object.keys(filteredData);
-      setKeysOfNewAcadmeyData(keys);
+        setKeysOfNewAcadmeyData(keys);
       })
       .catch((error) => {
         console.log(error);
       });
   };
   console.log(newAcadmeyData);
-  console.log(keysOfNewAcadmeyData);
+  const updateAcadmeyData = () => {
+    if (newAcadmeyData && Object.keys(newAcadmeyData).length > 0) {
+      setAcademyData((prevAcadmeyData) => {
+        return { ...prevAcadmeyData, ...newAcadmeyData };
+      });
+    }
+  };
+  useEffect(() => {
+    updateAcadmeyData();
+  }, [newAcadmeyData]);
+  console.log(academyData);
+  //=======================================================================language
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
-
   const handleLevelChange = (e) => {
     setSelectedLevel(e.target.value);
   };
-
   const handleAddLanguage = () => {
     setStateBtn(1);
     updateField("spoken_languages");
@@ -173,7 +182,7 @@ const OverviewById = () => {
       .join(", ");
     setLanguageString(joinLanguage);
   };
-
+//=================================================================google address
   useEffect(() => {
     if (!googleScriptLoaded) {
       const script = document.createElement("script");
@@ -182,26 +191,26 @@ const OverviewById = () => {
       script.onload = () => setGoogleScriptLoaded(true);
       script.onerror = (error) => console.error("Error loading Google Maps:", error);
       document.head.appendChild(script);
-  
+
       return () => {
         document.head.removeChild(script);
       };
     }
   }, [googleScriptLoaded]);
-  
+
   const handleSelect = (selectedAddress) => {
     setAddress(selectedAddress);
-    if(selectedAddress.length===0){
+    if (selectedAddress.length === 0) {
       setNumber2(1)
-    }else{
+    } else {
       setNumber2(0)
     }
     setStateBtn(1);
-  
+
     const placesService = new window.google.maps.places.PlacesService(
       document.createElement("div")
     );
-  
+
     placesService.textSearch({ query: selectedAddress }, (results, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         const location = results[0].geometry.location;
@@ -209,28 +218,28 @@ const OverviewById = () => {
         const selectedLongitude = location.lng();
         setCoordinate(`${selectedLatitude},${selectedLongitude}`);
 
-        if(`${selectedLatitude},${selectedLongitude}`.length===0){
+        if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
           setNumber4(1)
-        }else{
+        } else {
           setNumber4(0)
         }
-        
+
         updateField("coordinate");
       }
     });
-  
+
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
       selectedAddress
     )}`;
     setMapLink(mapLink);
-    if(mapLink.length===0){
+    if (mapLink.length === 0) {
       setNumber3(1)
-    }else{
+    } else {
       setNumber3(0)
     }
     updateField("map");
   };
-  
+
   const updateField = (fieldName) => {
     if (!updatedFields.includes(fieldName)) {
       setUpdatedFields([...updatedFields, fieldName]);
@@ -403,13 +412,12 @@ const OverviewById = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(selectedImage);
           setSelectedFile(selectedImage);
           updateField("logo");
           setFileName(processImageName(selectedImage.name));
-          if(processImageName(selectedImage.name).length===0){
+          if (processImageName(selectedImage.name).length === 0) {
             setNumber1(1)
-          }else{
+          } else {
             setNumber1(0)
           }
         })
@@ -481,7 +489,7 @@ const OverviewById = () => {
   };
 
   const addPhoneNumberInput = () => {
-    setIsWhatsappActivated(false); // Uncheck the checkbox
+    setIsWhatsappActivated(false);
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
@@ -511,37 +519,9 @@ const OverviewById = () => {
 
     const progressChanged = combinedProgress !== academyData?.completion_percentage;
 
-    // const updatedFormData = {
-    //   name: academyData?.name,
-    //   about: academyData?.about,
-    //   phone: academyData?.phone,
-    //   whatsapp: academyData?.whatsapp,
-    //   experience: academyData?.experience,
-    //   address1: address,
-    //   map: mapLink,
-    //   coordinate: coordinate,
-    //   facebook: academyData?.facebook,
-    //   instagram: academyData?.instagram,
-    //   website: academyData?.website,
-    //   sport: selectedDaysString?.replace(/^,+/g, ""),
-    //   email: academyData?.email,
-    //   timing: startAndEndTime,
-    //   logo: fileName,
-    //   completion_percentage: combinedProgress,
-    // };
-
-    // if (spokenLanguagesChanged) {
-    //   updatedFormData.spoken_languages = languageString;
-    // }
-
-    // Initialize an empty object to hold updated form data
     const updatedFormData = {};
-
-    // Function to check if a field has changed
     const hasChanged = (field) =>
       academyData?.[field] !== academyDataOld?.[field];
-
-    // Check each field if it has changed and update the corresponding field in updatedFormData
     if (hasChanged("name")) {
       updatedFormData.name = academyData.name;
     }
@@ -597,15 +577,15 @@ const OverviewById = () => {
       updatedFormData.timing = startAndEndTime;
     }
 
-    if (logoChanged && fileName!=="") {
+    if (logoChanged && fileName !== "") {
       updatedFormData.logo = fileName;
     }
-    
-    if (progressChanged && combinedProgress!=="") {
-      updatedFormData.completion_percentage=combinedProgress;
+
+    if (progressChanged && combinedProgress !== "") {
+      updatedFormData.completion_percentage = combinedProgress;
     }
 
-    if(number1===1){
+    if (number1 === 1) {
       updatedFormData.logo = fileName;
     }
 
@@ -619,17 +599,15 @@ const OverviewById = () => {
       updatedFormData.coordinate = coordinate;
     }
 
-    if(number2===1){
+    if (number2 === 1) {
       updatedFormData.address1 = address;
     }
-    if(number3===1){
+    if (number3 === 1) {
       updatedFormData.map = mapLink;
     }
-    if(number4===1){
+    if (number4 === 1) {
       updatedFormData.coordinate = coordinate;
     }
-
-
     console.log(updatedFormData);
     console.log("hrrr");
 
@@ -677,7 +655,7 @@ const OverviewById = () => {
             </label>
             <input
               type="text"
-              className="common-fonts common-input bmp-input"
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("name") ? "redBorderLine" : ""}`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
@@ -692,7 +670,7 @@ const OverviewById = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about || ""}
               id=""
-              className="common-fonts bmp-textarea"
+              className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
               rows="2"
             ></textarea>
           </div>
@@ -701,121 +679,112 @@ const OverviewById = () => {
               Address
             </label>
             {googleScriptLoaded && (
-            <PlacesAutocomplete
-              value={address}
-              onChange={setAddress}
-              onSelect={handleSelect}
-              searchOptions={{
-                componentRestrictions: { country: "IN" },
-              }}
-            >
-              {({
-                getInputProps,
-                suggestions,
-                getSuggestionItemProps,
-                loading,
-              }) => (
-                <div className="relativeInput">
-                  <input
-                    type="text"
-                    className="common-fonts common-input bmp-input "
-                    {...getInputProps({
-                      placeholder: "Enter your address",
-                    })}
-                  />
-                  <div
-                    {...(suggestions.length > 0
-                      ? { className: "autocomplete-dropdown" }
-                      : {})}
-                  >
-                    {loading && <div>Loading...</div>}
-                    {suggestions.map((suggestion) => (
-                      <div
-                        {...getSuggestionItemProps(suggestion)}
-                        key={suggestion.placeId}
-                      >
-                        {suggestion.description}
-                      </div>
-                    ))}
+              <PlacesAutocomplete
+                value={address}
+                onChange={setAddress}
+                onSelect={handleSelect}
+                searchOptions={{
+                  componentRestrictions: { country: "IN" },
+                }}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading,
+                }) => (
+                  <div className="relativeInput">
+                    <input
+                      type="text"
+                      className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
+                      {...getInputProps({
+                        placeholder: "Enter your address",
+                      })}
+                    />
+                    <div
+                      {...(suggestions.length > 0
+                        ? { className: "autocomplete-dropdown" }
+                        : {})}
+                    >
+                      {loading && <div>Loading...</div>}
+                      {suggestions.map((suggestion) => (
+                        <div
+                          {...getSuggestionItemProps(suggestion)}
+                          key={suggestion.placeId}
+                        >
+                          {suggestion.description}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </PlacesAutocomplete>
+                )}
+              </PlacesAutocomplete>
             )}
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Select your sport
             </label>
-            <div className="bmp-games">
+            <div className={`bmp-games ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${
-                  selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
+                  }`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -829,7 +798,7 @@ const OverviewById = () => {
                   {index === 0 ? "Phone Number" : `Whatsapp Number`}
                 </label>
 
-                {index === 0 && ( // Render checkbox and label only for the first phone number input
+                {index === 0 && (
                   <div className="bmp-whatsapp-check">
                     <label className="custom-checkbox">
                       <input
@@ -850,15 +819,15 @@ const OverviewById = () => {
 
               <input
                 type="number"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("phone") ? "redBorderLine" : ""}`}
                 name={index === 0 ? "phone" : "whatsapp"}
                 onChange={handleChange}
                 value={
                   isLoading
                     ? "-"
                     : index === 0
-                    ? academyData?.phone
-                    : academyData?.whatsapp
+                      ? academyData?.phone
+                      : academyData?.whatsapp
                 }
               />
             </div>
@@ -882,7 +851,7 @@ const OverviewById = () => {
             <input
               type="email"
               name="email"
-              className="common-fonts common-input bmp-input"
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("email") ? "redBorderLine" : ""}`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
@@ -897,7 +866,7 @@ const OverviewById = () => {
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className="common-fonts common-input bmp-input"
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("website") ? "redBorderLine" : ""}`}
             />
           </div>
 
@@ -906,7 +875,7 @@ const OverviewById = () => {
               Experience:{" "}
             </label>
             <select
-              className="common-fonts common-input langSelect"
+              className={`common-fonts common-input langSelect ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("experience") ? "redBorderLine" : ""}`}
               name="experience"
               onChange={handleChange}
             >
@@ -958,7 +927,7 @@ const OverviewById = () => {
             {!alwaysOpenChecked && (
               <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
                 <select
-                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
                   value={selectedStartTime}
                   onChange={handleTimeChange}
                 >
@@ -971,7 +940,7 @@ const OverviewById = () => {
                 </select>
                 <p className="common-fonts light-color bmp-to">To</p>
                 <select
-                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
                   value={selectedEndTime}
                   onChange={handleEndTimeChange}
                 >
@@ -1030,7 +999,7 @@ const OverviewById = () => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileName ? fileName : academyData?.logo}
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
@@ -1067,7 +1036,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("facebook") ? "redBorderLine" : ""}`}
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
@@ -1079,7 +1048,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className="common-fonts common-input bmp-input"
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("instagram") ? "redBorderLine" : ""}`}
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
@@ -1133,7 +1102,7 @@ const OverviewById = () => {
             </div>
 
             {mappedLanguages.map((mappedLanguage, index) => (
-              <div className="bmp_overview_language_map" key={index}>
+              <div className={`bmp_overview_language_map ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}`} key={index}>
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>
@@ -1148,19 +1117,31 @@ const OverviewById = () => {
         </div>
       </div>
 
-      <div className="bmp-bottom-btn">
-        <button className="common-fonts common-white-button">cancel</button>
-        {/* <button className="common-save-button common-save">Save</button> */}
-        {stateBtn === 0 ? (
-          <button className="disabledBtn">Save</button>
-        ) : (
+      <div className="bmp-bottom-btn">        
+        {status === 0 && role_name === "Academy_Admin" ? <>
           <button
-            className="common-save-button common-save"
-            onClick={handleSubmit}
-          >
-            Save
+            className="common-save-button common-save">
+            Approve
           </button>
-        )}
+          <button
+            className="common-save-button common-delete-button">
+            Disapprove
+          </button>
+        </>
+          : <>
+          <button className="common-fonts common-white-button">cancel</button>
+            {stateBtn === 0 ? (
+              <button className="disabledBtn">Save</button>
+            ) : (
+              <button
+                className="common-save-button common-save"
+                onClick={handleSubmit}
+              >
+                Save
+              </button>
+            )}
+          </>
+        }
       </div>
       <ToastContainer />
     </>

@@ -38,12 +38,12 @@ const ViewTournament = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredItems = (tableData || []).filter((item) => {
+  const filteredItems = (tableData || [])?.filter((item) => {
     const values = Object.values(item);
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < values?.length; i++) {
       if (
         values[i] &&
-        values[i].toString().toLowerCase().includes(searchTerm.toLowerCase())
+        values[i]?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase())
       ) {
         return true;
       }
