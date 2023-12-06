@@ -61,7 +61,7 @@ const Gallery = () => {
   const [border, setBorder] = useState(false);
   const [activeTab, setActiveTab] = useState("academy");
   const roleName = localStorage.getItem("role_name");
-
+//==========================================================================
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -881,6 +881,21 @@ const Gallery = () => {
           )}
 
           <div className="bmp-bottom-btn">
+          {status === 0 && role_name === "Academy_Admin" ?
+          <>
+          <button 
+          // onClick={handleDisapprove}
+            className="common-save-button common-delete-button">
+            Disapprove
+          </button>
+          <button 
+          // onClick={handleApprove}
+            className="common-save-button common-save">
+            Approve
+          </button>
+          </>
+          :
+          <>
             <button
               className="common-fonts common-white-button"
               onClick={resetState}
@@ -899,7 +914,8 @@ const Gallery = () => {
                 Save
               </button>
             )}
-            {/* <button className="common-fonts common-save-button" onClick={handleSubmit2}>Save</button> */}
+            </>
+}
           </div>
 
           {isDeleteModalOpen && (

@@ -283,7 +283,14 @@ const BmpOverview = () => {
         setAcademyDataOld(response?.data?.data[0]);
         setAddress(response?.data?.data[0]?.address1 || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
-
+        if (
+          response?.data?.data[0]?.completion_percentage !== "" &&
+          response?.data?.data[0]?.completion_percentage !== null
+        ) {
+          setProgressArray(
+            response?.data?.data[0]?.completion_percentage.split(",")
+          );
+        }
         const languages =
           response?.data?.data[0]?.spoken_languages?.split(", ");
 
@@ -294,18 +301,8 @@ const BmpOverview = () => {
             level: level.substring(0, level.length - 1).trim(),
           };
         });
-
         setMappedLanguages([...newLanguage]);
-
-        if (
-          response?.data?.data[0]?.completion_percentage !== "" &&
-          response?.data?.data[0]?.completion_percentage !== null
-        ) {
-          setProgressArray(
-            response?.data?.data[0]?.completion_percentage.split(",")
-          );
-        }
-        setIsLoading(false);
+         setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -632,7 +629,7 @@ const BmpOverview = () => {
     axios
       .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {

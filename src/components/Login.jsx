@@ -92,7 +92,6 @@ const Login = () => {
       .then((response) => {
         const data = response?.data;
         const status = response?.data?.status;
-        console.log(data);
         if (status === 0) {
           alert(data.message);
         } else if (status === 1) {
@@ -107,7 +106,7 @@ const Login = () => {
           localStorage.setItem("id", data?.user?.id);
           const landingUrl = response?.data?.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
-          const userPath = data?.user?.permissions?.split(",");
+          const userPath = data?.permissions?.split(",");
           userPath.push(landingUrl);
           const userPathTot = userPath.join(",");
           const encryptedUserPathTot = CryptoJS.AES.encrypt(
@@ -205,7 +204,7 @@ const Login = () => {
               Login To <span>Lead</span>Planer
             </h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit2}>
               <div className="login-page-fields">
                 <label for="" className="login-labels">
                   Work Email *

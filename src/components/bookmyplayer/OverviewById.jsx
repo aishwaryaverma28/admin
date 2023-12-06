@@ -8,7 +8,6 @@ import {
   GET_ACADEMY,
   UPDATE_ACADEMY,
   UPDATE_ACADMEY_STATUS,
-  GET_APPROVAL,
   GET_UPDATED_ACADEMY_INFO,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -110,32 +109,34 @@ const OverviewById = () => {
       )
       .then((response) => {
         console.log(response?.data?.data[0])
-        if(response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null){
-        const statusValue = response?.data?.data[0]?.status;
-        setStatus(statusValue);
-        const rawData = response?.data?.data[0];
-        const filteredData = Object.fromEntries(
-          Object.entries(rawData).filter(
-            ([key, value]) =>
-              value !== null &&
-              ![
-                "creation_date",
-                "update_date",
-                "status",
-                "id",
-                "academy_id",
-              ].includes(key)
-          )
-        );
-        setNewAcadmeyData(filteredData);
-        const keys = Object.keys(filteredData);
-        setKeysOfNewAcadmeyData(keys);
-            }
+        if (response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null) {
+          setRevokeId(response?.data?.data[0]?.id);
+          const statusValue = response?.data?.data[0]?.status;
+          setStatus(statusValue);
+          const rawData = response?.data?.data[0];
+          const filteredData = Object.fromEntries(
+            Object.entries(rawData).filter(
+              ([key, value]) =>
+                value !== null &&
+                ![
+                  "creation_date",
+                  "update_date",
+                  "status",
+                  "id",
+                  "academy_id",
+                ].includes(key)
+            )
+          );
+          setNewAcadmeyData(filteredData);
+          const keys = Object.keys(filteredData);
+          setKeysOfNewAcadmeyData(keys);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   const updateAcadmeyData = () => {
     if (newAcadmeyData && Object.keys(newAcadmeyData).length > 0) {
       setAcademyData((prevAcadmeyData) => {
@@ -155,7 +156,7 @@ const OverviewById = () => {
         };
       });
       setMappedLanguages([...newLanguage]);
-      
+
     }
     if (keysOfNewAcadmeyData.includes("timing")) {
       if (academyData && academyData.timing) {
@@ -179,29 +180,13 @@ const OverviewById = () => {
   useEffect(() => {
     if (status === 0 && role_name === "Academy_Admin") {
       updateAcadmeyData();
-      approvalData();
     }
   }, [newAcadmeyData, status, role_name]);
 
-// console.log(newAcadmeyData);
-// console.log(academyData);
-// console.log(status);
+  // console.log(newAcadmeyData);
+  // console.log(academyData);
+  // console.log(status);
 
-  const approvalData = () => {
-    axios.post(GET_APPROVAL, {
-      academy_id: id
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
-      const newData = response?.data?.data?.map((item) => {
-        if (item.status === 0) {
-          setRevokeId(item.id);
-        }
-      })
-    })
-  }
   //==============================================================acadmey data
   const academyDetails = () => {
     axios
@@ -519,8 +504,6 @@ const OverviewById = () => {
       setSelectedDays([...selectedDays, day]);
       updateField("sport");
     }
-
-
   };
 
   useEffect(() => {
@@ -705,15 +688,15 @@ const OverviewById = () => {
       sport: selectedDaysString?.replace(/^,+/g, ""),
       experience: academyData.experience,
       facebook: academyData.facebook,
-      instagram:academyData.instagram,
-      website:academyData.website,
+      instagram: academyData.instagram,
+      website: academyData.website,
       email: academyData.email,
       timing: startAndEndTime,
       spoken_languages: languageString,
       logo: fileName,
-      // address1: address,
-      // map: mapLink,
-      // coordinate: coordinate
+      address1: address,
+      map: mapLink,
+      coordinate: coordinate
     }
     axios
       .put(UPDATE_ACADEMY + id, updatedFormData, {
@@ -833,7 +816,7 @@ const OverviewById = () => {
                         : {})}
                     >
                       {loading && <div>Loading...</div>}
-                      {suggestions?.map((suggestion) => (
+                      {suggestions.map((suggestion) => (
                         <div
                           {...getSuggestionItemProps(suggestion)}
                           key={suggestion.placeId}
@@ -1245,15 +1228,15 @@ const OverviewById = () => {
 
       <div className="bmp-bottom-btn">
         {status === 0 && role_name === "Academy_Admin" ? <>
-          <button onClick={handleApprove}
-            className="common-save-button common-save">
-            Approve
-          </button>
           <button onClick={handleDisapprove}
             className="common-save-button common-delete-button">
             Disapprove
           </button>
-        </>
+          <button onClick={handleApprove}
+            className="common-save-button common-save">
+            Approve
+          </button>
+          </>
           : <>
             <button className="common-fonts common-white-button">cancel</button>
             {stateBtn === 0 ? (

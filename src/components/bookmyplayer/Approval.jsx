@@ -67,13 +67,10 @@ const Approval = () => {
         if (item.status === 1) {
           if (hasOverview && !hasGallery) {
             approvedFields = 'overview';
-            rejectedFields = 'overview';
           } else if (!hasOverview && hasGallery) {
             approvedFields = 'gallery';
-            rejectedFields = 'gallery';
           } else if (hasOverview && hasGallery) {
             approvedFields = 'overview, gallery';
-            rejectedFields = 'overview, gallery';
           }
         }
   
@@ -115,7 +112,7 @@ const Approval = () => {
     axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 3 },
       {
         headers: {
-          Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`
         }
       }).then((response) => {
         if (response?.data?.status === 1) {
