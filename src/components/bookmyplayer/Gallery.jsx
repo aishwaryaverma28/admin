@@ -5,6 +5,7 @@ import {
   UPDATE_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
+  UPDATE_ACADMEY_STATUS,
   getDecryptedToken,
 } from "../utils/Constants";
 import "chart.js/auto";
@@ -61,10 +62,11 @@ const Gallery = () => {
   const [border, setBorder] = useState(false);
   const [activeTab, setActiveTab] = useState("academy");
   const roleName = localStorage.getItem("role_name");
-//==========================================================================
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+  //======================================================================extra functions for approve n disapprove
+  const [combinedPics, setCombinedPics] = useState([]);
+  const [revokeId, setRevokeId] = useState(null);
+  const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
+
   const updatedAcadmeyInfo = () => {
     axios
       .post(
@@ -79,29 +81,55 @@ const Gallery = () => {
         }
       )
       .then((response) => {
-        const statusValue = response?.data?.data[0]?.status;
-        setStatus(statusValue);
-
-        const rawData = response?.data?.data[0];
-        const filteredData = Object.fromEntries(
-          Object.entries(rawData).filter(
-            ([key, value]) =>
-              value !== null &&
-              ![
-                "creation_date",
-                "update_date",
-                "status",
-                "id",
-                "academy_id",
-              ].includes(key)
-          )
-        );
-        setNewAcadmeyData(filteredData);
+        if (response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null) {
+          setRevokeId(response?.data?.data[0]?.id);
+          const statusValue = response?.data?.data[0]?.status;
+          setStatus(statusValue);
+          const rawData = response?.data?.data[0];
+          const filteredData = Object.fromEntries(
+            Object.entries(rawData).filter(
+              ([key, value]) =>
+                value !== null &&
+                ![
+                  "creation_date",
+                  "update_date",
+                  "status",
+                  "id",
+                  "academy_id",
+                ].includes(key)
+            )
+          );
+          setNewAcadmeyData(filteredData);
+          const keys = Object.keys(filteredData);
+          setKeysOfNewAcadmeyData(keys);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  const updateAcadmeyData = () => {
+    if (keysOfNewAcadmeyData.includes("photos")) {
+      if (
+        newAcadmeyData?.photos !== "" &&
+        newAcadmeyData?.photos !== null
+      ) {
+        setCombinedPics(newAcadmeyData?.photos?.split(",")?.reverse());
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (status === 0 && role_name === "Academy_Admin") {
+      updateAcadmeyData();
+    }
+  }, [newAcadmeyData, status, role_name]);
+  //==========================================================================
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -149,7 +177,7 @@ const Gallery = () => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
-  
+
   const initialPhotoUrls = [...photoUrls];
   const initialVideoUrls = [...videoUrls];
   const initialFileName = fileName;
@@ -286,10 +314,6 @@ const Gallery = () => {
     }
   };
 
-  // console.log(photoUrls);
-  console.log(videoUrls);
-  console.log("oopy");
-
   const submitImage2 = (file) => {
     setIsUploadingMulti(true);
     const selectedImage = file;
@@ -302,10 +326,6 @@ const Gallery = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -417,7 +437,7 @@ const Gallery = () => {
     axios
       .put(UPDATE_ACADEMY + academyId, body, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -477,7 +497,7 @@ const Gallery = () => {
     if (newAcadmeyData !== null) {
       Object.keys(newAcadmeyData).forEach((key) => {
         if (!body.hasOwnProperty(key)) {
-         body[key] = newAcadmeyData[key];
+          body[key] = newAcadmeyData[key];
         }
       });
     }
@@ -485,7 +505,7 @@ const Gallery = () => {
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -544,7 +564,7 @@ const Gallery = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       )
@@ -574,7 +594,7 @@ const Gallery = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       )
@@ -585,6 +605,92 @@ const Gallery = () => {
         console.error("API call failed:", error);
       });
   };
+//==========================================================================approve function
+const handleApprove = () => {
+  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }).then((response) => {
+      if (response?.data?.status === 1) {
+        toast.success("Academy info updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+      ApproveSubmit();
+    }).catch((error) => {
+      console.log(error);
+    })
+  setRevokeId(null);
+}
+
+const ApproveSubmit = () => {
+  if (!progressArray?.includes("4")) {
+    progressArray.push("4");
+    setProgressArray(progressArray);
+  }
+  const combinedProgress = progressArray?.join(",");
+
+  const updatedFormData = {
+    completion_percentage: combinedProgress,
+    photos: combinedPics.join(","),
+  }
+  axios
+    .put(UPDATE_ACADEMY + academyId , updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      if (response.data.status === 1) {
+        toast.success("Details updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occurred", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+      updatedAcadmeyInfo();
+      academyDetails();
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while updating details", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    })
+    .finally(() => {
+      setStateBtn(0);
+    });
+}
+//==========================================================================approve function
+const handleDisapprove = () => {
+  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }).then((response) => {
+      if (response?.data?.status === 1) {
+        toast.success("Academy info updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+    }).catch((error) => {
+      console.log(error);
+    })
+  setRevokeId(null);
+  updatedAcadmeyInfo();
+  academyDetails();
+}
 
   return (
     <div className="bmp-main-wrapper">
@@ -603,17 +709,15 @@ const Gallery = () => {
           <div className="contacts-top-flex ">
             <div className="genral-setting-btn genral-setting-fonts aaa">
               <button
-                className={`genral-btn  ${
-                  activeTab === "academy" ? "genral-active" : ""
-                }`}
+                className={`genral-btn  ${activeTab === "academy" ? "genral-active" : ""
+                  }`}
                 onClick={() => handleTabClick("academy")}
               >
                 <span className="mrkt-whatsapp">Academy & Banner</span>
               </button>
               <button
-                className={`genral-btn contact-genral-btn ${
-                  activeTab === "training" ? "genral-active" : ""
-                }`}
+                className={`genral-btn contact-genral-btn ${activeTab === "training" ? "genral-active" : ""
+                  }`}
                 onClick={() => handleTabClick("training")}
               >
                 <span className="mrkt-whatsapp">
@@ -761,34 +865,11 @@ const Gallery = () => {
                         Upload image/videos in format png, jpg, jpeg, gif, webp,
                         mp4{" "}
                       </p>
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
               </div>
-
-              {/* {selectedFile2 && (
-            <div className="bmp-new-img">
-              <div className="bmp-img-top-icon">
-                <div className="bmp-img-name">
-
-                  <div className="bmp-video">
-                    <img src={Video} alt="" />
-                  </div>
-
-                  <p className="common-fonts bmp-tour">academy tour.gif</p>
-                </div>
-                <div className="bmp-trash">
-                  <img src={Trash} alt="" />
-                </div>
-
-              </div>
-              <img
-                src={(selectedFile2)}
-                alt="Selected Preview"
-              />
-            </div>
-          )} */}
             </div>
           </div>
           {videoUrls?.length === 0 ? (
@@ -803,7 +884,6 @@ const Gallery = () => {
                     <div className="bmp-img-name">
                       <div className="bmp-video">
                         <img
-                          // src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
                           src={Video}
                           alt=""
                         />
@@ -836,86 +916,130 @@ const Gallery = () => {
               ))}
             </div>
           )}
+          <>
+            {status === 0 && role_name === "Academy_Admin" ?
+              <>
+                <div className={`outerBox`}>
+                  {combinedPics?.map((photo, index) => (
+                    <div className="bmp-new-img" style={{
+                      border: academyData?.photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
+                    }}>
+                      <div className="bmp-img-top-icon">
+                        <div className="bmp-img-name">
+                          <div className="bmp-video" >
+                            <img
+                              src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                              alt="Selected Preview"
+                            />
+                          </div>
 
-          {photoUrls?.length === 0 ? (
-            <div className={`support-no-ticket-found`}>
-              <p className="common-fonts">No photos added</p>
-            </div>
-          ) : (
-            <div className={`outerBox ${border ? "red-border-box" : ""}`}>
-              {photoUrls?.map((photo, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
-                      <div className="bmp-video">
+                          <p className="common-fonts bmp-tour">
+                            {photo?.length > 20 ? (
+                              <>{photo?.slice(20)}...</>
+                            ) : (
+                              <>{photo}</>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bmp-trash">
+                          <img
+                            src={Trash}
+                            alt=""
+                            onClick={() => handleDeleteOpen(index, "image")}
+                          />
+                        </div>
+                      </div>
+                      <img
+                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                        alt="Selected Preview"
+                        key={index}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </> :
+              <>
+                {photoUrls?.length === 0 ? (
+                  <div className={`support-no-ticket-found`}>
+                    <p className="common-fonts">No photos added</p>
+                  </div>
+                ) : (
+                  <div className={`outerBox`}>
+                    {photoUrls?.map((photo, index) => (
+                      <div className="bmp-new-img">
+                        <div className="bmp-img-top-icon">
+                          <div className="bmp-img-name">
+                            <div className="bmp-video">
+                              <img
+                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                                alt="Selected Preview"
+                              />
+                            </div>
+
+                            <p className="common-fonts bmp-tour">
+                              {photo?.length > 20 ? (
+                                <>{photo?.slice(20)}...</>
+                              ) : (
+                                <>{photo}</>
+                              )}
+                            </p>
+                          </div>
+                          <div className="bmp-trash">
+                            <img
+                              src={Trash}
+                              alt=""
+                              onClick={() => handleDeleteOpen(index, "image")}
+                            />
+                          </div>
+                        </div>
                         <img
                           src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                           alt="Selected Preview"
+                          key={index}
                         />
                       </div>
-
-                      <p className="common-fonts bmp-tour">
-                        {photo?.length > 20 ? (
-                          <>{photo?.slice(20)}...</>
-                        ) : (
-                          <>{photo}</>
-                        )}
-                      </p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img
-                        src={Trash}
-                        alt=""
-                        onClick={() => handleDeleteOpen(index, "image")}
-                      />
-                    </div>
+                    ))}
                   </div>
-                  <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                    alt="Selected Preview"
-                    key={index}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="bmp-bottom-btn">
-          {status === 0 && role_name === "Academy_Admin" ?
-          <>
-          <button 
-          // onClick={handleDisapprove}
-            className="common-save-button common-delete-button">
-            Disapprove
-          </button>
-          <button 
-          // onClick={handleApprove}
-            className="common-save-button common-save">
-            Approve
-          </button>
+                )}
+              </>
+            }
           </>
-          :
-          <>
-            <button
-              className="common-fonts common-white-button"
-              onClick={resetState}
-            >
-              Cancel
-            </button>
-            {stateBtn === 0 ? (
-              <button className="disabledBtn" disabled>
-                Save
-              </button>
-            ) : (
-              <button
-                className="common-fonts common-save-button"
-                onClick={handleSubmit2}
-              >
-                Save
-              </button>
-            )}
-            </>
-}
+          <div className="bmp-bottom-btn">
+            {status === 0 && role_name === "Academy_Admin" ?
+              <>
+                <button
+                  onClick={handleDisapprove}
+                  className="common-save-button common-delete-button">
+                  Disapprove
+                </button>
+                <button
+                  onClick={handleApprove}
+                  className="common-save-button common-save">
+                  Approve
+                </button>
+              </>
+              :
+              <>
+                <button
+                  className="common-fonts common-white-button"
+                  onClick={resetState}
+                >
+                  Cancel
+                </button>
+                {stateBtn === 0 ? (
+                  <button className="disabledBtn" disabled>
+                    Save
+                  </button>
+                ) : (
+                  <button
+                    className="common-fonts common-save-button"
+                    onClick={handleSubmit2}
+                  >
+                    Save
+                  </button>
+                )}
+              </>
+            }
           </div>
 
           {isDeleteModalOpen && (

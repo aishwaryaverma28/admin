@@ -204,7 +204,7 @@ const Login = () => {
               Login To <span>Lead</span>Planer
             </h2>
 
-            <form onSubmit={handleSubmit2}>
+            <form onSubmit={handleSubmit}>
               <div className="login-page-fields">
                 <label for="" className="login-labels">
                   Work Email *
