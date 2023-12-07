@@ -59,11 +59,8 @@ const Gallery = () => {
     "video/webm",
     "video/ogg",
   ];
-  const [border, setBorder] = useState(false);
   const [activeTab, setActiveTab] = useState("academy");
-  const roleName = localStorage.getItem("role_name");
   //======================================================================extra functions for approve n disapprove
-  const [combinedPics, setCombinedPics] = useState([]);
   const [revokeId, setRevokeId] = useState(null);
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
 
@@ -114,7 +111,15 @@ const Gallery = () => {
         newAcadmeyData?.photos !== "" &&
         newAcadmeyData?.photos !== null
       ) {
-        setCombinedPics(newAcadmeyData?.photos?.split(",")?.reverse());
+        setPhotoUrls(newAcadmeyData?.photos?.split(",")?.reverse());
+      }
+    }
+    if (keysOfNewAcadmeyData.includes("videos")) {
+      if (
+        newAcadmeyData?.videos !== "" &&
+        newAcadmeyData?.videos !== null
+      ) {
+        setVideoUrls(newAcadmeyData?.videos?.split(",")?.reverse());
       }
     }
   }
@@ -236,10 +241,6 @@ const Gallery = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -354,7 +355,6 @@ const Gallery = () => {
             setPhotoUrls(photoUrls);
             updateField("photos");
             setStateBtn(1);
-            // handleSubmit2("photos", updatedPhotoUrls);
           }
         })
         .catch((err) => {
@@ -378,10 +378,6 @@ const Gallery = () => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -410,7 +406,6 @@ const Gallery = () => {
             setVideoUrls(videoUrls);
             updateField("videos");
             setStateBtn(1);
-            // handleSubmit2("videos", updatedVideoUrls);
           }
         })
         .catch((err) => {
@@ -605,92 +600,93 @@ const Gallery = () => {
         console.error("API call failed:", error);
       });
   };
-//==========================================================================approve function
-const handleApprove = () => {
-  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
-    {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
-      if (response?.data?.status === 1) {
-        toast.success("Academy info updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-      ApproveSubmit();
-    }).catch((error) => {
-      console.log(error);
-    })
-  setRevokeId(null);
-}
-
-const ApproveSubmit = () => {
-  if (!progressArray?.includes("4")) {
-    progressArray.push("4");
-    setProgressArray(progressArray);
+  //==========================================================================approve function
+  const handleApprove = () => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        ApproveSubmit();
+      }).catch((error) => {
+        console.log(error);
+      })
+    setRevokeId(null);
   }
-  const combinedProgress = progressArray?.join(",");
 
-  const updatedFormData = {
-    completion_percentage: combinedProgress,
-    photos: combinedPics.join(","),
-  }
-  axios
-    .put(UPDATE_ACADEMY + academyId , updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      if (response.data.status === 1) {
-        toast.success("Details updated successfully", {
+  const ApproveSubmit = () => {
+    if (!progressArray?.includes("4")) {
+      progressArray.push("4");
+      setProgressArray(progressArray);
+    }
+    const combinedProgress = progressArray?.join(",");
+
+    const updatedFormData = {
+      completion_percentage: combinedProgress,
+      photos: photoUrls.join(","),
+      videos: videoUrls.join(","),
+    }
+    axios
+      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        updatedAcadmeyInfo();
+        academyDetails();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
           position: "top-center",
           autoClose: 2000,
         });
-      } else {
-        toast.error("Some Error Occurred", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-      updatedAcadmeyInfo();
-      academyDetails();
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while updating details", {
-        position: "top-center",
-        autoClose: 2000,
+      })
+      .finally(() => {
+        setStateBtn(0);
       });
-    })
-    .finally(() => {
-      setStateBtn(0);
-    });
-}
-//==========================================================================approve function
-const handleDisapprove = () => {
-  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
-    {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
-      if (response?.data?.status === 1) {
-        toast.success("Academy info updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
+  }
+  //==========================================================================approve function
+  const handleDisapprove = () => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
 
-    }).catch((error) => {
-      console.log(error);
-    })
-  setRevokeId(null);
-  updatedAcadmeyInfo();
-  academyDetails();
-}
+      }).catch((error) => {
+        console.log(error);
+      })
+    setRevokeId(null);
+    updatedAcadmeyInfo();
+    academyDetails();
+  }
 
   return (
     <div className="bmp-main-wrapper">
@@ -872,55 +868,104 @@ const handleDisapprove = () => {
               </div>
             </div>
           </div>
-          {videoUrls?.length === 0 ? (
-            <div className="support-no-ticket-found">
-              <p className="common-fonts">No videos added</p>
-            </div>
-          ) : (
-            <div className="outerBox">
-              {videoUrls?.map((video, index) => (
-                <div className="bmp-new-img">
-                  <div className="bmp-img-top-icon">
-                    <div className="bmp-img-name">
-                      <div className="bmp-video">
-                        <img
-                          src={Video}
-                          alt=""
-                        />
-                      </div>
-                      <p className="common-fonts bmp-tour">
-                        {video?.length > 20 ? (
-                          <>{video?.slice(0, 20) + "..."}</>
-                        ) : (
-                          <>{video}</>
-                        )}
-                      </p>
-                    </div>
-                    <div className="bmp-trash">
-                      <img
-                        src={Trash}
-                        alt=""
-                        onClick={() => handleDeleteOpen(index, "video")}
-                      />
-                    </div>
-                  </div>
-                  <div className="bmp-player-img">
-                    <video width="270" height="140" controls>
-                      <source
-                        src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
-                        type="video/mp4"
-                      />
-                    </video>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
           <>
             {status === 0 && role_name === "Academy_Admin" ?
               <>
+                <div className="outerBox">
+                  {videoUrls?.map((video, index) => (
+                    <div className="bmp-new-img" style={{
+                      border: academyData?.videos?.split(",")?.includes(video) ? 'none' : '2px solid red'
+                    }}>
+                      <div className="bmp-img-top-icon">
+                        <div className="bmp-img-name">
+                          <div className="bmp-video">
+                            <img
+                              src={Video}
+                              alt=""
+                            />
+                          </div>
+                          <p className="common-fonts bmp-tour">
+                            {video?.length > 20 ? (
+                              <>{video?.slice(0, 20) + "..."}</>
+                            ) : (
+                              <>{video}</>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bmp-trash">
+                          <img
+                            src={Trash}
+                            alt=""
+                            onClick={() => handleDeleteOpen(index, "video")}
+                          />
+                        </div>
+                      </div>
+                      <div className="bmp-player-img">
+                        <video width="270" height="140" controls>
+                          <source
+                            src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </> :
+              <>
+                {videoUrls?.length === 0 ? (
+                  <div className="support-no-ticket-found">
+                    <p className="common-fonts">No videos added</p>
+                  </div>
+                ) : (
+                  <div className="outerBox">
+                    {videoUrls?.map((video, index) => (
+                      <div className="bmp-new-img">
+                        <div className="bmp-img-top-icon">
+                          <div className="bmp-img-name">
+                            <div className="bmp-video">
+                              <img
+                                src={Video}
+                                alt=""
+                              />
+                            </div>
+                            <p className="common-fonts bmp-tour">
+                              {video?.length > 20 ? (
+                                <>{video?.slice(0, 20) + "..."}</>
+                              ) : (
+                                <>{video}</>
+                              )}
+                            </p>
+                          </div>
+                          <div className="bmp-trash">
+                            <img
+                              src={Trash}
+                              alt=""
+                              onClick={() => handleDeleteOpen(index, "video")}
+                            />
+                          </div>
+                        </div>
+                        <div className="bmp-player-img">
+                          <video width="270" height="140" controls>
+                            <source
+                              src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyId}/${video}`}
+                              type="video/mp4"
+                            />
+                          </video>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            }
+          </>
+          <>
+            {status === 0 && role_name === "Academy_Admin" ?
+              <>
+                {/* ====================================================map for admin photos */}
                 <div className={`outerBox`}>
-                  {combinedPics?.map((photo, index) => (
+                  {photoUrls?.map((photo, index) => (
                     <div className="bmp-new-img" style={{
                       border: academyData?.photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
                     }}>

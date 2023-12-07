@@ -183,9 +183,9 @@ const OverviewById = () => {
     }
   }, [newAcadmeyData, status, role_name]);
 
-  // console.log(newAcadmeyData);
-  // console.log(academyData);
-  // console.log(status);
+  console.log(newAcadmeyData);
+  console.log(academyData);
+  console.log(keysOfNewAcadmeyData);
 
   //==============================================================acadmey data
   const academyDetails = () => {
@@ -693,7 +693,7 @@ const OverviewById = () => {
       email: academyData.email,
       timing: startAndEndTime,
       spoken_languages: languageString,
-      logo: fileName,
+      logo: academyData.logo,
       address1: address,
       map: mapLink,
       coordinate: coordinate
