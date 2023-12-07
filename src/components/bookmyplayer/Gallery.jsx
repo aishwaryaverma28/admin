@@ -134,8 +134,6 @@ const closeModal = () => {
       }
     }
   }
-  console.log(newAcadmeyData);
-  console.log(videoUrls);
   useEffect(() => {
     if (status === 0 && role_name === "Academy_Admin") {
       updateAcadmeyData();
@@ -508,7 +506,6 @@ const closeModal = () => {
         }
       });
     }
-    console.log(body);
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
         headers: {
