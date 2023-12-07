@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
 import ProgressBar from "./ProgressBar";
 import Training from "./Training.jsx";
+import DisapproveModal from "./DisapproveModal.jsx";
 
 const Gallery = () => {
   const decryptedToken = getDecryptedToken();
@@ -63,6 +64,16 @@ const Gallery = () => {
   //======================================================================extra functions for approve n disapprove
   const [revokeId, setRevokeId] = useState(null);
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
+//=====================================for disapprove modal
+const [open, setOpen] = useState(false);
+const [disapprovalReason, setDisapprovalReason] = useState('');
+
+const openModal = () => {
+  setOpen(true)
+}
+const closeModal = () => {
+  setOpen(false);
+}
 
   const updatedAcadmeyInfo = () => {
     axios
@@ -123,7 +134,8 @@ const Gallery = () => {
       }
     }
   }
-
+  console.log(newAcadmeyData);
+  console.log(videoUrls);
   useEffect(() => {
     if (status === 0 && role_name === "Academy_Admin") {
       updateAcadmeyData();
@@ -667,7 +679,11 @@ const Gallery = () => {
   }
   //==========================================================================approve function
   const handleDisapprove = () => {
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
+    const body = { 
+      status: 2,
+      rejection_reason: disapprovalReason,
+     }
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
       {
         headers: {
           Authorization: `Bearer ${decryptedToken}`
@@ -683,6 +699,7 @@ const Gallery = () => {
       }).catch((error) => {
         console.log(error);
       })
+    closeModal();
     setRevokeId(null);
     updatedAcadmeyInfo();
     academyDetails();
@@ -1053,7 +1070,7 @@ const Gallery = () => {
             {status === 0 && role_name === "Academy_Admin" ?
               <>
                 <button
-                  onClick={handleDisapprove}
+                  onClick={openModal}
                   className="common-save-button common-delete-button">
                   Disapprove
                 </button>
@@ -1104,6 +1121,17 @@ const Gallery = () => {
       )}
 
       <ToastContainer />
+      {
+        open && (
+          <DisapproveModal
+          onClose={closeModal}
+          onEnter={handleDisapprove}
+          disapprovalReason={disapprovalReason}
+          setDisapprovalReason={setDisapprovalReason}
+        />
+        )
+      }
+
     </div>
   );
 };

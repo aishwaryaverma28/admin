@@ -87,7 +87,9 @@ const OverviewById = () => {
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
+  //=====================================for disapprove modal
   const [open, setOpen] = useState(false);
+  const [disapprovalReason, setDisapprovalReason] = useState('');
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",
@@ -743,27 +745,32 @@ const OverviewById = () => {
   }
 
   //==========================================================================approve function
-  // const handleDisapprove = () => {
-  //   // axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
-  //   //   {
-  //   //     headers: {
-  //   //       Authorization: `Bearer ${decryptedToken}`
-  //   //     }
-  //   //   }).then((response) => {
-  //   //     if (response?.data?.status === 1) {
-  //   //       toast.success("Academy info updated successfully", {
-  //   //         position: "top-center",
-  //   //         autoClose: 2000,
-  //   //       });
-  //   //     }
+  const handleDisapprove = () => {
+    const body = { 
+      status: 2,
+      rejection_reason: disapprovalReason,
+     }
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
+      {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }).then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
 
-  //   //   }).catch((error) => {
-  //   //     console.log(error);
-  //   //   })
-  //   // setRevokeId(null);
-  //   // updatedAcadmeyInfo();
-  //   // academyDetails();
-  // }
+      }).catch((error) => {
+        console.log(error);
+      })
+    closeModal();
+    setRevokeId(null);
+    updatedAcadmeyInfo();
+    academyDetails();
+  }
   return (
     <>
       <div className="bmp-container">
@@ -1266,7 +1273,12 @@ const OverviewById = () => {
       <ToastContainer />
       {
         open && (
-          <DisapproveModal onClose={closeModal} />
+          <DisapproveModal
+          onClose={closeModal}
+          onEnter={handleDisapprove}
+          disapprovalReason={disapprovalReason}
+          setDisapprovalReason={setDisapprovalReason}
+        />
         )
       }
     </>
