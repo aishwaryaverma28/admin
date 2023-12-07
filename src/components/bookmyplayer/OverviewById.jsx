@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "../styles/bmp.css";
 import { useParams } from "react-router-dom";
 import Map from "../../assets/image/map.png";
+import DisapproveModal from "./DisapproveModal.jsx";
 import "chart.js/auto";
 import axios from "axios";
 import {
@@ -86,12 +87,22 @@ const OverviewById = () => {
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",
     "killer",
     "kill you",
   ]);
+
+  const openModal = () => {
+    setOpen(true)
+  }
+  const closeModal = () => {
+    setOpen(false);
+  }
+
+  
 
   //===================================================================extra functions for approve n disapprove
   const updatedAcadmeyInfo = () => {
@@ -732,27 +743,27 @@ const OverviewById = () => {
   }
 
   //==========================================================================approve function
-  const handleDisapprove = () => {
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
-        if (response?.data?.status === 1) {
-          toast.success("Academy info updated successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
+  // const handleDisapprove = () => {
+  //   // axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 2 },
+  //   //   {
+  //   //     headers: {
+  //   //       Authorization: `Bearer ${decryptedToken}`
+  //   //     }
+  //   //   }).then((response) => {
+  //   //     if (response?.data?.status === 1) {
+  //   //       toast.success("Academy info updated successfully", {
+  //   //         position: "top-center",
+  //   //         autoClose: 2000,
+  //   //       });
+  //   //     }
 
-      }).catch((error) => {
-        console.log(error);
-      })
-    setRevokeId(null);
-    updatedAcadmeyInfo();
-    academyDetails();
-  }
+  //   //   }).catch((error) => {
+  //   //     console.log(error);
+  //   //   })
+  //   // setRevokeId(null);
+  //   // updatedAcadmeyInfo();
+  //   // academyDetails();
+  // }
   return (
     <>
       <div className="bmp-container">
@@ -1228,7 +1239,7 @@ const OverviewById = () => {
 
       <div className="bmp-bottom-btn">
         {status === 0 && role_name === "Academy_Admin" ? <>
-          <button onClick={handleDisapprove}
+          <button onClick={openModal}
             className="common-save-button common-delete-button">
             Disapprove
           </button>
@@ -1253,6 +1264,11 @@ const OverviewById = () => {
         }
       </div>
       <ToastContainer />
+      {
+        open && (
+          <DisapproveModal onClose={closeModal} />
+        )
+      }
     </>
   );
 };
