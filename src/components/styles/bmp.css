@@ -1158,3 +1158,21 @@ margin-right: 0.3rem;
  .bmp_disable{
   color:#909DB0 !important;
  }
+
+ .disapprove_new{
+  margin-left: 1rem;
+ }
+
+ .disapproval_input{
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #f3f6fa;
+  padding: 0.7rem;
+  cursor: pointer;
+  width: 100%;
+  outline: none;
+ }
+
+ .reason_for{
+  margin-bottom: 1rem;
+ }
