@@ -4,14 +4,16 @@ import {
   GET_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
   UPDATE_ACADEMY,
+  UPDATE_ACADMEY_STATUS,
   getDecryptedToken,
 } from "../utils/Constants";
 import Trash from "../../assets/image/red-bin.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
+import DisapproveModal from "./DisapproveModal.jsx";
 
-const Training = ({ status, newAcadmeyData }) => {
+const Training = ({ status, newAcadmeyData, keysOfNewAcadmeyData, updatedAcadmeyInfo, revokeId }) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
@@ -34,8 +36,42 @@ const Training = ({ status, newAcadmeyData }) => {
   const [updatedFields, setUpdatedFields] = useState([]);
   const [stateBtn, setStateBtn] = useState(0);
   const [academyData, setAcademyData] = useState({});
-  const [alertVideoShown2, setAlertVideoShown2] = useState(false);
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
+//=====================================for disapprove modal
+const [open, setOpen] = useState(false);
+const [disapprovalReason, setDisapprovalReason] = useState('');
+
+const openModal = () => {
+  setOpen(true)
+}
+const closeModal = () => {
+  setOpen(false);
+}
+
+  const updateAcadmeyData = () => {
+    if (keysOfNewAcadmeyData.includes("training_ground_photos")) {
+      if (
+        newAcadmeyData?.training_ground_photos !== "" &&
+        newAcadmeyData?.training_ground_photos !== null
+      ) {
+        setPhotoUrls(newAcadmeyData?.training_ground_photos?.split(",")?.reverse());
+      }
+    }
+    if (keysOfNewAcadmeyData.includes("tournament_photos")) {
+      if (
+        newAcadmeyData?.tournament_photos !== "" &&
+        newAcadmeyData?.tournament_photos !== null
+      ) {
+        setPhotoUrls2(newAcadmeyData?.tournament_photos?.split(",")?.reverse());
+      }
+    }
+  }
+  useEffect(() => {
+    if (status === 0 && role_name === "Academy_Admin") {
+      updateAcadmeyData();
+    }
+  }, [newAcadmeyData, status, role_name, academyData]);
+  //==========================================================================
   const academyDetails = () => {
     axios
       .get(GET_ACADEMY + academyId, {
@@ -134,10 +170,6 @@ const Training = ({ status, newAcadmeyData }) => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -187,7 +219,6 @@ const Training = ({ status, newAcadmeyData }) => {
     }
     setIsDeleteModalOpen(false);
   };
-  console.log(photoUrls);
   const deleteStrategy = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...photoUrls];
@@ -206,7 +237,7 @@ const Training = ({ status, newAcadmeyData }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       )
@@ -251,10 +282,6 @@ const Training = ({ status, newAcadmeyData }) => {
         return;
       }
       const folder = "bookmyplayer/academy/" + academyId;
-      // const uniqueFileName = `${folder}/${selectedImage.name.replace(
-      //   /\.[^/.]+$/,
-      //   ""
-      // )}`;
       const imageNameWithoutExtension = selectedImage.name.replace(
         /\.[^/.]+$/,
         ""
@@ -304,7 +331,6 @@ const Training = ({ status, newAcadmeyData }) => {
     }
     setIsDeleteModalOpen2(false);
   };
-  console.log(photoUrls2);
   const deleteStrategy2 = () => {
     if (deleteIndex2 !== null) {
       const updatedNameOfStrategy = [...photoUrls2];
@@ -323,7 +349,7 @@ const Training = ({ status, newAcadmeyData }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       )
@@ -344,20 +370,11 @@ const Training = ({ status, newAcadmeyData }) => {
   };
 
   function handleSubmit() {
-    // let body = {
-    //   academy_id: academyId,
-    //   training_ground_photos: photoUrls.join(","),
-    //   tournament_photos: photoUrls2.join(","),
-    // }
-
     let body = {};
-
     body.academy_id = academyId;
-
     const photoUrlsChanged =
       photoUrls.slice().sort().join(",") !==
       academyData?.training_ground_photos.split(",").slice().sort().join(",");
-
     const photoUrlsChanged2 =
       photoUrls2.slice().sort().join(",") !==
       academyData?.tournament_photos.split(",").slice().sort().join(",");
@@ -379,7 +396,6 @@ const Training = ({ status, newAcadmeyData }) => {
         }
       });
     }
-    console.log(body);
     console.log("updated training body");
     axios
       .post(UPDATE_ACADEMY_TABLE2, body, {
@@ -410,6 +426,90 @@ const Training = ({ status, newAcadmeyData }) => {
         });
       });
   }
+//==========================================================================approve function
+const handleApprove = () => {
+  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }).then((response) => {
+      if (response?.data?.status === 1) {
+        toast.success("Academy info updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+      ApproveSubmit();
+    }).catch((error) => {
+      console.log(error);
+    })
+}
+
+const ApproveSubmit = () => {
+
+  const updatedFormData = {
+    training_ground_photos: photoUrls.join(","),
+    tournament_photos: photoUrls2.join(","),
+  }
+  axios
+    .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      if (response.data.status === 1) {
+        toast.success("Details updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("Some Error Occurred", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+      updatedAcadmeyInfo();
+      academyDetails();
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while updating details", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    })
+    .finally(() => {
+      setStateBtn(0);
+    });
+}
+//==========================================================================approve function
+const handleDisapprove = () => {
+  const body = { 
+    status: 2,
+    rejection_reason: disapprovalReason,
+   }
+  axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }).then((response) => {
+      if (response?.data?.status === 1) {
+        toast.success("Academy info updated successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+
+    }).catch((error) => {
+      console.log(error);
+    })
+  closeModal();
+  updatedAcadmeyInfo();
+  academyDetails();
+}
 
   return (
     <div>
@@ -426,7 +526,7 @@ const Training = ({ status, newAcadmeyData }) => {
             </div>
             <div className="bmp-total-img">
               <p className="common-fonts bmp-prefer">
-                Upload minimum 25 images & videos 6/25
+                Upload minimum 25 images & tournament_photos 6/25
               </p>
             </div>
           </div>
@@ -473,204 +573,324 @@ const Training = ({ status, newAcadmeyData }) => {
                     <p className="common-fonts bmp-format">
                       Upload image in format png, jpg, jpeg, webp{" "}
                     </p>
-                    {}
+                    { }
                   </span>
                 )}
               </span>
             </div>
           </div>
         </div>
-        {photoUrls?.length === 0 ? (
-          <div className="support-no-ticket-found">
-            <p className="common-fonts">No photos added</p>
-          </div>
-        ) : (
-          <div className="outerBox">
-            {photoUrls?.map((photo, index) => (
-              <div className="bmp-new-img">
-                <div className="bmp-img-top-icon">
-                  <div className="bmp-img-name">
-                    <div className="bmp-video">
+        <>
+          {status === 0 && role_name === "Academy_Admin" ?
+            <>
+              {/* ====================================================map for admin photos */}
+              <div className={`outerBox`}>
+                {photoUrls?.map((photo, index) => (
+                  <div className="bmp-new-img" style={{
+                    border: academyData?.training_ground_photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
+                  }}>
+                    <div className="bmp-img-top-icon">
+                      <div className="bmp-img-name">
+                        <div className="bmp-video" >
+                          <img
+                            src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                            alt="Selected Preview"
+                          />
+                        </div>
+
+                        <p className="common-fonts bmp-tour">
+                          {photo?.length > 20 ? (
+                            <>{photo?.slice(20)}...</>
+                          ) : (
+                            <>{photo}</>
+                          )}
+                        </p>
+                      </div>
+                      <div className="bmp-trash">
+                        <img
+                          src={Trash}
+                          alt=""
+                          onClick={() => handleDeleteOpen(index, "image")}
+                        />
+                      </div>
+                    </div>
+                    <img
+                      src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                      alt="Selected Preview"
+                      key={index}
+                    />
+                  </div>
+                ))}
+              </div>
+            </> :
+            <>
+              {photoUrls?.length === 0 ? (
+                <div className="support-no-ticket-found">
+                  <p className="common-fonts">No photos added</p>
+                </div>
+              ) : (
+                <div className="outerBox">
+                  {photoUrls?.map((photo, index) => (
+                    <div className="bmp-new-img">
+                      <div className="bmp-img-top-icon">
+                        <div className="bmp-img-name">
+                          <div className="bmp-video">
+                            <img
+                              src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                              alt="Selected Preview"
+                            />
+                          </div>
+
+                          <p className="common-fonts bmp-tour">
+                            {photo?.length > 20 ? (
+                              <>{photo?.slice(20)}...</>
+                            ) : (
+                              <>{photo}</>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bmp-trash">
+                          <img
+                            src={Trash}
+                            alt=""
+                            onClick={() => handleDeleteOpen(index, "image")}
+                          />
+                        </div>
+                      </div>
                       <img
                         src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                         alt="Selected Preview"
+                        key={index}
                       />
                     </div>
-
-                    <p className="common-fonts bmp-tour">
-                      {photo?.length > 20 ? (
-                        <>{photo?.slice(20)}...</>
-                      ) : (
-                        <>{photo}</>
-                      )}
-                    </p>
-                  </div>
-                  <div className="bmp-trash">
-                    <img
-                      src={Trash}
-                      alt=""
-                      onClick={() => handleDeleteOpen(index, "image")}
-                    />
-                  </div>
+                  ))}
                 </div>
-                <img
-                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                  alt="Selected Preview"
-                  key={index}
-                />
+              )}
+            </>
+          }
+        </>
+        {/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
+        <>
+          <div className="bmpTab2ImgSection">
+            <div className="bmp-heading-flex">
+              <div>
+                <p className="common-fonts bmp-banner-upload">
+                  Upload Tournament images
+                </p>
+                <p className="common-fonts light-color bmp-size">
+                  Recommended image size less than 2Mb
+                </p>
               </div>
-            ))}
-          </div>
-        )}
-      </>
-      {/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
-      <>
-        <div className="bmpTab2ImgSection">
-          <div className="bmp-heading-flex">
-            <div>
-              <p className="common-fonts bmp-banner-upload">
-                Upload Tournament images
-              </p>
-              <p className="common-fonts light-color bmp-size">
-                Recommended image size less than 2Mb
-              </p>
+              <div className="bmp-total-img">
+                <p className="common-fonts bmp-prefer">
+                  Upload minimum 25 images & tournament_photos 6/25
+                </p>
+              </div>
             </div>
-            <div className="bmp-total-img">
-              <p className="common-fonts bmp-prefer">
-                Upload minimum 25 images & videos 6/25
-              </p>
-            </div>
-          </div>
-          <div className="bmp-upload-3 bmp-gap">
-            <div className="contact-browse deal-doc-file">
-              <span
-                className="common-fonts common-input contact-tab-input bmp-border-2"
-                style={{
-                  position: "relative",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  className="contact-browse-btn common-fonts"
-                  onClick={handleButtonClick2}
-                  disabled={status === 0 && role_name === 'Academy'}
-                >
-                  Browse
-                </button>
-                <input
-                  type="file"
+            <div className="bmp-upload-3 bmp-gap">
+              <div className="contact-browse deal-doc-file">
+                <span
+                  className="common-fonts common-input contact-tab-input bmp-border-2"
                   style={{
-                    display: "none",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
+                    position: "relative",
+                    marginRight: "10px",
                   }}
-                  ref={fileInputRef2}
-                  onChange={handleFileChange2}
-                  multiple
-                />
-                {isUploadingMulti2 ? (
-                  <span className="common-fonts upload-file-name">
-                    Uploading...
-                  </span>
-                ) : (
-                  <span className="common-fonts upload-file-name">
-                    <p className="common-fonts light-color">
-                      You can upload multiple images{" "}
-                    </p>
-                    <p className="common-fonts bmp-format">
-                      Upload image in format png, jpg, jpeg, webp{" "}
-                    </p>
-                    {}
-                  </span>
-                )}
-              </span>
+                >
+                  <button
+                    className="contact-browse-btn common-fonts"
+                    onClick={handleButtonClick2}
+                    disabled={status === 0 && role_name === 'Academy'}
+                  >
+                    Browse
+                  </button>
+                  <input
+                    type="file"
+                    style={{
+                      display: "none",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      width: "100%",
+                    }}
+                    ref={fileInputRef2}
+                    onChange={handleFileChange2}
+                    multiple
+                  />
+                  {isUploadingMulti2 ? (
+                    <span className="common-fonts upload-file-name">
+                      Uploading...
+                    </span>
+                  ) : (
+                    <span className="common-fonts upload-file-name">
+                      <p className="common-fonts light-color">
+                        You can upload multiple images{" "}
+                      </p>
+                      <p className="common-fonts bmp-format">
+                        Upload image in format png, jpg, jpeg, webp{" "}
+                      </p>
+                      { }
+                    </span>
+                  )}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        {photoUrls2?.length === 0 ? (
-          <div className="support-no-ticket-found">
-            <p className="common-fonts">No photos added</p>
-          </div>
-        ) : (
-          <div className="outerBox">
-            {photoUrls2?.map((photo, index) => (
-              <div className="bmp-new-img">
-                <div className="bmp-img-top-icon">
-                  <div className="bmp-img-name">
-                    <div className="bmp-video">
+          <>
+            {status === 0 && role_name === "Academy_Admin" ?
+              <>
+                <div className={`outerBox`}>
+                  {photoUrls2?.map((photo, index) => (
+                    <div className="bmp-new-img" style={{
+                      border: academyData?.tournament_photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
+                    }}>
+                      <div className="bmp-img-top-icon">
+                        <div className="bmp-img-name">
+                          <div className="bmp-video" >
+                            <img
+                              src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                              alt="Selected Preview"
+                            />
+                          </div>
+
+                          <p className="common-fonts bmp-tour">
+                            {photo?.length > 20 ? (
+                              <>{photo?.slice(20)}...</>
+                            ) : (
+                              <>{photo}</>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bmp-trash">
+                          <img
+                            src={Trash}
+                            alt=""
+                            onClick={() => handleDeleteOpen(index, "image")}
+                          />
+                        </div>
+                      </div>
                       <img
                         src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                         alt="Selected Preview"
+                        key={index}
                       />
                     </div>
-
-                    <p className="common-fonts bmp-tour">
-                      {photo?.length > 20 ? (
-                        <>{photo?.slice(20)}...</>
-                      ) : (
-                        <>{photo}</>
-                      )}
-                    </p>
-                  </div>
-                  <div className="bmp-trash">
-                    <img
-                      src={Trash}
-                      alt=""
-                      onClick={() => handleDeleteOpen2(index, "image")}
-                    />
-                  </div>
+                  ))}
                 </div>
-                <img
-                  src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
-                  alt="Selected Preview"
-                  key={index}
-                />
-              </div>
-            ))}
-          </div>
+              </> :
+              <>
+                {photoUrls2?.length === 0 ? (
+                  <div className="support-no-ticket-found">
+                    <p className="common-fonts">No photos added</p>
+                  </div>
+                ) : (
+                  <div className="outerBox">
+                    {photoUrls2?.map((photo, index) => (
+                      <div className="bmp-new-img">
+                        <div className="bmp-img-top-icon">
+                          <div className="bmp-img-name">
+                            <div className="bmp-video">
+                              <img
+                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                                alt="Selected Preview"
+                              />
+                            </div>
+
+                            <p className="common-fonts bmp-tour">
+                              {photo?.length > 20 ? (
+                                <>{photo?.slice(20)}...</>
+                              ) : (
+                                <>{photo}</>
+                              )}
+                            </p>
+                          </div>
+                          <div className="bmp-trash">
+                            <img
+                              src={Trash}
+                              alt=""
+                              onClick={() => handleDeleteOpen2(index, "image")}
+                            />
+                          </div>
+                        </div>
+                        <img
+                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
+                          alt="Selected Preview"
+                          key={index}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            }
+          </>
+        </>
+        <div className="bmp-bottom-btn">
+        {status === 0 && role_name === "Academy_Admin" ?
+              <>
+                <button
+                  onClick={openModal}
+                  className="common-save-button common-delete-button">
+                  Disapprove
+                </button>
+                <button
+                  onClick={handleApprove}
+                  className="common-save-button common-save">
+                  Approve
+                </button>
+              </>
+              :
+              <>
+          <button
+            className="common-fonts common-white-button"
+            onClick={resetState}
+          >
+            Cancel
+          </button>
+          {stateBtn === 0 ? (
+            <button className="disabledBtn">Save</button>
+          ) : (
+            <button
+              className="common-fonts common-save-button"
+              onClick={handleSubmit}
+            >
+              Save
+            </button>
+         )}
+         </>
+       }
+     </div>
+        {isDeleteModalOpen && (
+          <DeleteImage
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+            }}
+            onDelete={handleDeleteConfirm}
+            prop={deleteProp}
+          />
+        )}
+        {isDeleteModalOpen2 && (
+          <DeleteImage
+            onClose={() => {
+              setIsDeleteModalOpen2(false);
+            }}
+            onDelete={handleDeleteConfirm2}
+            prop={deleteProp2}
+          />
         )}
       </>
+      {
+        open && (
+          <DisapproveModal
+          onClose={closeModal}
+          onEnter={handleDisapprove}
+          disapprovalReason={disapprovalReason}
+          setDisapprovalReason={setDisapprovalReason}
+        />
+        )
+      }
 
-      <div className="bmp-bottom-btn">
-        <button
-          className="common-fonts common-white-button"
-          onClick={resetState}
-        >
-          Cancel
-        </button>
-        {stateBtn === 0 ? (
-          <button className="disabledBtn">Save</button>
-        ) : (
-          <button
-            className="common-fonts common-save-button"
-            onClick={handleSubmit}
-          >
-            Save
-          </button>
-        )}
-      </div>
-      {isDeleteModalOpen && (
-        <DeleteImage
-          onClose={() => {
-            setIsDeleteModalOpen(false);
-          }}
-          onDelete={handleDeleteConfirm}
-          prop={deleteProp}
-        />
-      )}
-      {isDeleteModalOpen2 && (
-        <DeleteImage
-          onClose={() => {
-            setIsDeleteModalOpen2(false);
-          }}
-          onDelete={handleDeleteConfirm2}
-          prop={deleteProp2}
-        />
-      )}
     </div>
   );
 };

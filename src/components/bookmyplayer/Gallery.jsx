@@ -61,7 +61,7 @@ const Gallery = () => {
     "video/ogg",
   ];
   const [activeTab, setActiveTab] = useState("academy");
-  //======================================================================extra functions for approve n disapprove
+//======================================================================extra functions for approve n disapprove
   const [revokeId, setRevokeId] = useState(null);
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
 //=====================================for disapprove modal
@@ -1114,7 +1114,7 @@ const closeModal = () => {
       )}
 
       {activeTab === "training" && (
-        <Training status={status} newAcadmeyData={newAcadmeyData} />
+        <Training status={status} newAcadmeyData={newAcadmeyData} keysOfNewAcadmeyData={keysOfNewAcadmeyData} updatedAcadmeyInfo={updatedAcadmeyInfo} revokeId={revokeId}/>
       )}
 
       <ToastContainer />
