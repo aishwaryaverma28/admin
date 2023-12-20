@@ -58,8 +58,6 @@ const Approval = () => {
           'training_ground_photos',
           'tournament_photos',
         ].some((key) => item[key] !== null);
-        console.log(hasOverview);
-        console.log(hasGallery);
   
         let approvedFields = '';
         let rejectedFields = '';
