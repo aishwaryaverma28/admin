@@ -8,13 +8,12 @@ import {
   UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
   RESTRICTED_KEYWORDS,
+  ADDRESS_API,
   getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
-import loadScript from "load-script";
-import PlacesAutocomplete from "react-places-autocomplete";
 import Dash from "../../assets/image/red-dash.svg";
 import Dash2 from "../../assets/image/dash2.svg";
 
@@ -81,9 +80,9 @@ const BmpOverview = () => {
   ];
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [address, setAddress] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",
@@ -172,60 +171,47 @@ const BmpOverview = () => {
     setLanguageString(joinLanguage);
   };
 
-  useEffect(() => {
-    if (!googleScriptLoaded) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN`;
-      script.async = true;
-      script.onload = () => setGoogleScriptLoaded(true);
-      script.onerror = (error) =>
-        console.error("Error loading Google Maps:", error);
-      document.head.appendChild(script);
-      return () => {
-        document.head.removeChild(script);
-      };
+  const handleInputChange = async (value) => {
+    setAddress(value);
+        try {
+      const response = await axios.post(ADDRESS_API, { input: value });
+      const data = response.data;
+      if (data.status === 1) {
+        setSuggestions(data.data);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching address suggestions:', error);
     }
-  }, [googleScriptLoaded]);
+  };
 
-  const handleSelect = (selectedAddress) => {
-    setAddress(selectedAddress);
+
+  const handleSelectAddress = (selectedAddress) => {
+    console.log(selectedAddress)
+    setAddress(selectedAddress.description);
     if (selectedAddress.length === 0) {
       setNumber2(1);
     } else {
       setNumber2(0);
     }
     setStateBtn(1);
-    const placesService = new window.google.maps.places.PlacesService(
-      document.createElement("div")
+    setCoordinate(`${selectedAddress.latitude},${selectedAddress.longitude}`);
+    if (`${selectedAddress.latitude},${selectedAddress.longitude}`.length === 0) {
+      setNumber4(1);
+    } else {
+      setNumber4(0);
+    }
+    setMapLink(
+      `https://www.google.com/maps?q=${selectedAddress.latitude},${selectedAddress.longitude}`
     );
-    placesService.textSearch({ query: selectedAddress }, (results, status) => {
-      if (
-        status === window.google.maps.places.PlacesServiceStatus.OK &&
-        results.length > 0
-      ) {
-        const location = results[0].geometry.location;
-        const selectedLatitude = location.lat();
-        const selectedLongitude = location.lng();
-        setCoordinate(`${selectedLatitude},${selectedLongitude}`);
-        if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
-          setNumber4(1);
-        } else {
-          setNumber4(0);
-        }
-        updateField("coordinate");
-      }
-    });
-
-    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
-      selectedAddress
-    )}`;
-    setMapLink(mapLink);
     if (mapLink.length === 0) {
       setNumber3(1);
     } else {
       setNumber3(0);
     }
-    updateField("map");
+    setSuggestions([]);
+
   };
 
   const updateField = (fieldName) => {
@@ -302,7 +288,7 @@ const BmpOverview = () => {
           };
         });
         setMappedLanguages([...newLanguage]);
-         setIsLoading(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -346,21 +332,7 @@ const BmpOverview = () => {
       }
     }
   }, [academyData]);
-  useEffect(() => {
-    if (!googleScriptLoaded) {
-      loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
-        (error, script) => {
-          if (error) {
-            console.error("Error loading Google Maps JavaScript API:", error);
-          } else {
-            setGoogleScriptLoaded(true);
-          }
-          return <div>Loading Google Maps...</div>;
-        }
-      );
-    }
-  }, [googleScriptLoaded]);
+
 
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
@@ -499,7 +471,7 @@ const BmpOverview = () => {
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
-  
+
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -671,9 +643,8 @@ const BmpOverview = () => {
             </label>
             <input
               type="text"
-              className={`common-fonts common-input bmp-input ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
@@ -689,9 +660,8 @@ const BmpOverview = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about || ""}
               id=""
-              className={`common-fonts bmp-textarea ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}
+              className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
               rows="2"
               disabled={status === 0 && role_name === "Academy"}
             ></textarea>
@@ -700,54 +670,43 @@ const BmpOverview = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Address
             </label>
-            {googleScriptLoaded && (
-              <PlacesAutocomplete
+            <div className="relativeInput">
+              <input
+                type="text"
                 value={address}
-                onChange={setAddress}
-                onSelect={handleSelect}
-                searchOptions={{
-                  componentRestrictions: { country: "IN" },
-                }}
-              disabled={status === 0 && role_name === "Academy"}
-              >
-                {({
-                  getInputProps,
-                  suggestions,
-                  getSuggestionItemProps,
-                  loading,
-                }) => (
-                  <div className="relativeInput">
-                    <input
-                      type="text"
-                      className={`common-fonts common-input bmp-input ${
-                        status === 0 && role_name === "Academy"
-                          ? "bmp_disable"
-                          : ""
-                      }`}
-                      disabled={status === 0 && role_name === "Academy"}
-                      {...getInputProps({
-                        placeholder: "Enter your address",
-                      })}
-                    />
+                onChange={(e) => handleInputChange(e.target.value)}
+                placeholder="Type your address..."
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}
+                disabled={status === 0 && role_name === "Academy"}
+              />
+              {suggestions.length > 0 && address.length !== 0 && (
+                <div className="autocomplete-dropdown">
+                  {suggestions.map((address) => (
                     <div
-                      {...(suggestions.length > 0
-                        ? { className: "autocomplete-dropdown" }
-                        : {})}
+                      key={address.place_id}
+                      onClick={() => handleSelectAddress(address)}
                     >
-                      {loading && <div>Loading...</div>}
-                      {suggestions.map((suggestion) => (
-                        <div
-                          {...getSuggestionItemProps(suggestion)}
-                          key={suggestion.placeId}
-                        >
-                          {suggestion.description}
-                        </div>
-                      ))}
+                      {address.description}
                     </div>
-                  </div>
-                )}
-              </PlacesAutocomplete>
-            )}
+                  ))}
+                </div>
+              )}
+              {/* {address && (
+        <div>
+          <p>Selected Address: {address}</p>
+          <p>
+            Selected Coordinates: {coordinate}
+          </p>
+          <p>
+            Google Map Link:{' '}
+            <a href={mapLink} target="_blank" rel="noopener noreferrer">
+              {mapLink}
+            </a>
+          </p>
+        </div>
+      )} */}
+            </div>
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
@@ -755,100 +714,91 @@ const BmpOverview = () => {
             </label>
             <div className="bmp-games">
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Football") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Football")}
               >
                 Football
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Basketball") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Basketball")}
               >
                 Basketball
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Chess") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Chess")}
               >
                 Chess
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Tennis") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Tennis")}
               >
                 Tennis
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("MMA") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("MMA")}
               >
                 MMA
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Golf") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Golf")}
               >
                 Golf
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Hockey") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Hockey")}
               >
                 Hockey
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Badminton") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-      className={`common-fonts bmp-game-list ${
-        selectedDays?.includes("Volleyball") &&
-        !(status === 0 && role_name === "Academy")
-          ? "bmp-game-active"
-          : ""
-      } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") &&
+                    !(status === 0 && role_name === "Academy")
+                    ? "bmp-game-active"
+                    : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Volleyball")}
               >
                 Volleyball
@@ -867,11 +817,10 @@ const BmpOverview = () => {
                     <label className="custom-checkbox">
                       <input
                         type="checkbox"
-                        className={`cb1 ${
-                          status === 0 && role_name === "Academy"
+                        className={`cb1 ${status === 0 && role_name === "Academy"
                             ? "bmp_disable"
                             : ""
-                        }`}
+                          }`}
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
                         onChange={handleCheckboxChange}
@@ -888,9 +837,8 @@ const BmpOverview = () => {
 
               <input
                 type="number"
-                className={`common-fonts common-input bmp-input ${
-                  status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-                }`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}
                 name={index === 0 ? "phone" : "whatsapp"}
                 disabled={status === 0 && role_name === "Academy"}
                 onChange={handleChange}
@@ -898,8 +846,8 @@ const BmpOverview = () => {
                   isLoading
                     ? "-"
                     : index === 0
-                    ? academyData?.phone
-                    : academyData?.whatsapp
+                      ? academyData?.phone
+                      : academyData?.whatsapp
                 }
               />
             </div>
@@ -908,9 +856,8 @@ const BmpOverview = () => {
           {isButtonVisible && (
             <div>
               <button
-                className={`common-fonts common-white-blue-button bmp-add-phone ${
-                  status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-                }`}
+                className={`common-fonts common-white-blue-button bmp-add-phone ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}
                 onClick={addPhoneNumberInput}
                 disabled={status === 0 && role_name === "Academy"}
               >
@@ -926,9 +873,8 @@ const BmpOverview = () => {
             <input
               type="email"
               name="email"
-              className={`common-fonts common-input bmp-input ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
@@ -944,9 +890,8 @@ const BmpOverview = () => {
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className={`common-fonts common-input bmp-input ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
               disabled={status === 0 && role_name === "Academy"}
             />
           </div>
@@ -956,9 +901,8 @@ const BmpOverview = () => {
               Experience:{" "}
             </label>
             <select
-              className={`common-fonts common-input langSelect ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}
+              className={`common-fonts common-input langSelect ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
               name="experience"
               onChange={handleChange}
               disabled={status === 0 && role_name === "Academy"}
@@ -997,11 +941,10 @@ const BmpOverview = () => {
                 <label className="custom-checkbox">
                   <input
                     type="checkbox"
-                    className={`cb1 ${
-                      status === 0 && role_name === "Academy"
+                    className={`cb1 ${status === 0 && role_name === "Academy"
                         ? "bmp_disable"
                         : ""
-                    }`}
+                      }`}
                     name="headerCheckBox"
                     checked={alwaysOpenChecked}
                     onChange={handleAlwaysOpenCheckboxChange}
@@ -1061,11 +1004,10 @@ const BmpOverview = () => {
                   }}
                 >
                   <button
-                    className={`common-fonts contact-browse-btn ${
-                      status === 0 && role_name === "Academy"
+                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "Academy"
                         ? "bmp_disable"
                         : ""
-                    }`}
+                      }`}
                     onClick={handleButtonClick}
                     disabled={status === 0 && role_name === "Academy"}
                   >
@@ -1093,7 +1035,7 @@ const BmpOverview = () => {
                   ) : (
                     <span className={`common-fonts upload-file-name ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}>
                       {fileName ? fileName : academyData?.logo}
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
@@ -1164,7 +1106,7 @@ const BmpOverview = () => {
               <p className="common-fonts bmp-social">Language</p>
 
               <button
-              
+
                 className={`common-white-blue-button ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
 
                 onClick={handleAddLanguage}
@@ -1214,9 +1156,8 @@ const BmpOverview = () => {
 
             {mappedLanguages.map((mappedLanguage, index) => (
               <div className="bmp_overview_language_map" key={index}>
-                <p className={`common-fonts ${
-                status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-              }`}>
+                <p className={`common-fonts ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}>
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>{
                   status === 0 && role_name === "Academy" ? (
@@ -1225,7 +1166,7 @@ const BmpOverview = () => {
                     <img src={Dash} alt="" onClick={handleDeleteLanguage} />
                   )
                 }
-                
+
               </div>
             ))}
           </div>
@@ -1241,7 +1182,7 @@ const BmpOverview = () => {
           </button>
         ) : (
           <button
-            className={`${status === 0 && role_name === 'Academy' ? "bmp_disable disabledBtn":"common-save-button common-save"}`}
+            className={`${status === 0 && role_name === 'Academy' ? "bmp_disable disabledBtn" : "common-save-button common-save"}`}
             onClick={handleSubmit}
             disabled={status === 0 && role_name === 'Academy'}
           >

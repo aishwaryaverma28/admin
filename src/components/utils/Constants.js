@@ -202,6 +202,7 @@ export const ENVELOPE_DETAILS = start + "/thirdPartyApiRouter/docusign/envelope/
 //============================================================bmp apis
 export const BMP_LOGIN = start +  "/bmp/login";
 export const GET_ACADEMY = start + "/bmp/academy/get/";
+export const ADDRESS_API = start + "/bmp/academy/getaddressbyquery";
 export const UPDATE_ACADEMY_TABLE2 = start+ "/bmp/academy/addupdaterequest";
 export const UPDATE_ACADEMY = start + "/bmp/academy/update/";
 export const ADD_BATCH = start + "/bmp/batch/add";
@@ -223,24 +224,7 @@ export const BMP_ACADEMY_ALL_REVIEWS = start + "/bmp/academy/getreviewsbytype";
 export const UPDATE_ACADEMY_REVIEW = start + "/bmp/academy/review/update/";
 
 //===============================================================league apis
-export const GET_ALL_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/getall";
-export const ADD_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/add";
-export const GET_LEAGUE_BY_ID = "http://core.leadplaner.com:3001/api/bmp/league/get/"
-export const UPDATE_LEAGUE = "http://core.leadplaner.com:3001/api/bmp/league/update/"
-/* 
-post api : {{ezukal_3000}}/api/bmp/academy/addupdaterequest
-body: {
-    "academy_id": 510,
-    "name":"tets name"
-}
-
-post api : {{ezukal_3000}}/api/bmp/academy/getupdatedinfo
-body: {
-    "academy_id": 510
-}
-
-put api : {{ezukal_3000}}/api/bmp/academy/updateupdatedinfo/1
-body: {
-    "status": 2
-}
-*/
+export const GET_ALL_LEAGUE = start + "/bmp/league/getall";
+export const ADD_LEAGUE = start + "/bmp/league/add";
+export const GET_LEAGUE_BY_ID = start + "/bmp/league/get/"
+export const UPDATE_LEAGUE = start + "/bmp/league/update/"

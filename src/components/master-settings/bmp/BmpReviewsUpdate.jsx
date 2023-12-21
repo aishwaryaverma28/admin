@@ -28,6 +28,7 @@ const BmpReviewsUpdate = () => {
     })
       .then((response) => {
         if (response?.data?.status === 1) {
+          console.log(response?.data?.data)
           const allReviews = response?.data?.data;
           const pendingReviews = allReviews.filter(item => item.status === 0);
           const approveReviews = allReviews.filter(item => item.status === 1);

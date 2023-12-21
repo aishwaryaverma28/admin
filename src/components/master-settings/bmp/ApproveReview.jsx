@@ -15,7 +15,7 @@ const ApproveReview = () => {
             status: 1
         }, {
           headers: {
-            Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`
           }
         }).then((response) => {
           setData(response?.data?.data);

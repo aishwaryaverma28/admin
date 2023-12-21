@@ -10,13 +10,12 @@ import {
   UPDATE_ACADEMY,
   UPDATE_ACADMEY_STATUS,
   GET_UPDATED_ACADEMY_INFO,
+  ADDRESS_API,
   getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
-import loadScript from "load-script";
-import PlacesAutocomplete from "react-places-autocomplete";
 import Dash from "../../assets/image/red-dash.svg";
 const OverviewById = () => {
   const { id } = useParams();
@@ -84,6 +83,7 @@ const OverviewById = () => {
   ];
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [address, setAddress] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
@@ -280,56 +280,47 @@ const OverviewById = () => {
     setLanguageString(joinLanguage);
   };
   //=================================================================google address
-  useEffect(() => {
-    if (!googleScriptLoaded) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN`;
-      script.async = true;
-      script.onload = () => setGoogleScriptLoaded(true);
-      script.onerror = (error) => console.error("Error loading Google Maps:", error);
-      document.head.appendChild(script);
-
-      return () => {
-        document.head.removeChild(script);
-      };
+  const handleInputChange = async (value) => {
+    setAddress(value);
+        try {
+      const response = await axios.post(ADDRESS_API, { input: value });
+      const data = response.data;
+      if (data.status === 1) {
+        setSuggestions(data.data);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching address suggestions:', error);
     }
-  }, [googleScriptLoaded]);
+  };
 
-  const handleSelect = (selectedAddress) => {
-    setAddress(selectedAddress);
+
+  const handleSelectAddress = (selectedAddress) => {
+    console.log(selectedAddress)
+    setAddress(selectedAddress.description);
     if (selectedAddress.length === 0) {
-      setNumber2(1)
+      setNumber2(1);
     } else {
-      setNumber2(0)
+      setNumber2(0);
     }
     setStateBtn(1);
-    const placesService = new window.google.maps.places.PlacesService(
-      document.createElement("div")
-    );
-    placesService.textSearch({ query: selectedAddress }, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-        const location = results[0].geometry.location;
-        const selectedLatitude = location.lat();
-        const selectedLongitude = location.lng();
-        setCoordinate(`${selectedLatitude},${selectedLongitude}`);
-        if (`${selectedLatitude},${selectedLongitude}`.length === 0) {
-          setNumber4(1)
-        } else {
-          setNumber4(0)
-        }
-        updateField("coordinate");
-      }
-    });
-    const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURI(
-      selectedAddress
-    )}`;
-    setMapLink(mapLink);
-    if (mapLink.length === 0) {
-      setNumber3(1)
+    setCoordinate(`${selectedAddress.latitude},${selectedAddress.longitude}`);
+    if (`${selectedAddress.latitude},${selectedAddress.longitude}`.length === 0) {
+      setNumber4(1);
     } else {
-      setNumber3(0)
+      setNumber4(0);
     }
-    updateField("map");
+    setMapLink(
+      `https://www.google.com/maps?q=${selectedAddress.latitude},${selectedAddress.longitude}`
+    );
+    if (mapLink.length === 0) {
+      setNumber3(1);
+    } else {
+      setNumber3(0);
+    }
+    setSuggestions([]);
+
   };
 
   const updateField = (fieldName) => {
@@ -394,21 +385,6 @@ const OverviewById = () => {
       }
     }
   }, [academyData]);
-  useEffect(() => {
-    if (!googleScriptLoaded) {
-      loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyAKKzPfrnhLHFG7xMO-snpRQ7ULl91iOQw&libraries=places&language=en&region=IN",
-        (error, script) => {
-          if (error) {
-            console.error("Error loading Google Maps JavaScript API:", error);
-          } else {
-            setGoogleScriptLoaded(true);
-          }
-          return <div>Loading Google Maps...</div>;
-        }
-      );
-    }
-  }, [googleScriptLoaded]);
 
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
@@ -805,48 +781,29 @@ const OverviewById = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Address
             </label>
-            {googleScriptLoaded && (
-              <PlacesAutocomplete
+            <div className="relativeInput">
+              <input
+                type="text"
                 value={address}
-                onChange={setAddress}
-                onSelect={handleSelect}
-                searchOptions={{
-                  componentRestrictions: { country: "IN" },
-                }}
-              >
-                {({
-                  getInputProps,
-                  suggestions,
-                  getSuggestionItemProps,
-                  loading,
-                }) => (
-                  <div className="relativeInput">
-                    <input
-                      type="text"
-                      className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
-                      {...getInputProps({
-                        placeholder: "Enter your address",
-                      })}
-                    />
+                onChange={(e) => handleInputChange(e.target.value)}
+                placeholder="Type your address..."
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}
+                disabled={status === 0 && role_name === "Academy"}
+              />
+              {suggestions.length > 0 && address.length !== 0 && (
+                <div className="autocomplete-dropdown">
+                  {suggestions.map((address) => (
                     <div
-                      {...(suggestions.length > 0
-                        ? { className: "autocomplete-dropdown" }
-                        : {})}
+                      key={address.place_id}
+                      onClick={() => handleSelectAddress(address)}
                     >
-                      {loading && <div>Loading...</div>}
-                      {suggestions.map((suggestion) => (
-                        <div
-                          {...getSuggestionItemProps(suggestion)}
-                          key={suggestion.placeId}
-                        >
-                          {suggestion.description}
-                        </div>
-                      ))}
+                      {address.description}
                     </div>
-                  </div>
-                )}
-              </PlacesAutocomplete>
-            )}
+                  ))}
+                </div>
+              )}
+                </div>
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
