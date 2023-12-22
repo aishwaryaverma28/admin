@@ -24,7 +24,8 @@ const Review = () => {
   const reviewData = () => {
     const body = {
       object_id: parseInt(academyId),
-      object_type: "academy"
+      object_type: "academy",
+      status:1
     }
     axios.post(GET_ALL_REVIEW, body, {
       headers: {

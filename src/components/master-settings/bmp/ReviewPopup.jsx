@@ -57,7 +57,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const handleSaveEdit = () => {
         axios.put(UPDATE_ACADEMY_REVIEW + review.id, { comment: editedComment }, {
             headers: {
-                Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+                Authorization: `Bearer ${decryptedToken}`
             }
         }).then((response) => {
             console.log(response);

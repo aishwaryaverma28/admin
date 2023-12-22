@@ -86,7 +86,6 @@ const OverviewById = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
   //=====================================for disapprove modal
   const [open, setOpen] = useState(false);
   const [disapprovalReason, setDisapprovalReason] = useState('');
@@ -787,9 +786,7 @@ const OverviewById = () => {
                 value={address}
                 onChange={(e) => handleInputChange(e.target.value)}
                 placeholder="Type your address..."
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-                  }`}
-                disabled={status === 0 && role_name === "Academy"}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
               />
               {suggestions.length > 0 && address.length !== 0 && (
                 <div className="autocomplete-dropdown">

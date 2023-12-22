@@ -173,8 +173,9 @@ const BmpOverview = () => {
 
   const handleInputChange = async (value) => {
     setAddress(value);
-        try {
-      const response = await axios.post(ADDRESS_API, { input: value });
+    try {
+      const response = await axios.get(`https://www.zomato.com/webroutes/location/search?q=${value}`);
+      console.log(response);
       const data = response.data;
       if (data.status === 1) {
         setSuggestions(data.data);
@@ -692,20 +693,20 @@ const BmpOverview = () => {
                   ))}
                 </div>
               )}
-              {/* {address && (
-        <div>
-          <p>Selected Address: {address}</p>
-          <p>
-            Selected Coordinates: {coordinate}
-          </p>
-          <p>
-            Google Map Link:{' '}
-            <a href={mapLink} target="_blank" rel="noopener noreferrer">
-              {mapLink}
-            </a>
-          </p>
-        </div>
-      )} */}
+              {address && (
+                <div>
+                  <p>Selected Address: {address}</p>
+                  <p>
+                    Selected Coordinates: {coordinate}
+                  </p>
+                  <p>
+                    Google Map Link:{' '}
+                    <a href={mapLink} target="_blank" rel="noopener noreferrer">
+                      {mapLink}
+                    </a>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className="bmp-input-flex">
@@ -715,9 +716,9 @@ const BmpOverview = () => {
             <div className="bmp-games">
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Football")}
               >
@@ -725,9 +726,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Basketball")}
               >
@@ -735,9 +736,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Chess")}
               >
@@ -745,9 +746,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Tennis")}
               >
@@ -755,9 +756,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("MMA")}
               >
@@ -765,9 +766,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Golf")}
               >
@@ -775,9 +776,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Hockey")}
               >
@@ -785,9 +786,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Badminton")}
               >
@@ -795,9 +796,9 @@ const BmpOverview = () => {
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") &&
-                    !(status === 0 && role_name === "Academy")
-                    ? "bmp-game-active"
-                    : ""
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("Volleyball")}
               >
@@ -818,8 +819,8 @@ const BmpOverview = () => {
                       <input
                         type="checkbox"
                         className={`cb1 ${status === 0 && role_name === "Academy"
-                            ? "bmp_disable"
-                            : ""
+                          ? "bmp_disable"
+                          : ""
                           }`}
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
@@ -942,8 +943,8 @@ const BmpOverview = () => {
                   <input
                     type="checkbox"
                     className={`cb1 ${status === 0 && role_name === "Academy"
-                        ? "bmp_disable"
-                        : ""
+                      ? "bmp_disable"
+                      : ""
                       }`}
                     name="headerCheckBox"
                     checked={alwaysOpenChecked}
@@ -1005,8 +1006,8 @@ const BmpOverview = () => {
                 >
                   <button
                     className={`common-fonts contact-browse-btn ${status === 0 && role_name === "Academy"
-                        ? "bmp_disable"
-                        : ""
+                      ? "bmp_disable"
+                      : ""
                       }`}
                     onClick={handleButtonClick}
                     disabled={status === 0 && role_name === "Academy"}
