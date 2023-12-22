@@ -15,7 +15,7 @@ const BmpSidebar = () => {
 
   return (
     <section className="setting-side-panel">
-      {userRole === "Academy_Admin" && (
+      {userRole === "Academy Admin" && (
         <div className="back-to-user general-refresh blog-back">
           <button className="common-fonts" onClick={handleBackToTable}>
             <img src={LeftArrow} alt="" />
@@ -29,7 +29,7 @@ const BmpSidebar = () => {
       <p className="prefrence-options setting-font-style">
 
       {
-        userRole === "Academy_Admin" ? (
+        userRole === "Academy Admin" ? (
           <NavLink exact to={`/lp/bmp/overview/${id}`}>
           Overview
         </NavLink>

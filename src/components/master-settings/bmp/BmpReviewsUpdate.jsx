@@ -20,6 +20,7 @@ const BmpReviewsUpdate = () => {
     const body = {
       object_id: parseInt(id),
       object_type: "academy"
+      
     }
     axios.post(GET_ALL_REVIEW, body, {
       headers: {

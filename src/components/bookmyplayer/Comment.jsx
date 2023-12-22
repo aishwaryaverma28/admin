@@ -15,7 +15,7 @@ const Comment = ({ onClose, review, reviewData }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [stateBtn, setStateBtn] = useState(0);
   const [acaReply, setAcaReply] = useState([])
-  // console.log(userName[0].name);
+  console.log(userName[0]?.name);
   const reviewReply = () => {
     const body = {
       review_id: review.id
@@ -56,8 +56,9 @@ const Comment = ({ onClose, review, reviewData }) => {
       name: userName[0]?.name,
       comment: reply,
       status: 1,
-      user_id: 2
+      user_id: userName[0]?.id
     };
+    console.log(body);
     axios.post(ADD_REPLY, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,

@@ -5,11 +5,11 @@ import { ADD_REPLY, UPDATE_ACADEMY_REVIEW, GET_REVIEW_REPLY, getDecryptedToken }
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Pen from "../../../assets/image/small-pen.svg";
-
+import { useSelector } from "react-redux";
 
 const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
-    console.log(review, academyId);
     const decryptedToken = getDecryptedToken();
+    const userName = useSelector(store => store.user.items);
     const [reply, setReply] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [stateReviewBtn, setStateReviewBtn] = useState(0);
@@ -20,8 +20,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
     const [editedComment, setEditedComment] = useState(review.comment);
     const [editedCommentIndex, setEditedCommentIndex] = useState(null);
     const [isReplyEditing, setIsReplyEditing] = useState(false);
-    
-
+// console.log(userName[0][0])
     const reviewReply = () => {
         const body = {
             review_id: review.id
@@ -33,7 +32,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         })
             .then((response) => {
                 if (response?.data?.status === 1) {
-                    console.log(response?.data?.data)
+                    // console.log(response?.data?.data)
                     setAcaReply(response?.data?.data?.reverse());
                 }
                 setIsLoading(false);
@@ -60,7 +59,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 Authorization: `Bearer ${decryptedToken}`
             }
         }).then((response) => {
-            console.log(response);
+            // console.log(response);
             toast.success("review updated successfully", {
                 position: "top-center",
                 autoClose: 2000,
@@ -86,10 +85,10 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
             type: "bmp-response",
             object_type: "academy",
             object_id: parseInt(academyId),
-            name: review?.name,
+            name: userName[0][0]?.first_name+" "+userName[0][0]?.last_name,
             comment: reply,
             status: 1,
-            user_id: 2
+            user_id: userName[0][0]?.id
         };
         axios.post(ADD_REPLY, body, {
             headers: {
@@ -98,7 +97,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
         })
             .then((response) => {
                 if (response?.data?.status === 1) {
-                    console.log(response?.data?.data)
+                    // console.log(response?.data?.data)
                     toast.success("Reply send successfully!", {
                         position: "top-center",
                         autoClose: 2000,
@@ -119,7 +118,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
             }
         }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.status === 1) {
                 toast.success("review disapproved successfully", {
                     position: "top-center",
@@ -138,7 +137,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
             }
         }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.status === 1) {
                 toast.success("review approved successfully", {
                     position: "top-center",
@@ -170,7 +169,7 @@ const ReviewPopup = ({ onClose, review, reviewData, academyId }) => {
                 Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
             }
         }).then((response) => {
-            console.log(response);
+            // console.log(response);
             toast.success("reply updated successfully", {
                 position: "top-center",
                 autoClose: 2000,

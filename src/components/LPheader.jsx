@@ -21,6 +21,8 @@ const LPheader = () => {
   const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
   const userId = localStorage.getItem("id");
+  const academyId = localStorage.getItem("academy_id");
+  const role_name = localStorage.getItem("role_name");
   const [pageTitle, setPageTitle] = useState("Lead");
   const dispatch = useDispatch();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -136,6 +138,7 @@ const LPheader = () => {
       if (response.data.status === 1) {
         setClientData(data[0]);
         setNumber(0);
+        dispatch(addItem(data));
       }
     } catch (error) {
       console.log(error);
@@ -147,15 +150,22 @@ const LPheader = () => {
   }
 
   async function getBMPUser() {
+    let body = {};
+    if(role_name === "Academy Admin")
+    {
+    body =  {
+      userId: userId,
+    }}else{
+      body =  {
+        userId: academyId,
+      }
+    }
     try {
       const response = await axios.post(
-        BMP_USER,
-        {
-          userId: userId,
-        },
+        BMP_USER,body,
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       );
@@ -231,7 +241,7 @@ const LPheader = () => {
   };
 
   const handleLogout = () => {
-    console.log(landingUrl)
+    // console.log(landingUrl)
     if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
       localStorage.clear();
       window.location.href = "https://www.bookmyplayer.com/login";

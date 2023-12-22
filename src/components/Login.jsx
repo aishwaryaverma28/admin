@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-    
+
   useEffect(() => {
     const encryptedToken = localStorage.getItem("jwtToken");
     if (encryptedToken) {
@@ -90,6 +90,7 @@ const Login = () => {
     axios
       .post(BMP_LOGIN, updateForm)
       .then((response) => {
+        console.log(response?.data);
         const data = response?.data;
         const status = response?.data?.status;
         if (status === 0) {
@@ -103,7 +104,10 @@ const Login = () => {
           localStorage.setItem("jwtToken", encryptedToken);
           const role_name = data?.user?.name;
           localStorage.setItem("role_name", role_name);
-          localStorage.setItem("academy_id", data?.user?.id);
+          if (role_name === "Academy Admin")
+            localStorage.setItem("id", data?.user?.id);
+          else
+            localStorage.setItem("academy_id", data?.user?.id);
           const landingUrl = response?.data?.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
           const userPath = data?.permissions?.split(",");
@@ -133,8 +137,7 @@ const Login = () => {
   };
   const forgetPass = (e) => {
     e.preventDefault();
-    if(email==="")
-    {
+    if (email === "") {
       alert("please the email");
     }
     const updateForm = {
@@ -233,7 +236,7 @@ const Login = () => {
               </div>
 
               <div>
-              <p className="login-forget-password" onClick={forgetPass}>forget Password?</p>
+                <p className="login-forget-password" onClick={forgetPass}>forget Password?</p>
               </div>
 
               <div className="login-checkbox">
