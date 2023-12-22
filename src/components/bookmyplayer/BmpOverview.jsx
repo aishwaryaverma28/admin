@@ -175,10 +175,9 @@ const BmpOverview = () => {
     setAddress(value);
     try {
       const response = await axios.get(`https://www.zomato.com/webroutes/location/search?q=${value}`);
-      console.log(response);
-      const data = response.data;
-      if (data.status === 1) {
-        setSuggestions(data.data);
+      // console.log(response?.data?.locationSuggestions);
+      if (response?.status === 200) {
+        setSuggestions(response?.data?.locationSuggestions);
       } else {
         setSuggestions([]);
       }
@@ -189,22 +188,22 @@ const BmpOverview = () => {
 
 
   const handleSelectAddress = (selectedAddress) => {
-    console.log(selectedAddress)
-    setAddress(selectedAddress.description);
-    if (selectedAddress.length === 0) {
+    // console.log(selectedAddress)
+    setAddress(selectedAddress?.entity_name);
+    if (selectedAddress?.length === 0) {
       setNumber2(1);
     } else {
       setNumber2(0);
     }
     setStateBtn(1);
-    setCoordinate(`${selectedAddress.latitude},${selectedAddress.longitude}`);
-    if (`${selectedAddress.latitude},${selectedAddress.longitude}`.length === 0) {
+    setCoordinate(`${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`);
+    if (`${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`.length === 0) {
       setNumber4(1);
     } else {
       setNumber4(0);
     }
     setMapLink(
-      `https://www.google.com/maps?q=${selectedAddress.latitude},${selectedAddress.longitude}`
+      `https://www.google.com/maps?q=${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`
     );
     if (mapLink.length === 0) {
       setNumber3(1);
@@ -265,10 +264,13 @@ const BmpOverview = () => {
         },
       })
       .then((response) => {
+        // console.log(response?.data?.data[0])
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
         setAddress(response?.data?.data[0]?.address1 || "");
+        setCoordinate(response?.data?.data[0]?.coordinate || "");
+        setMapLink(response?.data?.data[0]?.map || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
@@ -681,19 +683,19 @@ const BmpOverview = () => {
                   }`}
                 disabled={status === 0 && role_name === "Academy"}
               />
-              {suggestions.length > 0 && address.length !== 0 && (
+              {suggestions?.length > 0 && address?.length !== 0 && (
                 <div className="autocomplete-dropdown">
                   {suggestions.map((address) => (
                     <div
-                      key={address.place_id}
+                      key={address?.entity_latitude}
                       onClick={() => handleSelectAddress(address)}
                     >
-                      {address.description}
+                      {address?.entity_name}
                     </div>
                   ))}
                 </div>
               )}
-              {address && (
+              {/* {address && (
                 <div>
                   <p>Selected Address: {address}</p>
                   <p>
@@ -706,7 +708,7 @@ const BmpOverview = () => {
                     </a>
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <div className="bmp-input-flex">

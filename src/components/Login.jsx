@@ -103,7 +103,7 @@ const Login = () => {
           localStorage.setItem("jwtToken", encryptedToken);
           const role_name = data?.user?.name;
           localStorage.setItem("role_name", role_name);
-          localStorage.setItem("id", data?.user?.id);
+          localStorage.setItem("academy_id", data?.user?.id);
           const landingUrl = response?.data?.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
           const userPath = data?.permissions?.split(",");

@@ -281,11 +281,11 @@ const OverviewById = () => {
   //=================================================================google address
   const handleInputChange = async (value) => {
     setAddress(value);
-        try {
-      const response = await axios.post(ADDRESS_API, { input: value });
-      const data = response.data;
-      if (data.status === 1) {
-        setSuggestions(data.data);
+    try {
+      const response = await axios.get(`https://www.zomato.com/webroutes/location/search?q=${value}`);
+      // console.log(response?.data?.locationSuggestions);
+      if (response?.status === 200) {
+        setSuggestions(response?.data?.locationSuggestions);
       } else {
         setSuggestions([]);
       }
@@ -296,22 +296,22 @@ const OverviewById = () => {
 
 
   const handleSelectAddress = (selectedAddress) => {
-    console.log(selectedAddress)
-    setAddress(selectedAddress.description);
-    if (selectedAddress.length === 0) {
+    // console.log(selectedAddress)
+    setAddress(selectedAddress?.entity_name);
+    if (selectedAddress?.length === 0) {
       setNumber2(1);
     } else {
       setNumber2(0);
     }
     setStateBtn(1);
-    setCoordinate(`${selectedAddress.latitude},${selectedAddress.longitude}`);
-    if (`${selectedAddress.latitude},${selectedAddress.longitude}`.length === 0) {
+    setCoordinate(`${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`);
+    if (`${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`.length === 0) {
       setNumber4(1);
     } else {
       setNumber4(0);
     }
     setMapLink(
-      `https://www.google.com/maps?q=${selectedAddress.latitude},${selectedAddress.longitude}`
+      `https://www.google.com/maps?q=${selectedAddress?.entity_latitude},${selectedAddress?.entity_longitude}`
     );
     if (mapLink.length === 0) {
       setNumber3(1);
@@ -788,14 +788,14 @@ const OverviewById = () => {
                 placeholder="Type your address..."
                 className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
               />
-              {suggestions.length > 0 && address.length !== 0 && (
+              {suggestions?.length > 0 && address?.length !== 0 && (
                 <div className="autocomplete-dropdown">
                   {suggestions.map((address) => (
                     <div
-                      key={address.place_id}
+                      key={address?.entity_latitude}
                       onClick={() => handleSelectAddress(address)}
                     >
-                      {address.description}
+                      {address?.entity_name}
                     </div>
                   ))}
                 </div>
