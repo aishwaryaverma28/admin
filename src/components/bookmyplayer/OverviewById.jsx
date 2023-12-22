@@ -103,7 +103,7 @@ const OverviewById = () => {
     setOpen(false);
   }
 
-  
+
 
   //===================================================================extra functions for approve n disapprove
   const updatedAcadmeyInfo = () => {
@@ -168,7 +168,11 @@ const OverviewById = () => {
         };
       });
       setMappedLanguages([...newLanguage]);
-
+    }
+    if (keysOfNewAcadmeyData.includes("address1")) {
+      setAddress(newAcadmeyData?.address1 || "");
+      setCoordinate(newAcadmeyData?.coordinate || "");
+      setMapLink(newAcadmeyData?.map || "");
     }
     if (keysOfNewAcadmeyData.includes("timing")) {
       if (academyData && academyData.timing) {
@@ -190,7 +194,7 @@ const OverviewById = () => {
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy_Admin") {
+    if (status === 0 && role_name === "Academy Admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
@@ -212,6 +216,8 @@ const OverviewById = () => {
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
         setAddress(response?.data?.data[0]?.address1 || "");
+        setCoordinate(response?.data?.data[0]?.coordinate || "");
+        setMapLink(response?.data?.data[0]?.map || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
@@ -721,10 +727,10 @@ const OverviewById = () => {
 
   //==========================================================================approve function
   const handleDisapprove = () => {
-    const body = { 
+    const body = {
       status: 2,
       rejection_reason: disapprovalReason,
-     }
+    }
     axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
       {
         headers: {
@@ -757,7 +763,7 @@ const OverviewById = () => {
             </label>
             <input
               type="text"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("name") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("name") ? "redBorderLine" : ""}`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
@@ -772,7 +778,7 @@ const OverviewById = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about || ""}
               id=""
-              className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
+              className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
               rows="2"
             ></textarea>
           </div>
@@ -786,7 +792,7 @@ const OverviewById = () => {
                 value={address}
                 onChange={(e) => handleInputChange(e.target.value)}
                 placeholder="Type your address..."
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
               />
               {suggestions?.length > 0 && address?.length !== 0 && (
                 <div className="autocomplete-dropdown">
@@ -800,13 +806,13 @@ const OverviewById = () => {
                   ))}
                 </div>
               )}
-                </div>
+            </div>
           </div>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Select your sport
             </label>
-            <div className={`bmp-games ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
+            <div className={`bmp-games ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
                   }`}
@@ -900,7 +906,7 @@ const OverviewById = () => {
 
               <input
                 type="number"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("phone") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("phone") ? "redBorderLine" : ""}`}
                 name={index === 0 ? "phone" : "whatsapp"}
                 onChange={handleChange}
                 value={
@@ -932,7 +938,7 @@ const OverviewById = () => {
             <input
               type="email"
               name="email"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("email") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("email") ? "redBorderLine" : ""}`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
@@ -947,7 +953,7 @@ const OverviewById = () => {
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("website") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("website") ? "redBorderLine" : ""}`}
             />
           </div>
 
@@ -956,7 +962,7 @@ const OverviewById = () => {
               Experience:{" "}
             </label>
             <select
-              className={`common-fonts common-input langSelect ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("experience") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input langSelect ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("experience") ? "redBorderLine" : ""}`}
               name="experience"
               onChange={handleChange}
             >
@@ -991,7 +997,7 @@ const OverviewById = () => {
                 Open Timings
               </label>
               <div className="bmp-whatsapp-check">
-                <label className="custom-checkbox">
+                <label className={`custom-checkbox ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}>
                   <input
                     type="checkbox"
                     className="cb1"
@@ -1008,7 +1014,7 @@ const OverviewById = () => {
             {!alwaysOpenChecked && (
               <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
                 <select
-                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
+                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
                   value={selectedStartTime}
                   onChange={handleTimeChange}
                 >
@@ -1021,7 +1027,7 @@ const OverviewById = () => {
                 </select>
                 <p className="common-fonts light-color bmp-to">To</p>
                 <select
-                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
+                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
                   value={selectedEndTime}
                   onChange={handleEndTimeChange}
                 >
@@ -1046,7 +1052,7 @@ const OverviewById = () => {
             <div className="bmp-upload">
               <div className="contact-browse deal-doc-file">
                 <span
-                  className={`common-fonts common-input contact-tab-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("logo") ? "redBorderLine" : ""}`}
+                  className={`common-fonts common-input contact-tab-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("logo") ? "redBorderLine" : ""}`}
                   style={{
                     position: "relative",
                     marginRight: "10px",
@@ -1117,7 +1123,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("facebook") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("facebook") ? "redBorderLine" : ""}`}
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
@@ -1129,7 +1135,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("instagram") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("instagram") ? "redBorderLine" : ""}`}
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
@@ -1183,7 +1189,7 @@ const OverviewById = () => {
             </div>
 
             {mappedLanguages?.map((mappedLanguage, index) => (
-              <div className={`bmp_overview_language_map ${status === 0 && role_name === "Academy_Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}`} key={index}>
+              <div className={`bmp_overview_language_map ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}`} key={index}>
                 <p className="common-fonts">
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>
@@ -1199,7 +1205,7 @@ const OverviewById = () => {
       </div>
 
       <div className="bmp-bottom-btn">
-        {status === 0 && role_name === "Academy_Admin" ? <>
+        {status === 0 && role_name === "Academy Admin" ? <>
           <button onClick={openModal}
             className="common-save-button common-delete-button">
             Disapprove
@@ -1208,7 +1214,7 @@ const OverviewById = () => {
             className="common-save-button common-save">
             Approve
           </button>
-          </>
+        </>
           : <>
             <button className="common-fonts common-white-button">cancel</button>
             {stateBtn === 0 ? (
@@ -1228,11 +1234,11 @@ const OverviewById = () => {
       {
         open && (
           <DisapproveModal
-          onClose={closeModal}
-          onEnter={handleDisapprove}
-          disapprovalReason={disapprovalReason}
-          setDisapprovalReason={setDisapprovalReason}
-        />
+            onClose={closeModal}
+            onEnter={handleDisapprove}
+            disapprovalReason={disapprovalReason}
+            setDisapprovalReason={setDisapprovalReason}
+          />
         )
       }
     </>
