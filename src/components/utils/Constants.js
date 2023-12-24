@@ -43,8 +43,8 @@ export {getDecryptedUserPath}
   };
 // =============================================================apis used  
 // const start = "http://core.leadplaner.com:3001/api";
-// const start = "https://fiduciagroup.leadplaner.com/api";
-const start = "https://core.leadplaner.com/api/api";
+const start = "https://fiduciagroup.leadplaner.com/api";
+// const start = "https://core.leadplaner.com/api/api";
 const userId = localStorage.getItem('id');
 export const USER_INFO = start + "/user/getuserinfo";
 export const BMP_USER = start + "/bmp/getUser";

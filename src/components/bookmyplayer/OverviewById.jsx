@@ -686,7 +686,7 @@ const OverviewById = () => {
       website: academyData.website,
       email: academyData.email,
       timing: startAndEndTime,
-      spoken_languages: languageString,
+      spoken_languages: academyData.spoken_languages,
       logo: academyData.logo,
       address1: address,
       map: mapLink,
