@@ -67,7 +67,7 @@ const closeModal = () => {
     }
   }
   useEffect(() => {
-    if (status === 0 && role_name === "Academy_Admin") {
+    if (status === 0 && role_name === "Academy Admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name, academyData]);
@@ -581,7 +581,7 @@ const handleDisapprove = () => {
           </div>
         </div>
         <>
-          {status === 0 && role_name === "Academy_Admin" ?
+          {status === 0 && role_name === "Academy Admin" ?
             <>
               {/* ====================================================map for admin photos */}
               <div className={`outerBox`}>
@@ -738,7 +738,7 @@ const handleDisapprove = () => {
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy_Admin" ?
+            {status === 0 && role_name === "Academy Admin" ?
               <>
                 <div className={`outerBox`}>
                   {photoUrls2?.map((photo, index) => (
@@ -827,7 +827,7 @@ const handleDisapprove = () => {
           </>
         </>
         <div className="bmp-bottom-btn">
-        {status === 0 && role_name === "Academy_Admin" ?
+        {status === 0 && role_name === "Academy Admin" ?
               <>
                 <button
                   onClick={openModal}
