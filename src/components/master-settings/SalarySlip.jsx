@@ -64,6 +64,11 @@ const SalarySlip = () => {
           </tr>
         </thead>
         <tbody>
+          {/* <tr>
+          <td className="slaryMonth">
+            <PDFConverter/>
+          </td>
+          </tr> */}
           {loading ? (
             <tr>
               <td colSpan="3">Loading...</td>
