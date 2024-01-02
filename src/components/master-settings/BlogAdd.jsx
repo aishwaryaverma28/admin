@@ -140,6 +140,7 @@ const BlogAdd = () => {
           },
         })
         .then((response) => {
+          console.log(response?.data?.data)
           setOptions(
             response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
           );
@@ -734,8 +735,8 @@ const BlogAdd = () => {
                     <option value="">category</option>
 
                     {category?.map((data) => (
-                      <option key={data?.category} value={data?.category}>
-                        {data?.category}
+                      <option key={data?.sport} value={data?.sport}>
+                        {data?.sport}
                       </option>
                     ))}
                   </select>

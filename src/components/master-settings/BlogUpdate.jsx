@@ -915,8 +915,8 @@ const BlogUpdate = () => {
                     <option value="">category</option>
 
                     {category?.map((data) => (
-                      <option key={data.category} value={data.category}>
-                        {data.category}
+                      <option key={data?.sport} value={data?.sport}>
+                        {data?.sport}
                       </option>
                     ))}
                   </select>
