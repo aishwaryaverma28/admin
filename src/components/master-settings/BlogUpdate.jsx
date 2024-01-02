@@ -76,6 +76,7 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
+        console.log(response)
         setCategory(response?.data?.data);
       })
       .catch((error) => {
@@ -237,7 +238,7 @@ const BlogUpdate = () => {
 
       if (value) {
         updatedForm = {
-          category: value,
+          sport: value,
           condition: "category",
           org_id: org_id,
         };

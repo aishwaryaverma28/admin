@@ -123,7 +123,7 @@ const BlogAdd = () => {
 
       if (value) {
         updatedForm = {
-          category: value,
+          sport: value,
           condition: "category",
           org_id: org_id,
         };
