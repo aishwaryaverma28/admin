@@ -226,9 +226,7 @@ const BlogUpdate = () => {
 
   useEffect(() => {
     tagData();
-  }, [options]); // Run the effect when options (tag data) changes
-
-  // console.log(selectedTags)
+  }, [options]);
 
   const handleTagSelection = (event) => {
     const { name = "categoryDropdown", value } = event?.target || {};
@@ -239,7 +237,7 @@ const BlogUpdate = () => {
       if (value) {
         updatedForm = {
           sport: value,
-          condition: "category",
+          condition: "sport",
           org_id: org_id,
         };
       } else {

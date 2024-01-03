@@ -124,7 +124,7 @@ const BlogAdd = () => {
       if (value) {
         updatedForm = {
           sport: value,
-          condition: "category",
+          condition: "sport",
           org_id: org_id,
         };
       } else {
@@ -140,7 +140,7 @@ const BlogAdd = () => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
           setOptions(
             response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
           );
