@@ -434,7 +434,7 @@ const BlogAdd = () => {
   return (
     <>
       <header className="headerEditor">
-        <p className="common-fonts add-new-blog"> Add a new Blog</p>
+        <p className="common-fonts add-new-blog"> Add Blog</p>
       </header>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
