@@ -1164,9 +1164,9 @@ const BmpOverview = () => {
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>{
                   status === 0 && role_name === "Academy" ? (
-                    <img src={Dash2} alt="" onClick={handleDeleteLanguage} />
+                    <img src={Dash2} alt=""/>
                   ) : (
-                    <img src={Dash} alt="" onClick={handleDeleteLanguage} />
+                    <img src={Dash} alt="" onClick={() => handleDeleteLanguage(index)} />
                   )
                 }
 
@@ -1178,7 +1178,6 @@ const BmpOverview = () => {
 
       <div className="bmp-bottom-btn">
         <button className="common-fonts common-white-button">cancel</button>
-        {/* <button className="common-save-button common-save">Save</button> */}
         {stateBtn === 0 ? (
           <button disabled className="disabledBtn">
             Save
