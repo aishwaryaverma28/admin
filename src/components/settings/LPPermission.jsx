@@ -159,7 +159,7 @@ const fetchData = async () => {
     });
     setStateBtn(1);
   }
-  console.log(teamData);
+  // console.log(teamData);
   const handleSave = () => {
     const updatedData = {
       first_name: teamData?.first_name,

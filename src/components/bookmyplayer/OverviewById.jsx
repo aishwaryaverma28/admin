@@ -199,9 +199,9 @@ const OverviewById = () => {
     }
   }, [newAcadmeyData, status, role_name]);
 
-  console.log(newAcadmeyData);
-  console.log(academyData);
-  console.log(keysOfNewAcadmeyData);
+  // console.log(newAcadmeyData);
+  // console.log(academyData);
+  // console.log(keysOfNewAcadmeyData);
 
   //==============================================================acadmey data
   const academyDetails = () => {
@@ -286,6 +286,7 @@ const OverviewById = () => {
   };
   //=================================================================google address
   const handleInputChange = async (value) => {
+    setStateBtn(1);
     setAddress(value);
     try {
       const response = await axios.get(`https://www.zomato.com/webroutes/location/search?q=${value}`);
@@ -804,6 +805,20 @@ const OverviewById = () => {
                       {address?.entity_name}
                     </div>
                   ))}
+                </div>
+              )}
+               {address && (
+                <div>
+                  <p>Selected Address: {address}</p>
+                  <p>
+                    Selected Coordinates: {coordinate}
+                  </p>
+                  <p>
+                    Google Map Link:{' '}
+                    <a href={mapLink} target="_blank" rel="noopener noreferrer">
+                      {mapLink}
+                    </a>
+                  </p>
                 </div>
               )}
             </div>

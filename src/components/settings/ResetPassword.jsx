@@ -61,7 +61,7 @@ const ResetPassword = ({ onClose, user }) => {
   useEffect(() => {
     passGet();
   }, []);
-  // console.log(passDes);
+  
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
