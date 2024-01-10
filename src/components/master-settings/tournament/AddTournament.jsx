@@ -96,7 +96,7 @@ const AddTournament = () => {
           <div>
             <p className="helpTitle">
               Tournament Title
-              {/* <span className="common-fonts redAlert"> *</span> */}
+              <span className="common-fonts redAlert"> *</span>
             </p>
             <input
               type="text"
