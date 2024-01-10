@@ -47,7 +47,7 @@ const AddTournament = () => {
 
   const onSave = (e) => {
     e.preventDefault();
-     axios
+    axios
       .post(ADD_LEAGUE, formData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
@@ -59,7 +59,24 @@ const AddTournament = () => {
           position: "top-center",
           autoClose: 1000,
         });
-        setTimeout(modalOpen,1500);
+        setTimeout(modalOpen, 1500);
+        setFormData({
+          name: "",
+          title: "title",
+          sport: "",
+          website: "",
+          intro: "",
+          phone: "",
+          email: "",
+          pathway: "",
+          advantages: "",
+          rules: "",
+          description: "",
+          level: "",
+          category: "",
+          keywords: "",
+          contact: "",
+        })
         setStateBtn(0);
       })
       .catch((error) => {
@@ -267,7 +284,7 @@ const AddTournament = () => {
           </div>
         </div>
       </div>
-     
+
       <div className="help-bottom-btn">
         <button className="common-fonts common-delete-button">Cancel</button>
         {stateBtn === 0 ? (
