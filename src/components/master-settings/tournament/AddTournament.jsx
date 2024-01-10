@@ -95,7 +95,8 @@ const AddTournament = () => {
         <div className="helpBody">
           <div>
             <p className="helpTitle">
-              Tournament Title<span className="common-fonts redAlert"> *</span>
+              Tournament Title
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               type="text"
@@ -107,7 +108,8 @@ const AddTournament = () => {
           </div>
           <div>
             <p className="helpTitle">
-              Introduction<span className="common-fonts redAlert"> *</span>
+              Introduction
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <textarea
               name="intro"
@@ -122,7 +124,8 @@ const AddTournament = () => {
 
           <div>
             <p className="helpTitle">
-              Description<span className="common-fonts redAlert"> *</span>
+              Description
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <textarea
               name="description"
@@ -136,7 +139,8 @@ const AddTournament = () => {
           </div>
           <div>
             <p className="helpTitle">
-              Pathway<span className="common-fonts redAlert"> *</span>
+              Pathway
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <textarea
               name="pathway"
@@ -150,7 +154,8 @@ const AddTournament = () => {
           </div>
           <div>
             <p className="helpTitle">
-              Advantages<span className="common-fonts redAlert"> *</span>
+              Advantages
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <textarea
               name="advantages"
@@ -164,7 +169,8 @@ const AddTournament = () => {
           </div>
           <div>
             <p className="helpTitle">
-              Rules<span className="common-fonts redAlert"> *</span>
+              Rules
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <textarea
               name="rules"
@@ -180,7 +186,8 @@ const AddTournament = () => {
         <div className="helpRight tourHead">
           <div className="tournamentRight">
             <p className="helpTitle">
-              Website<span className="common-fonts redAlert"> *</span>
+              Website
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               className="tournamentInput"
@@ -193,7 +200,8 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Sport<span className="common-fonts redAlert"> *</span>
+              Sport
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               className="tournamentInput"
@@ -232,7 +240,8 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Level<span className="common-fonts redAlert"> *</span>
+              Level
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               className="tournamentInput"
@@ -245,7 +254,8 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Category<span className="common-fonts redAlert"> *</span>
+              Category
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               className="tournamentInput"
@@ -258,7 +268,8 @@ const AddTournament = () => {
           </div>
           <div className="tournamentRight">
             <p className="helpTitle">
-              Keywords<span className="common-fonts redAlert"> *</span>
+              Keywords
+              {/* <span className="common-fonts redAlert"> *</span> */}
             </p>
             <input
               className="tournamentInput"
