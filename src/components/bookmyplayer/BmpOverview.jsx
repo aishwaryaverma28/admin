@@ -267,12 +267,13 @@ const BmpOverview = () => {
       .then((response) => {
         localStorage.setItem("url", response?.data?.data[0]?.url);
         const academyName = response?.data?.data[0]?.name;
-        const cityName = response?.data?.data[0]?.city;
-        console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
-        const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
-        
-        setIntroduction(intro);
-        console.log(intro)
+const cityName = response?.data?.data[0]?.city;
+const aboutString = response?.data?.about[0]?.about;
+const updatedAbout = aboutString.replace(/ACADEMY_NAME/g, academyName);
+const finalAbout = updatedAbout.replace(/CITY_NAME/g, cityName);
+
+const intro = removeHtmlTags(finalAbout);
+setIntroduction(intro);
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,

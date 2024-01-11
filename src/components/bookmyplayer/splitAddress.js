@@ -57,7 +57,8 @@ export const splitAddress = (address) => {
     // Iterate through the filtered array to find state and city
     filteredAddressArray.forEach(part => {
         // Check if the part is a state
-        if (stateMapping[part.toUpperCase()]) {
+        if (stateMapping[part]) {
+            alert(part)
             state = stateMapping[part.toUpperCase()];
         } else {
             // If not a state, consider it as a city
