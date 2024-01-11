@@ -120,7 +120,6 @@ const OverviewById = () => {
         }
       )
       .then((response) => {
-        console.log(response?.data?.data[0])
         if (response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null) {
           setRevokeId(response?.data?.data[0]?.id);
           const statusValue = response?.data?.data[0]?.status;
@@ -198,7 +197,7 @@ const OverviewById = () => {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
-
+  
   // console.log(newAcadmeyData);
   // console.log(academyData);
   // console.log(keysOfNewAcadmeyData);
@@ -219,6 +218,7 @@ const OverviewById = () => {
         setCoordinate(response?.data?.data[0]?.coordinate || "");
         setMapLink(response?.data?.data[0]?.map || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
+        setSelectedDays(response?.data?.data[0]?.sport?.split(",") || []);
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
           response?.data?.data[0]?.completion_percentage !== null
@@ -505,10 +505,6 @@ const OverviewById = () => {
     setSelectedDaysString(selectedDays.join(","));
   }, [selectedDays]);
 
-  useEffect(() => {
-    setSelectedDays(academyData?.sport?.split(",") || []);
-  }, [academyData]);
-
   const handleButtonClick = (event) => {
     event.preventDefault();
     fileInputRef.current.click();
@@ -527,6 +523,8 @@ const OverviewById = () => {
   const startAndEndTime = alwaysOpenChecked
     ? "Always_open"
     : `${selectedStartTime} to ${selectedEndTime}`;
+
+    // console.log(selectedDays)
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -807,7 +805,7 @@ const OverviewById = () => {
                   ))}
                 </div>
               )}
-               {address && (
+               {/* {address && (
                 <div>
                   <p>Selected Address: {address}</p>
                   <p>
@@ -820,7 +818,7 @@ const OverviewById = () => {
                     </a>
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <div className="bmp-input-flex">
@@ -836,60 +834,227 @@ const OverviewById = () => {
                 Football
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Basketball")}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Arts") ? "bmp-game-active" : ""
+                  } `}
+                onClick={() => handleDayClick("Arts")}
               >
-                Basketball
+                Arts
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Chess")}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Atheletics")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Atheletics")}
               >
-                Chess
+                Atheletics
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Tennis")}
-              >
-                Tennis
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("MMA")}
-              >
-                MMA
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Golf")}
-              >
-                Golf
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Hockey")}
-              >
-                Hockey
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") ? "bmp-game-active" : ""
-                  }`}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
                 onClick={() => handleDayClick("Badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Volleyball")}
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Basketball")}
               >
-                Volleyball
+                Basketball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Billiards")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Billiards")}
+              >
+                Billiards
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Boxing")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Boxing")}
+              >
+                Boxing
+              </div> 
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Chess")}
+              >
+                Chess
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Cricket")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("Cricket")}
+              >
+                Cricket
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("fencing")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("fencing")}
+              >
+                fencing
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("football")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("football")}
+              >
+               football
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("golf")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("golf")}
+              >
+                golf
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("hockey")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("hockey")}
+              >
+                hockey
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("kabaddi")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("kabaddi")}
+              >
+                Kabaddi
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("kho-kho")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("kho-kho")}
+              >
+                kho-kho
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("mma")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("mma")}
+              >
+                MMA
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("motor sports")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("motor sports")}
+              >
+               Motor sports
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("shooting")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("shooting")}
+              >
+               Shooting
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("skating")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("skating")}
+              >
+               Skating
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("squash")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("squash")}
+              >
+               Squash
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("swimming")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("swimming")}
+              >
+               Swimming
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("table-tennis")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("table-tennis")}
+              >
+               Table-tennis
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("taekwondo")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("taekwondo")}
+              >
+               Taekwondo
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("tennis")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("tennis")}
+              >
+               Tennis
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("volleyball")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("volleyball")}
+              >
+               Volleyball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("wrestling")
+                  ? "bmp-game-active"
+                  : ""
+                  } `}
+                onClick={() => handleDayClick("wrestling")}
+              >
+               Wrestling
               </div>
             </div>
           </div>
