@@ -716,75 +716,25 @@ const BmpOverview = () => {
               Select your sport
             </label>
             <div className="bmp-games">
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") &&
+            <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Arts") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Football")}
+                onClick={() => handleDayClick("Arts")}
               >
-                Football
+                Arts
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Atheletics") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Basketball")}
+                onClick={() => handleDayClick("Atheletics")}
               >
-                Basketball
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") &&
-                  !(status === 0 && role_name === "Academy")
-                  ? "bmp-game-active"
-                  : ""
-                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Chess")}
-              >
-                Chess
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Tennis") &&
-                  !(status === 0 && role_name === "Academy")
-                  ? "bmp-game-active"
-                  : ""
-                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Tennis")}
-              >
-                Tennis
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("MMA") &&
-                  !(status === 0 && role_name === "Academy")
-                  ? "bmp-game-active"
-                  : ""
-                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("MMA")}
-              >
-                MMA
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Golf") &&
-                  !(status === 0 && role_name === "Academy")
-                  ? "bmp-game-active"
-                  : ""
-                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Golf")}
-              >
-                Golf
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Hockey") &&
-                  !(status === 0 && role_name === "Academy")
-                  ? "bmp-game-active"
-                  : ""
-                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Hockey")}
-              >
-                Hockey
+                Atheletics
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") &&
@@ -797,14 +747,224 @@ const BmpOverview = () => {
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Volleyball") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Volleyball")}
+                onClick={() => handleDayClick("Basketball")}
               >
-                Volleyball
+                Basketball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Billiards") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("Billiards")}
+              >
+                Billiards
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Boxing") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("Boxing")}
+              >
+                Boxing
+              </div> 
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("Chess")}
+              >
+                Chess
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("Cricket") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("Cricket")}
+              >
+                Cricket
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("fencing") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("fencing")}
+              >
+                fencing
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("football") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("football")}
+              >
+               football
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("golf") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("golf")}
+              >
+                golf
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("hockey") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("hockey")}
+              >
+                hockey
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("kabaddi") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("kabaddi")}
+              >
+                Kabaddi
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("kho-kho") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("kho-kho")}
+              >
+                kho-kho
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("mma") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("mma")}
+              >
+                MMA
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("motor sports") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("motor sports")}
+              >
+               Motor sports
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("shooting") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("shooting")}
+              >
+               Shooting
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("skating") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("skating")}
+              >
+               Skating
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("squash") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("squash")}
+              >
+               Squash
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("swimming") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("swimming")}
+              >
+               Swimming
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("table-tennis") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("table-tennis")}
+              >
+               Table-tennis
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("taekwondo") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("taekwondo")}
+              >
+               Taekwondo
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("tennis") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("tennis")}
+              >
+               Tennis
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("volleyball") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("volleyball")}
+              >
+               Volleyball
+              </div>
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("wrestling") &&
+                  !(status === 0 && role_name === "Academy")
+                  ? "bmp-game-active"
+                  : ""
+                  } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
+                onClick={() => handleDayClick("wrestling")}
+              >
+               Wrestling
               </div>
             </div>
           </div>
