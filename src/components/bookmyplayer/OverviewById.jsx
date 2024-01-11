@@ -31,7 +31,6 @@ const OverviewById = () => {
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
-  const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
   const [selectedStartTime, setSelectedStartTime] = useState("");
   const [selectedEndTime, setSelectedEndTime] = useState("");
   const fileInputRef = useRef(null);
@@ -45,7 +44,13 @@ const OverviewById = () => {
   const [updatedFields, setUpdatedFields] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
-  const [mappedLanguages, setMappedLanguages] = useState([]);
+  const [mappedLanguages, setMappedLanguages] = useState([{
+    language: "Hindi",
+    level: "Intermediate",
+  },{
+    language: "English",
+    level: "Intermediate",
+  }]);
   const [languageString, setLanguageString] = useState("");
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
@@ -174,7 +179,7 @@ const OverviewById = () => {
         newAcadmeyData?.address2,
         newAcadmeyData?.city,
         newAcadmeyData?.state,
-      ];  
+      ];
       const formattedAddress = addressComponents
         .filter((component) => component && component.trim() !== "")
         .join(", ");
@@ -183,18 +188,14 @@ const OverviewById = () => {
       setMapLink(newAcadmeyData?.map || "");
     }
     if (keysOfNewAcadmeyData.includes("timing")) {
-      if (academyData && academyData.timing) {
-        if (academyData.timing === "Always_open") {
-          setAlwaysOpenChecked(true);
-        } else {
-          const timingParts = academyData.timing.split(" to ");
-          if (timingParts.length === 2) {
-            const [startTime, endTime] = timingParts;
-            setAlwaysOpenChecked(false);
-            setSelectedStartTime(startTime);
-            setSelectedEndTime(endTime);
-          }
-        }
+      console.log(newAcadmeyData?.timing)
+      const timingParts = newAcadmeyData?.timing?.split(" - ");
+      console.log(timingParts)
+      if (timingParts.length === 2) {
+        // const [startTime, endTime] = timingParts;
+        const [startTime, endTime] = timingParts.map(time => time.trim());
+        setSelectedStartTime(startTime);
+        setSelectedEndTime(endTime);
       }
     }
     if (keysOfNewAcadmeyData.includes("logo")) {
@@ -202,15 +203,14 @@ const OverviewById = () => {
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy Admin") {
+    if (status === 0 && role_name === "Academy") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
-  
+
   // console.log(newAcadmeyData);
   // console.log(academyData);
   // console.log(keysOfNewAcadmeyData);
-
   //==============================================================acadmey data
   const academyDetails = () => {
     axios
@@ -225,9 +225,9 @@ const OverviewById = () => {
           response?.data?.data[0]?.address2,
           response?.data?.data[0]?.city,
           response?.data?.data[0]?.state,
-        ];  
+        ];
         const formattedAddress = addressComponents
-          .filter((component) => component && component.trim() !== "")
+          .filter((component) => component && component?.trim() !== "")
           .join(", ");
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
@@ -259,7 +259,7 @@ const OverviewById = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         setIsLoading(false);
       });
   };
@@ -389,32 +389,31 @@ const OverviewById = () => {
     setStateBtn(1);
   };
 
-
   useEffect(() => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
   useEffect(() => {
-    if (academyData && academyData.timing) {
-      if (academyData.timing === "Always_open") {
-        setAlwaysOpenChecked(true);
-      } else {
-        const timingParts = academyData.timing.split(" to ");
-        if (timingParts.length === 2) {
-          const [startTime, endTime] = timingParts;
-          setAlwaysOpenChecked(false);
-          setSelectedStartTime(startTime);
-          setSelectedEndTime(endTime);
-        }
+    if (academyData && academyData.timing !== null) {
+      const timingParts = academyData?.timing?.split("-")?.map(part => part?.trim());
+      if (timingParts?.length === 2) {
+        const [startTime, endTime] = timingParts;
+        setSelectedStartTime(startTime);
+        setSelectedEndTime(endTime);
       }
+    } else {
+      // If academyData.timing is null, set default values
+      setSelectedStartTime("10:00");
+      setSelectedEndTime("19:00");
     }
   }, [academyData]);
-
+  
+  
   const processImageName = (imageName) => {
-    const nameParts = imageName.split(".");
+    const nameParts = imageName?.split(".");
     if (nameParts.length > 1) {
-      const namePart = nameParts.slice(0, -1).join(".");
-      const processedName = namePart.replace(/[^\w-]/g, "-");
+      const namePart = nameParts?.slice(0, -1)?.join(".");
+      const processedName = namePart?.replace(/[^\w-]/g, "-");
       return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
       return imageName.replace(/[^\w-]/g, "-");
@@ -528,21 +527,15 @@ const OverviewById = () => {
     fileInputRef.current.click();
   };
 
-  const handleAlwaysOpenCheckboxChange = () => {
-    setAlwaysOpenChecked(!alwaysOpenChecked);
-    setStateBtn(1);
-  };
 
   const addPhoneNumberInput = () => {
     setIsWhatsappActivated(false);
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
-  const startAndEndTime = alwaysOpenChecked
-    ? "Always_open"
-    : `${selectedStartTime} to ${selectedEndTime}`;
+  const startAndEndTime = `${selectedStartTime} - ${selectedEndTime}`;
 
-    // console.log(selectedDays)
+  // console.log(selectedDays)
   function handleSubmit(event) {
     event.preventDefault();
     if (!progressArray?.includes("1")) {
@@ -554,15 +547,15 @@ const OverviewById = () => {
       languageString !== academyData?.spoken_languages;
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
-      const addressComponents = [
-        academyData?.address1,
-        academyData?.address2,
-        academyData?.city,
-        academyData?.state,
-      ];
-      const formattedAddress = addressComponents
-        .filter((component) => component && component.trim() !== "")
-        .join(", ");
+    const addressComponents = [
+      academyData?.address1,
+      academyData?.address2,
+      academyData?.city,
+      academyData?.state,
+    ];
+    const formattedAddress = addressComponents
+      .filter((component) => component && component.trim() !== "")
+      .join(", ");
     const addressChanged = address !== formattedAddress;
     const maplinkChanged = mapLink !== academyData?.map;
     const coordinateChanged = coordinate !== academyData?.coordinate;
@@ -644,7 +637,7 @@ const OverviewById = () => {
     axios
       .put(UPDATE_ACADEMY + id, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -832,7 +825,7 @@ const OverviewById = () => {
                   ))}
                 </div>
               )}
-               {/* {address && (
+              {/* {address && (
                 <div>
                   <p>Selected Address: {address}</p>
                   <p>
@@ -853,7 +846,7 @@ const OverviewById = () => {
               Select your sport
             </label>
             <div className={`bmp-games ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
-              
+
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("arts") ? "bmp-game-active" : ""
                   } `}
@@ -905,7 +898,7 @@ const OverviewById = () => {
                 onClick={() => handleDayClick("boxing")}
               >
                 Boxing
-              </div> 
+              </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("chess")
                   ? "bmp-game-active"
@@ -940,7 +933,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("football")}
               >
-               football
+                football
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("golf")
@@ -994,7 +987,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("motor sports")}
               >
-               Motor sports
+                Motor sports
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("shooting")
@@ -1003,7 +996,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("shooting")}
               >
-               Shooting
+                Shooting
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("skating")
@@ -1012,7 +1005,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("skating")}
               >
-               Skating
+                Skating
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("squash")
@@ -1021,7 +1014,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("squash")}
               >
-               Squash
+                Squash
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("swimming")
@@ -1030,7 +1023,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("swimming")}
               >
-               Swimming
+                Swimming
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("table-tennis")
@@ -1039,7 +1032,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("table-tennis")}
               >
-               Table-tennis
+                Table-tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("taekwondo")
@@ -1048,7 +1041,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("taekwondo")}
               >
-               Taekwondo
+                Taekwondo
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("tennis")
@@ -1057,7 +1050,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("tennis")}
               >
-               Tennis
+                Tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("volleyball")
@@ -1066,7 +1059,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("volleyball")}
               >
-               Volleyball
+                Volleyball
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("wrestling")
@@ -1075,7 +1068,7 @@ const OverviewById = () => {
                   } `}
                 onClick={() => handleDayClick("wrestling")}
               >
-               Wrestling
+                Wrestling
               </div>
             </div>
           </div>
@@ -1197,50 +1190,35 @@ const OverviewById = () => {
               <label htmlFor="" className="common-fonts bmp-academy-name">
                 Open Timings
               </label>
-              <div className="bmp-whatsapp-check">
-                <label className={`custom-checkbox ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}>
-                  <input
-                    type="checkbox"
-                    className="cb1"
-                    name="headerCheckBox"
-                    checked={alwaysOpenChecked}
-                    onChange={handleAlwaysOpenCheckboxChange}
-                  />
-                  <span className="checkmark"></span>
-                </label>
-                <p className="common-fonts light-color">Always Open</p>
-              </div>
+              
             </div>
-
-            {!alwaysOpenChecked && (
-              <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-                <select
-                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
-                  value={selectedStartTime}
-                  onChange={handleTimeChange}
-                >
-                  <option value="">Select Opening time</option>
-                  {timeOptions?.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-                <p className="common-fonts light-color bmp-to">To</p>
-                <select
-                  className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
-                  value={selectedEndTime}
-                  onChange={handleEndTimeChange}
-                >
-                  <option value="">Select closing time</option>
-                  {timeOptions?.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
+              <select
+                className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
+                value={selectedStartTime}
+                onChange={handleTimeChange}
+              >
+                <option value="">Select Opening time</option>
+                {timeOptions?.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+              <p className="common-fonts light-color bmp-to">To</p>
+              <select
+                className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
+                value={selectedEndTime}
+                onChange={handleEndTimeChange}
+              >
+                <option value="">Select closing time</option>
+                {timeOptions?.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -1304,7 +1282,7 @@ const OverviewById = () => {
               )}
 
               {!selectedFile && (
-                <div className="bmp-image-preview">               
+                <div className="bmp-image-preview">
                   <img
                     src={academyData?.logo === null
                       ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/510/download--1-.png"

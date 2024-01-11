@@ -28,7 +28,6 @@ const BmpOverview = () => {
   const [academyDataOld, setAcademyDataOld] = useState({});
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
-  const [alwaysOpenChecked, setAlwaysOpenChecked] = useState(true);
   const [selectedStartTime, setSelectedStartTime] = useState("");
   const [selectedEndTime, setSelectedEndTime] = useState("");
   const fileInputRef = useRef(null);
@@ -44,7 +43,13 @@ const BmpOverview = () => {
   const [progressArray, setProgressArray] = useState([]);
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
-  const [mappedLanguages, setMappedLanguages] = useState([]);
+  const [mappedLanguages, setMappedLanguages] = useState([{
+    language: "Hindi",
+    level: "Intermediate",
+  },{
+    language: "English",
+    level: "Intermediate",
+  }]);
   const [languageString, setLanguageString] = useState("");
   const [number, setNumber] = useState(0);
   const [number1, setNumber1] = useState(0);
@@ -331,18 +336,16 @@ const BmpOverview = () => {
   }, []);
 
   useEffect(() => {
-    if (academyData && academyData.timing) {
-      if (academyData.timing === "Always_open") {
-        setAlwaysOpenChecked(true);
-      } else {
-        const timingParts = academyData.timing.split(" to ");
-        if (timingParts.length === 2) {
-          const [startTime, endTime] = timingParts;
-          setAlwaysOpenChecked(false);
-          setSelectedStartTime(startTime);
-          setSelectedEndTime(endTime);
-        }
+    if (academyData && academyData?.timing !== null) {
+      const timingParts = academyData?.timing?.split("-")?.map(part => part?.trim());
+      if (timingParts?.length === 2) {
+        const [startTime, endTime] = timingParts;
+        setSelectedStartTime(startTime);
+        setSelectedEndTime(endTime);
       }
+    } else {
+      setSelectedStartTime("10:00");
+      setSelectedEndTime("19:00");
     }
   }, [academyData]);
 
@@ -470,10 +473,6 @@ const BmpOverview = () => {
     fileInputRef.current.click();
   };
 
-  const handleAlwaysOpenCheckboxChange = () => {
-    setAlwaysOpenChecked(!alwaysOpenChecked);
-    setStateBtn(1);
-  };
 
   const addPhoneNumberInput = () => {
     setIsWhatsappActivated(false);
@@ -481,9 +480,7 @@ const BmpOverview = () => {
     setIsButtonVisible(false);
   };
 
-  const startAndEndTime = alwaysOpenChecked
-    ? "Always_open"
-    : `${selectedStartTime} to ${selectedEndTime}`;
+  const startAndEndTime = `${selectedStartTime} - ${selectedEndTime}`;
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -505,8 +502,6 @@ const BmpOverview = () => {
       academyData?.city,
       academyData?.state,
     ];
-
-    // Filter out null or empty values and join them with a comma and space
     const formattedAddress = addressComponents
       .filter((component) => component && component.trim() !== "")
       .join(", ");
@@ -1121,26 +1116,7 @@ const BmpOverview = () => {
               <label htmlFor="" className="common-fonts bmp-academy-name">
                 Open Timings
               </label>
-              <div className="bmp-whatsapp-check">
-                <label className="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className={`cb1 ${status === 0 && role_name === "Academy"
-                      ? "bmp_disable"
-                      : ""
-                      }`}
-                    name="headerCheckBox"
-                    checked={alwaysOpenChecked}
-                    onChange={handleAlwaysOpenCheckboxChange}
-                    disabled={status === 0 && role_name === "Academy"}
-                  />
-                  <span className="checkmark"></span>
-                </label>
-                <p className="common-fonts light-color">Always Open</p>
-              </div>
             </div>
-
-            {!alwaysOpenChecked && (
               <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
                 <select
                   className="common-fonts common-input bmp-modal-select-2 overviewTime"
@@ -1168,7 +1144,6 @@ const BmpOverview = () => {
                   ))}
                 </select>
               </div>
-            )}
           </div>
         </div>
 
