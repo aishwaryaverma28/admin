@@ -639,37 +639,37 @@ const BmpOverview = () => {
     console.log(updatedFormData);
     console.log("update body");
 
-    axios
-      .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        if (response.data.status === 1) {
-          toast.success("Details updated successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        } else {
-          toast.error("Some Error Occurred", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-        academyDetails();
-        updatedAcadmeyInfo();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while updating details", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      })
-      .finally(() => {
-        setStateBtn(0);
-      });
+    // axios
+    //   .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     if (response.data.status === 1) {
+    //       toast.success("Details updated successfully", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     } else {
+    //       toast.error("Some Error Occurred", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }
+    //     academyDetails();
+    //     updatedAcadmeyInfo();
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error("An error occurred while updating details", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //   })
+    //   .finally(() => {
+    //     setStateBtn(0);
+    //   });
   }
 
   return (
