@@ -16,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
 import Dash from "../../assets/image/red-dash.svg";
 import Dash2 from "../../assets/image/dash2.svg";
+import { splitAddress } from "./splitAddress";
+import { removeHtmlTags } from "./removeHtml";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -23,6 +25,7 @@ const BmpOverview = () => {
   const role_name = localStorage.getItem("role_name");
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
+  const [introduction, setIntroduction] = useState("");
   const [academyData, setAcademyData] = useState({});
   const [phoneNumberCount, setPhoneNumberCount] = useState(1);
   const [academyDataOld, setAcademyDataOld] = useState({});
@@ -43,13 +46,7 @@ const BmpOverview = () => {
   const [progressArray, setProgressArray] = useState([]);
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
-  const [mappedLanguages, setMappedLanguages] = useState([{
-    language: "Hindi",
-    level: "Intermediate",
-  },{
-    language: "English",
-    level: "Intermediate",
-  }]);
+  const [mappedLanguages, setMappedLanguages] = useState([]);
   const [languageString, setLanguageString] = useState("");
   const [number, setNumber] = useState(0);
   const [number1, setNumber1] = useState(0);
@@ -131,6 +128,7 @@ const BmpOverview = () => {
         console.log(error);
       });
   };
+  //=====================================================================language changes
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
@@ -175,7 +173,7 @@ const BmpOverview = () => {
       .join(", ");
     setLanguageString(joinLanguage);
   };
-
+  //===============================================================================google map changes
   const handleInputChange = async (value) => {
     setAddress(value);
     try {
@@ -190,10 +188,8 @@ const BmpOverview = () => {
       console.error('Error fetching address suggestions:', error);
     }
   };
-
-
   const handleSelectAddress = (selectedAddress) => {
-    // console.log(selectedAddress)
+    splitAddress(selectedAddress)
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
       setNumber2(1);
@@ -234,7 +230,7 @@ const BmpOverview = () => {
       setIsButtonVisible(true);
     }
   };
-
+  //=======================================================timing
   const generateTimeOptions = () => {
     const options = [];
     for (let hours = 0; hours < 24; hours++) {
@@ -270,7 +266,13 @@ const BmpOverview = () => {
       })
       .then((response) => {
         localStorage.setItem("url", response?.data?.data[0]?.url);
-        console.log(response?.data?.data[0])
+        const academyName = response?.data?.data[0]?.name;
+        const cityName = response?.data?.data[0]?.city;
+        console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
+        const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
+        
+        setIntroduction(intro);
+        console.log(intro)
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -295,17 +297,31 @@ const BmpOverview = () => {
             response?.data?.data[0]?.completion_percentage.split(",")
           );
         }
-        const languages =
-          response?.data?.data[0]?.spoken_languages?.split(", ");
+        if (response?.data?.data[0]?.spoken_languages === null) {
+          // Set default languages if spoken_languages is null
+          setMappedLanguages([
+            {
+              language: "Hindi",
+              level: "Intermediate",
+            },
+            {
+              language: "English",
+              level: "Intermediate",
+            },
+          ]);
+        } else {
+          const languages = response?.data?.data[0]?.spoken_languages.split(", ");
 
-        const newLanguage = languages.map((lang) => {
-          const [language, level] = lang.split("(");
-          return {
-            language: language.trim(),
-            level: level.substring(0, level.length - 1).trim(),
-          };
-        });
-        setMappedLanguages([...newLanguage]);
+          const newLanguage = languages.map((lang) => {
+            const [language, level] = lang.split("(");
+            return {
+              language: language.trim(),
+              level: level.substring(0, level.length - 1).trim(),
+            };
+          });
+
+          setMappedLanguages([...newLanguage]);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -677,7 +693,7 @@ const BmpOverview = () => {
             <textarea
               name="about"
               onChange={handleChange}
-              value={isLoading ? "-" : academyData?.about || ""}
+              value={isLoading ? "-" : academyData?.about === null ? introduction : academyData?.about}
               id=""
               className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
                 }`}
@@ -1117,33 +1133,33 @@ const BmpOverview = () => {
                 Open Timings
               </label>
             </div>
-              <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-                <select
-                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
-                  value={selectedStartTime}
-                  onChange={handleTimeChange}
-                >
-                  <option value="">Select Opening time</option>
-                  {timeOptions.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-                <p className="common-fonts light-color bmp-to">To</p>
-                <select
-                  className="common-fonts common-input bmp-modal-select-2 overviewTime"
-                  value={selectedEndTime}
-                  onChange={handleEndTimeChange}
-                >
-                  <option value="">Select closing time</option>
-                  {timeOptions.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
+              <select
+                className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                value={selectedStartTime}
+                onChange={handleTimeChange}
+              >
+                <option value="">Select Opening time</option>
+                {timeOptions.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+              <p className="common-fonts light-color bmp-to">To</p>
+              <select
+                className="common-fonts common-input bmp-modal-select-2 overviewTime"
+                value={selectedEndTime}
+                onChange={handleEndTimeChange}
+              >
+                <option value="">Select closing time</option>
+                {timeOptions.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 

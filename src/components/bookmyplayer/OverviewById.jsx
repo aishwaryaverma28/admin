@@ -17,6 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
 import Dash from "../../assets/image/red-dash.svg";
+import { removeHtmlTags } from "./removeHtml.js";
 const OverviewById = () => {
   const { id } = useParams();
   localStorage.setItem("academy_id", id);
@@ -25,6 +26,7 @@ const OverviewById = () => {
   const [revokeId, setRevokeId] = useState(null);
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
+  const [introduction, setIntroduction] = useState("");
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
   const [academyData, setAcademyData] = useState({});
   const [academyDataOld, setAcademyDataOld] = useState({});
@@ -44,13 +46,7 @@ const OverviewById = () => {
   const [updatedFields, setUpdatedFields] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
-  const [mappedLanguages, setMappedLanguages] = useState([{
-    language: "Hindi",
-    level: "Intermediate",
-  },{
-    language: "English",
-    level: "Intermediate",
-  }]);
+  const [mappedLanguages, setMappedLanguages] = useState([]);
   const [languageString, setLanguageString] = useState("");
   const [progress, setProgress] = useState(null);
   const [progressArray, setProgressArray] = useState([]);
@@ -220,6 +216,13 @@ const OverviewById = () => {
         },
       })
       .then((response) => {
+        const academyName = response?.data?.data[0]?.name;
+        const cityName = response?.data?.data[0]?.city;
+        console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
+        const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
+        
+        setIntroduction(intro);
+        console.log(intro)
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -245,17 +248,30 @@ const OverviewById = () => {
             response?.data?.data[0]?.completion_percentage.split(",")
           );
         }
-        const languages =
-          response?.data?.data[0]?.spoken_languages?.split(", ");
-
-        const newLanguage = languages?.map((lang) => {
-          const [language, level] = lang.split("(");
-          return {
-            language: language.trim(),
-            level: level.substring(0, level.length - 1).trim(),
-          };
-        });
-        setMappedLanguages([...newLanguage]);
+        if (response?.data?.data[0]?.spoken_languages === null) {
+          setMappedLanguages([
+            {
+              language: "Hindi",
+              level: "Intermediate",
+            },
+            {
+              language: "English",
+              level: "Intermediate",
+            },
+          ]);
+        } else {
+          const languages = response?.data?.data[0]?.spoken_languages.split(", ");
+  
+          const newLanguage = languages.map((lang) => {
+            const [language, level] = lang.split("(");
+            return {
+              language: language.trim(),
+              level: level.substring(0, level.length - 1).trim(),
+            };
+          });
+  
+          setMappedLanguages([...newLanguage]);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -795,7 +811,7 @@ const OverviewById = () => {
             <textarea
               name="about"
               onChange={handleChange}
-              value={isLoading ? "-" : academyData?.about || ""}
+              value={isLoading ? "-" : academyData?.about === null ? introduction : academyData?.about}
               id=""
               className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
               rows="2"
