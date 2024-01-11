@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
 import Dash from "../../assets/image/red-dash.svg";
 import { removeHtmlTags } from "./removeHtml.js";
+import { splitAddress } from "./splitAddress.js";
 const OverviewById = () => {
   const { id } = useParams();
   localStorage.setItem("academy_id", id);
@@ -87,6 +88,7 @@ const OverviewById = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
+  const result={}
   //=====================================for disapprove modal
   const [open, setOpen] = useState(false);
   const [disapprovalReason, setDisapprovalReason] = useState('');
@@ -337,6 +339,7 @@ const OverviewById = () => {
 
 
   const handleSelectAddress = (selectedAddress) => {
+    result = splitAddress(selectedAddress)
     // console.log(selectedAddress)
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {

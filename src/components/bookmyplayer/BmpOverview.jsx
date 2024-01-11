@@ -85,6 +85,7 @@ const BmpOverview = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
+  const result = {}
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",
@@ -189,7 +190,8 @@ const BmpOverview = () => {
     }
   };
   const handleSelectAddress = (selectedAddress) => {
-    splitAddress(selectedAddress)
+    result = splitAddress(selectedAddress)
+    console.log(result);
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
       setNumber2(1);
@@ -267,13 +269,13 @@ const BmpOverview = () => {
       .then((response) => {
         localStorage.setItem("url", response?.data?.data[0]?.url);
         const academyName = response?.data?.data[0]?.name;
-const cityName = response?.data?.data[0]?.city;
-const aboutString = response?.data?.about[0]?.about;
-const updatedAbout = aboutString.replace(/ACADEMY_NAME/g, academyName);
-const finalAbout = updatedAbout.replace(/CITY_NAME/g, cityName);
+        const cityName = response?.data?.data[0]?.city;
+        const aboutString = response?.data?.about[0]?.about;
+        const updatedAbout = aboutString.replace(/ACADEMY_NAME/g, academyName);
+        const finalAbout = updatedAbout.replace(/CITY_NAME/g, cityName);
 
-const intro = removeHtmlTags(finalAbout);
-setIntroduction(intro);
+        const intro = removeHtmlTags(finalAbout);
+        setIntroduction(intro);
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -603,7 +605,10 @@ setIntroduction(intro);
     }
 
     if (addressChanged && address !== "") {
-      updatedFormData.address1 = address;
+      updatedFormData.address1 = result?.address1;
+      updatedFormData.address2 = result?.address2;
+      updatedFormData.city = result?.city;
+      updatedFormData.state = result?.state;
     }
     if (maplinkChanged && mapLink !== "") {
       updatedFormData.map = mapLink;
@@ -634,37 +639,37 @@ setIntroduction(intro);
     console.log(updatedFormData);
     console.log("update body");
 
-    axios
-      .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        if (response.data.status === 1) {
-          toast.success("Details updated successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        } else {
-          toast.error("Some Error Occurred", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-        academyDetails();
-        updatedAcadmeyInfo();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while updating details", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      })
-      .finally(() => {
-        setStateBtn(0);
-      });
+    // axios
+    //   .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     if (response.data.status === 1) {
+    //       toast.success("Details updated successfully", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     } else {
+    //       toast.error("Some Error Occurred", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }
+    //     academyDetails();
+    //     updatedAcadmeyInfo();
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error("An error occurred while updating details", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //   })
+    //   .finally(() => {
+    //     setStateBtn(0);
+    //   });
   }
 
   return (

@@ -40,36 +40,27 @@ const stateMapping = {
 
 export const splitAddress = (address) => {
     console.log(address?.entity_name);
-
-    // Split the address using a comma
     const addressArray = address?.entity_name?.split(',');
-
-    // Trim each part to remove leading and trailing whitespaces
     const trimmedAddressArray = addressArray.map(part => part.trim());
-
-    // Filter out the string "India" from the array
     const filteredAddressArray = trimmedAddressArray.filter(part => part.toLowerCase() !== 'india');
-
-    // Initialize variables for state and city
+    console.log(filteredAddressArray);
     let state = '';
     let city = '';
-
-    // Iterate through the filtered array to find state and city
     filteredAddressArray.forEach(part => {
-        // Check if the part is a state
-        if (stateMapping[part]) {
-            alert(part)
-            state = stateMapping[part.toUpperCase()];
+        const matchingState = Object.entries(stateMapping).find(([key, value]) =>
+          value.toLowerCase() === part.toLowerCase()
+        );
+        if (matchingState) {
+          state = matchingState[1];
+          if (state.toLowerCase() === 'delhi') {
+            city = 'Delhi';
+          }
         } else {
-            // If not a state, consider it as a city
-            city = part;
+          city = part;
         }
-    });
-
-    // Log the state and city
-    console.log('State:', state);
-    console.log('City:', city);
-
-    // Return an object containing state and city if you want to use them elsewhere
-    return { state, city };
+      });
+    const restOfDataArray = filteredAddressArray.filter(part => part !== state && part !== city);
+    const address1 = restOfDataArray.shift();
+    const address2 = restOfDataArray.join(',');
+    return { address1, address2, city, state };
 };
