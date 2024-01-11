@@ -39,18 +39,17 @@ const BmpSidebar = () => {
         </NavLink>
         )
       }
-
       </p>
-      <p className="prefrence-options setting-font-style">
+      {/* <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/fees">
           Fees and Batches
         </NavLink>
-      </p>
-      <p className="prefrence-options setting-font-style">
+      </p> */}
+      {/* <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/training">
           Training Strategy
         </NavLink>
-      </p>
+      </p> */}
       <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/gallery">
           Photos & Video
@@ -81,11 +80,11 @@ const BmpSidebar = () => {
           Contact Support
         </NavLink>
       </p>
-      <p className="prefrence-options setting-font-style">
+      {/* <p className="prefrence-options setting-font-style">
         <NavLink exact to="/lp/bmp/help">
           Help
         </NavLink>
-      </p>
+      </p> */}
     </section>
   );
 };

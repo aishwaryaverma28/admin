@@ -169,7 +169,16 @@ const OverviewById = () => {
       setMappedLanguages([...newLanguage]);
     }
     if (keysOfNewAcadmeyData.includes("address1")) {
-      setAddress(newAcadmeyData?.address1 || "");
+      const addressComponents = [
+        newAcadmeyData?.address1,
+        newAcadmeyData?.address2,
+        newAcadmeyData?.city,
+        newAcadmeyData?.state,
+      ];  
+      const formattedAddress = addressComponents
+        .filter((component) => component && component.trim() !== "")
+        .join(", ");
+      setAddress(formattedAddress || "");
       setCoordinate(newAcadmeyData?.coordinate || "");
       setMapLink(newAcadmeyData?.map || "");
     }
@@ -211,10 +220,19 @@ const OverviewById = () => {
         },
       })
       .then((response) => {
+        const addressComponents = [
+          response?.data?.data[0]?.address1,
+          response?.data?.data[0]?.address2,
+          response?.data?.data[0]?.city,
+          response?.data?.data[0]?.state,
+        ];  
+        const formattedAddress = addressComponents
+          .filter((component) => component && component.trim() !== "")
+          .join(", ");
         setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
-        setAddress(response?.data?.data[0]?.address1 || "");
+        setAddress(formattedAddress || "");
         setCoordinate(response?.data?.data[0]?.coordinate || "");
         setMapLink(response?.data?.data[0]?.map || "");
         setProgress(response?.data?.data[0]?.completion_percentage);
@@ -536,7 +554,16 @@ const OverviewById = () => {
       languageString !== academyData?.spoken_languages;
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
-    const addressChanged = address !== academyData?.address1;
+      const addressComponents = [
+        academyData?.address1,
+        academyData?.address2,
+        academyData?.city,
+        academyData?.state,
+      ];
+      const formattedAddress = addressComponents
+        .filter((component) => component && component.trim() !== "")
+        .join(", ");
+    const addressChanged = address !== formattedAddress;
     const maplinkChanged = mapLink !== academyData?.map;
     const coordinateChanged = coordinate !== academyData?.coordinate;
     const timingChanged = startAndEndTime !== academyData?.timing;
@@ -826,80 +853,74 @@ const OverviewById = () => {
               Select your sport
             </label>
             <div className={`bmp-games ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
+              
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Football") ? "bmp-game-active" : ""
-                  }`}
-                onClick={() => handleDayClick("Football")}
-              >
-                Football
-              </div>
-              <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Arts") ? "bmp-game-active" : ""
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("arts") ? "bmp-game-active" : ""
                   } `}
-                onClick={() => handleDayClick("Arts")}
+                onClick={() => handleDayClick("arts")}
               >
                 Arts
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Atheletics")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("atheletics")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Atheletics")}
+                onClick={() => handleDayClick("atheletics")}
               >
                 Atheletics
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("badminton")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Badminton")}
+                onClick={() => handleDayClick("badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("basketball")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Basketball")}
+                onClick={() => handleDayClick("basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Billiards")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("billiards")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Billiards")}
+                onClick={() => handleDayClick("billiards")}
               >
                 Billiards
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Boxing")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("boxing")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Boxing")}
+                onClick={() => handleDayClick("boxing")}
               >
                 Boxing
               </div> 
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("chess")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Chess")}
+                onClick={() => handleDayClick("chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Cricket")
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("cricket")
                   ? "bmp-game-active"
                   : ""
                   } `}
-                onClick={() => handleDayClick("Cricket")}
+                onClick={() => handleDayClick("cricket")}
               >
                 Cricket
               </div>
@@ -1283,9 +1304,11 @@ const OverviewById = () => {
               )}
 
               {!selectedFile && (
-                <div className="bmp-image-preview">
+                <div className="bmp-image-preview">               
                   <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${id}/${academyData?.logo}`}
+                    src={academyData?.logo === null
+                      ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/510/download--1-.png"
+                      : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${id}/${academyData?.logo}`}
                     alt=""
                     className="bmp-preview-image"
                   />

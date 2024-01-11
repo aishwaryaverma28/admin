@@ -264,13 +264,23 @@ const BmpOverview = () => {
         },
       })
       .then((response) => {
-        // console.log(response?.data?.data[0])
-        setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
+        localStorage.setItem("url", response?.data?.data[0]?.url);
+        console.log(response?.data?.data[0])
+        const addressComponents = [
+          response?.data?.data[0]?.address1,
+          response?.data?.data[0]?.address2,
+          response?.data?.data[0]?.city,
+          response?.data?.data[0]?.state,
+        ];
+        const formattedAddress = addressComponents
+          .filter((component) => component && component.trim() !== "")
+          .join(", ");
         setAcademyData(response?.data?.data[0]);
         setAcademyDataOld(response?.data?.data[0]);
-        setAddress(response?.data?.data[0]?.address1 || "");
+        setAddress(formattedAddress || "");
         setCoordinate(response?.data?.data[0]?.coordinate || "");
         setMapLink(response?.data?.data[0]?.map || "");
+        setSelectedLanguage(response?.data?.data[0]?.spoken_languages);
         setProgress(response?.data?.data[0]?.completion_percentage);
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
@@ -489,7 +499,18 @@ const BmpOverview = () => {
     const spokenLanguagesChanged =
       languageString !== academyData?.spoken_languages;
 
-    const addressChanged = address !== academyData?.address1;
+    const addressComponents = [
+      academyData?.address1,
+      academyData?.address2,
+      academyData?.city,
+      academyData?.state,
+    ];
+
+    // Filter out null or empty values and join them with a comma and space
+    const formattedAddress = addressComponents
+      .filter((component) => component && component.trim() !== "")
+      .join(", ");
+    const addressChanged = address !== formattedAddress;
     const maplinkChanged = mapLink !== academyData?.map;
     const coordinateChanged = coordinate !== academyData?.coordinate;
 
@@ -716,83 +737,83 @@ const BmpOverview = () => {
               Select your sport
             </label>
             <div className="bmp-games">
-            <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Arts") &&
+              <div
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("arts") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Arts")}
+                onClick={() => handleDayClick("arts")}
               >
                 Arts
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Atheletics") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("atheletics") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Atheletics")}
+                onClick={() => handleDayClick("atheletics")}
               >
                 Atheletics
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Badminton") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("badminton") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Badminton")}
+                onClick={() => handleDayClick("badminton")}
               >
                 Badminton
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Basketball") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("basketball") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Basketball")}
+                onClick={() => handleDayClick("basketball")}
               >
                 Basketball
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Billiards") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("billiards") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Billiards")}
+                onClick={() => handleDayClick("billiards")}
               >
                 Billiards
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Boxing") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("boxing") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Boxing")}
+                onClick={() => handleDayClick("boxing")}
               >
                 Boxing
-              </div> 
+              </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Chess") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("chess") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Chess")}
+                onClick={() => handleDayClick("chess")}
               >
                 Chess
               </div>
               <div
-                className={`common-fonts bmp-game-list ${selectedDays?.includes("Cricket") &&
+                className={`common-fonts bmp-game-list ${selectedDays?.includes("cricket") &&
                   !(status === 0 && role_name === "Academy")
                   ? "bmp-game-active"
                   : ""
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
-                onClick={() => handleDayClick("Cricket")}
+                onClick={() => handleDayClick("cricket")}
               >
                 Cricket
               </div>
@@ -814,7 +835,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("football")}
               >
-               football
+                football
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("golf") &&
@@ -874,7 +895,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("motor sports")}
               >
-               Motor sports
+                Motor sports
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("shooting") &&
@@ -884,7 +905,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("shooting")}
               >
-               Shooting
+                Shooting
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("skating") &&
@@ -894,7 +915,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("skating")}
               >
-               Skating
+                Skating
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("squash") &&
@@ -904,7 +925,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("squash")}
               >
-               Squash
+                Squash
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("swimming") &&
@@ -914,7 +935,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("swimming")}
               >
-               Swimming
+                Swimming
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("table-tennis") &&
@@ -924,7 +945,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("table-tennis")}
               >
-               Table-tennis
+                Table-tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("taekwondo") &&
@@ -934,7 +955,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("taekwondo")}
               >
-               Taekwondo
+                Taekwondo
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("tennis") &&
@@ -944,7 +965,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("tennis")}
               >
-               Tennis
+                Tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("volleyball") &&
@@ -954,7 +975,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("volleyball")}
               >
-               Volleyball
+                Volleyball
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("wrestling") &&
@@ -964,7 +985,7 @@ const BmpOverview = () => {
                   } ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("wrestling")}
               >
-               Wrestling
+                Wrestling
               </div>
             </div>
           </div>
@@ -1217,7 +1238,9 @@ const BmpOverview = () => {
               {!selectedFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.logo}`}
+                    src={academyData?.logo === null
+                      ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/510/download--1-.png"
+                      : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.logo}`}
                     alt=""
                     className="bmp-preview-image"
                   />
@@ -1324,7 +1347,7 @@ const BmpOverview = () => {
                   {mappedLanguage.language} ({mappedLanguage.level})
                 </p>{
                   status === 0 && role_name === "Academy" ? (
-                    <img src={Dash2} alt=""/>
+                    <img src={Dash2} alt="" />
                   ) : (
                     <img src={Dash} alt="" onClick={() => handleDeleteLanguage(index)} />
                   )

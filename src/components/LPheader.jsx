@@ -23,6 +23,7 @@ const LPheader = () => {
   const userId = localStorage.getItem("id");
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
+  const url = localStorage.getItem("url");
   const [pageTitle, setPageTitle] = useState("Lead");
   const dispatch = useDispatch();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -93,7 +94,7 @@ const LPheader = () => {
       case "/lp/bmp/overview":
         setPageTitle("BMP");
         break;
-        case "/lp/bmp/admin":
+      case "/lp/bmp/admin":
         setPageTitle("Manager");
         break;
       case "/lp/admin":
@@ -119,7 +120,7 @@ const LPheader = () => {
       return true;
     }
     const userRole = localStorage.getItem("role_name");
-    if (userRole === "Academy_Admin" && path === "/lp/bmp") {
+    if (userRole === "Academy Admin" && path === "/lp/bmp") {
       return false;
     }
 
@@ -151,18 +152,21 @@ const LPheader = () => {
 
   async function getBMPUser() {
     let body = {};
-    if(role_name === "Academy Admin")
-    {
-    body =  {
+    // if(role_name === "Academy Admin")
+    // {
+    // body =  {
+    //   userId: userId,
+    // }}else{
+    //   body =  {
+    //     userId: academyId,
+    //   }
+    // }
+    body = {
       userId: userId,
-    }}else{
-      body =  {
-        userId: academyId,
-      }
     }
     try {
       const response = await axios.post(
-        BMP_USER,body,
+        BMP_USER, body,
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -250,10 +254,16 @@ const LPheader = () => {
       window.location.href = "https://www.leadplaner.com/user/login";
     }
   };
-
-  const handleAddInfo = () => {
-
-  }
+  const handleViewSite = (e) => {
+    e.preventDefault();
+   const siteUrl =url;
+    if (siteUrl) {
+      localStorage.clear();
+      window.location.href = siteUrl;
+    } else {
+        alert('Site URL is not available');
+    }
+};
 
   return (
     <>
@@ -330,7 +340,8 @@ const LPheader = () => {
 
                 }
                 <br />
-                <span>{clientData.job_title}</span>
+                {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (<span>{clientData?.type}</span>):
+                  (<span>{clientData?.job_title}</span>)}
               </p>
             ) : (
               <p>
@@ -356,12 +367,13 @@ const LPheader = () => {
                     }
                   </h5>
                   <p className="email-case">{clientData?.email}</p>
-                  <p>{clientData?.job_title}</p>
+                  {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (<p>{clientData?.type}</p>):
+                  (<p>{clientData?.job_title}</p>)}
                 </div>
               </div>
               <div className="profileNPref">Profile & Preferences</div>
               <div className="userId">
-                User Id: 123456789 <i className="far fa-question-circle"></i>
+                User Id: {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (clientData?.id) : 123456789} <i className="far fa-question-circle"></i>
               </div>
               <div className="userId">
                 <p>Invite & earn rewards</p>
@@ -459,8 +471,20 @@ const LPheader = () => {
             )}
           </ul>
           <span></span>
+          {(landingUrl === "/lp/bmp/overview") ? (
+            <button
+              className="common-fonts bmpSiteBtn"
+            onClick={handleViewSite}
+            >
+              View Site
+            </button>
+        ) : (
+          <></>
+        )}
         </div>
+        
       </nav>
+      
       {/* Bottom Navigation End */}
 
       {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}

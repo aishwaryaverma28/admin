@@ -90,7 +90,7 @@ const Login = () => {
     axios
       .post(BMP_LOGIN, updateForm)
       .then((response) => {
-        console.log(response?.data);
+        // console.log(response?.data);
         const data = response?.data;
         const status = response?.data?.status;
         if (status === 0) {
@@ -102,12 +102,14 @@ const Login = () => {
             secretKey
           ).toString();
           localStorage.setItem("jwtToken", encryptedToken);
-          const role_name = data?.user?.name;
+          const role_name = data?.user?.type;
           localStorage.setItem("role_name", role_name);
           if (role_name === "Academy Admin")
             localStorage.setItem("id", data?.user?.id);
           else
-            localStorage.setItem("academy_id", data?.user?.id);
+          {localStorage.setItem("id", data?.user?.id);
+            localStorage.setItem("academy_id", data?.user?.parent_id);
+          }
           const landingUrl = response?.data?.landingurl;
           localStorage.setItem("landingUrl", landingUrl);
           const userPath = data?.permissions?.split(",");

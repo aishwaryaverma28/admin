@@ -806,10 +806,12 @@ const closeModal = () => {
                   {!selectedFile && (
                     <div className="bmp-image-preview">
                       <img
-                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.banner}`}
-                        alt=""
-                        className="bmp-preview-image"
-                      />
+                    src={academyData?.banner === null
+                      ? `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/default/${academyData?.sport}_banner.webp`
+                      : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.banner}`}
+                    alt=""
+                    className="bmp-preview-image"
+                  />
                     </div>
                   )}
                 </div>

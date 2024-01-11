@@ -242,13 +242,14 @@ font-weight: 400;
   /* z-index: 100; */
   padding: 0px;
   border-bottom: 1px solid #dcdcdc;
-  padding: 10px 30px;
+  padding: 8px 30px;
 }
 
 .navbarContainer {
   display: flex;
   gap: 12rem;
   /* padding: 1rem 0; */
+  justify-content: space-between;
   align-items: center;
 }
 
