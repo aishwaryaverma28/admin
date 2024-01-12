@@ -285,13 +285,6 @@ select:focus {
   text-transform: capitalize;
   color: #909daf !important;
 }
-.bmpSiteBtn{
-  border-radius: 40px;
-background: #2b74da;
-padding: 5px 8px;
-border: none;
-color: white;
-}
 
 .email-case {
   text-transform: lowercase;

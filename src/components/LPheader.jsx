@@ -104,7 +104,7 @@ const LPheader = () => {
         setPageTitle("Home");
         break;
       default:
-        setPageTitle("Lead"); // Default title
+        setPageTitle("Lead");
         break;
     }
   }, [landingUrl]);
@@ -131,7 +131,7 @@ const LPheader = () => {
     try {
       const response = await axios.get(USER_INFO, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       });
       const data = response?.data?.data;
@@ -191,13 +191,7 @@ const LPheader = () => {
   }
 
   useEffect(() => {
-    if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
-      getBMPUser();
-    } else if (landingUrl === "/lp/home" || landingUrl === '/lp/admin') {
-      getUser();
-    } else {
-      getUser();
-    }
+     getUser();
   }, []);
 
 
@@ -217,14 +211,7 @@ const LPheader = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-  const handleRefresh = () => {
-    window.location.reload(); // Reloads the current page
-  };
-
-  const handleOptionClick = (option) => {
-    console.log("Selected option:", option);
-    setIsOpen(false);
-  };
+ 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -245,26 +232,10 @@ const LPheader = () => {
   };
 
   const handleLogout = () => {
-    // console.log(landingUrl)
-    if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
-      localStorage.clear();
-      window.location.href = "https://www.bookmyplayer.com/login";
-    } else {
-      localStorage.clear();
+    localStorage.clear();
       window.location.href = "https://www.leadplaner.com/user/login";
-    }
   };
-  const handleViewSite = (e) => {
-    e.preventDefault();
-   const siteUrl =url;
-    if (siteUrl) {
-      localStorage.clear();
-      window.location.href = siteUrl;
-    } else {
-        alert('Site URL is not available');
-    }
-};
-
+ 
   return (
     <>
       <div className="nav">
@@ -326,12 +297,7 @@ const LPheader = () => {
             <img src={user} alt="user" />
             {clientData ? (
               <p>
-                {" "}
-                {/* {name
-                  ? name
-                  : `${clientData?.first_name} ${clientData?.last_name}`} */}
-
-                {
+               {
                   number === 0 ? (
                     `${clientData?.first_name} ${clientData?.last_name}`
                   ) : (
@@ -340,8 +306,7 @@ const LPheader = () => {
 
                 }
                 <br />
-                {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (<span>{clientData?.type}</span>):
-                  (<span>{clientData?.job_title}</span>)}
+                <span>{clientData?.job_title}</span>
               </p>
             ) : (
               <p>
@@ -367,13 +332,12 @@ const LPheader = () => {
                     }
                   </h5>
                   <p className="email-case">{clientData?.email}</p>
-                  {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (<p>{clientData?.type}</p>):
-                  (<p>{clientData?.job_title}</p>)}
+                 <p>{clientData?.job_title}</p>
                 </div>
               </div>
               <div className="profileNPref">Profile & Preferences</div>
               <div className="userId">
-                User Id: {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (clientData?.id) : 123456789} <i className="far fa-question-circle"></i>
+                User Id: {clientData?.id ? (clientData?.id) : 123456789}
               </div>
               <div className="userId">
                 <p>Invite & earn rewards</p>
@@ -394,11 +358,7 @@ const LPheader = () => {
       {/* Bottom Navigation Start */}
       <nav className="navbar">
         <div className="navbarContainer">
-          {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (
-            <img src={vector} alt="" className="BMPlogo" />
-          ) : (
-            <img src={logo} alt="" className="logo" />
-          )}
+           <img src={logo} alt="" className="logo" />
           <input
             type="checkbox"
             name=""
@@ -471,22 +431,9 @@ const LPheader = () => {
             )}
           </ul>
           <span></span>
-          {(landingUrl === "/lp/bmp/overview") ? (
-            <button
-              className="common-fonts bmpSiteBtn"
-            onClick={handleViewSite}
-            >
-              View Site
-            </button>
-        ) : (
-          <></>
-        )}
         </div>
-        
-      </nav>
-      
+        </nav>      
       {/* Bottom Navigation End */}
-
       {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}
       {isNotifyModalOpen && <NotificationModal onClose={handleBellCLose} />}
     </>

@@ -85,7 +85,7 @@ const BmpOverview = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  const result = {}
+  let result = {}
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",

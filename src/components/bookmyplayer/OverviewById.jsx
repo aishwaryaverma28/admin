@@ -88,7 +88,7 @@ const OverviewById = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  const result={}
+  let result={}
   //=====================================for disapprove modal
   const [open, setOpen] = useState(false);
   const [disapprovalReason, setDisapprovalReason] = useState('');

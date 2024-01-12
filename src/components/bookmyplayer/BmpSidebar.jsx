@@ -59,10 +59,9 @@ const BmpSidebar = () => {
       <p className="prefrence-options setting-font-style bmp-profile-txt common-fonts">
         System
       </p>
-
       <p className="prefrence-options setting-font-style">
-        <NavLink exact to="/lp/bmp/approval">
-          Approval Status
+        <NavLink exact to="/lp/bmp/leads">
+          Leads
         </NavLink>
       </p>
       <p className="prefrence-options setting-font-style">
@@ -71,8 +70,8 @@ const BmpSidebar = () => {
         </NavLink>
       </p>
       <p className="prefrence-options setting-font-style">
-        <NavLink exact to="/lp/bmp/leads">
-          Leads
+        <NavLink exact to="/lp/bmp/approval">
+          Approval Status
         </NavLink>
       </p>
       <p className="prefrence-options setting-font-style">
