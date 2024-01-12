@@ -351,7 +351,6 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 letter-spacing: -0.02563rem;
-border-bottom:0.0625rem solid #DCDCDC;
 }
 .userId p{
   padding: 0.55rem 0.5rem;
@@ -510,4 +509,28 @@ letter-spacing: -0.02563rem;
   .BMPlogo{
     height: 1.7rem;
     margin: 0.7rem 0rem;
+  }
+
+  .new_li p{
+    cursor: pointer;
+  }
+
+  .pass_flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dcdcdc;
+  }
+
+  .pass_flex p{
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+
+  .wrapper_new{
+    z-index: 15 !important;
+  }
+
+  .userDropdownContainer{
+    cursor: pointer;
   }

@@ -163,6 +163,7 @@ const closeModal = () => {
             response?.data?.data[0]?.completion_percentage.split(",")
           );
         }
+        setProgressArray(...progressArray, "1");
         if (
           response?.data?.data[0]?.photos !== "" &&
           response?.data?.data[0]?.photos !== null
@@ -843,7 +844,10 @@ const closeModal = () => {
                   }}
                 >
                   <button
-                    className="contact-browse-btn common-fonts"
+                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "Academy"
+                      ? "bmp_disable"
+                      : ""
+                      }`}
                     onClick={handleButtonClick2}
                     disabled={status === 0 && role_name === 'Academy'}
                   >
