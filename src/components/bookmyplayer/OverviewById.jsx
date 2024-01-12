@@ -1160,6 +1160,7 @@ const OverviewById = () => {
               <option value="20+">20+</option>
             </select>
           </div>
+          <br/>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
             Open Timings
@@ -1169,9 +1170,7 @@ const OverviewById = () => {
               name="timing"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.timing === null ? "10am-9pm" : academyData?.timing}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
-                }`}
-              disabled={status === 0 && role_name === "Academy"}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
             />
           </div>
         </div>
@@ -1281,11 +1280,8 @@ const OverviewById = () => {
               <p className="common-fonts bmp-social">Language</p>
 
               <button
-
-                className={`common-white-blue-button ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
-
+                className={`common-white-blue-button`}
                 onClick={handleAddLanguage}
-                disabled={status === 0 && role_name === "Academy"}
               >
                 + Add Language
               </button>
@@ -1295,9 +1291,7 @@ const OverviewById = () => {
                 <select
                   value={selectedLanguageName}
                   onChange={handlelanguageNameChange}
-                  className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
-
-                  disabled={status === 0 && role_name === "Academy"}
+                  className={`common-fonts common-input langSelect level_input bmp_lang_box`}
                 >
                   <option value="">Select your language</option>
                   {languages.map((language) => (
