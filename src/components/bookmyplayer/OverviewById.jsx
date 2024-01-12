@@ -17,6 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProgressBar from "./ProgressBar";
 import Dash from "../../assets/image/red-dash.svg";
+import Dash2 from "../../assets/image/dash2.svg";
 import { removeHtmlTags } from "./removeHtml.js";
 import { splitAddress } from "./splitAddress.js";
 const OverviewById = () => {
@@ -50,7 +51,7 @@ const OverviewById = () => {
   const [mappedLanguages, setMappedLanguages] = useState([]);
   const [languageString, setLanguageString] = useState("");
   const [progress, setProgress] = useState(null);
-  const [progressArray, setProgressArray] = useState([]);
+  const [progressArray, setProgressArray] = useState(["1"]);
   const [number, setNumber] = useState(0);
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
@@ -60,16 +61,7 @@ const OverviewById = () => {
   let joinLanguage;
   const languages = [
     { value: "Hindi", label: "Hindi" },
-    { value: "English", label: "English" },
-    { value: "Russian", label: "Russian" },
-    { value: "Chinese", label: "Chinese" },
-    { value: "Spanish", label: "Spanish" },
-    { value: "French", label: "French" },
-    { value: "German", label: "German" },
-    { value: "Italian", label: "Italian" },
-    { value: "Japanese", label: "Japanese" },
-    { value: "Korean", label: "Korean" },
-    { value: "Portuguese", label: "Portuguese" },
+    { value: "English", label: "English" },    
     { value: "Telugu", label: "Telugu" },
     { value: "Kannada", label: "Kannada" },
     { value: "Tamil", label: "Tamil" },
@@ -82,6 +74,15 @@ const OverviewById = () => {
     { value: "Odia", label: "Odia" },
     { value: "Sindhi", label: "Sindhi" },
     { value: "Bhojpuri", label: "Bhojpuri" },
+    { value: "Russian", label: "Russian" },
+    { value: "Chinese", label: "Chinese" },
+    { value: "Spanish", label: "Spanish" },
+    { value: "French", label: "French" },
+    { value: "German", label: "German" },
+    { value: "Italian", label: "Italian" },
+    { value: "Japanese", label: "Japanese" },
+    { value: "Korean", label: "Korean" },
+    { value: "Portuguese", label: "Portuguese" },
   ];
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [address, setAddress] = useState("");
@@ -163,10 +164,9 @@ const OverviewById = () => {
     if (keysOfNewAcadmeyData.includes("spoken_languages")) {
       const languages = newAcadmeyData?.spoken_languages?.split(", ");
       const newLanguage = languages?.map((lang) => {
-        const [language, level] = lang.split("(");
+        const [language] = lang.split("(");
         return {
-          language: language.trim(),
-          level: level.substring(0, level.length - 1).trim(),
+          language: language.trim()
         };
       });
       setMappedLanguages([...newLanguage]);
@@ -185,18 +185,7 @@ const OverviewById = () => {
       setCoordinate(newAcadmeyData?.coordinate || "");
       setMapLink(newAcadmeyData?.map || "");
     }
-    if (keysOfNewAcadmeyData.includes("timing")) {
-      console.log(newAcadmeyData?.timing)
-      const timingParts = newAcadmeyData?.timing?.split(" - ");
-      console.log(timingParts)
-      if (timingParts.length === 2) {
-        // const [startTime, endTime] = timingParts;
-        const [startTime, endTime] = timingParts.map(time => time.trim());
-        setSelectedStartTime(startTime);
-        setSelectedEndTime(endTime);
-      }
-    }
-    if (keysOfNewAcadmeyData.includes("logo")) {
+     if (keysOfNewAcadmeyData.includes("logo")) {
       setFileName(newAcadmeyData.logo);
     }
   };
@@ -205,7 +194,6 @@ const OverviewById = () => {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
-
   // console.log(newAcadmeyData);
   // console.log(academyData);
   // console.log(keysOfNewAcadmeyData);
@@ -222,9 +210,7 @@ const OverviewById = () => {
         const cityName = response?.data?.data[0]?.city;
         console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
         const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
-        
         setIntroduction(intro);
-        console.log(intro)
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -250,25 +236,22 @@ const OverviewById = () => {
             response?.data?.data[0]?.completion_percentage.split(",")
           );
         }
+        progressArray?.push("1");
         if (response?.data?.data[0]?.spoken_languages === null) {
           setMappedLanguages([
             {
-              language: "Hindi",
-              level: "Intermediate",
+              language: "Hindi"
             },
             {
-              language: "English",
-              level: "Intermediate",
+              language: "English"
             },
           ]);
         } else {
-          const languages = response?.data?.data[0]?.spoken_languages.split(", ");
-  
+          const languages = response?.data?.data[0]?.spoken_languages.split(", ");  
           const newLanguage = languages.map((lang) => {
-            const [language, level] = lang.split("(");
+            const [language] = lang.split("(");
             return {
               language: language.trim(),
-              level: level.substring(0, level.length - 1).trim(),
             };
           });
   
@@ -285,22 +268,23 @@ const OverviewById = () => {
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
   };
-  const handleLevelChange = (e) => {
-    setSelectedLevel(e.target.value);
-  };
+
   const handleAddLanguage = () => {
     setStateBtn(1);
     updateField("spoken_languages");
-    if (selectedLanguageName && selectedLevel) {
+    if (selectedLanguageName) {
       const newLanguage = {
-        language: selectedLanguageName,
-        level: selectedLevel,
+        language: selectedLanguageName
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
-      joinLanguage = mappedLanguages?.concat(newLanguage)?.map((lang) => `${lang.language}(${lang.level})`)?.join(", ");
-      setLanguageString(joinLanguage);
+      const languageString = mappedLanguages
+        .concat(newLanguage)
+        .map((lang) => `${lang.language}`)
+        .join(", ");
+      setLanguageString(languageString);
     }
   };
+
   const handleDeleteLanguage = (index) => {
     setStateBtn(1);
     const updatedLanguages = [...mappedLanguages];
@@ -316,7 +300,7 @@ const OverviewById = () => {
     setMappedLanguages([...newArr]);
 
     joinLanguage = newArr
-      .map((lang) => `${lang.language}(${lang.level})`)
+      .map((lang) => `${lang.language}`)
       .join(", ");
     setLanguageString(joinLanguage);
   };
@@ -395,37 +379,10 @@ const OverviewById = () => {
     return options;
   };
 
-  const timeOptions = generateTimeOptions();
-
-  const handleTimeChange = (event) => {
-    setSelectedStartTime(event.target.value);
-    updateField("timing");
-    setStateBtn(1);
-  };
-  const handleEndTimeChange = (event) => {
-    setSelectedEndTime(event.target.value);
-    updateField("timing");
-    setStateBtn(1);
-  };
-
-  useEffect(() => {
+   useEffect(() => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
-  useEffect(() => {
-    if (academyData && academyData.timing !== null) {
-      const timingParts = academyData?.timing?.split("-")?.map(part => part?.trim());
-      if (timingParts?.length === 2) {
-        const [startTime, endTime] = timingParts;
-        setSelectedStartTime(startTime);
-        setSelectedEndTime(endTime);
-      }
-    } else {
-      // If academyData.timing is null, set default values
-      setSelectedStartTime("10:00");
-      setSelectedEndTime("19:00");
-    }
-  }, [academyData]);
   
   
   const processImageName = (imageName) => {
@@ -612,7 +569,7 @@ const OverviewById = () => {
       updatedFormData.email = academyData.email;
     }
     if (hasChanged("timing")) {
-      updatedFormData.timing = startAndEndTime;
+      updatedFormData.timing = academyData.timing;
     }
     if (spokenLanguagesChanged && languageString !== "") {
       updatedFormData.spoken_languages = languageString;
@@ -723,7 +680,7 @@ const OverviewById = () => {
       instagram: academyData.instagram,
       website: academyData.website,
       email: academyData.email,
-      timing: startAndEndTime,
+      timing: academyData.timing,
       spoken_languages: academyData.spoken_languages,
       logo: academyData.logo,
       address1: address,
@@ -1203,41 +1160,19 @@ const OverviewById = () => {
               <option value="20+">20+</option>
             </select>
           </div>
-
-          <div className="bmp-input-flex bmp-last-time">
-            <div className="bmp-phone-field">
-              <label htmlFor="" className="common-fonts bmp-academy-name">
-                Open Timings
-              </label>
-              
-            </div>
-            <div className="bmp-input-flex-2 bmp-add-fields bmp-new-timing">
-              <select
-                className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
-                value={selectedStartTime}
-                onChange={handleTimeChange}
-              >
-                <option value="">Select Opening time</option>
-                {timeOptions?.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-              <p className="common-fonts light-color bmp-to">To</p>
-              <select
-                className={`common-fonts common-input bmp-modal-select-2 overviewTime ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
-                value={selectedEndTime}
-                onChange={handleEndTimeChange}
-              >
-                <option value="">Select closing time</option>
-                {timeOptions?.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="bmp-input-flex">
+            <label htmlFor="" className="common-fonts bmp-academy-name">
+            Open Timings
+            </label>
+            <input
+              type="text"
+              name="timing"
+              onChange={handleChange}
+              value={isLoading ? "-" : academyData?.timing === null ? "10am-9pm" : academyData?.timing}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                }`}
+              disabled={status === 0 && role_name === "Academy"}
+            />
           </div>
         </div>
 
@@ -1346,58 +1281,47 @@ const OverviewById = () => {
               <p className="common-fonts bmp-social">Language</p>
 
               <button
-                className="common-white-blue-button"
+
+                className={`common-white-blue-button ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+
                 onClick={handleAddLanguage}
+                disabled={status === 0 && role_name === "Academy"}
               >
                 + Add Language
               </button>
             </div>
 
-            <div className="bmp-input-flex bmp_language_box">
-              <div>
-                <label className="common-fonts bmp-academy-name">
-                  Language
-                </label>
+            <div className="bmp-input-flex ">
                 <select
                   value={selectedLanguageName}
                   onChange={handlelanguageNameChange}
-                  className="common-fonts common-input langSelect level_input"
+                  className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+
+                  disabled={status === 0 && role_name === "Academy"}
                 >
                   <option value="">Select your language</option>
-                  {languages?.map((language) => (
+                  {languages.map((language) => (
                     <option key={language.value} value={language.value}>
                       {language.label}
                     </option>
                   ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="common-fonts bmp-academy-name">Level</label>
-                <select
-                  value={selectedLevel}
-                  onChange={handleLevelChange}
-                  className="common-fonts common-input langSelect level_input"
-                >
-                  <option value="">Select your Level</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Mastery">Mastery</option>
-                </select>
-              </div>
+                </select>    
             </div>
 
-            {mappedLanguages?.map((mappedLanguage, index) => (
-              <div className={`bmp_overview_language_map ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}`} key={index}>
-                <p className="common-fonts">
-                  {mappedLanguage.language} ({mappedLanguage.level})
-                </p>
-                <img
-                  src={Dash}
-                  alt=""
-                  onClick={() => handleDeleteLanguage(index)}
-                />
+            {mappedLanguages.map((mappedLanguage, index) => (
+              <div className={`bmp_overview_language_map  ${status === 0 && role_name === "Academy Admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}
+            }`}key={index}>
+                <p className={`common-fonts
+                  }`}>
+                  {mappedLanguage.language}
+                </p>{
+                  status === 0 && role_name === "Academy" ? (
+                    <img src={Dash2} alt="" />
+                  ) : (
+                    <img src={Dash} alt="" onClick={() => handleDeleteLanguage(index)} />
+                  )
+                }
+
               </div>
             ))}
           </div>

@@ -560,7 +560,9 @@
 .bmp-upload-3 {
   margin-left: 1rem;
 }
-
+.bmp_lang_box{
+  width: 28rem;
+}
 .bmp-batch-date {
   display: flex;
   justify-content: space-between;
