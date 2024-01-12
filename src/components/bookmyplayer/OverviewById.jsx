@@ -89,7 +89,7 @@ const OverviewById = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  let result={}
+  const [result, setResult] = useState({});
   //=====================================for disapprove modal
   const [open, setOpen] = useState(false);
   const [disapprovalReason, setDisapprovalReason] = useState('');
@@ -159,6 +159,7 @@ const OverviewById = () => {
       });
     }
     if (keysOfNewAcadmeyData.includes("sport")) {
+      // alert("hi")
       setSelectedDays(newAcadmeyData?.sport?.split(",") || []);
     }
     if (keysOfNewAcadmeyData.includes("spoken_languages")) {
@@ -190,7 +191,7 @@ const OverviewById = () => {
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy") {
+    if (status === 0 && role_name === "Academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
@@ -325,8 +326,9 @@ const OverviewById = () => {
 
 
   const handleSelectAddress = (selectedAddress) => {
-    result = splitAddress(selectedAddress)
-    // console.log(selectedAddress)
+    let add = splitAddress(selectedAddress)
+    setResult(add);
+    console.log(result);
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
       setNumber2(1);
@@ -596,7 +598,10 @@ const OverviewById = () => {
       updatedFormData.logo = fileName;
     }
     if (addressChanged && address !== "") {
-      updatedFormData.address1 = address;
+      updatedFormData.address1 = result?.address1;
+      updatedFormData.address2 = result?.address2;
+      updatedFormData.city = result?.city;
+      updatedFormData.state = result?.state;
     }
     if (maplinkChanged && mapLink !== "") {
       updatedFormData.map = mapLink;
@@ -687,10 +692,14 @@ const OverviewById = () => {
       timing: academyData.timing,
       spoken_languages: academyData.spoken_languages,
       logo: academyData.logo,
-      address1: address,
+      address1 : result?.address1,
+      address2 : result?.address2,
+      city : result?.city,
+      state : result?.state,
       map: mapLink,
       coordinate: coordinate
     }
+    console.log(updatedFormData)
     axios
       .put(UPDATE_ACADEMY + id, updatedFormData, {
         headers: {
@@ -751,10 +760,12 @@ const OverviewById = () => {
     updatedAcadmeyInfo();
     academyDetails();
   }
+  console.log(selectedDays)
   return (
     <>
       <div className="bmp-container">
         <div>
+          <button onClick={ApproveSubmit}>save</button>
           <p className="common-fonts bmp-top">Address & Contact details</p>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">

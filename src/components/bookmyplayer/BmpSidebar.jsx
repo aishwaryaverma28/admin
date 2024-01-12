@@ -29,7 +29,7 @@ const BmpSidebar = () => {
       <p className="prefrence-options setting-font-style">
 
       {
-        userRole === "Academy Admin" ? (
+        userRole === "Academy_admin" ? (
           <NavLink exact to={`/lp/bmp/overview/${id}`}>
           Overview
         </NavLink>

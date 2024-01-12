@@ -84,7 +84,7 @@ const BmpOverview = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [mapLink, setMapLink] = useState("");
   const [coordinate, setCoordinate] = useState("");
-  let result = {}
+  const [result, setResult] = useState({});
   const [keywords, setKeywords] = useState([
     "murder",
     "kill",
@@ -184,7 +184,8 @@ const BmpOverview = () => {
     }
   };
   const handleSelectAddress = (selectedAddress) => {
-    result = splitAddress(selectedAddress)
+    let add = splitAddress(selectedAddress)
+    setResult(add);
     console.log(result);
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
@@ -305,7 +306,7 @@ const BmpOverview = () => {
   useEffect(() => {
     progressArray?.push("1");
   },[academyData])
-console.log(progressArray)
+
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
     if (nameParts.length > 1) {
@@ -435,7 +436,7 @@ console.log(progressArray)
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
-
+console.log(result)
   function handleSubmit(event) {
     event.preventDefault();
     const filteredProgressArray = progressArray.filter(value => value !== "1");

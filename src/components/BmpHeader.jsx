@@ -245,7 +245,7 @@ const BmpHeader = () => {
               </div>
               {landingUrl === "/lp/bmp/overview" ? (
                 <div className="profileNPref" onClick={handleViewSite}>
-                  View Site
+                  View Profile
                 </div>
               ) : (
                 <></>
