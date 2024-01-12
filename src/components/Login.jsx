@@ -90,7 +90,7 @@ const Login = () => {
     axios
       .post(BMP_LOGIN, updateForm)
       .then((response) => {
-        // console.log(response?.data);
+        console.log(response?.data);
         const data = response?.data;
         const status = response?.data?.status;
         if (status === 0) {

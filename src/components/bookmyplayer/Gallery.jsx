@@ -61,19 +61,19 @@ const Gallery = () => {
     "video/ogg",
   ];
   const [activeTab, setActiveTab] = useState("academy");
-//======================================================================extra functions for approve n disapprove
+  //======================================================================extra functions for approve n disapprove
   const [revokeId, setRevokeId] = useState(null);
   const [keysOfNewAcadmeyData, setKeysOfNewAcadmeyData] = useState([]);
-//=====================================for disapprove modal
-const [open, setOpen] = useState(false);
-const [disapprovalReason, setDisapprovalReason] = useState('');
+  //=====================================for disapprove modal
+  const [open, setOpen] = useState(false);
+  const [disapprovalReason, setDisapprovalReason] = useState('');
 
-const openModal = () => {
-  setOpen(true)
-}
-const closeModal = () => {
-  setOpen(false);
-}
+  const openModal = () => {
+    setOpen(true)
+  }
+  const closeModal = () => {
+    setOpen(false);
+  }
 
   const updatedAcadmeyInfo = () => {
     axios
@@ -135,7 +135,7 @@ const closeModal = () => {
     }
   }
   useEffect(() => {
-    if (status === 0 && role_name === "Academy Admin") {
+    if (status === 0 && role_name === "Academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
@@ -155,15 +155,17 @@ const closeModal = () => {
       .then((response) => {
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
+        let dummy = response?.data?.data[0]?.completion_percentage + ",1"
         if (
           response?.data?.data[0]?.completion_percentage !== "" &&
           response?.data?.data[0]?.completion_percentage !== null
         ) {
-          setProgressArray(
-            response?.data?.data[0]?.completion_percentage.split(",")
-          );
+          setProgressArray(dummy?.split(","))
+          // setProgressArray(
+          //   response?.data?.data[0]?.completion_percentage?.split(",")
+          // );
         }
-        setProgressArray(...progressArray, "1");
+        progressArray?.push("1");
         if (
           response?.data?.data[0]?.photos !== "" &&
           response?.data?.data[0]?.photos !== null
@@ -193,6 +195,10 @@ const closeModal = () => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
+  // useEffect(() => {
+  //   progressArray?.push("1");
+  // },[progressArray])
+  console.log(progressArray)
 
   const initialPhotoUrls = [...photoUrls];
   const initialVideoUrls = [...videoUrls];
@@ -429,11 +435,12 @@ const closeModal = () => {
   };
 
   function handleSubmit(file) {
-    if (!progressArray?.includes("4")) {
-      progressArray.push("4");
-      setProgressArray(progressArray);
+    const filteredProgressArray = progressArray.filter(value => value !== "1");
+    if (!filteredProgressArray?.includes("4")) {
+      filteredProgressArray.push("4");
+      setProgressArray(filteredProgressArray);
     }
-    const combinedProgress = progressArray.join(",");
+    const combinedProgress = filteredProgressArray.join(",");
     let body = {};
     body = {
       banner: file,
@@ -469,11 +476,13 @@ const closeModal = () => {
   }
 
   function handleSubmit2() {
-    if (!progressArray?.includes("4")) {
-      progressArray.push("4");
-      setProgressArray(progressArray);
+    const filteredProgressArray = progressArray.filter(value => value !== "1");
+    if (!filteredProgressArray?.includes("4")) {
+      filteredProgressArray.push("4");
+      setProgressArray(filteredProgressArray);
     }
-    const combinedProgress = progressArray.join(",");
+    const combinedProgress = filteredProgressArray.join(",");
+    
     let body = {};
     body.academy_id = academyId;
     const progressChanged =
@@ -481,19 +490,19 @@ const closeModal = () => {
 
 
     const photoUrlsChanged =
-      photoUrls.slice().sort().join(",") !==
-      academyData?.photos.split(",").slice().sort().join(",");
+      photoUrls?.slice()?.sort()?.join(",") !==
+      academyData?.photos?.split(",")?.slice()?.sort()?.join(",");
 
     const videoUrlsChanged =
-      videoUrls.slice().sort().join(",") !==
-      academyData?.videos.split(",").slice().sort().join(",");
+      videoUrls?.slice()?.sort()?.join(",") !==
+      academyData?.videos?.split(",")?.slice()?.sort()?.join(",");
 
-    if (photoUrlsChanged && photoUrls.slice().sort().join(",").length !== "") {
-      body.photos = photoUrls.join(",");
+    if (photoUrlsChanged && photoUrls?.slice()?.sort()?.join(",")?.length !== "") {
+      body.photos = photoUrls?.join(",");
     }
 
-    if (videoUrlsChanged && videoUrls.slice().sort().join(",").length !== "") {
-      body.videos = videoUrls.join(",");
+    if (videoUrlsChanged && videoUrls?.slice()?.sort()?.join(",")?.length !== "") {
+      body.videos = videoUrls?.join(",");
     }
 
     if (progressChanged && combinedProgress !== "") {
@@ -525,6 +534,8 @@ const closeModal = () => {
             autoClose: 2000,
           });
         }
+        updatedAcadmeyInfo();
+        academyDetails();
         setAlertVideoShown(false);
         setStateBtn(0);
       })
@@ -632,12 +643,12 @@ const closeModal = () => {
   }
 
   const ApproveSubmit = () => {
-    if (!progressArray?.includes("4")) {
-      progressArray.push("4");
-      setProgressArray(progressArray);
+    const filteredProgressArray = progressArray.filter(value => value !== "1");
+    if (!filteredProgressArray?.includes("4")) {
+      filteredProgressArray.push("4");
+      setProgressArray(filteredProgressArray);
     }
-    const combinedProgress = progressArray?.join(",");
-
+    const combinedProgress = filteredProgressArray.join(",");
     const updatedFormData = {
       completion_percentage: combinedProgress,
       photos: photoUrls.join(","),
@@ -677,10 +688,10 @@ const closeModal = () => {
   }
   //==========================================================================approve function
   const handleDisapprove = () => {
-    const body = { 
+    const body = {
       status: 2,
       rejection_reason: disapprovalReason,
-     }
+    }
     axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
       {
         headers: {
@@ -807,12 +818,12 @@ const closeModal = () => {
                   {!selectedFile && (
                     <div className="bmp-image-preview">
                       <img
-                    src={academyData?.banner === null
-                      ? `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/default/${academyData?.sport}_banner.webp`
-                      : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.banner}`}
-                    alt=""
-                    className="bmp-preview-image"
-                  />
+                        src={academyData?.banner === null
+                          ? `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/default/${academyData?.sport}_banner.webp`
+                          : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${academyData?.banner}`}
+                        alt=""
+                        className="bmp-preview-image"
+                      />
                     </div>
                   )}
                 </div>
@@ -889,7 +900,7 @@ const closeModal = () => {
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy Admin" ?
+            {status === 0 && role_name === "Academy_admin" ?
               <>
                 <div className="outerBox">
                   {videoUrls?.map((video, index) => (
@@ -981,7 +992,7 @@ const closeModal = () => {
             }
           </>
           <>
-            {status === 0 && role_name === "Academy Admin" ?
+            {status === 0 && role_name === "Academy_admin" ?
               <>
                 {/* ====================================================map for admin photos */}
                 <div className={`outerBox`}>
@@ -1070,7 +1081,7 @@ const closeModal = () => {
             }
           </>
           <div className="bmp-bottom-btn">
-            {status === 0 && role_name === "Academy Admin" ?
+            {status === 0 && role_name === "Academy_admin" ?
               <>
                 <button
                   onClick={openModal}
@@ -1098,7 +1109,7 @@ const closeModal = () => {
                 ) : (
                   <button
                     className="common-fonts common-save-button"
-                    onClick={handleSubmit2}
+                    onClick={role_name === "Academy_admin" ? ApproveSubmit : handleSubmit2}
                   >
                     Save
                   </button>
@@ -1120,18 +1131,18 @@ const closeModal = () => {
       )}
 
       {activeTab === "training" && (
-        <Training status={status} newAcadmeyData={newAcadmeyData} keysOfNewAcadmeyData={keysOfNewAcadmeyData} updatedAcadmeyInfo={updatedAcadmeyInfo} revokeId={revokeId}/>
+        <Training status={status} newAcadmeyData={newAcadmeyData} keysOfNewAcadmeyData={keysOfNewAcadmeyData} updatedAcadmeyInfo={updatedAcadmeyInfo} revokeId={revokeId} />
       )}
 
       <ToastContainer />
       {
         open && (
           <DisapproveModal
-          onClose={closeModal}
-          onEnter={handleDisapprove}
-          disapprovalReason={disapprovalReason}
-          setDisapprovalReason={setDisapprovalReason}
-        />
+            onClose={closeModal}
+            onEnter={handleDisapprove}
+            disapprovalReason={disapprovalReason}
+            setDisapprovalReason={setDisapprovalReason}
+          />
         )
       }
 

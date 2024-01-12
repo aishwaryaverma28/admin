@@ -237,14 +237,15 @@ const BmpOverview = () => {
       })
       .then((response) => {
         localStorage.setItem("url", response?.data?.data[0]?.url);
+
         const academyName = response?.data?.data[0]?.name;
         const cityName = response?.data?.data[0]?.city;
         const aboutString = response?.data?.about[0]?.about;
         const updatedAbout = aboutString.replace(/ACADEMY_NAME/g, academyName);
         const finalAbout = updatedAbout.replace(/CITY_NAME/g, cityName);
-
         const intro = removeHtmlTags(finalAbout);
         setIntroduction(intro);
+
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -269,7 +270,6 @@ const BmpOverview = () => {
             response?.data?.data[0]?.completion_percentage.split(",")
           );
         }
-        progressArray?.push("1");
         if (response?.data?.data[0]?.spoken_languages === null) {
           setMappedLanguages([
             {
@@ -302,7 +302,10 @@ const BmpOverview = () => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
-
+  useEffect(() => {
+    progressArray?.push("1");
+  },[academyData])
+console.log(progressArray)
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
     if (nameParts.length > 1) {
@@ -433,16 +436,14 @@ const BmpOverview = () => {
     setIsButtonVisible(false);
   };
 
-console.log(progressArray)
   function handleSubmit(event) {
     event.preventDefault();
-    if (!progressArray?.includes("1")) {
-      progressArray.push("1");
-      setProgressArray(progressArray);
+    const filteredProgressArray = progressArray.filter(value => value !== "1");
+    if (!filteredProgressArray?.includes("1")) {
+      filteredProgressArray.push("1");
+      setProgressArray(filteredProgressArray);
     }
-    const combinedProgress = progressArray?.join(",");
-    console.log(combinedProgress)
-
+    const combinedProgress = filteredProgressArray.join(",");
     const sportsChanged =
       selectedDaysString?.replace(/^,+/g, "") !== academyData?.sport;
 

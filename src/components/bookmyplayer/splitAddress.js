@@ -39,26 +39,33 @@ const stateMapping = {
 };
 
 export const splitAddress = (address) => {
-    console.log(address?.entity_name);
     const addressArray = address?.entity_name?.split(',');
     const trimmedAddressArray = addressArray.map(part => part.trim());
     const filteredAddressArray = trimmedAddressArray.filter(part => part.toLowerCase() !== 'india');
-    console.log(filteredAddressArray);
     let state = '';
     let city = '';
-    filteredAddressArray.forEach(part => {
-        const matchingState = Object.entries(stateMapping).find(([key, value]) =>
-          value.toLowerCase() === part.toLowerCase()
-        );
-        if (matchingState) {
-          state = matchingState[1];
-          if (state.toLowerCase() === 'delhi') {
+    const lastElement = filteredAddressArray?.pop()?.split(" ");
+    const pincodeRegex = /^\d{6}$/;
+    const isPincode = pincodeRegex.test(lastElement[lastElement.length - 1]);
+    if (isPincode) {
+        lastElement.pop();
+    }
+    const lastElementString = lastElement?.join(" ");
+    const matchingState = Object.entries(stateMapping).find(([key, value]) =>
+        value.toLowerCase() === lastElementString.toLowerCase()
+    );
+    if (matchingState) {
+        state = matchingState[1];
+        if (state.toLowerCase() === 'delhi') {
             city = 'Delhi';
-          }
-        } else {
-          city = part;
         }
-      });
+    } else {
+        city = lastElementString;
+    }
+    if(city === "")
+    {
+      city = filteredAddressArray?.pop();
+    }
     const restOfDataArray = filteredAddressArray.filter(part => part !== state && part !== city);
     const address1 = restOfDataArray.shift();
     const address2 = restOfDataArray.join(',');
