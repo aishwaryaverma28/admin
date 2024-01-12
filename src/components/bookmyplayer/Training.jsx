@@ -13,7 +13,13 @@ import "react-toastify/dist/ReactToastify.css";
 import DeleteImage from "./DeleteImage.jsx";
 import DisapproveModal from "./DisapproveModal.jsx";
 
-const Training = ({ status, newAcadmeyData, keysOfNewAcadmeyData, updatedAcadmeyInfo, revokeId }) => {
+const Training = ({
+  status,
+  newAcadmeyData,
+  keysOfNewAcadmeyData,
+  updatedAcadmeyInfo,
+  revokeId,
+}) => {
   const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
@@ -37,16 +43,16 @@ const Training = ({ status, newAcadmeyData, keysOfNewAcadmeyData, updatedAcadmey
   const [stateBtn, setStateBtn] = useState(0);
   const [academyData, setAcademyData] = useState({});
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
-//=====================================for disapprove modal
-const [open, setOpen] = useState(false);
-const [disapprovalReason, setDisapprovalReason] = useState('');
+  //=====================================for disapprove modal
+  const [open, setOpen] = useState(false);
+  const [disapprovalReason, setDisapprovalReason] = useState("");
 
-const openModal = () => {
-  setOpen(true)
-}
-const closeModal = () => {
-  setOpen(false);
-}
+  const openModal = () => {
+    setOpen(true);
+  };
+  const closeModal = () => {
+    setOpen(false);
+  };
 
   const updateAcadmeyData = () => {
     if (keysOfNewAcadmeyData.includes("training_ground_photos")) {
@@ -54,7 +60,9 @@ const closeModal = () => {
         newAcadmeyData?.training_ground_photos !== "" &&
         newAcadmeyData?.training_ground_photos !== null
       ) {
-        setPhotoUrls(newAcadmeyData?.training_ground_photos?.split(",")?.reverse());
+        setPhotoUrls(
+          newAcadmeyData?.training_ground_photos?.split(",")?.reverse()
+        );
       }
     }
     if (keysOfNewAcadmeyData.includes("tournament_photos")) {
@@ -65,7 +73,7 @@ const closeModal = () => {
         setPhotoUrls2(newAcadmeyData?.tournament_photos?.split(",")?.reverse());
       }
     }
-  }
+  };
   useEffect(() => {
     if (status === 0 && role_name === "Academy Admin") {
       updateAcadmeyData();
@@ -426,90 +434,96 @@ const closeModal = () => {
         });
       });
   }
-//==========================================================================approve function
-const handleApprove = () => {
-  axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
-    {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
-      if (response?.data?.status === 1) {
-        toast.success("Academy info updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-      ApproveSubmit();
-    }).catch((error) => {
-      console.log(error);
-    })
-}
-
-const ApproveSubmit = () => {
-
-  const updatedFormData = {
-    training_ground_photos: photoUrls.join(","),
-    tournament_photos: photoUrls2.join(","),
-  }
-  axios
-    .put(UPDATE_ACADEMY + academyId, updatedFormData, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      if (response.data.status === 1) {
-        toast.success("Details updated successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      } else {
-        toast.error("Some Error Occurred", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-      updatedAcadmeyInfo();
-      academyDetails();
-    })
-    .catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while updating details", {
-        position: "top-center",
-        autoClose: 2000,
+  //==========================================================================approve function
+  const handleApprove = () => {
+    axios
+      .put(
+        UPDATE_ACADMEY_STATUS + revokeId,
+        { status: 1 },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        ApproveSubmit();
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    })
-    .finally(() => {
-      setStateBtn(0);
-    });
-}
-//==========================================================================approve function
-const handleDisapprove = () => {
-  const body = { 
-    status: 2,
-    rejection_reason: disapprovalReason,
-   }
-  axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
-    {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
-      if (response?.data?.status === 1) {
-        toast.success("Academy info updated successfully", {
+  };
+
+  const ApproveSubmit = () => {
+    const updatedFormData = {
+      training_ground_photos: photoUrls.join(","),
+      tournament_photos: photoUrls2.join(","),
+    };
+    axios
+      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("Details updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error("Some Error Occurred", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+        updatedAcadmeyInfo();
+        academyDetails();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
           position: "top-center",
           autoClose: 2000,
         });
-      }
-
-    }).catch((error) => {
-      console.log(error);
-    })
-  closeModal();
-  updatedAcadmeyInfo();
-  academyDetails();
-}
+      })
+      .finally(() => {
+        setStateBtn(0);
+      });
+  };
+  //==========================================================================approve function
+  const handleDisapprove = () => {
+    const body = {
+      status: 2,
+      rejection_reason: disapprovalReason,
+    };
+    axios
+      .put(UPDATE_ACADMEY_STATUS + revokeId, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+          toast.success("Academy info updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    closeModal();
+    updatedAcadmeyInfo();
+    academyDetails();
+  };
 
   return (
     <div>
@@ -540,9 +554,11 @@ const handleDisapprove = () => {
                 }}
               >
                 <button
-                  className="contact-browse-btn common-fonts"
+                  className={`common-fonts contact-browse-btn ${
+                    status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                  }`}
                   onClick={handleButtonClick}
-                  disabled={status === 0 && role_name === 'Academy'}
+                  disabled={status === 0 && role_name === "Academy"}
                 >
                   Browse
                 </button>
@@ -573,7 +589,7 @@ const handleDisapprove = () => {
                     <p className="common-fonts bmp-format">
                       Upload image in format png, jpg, jpeg, webp{" "}
                     </p>
-                    { }
+                    {}
                   </span>
                 )}
               </span>
@@ -581,17 +597,24 @@ const handleDisapprove = () => {
           </div>
         </div>
         <>
-          {status === 0 && role_name === "Academy Admin" ?
+          {status === 0 && role_name === "Academy Admin" ? (
             <>
               {/* ====================================================map for admin photos */}
               <div className={`outerBox`}>
                 {photoUrls?.map((photo, index) => (
-                  <div className="bmp-new-img" style={{
-                    border: academyData?.training_ground_photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
-                  }}>
+                  <div
+                    className="bmp-new-img"
+                    style={{
+                      border: academyData?.training_ground_photos
+                        ?.split(",")
+                        ?.includes(photo)
+                        ? "none"
+                        : "2px solid red",
+                    }}
+                  >
                     <div className="bmp-img-top-icon">
                       <div className="bmp-img-name">
-                        <div className="bmp-video" >
+                        <div className="bmp-video">
                           <img
                             src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                             alt="Selected Preview"
@@ -622,7 +645,8 @@ const handleDisapprove = () => {
                   </div>
                 ))}
               </div>
-            </> :
+            </>
+          ) : (
             <>
               {photoUrls?.length === 0 ? (
                 <div className="support-no-ticket-found">
@@ -667,7 +691,7 @@ const handleDisapprove = () => {
                 </div>
               )}
             </>
-          }
+          )}
         </>
         {/* /////////////////////////////////////////////////////////////////////////////code for tournaments/////////////////////////////////////////////////////////////////////////// */}
         <>
@@ -697,9 +721,13 @@ const handleDisapprove = () => {
                   }}
                 >
                   <button
-                    className="contact-browse-btn common-fonts"
+                    className={`common-fonts contact-browse-btn ${
+                      status === 0 && role_name === "Academy"
+                        ? "bmp_disable"
+                        : ""
+                    }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === 'Academy'}
+                    disabled={status === 0 && role_name === "Academy"}
                   >
                     Browse
                   </button>
@@ -730,7 +758,7 @@ const handleDisapprove = () => {
                       <p className="common-fonts bmp-format">
                         Upload image in format png, jpg, jpeg, webp{" "}
                       </p>
-                      { }
+                      {}
                     </span>
                   )}
                 </span>
@@ -738,16 +766,23 @@ const handleDisapprove = () => {
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy Admin" ?
+            {status === 0 && role_name === "Academy Admin" ? (
               <>
                 <div className={`outerBox`}>
                   {photoUrls2?.map((photo, index) => (
-                    <div className="bmp-new-img" style={{
-                      border: academyData?.tournament_photos?.split(",")?.includes(photo) ? 'none' : '2px solid red'
-                    }}>
+                    <div
+                      className="bmp-new-img"
+                      style={{
+                        border: academyData?.tournament_photos
+                          ?.split(",")
+                          ?.includes(photo)
+                          ? "none"
+                          : "2px solid red",
+                      }}
+                    >
                       <div className="bmp-img-top-icon">
                         <div className="bmp-img-name">
-                          <div className="bmp-video" >
+                          <div className="bmp-video">
                             <img
                               src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyId}/${photo}`}
                               alt="Selected Preview"
@@ -778,7 +813,8 @@ const handleDisapprove = () => {
                     </div>
                   ))}
                 </div>
-              </> :
+              </>
+            ) : (
               <>
                 {photoUrls2?.length === 0 ? (
                   <div className="support-no-ticket-found">
@@ -823,44 +859,46 @@ const handleDisapprove = () => {
                   </div>
                 )}
               </>
-            }
+            )}
           </>
         </>
         <div className="bmp-bottom-btn">
-        {status === 0 && role_name === "Academy Admin" ?
-              <>
-                <button
-                  onClick={openModal}
-                  className="common-save-button common-delete-button">
-                  Disapprove
-                </button>
-                <button
-                  onClick={handleApprove}
-                  className="common-save-button common-save">
-                  Approve
-                </button>
-              </>
-              :
-              <>
-          <button
-            className="common-fonts common-white-button"
-            onClick={resetState}
-          >
-            Cancel
-          </button>
-          {stateBtn === 0 ? (
-            <button className="disabledBtn">Save</button>
+          {status === 0 && role_name === "Academy Admin" ? (
+            <>
+              <button
+                onClick={openModal}
+                className="common-save-button common-delete-button"
+              >
+                Disapprove
+              </button>
+              <button
+                onClick={handleApprove}
+                className="common-save-button common-save"
+              >
+                Approve
+              </button>
+            </>
           ) : (
-            <button
-              className="common-fonts common-save-button"
-              onClick={handleSubmit}
-            >
-              Save
-            </button>
-         )}
-         </>
-       }
-     </div>
+            <>
+              <button
+                className="common-fonts common-white-button"
+                onClick={resetState}
+              >
+                Cancel
+              </button>
+              {stateBtn === 0 ? (
+                <button className="disabledBtn">Save</button>
+              ) : (
+                <button
+                  className="common-fonts common-save-button"
+                  onClick={handleSubmit}
+                >
+                  Save
+                </button>
+              )}
+            </>
+          )}
+        </div>
         {isDeleteModalOpen && (
           <DeleteImage
             onClose={() => {
@@ -880,17 +918,14 @@ const handleDisapprove = () => {
           />
         )}
       </>
-      {
-        open && (
-          <DisapproveModal
+      {open && (
+        <DisapproveModal
           onClose={closeModal}
           onEnter={handleDisapprove}
           disapprovalReason={disapprovalReason}
           setDisapprovalReason={setDisapprovalReason}
         />
-        )
-      }
-
+      )}
     </div>
   );
 };

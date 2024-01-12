@@ -4,7 +4,7 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
-import logo_bmp from "../assets/image/logo_bmp.svg"
+import logo_bmp from "../assets/image/logo_bmp.svg";
 import axios from "axios";
 import {
   BMP_USER,
@@ -13,8 +13,9 @@ import {
 } from "./utils/Constants";
 import HelpModal from "./HelpModal";
 import NotificationModal from "./NotificationModal.jsx";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { addItem } from "./utils/userInfoSlice.js";
+import ChangePassword from "./ChangePassword.jsx";
 const BmpHeader = () => {
   const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
@@ -30,6 +31,7 @@ const BmpHeader = () => {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [pathAddress, setPathAddress] = useState(null);
+  const [modal, setModal] = useState(false);
   const decryptedToken = getDecryptedToken();
   const decryptedUserPath = getDecryptedUserPath();
   const [number, setNumber] = useState(null);
@@ -48,14 +50,23 @@ const BmpHeader = () => {
     }
   }, []);
 
-   const handleBell = () => {
+  const openModal = () => {
+    setModal(true);
+    setIsOpen(!isOpen);
+  };
+
+  const closeModal = () => {
+    setModal(false);
+  };
+
+  const handleBell = () => {
     setIsNotifyModalOpen(true);
   };
   const handleBellCLose = () => {
     setIsNotifyModalOpen(false);
   };
 
- async function getBMPUser() {
+  async function getBMPUser() {
     let body = {};
     // if(role_name === "Academy Admin")
     // {
@@ -68,16 +79,13 @@ const BmpHeader = () => {
     // }
     body = {
       userId: userId,
-    }
+    };
     try {
-      const response = await axios.post(
-        BMP_USER, body,
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      );
+      const response = await axios.post(BMP_USER, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      });
       const data = response?.data?.user;
       // console.log(data);
       localStorage.setItem("org_id", data.org_id);
@@ -96,9 +104,8 @@ const BmpHeader = () => {
   }
 
   useEffect(() => {
-      getBMPUser();
-    }, []);
-
+    getBMPUser();
+  }, []);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -129,16 +136,16 @@ const BmpHeader = () => {
   };
 
   const handleLogout = () => {
-      localStorage.clear();
-      window.location.href = "https://www.bookmyplayer.com/login";
+    localStorage.clear();
+    window.location.href = "https://www.bookmyplayer.com/login";
   };
   const handleViewSite = (e) => {
     e.preventDefault();
     const siteUrl = url;
     if (siteUrl) {
-      window.open(siteUrl, '_blank');
+      window.open(siteUrl, "_blank");
     } else {
-      alert('Site URL is not available');
+      alert("Site URL is not available");
     }
   };
 
@@ -146,7 +153,7 @@ const BmpHeader = () => {
     <>
       <div className="nav">
         <div className="navHeader">
-            <img src={logo_bmp} alt="" className="BMPlogo" />
+          <img src={logo_bmp} alt="" className="BMPlogo" />
         </div>
         <div className="navBtn">
           <label htmlFor="navCheck" onClick={handleNavToggle}>
@@ -203,14 +210,9 @@ const BmpHeader = () => {
             <img src={user} alt="user" />
             {clientData ? (
               <p>
-                {
-                  number === 0 ? (
-                    `${clientData?.first_name} ${clientData?.last_name}`
-                  ) : (
-                    `${clientData?.name}`
-                  )
-
-                }
+                {number === 0
+                  ? `${clientData?.first_name} ${clientData?.last_name}`
+                  : `${clientData?.name}`}
                 <br />
                 <span>{clientData?.type}</span>
               </p>
@@ -228,31 +230,41 @@ const BmpHeader = () => {
                 <img src={user} alt="user" />
                 <div className="crmUserInfo">
                   <h5 className="crmUserInfoName">
-                    {
-                      number === 0 ? (
-                        `${clientData?.first_name} ${clientData?.last_name}`
-                      ) : (
-                        `${clientData?.name}`
-                      )
-
-                    }
+                    {number === 0
+                      ? `${clientData?.first_name} ${clientData?.last_name}`
+                      : `${clientData?.name}`}
                   </h5>
                   <p className="email-case">{clientData?.email}</p>
-                  {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (<p>{clientData?.type}</p>) :
-                    (<p>{clientData?.job_title}</p>)}
+                  {landingUrl === "/lp/bmp/overview" ||
+                  landingUrl === "/lp/bmp/admin" ? (
+                    <p>{clientData?.type}</p>
+                  ) : (
+                    <p>{clientData?.job_title}</p>
+                  )}
                 </div>
               </div>
-              {(landingUrl === "/lp/bmp/overview") ? (
+              {landingUrl === "/lp/bmp/overview" ? (
                 <div className="profileNPref" onClick={handleViewSite}>
                   View Site
                 </div>
               ) : (
                 <></>
               )}
-              <div className="userId">
-                User Id: {(landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') ? (clientData?.id) : 123456789}
+
+              <div className="pass_flex">
+                <div className="userId">
+                  User Id:{" "}
+                  {landingUrl === "/lp/bmp/overview" ||
+                  landingUrl === "/lp/bmp/admin"
+                    ? clientData?.id
+                    : 123456789}
+                </div>
+                <p className="common-fonts" onClick={openModal}>
+                  Change Password
+                </p>
               </div>
-              <div className="userId">
+
+              <div className="userId new_li">
                 <p>Invite & earn rewards</p>
                 <p>Account & Billing </p>
                 <p>Price & Features</p>
@@ -268,10 +280,11 @@ const BmpHeader = () => {
         </div>
       </div>
       {/* Top Navigation End  */}
-      
 
       {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}
       {isNotifyModalOpen && <NotificationModal onClose={handleBellCLose} />}
+
+      {modal && <ChangePassword onClose={closeModal} />}
     </>
   );
 };
