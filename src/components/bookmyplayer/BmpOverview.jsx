@@ -131,14 +131,11 @@ const BmpOverview = () => {
   //=====================================================================language changes
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
-  };
-
-  const handleAddLanguage = () => {
     setStateBtn(1);
     updateField("spoken_languages");
-    if (selectedLanguageName) {
+    if (e.target.value) {
       const newLanguage = {
-        language: selectedLanguageName
+        language: e.target.value
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
       const languageString = mappedLanguages
@@ -237,7 +234,7 @@ const BmpOverview = () => {
         },
       })
       .then((response) => {
-        
+
         localStorage.setItem("url", response?.data?.data[0]?.url);
 
         // const academyName = response?.data?.data[0]?.name;
@@ -1195,18 +1192,7 @@ console.log(result)
             </div>
             <div className="bmp_overview_language_flex">
               <p className="common-fonts bmp-social">Language</p>
-
-              <button
-
-                className={`common-white-blue-button ${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
-
-                onClick={handleAddLanguage}
-                disabled={status === 0 && role_name === "Academy"}
-              >
-                + Add Language
-              </button>
             </div>
-
             <div className="bmp-input-flex ">
                 <select
                   value={selectedLanguageName}

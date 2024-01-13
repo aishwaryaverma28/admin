@@ -120,7 +120,7 @@ const LPheader = () => {
       return true;
     }
     const userRole = localStorage.getItem("role_name");
-    if (userRole === "Academy Admin" && path === "/lp/bmp") {
+    if (userRole === "Academy_admin" && path === "/lp/bmp/admin") {
       return false;
     }
 
@@ -150,47 +150,7 @@ const LPheader = () => {
     }
   }
 
-  async function getBMPUser() {
-    let body = {};
-    // if(role_name === "Academy Admin")
-    // {
-    // body =  {
-    //   userId: userId,
-    // }}else{
-    //   body =  {
-    //     userId: academyId,
-    //   }
-    // }
-    body = {
-      userId: userId,
-    }
-    try {
-      const response = await axios.post(
-        BMP_USER, body,
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      );
-      const data = response?.data?.user;
-      // console.log(data);
-      localStorage.setItem("org_id", data.org_id);
-      if (response.data.status === 1) {
-        setClientData(data);
-        setNumber(1);
-        dispatch(addItem(data));
-      }
-    } catch (error) {
-      console.log(error);
-      if (error?.response?.data?.message === "Invalid or expired token.") {
-        alert(error?.response?.data?.message);
-        handleLogout();
-      }
-    }
-  }
-
-  useEffect(() => {
+    useEffect(() => {
      getUser();
   }, []);
 

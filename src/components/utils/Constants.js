@@ -32,7 +32,7 @@ export {getDecryptedUserPath}
   //=============================================================logout function
   export const handleLogout = () => {
        // window.location.href = "http://core.leadplaner.com/";
-    if(landingUrl === "/lp/bmp"){
+    if(landingUrl === "/lp/bmp/overview" || landingUrl === "/lp/bmp/admin"){
       localStorage.clear();
       window.location.href = "https://www.bookmyplayer.com/login";
     }else{

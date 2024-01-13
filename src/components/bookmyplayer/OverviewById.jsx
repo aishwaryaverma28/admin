@@ -272,14 +272,11 @@ const OverviewById = () => {
   //=======================================================================language
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
-  };
-
-  const handleAddLanguage = () => {
     setStateBtn(1);
     updateField("spoken_languages");
-    if (selectedLanguageName) {
+    if (e.target.value) {
       const newLanguage = {
-        language: selectedLanguageName
+        language: e.target.value
       };
       setMappedLanguages([...mappedLanguages, newLanguage]);
       const languageString = mappedLanguages
@@ -1295,13 +1292,6 @@ const OverviewById = () => {
 
             <div className="bmp_overview_language_flex">
               <p className="common-fonts bmp-social">Language</p>
-
-              <button
-                className={`common-white-blue-button`}
-                onClick={handleAddLanguage}
-              >
-                + Add Language
-              </button>
             </div>
 
             <div className="bmp-input-flex ">

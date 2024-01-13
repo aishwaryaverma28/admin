@@ -75,7 +75,7 @@ const Training = ({
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy Admin") {
+    if (status === 0 && role_name === "Academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name, academyData]);
@@ -597,7 +597,7 @@ const Training = ({
           </div>
         </div>
         <>
-          {status === 0 && role_name === "Academy Admin" ? (
+          {status === 0 && role_name === "Academy_admin" ? (
             <>
               {/* ====================================================map for admin photos */}
               <div className={`outerBox`}>
@@ -766,7 +766,7 @@ const Training = ({
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy Admin" ? (
+            {status === 0 && role_name === "Academy_admin" ? (
               <>
                 <div className={`outerBox`}>
                   {photoUrls2?.map((photo, index) => (
@@ -863,7 +863,7 @@ const Training = ({
           </>
         </>
         <div className="bmp-bottom-btn">
-          {status === 0 && role_name === "Academy Admin" ? (
+          {status === 0 && role_name === "Academy_admin" ? (
             <>
               <button
                 onClick={openModal}
