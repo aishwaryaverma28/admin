@@ -183,7 +183,6 @@ const BmpOverview = () => {
   const handleSelectAddress = (selectedAddress) => {
     let add = splitAddress(selectedAddress)
     setResult(add);
-    console.log(result);
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
       setNumber2(1);

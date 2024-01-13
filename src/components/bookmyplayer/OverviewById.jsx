@@ -25,7 +25,6 @@ const OverviewById = () => {
   localStorage.setItem("academy_id", id);
   const role_name = localStorage.getItem("role_name");
   const decryptedToken = getDecryptedToken();
-  // console.log(decryptedToken)
   const [revokeId, setRevokeId] = useState(null);
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
@@ -47,7 +46,6 @@ const OverviewById = () => {
   const [selectedDaysString, setSelectedDaysString] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [updatedFields, setUpdatedFields] = useState([]);
-  const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedLanguageName, setSelectedLanguageName] = useState("");
   const [mappedLanguages, setMappedLanguages] = useState([]);
   const [languageString, setLanguageString] = useState("");
@@ -186,6 +184,10 @@ const OverviewById = () => {
       setAddress(formattedAddress || "");
       setCoordinate(newAcadmeyData?.coordinate || "");
       setMapLink(newAcadmeyData?.map || "");
+      result.address1 = newAcadmeyData?.address1;
+      result.address2 = newAcadmeyData?.address2;
+      result.city = newAcadmeyData?.city;
+      result.state = newAcadmeyData?.state;
     }
      if (keysOfNewAcadmeyData.includes("logo")) {
       setFileName(newAcadmeyData.logo);
@@ -196,9 +198,6 @@ const OverviewById = () => {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
-  // console.log(newAcadmeyData);
-  // console.log(academyData);
-  // console.log(keysOfNewAcadmeyData);
   //==============================================================acadmey data
   const academyDetails = () => {
     axios
@@ -312,7 +311,6 @@ const OverviewById = () => {
     setAddress(value);
     try {
       const response = await axios.get(`https://www.zomato.com/webroutes/location/search?q=${value}`);
-      // console.log(response?.data?.locationSuggestions);
       if (response?.status === 200) {
         setSuggestions(response?.data?.locationSuggestions);
       } else {
@@ -327,7 +325,6 @@ const OverviewById = () => {
   const handleSelectAddress = (selectedAddress) => {
     let add = splitAddress(selectedAddress)
     setResult(add);
-    console.log(result);
     setAddress(selectedAddress?.entity_name);
     if (selectedAddress?.length === 0) {
       setNumber2(1);
@@ -367,19 +364,6 @@ const OverviewById = () => {
       setPhoneNumberCount(1);
       setIsButtonVisible(true);
     }
-  };
-
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hours = 0; hours < 24; hours++) {
-      for (let minutes = 0; minutes < 60; minutes += 30) {
-        const hour = hours < 10 ? `0${hours}` : `${hours}`;
-        const minute = minutes === 0 ? "00" : `${minutes}`;
-        const time = `${hour}:${minute}`;
-        options.push(time);
-      }
-    }
-    return options;
   };
 
    useEffect(() => {
@@ -635,6 +619,7 @@ const OverviewById = () => {
             autoClose: 2000,
           });
         }
+        updatedAcadmeyInfo();
         academyDetails();
       })
       .catch((error) => {
@@ -759,12 +744,10 @@ const OverviewById = () => {
     updatedAcadmeyInfo();
     academyDetails();
   }
-  console.log(selectedDays)
   return (
     <>
       <div className="bmp-container">
         <div>
-          {/* <button onClick={ApproveSubmit}>save</button> */}
           <p className="common-fonts bmp-top">Address & Contact details</p>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
