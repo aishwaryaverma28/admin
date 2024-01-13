@@ -35,12 +35,11 @@ const [batchObject, setBatchObject] = useState({});
   const allowedImageTypes = ["application/pdf"];
   const academyDetails = () => {
     axios
-      .get(GET_ACADEMY + id,
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
+      .post(GET_ACADEMY , {academy_id:id}, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then((response) => {
         setAcademyData(response?.data?.data[0])        
         setProgress(response?.data?.data[0]?.completion_percentage);

@@ -147,12 +147,12 @@ const Gallery = () => {
 
   const academyDetails = () => {
     axios
-      .get(GET_ACADEMY + academyId, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
+    .post(GET_ACADEMY , {academy_id:academyId}, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
         let dummy = response?.data?.data[0]?.completion_percentage + ",1"

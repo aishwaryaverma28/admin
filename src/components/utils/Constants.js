@@ -202,7 +202,7 @@ export const ENVELOPE_DETAILS = start + "/thirdPartyApiRouter/docusign/envelope/
 
 //============================================================bmp apis
 export const BMP_LOGIN = start +  "/bmp/login";
-export const GET_ACADEMY = start + "/bmp/academy/get/";
+export const GET_ACADEMY = start + "/bmp/academy/get";
 export const ADDRESS_API = start + "/bmp/academy/getaddressbyquery";
 export const UPDATE_ACADEMY_TABLE2 = start+ "/bmp/academy/addupdaterequest";
 export const UPDATE_ACADEMY = start + "/bmp/academy/update/";

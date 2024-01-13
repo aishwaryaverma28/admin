@@ -82,12 +82,12 @@ const Training = ({
   //==========================================================================
   const academyDetails = () => {
     axios
-      .get(GET_ACADEMY + academyId, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
+    .post(GET_ACADEMY , {academy_id:academyId}, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
         setAcademyData(response?.data?.data[0]);
 
         if (

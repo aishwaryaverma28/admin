@@ -25,6 +25,7 @@ const OverviewById = () => {
   localStorage.setItem("academy_id", id);
   const role_name = localStorage.getItem("role_name");
   const decryptedToken = getDecryptedToken();
+  // console.log(decryptedToken)
   const [revokeId, setRevokeId] = useState(null);
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
@@ -201,17 +202,18 @@ const OverviewById = () => {
   //==============================================================acadmey data
   const academyDetails = () => {
     axios
-      .get(GET_ACADEMY + id, {
+      .post(GET_ACADEMY , {academy_id:id}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        const academyName = response?.data?.data[0]?.name;
-        const cityName = response?.data?.data[0]?.city;
-        console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
-        const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
-        setIntroduction(intro);
+        // console.log(response?.data?.data[0])
+        // const academyName = response?.data?.data[0]?.name;
+        // const cityName = response?.data?.data[0]?.city;
+        // console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
+        // const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
+        // setIntroduction(intro);
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -765,7 +767,7 @@ const OverviewById = () => {
     <>
       <div className="bmp-container">
         <div>
-          <button onClick={ApproveSubmit}>save</button>
+          {/* <button onClick={ApproveSubmit}>save</button> */}
           <p className="common-fonts bmp-top">Address & Contact details</p>
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
