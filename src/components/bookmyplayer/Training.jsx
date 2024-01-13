@@ -230,7 +230,7 @@ const Training = ({
   const deleteStrategy = () => {
     if (deleteIndex !== null) {
       const updatedNameOfStrategy = [...photoUrls];
-      updatedNameOfStrategy.splice(deleteIndex, 1);
+      updatedNameOfStrategy?.splice(deleteIndex, 1);
       setPhotoUrls(updatedNameOfStrategy);
       updateDataAndCallAPI(updatedNameOfStrategy);
     }
@@ -342,13 +342,13 @@ const Training = ({
   const deleteStrategy2 = () => {
     if (deleteIndex2 !== null) {
       const updatedNameOfStrategy = [...photoUrls2];
-      updatedNameOfStrategy.splice(deleteIndex2, 1);
+      updatedNameOfStrategy?.splice(deleteIndex2, 1);
       setPhotoUrls2(updatedNameOfStrategy);
       updateDataAndCallAPI2(updatedNameOfStrategy);
     }
   };
   const updateDataAndCallAPI2 = (updatedNameArray) => {
-    const updatedNameString = updatedNameArray.reverse().join(",");
+    const updatedNameString = updatedNameArray?.reverse()?.join(",");
     axios
       .put(
         UPDATE_ACADEMY + academyId,
@@ -381,21 +381,21 @@ const Training = ({
     let body = {};
     body.academy_id = academyId;
     const photoUrlsChanged =
-      photoUrls.slice().sort().join(",") !==
-      academyData?.training_ground_photos.split(",").slice().sort().join(",");
+      photoUrls?.slice()?.sort()?.join(",") !==
+      academyData?.training_ground_photos?.split(",")?.slice()?.sort()?.join(",");
     const photoUrlsChanged2 =
-      photoUrls2.slice().sort().join(",") !==
-      academyData?.tournament_photos.split(",").slice().sort().join(",");
+      photoUrls2?.slice()?.sort()?.join(",") !==
+      academyData?.tournament_photos?.split(",")?.slice()?.sort()?.join(",");
 
-    if (photoUrlsChanged && photoUrls.slice().sort().join(",").length !== "") {
-      body.training_ground_photos = photoUrls.join(",");
+    if (photoUrlsChanged && photoUrls?.slice()?.sort()?.join(",")?.length !== "") {
+      body.training_ground_photos = photoUrls?.join(",");
     }
 
     if (
       photoUrlsChanged2 &&
-      photoUrls2.slice().sort().join(",").length !== ""
+      photoUrls2?.slice()?.sort()?.join(",")?.length !== ""
     ) {
-      body.tournament_photos = photoUrls2.join(",");
+      body.tournament_photos = photoUrls2?.join(",");
     }
     if (newAcadmeyData !== null) {
       Object.keys(newAcadmeyData).forEach((key) => {
@@ -462,8 +462,8 @@ const Training = ({
 
   const ApproveSubmit = () => {
     const updatedFormData = {
-      training_ground_photos: photoUrls.join(","),
-      tournament_photos: photoUrls2.join(","),
+      training_ground_photos: photoUrls?.join(","),
+      tournament_photos: photoUrls2?.join(","),
     };
     axios
       .put(UPDATE_ACADEMY + academyId, updatedFormData, {
