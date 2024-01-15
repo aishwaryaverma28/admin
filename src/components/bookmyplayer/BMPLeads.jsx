@@ -101,18 +101,10 @@ const BMPLeads = () => {
             <img src={SearchIcon} alt="" />
           </span>
         </div>
-
-    <div className=''>
+    <div>
         <button className='common-fonts bmp_lead_date_button'><img src={Calender} alt="" />Any Date</button>
       </div>
-
     </div>
-
-
-
-
-
-
 <div className='marketing-all-table leads_bmp_table'>
     <table>
       <thead>

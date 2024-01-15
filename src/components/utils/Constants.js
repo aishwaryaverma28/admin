@@ -229,3 +229,6 @@ export const GET_ALL_LEAGUE = start + "/bmp/league/getall";
 export const ADD_LEAGUE = start + "/bmp/league/add";
 export const GET_LEAGUE_BY_ID = start + "/bmp/league/get/"
 export const UPDATE_LEAGUE = start + "/bmp/league/update/"
+
+//=====================================================================lead review
+export const GET_ALL_LEADS = start + "/ezuka/leads/get-all";

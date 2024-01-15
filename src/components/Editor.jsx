@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import latest from "../assets/image/latest.jpg";
@@ -14,16 +14,49 @@ import finance from "../assets/image/finance.svg";
 import health from "../assets/image/health.svg";
 import forms from "../assets/image/forms.svg";
 import "./styles/Editor.css";
+import axios from "axios";
+import { GET_ALL_LEADS, getDecryptedToken } from "./utils/Constants";
+import LeadReview from "./LeadReview";
 const Editor = () => {
+  const decryptedToken = getDecryptedToken();
+  const role_name = localStorage.getItem("role_name")
+  const [leads, setLeads] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [value, onChange] = useState(new Date());
+  // console.log(decryptedToken)
+  const allLeads = () => {
+    axios.post(GET_ALL_LEADS,{}, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response?.data?.data);
+      if (response?.data?.status === 1) {
+      setLeads(response?.data?.data);
+      }
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setIsLoading(false);
+    })
+  }
+  useEffect(() => {
+    allLeads();
+  }, []);
   return (
     <>
-      <header className="headerEditor">
-        <h2>Dashboard</h2>
-        
-      </header>
-
-      <main>
+     <main>
+     {isLoading ? (
+        <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
+      ) : leads?.length === 0 ? (
+        <div style={{ padding: "1.5rem", textAlign: "center" }}>No leads Found</div>
+      ) : role_name === "lead_viewer" ? (
+        <LeadReview leads={leads} />
+      ) : (
+        <></>
+      )}
         <section className="dashboard">
           <div className="dashboardLeft">
             <div className="announcement-content">

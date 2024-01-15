@@ -20,7 +20,7 @@ const EmployeeView = () => {
     axios
       .post(BLOG_GET, siteName, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {

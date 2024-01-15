@@ -64,7 +64,7 @@ const CreateUserModal = ({ onClose, onUserAdded, userActive, orgId }) => {
     passGet();
   }, []);
 
-  console.log(passDes);
+  // console.log(passDes);
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
