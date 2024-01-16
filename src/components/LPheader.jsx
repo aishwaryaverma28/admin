@@ -5,11 +5,9 @@ import "./styles/LPheader.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
-import vector from "../assets/image/Vector.svg";
 import axios from "axios";
 import {
   USER_INFO,
-  BMP_USER,
   getDecryptedToken,
   getDecryptedUserPath,
 } from "./utils/Constants";
@@ -17,13 +15,13 @@ import HelpModal from "./HelpModal";
 import NotificationModal from "./NotificationModal.jsx";
 import { useDispatch } from 'react-redux';
 import { addItem } from "./utils/userInfoSlice.js";
+import ResetPassword from "./settings/ResetPassword.jsx";
+import { toast, ToastContainer } from "react-toastify";
 const LPheader = () => {
+  const [isResetPassowrd, setIsResetPassword] = useState(false);
+  const [userId, setUserId] = useState(null);
   const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
-  const userId = localStorage.getItem("id");
-  const academyId = localStorage.getItem("academy_id");
-  const role_name = localStorage.getItem("role_name");
-  const url = localStorage.getItem("url");
   const [pageTitle, setPageTitle] = useState("Lead");
   const dispatch = useDispatch();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -138,6 +136,7 @@ const LPheader = () => {
       localStorage.setItem("org_id", data[0].org_id);
       if (response.data.status === 1) {
         setClientData(data[0]);
+        setUserId(data[0].id)
         setNumber(0);
         dispatch(addItem(data));
       }
@@ -190,7 +189,16 @@ const LPheader = () => {
   const closeHelpModal = () => {
     setIsHelpModalOpen(false);
   };
+  //==============================================================change password
+  const handleResetPasswordOpen = () => {
+    setIsResetPassword(true);
+  };
 
+  const handleResetPasswordClose = () => {
+    setIsResetPassword(false);
+  };
+
+//================================================================sign out
   const handleLogout = () => {
     localStorage.clear();
       window.location.href = "https://www.leadplaner.com/user/login";
@@ -296,8 +304,15 @@ const LPheader = () => {
                 </div>
               </div>
               <div className="profileNPref">Profile & Preferences</div>
-              <div className="userId">
+              <div className="pass_flex">
+                <div className="userId">
                 User Id: {clientData?.id ? (clientData?.id) : 123456789}
+                </div>
+                <p className="common-fonts" 
+                onClick={handleResetPasswordOpen}
+                >
+                  Change Password
+                </p>
               </div>
               <div className="userId">
                 <p>Invite & earn rewards</p>
@@ -394,8 +409,12 @@ const LPheader = () => {
         </div>
         </nav>      
       {/* Bottom Navigation End */}
+      {isResetPassowrd && (
+        <ResetPassword onClose={handleResetPasswordClose} user={userId}/>
+      )}
       {isHelpModalOpen && <HelpModal onClose={closeHelpModal} />}
       {isNotifyModalOpen && <NotificationModal onClose={handleBellCLose} />}
+      <ToastContainer/>
     </>
   );
 };

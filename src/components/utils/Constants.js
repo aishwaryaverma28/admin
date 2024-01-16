@@ -31,15 +31,14 @@ export {getDecryptedUserPath}
   
   //=============================================================logout function
   export const handleLogout = () => {
-       // window.location.href = "http://core.leadplaner.com/";
     if(landingUrl === "/lp/bmp/overview" || landingUrl === "/lp/bmp/admin"){
       localStorage.clear();
-      window.location.href = "https://www.bookmyplayer.com/login";
+      // window.location.href = "https://www.bookmyplayer.com/login";
+      window.location.href = "https://www.bookmyplayer.com/front/logout";
     }else{
       localStorage.clear();
       window.location.href = "https://www.leadplaner.com/user/login";
     }
-    // window.location.href = " https://fiduciagroup.leadplaner.com/";
   };
 // =============================================================apis used  
 // const start = "http://core.leadplaner.com:3001/api";
