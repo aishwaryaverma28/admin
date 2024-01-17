@@ -1,45 +1,56 @@
-import React from 'react'
+import React from "react";
 
-const BlogPerformance = ({data}) => {
-  console.log(data)
+const BlogPerformance = ({ data }) => {
+
+  console.log(data);
   const formatDate = (isoDate) => {
-    const options = { year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const options = {
+      year: "2-digit",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
     const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
   return (
-    <div className='performance_table_box'>
-    <div className='marketing-all-table'>
-      <div className='performance_title'><span>PERFORMANCE DATA</span><span>Total Blog: {data?.length}</span></div>
-      <table>
-        <thead>
-          <tr>
-            <th className='common-fonts'>S No</th>
-            <th className='common-fonts'>DATE</th>
-            <th className='common-fonts'>BLOG TITLE</th>
-            <th className='common-fonts'>SECTION COUNT</th>
-            <th className='common-fonts'>SPORT</th>
-            <th className='common-fonts'>WORD COUNT</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data?.map((item, index) => (
+    <div className="performance_table_box">
+      <div className="marketing-all-table new_table_1">
+        <div className="performance_title">
+          <span>PERFORMANCE DATA</span>
+          <span>Total Blog: {data?.length}</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th className="common-fonts">S No</th>
+              <th className="common-fonts">DATE</th>
+              <th className="common-fonts">BLOG TITLE</th>
+              <th className="common-fonts">SECTION COUNT</th>
+              <th className="common-fonts">SPORT</th>
+              <th className="common-fonts">WORD COUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.map((item, index) => (
               <tr key={item?.id}>
-                <td className='common-fonts'>{index + 1}</td>
-                <td className='common-fonts'>{formatDate(item?.creation_date)}</td>
-                <td className='common-fonts'>{item?.title}</td>
-                <td className='common-fonts'>{item?.section_count}</td>
-                <td className='common-fonts'>{item?.sport}</td>
-                <td className='common-fonts'> {item?.word_count}</td>
+                <td className="common-fonts">{index + 1}</td>
+                <td className="common-fonts">
+                  {formatDate(item?.creation_date)}
+                </td>
+                <td className="common-fonts">{item?.title}</td>
+                <td className="common-fonts">{item?.section_count}</td>
+                <td className="common-fonts">{item?.sport}</td>
+                <td className="common-fonts"> {item?.word_count}</td>
               </tr>
-            ))
-          }
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default BlogPerformance
+export default BlogPerformance;

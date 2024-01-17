@@ -8,6 +8,11 @@
   margin-right: 1rem;
 }
 
+.new_table_1{
+  height: 450px;
+  overflow: scroll;
+}
+
 .marketing-all-table table {
   margin-top: 2rem;
 }
@@ -25,7 +30,7 @@
   border-right: 1px solid transparent;
 }
 
-.market-review-table table td:nth-child(5){
+.market-review-table table td:nth-child(5) {
   border-right: 1px solid transparent;
 }
 
