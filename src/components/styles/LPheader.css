@@ -534,3 +534,9 @@ letter-spacing: -0.02563rem;
   .userDropdownContainer{
     cursor: pointer;
   }
+  .performance_title{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+    color: #2b74da !important;
+  }

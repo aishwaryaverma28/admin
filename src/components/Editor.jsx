@@ -15,15 +15,21 @@ import health from "../assets/image/health.svg";
 import forms from "../assets/image/forms.svg";
 import "./styles/Editor.css";
 import axios from "axios";
-import { GET_ALL_LEADS, getDecryptedToken } from "./utils/Constants";
+import { useSelector } from "react-redux";
+import { GET_ALL_LEADS, BLOG_GET, getDecryptedToken } from "./utils/Constants";
 import LeadReview from "./LeadReview";
+import BlogPerformance from "./BlogPerformance";
 const Editor = () => {
   const decryptedToken = getDecryptedToken();
   const role_name = localStorage.getItem("role_name")
+  const org_id = localStorage.getItem("org_id");
+  const userName = useSelector(store => store.user.items);
+  const [tableData, setTableData] = useState([]);
   const [leads, setLeads] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [value, onChange] = useState(new Date());
-  // console.log(decryptedToken)
+  // console.log(userName[0][0]?.email)
+  // console.log(role_name)
   const allLeads = () => {
     axios.post(GET_ALL_LEADS,{}, {
       headers: {
@@ -31,7 +37,7 @@ const Editor = () => {
       },
     })
     .then((response) => {
-      console.log(response?.data?.data);
+      // console.log(response?.data?.data);
       if (response?.data?.status === 1) {
       setLeads(response?.data?.data?.reverse());
       }
@@ -42,21 +48,64 @@ const Editor = () => {
       setIsLoading(false);
     })
   }
+
+  const blogData = () => {
+    const siteName = {
+      siteName: "bookmyplayer",
+      org_id: org_id,
+    };
+    axios
+      .post(BLOG_GET, siteName, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.status === 1) {
+         const filteredData = response?.data?.data.filter(item => item.created_by === userName[0][0]?.email);
+        setTableData(filteredData);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  };
+  // console.log(tableData)
   useEffect(() => {
-    allLeads();
-  }, []);
+    if (role_name === "lead_viewer") {
+      allLeads();
+    } else if (role_name === "blogger") {
+      blogData();
+    }
+  }, [role_name, userName]);
+
   return (
     <>
      <main>
-     {isLoading ? (
-        <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
-      ) : leads?.length === 0 ? (
-        <div style={{ padding: "1.5rem", textAlign: "center" }}>No leads Found</div>
-      ) : role_name === "lead_viewer" ? (
-        <LeadReview leads={leads} />
-      ) : (
-        <></>
-      )}
+     {role_name === "lead_viewer" && (
+          <>
+            {isLoading ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
+            ) : leads?.length === 0 ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>No leads Found</div>
+            ) : (
+              <LeadReview leads={leads} />
+            )}
+          </>
+        )}
+        {role_name === "blogger" && (
+          <>
+            {isLoading ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
+            ) : leads?.length === 0 ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
+            ) : (
+              <BlogPerformance data={tableData} />
+            )}
+          </>
+        )}
         <section className="dashboard">
           <div className="dashboardLeft">
             <div className="announcement-content">
