@@ -1,6 +1,6 @@
 import React from "react";
 
-const BlogPerformance = ({ data }) => {
+const BlogPerformance = ({ data, user }) => {
 
   console.log(data);
   const formatDate = (isoDate) => {
@@ -31,6 +31,8 @@ const BlogPerformance = ({ data }) => {
               <th className="common-fonts section_count">SECTION COUNT</th>
               <th className="common-fonts">SPORT</th>
               <th className="common-fonts section_count">WORD COUNT</th>
+              {user === "client" && (
+                <th className="common-fonts section_count">CREATED BY</th>)}
             </tr>
           </thead>
           <tbody>
@@ -40,12 +42,15 @@ const BlogPerformance = ({ data }) => {
                 <td className="common-fonts">
                   {formatDate(item?.creation_date)}
                 </td>
-                <td className="common-fonts">{item?.title && item.title.length > 50
-    ? `${item.title.slice(0, 50)}...`
-    : item?.title}</td>
+                <td className="common-fonts">{item?.title}</td>
+                {/* <td className="common-fonts">{item?.title && item.title.length > 50
+                  ? `${item.title.slice(0, 50)}...`
+                  : item?.title}</td> */}
                 <td className="common-fonts">{item?.section_count}</td>
                 <td className="common-fonts">{item?.sport}</td>
                 <td className="common-fonts"> {item?.word_count}</td>
+                {user === "client" && (
+                <td className="common-fonts"> {item?.created_by}</td>)}
               </tr>
             ))}
           </tbody>

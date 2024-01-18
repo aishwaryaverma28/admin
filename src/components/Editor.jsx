@@ -99,10 +99,10 @@ const Editor = () => {
           <>
             {isLoading ? (
               <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
-            ) : leads?.length === 0 ? (
+            ) :tableData?.length === 0 ? (
               <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
             ) : (
-              <BlogPerformance data={tableData} />
+              <BlogPerformance data={tableData} user={role_name}/>
             )}
           </>
         )}
