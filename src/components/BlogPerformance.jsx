@@ -28,9 +28,9 @@ const BlogPerformance = ({ data }) => {
               <th className="common-fonts">S No</th>
               <th className="common-fonts">DATE</th>
               <th className="common-fonts">BLOG TITLE</th>
-              <th className="common-fonts">SECTION COUNT</th>
+              <th className="common-fonts section_count">SECTION COUNT</th>
               <th className="common-fonts">SPORT</th>
-              <th className="common-fonts">WORD COUNT</th>
+              <th className="common-fonts section_count">WORD COUNT</th>
             </tr>
           </thead>
           <tbody>
@@ -40,7 +40,9 @@ const BlogPerformance = ({ data }) => {
                 <td className="common-fonts">
                   {formatDate(item?.creation_date)}
                 </td>
-                <td className="common-fonts">{item?.title}</td>
+                <td className="common-fonts">{item?.title && item.title.length > 50
+    ? `${item.title.slice(0, 50)}...`
+    : item?.title}</td>
                 <td className="common-fonts">{item?.section_count}</td>
                 <td className="common-fonts">{item?.sport}</td>
                 <td className="common-fonts"> {item?.word_count}</td>
