@@ -31,7 +31,7 @@ const BlogPerformance = ({ data, user }) => {
               <th className="common-fonts section_count">SECTION COUNT</th>
               <th className="common-fonts">SPORT</th>
               <th className="common-fonts section_count">WORD COUNT</th>
-              {user === "client" && (
+              {user === "vaneet.gupta@gmail.com" && (
                 <th className="common-fonts section_count">CREATED BY</th>)}
             </tr>
           </thead>
@@ -49,7 +49,7 @@ const BlogPerformance = ({ data, user }) => {
                 <td className="common-fonts">{item?.section_count}</td>
                 <td className="common-fonts">{item?.sport}</td>
                 <td className="common-fonts"> {item?.word_count}</td>
-                {user === "client" && (
+                {user === "vaneet.gupta@gmail.com" && (
                 <td className="common-fonts"> {item?.created_by}</td>)}
               </tr>
             ))}
