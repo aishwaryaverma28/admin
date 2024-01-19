@@ -55,6 +55,17 @@ const Home = () => {
   }
   return (
     <>
+     {role_name === "admin" && userName && userName[0] && userName[0][0]?.email === "vaneet.gupta@gmail.com" && (
+        <>
+            {isLoading ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
+            ) : tableData?.length === 0 ? (
+              <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
+            ) : (
+              <BlogPerformance data={tableData} user={userName[0][0]?.email}/>
+            )}
+          </>
+        )}
       <header className="homeHeader">
         <section className="homeSecOne">
           <div className="greyHead">
@@ -117,17 +128,7 @@ const Home = () => {
           </div>
         </section>
       </header>
-      {role_name === "admin" && userName && userName[0] && userName[0][0]?.email === "vaneet.gupta@gmail.com" && (
-        <>
-            {isLoading ? (
-              <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
-            ) : tableData?.length === 0 ? (
-              <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
-            ) : (
-              <BlogPerformance data={tableData} user={userName[0][0]?.email}/>
-            )}
-          </>
-        )}
+     
       <main className="home-main-container">
         <section className="home-my-task"> 
           <section className="home-top">
