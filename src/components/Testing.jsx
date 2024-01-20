@@ -78,7 +78,7 @@ function Testing() {
   }, [auth, navigate]);
 
   if (isLoading) {
-    return null; // Render nothing while loading
+    return null;
   }
 
   return (

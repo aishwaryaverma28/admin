@@ -72,10 +72,16 @@ import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.
 import AddTournament from "./components/master-settings/tournament/AddTournament.jsx";
 import ViewTournament from "./components/master-settings/tournament/ViewTournament.jsx";
 import UpdateTournament from "./components/master-settings/tournament/UpdateTournament.jsx";
+import Opening from "./components/Opening.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
     element: <Testing />,
+    errorElement:<Error/>,
+  },
+  {
+    path: "/:id/:source",
+    element: <Opening/>,
     errorElement:<Error/>,
   },
   {
@@ -97,8 +103,8 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
-        path: "/lp", // This is the new route for /lp
-        element: <Navigate to="/lp/home" replace />, // Redirect to /lp/home
+        path: "/lp",
+        element: <Navigate to="/lp/home" replace />,
       },
       {
         path: "/lp/lead",
@@ -213,8 +219,8 @@ const router = createBrowserRouter([
         errorElement: <Error />,
         children: [
           {
-            path: "/lp/settings", // This is the new route for /lp
-            element: <Navigate to="/lp/settings/general" replace />, // Redirect to /lp/home
+            path: "/lp/settings",
+            element: <Navigate to="/lp/settings/general" replace />,
           },
           {
             path: "/lp/settings/general",

@@ -11,7 +11,7 @@ import {
   UPDATE_ACADMEY_STATUS,
   GET_UPDATED_ACADEMY_INFO,
   ADDRESS_API,
-  getDecryptedToken,
+  // getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,7 +26,7 @@ const OverviewById = () => {
   const { id } = useParams();
   localStorage.setItem("academy_id", id);
   const role_name = localStorage.getItem("role_name");
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const [revokeId, setRevokeId] = useState(null);
   const [status, setStatus] = useState(null);
   const [newAcadmeyData, setNewAcadmeyData] = useState(null);
@@ -118,12 +118,13 @@ const OverviewById = () => {
         GET_UPDATED_ACADEMY_INFO,
         {
           academy_id: id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         if (response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null) {
@@ -204,11 +205,13 @@ const OverviewById = () => {
   //==============================================================acadmey data
   const academyDetails = () => {
     axios
-      .post(GET_ACADEMY , {academy_id:id}, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(GET_ACADEMY , {academy_id:id}
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         const sport = response?.data?.data[0]?.sport;
         const academyName = response?.data?.data[0]?.name;
@@ -608,11 +611,13 @@ const OverviewById = () => {
       updatedFormData.coordinate = coordinate;
     }
     axios
-      .put(UPDATE_ACADEMY + id, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_ACADEMY + id, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -641,12 +646,14 @@ const OverviewById = () => {
   }
   //==========================================================================approve function
   const handleApprove = () => {
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 }
+      // ,
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`
+      //   }
+      // }
+      ).then((response) => {
         if (response?.data?.status === 1) {
           toast.success("Academy info updated successfully", {
             position: "top-center",
@@ -691,11 +698,13 @@ const OverviewById = () => {
     }
     console.log(updatedFormData)
     axios
-      .put(UPDATE_ACADEMY + id, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
+      .put(UPDATE_ACADEMY + id, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -729,12 +738,14 @@ const OverviewById = () => {
       status: 2,
       rejection_reason: disapprovalReason,
     }
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body
+      // ,
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`
+      //   }
+      // }
+      ).then((response) => {
         if (response?.data?.status === 1) {
           toast.success("Academy info updated successfully", {
             position: "top-center",

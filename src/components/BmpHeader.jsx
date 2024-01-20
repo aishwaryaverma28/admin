@@ -32,7 +32,7 @@ const BmpHeader = () => {
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [pathAddress, setPathAddress] = useState(null);
   const [modal, setModal] = useState(false);
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const decryptedUserPath = getDecryptedUserPath();
   const [number, setNumber] = useState(null);
   let allowed = decryptedUserPath.split(",");
@@ -81,11 +81,13 @@ const BmpHeader = () => {
       userId: userId,
     };
     try {
-      const response = await axios.post(BMP_USER, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      });
+      const response = await axios.post(BMP_USER, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      );
       const data = response?.data?.user;
       // console.log(data);
       localStorage.setItem("org_id", data.org_id);

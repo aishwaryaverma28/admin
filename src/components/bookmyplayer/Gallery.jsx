@@ -22,7 +22,7 @@ import Training from "./Training.jsx";
 import DisapproveModal from "./DisapproveModal.jsx";
 
 const Gallery = () => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
   const [status, setStatus] = useState(null);
@@ -81,12 +81,13 @@ const Gallery = () => {
         GET_UPDATED_ACADEMY_INFO,
         {
           academy_id: academyId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         if (response?.data?.data[0] !== undefined || response?.data?.data[0]?.status !== null) {
@@ -147,11 +148,13 @@ const Gallery = () => {
 
   const academyDetails = () => {
     axios
-    .post(GET_ACADEMY , {academy_id:academyId}, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    .post(GET_ACADEMY , {academy_id:academyId}
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`,
+    //   },
+    // }
+    )
     .then((response) => {
         setAcademyData(response?.data?.data[0]);
         setProgress(response?.data?.data[0]?.completion_percentage);
@@ -448,11 +451,13 @@ const Gallery = () => {
     };
 
     axios
-      .put(UPDATE_ACADEMY + academyId, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_ACADEMY + academyId, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -517,11 +522,13 @@ const Gallery = () => {
       });
     }
     axios
-      .post(UPDATE_ACADEMY_TABLE2, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(UPDATE_ACADEMY_TABLE2, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -577,12 +584,13 @@ const Gallery = () => {
         UPDATE_ACADEMY + academyId,
         {
           photos: updatedNameString,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         academyDetails();
@@ -607,12 +615,13 @@ const Gallery = () => {
         UPDATE_ACADEMY + academyId,
         {
           videos: updatedNameString,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         academyDetails();
@@ -623,12 +632,14 @@ const Gallery = () => {
   };
   //==========================================================================approve function
   const handleApprove = () => {
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 },
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 1 }
+      // ,
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`
+      //   }
+      // }
+      ).then((response) => {
         if (response?.data?.status === 1) {
           toast.success("Academy info updated successfully", {
             position: "top-center",
@@ -655,11 +666,13 @@ const Gallery = () => {
       videos: videoUrls.join(","),
     }
     axios
-      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_ACADEMY + academyId, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -692,12 +705,14 @@ const Gallery = () => {
       status: 2,
       rejection_reason: disapprovalReason,
     }
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body,
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, body
+      // ,
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`
+      //   }
+      // }
+      ).then((response) => {
         if (response?.data?.status === 1) {
           toast.success("Academy info updated successfully", {
             position: "top-center",

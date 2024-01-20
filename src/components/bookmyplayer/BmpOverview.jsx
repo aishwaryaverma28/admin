@@ -7,9 +7,9 @@ import {
   GET_ACADEMY,
   UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
-  RESTRICTED_KEYWORDS,
-  ADDRESS_API,
-  getDecryptedToken,
+  // RESTRICTED_KEYWORDS,
+  // ADDRESS_API,
+  // getDecryptedToken,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,7 +21,7 @@ import { removeHtmlTags } from "./removeHtml";
 import { default_about } from "../utils/bmp_about";
 
 const BmpOverview = () => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
   const [status, setStatus] = useState(null);
@@ -97,12 +97,12 @@ const BmpOverview = () => {
         GET_UPDATED_ACADEMY_INFO,
         {
           academy_id: academyId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,{
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         const statusValue = response?.data?.data[0]?.status;
@@ -227,11 +227,13 @@ const BmpOverview = () => {
 
   const academyDetails = () => {
     axios
-      .post(GET_ACADEMY, { academy_id: academyId }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(GET_ACADEMY, { academy_id: academyId }
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
 
         localStorage.setItem("url", response?.data?.data[0]?.url);
@@ -243,7 +245,8 @@ const BmpOverview = () => {
         const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
         const intro = removeHtmlTags(finalAbout);
         setIntroduction(intro);
-
+        if (sport === null)
+          setIntroduction("-")
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,
@@ -565,11 +568,13 @@ const BmpOverview = () => {
     console.log("update body");
 
     axios
-      .post(UPDATE_ACADEMY_TABLE2, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(UPDATE_ACADEMY_TABLE2, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
