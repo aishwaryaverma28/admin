@@ -1,7 +1,9 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import {
-  GET_ACC_LEAD, getDecryptedToken,
+  GET_ACC_LEAD
+  // , getDecryptedToken,
+
 } from "../utils/Constants";
 import BMPLeadModal from './BMPLeadModal.jsx';
 import Calender from "../../assets/image/calendar.svg";
@@ -9,7 +11,7 @@ import SearchIcon from "../../assets/image/search.svg";
 
 
 const BMPLeads = () => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = parseInt(localStorage.getItem("academy_id"));
   const [review, setReview] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,11 +61,13 @@ const BMPLeads = () => {
 
 
   const reviewData = () => {
-    axios.get(GET_ACC_LEAD +academyId+"/academy", {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    axios.get(GET_ACC_LEAD +academyId+"/academy"
+    // , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`,
+    //   },
+    // }
+    )
       .then((response) => {
         console.log(response?.data?.data)
         if (response?.data?.status === 1) {

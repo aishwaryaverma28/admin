@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { getDecryptedToken, RESTRICTED_KEYWORDS, UPDATE_BATCH } from "../utils/Constants";
+import {
+    //  getDecryptedToken,
+      RESTRICTED_KEYWORDS, UPDATE_BATCH } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
 const UpdateBatch = ({ onClose, fetchBatch, batchId, batch }) => {
   // console.log(batch);
-  const decryptedToken = getDecryptedToken();
+//   const decryptedToken = getDecryptedToken();
     const [selectedDays, setSelectedDays] = useState([]);
     const [batchTitle, setBatchTitle] = useState("");
     const [ageGroups, setAgeGroups] = useState([{ minAge: "", maxAge: "" }]);
@@ -195,11 +197,13 @@ const fetchBatchData = (event) => {
         fees: feeGroupStrings.join(", ")
     }
     axios
-        .put(UPDATE_BATCH + batchId, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-            },
-        })
+        .put(UPDATE_BATCH + batchId, body
+        //     , {
+        //     headers: {
+        //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        //     },
+        // }
+        )
         .then((response) => {
             console.log(response)
             if (response?.data?.status === 1) {

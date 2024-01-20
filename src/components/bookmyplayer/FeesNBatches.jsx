@@ -8,7 +8,8 @@ import Pen from "../../assets/image/pen.svg";
 import axios from "axios";
 import {
   GET_BATCH, GET_ACADEMY, UPDATE_BATCH,
-  UPDATE_ACADEMY, getDecryptedToken
+  UPDATE_ACADEMY
+  // , getDecryptedToken
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +18,7 @@ import AddBatch from "./AddBatch.jsx";
 import UpdateBatch from "./UpdateBatch.jsx";
 
 const FeesNBatches = () => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   //=========================================================================
   const [isBatchOpen, setIsBatchOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
@@ -35,11 +36,13 @@ const [batchObject, setBatchObject] = useState({});
   const allowedImageTypes = ["application/pdf"];
   const academyDetails = () => {
     axios
-      .post(GET_ACADEMY , {academy_id:id}, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(GET_ACADEMY , {academy_id:id}
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         setAcademyData(response?.data?.data[0])        
         setProgress(response?.data?.data[0]?.completion_percentage);
@@ -58,11 +61,13 @@ const [batchObject, setBatchObject] = useState({});
       object_type: "academy"
   }
     axios
-      .post(GET_BATCH, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
+      .post(GET_BATCH, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      //   },
+      // }
+      )
       .then((response) => {
         setBatch(response?.data?.data)
       })
@@ -142,11 +147,13 @@ const [batchObject, setBatchObject] = useState({});
   function handleSubmit(file) {
 
     axios
-      .put(UPDATE_ACADEMY + id, { brochure: file }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
+      .put(UPDATE_ACADEMY + id, { brochure: file }
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -188,11 +195,13 @@ const [batchObject, setBatchObject] = useState({});
  
   const handleDeleteBatch = (batchId) => {
     axios
-      .put(UPDATE_BATCH + batchId, { is_deleted: 1 }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_BATCH + batchId, { is_deleted: 1 }
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Batch deleted successfully", {

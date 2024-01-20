@@ -5,7 +5,7 @@ import {
   UPDATE_ACADEMY_TABLE2,
   UPDATE_ACADEMY,
   UPDATE_ACADMEY_STATUS,
-  getDecryptedToken,
+  // getDecryptedToken,
 } from "../utils/Constants";
 import Trash from "../../assets/image/red-bin.svg";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,7 +20,7 @@ const Training = ({
   updatedAcadmeyInfo,
   revokeId,
 }) => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const role_name = localStorage.getItem("role_name");
   const [isUploadingMulti, setIsUploadingMulti] = useState(false);
@@ -82,11 +82,13 @@ const Training = ({
   //==========================================================================
   const academyDetails = () => {
     axios
-    .post(GET_ACADEMY , {academy_id:academyId}, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    .post(GET_ACADEMY , {academy_id:academyId}
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`,
+    //   },
+    // }
+    )
     .then((response) => {
         setAcademyData(response?.data?.data[0]);
 
@@ -242,12 +244,13 @@ const Training = ({
         UPDATE_ACADEMY + academyId,
         {
           training_ground_photos: updatedNameString,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         academyDetails();
@@ -354,12 +357,13 @@ const Training = ({
         UPDATE_ACADEMY + academyId,
         {
           tournament_photos: updatedNameString,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         academyDetails();
@@ -406,11 +410,13 @@ const Training = ({
     }
     console.log("updated training body");
     axios
-      .post(UPDATE_ACADEMY_TABLE2, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .post(UPDATE_ACADEMY_TABLE2, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -439,12 +445,13 @@ const Training = ({
     axios
       .put(
         UPDATE_ACADMEY_STATUS + revokeId,
-        { status: 1 },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
+        { status: 1 }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${decryptedToken}`,
+        //   },
+        // }
       )
       .then((response) => {
         if (response?.data?.status === 1) {
@@ -466,11 +473,13 @@ const Training = ({
       tournament_photos: photoUrls2?.join(","),
     };
     axios
-      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_ACADEMY + academyId, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -504,11 +513,13 @@ const Training = ({
       rejection_reason: disapprovalReason,
     };
     axios
-      .put(UPDATE_ACADMEY_STATUS + revokeId, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
+      .put(UPDATE_ACADMEY_STATUS + revokeId, body
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
       .then((response) => {
         if (response?.data?.status === 1) {
           toast.success("Academy info updated successfully", {
@@ -555,10 +566,10 @@ const Training = ({
               >
                 <button
                   className={`common-fonts contact-browse-btn ${
-                    status === 0 && role_name === "Academy" ? "bmp_disable" : ""
+                    status === 0 && role_name === "academy" ? "bmp_disable" : ""
                   }`}
                   onClick={handleButtonClick}
-                  disabled={status === 0 && role_name === "Academy"}
+                  disabled={status === 0 && role_name === "academy"}
                 >
                   Browse
                 </button>
@@ -722,12 +733,12 @@ const Training = ({
                 >
                   <button
                     className={`common-fonts contact-browse-btn ${
-                      status === 0 && role_name === "Academy"
+                      status === 0 && role_name === "academy"
                         ? "bmp_disable"
                         : ""
                     }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === "Academy"}
+                    disabled={status === 0 && role_name === "academy"}
                   >
                     Browse
                   </button>

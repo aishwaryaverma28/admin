@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Calender from "../../assets/image/calendar.svg";
 import axios from 'axios';
-import { GET_APPROVAL, UPDATE_ACADMEY_STATUS, getDecryptedToken } from '../utils/Constants.js';
+import { GET_APPROVAL, UPDATE_ACADMEY_STATUS, 
+  // getDecryptedToken 
+} from '../utils/Constants.js';
 import ApprovalModal from './ApprovalModal.jsx';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Approval = () => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const academyId = localStorage.getItem("academy_id");
@@ -27,11 +29,13 @@ const Approval = () => {
   const approvalData = () => {
     axios.post(GET_APPROVAL, {
       academy_id: academyId
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }).then((response) => {
+    }
+    // , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`
+    //   }
+    // }
+    ).then((response) => {
       const newData = response?.data?.data.map((item) => {
         const hasOverview = [
           'spoken_languages',
@@ -107,12 +111,14 @@ const Approval = () => {
   }, []);
 
   const handleRevoke = () => {
-    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 3 },
-      {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`
-        }
-      }).then((response) => {
+    axios.put(UPDATE_ACADMEY_STATUS + revokeId, { status: 3 }
+      // ,
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`
+      //   }
+      // }
+      ).then((response) => {
         if (response?.data?.status === 1) {
           console.log(response?.data?.data)
           toast.success("Reply send successfully!", {

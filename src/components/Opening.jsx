@@ -6,7 +6,7 @@ import loader from "../assets/image/loader.gif"
 import CryptoJS from "crypto-js";
 const secretKey = "mySecretKey123";
 const Opening = () => {
-    const { id,source } = useParams();
+    const { source, id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     async function getBMPUser() {

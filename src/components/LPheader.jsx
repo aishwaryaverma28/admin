@@ -201,7 +201,7 @@ const LPheader = () => {
 //================================================================sign out
   const handleLogout = () => {
     localStorage.clear();
-      window.location.href = "https://www.leadplaner.com/user/login";
+      window.location.href = "https://core.leadplaner.com/login";
   };
  
   return (

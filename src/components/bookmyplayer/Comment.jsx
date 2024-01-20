@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import "../styles/Comment.css";
 import star from "../../assets/image/star.svg"
 import axios from 'axios';
-import { ADD_REPLY, GET_REVIEW_REPLY, getDecryptedToken } from "../utils/Constants";
+import { ADD_REPLY, GET_REVIEW_REPLY
+  // , getDecryptedToken
+ } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 
 const Comment = ({ onClose, review, reviewData }) => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const userName = useSelector(store => store.user.items);
   const academyId = localStorage.getItem("academy_id");
   const [reply, setReply] = useState("");
@@ -20,11 +22,13 @@ const Comment = ({ onClose, review, reviewData }) => {
     const body = {
       review_id: review.id
     }
-    axios.post(GET_REVIEW_REPLY, body, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    axios.post(GET_REVIEW_REPLY, body
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`,
+    //   },
+    // }
+    )
       .then((response) => {
         if (response?.data?.status === 1) {
           // console.log(response?.data?.data)
@@ -59,11 +63,13 @@ const Comment = ({ onClose, review, reviewData }) => {
       user_id: userName[0]?.id
     };
     console.log(body);
-    axios.post(ADD_REPLY, body, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    axios.post(ADD_REPLY, body
+    //   , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}`,
+    //   },
+    // }
+    )
       .then((response) => {
         if (response?.data?.status === 1) {
           console.log(response?.data?.data)

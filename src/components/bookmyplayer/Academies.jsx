@@ -1,6 +1,9 @@
 import React,{ useState, useEffect } from 'react'
 import axios from 'axios';
-import { GET_ACADEMY_STATUS, getDecryptedToken } from '../utils/Constants.js';
+import { GET_ACADEMY_STATUS, 
+  // getDecryptedToken 
+} 
+  from '../utils/Constants.js';
 import SearchIcon from "../../assets/image/search.svg";
 import Logo from "../../assets/image/blue_logo.png";
 import PendingAcademies from './PendingAcademies.jsx';
@@ -9,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 const Academies = () => {
   const [activeTab, setActiveTab] = useState("all");
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const [data, setData] = useState([]);
   const [pendingData, setPendingData] = useState([]);
   const [rejectedData, setRejectedData] = useState([]);
@@ -23,11 +26,13 @@ const Academies = () => {
   const getAllAcademy = () => {
     axios.post(GET_ACADEMY_STATUS, {
       status: 4
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
+    }
+    // , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+    //   }
+    // }
+    ).then((response) => {
       setData(response?.data?.data);
     }).catch((error) => {
       console.log(error);
@@ -36,11 +41,13 @@ const Academies = () => {
   const getPendingAcademy = () => {
     axios.post(GET_ACADEMY_STATUS, {
       status: 0
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
+    }
+    // , {
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+    //   }
+    // }
+    ).then((response) => {
       setPendingData(response?.data?.data);
     }).catch((error) => {
       console.log(error);
@@ -49,11 +56,13 @@ const Academies = () => {
   const getRejectedAcademy = () => {
     axios.post(GET_ACADEMY_STATUS, {
       status: 2
-    }, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
-      }
-    }).then((response) => {
+    }
+    // ,{
+    //   headers: {
+    //     Authorization: `Bearer ${decryptedToken}` // Include the JWT token in the Authorization header
+    //   }
+    // }
+    ).then((response) => {
       setRejectedData(response?.data?.data);
     }).catch((error) => {
       console.log(error);

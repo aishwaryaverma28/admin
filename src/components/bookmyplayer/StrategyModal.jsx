@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { UPDATE_ACADEMY, RESTRICTED_KEYWORDS, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_ACADEMY, RESTRICTED_KEYWORDS
+  // , getDecryptedToken
+ } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const StrategyModal = ({ onClose, newData, name, fetchData, array }) => {
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [stateBtn, setStateBtn] = useState(0);
   const [sName, setSName] = useState("");
@@ -119,11 +121,13 @@ const StrategyModal = ({ onClose, newData, name, fetchData, array }) => {
     }
     // console.log(updatedFormData);
     axios
-      .put(UPDATE_ACADEMY + academyId, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
+      .put(UPDATE_ACADEMY + academyId, updatedFormData
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+      //   },
+      // }
+      )
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {

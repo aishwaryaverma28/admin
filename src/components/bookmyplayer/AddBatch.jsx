@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../styles/HelpModal.css";
 import axios from "axios";
-import { getDecryptedToken, UPDATE_ACADEMY, RESTRICTED_KEYWORDS, ADD_BATCH } from "../utils/Constants";
+import { 
+    // getDecryptedToken,
+    UPDATE_ACADEMY, RESTRICTED_KEYWORDS, ADD_BATCH } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddBatch = ({ onClose, fetchBatch, array }) => {
-    const decryptedToken = getDecryptedToken();
+    // const decryptedToken = getDecryptedToken();
     const [selectedDays, setSelectedDays] = useState([]);
     const [batchTitle, setBatchTitle] = useState("");
     const [ageGroups, setAgeGroups] = useState([{ minAge: "", maxAge: "" }]);
@@ -181,11 +183,13 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
             fees: feeGroupStrings.join(", ")
         }
         axios
-            .post(ADD_BATCH, body, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-                },
-            })
+            .post(ADD_BATCH, body
+            //     , {
+            //     headers: {
+            //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            //     },
+            // }
+            )
             .then((response) => {
                 console.log(response)
                 if (response?.data?.status === 1) {
@@ -224,11 +228,13 @@ const AddBatch = ({ onClose, fetchBatch, array }) => {
         axios
             .put(UPDATE_ACADEMY + id, {
                 completion_percentage: combinedProgress,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-                },
-            })
+            }
+            // , {
+            //     headers: {
+            //         Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            //     },
+            // }
+            )
             .then((response) => {
                 console.log(response);
             })
