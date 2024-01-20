@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     errorElement:<Error/>,
   },
   {
-    path: "/:id/:source",
+    path: "/:source/:id",
     element: <Opening/>,
     errorElement:<Error/>,
   },

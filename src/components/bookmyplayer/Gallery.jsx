@@ -6,7 +6,7 @@ import {
   UPDATE_ACADEMY_TABLE2,
   GET_UPDATED_ACADEMY_INFO,
   UPDATE_ACADMEY_STATUS,
-  getDecryptedToken,
+  // getDecryptedToken,
 } from "../utils/Constants";
 import "chart.js/auto";
 import Photo from "../../assets/image/gallery.svg";
@@ -870,12 +870,12 @@ const Gallery = () => {
                   }}
                 >
                   <button
-                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "Academy"
+                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "academy"
                       ? "bmp_disable"
                       : ""
                       }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === 'Academy'}
+                    disabled={status === 0 && role_name === 'academy'}
                   >
                     Browse
                   </button>

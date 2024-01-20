@@ -2,14 +2,14 @@ import React from "react";
 import "../styles/Comment.css";
 import { useState } from "react";
 import axios from "axios";
-import { getDecryptedToken } from "../utils/Constants";
+// import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
 const ApprovalModal = ({ onClose, item}) => {
   console.log(item);
-  const decryptedToken = getDecryptedToken();
+  // const decryptedToken = getDecryptedToken();
   const academyId = localStorage.getItem("academy_id");
   const [isLoading, setIsLoading] = useState(true);
 
