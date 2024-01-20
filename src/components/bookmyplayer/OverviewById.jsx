@@ -20,6 +20,8 @@ import Dash from "../../assets/image/red-dash.svg";
 import Dash2 from "../../assets/image/dash2.svg";
 import { removeHtmlTags } from "./removeHtml.js";
 import { splitAddress } from "./splitAddress.js";
+import { default_about } from "../utils/bmp_about";
+
 const OverviewById = () => {
   const { id } = useParams();
   localStorage.setItem("academy_id", id);
@@ -208,12 +210,15 @@ const OverviewById = () => {
         },
       })
       .then((response) => {
-        // console.log(response?.data?.data[0])
-        // const academyName = response?.data?.data[0]?.name;
-        // const cityName = response?.data?.data[0]?.city;
-        // console.log(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName));
-        // const intro = removeHtmlTags(response?.data?.about[0]?.about.replace('ACADENY_NAME', academyName).replace('CITY_NAME', cityName))
-        // setIntroduction(intro);
+        const sport = response?.data?.data[0]?.sport;
+        const academyName = response?.data?.data[0]?.name;
+        const cityName = response?.data?.data[0]?.city;
+        const academyObject = default_about?.find(obj => obj.sport === sport);
+        const updatedAbout = academyObject?.about?.replace(/ACADEMY_NAME/g, academyName);
+        const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
+        const intro = removeHtmlTags(finalAbout);
+        setIntroduction(intro);
+
         const addressComponents = [
           response?.data?.data[0]?.address1,
           response?.data?.data[0]?.address2,

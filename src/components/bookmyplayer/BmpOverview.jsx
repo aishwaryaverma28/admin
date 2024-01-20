@@ -18,6 +18,7 @@ import Dash from "../../assets/image/red-dash.svg";
 import Dash2 from "../../assets/image/dash2.svg";
 import { splitAddress } from "./splitAddress";
 import { removeHtmlTags } from "./removeHtml";
+import { default_about } from "../utils/bmp_about";
 
 const BmpOverview = () => {
   const decryptedToken = getDecryptedToken();
@@ -31,8 +32,6 @@ const BmpOverview = () => {
   const [academyDataOld, setAcademyDataOld] = useState({});
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isWhatsappActivated, setIsWhatsappActivated] = useState(true);
-  const [selectedStartTime, setSelectedStartTime] = useState("");
-  const [selectedEndTime, setSelectedEndTime] = useState("");
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -56,7 +55,7 @@ const BmpOverview = () => {
   const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
   const languages = [
     { value: "Hindi", label: "Hindi" },
-    { value: "English", label: "English" },    
+    { value: "English", label: "English" },
     { value: "Telugu", label: "Telugu" },
     { value: "Kannada", label: "Kannada" },
     { value: "Tamil", label: "Tamil" },
@@ -225,10 +224,10 @@ const BmpOverview = () => {
     }
   };
   //=======================================================timing
- 
+
   const academyDetails = () => {
     axios
-      .post(GET_ACADEMY , {academy_id:academyId}, {
+      .post(GET_ACADEMY, { academy_id: academyId }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -236,14 +235,14 @@ const BmpOverview = () => {
       .then((response) => {
 
         localStorage.setItem("url", response?.data?.data[0]?.url);
-
-        // const academyName = response?.data?.data[0]?.name;
-        // const cityName = response?.data?.data[0]?.city;
-        // const aboutString = response?.data?.about[0]?.about;
-        // const updatedAbout = aboutString.replace(/ACADEMY_NAME/g, academyName);
-        // const finalAbout = updatedAbout.replace(/CITY_NAME/g, cityName);
-        // const intro = removeHtmlTags(finalAbout);
-        // setIntroduction(intro);
+        const sport = response?.data?.data[0]?.sport;
+        const academyName = response?.data?.data[0]?.name;
+        const cityName = response?.data?.data[0]?.city;
+        const academyObject = default_about?.find(obj => obj.sport === sport);
+        const updatedAbout = academyObject?.about?.replace(/ACADEMY_NAME/g, academyName);
+        const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
+        const intro = removeHtmlTags(finalAbout);
+        setIntroduction(intro);
 
         const addressComponents = [
           response?.data?.data[0]?.address1,
@@ -297,13 +296,13 @@ const BmpOverview = () => {
         setIsLoading(false);
       });
   };
-   useEffect(() => {
+  useEffect(() => {
     academyDetails();
     updatedAcadmeyInfo();
   }, []);
   useEffect(() => {
     progressArray?.push("1");
-  },[academyData])
+  }, [academyData])
 
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
@@ -434,7 +433,7 @@ const BmpOverview = () => {
     setPhoneNumberCount(phoneNumberCount + 1);
     setIsButtonVisible(false);
   };
-console.log(result)
+
   function handleSubmit(event) {
     event.preventDefault();
     const filteredProgressArray = progressArray.filter(value => value !== "1");
@@ -1058,10 +1057,10 @@ console.log(result)
               <option value="20+">20+</option>
             </select>
           </div>
-          <br/>
+          <br />
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
-            Open Timings
+              Open Timings
             </label>
             <input
               type="text"
@@ -1194,20 +1193,20 @@ console.log(result)
               <p className="common-fonts bmp-social">Language</p>
             </div>
             <div className="bmp-input-flex ">
-                <select
-                  value={selectedLanguageName}
-                  onChange={handlelanguageNameChange}
-                  className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
+              <select
+                value={selectedLanguageName}
+                onChange={handlelanguageNameChange}
+                className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === 'Academy' ? 'bmp_disable' : ''}`}
 
-                  disabled={status === 0 && role_name === "Academy"}
-                >
-                  <option value="">Select your language</option>
-                  {languages.map((language) => (
-                    <option key={language.value} value={language.value}>
-                      {language.label}
-                    </option>
-                  ))}
-                </select>    
+                disabled={status === 0 && role_name === "Academy"}
+              >
+                <option value="">Select your language</option>
+                {languages.map((language) => (
+                  <option key={language.value} value={language.value}>
+                    {language.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {mappedLanguages.map((mappedLanguage, index) => (
