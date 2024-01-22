@@ -68,15 +68,6 @@ const BmpHeader = () => {
 
   async function getBMPUser() {
     let body = {};
-    // if(role_name === "Academy Admin")
-    // {
-    // body =  {
-    //   userId: userId,
-    // }}else{
-    //   body =  {
-    //     userId: academyId,
-    //   }
-    // }
     body = {
       userId: userId,
     };

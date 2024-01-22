@@ -11,15 +11,6 @@ const Opening = () => {
     const navigate = useNavigate();
     async function getBMPUser() {
         let body = {};
-        // if(role_name === "Academy Admin")
-        // {
-        // body =  {
-        //   userId: userId,
-        // }}else{
-        //   body =  {
-        //     userId: academyId,
-        //   }
-        // }
         body = {
             userId: id,
         };
@@ -29,10 +20,11 @@ const Opening = () => {
             console.log(data);
             if (response.data.status === 1) {
                 localStorage.setItem("org_id", data?.org_id);
-                localStorage.setItem("role_name", data?.type);
+                let role = data?.type?.toLowerCase()
+                localStorage.setItem("role_name", data?.type?.toLowerCase());
                 localStorage.setItem("academy_id", data?.parent_id);
                 localStorage.setItem("id", id);
-                if (data?.type === "academy") {
+                if (role === "academy") {
                     const permissions = "/lp/bmp,/lp/bmp/overview,/lp/bmp/fees,/lp/bmp/training,/lp/bmp/gallery,/lp/bmp/reviews,/lp/bmp/leads,/lp/bmp/support,/lp/bmp/help"
                     const userPath = permissions.split(",");
                     const userPathTot = userPath.join(",");
@@ -43,6 +35,18 @@ const Opening = () => {
                     localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
                     localStorage.setItem("landingUrl", "/lp/bmp/overview");
                     navigate("/lp/bmp/overview");
+                }
+                else if (role === "academy_admin") {
+                    const permissions = "/lp/bmp,/lp/bmp/admin,/lp/bmp/overview,/lp/bmp/fees,/lp/bmp/training,/lp/bmp/gallery,/lp/bmp/reviews,/lp/bmp/leads,/lp/bmp/support,/lp/bmp/help"
+                    const userPath = permissions.split(",");
+                    const userPathTot = userPath.join(",");
+                    const encryptedUserPathTot = CryptoJS.AES.encrypt(
+                        userPathTot,
+                        secretKey
+                    ).toString();
+                    localStorage.setItem("encryptedUserPathTot", encryptedUserPathTot);
+                    localStorage.setItem("landingUrl", "/lp/bmp/admin");
+                    navigate("/lp/bmp/admin");
                 }
                 setIsLoading(false);
             }

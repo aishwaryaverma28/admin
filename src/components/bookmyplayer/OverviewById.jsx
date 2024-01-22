@@ -198,7 +198,7 @@ const OverviewById = () => {
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy_admin") {
+    if (status === 0 && role_name === "academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
@@ -221,6 +221,8 @@ const OverviewById = () => {
         const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
         const intro = removeHtmlTags(finalAbout);
         setIntroduction(intro);
+        if (sport === null || sport === "")
+          setIntroduction("-")
 
         const addressComponents = [
           response?.data?.data[0]?.address1,
@@ -772,7 +774,7 @@ const OverviewById = () => {
             </label>
             <input
               type="text"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("name") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("name") ? "redBorderLine" : ""}`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
@@ -787,7 +789,7 @@ const OverviewById = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about === null ? introduction : academyData?.about}
               id=""
-              className={`common-fonts bmp-textarea ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
+              className={`common-fonts bmp-textarea ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("about") ? "redBorderLine" : ""}`}
               rows="2"
             ></textarea>
           </div>
@@ -801,7 +803,7 @@ const OverviewById = () => {
                 value={address}
                 onChange={(e) => handleInputChange(e.target.value)}
                 placeholder="Type your address..."
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("address1") ? "redBorderLine" : ""}`}
               />
               {suggestions?.length > 0 && address?.length !== 0 && (
                 <div className="autocomplete-dropdown">
@@ -835,7 +837,7 @@ const OverviewById = () => {
             <label htmlFor="" className="common-fonts bmp-academy-name">
               Select your sport
             </label>
-            <div className={`bmp-games ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
+            <div className={`bmp-games ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("sport") ? "redBorderLine" : ""}`}>
 
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("arts") ? "bmp-game-active" : ""
@@ -1090,7 +1092,7 @@ const OverviewById = () => {
 
               <input
                 type="number"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("phone") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("phone") ? "redBorderLine" : ""}`}
                 name={index === 0 ? "phone" : "whatsapp"}
                 onChange={handleChange}
                 value={
@@ -1122,7 +1124,7 @@ const OverviewById = () => {
             <input
               type="email"
               name="email"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("email") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("email") ? "redBorderLine" : ""}`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
@@ -1137,7 +1139,7 @@ const OverviewById = () => {
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("website") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("website") ? "redBorderLine" : ""}`}
             />
           </div>
 
@@ -1146,7 +1148,7 @@ const OverviewById = () => {
               Experience:{" "}
             </label>
             <select
-              className={`common-fonts common-input langSelect ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("experience") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input langSelect ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("experience") ? "redBorderLine" : ""}`}
               name="experience"
               onChange={handleChange}
             >
@@ -1184,7 +1186,7 @@ const OverviewById = () => {
               name="timing"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.timing === null ? "10am-9pm" : academyData?.timing}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("timing") ? "redBorderLine" : ""}`}
             />
           </div>
         </div>
@@ -1198,7 +1200,7 @@ const OverviewById = () => {
             <div className="bmp-upload">
               <div className="contact-browse deal-doc-file">
                 <span
-                  className={`common-fonts common-input contact-tab-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("logo") ? "redBorderLine" : ""}`}
+                  className={`common-fonts common-input contact-tab-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("logo") ? "redBorderLine" : ""}`}
                   style={{
                     position: "relative",
                     marginRight: "10px",
@@ -1271,7 +1273,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("facebook") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("facebook") ? "redBorderLine" : ""}`}
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
@@ -1283,7 +1285,7 @@ const OverviewById = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("instagram") ? "redBorderLine" : ""}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("instagram") ? "redBorderLine" : ""}`}
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
@@ -1310,13 +1312,13 @@ const OverviewById = () => {
             </div>
 
             {mappedLanguages.map((mappedLanguage, index) => (
-              <div className={`bmp_overview_language_map  ${status === 0 && role_name === "Academy_admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}
+              <div className={`bmp_overview_language_map  ${status === 0 && role_name === "academy_admin" && keysOfNewAcadmeyData.includes("spoken_languages") ? "redBorderLine" : ""}
             }`}key={index}>
                 <p className={`common-fonts
                   }`}>
                   {mappedLanguage.language}
                 </p>{
-                  status === 0 && role_name === "Academy" ? (
+                  status === 0 && role_name === "academy" ? (
                     <img src={Dash2} alt="" />
                   ) : (
                     <img src={Dash} alt="" onClick={() => handleDeleteLanguage(index)} />
@@ -1330,7 +1332,7 @@ const OverviewById = () => {
       </div>
 
       <div className="bmp-bottom-btn">
-        {status === 0 && role_name === "Academy_admin" ? <>
+        {status === 0 && role_name === "academy_admin" ? <>
           <button onClick={openModal}
             className="common-save-button common-delete-button">
             Disapprove

@@ -245,7 +245,7 @@ const BmpOverview = () => {
         const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
         const intro = removeHtmlTags(finalAbout);
         setIntroduction(intro);
-        if (sport === null)
+        if (sport === null || sport === "")
           setIntroduction("-")
         const addressComponents = [
           response?.data?.data[0]?.address1,

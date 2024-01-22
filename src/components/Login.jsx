@@ -104,7 +104,7 @@ const Login = () => {
           localStorage.setItem("jwtToken", encryptedToken);
           const role_name = data?.user?.type;
           localStorage.setItem("role_name", role_name);
-          if (role_name === "Academy Admin")
+          if (role_name === "Academy_admin")
             localStorage.setItem("id", data?.user?.id);
           else
           {localStorage.setItem("id", data?.user?.id);

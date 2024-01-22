@@ -136,7 +136,7 @@ const Gallery = () => {
     }
   }
   useEffect(() => {
-    if (status === 0 && role_name === "Academy_admin") {
+    if (status === 0 && role_name === "academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name]);
@@ -915,7 +915,7 @@ const Gallery = () => {
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy_admin" ?
+            {status === 0 && role_name === "academy_admin" ?
               <>
                 <div className="outerBox">
                   {videoUrls?.map((video, index) => (
@@ -1007,7 +1007,7 @@ const Gallery = () => {
             }
           </>
           <>
-            {status === 0 && role_name === "Academy_admin" ?
+            {status === 0 && role_name === "academy_admin" ?
               <>
                 {/* ====================================================map for admin photos */}
                 <div className={`outerBox`}>
@@ -1096,7 +1096,7 @@ const Gallery = () => {
             }
           </>
           <div className="bmp-bottom-btn">
-            {status === 0 && role_name === "Academy_admin" ?
+            {status === 0 && role_name === "academy_admin" ?
               <>
                 <button
                   onClick={openModal}
@@ -1124,7 +1124,7 @@ const Gallery = () => {
                 ) : (
                   <button
                     className="common-fonts common-save-button"
-                    onClick={role_name === "Academy_admin" ? ApproveSubmit : handleSubmit2}
+                    onClick={role_name === "academy_admin" ? ApproveSubmit : handleSubmit2}
                   >
                     Save
                   </button>
