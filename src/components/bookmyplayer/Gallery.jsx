@@ -753,7 +753,7 @@ const Gallery = () => {
                   }`}
                 onClick={() => handleTabClick("academy")}
               >
-                <span className="mrkt-whatsapp"><span>{role_name}</span> & Banner</span>
+                <span className="mrkt-whatsapp"><span style={{textTransform: "capitalize"}}>{role_name}</span> & Banner</span>
               </button>
               <button
                 className={`genral-btn contact-genral-btn ${activeTab === "training" ? "genral-active" : ""

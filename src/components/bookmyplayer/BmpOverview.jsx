@@ -612,7 +612,7 @@ const BmpOverview = () => {
 
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
-              <span>{role_name}</span> name
+              <span style={{textTransform: "capitalize"}}>{role_name}</span> name
             </label>
             <input
               type="text"
@@ -1084,7 +1084,7 @@ const BmpOverview = () => {
         <div>
           <ProgressBar array={progressArray} />
           <div className="bmp-right-fields">
-            <p className="common-fonts">Upload <span>{role_name}</span> Logo</p>
+            <p className="common-fonts">Upload <span style={{textTransform: "capitalize"}}>{role_name}</span> Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>
 
             <div className="bmp-upload">
