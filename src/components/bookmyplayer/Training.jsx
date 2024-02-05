@@ -90,6 +90,8 @@ const Training = ({
     // }
     )
     .then((response) => {
+      if (response?.data?.data && response?.data?.data?.length !== 0) 
+      {
         setAcademyData(response?.data?.data[0]);
 
         if (
@@ -118,7 +120,8 @@ const Training = ({
             response.data.data[0].updated_column?.split(",").reverse()
           );
         }
-      })
+      }
+    })
       .catch((error) => {
         console.log(error);
       });

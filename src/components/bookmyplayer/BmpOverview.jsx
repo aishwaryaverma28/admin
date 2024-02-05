@@ -235,7 +235,8 @@ const BmpOverview = () => {
       // }
       )
       .then((response) => {
-
+        if (response?.data?.data && response?.data?.data?.length !== 0) 
+        {
         localStorage.setItem("url", response?.data?.data[0]?.url);
         const sport = response?.data?.data[0]?.sport;
         const academyName = response?.data?.data[0]?.name;
@@ -293,7 +294,8 @@ const BmpOverview = () => {
           setMappedLanguages([...newLanguage]);
         }
         setIsLoading(false);
-      })
+      }
+    })
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
@@ -610,7 +612,7 @@ const BmpOverview = () => {
 
           <div className="bmp-input-flex">
             <label htmlFor="" className="common-fonts bmp-academy-name">
-              Academy name
+              <span>{role_name}</span> name
             </label>
             <input
               type="text"
@@ -1082,7 +1084,7 @@ const BmpOverview = () => {
         <div>
           <ProgressBar array={progressArray} />
           <div className="bmp-right-fields">
-            <p className="common-fonts">Upload Academic Logo</p>
+            <p className="common-fonts">Upload <span>{role_name}</span> Logo</p>
             <p className="common-fonts">Recommended image size 190x190</p>
 
             <div className="bmp-upload">
