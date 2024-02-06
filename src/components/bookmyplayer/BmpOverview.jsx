@@ -128,6 +128,7 @@ const BmpOverview = () => {
         console.log(error);
       });
   };
+  console.log(status)
   //=====================================================================language changes
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);
@@ -616,12 +617,12 @@ const BmpOverview = () => {
             </label>
             <input
               type="text"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
               name="name"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.name || ""}
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             />
           </div>
           <div className="bmp-input-flex">
@@ -633,10 +634,10 @@ const BmpOverview = () => {
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.about === null ? introduction : academyData?.about}
               id=""
-              className={`common-fonts bmp-textarea ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts bmp-textarea ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
               rows="2"
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             ></textarea>
           </div>
           <div className="bmp-input-flex">
@@ -649,9 +650,9 @@ const BmpOverview = () => {
                 value={address}
                 onChange={(e) => handleInputChange(e.target.value)}
                 placeholder="Type your address..."
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                   }`}
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
               />
               {suggestions?.length > 0 && address?.length !== 0 && (
                 <div className="autocomplete-dropdown">
@@ -688,250 +689,250 @@ const BmpOverview = () => {
             <div className="bmp-games">
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("arts") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("arts")}
               >
                 Arts
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("atheletics") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("atheletics")}
               >
                 Atheletics
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("badminton") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("badminton")}
               >
                 Badminton
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("basketball") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("basketball")}
               >
                 Basketball
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("billiards") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("billiards")}
               >
                 Billiards
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("boxing") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("boxing")}
               >
                 Boxing
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("chess") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("chess")}
               >
                 Chess
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("cricket") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("cricket")}
               >
                 Cricket
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("fencing") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("fencing")}
               >
                 fencing
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("football") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("football")}
               >
                 football
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("golf") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("golf")}
               >
                 golf
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("hockey") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("hockey")}
               >
                 hockey
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("kabaddi") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("kabaddi")}
               >
                 Kabaddi
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("kho-kho") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("kho-kho")}
               >
                 kho-kho
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("mma") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("mma")}
               >
                 MMA
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("motor sports") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("motor sports")}
               >
                 Motor sports
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("shooting") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("shooting")}
               >
                 Shooting
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("skating") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("skating")}
               >
                 Skating
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("squash") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("squash")}
               >
                 Squash
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("swimming") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("swimming")}
               >
                 Swimming
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("table-tennis") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("table-tennis")}
               >
                 Table-tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("taekwondo") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("taekwondo")}
               >
                 Taekwondo
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("tennis") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("tennis")}
               >
                 Tennis
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("volleyball") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("volleyball")}
               >
                 Volleyball
               </div>
               <div
                 className={`common-fonts bmp-game-list ${selectedDays?.includes("wrestling") &&
-                  !(status === 0 && role_name === "academy")
+                  !(status === 0 && role_name === ('academy' || 'player'))
                   ? "bmp-game-active"
                   : ""
-                  } ${status === 0 && role_name === "academy" ? "bmp_disable" : ""}`}
+                  } ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""}`}
                 onClick={() => handleDayClick("wrestling")}
               >
                 Wrestling
@@ -950,14 +951,14 @@ const BmpOverview = () => {
                     <label className="custom-checkbox">
                       <input
                         type="checkbox"
-                        className={`cb1 ${status === 0 && role_name === "academy"
+                        className={`cb1 ${status === 0 && role_name === ('academy' || 'player')
                           ? "bmp_disable"
                           : ""
                           }`}
                         name="headerCheckBox"
                         checked={isWhatsappActivated}
                         onChange={handleCheckboxChange}
-                        disabled={status === 0 && role_name === "academy"}
+                        disabled={status === 0 && role_name === ('academy' || 'player')}
                       />
                       <span className="checkmark"></span>
                     </label>
@@ -970,10 +971,10 @@ const BmpOverview = () => {
 
               <input
                 type="number"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                   }`}
                 name={index === 0 ? "phone" : "whatsapp"}
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
                 onChange={handleChange}
                 value={
                   isLoading
@@ -989,10 +990,10 @@ const BmpOverview = () => {
           {isButtonVisible && (
             <div>
               <button
-                className={`common-fonts common-white-blue-button bmp-add-phone ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+                className={`common-fonts common-white-blue-button bmp-add-phone ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                   }`}
                 onClick={addPhoneNumberInput}
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
               >
                 + Add Phone Number
               </button>
@@ -1006,12 +1007,12 @@ const BmpOverview = () => {
             <input
               type="email"
               name="email"
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.email || ""}
               style={{ textTransform: "none" }}
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             />
           </div>
           <div className="bmp-input-flex">
@@ -1023,9 +1024,9 @@ const BmpOverview = () => {
               name="website"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.website || ""}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             />
           </div>
 
@@ -1034,11 +1035,11 @@ const BmpOverview = () => {
               Experience:{" "}
             </label>
             <select
-              className={`common-fonts common-input langSelect ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts common-input langSelect ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
               name="experience"
               onChange={handleChange}
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             >
               <option value="">Select Experience</option>
               <option value="1">1</option>
@@ -1074,9 +1075,9 @@ const BmpOverview = () => {
               name="timing"
               onChange={handleChange}
               value={isLoading ? "-" : academyData?.timing === null ? "10am-9pm" : academyData?.timing}
-              className={`common-fonts common-input bmp-input ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+              className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                 }`}
-              disabled={status === 0 && role_name === "academy"}
+              disabled={status === 0 && role_name === ('academy' || 'player')}
             />
           </div>
         </div>
@@ -1097,12 +1098,12 @@ const BmpOverview = () => {
                   }}
                 >
                   <button
-                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "academy"
+                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === ('academy' || 'player')
                       ? "bmp_disable"
                       : ""
                       }`}
                     onClick={handleButtonClick}
-                    disabled={status === 0 && role_name === "academy"}
+                    disabled={status === 0 && role_name === ('academy' || 'player')}
                   >
                     Browse
                   </button>
@@ -1126,7 +1127,7 @@ const BmpOverview = () => {
                       Uploading...
                     </span>
                   ) : (
-                    <span className={`common-fonts upload-file-name ${status === 0 && role_name === 'academy' ? 'bmp_disable' : ''}`}>
+                    <span className={`common-fonts upload-file-name ${status === 0 && role_name === ('academy' || 'player') ? 'bmp_disable' : ''}`}>
                       {fileName ? fileName : academyData?.logo}
                       { }
                     </span>
@@ -1167,11 +1168,11 @@ const BmpOverview = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === 'academy' ? 'bmp_disable' : ''}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? 'bmp_disable' : ''}`}
                 name="facebook"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.facebook || ""}
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
               />
             </div>
             {/* <div className="bmp-input-flex">
@@ -1189,11 +1190,11 @@ const BmpOverview = () => {
               </label>
               <input
                 type="text"
-                className={`common-fonts common-input bmp-input ${status === 0 && role_name === 'academy' ? 'bmp_disable' : ''}`}
+                className={`common-fonts common-input bmp-input ${status === 0 && role_name === ('academy' || 'player') ? 'bmp_disable' : ''}`}
                 name="instagram"
                 onChange={handleChange}
                 value={isLoading ? "-" : academyData?.instagram || ""}
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
               />
             </div>
             <div className="bmp_overview_language_flex">
@@ -1203,9 +1204,9 @@ const BmpOverview = () => {
               <select
                 value={selectedLanguageName}
                 onChange={handlelanguageNameChange}
-                className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === 'academy' ? 'bmp_disable' : ''}`}
+                className={`common-fonts common-input langSelect level_input bmp_lang_box${status === 0 && role_name === ('academy' || 'player') ? 'bmp_disable' : ''}`}
 
-                disabled={status === 0 && role_name === "academy"}
+                disabled={status === 0 && role_name === ('academy' || 'player')}
               >
                 <option value="">Select your language</option>
                 {languages.map((language) => (
@@ -1218,11 +1219,11 @@ const BmpOverview = () => {
 
             {mappedLanguages.map((mappedLanguage, index) => (
               <div className="bmp_overview_language_map" key={index}>
-                <p className={`common-fonts ${status === 0 && role_name === "academy" ? "bmp_disable" : ""
+                <p className={`common-fonts ${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                   }`}>
                   {mappedLanguage.language}
                 </p>{
-                  status === 0 && role_name === "academy" ? (
+                  status === 0 && role_name === ('academy' || 'player') ? (
                     <img src={Dash2} alt="" />
                   ) : (
                     <img src={Dash} alt="" onClick={() => handleDeleteLanguage(index)} />
@@ -1243,9 +1244,9 @@ const BmpOverview = () => {
           </button>
         ) : (
           <button
-            className={`${status === 0 && role_name === 'academy' ? "bmp_disable disabledBtn" : "common-save-button common-save"}`}
+            className={`${status === 0 && role_name === ('academy' || 'player') ? "bmp_disable disabledBtn" : "common-save-button common-save"}`}
             onClick={handleSubmit}
-            disabled={status === 0 && role_name === 'academy'}
+            disabled={status === 0 && role_name === ('academy' || 'player')}
           >
             Save
           </button>

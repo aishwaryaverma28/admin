@@ -873,12 +873,12 @@ const Gallery = () => {
                   }}
                 >
                   <button
-                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === "academy"
+                    className={`common-fonts contact-browse-btn ${status === 0 && role_name === ('academy' || 'player')
                       ? "bmp_disable"
                       : ""
                       }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === 'academy'}
+                    disabled={status === 0 && role_name === ('academy' || 'player')}
                   >
                     Browse
                   </button>

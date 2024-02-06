@@ -75,7 +75,7 @@ const Training = ({
     }
   };
   useEffect(() => {
-    if (status === 0 && role_name === "Academy_admin") {
+    if (status === 0 && role_name === "academy_admin") {
       updateAcadmeyData();
     }
   }, [newAcadmeyData, status, role_name, academyData]);
@@ -569,10 +569,10 @@ const Training = ({
               >
                 <button
                   className={`common-fonts contact-browse-btn ${
-                    status === 0 && role_name === "academy" ? "bmp_disable" : ""
+                    status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
                   }`}
                   onClick={handleButtonClick}
-                  disabled={status === 0 && role_name === "academy"}
+                  disabled={status === 0 && role_name === ('academy' || 'player')}
                 >
                   Browse
                 </button>
@@ -611,7 +611,7 @@ const Training = ({
           </div>
         </div>
         <>
-          {status === 0 && role_name === "Academy_admin" ? (
+          {status === 0 && role_name === "academy_admin" ? (
             <>
               {/* ====================================================map for admin photos */}
               <div className={`outerBox`}>
@@ -736,12 +736,12 @@ const Training = ({
                 >
                   <button
                     className={`common-fonts contact-browse-btn ${
-                      status === 0 && role_name === "academy"
+                      status === 0 && role_name === ('academy' || 'player')
                         ? "bmp_disable"
                         : ""
                     }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === "academy"}
+                    disabled={status === 0 && role_name === ('academy' || 'player')}
                   >
                     Browse
                   </button>
@@ -780,7 +780,7 @@ const Training = ({
             </div>
           </div>
           <>
-            {status === 0 && role_name === "Academy_admin" ? (
+            {status === 0 && role_name === "academy_admin" ? (
               <>
                 <div className={`outerBox`}>
                   {photoUrls2?.map((photo, index) => (
@@ -877,7 +877,7 @@ const Training = ({
           </>
         </>
         <div className="bmp-bottom-btn">
-          {status === 0 && role_name === "Academy_admin" ? (
+          {status === 0 && role_name === "academy_admin" ? (
             <>
               <button
                 onClick={openModal}
