@@ -249,3 +249,15 @@
     left:5%;
 
 }
+
+/* dashboard css  */
+
+.dashboard_header{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #909db0;
+  margin-top: 0.01rem;
+}
+/* dashboard css ends */
