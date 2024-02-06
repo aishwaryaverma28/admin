@@ -36,11 +36,11 @@ const Dashboard = () => {
           <div className="dashboard_item">
             <div className="dashboard_card">
               <h3 className="common_fontscommon_fonts">Login</h3>
-              <p className="common_fonts">94</p>
+              <p className="common_fonts dash_num">94</p>
             </div>
             <div className="dashboard_card">
               <h3 className="font_new">Registration</h3>
-              <p className="common_fonts">36</p>
+              <p className="common_fonts dash_num">36</p>
             </div>
           </div>
 
@@ -48,29 +48,25 @@ const Dashboard = () => {
 
           <div className="dashboard_item">
             <div className="dashboard_card">
-              <h3 className="common_fontscommon_fonts">Academy</h3>
-              <p className="common_fonts">94</p>
+              <h3 className="common_fonts">Academy</h3>
+              <p className="common_fonts dash_num">94</p>
             </div>
             <div className="dashboard_card">
               <h3 className="font_new">Individuals</h3>
-              <p className="common_fonts">36</p>
+              <p className="common_fonts dash_num">36</p>
             </div>
           </div>
 
           <div className="dashboard_item">
             <div className="dashboard_card">
-              <h3 className="common_fontscommon_fonts">Leads</h3>
-              <p className="common_fonts">70</p>
+              <h3 className="common_fonts">Leads</h3>
+              <p className="common_fonts dash_num">70</p>
             </div>
             <div className="dashboard_card">
               <h3 className="font_new">Subscriptions</h3>
-              <p className="common_fonts">34</p>
+              <p className="common_fonts dash_num">34</p>
             </div>
           </div>
-
-          <div className="dashboard_item"></div>
-          <div className="dashboard_item"></div>
-          <div className="dashboard_item"></div>
         </div>
       </div>
     </section>
