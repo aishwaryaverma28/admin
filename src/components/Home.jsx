@@ -54,7 +54,7 @@ const Home = () => {
           ) : tableData?.length === 0 ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
           ) : (
-            <Dashboard/>
+            <Dashboard blog={tableData}/>
           )}
         </>
       ) : (

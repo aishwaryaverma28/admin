@@ -1,11 +1,107 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { getDecryptedToken } from "./utils/Constants";
+const Dashboard = ({blog}) => {
+  const [selectedOption, setSelectedOption] = useState("last_thirty_days");
+  const decryptedToken = getDecryptedToken();
+  const [leadsCount, setLeadsCount] = useState(null);
+  const [stats, setStats] = useState(null);
 
-const Dashboard = () => {
+  useEffect(() => {
+    const today = new Date();
+    const lastThirtyDaysStartDate = new Date(today);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+    const endDate = today.toISOString().split("T")[0];
+    axios.post ("https://core.leadplaner.com/api/api/bmp/getstats" , {
+      startDate: startDate,
+      endDate: endDate
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      if (response?.data?.status === 1) {
+        setLeadsCount(response?.data?.data?.leads)
+        setStats(response?.data?.data?.stats)
+      }
+    })
+  }, []);
+
+  const handleSelectChange = (e) => {
+    setSelectedOption(e.target.value);
+    let startDate, endDate;
+    const today = new Date();
+    switch (e.target.value) {
+      case "today":
+        startDate = today.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "yesterday":
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        startDate = yesterday.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "this_week":
+        const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+        startDate = firstDayOfWeek.toISOString().split("T")[0];
+        endDate = today.toISOString().split("T")[0];
+        break;
+      case "last_week":
+        const lastWeekEndDate = new Date();
+        lastWeekEndDate.setDate(lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1);
+        const lastWeekStartDate = new Date(lastWeekEndDate);
+        lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
+        startDate = lastWeekStartDate.toISOString().split("T")[0];
+        endDate = lastWeekEndDate.toISOString().split("T")[0];
+        break;
+    case "last_seven_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSevenDaysStartDate = new Date(today);
+        lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
+        startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
+        break;
+    case "last_fourteen_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastFourteenDaysStartDate = new Date(today);
+        lastFourteenDaysStartDate.setDate(lastFourteenDaysStartDate.getDate() - 13);
+        startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
+        break;
+    case "last_twenty_eight_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastTwentyEightDaysStartDate = new Date(today);
+        lastTwentyEightDaysStartDate.setDate(lastTwentyEightDaysStartDate.getDate() - 27);
+        startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
+        break;
+    case "last_thirty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastThirtyDaysStartDate = new Date(today);
+        lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+        startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+        break;
+    case "last_sixty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSixtyDaysStartDate = new Date(today);
+        lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
+        startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
+        break;
+    
+      default:
+        startDate = "";
+        endDate = "";
+        break;
+    }
+    // Call your API with startDate and endDate
+    // apiCall(startDate, endDate);
+  };
   return (
     <section>
       <div className="dashboard_header">
         <div>
-          <select className="selectSec">
+        <select className="selectSec" onChange={handleSelectChange} value={selectedOption}>
             <option value="">Select Days</option>
             <option value="today">Today</option>
             <option value="yesterday">Yesterday</option>
@@ -45,26 +141,27 @@ const Dashboard = () => {
           </div>
 
           <h2>USERS</h2>
-
           <div className="dashboard_item">
-            <div className="dashboard_card">
-              <h3 className="common_fonts">Academy</h3>
-              <p className="common_fonts dash_num">94</p>
-            </div>
-            <div className="dashboard_card">
-              <h3 className="font_new">Individuals</h3>
-              <p className="common_fonts dash_num">36</p>
-            </div>
+            {stats && stats.map((item, index) => (
+              <div className="dashboard_card" key={index}>
+                <h3 className="common_fonts">{item.type}</h3>
+                <p className="common_fonts dash_num">{item.count}</p>
+              </div>
+            ))}
           </div>
-
+          
           <div className="dashboard_item">
             <div className="dashboard_card">
               <h3 className="common_fonts">Leads</h3>
-              <p className="common_fonts dash_num">70</p>
+              <p className="common_fonts dash_num">{leadsCount ? leadsCount?.length : 0}</p>
             </div>
             <div className="dashboard_card">
               <h3 className="font_new">Subscriptions</h3>
               <p className="common_fonts dash_num">34</p>
+            </div>
+            <div className="dashboard_card">
+              <h3 className="font_new">Blogs</h3>
+              <p className="common_fonts dash_num">{blog ? blog?.length : 0}</p>
             </div>
           </div>
         </div>
