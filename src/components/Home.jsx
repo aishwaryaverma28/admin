@@ -14,8 +14,34 @@ const Home = () => {
   const role_name = localStorage.getItem("role_name")
   const userName = useSelector(store => store.user.items);
   const [tableData, setTableData] = useState([]);
+  const [stats, setStats] =useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  // console.log(userName[0][0]?.email)
+  useEffect(() => {
+    const today = new Date();
+    const lastThirtyDaysStartDate = new Date(today);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+    const endDate = today.toISOString().split("T")[0]; 
+    axios.post ("https://core.leadplaner.com/api/api/bmp/getstats" , {
+      startDate: startDate,
+      endDate: endDate
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+    .then((response) => {
+      if (response?.data?.status === 1) {
+        setStats(response?.data?.data?.stats)
+        setIsLoading(false);
+      }
+    })
+    .catch((error) => {
+      console.log(error);      
+      setIsLoading(false);
+    })
+  }, []);
   const blogData = () => {
     const siteName = {
       siteName: "bookmyplayer",
@@ -32,11 +58,9 @@ const Home = () => {
         if (response?.data?.status === 1) {
           setTableData(response?.data?.data);
         }
-        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setIsLoading(false);
       });
   };
   useEffect(() => {
@@ -51,7 +75,7 @@ const Home = () => {
         <>
           {isLoading ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
-          ) : tableData?.length === 0 ? (
+          ) : stats?.length === 0 ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
           ) : (
             <Dashboard blog={tableData}/>

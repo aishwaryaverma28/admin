@@ -31,6 +31,9 @@ const getData = (startDate, endDate) => {
       setStats(response?.data?.data?.stats)
     }
   })
+  .catch((error) => {
+    console.log(error);
+  })
 }
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
@@ -103,7 +106,6 @@ getData(startDate, endDate);
       <div className="dashboard_header">
         <div>
         <select className="selectSec" onChange={handleSelectChange} value={selectedOption}>
-            <option value="">Select Days</option>
             <option value="today">Today</option>
             <option value="yesterday">Yesterday</option>
             <option value="this_week">This Week</option>
@@ -116,8 +118,7 @@ getData(startDate, endDate);
           </select>
         </div>
         <div>
-          <select class="selectSec">
-            <option value="">Select Site</option>
+          <select className="selectSec">
             <option value="bookmyplayer">bookmyplayer</option>
             <option value="leadplaner">leadplaner</option>
             <option value="firstcron">firstcron</option>
