@@ -13,23 +13,25 @@ const Dashboard = ({blog}) => {
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
     const endDate = today.toISOString().split("T")[0];
-    axios.post ("https://core.leadplaner.com/api/api/bmp/getstats" , {
-      startDate: startDate,
-      endDate: endDate
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
-    .then((response) => {
-      if (response?.data?.status === 1) {
-        setLeadsCount(response?.data?.data?.leads)
-        setStats(response?.data?.data?.stats)
-      }
-    })
+    getData(startDate, endDate)
   }, []);
-
+const getData = (startDate, endDate) => {
+  axios.post ("https://core.leadplaner.com/api/api/bmp/getstats" , {
+    startDate: startDate,
+    endDate: endDate
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`,
+    },
+  })
+  .then((response) => {
+    if (response?.data?.status === 1) {
+      setLeadsCount(response?.data?.data?.leads)
+      setStats(response?.data?.data?.stats)
+    }
+  })
+}
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
     let startDate, endDate;
@@ -94,8 +96,7 @@ const Dashboard = ({blog}) => {
         endDate = "";
         break;
     }
-    // Call your API with startDate and endDate
-    // apiCall(startDate, endDate);
+getData(startDate, endDate);
   };
   return (
     <section>
