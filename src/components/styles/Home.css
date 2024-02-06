@@ -265,7 +265,7 @@
 .dashboard_view{
   display: grid;
   grid-template-columns:1fr 2fr;
-  height: 100%;
+  height:80vh;
 }
 
 .dashboard_left{
@@ -277,6 +277,8 @@
   margin-left: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .dashboard_item{
@@ -294,7 +296,7 @@
 .font_new{
   color: #1e2224;
   font-family: "Lexend Deca", sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   line-height: normal;
   letter-spacing: -0.02563rem;
   text-transform: none;
@@ -302,5 +304,13 @@
 
 .dashboard_card h3{
 margin-bottom: 0.6rem;
+font-weight: 400;
+font-size: 1rem;
+}
+
+.dash_num{
+font-weight: 400;
+font-size: 1rem;
+color:#2b74da; 
 }
 /* dashboard css ends */
