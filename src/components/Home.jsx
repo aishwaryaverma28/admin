@@ -4,7 +4,8 @@ import axios from "axios";
 
 import { BLOG_GET, getDecryptedToken } from "./utils/Constants";
 import { useSelector } from "react-redux";
-import BlogPerformance from "./BlogPerformance";
+// import BlogPerformance from "./BlogPerformance";
+import Dashboard from "./Dashboard.jsx";
 import StaticHome from "./StaticHome";
 
 const Home = () => {
@@ -53,7 +54,7 @@ const Home = () => {
           ) : tableData?.length === 0 ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
           ) : (
-            <BlogPerformance data={tableData}/>
+            <Dashboard/>
           )}
         </>
       ) : (
