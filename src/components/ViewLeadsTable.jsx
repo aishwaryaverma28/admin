@@ -38,7 +38,9 @@ const ViewLeadsTable = ({data}) => {
           <td className="common-fonts">{item?.object_type}</td>
           <td className="common-fonts">{item?.phone}</td>
           <td className="common-fonts">{item?.type}</td>
-          <td className="common-fonts"> {item?.description}</td>
+          <td className="common-fonts"><div className='leads_desc'>
+          {item?.description}
+          </div></td>
         </tr>
       ))}
     </tbody>

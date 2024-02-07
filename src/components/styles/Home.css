@@ -242,24 +242,22 @@
   font-weight: 0.875rem;
 }
 
-
-.time-icon{
-    position: absolute;
-    top:80%;
-    left:5%;
-
+.time-icon {
+  position: absolute;
+  top: 80%;
+  left: 5%;
 }
 
 /* dashboard css  */
 
-.dashboard_header{
+.dashboard_header {
   display: flex;
   justify-content: end;
   align-items: center;
   background-color: #fff;
-  box-shadow:0 3px 5px -3px #e1d9d9;
+  box-shadow: 0 3px 5px -3px #e1d9d9;
   margin-top: 0.01rem;
-  gap:1rem;
+  gap: 1rem;
   padding-bottom: 1rem;
   padding-top: 1rem;
 }
@@ -277,17 +275,17 @@
   border-radius: 5px;
 }
 
-.dashboard_view{
+.dashboard_view {
   display: grid;
-  grid-template-columns:300px auto;
-  height:80vh;
+  grid-template-columns: 300px auto;
+  height: 80vh;
 }
 
-.dashboard_left{
+.dashboard_left {
   border-right: 1px solid #dcdcdc;
 }
 
-.dashboard_left h2{
+.dashboard_left h2 {
   color: #222;
   margin-left: 1rem;
   margin-top: 1rem;
@@ -296,17 +294,16 @@
   font-weight: 500;
 }
 
-.dashboard_item{
+.dashboard_item {
   display: flex;
   justify-content: start;
   align-items: center;
   padding: 1rem;
-  gap:2rem;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
-
-.font_new{
+.font_new {
   color: #1e2224;
   font-family: "Lexend Deca", sans-serif;
   font-weight: 400;
@@ -315,36 +312,50 @@
   text-transform: none;
 }
 
-.dashboard_card h3{
-margin-bottom: 0.6rem;
-font-weight: 400;
-font-size: 1rem;
-cursor: pointer;
+.dashboard_card h3 {
+  margin-bottom: 0.6rem;
+  font-weight: 400;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-.dash_num{
-font-weight: 400;
-font-size: 1rem;
-color:#2b74da; 
+.dash_num {
+  font-weight: 400;
+  font-size: 1rem;
+  color: #2b74da;
 }
 
-.leads_new_btn{
+.leads_new_btn {
   display: flex;
   justify-content: end;
   align-items: center;
   padding: 1rem;
 }
 
-.lead_input_box{
-  width:100%;
+.lead_input_box {
+  width: 100%;
   margin-left: 1rem;
 }
 
-.lead_text_area textarea{
+.lead_text_area textarea {
   height: 4rem;
 }
 
-.leads_new_tab{
+.leads_new_tab {
   margin: 1rem;
 }
+
+.leads_table_height {
+  height: 22rem;
+  overflow: scroll;
+}
+
+.leads_new_tab table tr th:nth-child(7) {
+  width: 20rem;
+}
+.leads_desc {
+  height: 3.5rem;
+  overflow-y: scroll;
+}
+
 /* dashboard css ends */

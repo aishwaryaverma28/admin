@@ -3,7 +3,6 @@ import axios from "axios";
 import { getDecryptedToken } from "./utils/Constants";
 import BlogPerformance from "./BlogPerformance.jsx";
 import LeadModal from "./LeadModal.jsx";
-import ViewLeadsPage from "./master-settings/leads/ViewLeadsPage.jsx";
 import ViewLeadsTable from "./ViewLeadsTable.jsx";
 const Dashboard = ({ blog }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
@@ -217,7 +216,7 @@ const Dashboard = ({ blog }) => {
             <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
           </div>
 
-          <div className="leads_new_tab">
+          <div className="leads_new_tab leads_table_height">
             <ViewLeadsTable data={leadsCount}/>
           </div>
         </div>
