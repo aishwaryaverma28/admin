@@ -72,6 +72,8 @@ import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.
 import AddTournament from "./components/master-settings/tournament/AddTournament.jsx";
 import ViewTournament from "./components/master-settings/tournament/ViewTournament.jsx";
 import UpdateTournament from "./components/master-settings/tournament/UpdateTournament.jsx";
+import AddLeadPage from "./components/master-settings/leads/AddLeadPage.jsx";
+import ViewLeadsPage from "./components/master-settings/leads/ViewLeadsPage.jsx";
 import Opening from "./components/Opening.jsx";
 const router = createBrowserRouter([
   {
@@ -293,6 +295,14 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/tournament/view",
             element: <SecureRoutes Component={ViewTournament}/>,
+          },
+          {
+            path: "/lp/settings/leads/add",
+            element: <AddLeadPage />,
+          },
+          {
+            path: "/lp/settings/leads/view",
+            element: <ViewLeadsPage />,
           },
           {
             path: "/lp/settings/blog/tournament/:id",
