@@ -256,10 +256,25 @@
   display: flex;
   justify-content: end;
   align-items: center;
-  padding: 0.5rem;
   background-color: #fff;
   box-shadow:0 3px 5px -3px #e1d9d9;
   margin-top: 0.01rem;
+  gap:1rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.select_new {
+  cursor: pointer;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  color: #565c5f;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Lexend Deca", sans-serif;
+  text-transform: capitalize;
+  padding: 10px 15px;
+  border-radius: 5px;
 }
 
 .dashboard_view{
@@ -290,9 +305,6 @@
   flex-wrap: wrap;
 }
 
-.dashboard_card{
-  width:5rem;
-}
 
 .font_new{
   color: #1e2224;
@@ -330,5 +342,9 @@ color:#2b74da;
 
 .lead_text_area textarea{
   height: 4rem;
+}
+
+.leads_new_tab{
+  margin: 1rem;
 }
 /* dashboard css ends */

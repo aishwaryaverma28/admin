@@ -129,14 +129,12 @@ const ViewLeadsPage = () => {
   };
 
   return (
-    <>
-    <header className="headerEditor">
-      <p className="common-fonts add-new-blog"> View Leads</p>
-      </header>
+    <div className="leads_new_tab">
+   
       <div className="dashboard_header">
         <div>
           <select
-            className="selectSec"
+            className="select_new"
             onChange={handleSelectChange}
             value={selectedOption}
           >
@@ -152,7 +150,7 @@ const ViewLeadsPage = () => {
           </select>
         </div>
         <div>
-          <select className="selectSec">
+          <select className="select_new">
             <option value="bookmyplayer">bookmyplayer</option>
             <option value="leadplaner">leadplaner</option>
             <option value="firstcron">firstcron</option>
@@ -196,7 +194,7 @@ const ViewLeadsPage = () => {
           </tbody>
         </table>
       )}
-    </>
+    </div>
   )
 }
 
