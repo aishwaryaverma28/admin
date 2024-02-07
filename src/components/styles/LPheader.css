@@ -536,7 +536,13 @@ letter-spacing: -0.02563rem;
   }
   .performance_title{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin-top: 1rem;
     color: #2b74da !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .performance_title img{
+    cursor: pointer;
   }

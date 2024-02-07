@@ -1,5 +1,6 @@
 import React from "react";
-const BlogPerformance = ({ data}) => {
+import Back from "../assets/image/arrow-left.svg"
+const BlogPerformance = ({ data , onClose}) => {
 
   console.log(data);
   const formatDate = (isoDate) => {
@@ -18,6 +19,7 @@ const BlogPerformance = ({ data}) => {
     <div className="performance_table_box">
       <div className="marketing-all-table new_table_1">
         <div className="performance_title">
+        <img src={Back} alt=""  onClick={onClose}/>
           <span>PERFORMANCE DATA</span>
           <span>Total Blog: {data?.length}</span>
         </div>
