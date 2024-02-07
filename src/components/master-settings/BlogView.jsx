@@ -5,7 +5,7 @@ import { BLOG_GET, getDecryptedToken } from "../utils/Constants";
 import { Link } from "react-router-dom";
 import TablePaginationBlog from "./TablePaginationBlog";
 
-const EmployeeView = () => {
+const BlogView = () => {
   const org_id = localStorage.getItem("org_id");
   const [value, setValue] = useState(10);
   const [tableData, setTableData] = useState([]);
@@ -60,7 +60,7 @@ const EmployeeView = () => {
   return (
     <>
       <header className="headerEditor">
-        <h2>View Blog Details</h2>
+      <p className="common-fonts add-new-blog"> View Blog Details</p>
       </header>
       <div className="buttonBox">
         <div className="searchBar">
@@ -100,4 +100,4 @@ const EmployeeView = () => {
   );
 };
 
-export default EmployeeView;
+export default BlogView;
