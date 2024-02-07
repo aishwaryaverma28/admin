@@ -236,3 +236,5 @@ export const UPDATE_LEAGUE = start + "/bmp/league/update/";
 
 //=====================================================================lead review
 export const GET_ALL_LEADS = start + "/ezuka/leads/get-all";
+
+export const ADD_BMP_LEADS = start + "/bmp/createLeads";
