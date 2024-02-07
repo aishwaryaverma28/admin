@@ -4,6 +4,7 @@ import { getDecryptedToken } from "./utils/Constants";
 import BlogPerformance from "./BlogPerformance.jsx";
 import LeadModal from "./LeadModal.jsx";
 import ViewLeadsPage from "./master-settings/leads/ViewLeadsPage.jsx";
+import ViewLeadsTable from "./ViewLeadsTable.jsx";
 const Dashboard = ({ blog }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
@@ -217,13 +218,13 @@ const Dashboard = ({ blog }) => {
           </div>
 
           <div className="leads_new_tab">
-            <ViewLeadsPage/>
+            <ViewLeadsTable data={leadsCount}/>
           </div>
         </div>
       </div>
       {
         openLead && (
-          <LeadModal onClose={addLeadClose} />
+          <LeadModal onClose={addLeadClose} getData={getData} />
         )
       }
     </section>
