@@ -8,6 +8,8 @@ const Dashboard = ({ blog }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
   const [leadsCount, setLeadsCount] = useState(null);
+  const [login, setLogin] = useState(null);
+  const [reg, setReg] = useState(null);
   const [stats, setStats] = useState(null);
   const [openBlog, setOpenBlog] = useState(false);
   const [openLead, setOpenLead] = useState(false);
@@ -49,9 +51,12 @@ const Dashboard = ({ blog }) => {
         }
       )
       .then((response) => {
+        console.log(response?.data?.data?.otpStats[0]?.count);
         if (response?.data?.status === 1) {
           setLeadsCount(response?.data?.data?.leads);
           setStats(response?.data?.data?.stats);
+          setLogin(response?.data?.data?.otpStats[0]?.count);
+          setReg(response?.data?.data?.otpStats[1]?.count);
         }
       })
       .catch((error) => {
@@ -172,11 +177,11 @@ const Dashboard = ({ blog }) => {
           <div className="dashboard_item">
             <div className="dashboard_card">
               <h3 className="common_fontscommon_fonts">Login</h3>
-              <p className="common_fonts dash_num">94</p>
+              <p className="common_fonts dash_num">{login ? login : 0}</p>
             </div>
             <div className="dashboard_card">
               <h3 className="font_new">Registration</h3>
-              <p className="common_fonts dash_num">36</p>
+              <p className="common_fonts dash_num">{reg ? reg : 0}</p>
             </div>
           </div>
 
