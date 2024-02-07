@@ -129,6 +129,10 @@ select:focus {
   /* Adds a blue box shadow when input is focused */
 }
 
+textarea{
+  outline: none;
+}
+
 .common-fonts {
   color: #1e2224;
   font-family: "Lexend Deca", sans-serif;
