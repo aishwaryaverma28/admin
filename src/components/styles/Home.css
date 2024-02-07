@@ -290,7 +290,7 @@
 }
 
 .dashboard_card{
-  width: 4rem;
+  width:6rem;
 }
 
 .font_new{
@@ -306,6 +306,7 @@
 margin-bottom: 0.6rem;
 font-weight: 400;
 font-size: 1rem;
+cursor: pointer;
 }
 
 .dash_num{
