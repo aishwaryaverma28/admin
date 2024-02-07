@@ -32,9 +32,13 @@ const Dashboard = ({ blog }) => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
-    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-    const endDate = today.toISOString().split("T")[0];
-    getData(startDate, endDate);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];    
+    // Adjust the endDate calculation to increase it by 1 day
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 1);
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+  
+    getData(startDate, formattedEndDate);
   }, []);
   const getData = (startDate, endDate) => {
     axios
