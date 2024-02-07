@@ -264,7 +264,7 @@
 
 .dashboard_view{
   display: grid;
-  grid-template-columns:1fr 2fr;
+  grid-template-columns:300px auto;
   height:80vh;
 }
 
@@ -286,11 +286,12 @@
   justify-content: start;
   align-items: center;
   padding: 1rem;
-  gap:3rem;
+  gap:2rem;
+  flex-wrap: wrap;
 }
 
 .dashboard_card{
-  width:6rem;
+  width:5rem;
 }
 
 .font_new{
@@ -313,5 +314,21 @@ cursor: pointer;
 font-weight: 400;
 font-size: 1rem;
 color:#2b74da; 
+}
+
+.leads_new_btn{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 1rem;
+}
+
+.lead_input_box{
+  width:100%;
+  margin-left: 1rem;
+}
+
+.lead_text_area textarea{
+  height: 4rem;
 }
 /* dashboard css ends */

@@ -2,12 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getDecryptedToken } from "./utils/Constants";
 import BlogPerformance from "./BlogPerformance.jsx";
+import LeadModal from "./LeadModal.jsx";
 const Dashboard = ({ blog }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
   const [leadsCount, setLeadsCount] = useState(null);
   const [stats, setStats] = useState(null);
   const [openBlog, setOpenBlog] = useState(false);
+  const [openLead, setOpenLead] = useState(false);
+
+  const addLeadClick = () => {
+    setOpenLead(true)
+  }
+  const addLeadClose = () => {
+    setOpenLead(false)
+  }
 
   const blogClick = () => {
     setOpenBlog(true);
@@ -200,7 +209,18 @@ const Dashboard = ({ blog }) => {
             </div>
           </div>
         </div>
+
+        <div className="dashboard_right">
+          <div className="leads_new_btn">
+            <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
+          </div>
+        </div>
       </div>
+      {
+        openLead && (
+          <LeadModal onClose={addLeadClose} />
+        )
+      }
     </section>
   );
 };
