@@ -28,7 +28,7 @@ const ViewLeadsTable = ({data}) => {
       </tr>
     </thead>
     <tbody>
-      {data?.reverse()?.map((item, index) => (
+      {data?.map((item, index) => (
         <tr key={item?.id}>
           <td className="common-fonts">{index + 1}</td>
           <td className="common-fonts">

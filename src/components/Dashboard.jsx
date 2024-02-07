@@ -53,7 +53,7 @@ const Dashboard = ({ blog }) => {
       .then((response) => {
         console.log(response?.data?.data?.otpStats[0]?.count);
         if (response?.data?.status === 1) {
-          setLeadsCount(response?.data?.data?.leads);
+          setLeadsCount(response?.data?.data?.leads?.reverse());
           setStats(response?.data?.data?.stats);
           setLogin(response?.data?.data?.otpStats[0]?.count);
           setReg(response?.data?.data?.otpStats[1]?.count);
