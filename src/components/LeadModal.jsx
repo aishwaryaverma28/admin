@@ -9,6 +9,8 @@ const LeadModal = ({ onClose, getData }) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [formData, setFormData] = useState({
     object_type: "academy",
+    address: "",
+    email: "",
     object_id: "",
     name: "",
     phone: "",
@@ -32,11 +34,11 @@ const LeadModal = ({ onClose, getData }) => {
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-    
+
     // Adjust the endDate calculation to increase it by 1 day
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
-    const formattedEndDate = endDate.toISOString().split("T")[0];  
+    const formattedEndDate = endDate.toISOString().split("T")[0];
     axios
       .post(ADD_BMP_LEADS, updatedFormData, {
         headers: {
@@ -55,6 +57,8 @@ const LeadModal = ({ onClose, getData }) => {
             object_id: "",
             name: "",
             phone: "",
+            address: "",
+            email: "",
             description: ""
           });
           setStateBtn(0);
@@ -77,6 +81,8 @@ const LeadModal = ({ onClose, getData }) => {
       object_id: "",
       name: "",
       phone: "",
+      address: "",
+      email: "",
       description: ""
     });
     setStateBtn(0);
@@ -100,6 +106,17 @@ const LeadModal = ({ onClose, getData }) => {
                     placeholder="Enter Lead Name"
                     name="name"
                     value={formData?.name}
+                    onChange={handleChange}
+                    className="common-input"
+                  ></input>
+                </div>
+                <div>
+                  <p className="helpTitle">Address</p>
+                  <input
+                    type="text"
+                    placeholder="Enter Lead Name"
+                    name="address"
+                    value={formData?.address}
                     onChange={handleChange}
                     className="common-input"
                   ></input>
@@ -134,7 +151,17 @@ const LeadModal = ({ onClose, getData }) => {
                     onChange={handleChange}
                   ></input>
                 </div>
-
+                <div>
+                  <p className="helpTitle">Email</p>
+                  <input
+                    type="text"
+                    placeholder="Enter Lead Email"
+                    name="email"
+                    value={formData?.email}
+                    onChange={handleChange}
+                    className="common-input"
+                  ></input>
+                </div>
                 <div className="lead_text_area">
                   <p className="helpTitle">
                     Description
