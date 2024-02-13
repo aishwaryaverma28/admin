@@ -128,7 +128,6 @@ const BmpOverview = () => {
         console.log(error);
       });
   };
-  console.log(status)
   //=====================================================================language changes
   const handlelanguageNameChange = (e) => {
     setSelectedLanguageName(e.target.value);

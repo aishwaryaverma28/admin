@@ -14,7 +14,8 @@ const BmpSidebar = () => {
   const navigate = useNavigate();
   const id = localStorage.getItem("academy_id");
   const newId = localStorage.getItem("id");
-  console.log(newId)
+  // console.log(newId)
+const [details, setDetails]= useState(null);
   const handleBackToTable = () => {
     localStorage.removeItem("academy_id");
     navigate("/lp/bmp/admin");
@@ -32,8 +33,8 @@ const BmpSidebar = () => {
       // }
       )
       .then((response) => {
-        console.log(response);
-        console.log("hii")
+        console.log(response?.data?.data);
+        setDetails(response?.data?.data[0])
     })
       .catch((error) => {
         console.log(error);
@@ -44,10 +45,15 @@ const BmpSidebar = () => {
     academyDetails();
   }, []);
 
+const sendWhatsAppMessage = () => {
+  const message = `I need more details for ${userRole} ${details.name} ${details.url}`;
+  const phoneNumber = "+447979100801";
+  // const phoneNumber = "+917558269998";
+  const encodedMessage = encodeURIComponent(message);
+  window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`, "_blank");
+};
   return (
     <>
-
-
     <section className="setting-side-panel">
       {userRole === "Academy_admin" && (
         <div className="back-to-user general-refresh blog-back">
@@ -119,7 +125,7 @@ const BmpSidebar = () => {
         </NavLink>
       </p> */}
       
-    <div className="whatsapp_btn">
+    <div className="whatsapp_btn" onClick={sendWhatsAppMessage}>
      <img src={Whatsapp} loadaing="lazy" alt="loading" width="14" height="14"></img>
     </div>
     </section>
