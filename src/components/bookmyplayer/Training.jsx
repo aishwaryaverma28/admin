@@ -569,10 +569,10 @@ const Training = ({
               >
                 <button
                   className={`common-fonts contact-browse-btn ${
-                    status === 0 && role_name === ('academy' || 'player') ? "bmp_disable" : ""
+                    status === 0 && (role_name === 'academy' || role_name === 'player') ? "bmp_disable" : ""
                   }`}
                   onClick={handleButtonClick}
-                  disabled={status === 0 && role_name === ('academy' || 'player')}
+                  disabled={status === 0 && (role_name === 'academy' || role_name === 'player')}
                 >
                   Browse
                 </button>
@@ -736,12 +736,12 @@ const Training = ({
                 >
                   <button
                     className={`common-fonts contact-browse-btn ${
-                      status === 0 && role_name === ('academy' || 'player')
+                      status === 0 && (role_name === 'academy' || role_name === 'player')
                         ? "bmp_disable"
                         : ""
                     }`}
                     onClick={handleButtonClick2}
-                    disabled={status === 0 && role_name === ('academy' || 'player')}
+                    disabled={status === 0 && (role_name === 'academy' || role_name === 'player')}
                   >
                     Browse
                   </button>
