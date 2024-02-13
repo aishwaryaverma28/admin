@@ -55,8 +55,7 @@ const Dashboard = ({ blog }) => {
         }
       )
       .then((response) => {
-        console.log(response?.data?.data);
-        if (response?.data?.status === 1) {
+          if (response?.data?.status === 1) {
           setLeadsCount(response?.data?.data?.leads?.reverse());
           setStats(response?.data?.data?.stats);
           setLogin(response?.data?.data?.otpStats[0]?.count);
@@ -72,75 +71,79 @@ const Dashboard = ({ blog }) => {
     let startDate, endDate;
     const today = new Date();
     switch (e.target.value) {
-      case "today":
-        startDate = today.toISOString().split("T")[0];
-        endDate = startDate;
-        break;
-      case "yesterday":
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-        startDate = yesterday.toISOString().split("T")[0];
-        endDate = startDate;
-        break;
-      case "this_week":
-        const firstDayOfWeek = new Date(
-          today.setDate(today.getDate() - today.getDay())
-        );
-        startDate = firstDayOfWeek.toISOString().split("T")[0];
-        endDate = today.toISOString().split("T")[0];
-        break;
-      case "last_week":
-        const lastWeekEndDate = new Date();
-        lastWeekEndDate.setDate(
-          lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1
-        );
-        const lastWeekStartDate = new Date(lastWeekEndDate);
-        lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
-        startDate = lastWeekStartDate.toISOString().split("T")[0];
-        endDate = lastWeekEndDate.toISOString().split("T")[0];
-        break;
-      case "last_seven_days":
-        endDate = today.toISOString().split("T")[0];
-        const lastSevenDaysStartDate = new Date(today);
-        lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
-        startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
-        break;
-      case "last_fourteen_days":
-        endDate = today.toISOString().split("T")[0];
-        const lastFourteenDaysStartDate = new Date(today);
-        lastFourteenDaysStartDate.setDate(
-          lastFourteenDaysStartDate.getDate() - 13
-        );
-        startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
-        break;
-      case "last_twenty_eight_days":
-        endDate = today.toISOString().split("T")[0];
-        const lastTwentyEightDaysStartDate = new Date(today);
-        lastTwentyEightDaysStartDate.setDate(
-          lastTwentyEightDaysStartDate.getDate() - 27
-        );
-        startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
-        break;
-      case "last_thirty_days":
-        endDate = today.toISOString().split("T")[0];
-        const lastThirtyDaysStartDate = new Date(today);
-        lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
-        startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-        break;
-      case "last_sixty_days":
-        endDate = today.toISOString().split("T")[0];
-        const lastSixtyDaysStartDate = new Date(today);
-        lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
-        startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
-        break;
-
-      default:
-        startDate = "";
-        endDate = "";
-        break;
+        case "today":
+            startDate = today.toISOString().split("T")[0];
+            endDate = startDate;
+            break;
+        case "yesterday":
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            startDate = yesterday.toISOString().split("T")[0];
+            endDate = startDate;
+            break;
+        case "this_week":
+            const firstDayOfWeek = new Date(
+                today.setDate(today.getDate() - today.getDay())
+            );
+            startDate = firstDayOfWeek.toISOString().split("T")[0];
+            endDate = today.toISOString().split("T")[0];
+            break;
+        case "last_week":
+            const lastWeekEndDate = new Date();
+            lastWeekEndDate.setDate(
+                lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1
+            );
+            const lastWeekStartDate = new Date(lastWeekEndDate);
+            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
+            startDate = lastWeekStartDate.toISOString().split("T")[0];
+            endDate = lastWeekEndDate.toISOString().split("T")[0];
+            break;
+        case "last_seven_days":
+            endDate = today.toISOString().split("T")[0];
+            const lastSevenDaysStartDate = new Date(today);
+            lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
+            startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
+            break;
+        case "last_fourteen_days":
+            endDate = today.toISOString().split("T")[0];
+            const lastFourteenDaysStartDate = new Date(today);
+            lastFourteenDaysStartDate.setDate(
+                lastFourteenDaysStartDate.getDate() - 13
+            );
+            startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
+            break;
+        case "last_twenty_eight_days":
+            endDate = today.toISOString().split("T")[0];
+            const lastTwentyEightDaysStartDate = new Date(today);
+            lastTwentyEightDaysStartDate.setDate(
+                lastTwentyEightDaysStartDate.getDate() - 27
+            );
+            startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
+            break;
+        case "last_thirty_days":
+            endDate = today.toISOString().split("T")[0];
+            const lastThirtyDaysStartDate = new Date(today);
+            lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+            startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+            break;
+        case "last_sixty_days":
+            endDate = today.toISOString().split("T")[0];
+            const lastSixtyDaysStartDate = new Date(today);
+            lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
+            startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
+            break;
+        default:
+            startDate = "";
+            endDate = "";
+            break;
     }
-    getData(startDate, endDate);
-  };
+    
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1); // Add one day to end date
+    const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
+
+    getData(startDate, formattedEndDate);
+};
 
   return openBlog ? (
     <BlogPerformance data={blog} onClose={blogClose} />
