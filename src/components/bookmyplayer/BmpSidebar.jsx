@@ -1,19 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/LPSetting.css";
 import "../styles/bmp.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import LeftArrow from "../../assets/image/arrow-left.svg";
+import Whatsapp from "../../assets/image/whatsapp.svg";
+import axios from "axios";
+import {
+  GET_ACADEMY
+} from "../utils/Constants";
 
 const BmpSidebar = () => {
   const userRole = localStorage.getItem("role_name");
   const navigate = useNavigate();
   const id = localStorage.getItem("academy_id");
+  const newId = localStorage.getItem("id");
+  console.log(newId)
   const handleBackToTable = () => {
     localStorage.removeItem("academy_id");
     navigate("/lp/bmp/admin");
   };
 
+
+
+  const academyDetails = () => {
+    axios
+      .post(GET_ACADEMY, { academy_id: newId }
+      //   , {
+      //   headers: {
+      //     Authorization: `Bearer ${decryptedToken}`,
+      //   },
+      // }
+      )
+      .then((response) => {
+        console.log(response);
+        console.log("hii")
+    })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    academyDetails();
+  }, []);
+
   return (
+    <>
+
+
     <section className="setting-side-panel">
       {userRole === "Academy_admin" && (
         <div className="back-to-user general-refresh blog-back">
@@ -84,7 +118,13 @@ const BmpSidebar = () => {
           Help
         </NavLink>
       </p> */}
+      
+    <div className="whatsapp_btn">
+     <img src={Whatsapp} loadaing="lazy" alt="loading" width="14" height="14"></img>
+    </div>
     </section>
+
+    </>
   );
 };
 
