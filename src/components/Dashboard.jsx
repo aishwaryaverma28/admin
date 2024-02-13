@@ -235,7 +235,7 @@ return openBlog ? (
 
     <div className="dashboard_right">
       <div className="leads_new_btn">
-        <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
+        {/* <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button> */}
       </div>
 
       <div className="leads_new_tab leads_table_height">

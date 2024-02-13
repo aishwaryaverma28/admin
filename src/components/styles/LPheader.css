@@ -537,6 +537,7 @@ letter-spacing: -0.02563rem;
   .performance_title{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 1rem;
     color: #2b74da !important;
     padding-left: 1rem;
