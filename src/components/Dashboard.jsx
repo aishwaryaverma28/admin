@@ -56,11 +56,11 @@ const Dashboard = ({ blog }) => {
       )
       .then((response) => {
           if (response?.data?.status === 1) {
-            console.log(response?.data?.data)
+            // console.log(response?.data?.data?.otpStats[0])
           setLeadsCount(response?.data?.data?.leads?.reverse());
           setStats(response?.data?.data?.stats?.reverse());
-          setLogin(response?.data?.data?.otpStats[0]?.count);
-          setReg(response?.data?.data?.otpStats[1]?.count);
+          setLogin(response?.data?.data?.otpStats[0]?.login_otp);
+          setReg(response?.data?.data?.otpStats[0]?.signup_otp);
         }
       })
       .catch((error) => {
