@@ -56,8 +56,9 @@ const Dashboard = ({ blog }) => {
       )
       .then((response) => {
           if (response?.data?.status === 1) {
+            console.log(response?.data?.data)
           setLeadsCount(response?.data?.data?.leads?.reverse());
-          setStats(response?.data?.data?.stats);
+          setStats(response?.data?.data?.stats?.reverse());
           setLogin(response?.data?.data?.otpStats[0]?.count);
           setReg(response?.data?.data?.otpStats[1]?.count);
         }
@@ -198,7 +199,7 @@ const Dashboard = ({ blog }) => {
               stats.map((item, index) => (
                 <div className="dashboard_card" key={index}>
                   <h3 className="common_fonts">{item.type}</h3>
-                  <p className="common_fonts dash_num">{item.count}</p>
+                  <p className="common_fonts dash_num">{item.type_count}</p>
                 </div>
               ))}
           </div>
