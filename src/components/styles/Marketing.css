@@ -32,6 +32,10 @@
   border-right: 1px solid transparent;
 }
 
+.lead_last_border table td:nth-child(7){
+  border-right: 1px solid #dcdcdc;
+}
+
 .market-review-table table td:nth-child(5) {
   border-right: 1px solid transparent;
 }
