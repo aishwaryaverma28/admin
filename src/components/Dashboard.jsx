@@ -43,7 +43,7 @@ const Dashboard = ({ blog }) => {
   const getData = (startDate, endDate) => {
     axios
       .post(
-        "https://core.leadplaner.com/api/api/bmp/getstats",
+        "https://bmp.leadplaner.com/api/api/bmp/getstats",
         {
           startDate: startDate,
           endDate: endDate,
@@ -55,7 +55,7 @@ const Dashboard = ({ blog }) => {
         }
       )
       .then((response) => {
-        console.log(response?.data?.data?.otpStats[0]?.count);
+        console.log(response?.data?.data);
         if (response?.data?.status === 1) {
           setLeadsCount(response?.data?.data?.leads?.reverse());
           setStats(response?.data?.data?.stats);

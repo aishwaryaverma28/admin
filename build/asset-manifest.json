@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.d821c9b6.css",
-    "main.js": "/static/js/main.ad04708a.js",
+    "main.css": "/static/css/main.801b7492.css",
+    "main.js": "/static/js/main.101e918f.js",
     "static/js/703.a43ad199.chunk.js": "/static/js/703.a43ad199.chunk.js",
     "static/js/513.017b8454.chunk.js": "/static/js/513.017b8454.chunk.js",
     "static/media/whatsapp.png": "/static/media/whatsapp.4b37dbe87e980c9d4045.png",
@@ -21,6 +21,7 @@
     "static/media/calendar.svg": "/static/media/calendar.61918c5c96ba9fa2cd99af5cb3c68538.svg",
     "static/media/gallery-2.svg": "/static/media/gallery-2.8b35685cc2cd93a8f507f5e82d0e4092.svg",
     "static/media/no-img.svg": "/static/media/no-img.985ab469a8aad210be40ee5dde42e60f.svg",
+    "static/media/whatsapp.svg": "/static/media/whatsapp.520744a3ab71241d60eeab739604c77f.svg",
     "static/media/lock.svg": "/static/media/lock.c6323ba76ed8d88e71821c71f5bab1d8.svg",
     "static/media/time-blue.svg": "/static/media/time-blue.fbb92ac834a4c162dde60fef41b3ff32.svg",
     "static/media/time.svg": "/static/media/time.245fbc940075c22fbf2ceba5bbaff155.svg",
@@ -95,13 +96,13 @@
     "static/media/dash2.svg": "/static/media/dash2.7359699e8fad32d174d3ae6845117532.svg",
     "static/media/red-dash.svg": "/static/media/red-dash.5111f1408f8f65b6b62cfc413440f1e6.svg",
     "static/media/bluedot.svg": "/static/media/bluedot.8d480cafc752076cfa9b3ffc75b9a1c2.svg",
-    "main.d821c9b6.css.map": "/static/css/main.d821c9b6.css.map",
-    "main.ad04708a.js.map": "/static/js/main.ad04708a.js.map",
+    "main.801b7492.css.map": "/static/css/main.801b7492.css.map",
+    "main.101e918f.js.map": "/static/js/main.101e918f.js.map",
     "703.a43ad199.chunk.js.map": "/static/js/703.a43ad199.chunk.js.map",
     "513.017b8454.chunk.js.map": "/static/js/513.017b8454.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d821c9b6.css",
-    "static/js/main.ad04708a.js"
+    "static/css/main.801b7492.css",
+    "static/js/main.101e918f.js"
   ]
 }
