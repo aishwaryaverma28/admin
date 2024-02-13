@@ -22,7 +22,7 @@ const Home = () => {
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
     const endDate = today.toISOString().split("T")[0]; 
-    axios.post ("https://core.leadplaner.com/api/api/bmp/getstats" , {
+    axios.post ("https://bmp.leadplaner.com/api/api/bmp/getstats" , {
       startDate: startDate,
       endDate: endDate
     },
