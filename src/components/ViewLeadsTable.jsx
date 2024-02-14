@@ -4,13 +4,10 @@ import LeadModal from "./LeadModal.jsx";
 import axios from "axios";
 import { getDecryptedToken } from "./utils/Constants";
 
-const ViewLeadsTable = ({ data, onClose }) => {
+const ViewLeadsTable = ({ onClose }) => {
   const [openLead, setOpenLead] = useState(false);
   const [leadsCount, setLeadsCount] = useState(null);
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
-  const [login, setLogin] = useState(null);
-  const [reg, setReg] = useState(null);
-  const [stats, setStats] = useState(null);
   const decryptedToken = getDecryptedToken();
   const formatDate = (isoDate) => {
     const options = {
@@ -36,12 +33,12 @@ const ViewLeadsTable = ({ data, onClose }) => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
-    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];    
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
     // Adjust the endDate calculation to increase it by 1 day
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-  
+
     getData(startDate, formattedEndDate);
   }, []);
   const getData = (startDate, endDate) => {
@@ -59,12 +56,9 @@ const ViewLeadsTable = ({ data, onClose }) => {
         }
       )
       .then((response) => {
-          if (response?.data?.status === 1) {
-            // console.log(response?.data?.data?.otpStats[0])
+        if (response?.data?.status === 1) {
+          // console.log(response?.data?.data?.otpStats[0])
           setLeadsCount(response?.data?.data?.leads?.reverse());
-          setStats(response?.data?.data?.stats?.reverse());
-          setLogin(response?.data?.data?.otpStats[0]?.login_otp);
-          setReg(response?.data?.data?.otpStats[0]?.signup_otp);
         }
       })
       .catch((error) => {
@@ -77,90 +71,117 @@ const ViewLeadsTable = ({ data, onClose }) => {
     let startDate, endDate;
     const today = new Date();
     switch (e.target.value) {
-        case "today":
-            startDate = today.toISOString().split("T")[0];
-            endDate = startDate;
-            break;
-        case "yesterday":
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-            startDate = yesterday.toISOString().split("T")[0];
-            endDate = startDate;
-            break;
-        case "this_week":
-            const firstDayOfWeek = new Date(
-                today.setDate(today.getDate() - today.getDay())
-            );
-            startDate = firstDayOfWeek.toISOString().split("T")[0];
-            endDate = today.toISOString().split("T")[0];
-            break;
-        case "last_week":
-            const lastWeekEndDate = new Date();
-            lastWeekEndDate.setDate(
-                lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1
-            );
-            const lastWeekStartDate = new Date(lastWeekEndDate);
-            lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
-            startDate = lastWeekStartDate.toISOString().split("T")[0];
-            endDate = lastWeekEndDate.toISOString().split("T")[0];
-            break;
-        case "last_seven_days":
-            endDate = today.toISOString().split("T")[0];
-            const lastSevenDaysStartDate = new Date(today);
-            lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
-            startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
-            break;
-        case "last_fourteen_days":
-            endDate = today.toISOString().split("T")[0];
-            const lastFourteenDaysStartDate = new Date(today);
-            lastFourteenDaysStartDate.setDate(
-                lastFourteenDaysStartDate.getDate() - 13
-            );
-            startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
-            break;
-        case "last_twenty_eight_days":
-            endDate = today.toISOString().split("T")[0];
-            const lastTwentyEightDaysStartDate = new Date(today);
-            lastTwentyEightDaysStartDate.setDate(
-                lastTwentyEightDaysStartDate.getDate() - 27
-            );
-            startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
-            break;
-        case "last_thirty_days":
-            endDate = today.toISOString().split("T")[0];
-            const lastThirtyDaysStartDate = new Date(today);
-            lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
-            startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-            break;
-        case "last_sixty_days":
-            endDate = today.toISOString().split("T")[0];
-            const lastSixtyDaysStartDate = new Date(today);
-            lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
-            startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
-            break;
-        default:
-            startDate = "";
-            endDate = "";
-            break;
+      case "today":
+        startDate = today.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "yesterday":
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        startDate = yesterday.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "this_week":
+        const firstDayOfWeek = new Date(
+          today.setDate(today.getDate() - today.getDay())
+        );
+        startDate = firstDayOfWeek.toISOString().split("T")[0];
+        endDate = today.toISOString().split("T")[0];
+        break;
+      case "last_week":
+        const lastWeekEndDate = new Date();
+        lastWeekEndDate.setDate(
+          lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1
+        );
+        const lastWeekStartDate = new Date(lastWeekEndDate);
+        lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
+        startDate = lastWeekStartDate.toISOString().split("T")[0];
+        endDate = lastWeekEndDate.toISOString().split("T")[0];
+        break;
+      case "last_seven_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSevenDaysStartDate = new Date(today);
+        lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
+        startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_fourteen_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastFourteenDaysStartDate = new Date(today);
+        lastFourteenDaysStartDate.setDate(
+          lastFourteenDaysStartDate.getDate() - 13
+        );
+        startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_twenty_eight_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastTwentyEightDaysStartDate = new Date(today);
+        lastTwentyEightDaysStartDate.setDate(
+          lastTwentyEightDaysStartDate.getDate() - 27
+        );
+        startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_thirty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastThirtyDaysStartDate = new Date(today);
+        lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+        startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_sixty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSixtyDaysStartDate = new Date(today);
+        lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
+        startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
+        break;
+      default:
+        startDate = "";
+        endDate = "";
+        break;
     }
-    
+
     const adjustedEndDate = new Date(endDate);
     adjustedEndDate.setDate(adjustedEndDate.getDate() + 1); // Add one day to end date
     const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
 
     getData(startDate, formattedEndDate);
-};
+  };
 
 
   return (
     <>
       <div className="performance_title">
         <img src={Back} alt="" onClick={onClose} />
-        <span>PERFORMANCE DATA</span>
-          <span>Total Lead: {data?.length}</span>
-          <div className="leads_new_btn">
-        <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
-      </div>
+        <span>LEAD DATA</span>
+        <span>Total Lead: {leadsCount?.length}</span>
+        <div className="leads_new_btn">
+          <div className="dashboard_header">
+            <div>
+              <select
+                className="selectSec"
+                onChange={handleSelectChange}
+                value={selectedOption}
+              >
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="this_week">This Week</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_seven_days">Last 7 days</option>
+                <option value="last_fourteen_days">Last 14 days</option>
+                <option value="last_twenty_eight_days">Last 28 days</option>
+                <option value="last_thirty_days">Last 30 days</option>
+                <option value="last_sixty_days">Last 60 days</option>
+              </select>
+            </div>
+            <div>
+              <select className="selectSec">
+                <option value="bookmyplayer">bookmyplayer</option>
+                <option value="leadplaner">leadplaner</option>
+                <option value="firstcron">firstcron</option>
+                <option value="routplaner">routplaner</option>
+              </select>
+            </div>
+          </div>
+          <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
+        </div>
       </div>
 
       <div className="marketing-all-table lead_last_border new_table_1">
@@ -177,7 +198,7 @@ const ViewLeadsTable = ({ data, onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((item, index) => (
+            {leadsCount?.map((item, index) => (
               <tr key={item?.id}>
                 <td className="common-fonts">{index + 1}</td>
                 <td className="common-fonts">
@@ -196,10 +217,10 @@ const ViewLeadsTable = ({ data, onClose }) => {
         </table>
       </div>
       {
-    openLead && (
-      <LeadModal onClose={addLeadClose}/>
-    )
-  }
+        openLead && (
+          <LeadModal onClose={addLeadClose} getData={getData} />
+        )
+      }
     </>
   );
 };

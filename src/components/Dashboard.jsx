@@ -4,13 +4,9 @@ import { getDecryptedToken } from "./utils/Constants";
 import BlogPerformance from "./BlogPerformance.jsx";
 import LeadModal from "./LeadModal.jsx";
 import ViewLeadsTable from "./ViewLeadsTable.jsx";
-const Dashboard = ({ blog }) => {
+const Dashboard = ({ blog, getData, leadsCount, login, reg,stats }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
-  const decryptedToken = getDecryptedToken();
-  const [leadsCount, setLeadsCount] = useState(null);
-  const [login, setLogin] = useState(null);
-  const [reg, setReg] = useState(null);
-  const [stats, setStats] = useState(null);
+ 
   const [openBlog, setOpenBlog] = useState(false);
   const [openLeadTable, setOpenLeadTable] = useState(false);
   const [openLead, setOpenLead] = useState(false);
@@ -35,45 +31,6 @@ const Dashboard = ({ blog }) => {
     setOpenLeadTable(false);
   };
 
-  useEffect(() => {
-    const today = new Date();
-    const lastThirtyDaysStartDate = new Date(today);
-    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
-    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];    
-    // Adjust the endDate calculation to increase it by 1 day
-    const endDate = new Date(today);
-    endDate.setDate(endDate.getDate() + 1);
-    const formattedEndDate = endDate.toISOString().split("T")[0];
-  
-    getData(startDate, formattedEndDate);
-  }, []);
-  const getData = (startDate, endDate) => {
-    axios
-      .post(
-        "https://bmp.leadplaner.com/api/api/bmp/getstats",
-        {
-          startDate: startDate,
-          endDate: endDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      )
-      .then((response) => {
-          if (response?.data?.status === 1) {
-            // console.log(response?.data?.data?.otpStats[0])
-          setLeadsCount(response?.data?.data?.leads?.reverse());
-          setStats(response?.data?.data?.stats?.reverse());
-          setLogin(response?.data?.data?.otpStats[0]?.login_otp);
-          setReg(response?.data?.data?.otpStats[0]?.signup_otp);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
     let startDate, endDate;
@@ -243,11 +200,11 @@ return openBlog ? (
       </div>
     </div>
   </div>
-  {
+  {/* {
     openLead && (
       <LeadModal onClose={addLeadClose} getData={getData} />
     )
-  }
+  } */}
 </section>
 );
 
