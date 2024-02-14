@@ -44,6 +44,7 @@ export const handleLogout = () => {
 };
 // =============================================================apis used
 const start = "https://core.leadplaner.com/api/api";
+const bmpStart = "https://bmp.leadplaner.com/api/api";
 const userId = localStorage.getItem("id");
 export const USER_INFO = start + "/user/getuserinfo";
 export const BMP_USER = start + "/bmp/getUser";
@@ -234,4 +235,4 @@ export const UPDATE_LEAGUE = start + "/bmp/league/update/";
 //=====================================================================lead review
 export const GET_ALL_LEADS = start + "/ezuka/leads/get-all";
 
-export const ADD_BMP_LEADS = "https://bmp.leadplaner.com/api/api/bmp/createLeads";
+export const ADD_BMP_LEADS = bmpStart +"/bmp/createLeads";

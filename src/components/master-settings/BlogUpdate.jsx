@@ -671,17 +671,47 @@ const BlogUpdate = () => {
               />
             </div>
             <div className="from-filed">
-              <label htmlFor="sport" className="common-fonts blogs-new-label">
+            <label htmlFor="sport" className="common-fonts blogs-new-label">
                 Blog Sport
               </label>
-              <input
-                type="text"
-                name="sport"
+              <input list="sports" name="sport"
                 id="sport"
                 placeholder="Enter Blog Sport"
-                value={formData.sport}
-                onChange={handleChange}
-              />
+                value={formData?.sport}
+                onChange={handleChange} />
+
+              <datalist id="sports">
+                <option value="archery"></option>
+                <option value="arts"></option>
+                <option value="athletics"></option>
+                <option value="badminton"></option>
+                <option value="basketball"></option>
+                <option value="billiards"></option>
+                <option value="boxing"></option>
+                <option value="chess"></option>
+                <option value="cricket"></option>
+                <option value="fencing"></option>
+                <option value="football"></option>
+                <option value="golf"></option>
+                <option value="hockey"></option>
+                <option value="kabaddi"></option>
+                <option value="karate"></option>
+                <option value="kho-kho"></option>
+                <option value="mma"></option>
+                <option value="motorsports"></option>
+                <option value="rugby"></option>
+                <option value="shooting"></option>
+                <option value="skating"></option>
+                <option value="sports"></option>
+                <option value="squash"></option>
+                <option value="swimming"></option>
+                <option value="table-Tennis"></option>
+                <option value="taekwondo"></option>
+                <option value="tennis"></option>
+                <option value="volleyball"></option>
+                <option value="wrestling"></option>
+              </datalist>
+
             </div>
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">

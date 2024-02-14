@@ -41,7 +41,7 @@ const BlogAdd = () => {
   const [formData, setFormData] = useState({
     title: "",
     url: "",
-    sport:"",
+    sport: "",
     description: "",
     meta_description: "",
     keywords: "",
@@ -69,7 +69,7 @@ const BlogAdd = () => {
 
   const getTagBySite = (site) => {
     axios
-      .get(GET_TAG_BY_SITE + site +"/"+org_id, {
+      .get(GET_TAG_BY_SITE + site + "/" + org_id, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -197,7 +197,7 @@ const BlogAdd = () => {
         return { ...prev, keywords: modifiedValue };
       });
     }
-   
+
     setStateBtn(1);
   }
 
@@ -297,7 +297,7 @@ const BlogAdd = () => {
       ...formData,
       title: "",
       url: "",
-      sport:"",
+      sport: "",
       description: "",
       meta_description: "",
       keywords: "",
@@ -489,15 +489,15 @@ const BlogAdd = () => {
                     Add Image
                   </button>
                   <div className="blog-new-img">
-                  {blogImg ? blogImg : <></>}
+                    {blogImg ? blogImg : <></>}
                   </div>
-                  
+
                 </div>
               </div>
             </div>
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">
-                description
+                Description
                 <span className="common-fonts redAlert"> *</span>
               </label>
               <input
@@ -510,17 +510,46 @@ const BlogAdd = () => {
               />
             </div>
             <div className="from-filed">
-              <label htmlFor="sport" className="common-fonts blogs-new-label">
+            <label htmlFor="sport" className="common-fonts blogs-new-label">
                 Blog Sport
               </label>
-              <input
-                type="text"
-                name="sport"
+              <input list="sports" name="sport"
                 id="sport"
                 placeholder="Enter Blog Sport"
                 value={formData?.sport}
-                onChange={handleChange}
-              />
+                onChange={handleChange} />
+              <datalist id="sports">
+                <option value="archery"></option>
+                <option value="arts"></option>
+                <option value="athletics"></option>
+                <option value="badminton"></option>
+                <option value="basketball"></option>
+                <option value="billiards"></option>
+                <option value="boxing"></option>
+                <option value="chess"></option>
+                <option value="cricket"></option>
+                <option value="fencing"></option>
+                <option value="football"></option>
+                <option value="golf"></option>
+                <option value="hockey"></option>
+                <option value="kabaddi"></option>
+                <option value="karate"></option>
+                <option value="kho-kho"></option>
+                <option value="mma"></option>
+                <option value="motorsports"></option>
+                <option value="rugby"></option>
+                <option value="shooting"></option>
+                <option value="skating"></option>
+                <option value="sports"></option>
+                <option value="squash"></option>
+                <option value="swimming"></option>
+                <option value="table-Tennis"></option>
+                <option value="taekwondo"></option>
+                <option value="tennis"></option>
+                <option value="volleyball"></option>
+                <option value="wrestling"></option>
+              </datalist>
+
             </div>
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">
@@ -612,7 +641,7 @@ const BlogAdd = () => {
                         Add Image
                       </button>
                       <div className="blog-new-img"> {blogImg2 ? blogImg2 : <></>}</div>
-                     
+
                     </div>
                     <button
                       onClick={handleAddSection}
@@ -693,9 +722,9 @@ const BlogAdd = () => {
                           {section?.image ? " change image" : " add image"}
                         </button>
                         <div className="blog-new-img">
-                        {section?.image ? section?.image : <></>}
+                          {section?.image ? section?.image : <></>}
                         </div>
-                        
+
                       </div>
                     </div>
 
@@ -823,7 +852,7 @@ const BlogAdd = () => {
                 </div>
               </div>
               <div className="tagData tag-box tag-box-2">
-              <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
+                <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
 
               </div>
             </div>
