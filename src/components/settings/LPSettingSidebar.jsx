@@ -324,7 +324,7 @@ const LPSettingSidebar = () => {
           )}
 
 
-          {(isPathAllowed("/lp/settings/blog/add") ||
+          {/* {(isPathAllowed("/lp/settings/blog/add") ||
             isPathAllowed("/lp/settings/blog/view")) && (
               <div
                 className="master-arrow"
@@ -365,7 +365,7 @@ const LPSettingSidebar = () => {
                 </p>
               )}
             </div>
-          )}
+          )} */}
 
           {isPathAllowed("/lp/settings/review/view") && (
             <>
