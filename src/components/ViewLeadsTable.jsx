@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Back from "../assets/image/arrow-left.svg";
 import LeadModal from "./LeadModal.jsx";
 import axios from "axios";
-import { getDecryptedToken } from "./utils/Constants";
+import { GET_STATS,getDecryptedToken } from "./utils/Constants";
 
 const ViewLeadsTable = ({ onClose }) => {
   const [openLead, setOpenLead] = useState(false);
@@ -44,7 +44,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const getData = (startDate, endDate) => {
     axios
       .post(
-        "https://bmp.leadplaner.com/api/api/bmp/getstats",
+        GET_STATS,
         {
           startDate: startDate,
           endDate: endDate,

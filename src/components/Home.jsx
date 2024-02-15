@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles/Home.css";
 import axios from "axios";
 
-import { BLOG_GET, getDecryptedToken } from "./utils/Constants";
+import { BLOG_GET,GET_STATS, getDecryptedToken } from "./utils/Constants";
 import { useSelector } from "react-redux";
 // import BlogPerformance from "./BlogPerformance";
 import Dashboard from "./Dashboard.jsx";
@@ -35,7 +35,7 @@ const Home = () => {
   const getData = (startDate, endDate) => {
     axios
       .post(
-        "https://bmp.leadplaner.com/api/api/bmp/getstats",
+        GET_STATS,
         {
           startDate: startDate,
           endDate: endDate,
@@ -49,6 +49,7 @@ const Home = () => {
       .then((response) => {
         if (response?.data?.status === 1) {
           console.log(response?.data?.data)
+          setIsLoading(false);
           setLeadsCount(response?.data?.data?.leads?.reverse());
           setStats(response?.data?.data?.stats?.reverse());
           setLogin(response?.data?.data?.otpStats[0]?.login_otp);
@@ -57,6 +58,7 @@ const Home = () => {
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
       });
   };
 

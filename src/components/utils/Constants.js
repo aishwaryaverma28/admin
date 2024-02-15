@@ -58,19 +58,19 @@ export const OTP = start + "/user/send-otp";
 export const MAIN_PASS = start + "/user/forgot-password";
 export const VERIFY_OTP = start + "/user/verify-otp";
 //==============================================================blog apis
-export const BLOG_ADD = start + "/blog/add";
-export const BLOG_EDIT = start + "/blog/edit/";
-export const BLOG_GET = start + "/blog/get";
-export const BLOG_GETID = start + "/blog/get/";
+export const BLOG_ADD = bmpStart + "/blog/add";
+export const BLOG_EDIT = bmpStart + "/blog/edit/";
+export const BLOG_GET = bmpStart + "/blog/get";
+export const BLOG_GETID = bmpStart + "/blog/get/";
 export const GET_TAG = start + "/blog/tag/getall";
-export const GET_TAG_CATEGORY = start + "/blog/tag/getcategories/";
-export const GET_TAG_BY_SITE = start + "/blog/tag/getbysite/";
-export const SEC_GET = start + "/blog/section/getbyblog/";
+export const GET_TAG_CATEGORY = bmpStart + "/blog/tag/getcategories/";
+export const GET_TAG_BY_SITE = bmpStart + "/blog/tag/getbysite/";
+export const SEC_GET = bmpStart + "/blog/section/getbyblog/";
 export const IMAGE_UP = start + "/blog/addImg";
 export const IMAGE_DEL = start + "/blog/deleteImg/";
 export const IMG_BASE = start + "blog/";
-export const SEC_UPDATE = start + "/blog/section/update/";
-export const SEC_ADD = start + "/blog/section/add/";
+export const SEC_UPDATE = bmpStart + "/blog/section/update/";
+export const SEC_ADD = bmpStart + "/blog/section/add/";
 // ====================================================================employee apis
 export const EMPLOYEE_UPDATE = start + "/employee/edit/";
 export const EMPLOYEE_ADD = start + "/employee/add";
@@ -236,3 +236,4 @@ export const UPDATE_LEAGUE = start + "/bmp/league/update/";
 export const GET_ALL_LEADS = start + "/ezuka/leads/get-all";
 
 export const ADD_BMP_LEADS = bmpStart +"/bmp/createLeads";
+export const GET_STATS = bmpStart + "/bmp/getstats";
