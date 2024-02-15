@@ -341,10 +341,10 @@ const BlogUpdate = () => {
   };
 
   const removeHtmlTags = (htmlString) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = htmlString;
-    return tempDiv.textContent || tempDiv.innerText || "";
-  };
+    const regex = /<(?!a\s*\/?)[^>]+>/g;
+    return htmlString.replace(regex, '');
+};
+
   //=========================================================handle section data in an array of objects
 
   const handleAddSection = (e) => {
@@ -955,11 +955,13 @@ const BlogUpdate = () => {
                   >
                     <option value="">Select a tag</option>
 
-                    {options?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.tag}
-                      </option>
-                    ))}
+                    {options
+                      ?.filter(option => !tagId.split(",").includes(option.id.toString()))
+                      .map((option) => (
+                        <option key={option?.id} value={option?.id}>
+                          {option?.tag}
+                        </option>
+                      ))}
                   </select>
                   {/* 
                   <button onClick={AddTag} type="button" className="primaryBtn">

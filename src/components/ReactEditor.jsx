@@ -26,22 +26,22 @@ function ReactEditor({ onDataTransfer, initialContent }, ref) {
   }));
 
   const modules = {
-        toolbar: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ color: [] }, { background: [] }],
-          [{ align: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['link', 'image'],
-          ['clean'],
-          ['blockquote'],
-          [{ script: 'sub' }, { script: 'super' }],
-          ['blockquote', 'code-block'],
-          [{ indent: '-1' }, { indent: '+1' }],
-          [{ direction: 'rtl' }],
-          ['video'],
-        ],
-      };
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image'],
+      ['clean'],
+      ['blockquote'],
+      [{ script: 'sub' }, { script: 'super' }],
+      ['blockquote', 'code-block'],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ direction: 'rtl' }],
+      ['video'],
+    ],
+  };
     
   return <ReactQuill theme="snow" value={value} onChange={handleQuillChange} modules={modules} className="quillEditor"/>;
 }

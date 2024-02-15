@@ -248,19 +248,24 @@ const BlogAdd = () => {
   //=======================================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
+    console.log(data);
     setStateBtn(1);
   };
 
   const removeHtmlTags = (htmlString) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = htmlString;
-    return tempDiv.textContent || tempDiv.innerText || "";
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = htmlString;
+  //   return tempDiv.textContent || tempDiv.innerText || "";
+  const regex = /<(?!a\s*\/?)[^>]+>/g;
+  return htmlString.replace(regex, '');
   };
+
   //====================================================================================== handle section data in an array of objects
 
   const handleAddSection = (e) => {
     e.preventDefault();
     const plainText = removeHtmlTags(dataFromChild);
+    console.log(plainText)
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
@@ -510,7 +515,7 @@ const BlogAdd = () => {
               />
             </div>
             <div className="from-filed">
-            <label htmlFor="sport" className="common-fonts blogs-new-label">
+              <label htmlFor="sport" className="common-fonts blogs-new-label">
                 Blog Sport
               </label>
               <input list="sports" name="sport"
@@ -775,12 +780,13 @@ const BlogAdd = () => {
                     name="tagDropdown"
                   >
                     <option value="">Select a tag</option>
-
-                    {options?.map((option) => (
-                      <option key={option?.id} value={option?.id}>
-                        {option?.tag}
-                      </option>
-                    ))}
+                    {options
+                      ?.filter(option => !tagId.split(",").includes(option.id.toString()))
+                      .map((option) => (
+                        <option key={option?.id} value={option?.id}>
+                          {option?.tag}
+                        </option>
+                      ))}
                   </select>
 
                   {/* <button onClick={AddTag} type="button" className="primaryBtn">
