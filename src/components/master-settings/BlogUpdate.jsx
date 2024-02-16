@@ -28,7 +28,7 @@ const BlogUpdate = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [dataFromTable, setDataFromTable] = useState([]);
-  const [tableData, setTableDate] = useState(false)  
+  const [tableData, setTableDate] = useState(false)
   const [isIndex, setIsIndex] = useState(-1);
   const [options, setOptions] = useState([]);
   const fileInputRef2 = useRef(null);
@@ -331,7 +331,7 @@ const BlogUpdate = () => {
     newSectionData[index].table = data;
     setSectionData(newSectionData);
     setStateBtn(1);
-};
+  };
   //=========================================================== sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
@@ -350,16 +350,16 @@ const BlogUpdate = () => {
     setDataFromChild(data);
     setTableDate(false);
   };
-//===========================================================================================table data
-const handleDataSave = (data) => {
-  setTableDate(false);
-  setDataFromTable(data);
-};  
+  //===========================================================================================table data
+  const handleDataSave = (data) => {
+    setTableDate(false);
+    setDataFromTable(data);
+  };
 
   const removeHtmlTags = (htmlString) => {
     const regex = /<(?!a\s*\/?)[^>]+>/g;
     return htmlString.replace(regex, '');
-};
+  };
 
   //=========================================================handle section data in an array of objects
 
@@ -687,7 +687,7 @@ const handleDataSave = (data) => {
               />
             </div>
             <div className="from-filed">
-            <label htmlFor="sport" className="common-fonts blogs-new-label">
+              <label htmlFor="sport" className="common-fonts blogs-new-label">
                 Blog Sport
               </label>
               <input list="sports" name="sport"
@@ -815,7 +815,7 @@ const handleDataSave = (data) => {
                     </button>
                   </div>
                 </div>
-                <Table onDataSave={handleDataSave} tableFlag = {tableData}/>
+                <Table onDataSave={handleDataSave} tableFlag={tableData} />
                 <div className="formEditor">
                   <ReactEditor
                     ref={editorRef} // Attach the ref here
@@ -823,123 +823,123 @@ const handleDataSave = (data) => {
                   />
                 </div>
               </div>
-<div>
-              {sectionData?.map((section, index) => (
-                <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
-                  <div
-                    className="sectionDropdown"
-                    onClick={() => accordianClick(index)}
-                  >
-                    <div className="accHead">
-                      <h3>{section.sort}</h3>
-                      <h3>{section.heading}</h3>
-                    </div>
-                    {isIndex === index ? (
-                      <span>
-                        <i class="fa-sharp fa-solid fa-minus"></i>
-                      </span>
-                    ) : (
-                      <span>
-                        <i className="fa-sharp fa-solid fa-plus"></i>
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className={
-                      isIndex === index ? "answer display_answer" : "answer"
-                    }
-                  >
-                    <div className="sectionBlockOne">
-                      <input
-                        type="text"
-                        name="Sort"
-                        id="Sort"
-                        placeholder="Sort"
-                        className="SubsectionSort"
-                        value={section.sort}
-                        onChange={(event) => handleSortChange(event, index)}
-                      />
-                      <input
-                        type="text"
-                        name="heading"
-                        id="heading"
-                        placeholder="Section Title"
-                        className="sectionHead"
-                        value={section.heading}
-                        onChange={(event) => handleSecTitleChange(event, index)}
-                      />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(event) => handleReplaceImage(event, index)}
-                        style={{ display: "none" }}
-                        ref={(input) => (fileInputRefs[index] = input)}
-                      />
-                      <div className="blog-browse-img-2">
-                        <button
-                          className="common-fonts blog-add-img add-img-2"
-                          onClick={(event) => {
-                            event.preventDefault();
-                            fileInputRefs[index].click();
-                            setUpdateStateBtn(1);
-                          }}
-                        >
-                          {section?.image ? " change image" : " add image"}
-                        </button>
-                        {section?.image ? (
-                          <p className="common-fonts section-img-new">
-                            {section?.image}
-                          </p>
-                        ) : (
-                          <></>
-                        )}
+              <div>
+                {sectionData?.map((section, index) => (
+                  <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
+                    <div
+                      className="sectionDropdown"
+                      onClick={() => accordianClick(index)}
+                    >
+                      <div className="accHead">
+                        <h3>{section.sort}</h3>
+                        <h3>{section.heading}</h3>
                       </div>
-                    </div>
-                    <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.table} />
-                    <div className="formEditor">
-                      <ReactEditor
-                        onDataTransfer={(data) =>
-                          handleEditorChange(data, index)
-                        }
-                        initialContent={section.section}
-                      />
-                    </div>
-                    <div className="blog-disable">
-                      {updateStateBtn === 0 ? (
-                        <button
-                          disabled
-                          className="disabledBtn blog-update-btn"
-                        >
-                          Update
-                        </button>
+                      {isIndex === index ? (
+                        <span>
+                          <i class="fa-sharp fa-solid fa-minus"></i>
+                        </span>
                       ) : (
-                        <button
-                          className="common-fonts common-save-button blog-update-btn"
-                          onClick={() => handleUpdateClick(section.id)}
-                        >
-                          Update
-                        </button>
+                        <span>
+                          <i className="fa-sharp fa-solid fa-plus"></i>
+                        </span>
                       )}
                     </div>
-                    {section.id ? (
-                      <></>
-                    ) : (
-                      <div className="deleteContainer">
-                        <button
-                          onClick={() => handleDeleteSection(index)}
-                          className="sectionDelete"
-                        >
-                          <img
-                            src={trash}
-                            className="deleteIcon"
-                            alt="Delete"
-                          />
-                        </button>
+                    <div
+                      className={
+                        isIndex === index ? "answer display_answer" : "answer"
+                      }
+                    >
+                      <div className="sectionBlockOne">
+                        <input
+                          type="text"
+                          name="Sort"
+                          id="Sort"
+                          placeholder="Sort"
+                          className="SubsectionSort"
+                          value={section.sort}
+                          onChange={(event) => handleSortChange(event, index)}
+                        />
+                        <input
+                          type="text"
+                          name="heading"
+                          id="heading"
+                          placeholder="Section Title"
+                          className="sectionHead"
+                          value={section.heading}
+                          onChange={(event) => handleSecTitleChange(event, index)}
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => handleReplaceImage(event, index)}
+                          style={{ display: "none" }}
+                          ref={(input) => (fileInputRefs[index] = input)}
+                        />
+                        <div className="blog-browse-img-2">
+                          <button
+                            className="common-fonts blog-add-img add-img-2"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              fileInputRefs[index].click();
+                              setUpdateStateBtn(1);
+                            }}
+                          >
+                            {section?.image ? " change image" : " add image"}
+                          </button>
+                          {section?.image ? (
+                            <p className="common-fonts section-img-new">
+                              {section?.image}
+                            </p>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       </div>
-                    )}
+                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                      <div className="formEditor">
+                        <ReactEditor
+                          onDataTransfer={(data) =>
+                            handleEditorChange(data, index)
+                          }
+                          initialContent={section.section}
+                        />
+                      </div>
+                      <div className="blog-disable">
+                        {updateStateBtn === 0 ? (
+                          <button
+                            disabled
+                            className="disabledBtn blog-update-btn"
+                          >
+                            Update
+                          </button>
+                        ) : (
+                          <button
+                            className="common-fonts common-save-button blog-update-btn"
+                            onClick={() => handleUpdateClick(section.id)}
+                          >
+                            Update
+                          </button>
+                        )}
+                      </div>
+                      {section.id ? (
+                        <></>
+                      ) : (
+                        <div className="deleteContainer">
+                          <button
+                            onClick={() => handleDeleteSection(index)}
+                            className="sectionDelete"
+                          >
+                            <img
+                              src={trash}
+                              className="deleteIcon"
+                              alt="Delete"
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
               </div>
             </>
 

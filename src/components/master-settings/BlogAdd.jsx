@@ -753,7 +753,7 @@ const BlogAdd = () => {
                           </div>
                         </div>
                       </div>
-                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.table} />
+                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
                       <div className="formEditor">
                         <ReactEditor
                           onDataTransfer={(data) =>
