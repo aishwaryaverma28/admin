@@ -635,3 +635,45 @@ width: 12.5rem;
 .update-view p:last-child{
   margin-right: 1rem;
 }
+
+.row_name{
+  margin-bottom: 1rem;
+}
+
+.row_label{
+  display: inline-block;
+  width: 5rem;
+}
+
+.dynamic_table{
+  border-color: green;
+}
+
+.dynamic-input{
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #f3f6fa;
+  padding: 0.7rem;
+  cursor: pointer;
+  width: 8.5rem;
+  height: 2rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dynamic-box{
+  width: 60rem;
+}
+
+
+.box_2{
+  margin-left: 1rem;
+}
+
+.hhh{
+ overflow-y: scroll;
+}
+
+::-webkit-scrollbar{
+  height: 0.5rem;
+}

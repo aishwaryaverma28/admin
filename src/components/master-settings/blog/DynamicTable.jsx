@@ -43,6 +43,7 @@ const DynamicTable = ({ onDataSave, initialData }) => {
             type="text"
             value={tableData[i] ? tableData[i][j] : ''}
             onChange={(e) => handleTableDataChange(e, i, j)}
+            className='dynamic-input'
           />
         );
       }
@@ -87,21 +88,21 @@ const DynamicTable = ({ onDataSave, initialData }) => {
 
   return (
     <div>
-      <div>
-        <label>Rows:</label>
-        <input type="number" value={rows} onChange={handleRowChange} />
+      <div className='row_name box_2'>
+        <label className='row_label'>Rows:</label>
+        <input type="number" value={rows} onChange={handleRowChange}  className='common-fonts common-input'/>
         {/* <button onClick={handleAddRow}>Add Row</button> */}
         {/* <button onClick={handleRemoveRow}>Remove Row</button> */}
       </div>
-      <div>
-        <label>Columns:</label>
-        <input type="number" value={columns} onChange={handleColumnChange} />
+      <div className='row_name box_2'>
+        <label className='row_label'>Columns:</label>
+        <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input' />
         {/* <button onClick={handleAddColumn}>Add Column</button> */}
         {/* <button onClick={handleRemoveColumn}>Remove Column</button> */}
       </div>
       <div>
         {rows > 0 && columns > 0 && (
-          <div className="table">
+          <div className='box_2'>
             {generateTable().map((row, index) => (
               <div key={`row-${index}`}>
                 {row}

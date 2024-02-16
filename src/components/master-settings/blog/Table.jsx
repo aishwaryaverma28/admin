@@ -41,6 +41,7 @@ useEffect(() => {
             type="text"
             value={tableData[i] ? tableData[i][j] : ''}
             onChange={(e) => handleTableDataChange(e, i, j)}
+            className='dynamic-input'
           />
         );
       }
@@ -51,17 +52,17 @@ useEffect(() => {
 
   return (
     <div>
-      <div>
-        <label>Rows:</label>
-        <input type="number" value={rows} onChange={handleRowChange} />
+      <div className='row_name'>
+        <label className='row_label'>Rows:</label>
+        <input type="number" value={rows} onChange={handleRowChange} className='common-fonts common-input' />
       </div>
-      <div>
-        <label>Columns:</label>
-        <input type="number" value={columns} onChange={handleColumnChange} />
+      <div className='row_name'>
+        <label className='row_label'>Columns:</label>
+        <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input' />
       </div>
       <div>
         {rows > 0 && columns > 0 && (
-          <div className="table">
+          <div className='dynamic-box'>
             {generateTable().map((row, index) => (
               <div key={`row-${index}`}>
                 {row}
