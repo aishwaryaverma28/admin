@@ -13,6 +13,8 @@ import ReactEditor from "../ReactEditor";
 import trash from "../../assets/image/delete-icon.svg";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DynamicTable from "./blog/DynamicTable";
+import Table from "./blog/Table";
 
 const BlogAdd = () => {
   const org_id = localStorage.getItem("org_id");
@@ -29,6 +31,8 @@ const BlogAdd = () => {
   const [dataFromChild, setDataFromChild] = useState("");
   const [isIndex, setIsIndex] = useState(-1);
   const [sectionData, setSectionData] = useState([]);
+  const [dataFromTable, setDataFromTable] = useState([]);
+  const [tableData, setTableDate] = useState(false)
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
@@ -232,32 +236,48 @@ const BlogAdd = () => {
     setSectionData(newSectionData);
     setStateBtn(1);
   };
+  const handleTableChange = (data, index) => {
+    const newSectionData = [...sectionData];
+    newSectionData[index].table = data;
+    setSectionData(newSectionData);
+    setStateBtn(1);
+};
+
 
   //======================================================================================= sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
     setSectionTitle(title);
     setStateBtn(1);
+    setTableDate(false);
   };
 
   const handleSecSortChange = (event) => {
     const newValue = event.target.value;
     setSectionSort(newValue === "" ? null : parseInt(newValue, 10));
     setStateBtn(1);
+    setTableDate(false);
+  };
+
+  //===========================================================================================table data
+  const handleDataSave = (data) => {
+    setTableDate(false);
+    setDataFromTable(data);
+    setStateBtn(1);
   };
   //=======================================================================================editor data transfer
   const handleDataTransfer = (data) => {
+    setTableDate(false);
     setDataFromChild(data);
-    console.log(data);
     setStateBtn(1);
   };
 
   const removeHtmlTags = (htmlString) => {
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = htmlString;
-  //   return tempDiv.textContent || tempDiv.innerText || "";
-  const regex = /<(?!a\s*\/?)[^>]+>/g;
-  return htmlString.replace(regex, '');
+    //   const tempDiv = document.createElement("div");
+    //   tempDiv.innerHTML = htmlString;
+    //   return tempDiv.textContent || tempDiv.innerText || "";
+    const regex = /<(?!a\s*\/?)[^>]+>/g;
+    return htmlString.replace(regex, '');
   };
 
   //====================================================================================== handle section data in an array of objects
@@ -265,7 +285,6 @@ const BlogAdd = () => {
   const handleAddSection = (e) => {
     e.preventDefault();
     const plainText = removeHtmlTags(dataFromChild);
-    console.log(plainText)
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
@@ -273,6 +292,7 @@ const BlogAdd = () => {
       section: plainText,
       site: "",
       alt: "",
+      data_table: dataFromTable,
     };
     setSectionData([...sectionData, newSection]);
     setSectionTitle("");
@@ -281,6 +301,8 @@ const BlogAdd = () => {
     setStateBtn(1);
     setBlogImg2("");
     editorRef.current.clearEditorContent();
+    setDataFromTable([]);
+    setTableDate(true);
   };
   // =====================================================================================delete the targeted section
   const handleDeleteSection = (index) => {
@@ -657,7 +679,7 @@ const BlogAdd = () => {
                     </button>
                   </div>
                 </div>
-
+                <Table onDataSave={handleDataSave} tableFlag = {tableData}/>
                 <div className="formEditor">
                   <ReactEditor
                     ref={editorRef} // Add this line
@@ -665,93 +687,93 @@ const BlogAdd = () => {
                   />
                 </div>
               </div>
-
-              {sectionData?.map((section, index) => (
-                <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
-                  <div
-                    className="sectionDropdown"
-                    onClick={() => accordianClick(index)}
-                  >
-                    <div className="accHead">
-                      <h3>{section?.sort}</h3>
-                      <h3>{section?.heading}</h3>
+              <div>
+                {sectionData?.map((section, index) => (
+                  <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
+                    <div
+                      className="sectionDropdown"
+                      onClick={() => accordianClick(index)}
+                    >
+                      <div className="accHead">
+                        <h3>{section?.sort}</h3>
+                        <h3>{section?.heading}</h3>
+                      </div>
+                      {isIndex === index ? (
+                        <span>
+                          <i class="fa-sharp fa-solid fa-minus"></i>
+                        </span>
+                      ) : (
+                        <span>
+                          <i className="fa-sharp fa-solid fa-plus"></i>
+                        </span>
+                      )}
                     </div>
-                    {isIndex === index ? (
-                      <span>
-                        <i class="fa-sharp fa-solid fa-minus"></i>
-                      </span>
-                    ) : (
-                      <span>
-                        <i className="fa-sharp fa-solid fa-plus"></i>
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className={
-                      isIndex === index ? "answer display_answer" : "answer"
-                    }
-                  >
-                    <div className="sectionBlockOne">
-                      <input
-                        type="text"
-                        name="Sort"
-                        id="Sort"
-                        placeholder="Sort"
-                        className="SubsectionSort"
-                        value={section?.sort}
-                        onChange={(event) => handleSortChange(event, index)}
-                      />
-                      <input
-                        type="text"
-                        name="heading"
-                        id="heading"
-                        placeholder="Section Title"
-                        className="sectionHead"
-                        value={section?.heading}
-                        onChange={(event) => handleSecTitleChange(event, index)}
-                      />
+                    <div
+                      className={
+                        isIndex === index ? "answer display_answer" : "answer"
+                      }
+                    >
+                      <div className="sectionBlockOne">
+                        <input
+                          type="text"
+                          name="Sort"
+                          id="Sort"
+                          placeholder="Sort"
+                          className="SubsectionSort"
+                          value={section?.sort}
+                          onChange={(event) => handleSortChange(event, index)}
+                        />
+                        <input
+                          type="text"
+                          name="heading"
+                          id="heading"
+                          placeholder="Section Title"
+                          className="sectionHead"
+                          value={section?.heading}
+                          onChange={(event) => handleSecTitleChange(event, index)}
+                        />
 
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(event) => handleReplaceImage(event, index)}
-                        style={{ display: "none" }}
-                        ref={(input) => (fileInputRefs[index] = input)}
-                      />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => handleReplaceImage(event, index)}
+                          style={{ display: "none" }}
+                          ref={(input) => (fileInputRefs[index] = input)}
+                        />
 
-                      <div className="blog-browse-img">
-                        <button
-                          className="common-fonts blog-add-img add-img-2"
-                          onClick={() => fileInputRefs[index].click()}
-                        >
-                          {section?.image ? " change image" : " add image"}
-                        </button>
-                        <div className="blog-new-img">
-                          {section?.image ? section?.image : <></>}
+                        <div className="blog-browse-img">
+                          <button
+                            className="common-fonts blog-add-img add-img-2"
+                            onClick={() => fileInputRefs[index].click()}
+                          >
+                            {section?.image ? " change image" : " add image"}
+                          </button>
+                          <div className="blog-new-img">
+                            {section?.image ? section?.image : <></>}
+                          </div>
                         </div>
-
+                      </div>
+                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.table} />
+                      <div className="formEditor">
+                        <ReactEditor
+                          onDataTransfer={(data) =>
+                            handleEditorChange(data, index)
+                          }
+                          initialContent={section?.section}
+                        />
+                      </div>
+                      <div className="deleteContainer">
+                        <button
+                          onClick={() => handleDeleteSection(index)}
+                          className="sectionDelete"
+                        >
+                          <img src={trash} className="deleteIcon" alt="Delete" />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="formEditor">
-                      <ReactEditor
-                        onDataTransfer={(data) =>
-                          handleEditorChange(data, index)
-                        }
-                        initialContent={section?.section}
-                      />
-                    </div>
-                    <div className="deleteContainer">
-                      <button
-                        onClick={() => handleDeleteSection(index)}
-                        className="sectionDelete"
-                      >
-                        <img src={trash} className="deleteIcon" alt="Delete" />
-                      </button>
-                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </>
           </div>
           {/*==============================================================left side of form end here ============================================================*/}

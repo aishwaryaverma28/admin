@@ -18,6 +18,8 @@ import "../styles/BlogAdd.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
+import Table from "./blog/Table";
+import DynamicTable from "./blog/DynamicTable";
 const BlogUpdate = () => {
   const { id } = useParams();
   const org_id = localStorage.getItem("org_id");
@@ -25,14 +27,13 @@ const BlogUpdate = () => {
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
+  const [dataFromTable, setDataFromTable] = useState([]);
+  const [tableData, setTableDate] = useState(false)  
   const [isIndex, setIsIndex] = useState(-1);
   const [options, setOptions] = useState([]);
   const fileInputRef2 = useRef(null);
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
-  // const [childData, setChildData] = useState("");
-  // const [selectedImage, setSelectedImage] = useState(null);
-  // const [showEditButton, setShowEditButton] = useState(false);
   const decryptedToken = getDecryptedToken();
   // tags states
   const [selectedTags, setSelectedTags] = useState([]);
@@ -72,7 +73,7 @@ const BlogUpdate = () => {
     axios
       .get(GET_TAG_CATEGORY + org_id, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -98,6 +99,7 @@ const BlogUpdate = () => {
       image: updatedSection.image,
       section: plainText,
       blogid: updatedSection.blogid,
+      data_table: updatedSection.data_table,
     };
     console.log(updatedFormData);
     axios
@@ -161,7 +163,7 @@ const BlogUpdate = () => {
     }
     const secResponse = await axios.get(SEC_GET + id, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}`,
       },
     });
     const secData = secResponse.data.data;
@@ -324,21 +326,35 @@ const BlogUpdate = () => {
     setUpdateStateBtn(1);
   };
 
+  const handleTableChange = (data, index) => {
+    const newSectionData = [...sectionData];
+    newSectionData[index].table = data;
+    setSectionData(newSectionData);
+    setStateBtn(1);
+};
   //=========================================================== sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
     setSectionTitle(title);
+    setTableDate(false);
   };
 
   const handleSecSortChange = (event) => {
     const sort = event.target.value;
     setSectionSort(sort);
+    setTableDate(false);
   };
 
   //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
+    setTableDate(false);
   };
+//===========================================================================================table data
+const handleDataSave = (data) => {
+  setTableDate(false);
+  setDataFromTable(data);
+};  
 
   const removeHtmlTags = (htmlString) => {
     const regex = /<(?!a\s*\/?)[^>]+>/g;
@@ -355,7 +371,7 @@ const BlogUpdate = () => {
       sort: parseInt(sectionSort),
       image: blogImg3.split("blog/")[1]?.replace(/\.jpg$/, ""),
       section: plainText,
-      // section: `${dataFromChild}`,
+      data_table: dataFromTable,
       site: "",
       alt: "",
     };
@@ -798,10 +814,8 @@ const BlogUpdate = () => {
                       Add Section<span className="common-fonts redAlert"> *</span>
                     </button>
                   </div>
-
-
                 </div>
-
+                <Table onDataSave={handleDataSave} tableFlag = {tableData}/>
                 <div className="formEditor">
                   <ReactEditor
                     ref={editorRef} // Attach the ref here
@@ -809,7 +823,7 @@ const BlogUpdate = () => {
                   />
                 </div>
               </div>
-
+<div>
               {sectionData?.map((section, index) => (
                 <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
                   <div
@@ -881,7 +895,7 @@ const BlogUpdate = () => {
                         )}
                       </div>
                     </div>
-
+                    <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.table} />
                     <div className="formEditor">
                       <ReactEditor
                         onDataTransfer={(data) =>
@@ -926,6 +940,7 @@ const BlogUpdate = () => {
                   </div>
                 </div>
               ))}
+              </div>
             </>
 
             {/* ============================================================================================================================================== */}
