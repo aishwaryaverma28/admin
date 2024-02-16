@@ -77,7 +77,6 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        console.log(response)
         setCategory(response?.data?.data);
       })
       .catch((error) => {
@@ -87,7 +86,6 @@ const BlogUpdate = () => {
 
   const handleUpdateClick = (id) => {
     const updatedSection = sectionData.find((section) => section.id === id);
-
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
@@ -99,9 +97,8 @@ const BlogUpdate = () => {
       image: updatedSection.image,
       section: plainText,
       blogid: updatedSection.blogid,
-      data_table: updatedSection.data_table,
+      data_table: JSON.stringify(updatedSection.data_table),
     };
-    console.log(updatedFormData);
     axios
       .put(SEC_UPDATE + updatedSection.id, updatedFormData, {
         headers: {
@@ -161,17 +158,28 @@ const BlogUpdate = () => {
       setSelectSite(data?.site);
       // getTagBySite(data?.site);
     }
-    const secResponse = await axios.get(SEC_GET + id, {
+    sectionResponse();
+    tagData();
+  }
+  const sectionResponse = () => {
+    axios.get(SEC_GET + id, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,
       },
-    });
-    const secData = secResponse.data.data;
-    const sectionDataWithoutDate = removeDateFromSectionData(secData);
-    setSectionData(sectionDataWithoutDate);
-    tagData();
+    })
+      .then((response) => {
+        const secData = response?.data?.data;
+        const sectionDataWithoutDate = removeDateFromSectionData(secData);
+        const tempSectionData = sectionDataWithoutDate.map(section => ({
+          ...section,
+          data_table: JSON.parse(section.data_table)
+        }));
+        setSectionData(tempSectionData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-
   const removeDateFromSectionData = (data) => {
     return data?.map((section) => {
       const { date, ...newSection } = section;
@@ -328,10 +336,10 @@ const BlogUpdate = () => {
 
   const handleTableChange = (data, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].table = data;
+    newSectionData[index].data_table = data.map(row => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
-  };
+};
   //=========================================================== sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
@@ -357,8 +365,8 @@ const BlogUpdate = () => {
   };
 
   const removeHtmlTags = (htmlString) => {
-    const regex = /<(?!a\s*\/?)[^>]+>/g;
-    return htmlString.replace(regex, '');
+    const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
+      return htmlString.replace(regex, '');
   };
 
   //=========================================================handle section data in an array of objects
@@ -371,10 +379,11 @@ const BlogUpdate = () => {
       sort: parseInt(sectionSort),
       image: blogImg3.split("blog/")[1]?.replace(/\.jpg$/, ""),
       section: plainText,
-      data_table: dataFromTable,
+      data_table: JSON.stringify(dataFromTable),
       site: "",
       alt: "",
     };
+    console.log(newSection);
     axios
       .post(SEC_ADD + id, newSection, {
         headers: {
@@ -388,13 +397,13 @@ const BlogUpdate = () => {
             position: "top-center",
             autoClose: 2000,
           });
+          sectionResponse();
         } else {
           toast.error(response?.data?.message, {
             position: "top-center",
             autoClose: 2000,
           });
         }
-        getBlogInfo();
       });
     setSectionTitle("");
     setSectionSort(parseInt(sectionSort) + 1);
@@ -402,6 +411,8 @@ const BlogUpdate = () => {
     setStateBtn(1);
     editorRef.current.clearEditorContent();
     setBlogImg3("");
+    setDataFromTable([]);
+    setTableDate(true);
   };
 
   // =====================================================================================delete the targeted section
@@ -895,7 +906,9 @@ const BlogUpdate = () => {
                           )}
                         </div>
                       </div>
-                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                      <div>
+                        <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                      </div>
                       <div className="formEditor">
                         <ReactEditor
                           onDataTransfer={(data) =>

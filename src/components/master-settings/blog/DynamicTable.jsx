@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const DynamicTable = ({ onDataSave, initialData }) => {
-  console.log(initialData);
+  // console.log(initialData);
   const [rows, setRows] = useState(initialData ? initialData?.length : 1);
   const [columns, setColumns] = useState(initialData ? initialData[0]?.length : 1);
   const [tableData, setTableData] = useState(initialData || []);
@@ -10,9 +10,10 @@ const DynamicTable = ({ onDataSave, initialData }) => {
     if (initialData) {
       setRows(initialData?.length);
       setColumns(initialData[0]?.length);
+      setTableData(initialData);
     }
   }, [initialData]);
-
+  
   const handleRowChange = (e) => {
     setRows(parseInt(e.target.value));
   };
@@ -28,7 +29,6 @@ const DynamicTable = ({ onDataSave, initialData }) => {
     }
     newData[rowIndex][colIndex] = e.target.value;
     setTableData(newData);
-    // Call the onDataSave function whenever table data changes
     onDataSave(newData);
   };
 

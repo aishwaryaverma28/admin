@@ -238,7 +238,7 @@ const BlogAdd = () => {
   };
   const handleTableChange = (data, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].table = data;
+    newSectionData[index].data_table = data.map(row => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
 };
@@ -276,15 +276,17 @@ const BlogAdd = () => {
     //   const tempDiv = document.createElement("div");
     //   tempDiv.innerHTML = htmlString;
     //   return tempDiv.textContent || tempDiv.innerText || "";
-    const regex = /<(?!a\s*\/?)[^>]+>/g;
-    return htmlString.replace(regex, '');
+          const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
+      return htmlString.replace(regex, '');
   };
 
   //====================================================================================== handle section data in an array of objects
 
   const handleAddSection = (e) => {
     e.preventDefault();
+    console.log(dataFromChild)
     const plainText = removeHtmlTags(dataFromChild);
+    console.log(plainText)
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
