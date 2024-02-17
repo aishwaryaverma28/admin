@@ -191,6 +191,7 @@ const ViewLeadsTable = ({ onClose }) => {
               <th className="common-fonts">S No</th>
               <th className="common-fonts">DATE</th>
               <th className="common-fonts">NAME</th>
+              <th className="common-fonts">EMAIL</th>
               <th className="common-fonts">OBJ TYPE</th>
               <th className="common-fonts section_count">PHONE</th>
               <th className="common-fonts section_count">TYPE</th>
@@ -200,11 +201,12 @@ const ViewLeadsTable = ({ onClose }) => {
           <tbody>
             {leadsCount?.map((item, index) => (
               <tr key={item?.id}>
-                <td className="common-fonts">{index + 1}</td>
+                <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">
                   {formatDate(item?.creation_date)}
                 </td>
                 <td className="common-fonts">{item?.name}</td>
+                <td className="common-fonts">{item?.email}</td>
                 <td className="common-fonts">{item?.object_type}</td>
                 <td className="common-fonts">{item?.phone}</td>
                 <td className="common-fonts">{item?.type}</td>
