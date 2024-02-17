@@ -238,7 +238,7 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
             </div>
 
             <div className="help-bottom-btn">
-                {selectedLead.is_deleted === 1 ? <button className="common-fonts common-delete-button" onClick={handleRevoke}>
+                {selectedLead.is_deleted === 1 ? <button className="common-fonts common-save-button" onClick={handleRevoke}>
                 Revoke
               </button> :<button className="common-fonts common-delete-button" onClick={handleDelete}>
                 Delete
