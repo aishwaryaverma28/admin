@@ -599,4 +599,19 @@
   width: 2rem;
 }
 
+.new_table_1 th:nth-child(1){
+  width:3rem;
+}
+.new_table_1 th:nth-child(2), .new_table_1 th:nth-child(3){
+  width:12rem;
+}
+.new_table_1 th:nth-child(4){
+  width:15rem;
+}
+.new_table_1 th:nth-child(5){
+  width:7rem;
+}
 
+.new_table_1 table td:nth-child(7) {
+  border-right: 1px solid transparent;
+}
