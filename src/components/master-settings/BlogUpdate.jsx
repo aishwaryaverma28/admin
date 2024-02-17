@@ -86,6 +86,7 @@ const BlogUpdate = () => {
 
   const handleUpdateClick = (id) => {
     const updatedSection = sectionData.find((section) => section.id === id);
+    console.log(updatedSection)
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
@@ -334,12 +335,12 @@ const BlogUpdate = () => {
     setUpdateStateBtn(1);
   };
 
-  const handleTableChange = (data, index) => {
+  const handleTableChange = (data, index, id) => {
     const newSectionData = [...sectionData];
     newSectionData[index].data_table = data.map(row => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
-    handleUpdateClick(index);
+    handleUpdateClick(id);
 };
   //=========================================================== sort and title data change
   const handleTitle = (event) => {
@@ -908,7 +909,7 @@ const BlogUpdate = () => {
                         </div>
                       </div>
                       <div>
-                        <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                        <DynamicTable onDataSave={(data) => handleTableChange(data, index, section.id)} initialData={section.data_table} />
                       </div>
                       <div className="formEditor">
                         <ReactEditor
