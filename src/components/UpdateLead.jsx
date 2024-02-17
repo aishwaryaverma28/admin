@@ -104,6 +104,45 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
         console.log(error);
       });
   }
+  function handleRevoke(event) {
+    event.preventDefault();
+    const updatedFormData = {
+        is_deleted: 0
+    };
+    const today = new Date();
+    const lastThirtyDaysStartDate = new Date(today);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 1);
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+    axios
+      .put(UPDATE_LEADS + selectedLead.id, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        if (response?.data?.status !== false) {
+          toast.success("Lead updated successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          setStateBtn(0);
+          getData(startDate, formattedEndDate);
+          onClose();
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <>
@@ -199,9 +238,12 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
             </div>
 
             <div className="help-bottom-btn">
-              <button className="common-fonts common-delete-button" onClick={handleDelete}>
+                {selectedLead.is_deleted === 1 ? <button className="common-fonts common-delete-button" onClick={handleRevoke}>
+                Revoke
+              </button> :<button className="common-fonts common-delete-button" onClick={handleDelete}>
                 Delete
-              </button>
+              </button>}
+              
               {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>
                   Save
