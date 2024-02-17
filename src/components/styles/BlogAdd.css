@@ -637,9 +637,12 @@ width: 12.5rem;
 }
 
 .row_name{
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center; 
 }
-
+.dynamic-input{
+width: 10rem;
+}
 .row_label{
   display: inline-block;
   width: 5rem;
@@ -676,4 +679,10 @@ width: 12.5rem;
 
 ::-webkit-scrollbar{
   height: 0.5rem;
+}
+
+.blog_dynamic_table{
+  display: flex;
+  gap: 10rem;
+  align-items: center;
 }

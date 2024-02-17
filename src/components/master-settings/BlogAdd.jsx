@@ -294,7 +294,7 @@ const BlogAdd = () => {
       section: plainText,
       site: "",
       alt: "",
-      data_table: dataFromTable,
+      data_table: JSON.stringify(dataFromTable),
     };
     setSectionData([...sectionData, newSection]);
     setSectionTitle("");
@@ -755,7 +755,7 @@ const BlogAdd = () => {
                           </div>
                         </div>
                       </div>
-                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={JSON.parse(section.data_table)} />
                       <div className="formEditor">
                         <ReactEditor
                           onDataTransfer={(data) =>

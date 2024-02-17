@@ -88,17 +88,19 @@ const DynamicTable = ({ onDataSave, initialData }) => {
 
   return (
     <div>
+      <div className='blog_dynamic_table'>
       <div className='row_name box_2'>
         <label className='row_label'>Rows:</label>
-        <input type="number" value={rows} onChange={handleRowChange}  className='common-fonts common-input'/>
+        <input type="number" value={rows} onChange={handleRowChange}  className='common-fonts common-input dynamic-input'/>
         {/* <button onClick={handleAddRow}>Add Row</button> */}
         {/* <button onClick={handleRemoveRow}>Remove Row</button> */}
       </div>
       <div className='row_name box_2'>
         <label className='row_label'>Columns:</label>
-        <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input' />
+        <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input dynamic-input'  />
         {/* <button onClick={handleAddColumn}>Add Column</button> */}
         {/* <button onClick={handleRemoveColumn}>Remove Column</button> */}
+      </div>
       </div>
       <div>
         {rows > 0 && columns > 0 && (

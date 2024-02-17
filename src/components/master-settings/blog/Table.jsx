@@ -5,13 +5,13 @@ const Table = ({ onDataSave, tableFlag }) => {
   const [columns, setColumns] = useState(1);
   const [tableData, setTableData] = useState([]);
 
-useEffect(() => {
-  if (tableFlag === true){
-  setRows(1);
-  setColumns(1);
-  setTableData([]);
-  }
-},[tableFlag])
+  useEffect(() => {
+    if (tableFlag === true) {
+      setRows(1);
+      setColumns(1);
+      setTableData([]);
+    }
+  }, [tableFlag])
   const handleRowChange = (e) => {
     setRows(parseInt(e.target.value));
   };
@@ -52,13 +52,15 @@ useEffect(() => {
 
   return (
     <div>
-      <div className='row_name'>
-        <label className='row_label'>Rows:</label>
-        <input type="number" value={rows} onChange={handleRowChange} className='common-fonts common-input' />
-      </div>
-      <div className='row_name'>
-        <label className='row_label'>Columns:</label>
-        <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input' />
+      <div className='blog_dynamic_table'>
+        <div className='row_name'>
+          <label className='row_label'>Rows:</label>
+          <input type="number" value={rows} onChange={handleRowChange} className='common-fonts common-input dynamic-input' />
+        </div>
+        <div className='row_name'>
+          <label className='row_label'>Columns:</label>
+          <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input dynamic-input' />
+        </div>
       </div>
       <div>
         {rows > 0 && columns > 0 && (
@@ -71,7 +73,7 @@ useEffect(() => {
           </div>
         )}
       </div>
-      <br/><br/>
+      <br /><br />
     </div>
   );
 };
