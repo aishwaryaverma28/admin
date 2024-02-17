@@ -354,8 +354,8 @@
   width: 20rem;
 }
 .leads_desc {
-  height: 3.5rem;
-  overflow-y: scroll;
+  height:1.1rem;
+  overflow: hidden;
 }
 
 /* dashboard css ends */
