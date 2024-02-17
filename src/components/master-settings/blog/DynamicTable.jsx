@@ -29,7 +29,6 @@ const DynamicTable = ({ onDataSave, initialData }) => {
     }
     newData[rowIndex][colIndex] = e.target.value;
     setTableData(newData);
-    onDataSave(newData);
   };
 
   const generateTable = () => {
@@ -51,55 +50,20 @@ const DynamicTable = ({ onDataSave, initialData }) => {
     }
     return rowsArray;
   };
-
-  const handleAddRow = (e) => {
+  const handleAddButtonClick = (e) => {
     e.preventDefault();
-    setRows(rows + 1);
-    setTableData([...tableData, Array(columns).fill('')]);
+    onDataSave(tableData);
   };
-
-  const handleAddColumn = (e) => {
-    e.preventDefault();
-    setColumns(columns + 1);
-    const newData = tableData.map((row) => {
-      return [...row, ''];
-    });
-    setTableData(newData);
-  };
-
-  const handleRemoveRow = (e) => {
-    e.preventDefault();
-    if (rows > 1) {
-      setRows(rows - 1);
-      setTableData(tableData.slice(0, -1));
-    }
-  };
-
-  const handleRemoveColumn = (e) => {
-    e.preventDefault();
-    if (columns > 1) {
-      setColumns(columns - 1);
-      const newData = tableData.map((row) => {
-        return row.slice(0, -1);
-      });
-      setTableData(newData);
-    }
-  };
-
   return (
     <div>
       <div className='blog_dynamic_table'>
       <div className='row_name box_2'>
         <label className='row_label'>Rows:</label>
         <input type="number" value={rows} onChange={handleRowChange}  className='common-fonts common-input dynamic-input'/>
-        {/* <button onClick={handleAddRow}>Add Row</button> */}
-        {/* <button onClick={handleRemoveRow}>Remove Row</button> */}
       </div>
       <div className='row_name box_2'>
         <label className='row_label'>Columns:</label>
         <input type="number" value={columns} onChange={handleColumnChange} className='common-fonts common-input dynamic-input'  />
-        {/* <button onClick={handleAddColumn}>Add Column</button> */}
-        {/* <button onClick={handleRemoveColumn}>Remove Column</button> */}
       </div>
       </div>
       <div>
@@ -113,6 +77,7 @@ const DynamicTable = ({ onDataSave, initialData }) => {
           </div>
         )}
       </div>
+      <button onClick={handleAddButtonClick}>ADD</button>
       <br/><br/>
     </div>
   );
