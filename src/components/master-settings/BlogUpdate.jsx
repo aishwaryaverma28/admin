@@ -28,7 +28,7 @@ const BlogUpdate = () => {
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
   const [dataFromTable, setDataFromTable] = useState([]);
-  const [tableData, setTableDate] = useState(false)
+  const [tableData, setTableDate] = useState(false);
   const [isIndex, setIsIndex] = useState(-1);
   const [options, setOptions] = useState([]);
   const fileInputRef2 = useRef(null);
@@ -86,7 +86,7 @@ const BlogUpdate = () => {
 
   const handleUpdateClick = (id) => {
     const updatedSection = sectionData.find((section) => section.id === id);
-    console.log(updatedSection)
+    console.log(updatedSection);
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
@@ -125,7 +125,7 @@ const BlogUpdate = () => {
   };
   const formatDateForInput = (timestamp) => {
     const utcDate = new Date(timestamp);
-    const istDate = new Date(utcDate.getTime() + (5.5 * 60 * 60 * 1000));
+    const istDate = new Date(utcDate.getTime() + 5.5 * 60 * 60 * 1000);
     const formattedDate = istDate.toISOString().split("T")[0];
     return formattedDate;
   };
@@ -163,24 +163,25 @@ const BlogUpdate = () => {
     tagData();
   }
   const sectionResponse = () => {
-    axios.get(SEC_GET + id, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    axios
+      .get(SEC_GET + id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then((response) => {
         const secData = response?.data?.data;
         const sectionDataWithoutDate = removeDateFromSectionData(secData);
-        const tempSectionData = sectionDataWithoutDate.map(section => ({
+        const tempSectionData = sectionDataWithoutDate.map((section) => ({
           ...section,
-          data_table: JSON.parse(section.data_table)
+          data_table: JSON.parse(section.data_table),
         }));
         setSectionData(tempSectionData);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
   const removeDateFromSectionData = (data) => {
     return data?.map((section) => {
       const { date, ...newSection } = section;
@@ -267,7 +268,10 @@ const BlogUpdate = () => {
         })
         .then((response) => {
           setOptions(
-            response?.data?.data?.map((item) => ({ id: item.id, tag: item.tag }))
+            response?.data?.data?.map((item) => ({
+              id: item.id,
+              tag: item.tag,
+            }))
           );
         })
         .catch((error) => {
@@ -337,11 +341,21 @@ const BlogUpdate = () => {
 
   const handleTableChange = (data, index, id) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].data_table = data.map(row => [...row]);
+    const transposedData = transpose(data);
+    const filteredTransposedData = transposedData.filter((column) =>
+      column.some((cell) => cell !== "")
+    );
+    const filteredData = transpose(filteredTransposedData);
+    newSectionData[index].data_table = filteredData.map((row) => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
     handleUpdateClick(id);
-};
+  };
+
+  // Function to transpose a 2D array
+  function transpose(matrix) {
+    return matrix[0].map((_, colIndex) => matrix.map((row) => row[colIndex]));
+  }
   //=========================================================== sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
@@ -368,7 +382,7 @@ const BlogUpdate = () => {
 
   const removeHtmlTags = (htmlString) => {
     const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
-      return htmlString.replace(regex, '');
+    return htmlString.replace(regex, "");
   };
 
   //=========================================================handle section data in an array of objects
@@ -438,8 +452,7 @@ const BlogUpdate = () => {
       setFormData((prev) => {
         return { ...prev, url: modifiedValue };
       });
-    }
-    else if (name === "keywords") {
+    } else if (name === "keywords") {
       modifiedValue = modifiedValue.toLowerCase();
       setFormData((prev) => {
         return { ...prev, keywords: modifiedValue };
@@ -683,7 +696,6 @@ const BlogUpdate = () => {
                 <div className="blog-new-img">
                   {blogImg2 ? blogImgName : <></>}
                 </div>
-
               </div>
             </div>
             <div className="from-filed">
@@ -703,11 +715,14 @@ const BlogUpdate = () => {
               <label htmlFor="sport" className="common-fonts blogs-new-label">
                 Blog Sport
               </label>
-              <input list="sports" name="sport"
+              <input
+                list="sports"
+                name="sport"
                 id="sport"
                 placeholder="Enter Blog Sport"
                 value={formData?.sport}
-                onChange={handleChange} />
+                onChange={handleChange}
+              />
 
               <datalist id="sports">
                 <option value="archery"></option>
@@ -740,7 +755,6 @@ const BlogUpdate = () => {
                 <option value="volleyball"></option>
                 <option value="wrestling"></option>
               </datalist>
-
             </div>
             <div className="from-filed">
               <label htmlFor="title" className="common-fonts blogs-new-label">
@@ -779,8 +793,12 @@ const BlogUpdate = () => {
                   style={{ display: "none" }}
                 />
                 <div className="from-blog-section from-filed">
-                  <label htmlFor="title" className="common-fonts blogs-new-label">
-                    Section Title<span className="common-fonts redAlert"> *</span>
+                  <label
+                    htmlFor="title"
+                    className="common-fonts blogs-new-label"
+                  >
+                    Section Title
+                    <span className="common-fonts redAlert"> *</span>
                   </label>
                   <input
                     type="text"
@@ -790,7 +808,6 @@ const BlogUpdate = () => {
                     onChange={handleTitle}
                     value={sectionTitle}
                   />
-
 
                   <div className="formBtnBox">
                     <div className="blog-url-input-2 blog-sort">
@@ -818,13 +835,16 @@ const BlogUpdate = () => {
                         Add Image
                       </button>
 
-                      <div className="blog-new-img">{blogImg3 ? blogImgName2 : <></>}</div>
+                      <div className="blog-new-img">
+                        {blogImg3 ? blogImgName2 : <></>}
+                      </div>
                     </div>
                     <button
                       onClick={handleAddSection}
                       className="common-fonts blog-add-img add-img-2 add-img-3"
                     >
-                      Add Section<span className="common-fonts redAlert"> *</span>
+                      Add Section
+                      <span className="common-fonts redAlert"> *</span>
                     </button>
                   </div>
                 </div>
@@ -838,7 +858,10 @@ const BlogUpdate = () => {
               </div>
               <div>
                 {sectionData?.map((section, index) => (
-                  <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
+                  <div
+                    key={index}
+                    className={`section ${index === 0 ? "first-section" : ""}`}
+                  >
                     <div
                       className="sectionDropdown"
                       onClick={() => accordianClick(index)}
@@ -879,7 +902,9 @@ const BlogUpdate = () => {
                           placeholder="Section Title"
                           className="sectionHead"
                           value={section.heading}
-                          onChange={(event) => handleSecTitleChange(event, index)}
+                          onChange={(event) =>
+                            handleSecTitleChange(event, index)
+                          }
                         />
                         <input
                           type="file"
@@ -909,7 +934,12 @@ const BlogUpdate = () => {
                         </div>
                       </div>
                       <div>
-                        <DynamicTable onDataSave={(data) => handleTableChange(data, index, section.id)} initialData={section.data_table} />
+                        <DynamicTable
+                          onDataSave={(data) =>
+                            handleTableChange(data, index, section.id)
+                          }
+                          initialData={section.data_table}
+                        />
                       </div>
                       <div className="formEditor">
                         <ReactEditor
@@ -986,7 +1016,10 @@ const BlogUpdate = () => {
                     <option value="">Select a tag</option>
 
                     {options
-                      ?.filter(option => !tagId.split(",").includes(option.id.toString()))
+                      ?.filter(
+                        (option) =>
+                          !tagId.split(",").includes(option.id.toString())
+                      )
                       .map((option) => (
                         <option key={option?.id} value={option?.id}>
                           {option?.tag}
@@ -1055,7 +1088,9 @@ const BlogUpdate = () => {
                   </div>
                 </div>
                 <div className="tagData tag-box tag-box-2">
-                  <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
+                  <div className={selectSite ? "tagItems" : ""}>
+                    {selectSite}
+                  </div>
                 </div>
               </div>
             </div>

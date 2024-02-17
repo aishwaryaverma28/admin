@@ -646,6 +646,7 @@ width: 10rem;
 .row_label{
   display: inline-block;
   width: 5rem;
+  margin-bottom: 1rem;
 }
 
 .dynamic_table{
@@ -685,4 +686,11 @@ width: 10rem;
   display: flex;
   gap: 10rem;
   align-items: center;
+}
+
+.btn_flex_new{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-right: 1.5rem;
 }

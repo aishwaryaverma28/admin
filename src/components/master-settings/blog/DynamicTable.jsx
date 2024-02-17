@@ -77,7 +77,10 @@ const DynamicTable = ({ onDataSave, initialData }) => {
           </div>
         )}
       </div>
-      <button onClick={handleAddButtonClick}>ADD</button>
+      <div className='btn_flex_new'>
+      <button onClick={handleAddButtonClick} className='common-save-button common-fonts'>ADD</button>
+      </div>
+      
       <br/><br/>
     </div>
   );
