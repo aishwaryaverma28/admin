@@ -335,11 +335,11 @@ const BlogUpdate = () => {
   };
 
   const handleTableChange = (data, index) => {
-    alert("hi")
     const newSectionData = [...sectionData];
     newSectionData[index].data_table = data.map(row => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
+    handleUpdateClick(index);
 };
   //=========================================================== sort and title data change
   const handleTitle = (event) => {

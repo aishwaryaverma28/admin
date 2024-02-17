@@ -294,8 +294,9 @@ const BlogAdd = () => {
       section: plainText,
       site: "",
       alt: "",
-      data_table: JSON.stringify(dataFromTable),
+      data_table: dataFromTable,
     };
+    
     setSectionData([...sectionData, newSection]);
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
@@ -350,7 +351,7 @@ const BlogAdd = () => {
       tag: tagId,
       image: blogImg,
       date: selectedDate,
-      sections: sectionData,
+      // sections: sectionData,
       site: selectSite,
       route: formData?.url,
       alt: "",
@@ -755,7 +756,7 @@ const BlogAdd = () => {
                           </div>
                         </div>
                       </div>
-                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={JSON.parse(section.data_table)} />
+                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
                       <div className="formEditor">
                         <ReactEditor
                           onDataTransfer={(data) =>
