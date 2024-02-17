@@ -3,9 +3,12 @@ import Back from "../assets/image/arrow-left.svg";
 import LeadModal from "./LeadModal.jsx";
 import axios from "axios";
 import { GET_STATS,getDecryptedToken } from "./utils/Constants";
+import UpdateLead from "./UpdateLead.jsx";
 
 const ViewLeadsTable = ({ onClose }) => {
   const [openLead, setOpenLead] = useState(false);
+  const [updateLead, setUpdateLead] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
   const [leadsCount, setLeadsCount] = useState(null);
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
@@ -21,14 +24,20 @@ const ViewLeadsTable = ({ onClose }) => {
     const date = new Date(isoDate);
     return date.toLocaleDateString("en-US", options);
   };
-
+  const updateLeadClick = (item) => {
+    setSelectedLead(item);
+    setUpdateLead(true);
+  };
+  const updateLeadClose = () => {
+    setUpdateLead(false)
+  }
   const addLeadClick = () => {
     setOpenLead(true)
   }
   const addLeadClose = () => {
     setOpenLead(false)
   }
-
+  
   useEffect(() => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
@@ -200,7 +209,7 @@ const ViewLeadsTable = ({ onClose }) => {
           </thead>
           <tbody>
             {leadsCount?.map((item, index) => (
-              <tr key={item?.id}>
+              <tr key={item?.id} onClick={() => updateLeadClick(item)} className={item.is_deleted === 1 ? 'redText' : ''}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">
                   {formatDate(item?.creation_date)}
@@ -221,6 +230,12 @@ const ViewLeadsTable = ({ onClose }) => {
       {
         openLead && (
           <LeadModal onClose={addLeadClose} getData={getData} />
+        )
+      }
+{
+        updateLead && (
+          <UpdateLead onClose={updateLeadClose} selectedLead={selectedLead} getData={getData}/>
+
         )
       }
     </>
