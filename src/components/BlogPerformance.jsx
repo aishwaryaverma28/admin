@@ -23,7 +23,7 @@ const BlogPerformance = ({ data , onClose}) => {
           <span>PERFORMANCE DATA</span>
           <span>Total Blog: {data?.length}</span>
         </div>
-        <table>
+        <table className="blog_performance">
           <thead>
             <tr>
               <th className="common-fonts">ID</th>

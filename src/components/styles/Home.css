@@ -261,6 +261,13 @@
   padding-bottom: 1rem;
   padding-top: 1rem;
 }
+.dashboard_header2 {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  background-color: #fff;
+  gap: 1rem;
+}
 
 .select_new {
   cursor: pointer;
