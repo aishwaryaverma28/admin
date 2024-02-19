@@ -14,10 +14,13 @@ const Home = () => {
   const role_name = localStorage.getItem("role_name")
   const userName = useSelector(store => store.user.items);
   const [tableData, setTableData] = useState([]);
-  const [stats, setStats] = useState(null);
   const [leadsCount, setLeadsCount] = useState(null);
+  const [academyCount, setAcademyCount] = useState(null);
+  const [playerCount, setPlayerCount] = useState(null);
+  const [subsCount, setSubsCount] = useState(null);
+  const [signUp, setSignUp] = useState(null);
   const [login, setLogin] = useState(null);
-  const [reg, setReg] = useState(null);
+  const [coach, setCoach] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
       const today = new Date();
@@ -51,9 +54,12 @@ const Home = () => {
           console.log(response?.data?.data)
           setIsLoading(false);
           setLeadsCount(response?.data?.data?.leads?.reverse());
-          setStats(response?.data?.data?.stats?.reverse());
-          setLogin(response?.data?.data?.otpStats[0]?.login_otp);
-          setReg(response?.data?.data?.otpStats[0]?.signup_otp);
+          setAcademyCount(response?.data?.data?.AcademyUserStats?.reverse());
+          setPlayerCount(response?.data?.data?.PlayerUserStats?.reverse());
+          setSubsCount(response?.data?.data?.subs?.reverse());
+          setSignUp(response?.data?.data?.signUpSuccess?.reverse());
+          setLogin(response?.data?.data?.loginSuccess?.reverse());
+          setCoach(response?.data?.data?.CoachUserStats?.reverse());
         }
       })
       .catch((error) => {
@@ -95,10 +101,10 @@ const Home = () => {
         <>
           {isLoading ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
-          ) : stats?.length === 0 ? (
+          ) : leadsCount?.length === 0 ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>No Blogs Found</div>
           ) : (
-            <Dashboard blog={tableData} getData={getData} leadsCount={leadsCount} login={login} reg={reg} stats={stats} />
+            <Dashboard blog={tableData} getData={getData} leadsCount={leadsCount} academyCount={academyCount} playerCount={playerCount} subsCount={subsCount} signUp={signUp} login={login} coach={coach}/>
           )}
         </>
       ) : (

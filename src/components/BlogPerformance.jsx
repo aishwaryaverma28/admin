@@ -26,7 +26,7 @@ const BlogPerformance = ({ data , onClose}) => {
         <table>
           <thead>
             <tr>
-              <th className="common-fonts">S No</th>
+              <th className="common-fonts">ID</th>
               <th className="common-fonts">DATE</th>
               <th className="common-fonts">BLOG TITLE</th>
               <th className="common-fonts section_count">VIEW COUNT</th>
@@ -39,12 +39,12 @@ const BlogPerformance = ({ data , onClose}) => {
           <tbody>
             {data?.map((item, index) => (
               <tr key={item?.id}>
-                <td className="common-fonts">{index + 1}</td>
+                <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">
                   {formatDate(item?.creation_date)}
                 </td>
-                <td className="common-fonts">{item?.title}</td>
-                <td className="common-fonts">{item?.view_count}</td>
+                <td className="common-fonts blog_title">{item?.title}</td>
+                <td className="common-fonts blog_view">{item?.view_count}</td>
                 <td className="common-fonts">{item?.section_count}</td>
                 <td className="common-fonts">{item?.sport}</td>
                 <td className="common-fonts"> {item?.word_count}</td>

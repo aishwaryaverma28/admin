@@ -21,7 +21,9 @@
 .marketing-all-table table td {
   text-align: left;
 }
-
+.blog_title{
+  width: 30rem;
+}
 .marketing-all-table table td:nth-child(1),
 .marketing-all-table table td:nth-child(2),
 .marketing-all-table table td:nth-child(3),

@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useState, useEffect} from 'react'
 import Back from "../assets/image/arrow-left.svg";
-import LeadModal from "./LeadModal.jsx";
 import axios from "axios";
 import { GET_STATS,getDecryptedToken } from "./utils/Constants";
-import UpdateLead from "./UpdateLead.jsx";
 
-const ViewLeadsTable = ({ onClose }) => {
-  const [openLead, setOpenLead] = useState(false);
-  const [updateLead, setUpdateLead] = useState(false);
-  const [selectedLead, setSelectedLead] = useState(null);
-  const [leadsCount, setLeadsCount] = useState(null);
-  const [selectedOption, setSelectedOption] = useState("last_thirty_days");
+const CoachTable = ({onClose }) => {
+    const [coach, setCoach] = useState(null);
+    const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
   const formatDate = (isoDate) => {
     const options = {
@@ -24,26 +19,12 @@ const ViewLeadsTable = ({ onClose }) => {
     const date = new Date(isoDate);
     return date.toLocaleDateString("en-US", options);
   };
-  const updateLeadClick = (item) => {
-    setSelectedLead(item);
-    setUpdateLead(true);
-  };
-  const updateLeadClose = () => {
-    setUpdateLead(false)
-  }
-  const addLeadClick = () => {
-    setOpenLead(true)
-  }
-  const addLeadClose = () => {
-    setOpenLead(false)
-  }
-  
+    
   useEffect(() => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-    // Adjust the endDate calculation to increase it by 1 day
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
@@ -65,9 +46,9 @@ const ViewLeadsTable = ({ onClose }) => {
         }
       )
       .then((response) => {
+        console.log(response?.data?.data?.CoachUserStats?.reverse());
         if (response?.data?.status === 1) {
-          // console.log(response?.data?.data?.otpStats[0])
-          setLeadsCount(response?.data?.data?.leads?.reverse());
+            setCoach(response?.data?.data?.CoachUserStats?.reverse());
         }
       })
       .catch((error) => {
@@ -153,93 +134,69 @@ const ViewLeadsTable = ({ onClose }) => {
 
     getData(startDate, formattedEndDate);
   };
-
-
   return (
     <>
-      <div className="performance_title">
-        <img src={Back} alt="" onClick={onClose} />
-        <span>LEAD DATA</span>
-        <span>Total Lead: {leadsCount?.length}</span>
-        <div className="leads_new_btn">
-          <div className="dashboard_header">
-            <div>
-              <select
-                className="selectSec"
-                onChange={handleSelectChange}
-                value={selectedOption}
-              >
-                <option value="today">Today</option>
-                <option value="yesterday">Yesterday</option>
-                <option value="this_week">This Week</option>
-                <option value="last_week">Last Week</option>
-                <option value="last_seven_days">Last 7 days</option>
-                <option value="last_fourteen_days">Last 14 days</option>
-                <option value="last_twenty_eight_days">Last 28 days</option>
-                <option value="last_thirty_days">Last 30 days</option>
-                <option value="last_sixty_days">Last 60 days</option>
-              </select>
-            </div>
-            <div>
-              <select className="selectSec">
-                <option value="bookmyplayer">bookmyplayer</option>
-                <option value="leadplaner">leadplaner</option>
-                <option value="firstcron">firstcron</option>
-                <option value="routplaner">routplaner</option>
-              </select>
-            </div>
+    <div className="performance_title">
+      <img src={Back} alt="" onClick={onClose} />
+      <span>COACH DATA</span>
+      <span>Total Coach: {coach ? coach?.length : 0}</span>
+      <div className="leads_new_btn">
+        <div className="dashboard_header">
+          <div>
+            <select
+              className="selectSec"
+              onChange={handleSelectChange}
+              value={selectedOption}
+            >
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="this_week">This Week</option>
+              <option value="last_week">Last Week</option>
+              <option value="last_seven_days">Last 7 days</option>
+              <option value="last_fourteen_days">Last 14 days</option>
+              <option value="last_twenty_eight_days">Last 28 days</option>
+              <option value="last_thirty_days">Last 30 days</option>
+              <option value="last_sixty_days">Last 60 days</option>
+            </select>
           </div>
-          <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button>
+          <div>
+            <select className="selectSec">
+              <option value="bookmyplayer">bookmyplayer</option>
+              <option value="leadplaner">leadplaner</option>
+              <option value="firstcron">firstcron</option>
+              <option value="routplaner">routplaner</option>
+            </select>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div className="marketing-all-table lead_last_border new_table_1">
-        <table>
-          <thead>
-            <tr>
-              <th className="common-fonts">ID</th>
-              <th className="common-fonts">DATE</th>
-              <th className="common-fonts">NAME</th>
-              <th className="common-fonts">EMAIL</th>
-              <th className="common-fonts">OBJ TYPE</th>
-              <th className="common-fonts section_count">PHONE</th>
-              <th className="common-fonts section_count">TYPE</th>
-              <th className="common-fonts section_count">DESCRIPTION</th>
+    <div className="marketing-all-table lead_last_border new_table_1">
+      <table>
+        <thead>
+          <tr>
+            <th className="common-fonts">ID</th>
+            <th className="common-fonts">DATE</th>
+            <th className="common-fonts">NAME</th>
+            <th className="common-fonts">PHONE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {coach?.map((item, index) => (
+            <tr key={item?.id}>
+              <td className="common-fonts">{item.id}</td>
+              <td className="common-fonts">
+                {formatDate(item?.creation_date)}
+              </td>
+              <td className="common-fonts">{item?.name}</td>
+              <td className="common-fonts">{item?.phone}</td>
             </tr>
-          </thead>
-          <tbody>
-            {leadsCount?.map((item, index) => (
-              <tr key={item?.id} onClick={() => updateLeadClick(item)} className={item.is_deleted === 1 ? 'redText' : ''}>
-                <td className="common-fonts">{item.id}</td>
-                <td className="common-fonts">
-                  {formatDate(item?.creation_date)}
-                </td>
-                <td className="common-fonts">{item?.name}</td>
-                <td className="common-fonts">{item?.email}</td>
-                <td className="common-fonts">{item?.object_type}</td>
-                <td className="common-fonts">{item?.phone}</td>
-                <td className="common-fonts">{item?.type}</td>
-                <td className="common-fonts">
-                  <div className="leads_desc">{item?.description}</div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {
-        openLead && (
-          <LeadModal onClose={addLeadClose} getData={getData} />
-        )
-      }
-{
-        updateLead && (
-          <UpdateLead onClose={updateLeadClose} selectedLead={selectedLead} getData={getData}/>
-
-        )
-      }
+          ))}
+        </tbody>
+      </table>
+    </div>
     </>
-  );
-};
+  )
+}
 
-export default ViewLeadsTable;
+export default CoachTable

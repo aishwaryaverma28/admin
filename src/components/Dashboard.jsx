@@ -5,11 +5,21 @@ import BlogPerformance from "./BlogPerformance.jsx";
 import LeadModal from "./LeadModal.jsx";
 import ViewLeadsTable from "./ViewLeadsTable.jsx";
 import Subscription from "./Subscription.jsx";
-const Dashboard = ({ blog, getData, leadsCount, login, reg, stats }) => {
+import ViewAcademyTable from "./ViewAcademyTable.jsx";
+import ViewPlayerTable from "./ViewPlayerTable.jsx";
+import SignUpTable from "./SignUpTable.jsx";
+import LoginTable from "./LoginTable.jsx";
+import CoachTable from "./CoachTable.jsx";
+const Dashboard = ({ blog, getData, leadsCount, academyCount, playerCount, subsCount, signUp, login, coach }) => {
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
 
   const [openBlog, setOpenBlog] = useState(false);
   const [openLeadTable, setOpenLeadTable] = useState(false);
+  const [openAcademyTable, setOpenAcademyTable] = useState(false);
+  const [openPlayerTable, setOpenPlayerTable] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [coachOpen, setCoachOpen] = useState(false);
   const [openLead, setOpenLead] = useState(false);
   const [openSubscription, setOpenSubscription] = useState(false);
 
@@ -39,6 +49,36 @@ const Dashboard = ({ blog, getData, leadsCount, login, reg, stats }) => {
     setOpenLeadTable(false);
   };
 
+  const academyTableClick = () => {
+    setOpenAcademyTable(true);
+  };
+  const academyTableClose = () => {
+    setOpenAcademyTable(false);
+  };
+  const playerTableClick = () => {
+    setOpenPlayerTable(true);
+  };
+  const playerTableClose = () => {
+    setOpenPlayerTable(false);
+  };
+  const signUpTableClick = () => {
+    setOpenSignUp(true);
+  };
+  const signUpTableClose = () => {
+    setOpenSignUp(false);
+  };
+  const loginTableClick = () => {
+    setLoginOpen(true);
+  };
+  const loginTableClose = () => {
+    setLoginOpen(false);
+  };
+  const coachTableClick = () => {
+    setCoachOpen(true);
+  };
+  const coachTableClose = () => {
+    setCoachOpen(false);
+  };
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
     let startDate, endDate;
@@ -121,106 +161,130 @@ const Dashboard = ({ blog, getData, leadsCount, login, reg, stats }) => {
   return openBlog ? (
     <BlogPerformance data={blog} onClose={blogClose} />
   ) : openLeadTable ? (
-    <ViewLeadsTable data={leadsCount} onClose={leadTableClose} />
+    <ViewLeadsTable onClose={leadTableClose} />
   ) : openSubscription ? (
     <Subscription onClose={subscriptionClose} />
-  ) : (
-    <section>
-      <div className="dashboard_header">
-        <div>
-          <select
-            className="selectSec"
-            onChange={handleSelectChange}
-            value={selectedOption}
-          >
-            <option value="today">Today</option>
-            <option value="yesterday">Yesterday</option>
-            <option value="this_week">This Week</option>
-            <option value="last_week">Last Week</option>
-            <option value="last_seven_days">Last 7 days</option>
-            <option value="last_fourteen_days">Last 14 days</option>
-            <option value="last_twenty_eight_days">Last 28 days</option>
-            <option value="last_thirty_days">Last 30 days</option>
-            <option value="last_sixty_days">Last 60 days</option>
-          </select>
-        </div>
-        <div>
-          <select className="selectSec">
-            <option value="bookmyplayer">bookmyplayer</option>
-            <option value="leadplaner">leadplaner</option>
-            <option value="firstcron">firstcron</option>
-            <option value="routplaner">routplaner</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="dashboard_view">
-        <div className="dashboard_left">
-          <h2>OTP</h2>
-
-          <div className="dashboard_item">
-            <div className="dashboard_card">
-              <h3 className="common_fontscommon_fonts">Login</h3>
-              <p className="common_fonts dash_num">{login ? login : 0}</p>
+  ) : openAcademyTable ? (
+    <ViewAcademyTable onClose={academyTableClose} />
+  ) : openPlayerTable ? (
+      <ViewPlayerTable onClose={playerTableClose} />
+    ) : openSignUp ? (
+      <SignUpTable onClose={signUpTableClose} />
+    ) : loginOpen ? (
+      <LoginTable onClose={loginTableClose} />
+    ) : coachOpen ? (
+      <CoachTable onClose={coachTableClose} />
+    ) :
+      (
+        <section>
+          <div className="dashboard_header">
+            <div>
+              <select
+                className="selectSec"
+                onChange={handleSelectChange}
+                value={selectedOption}
+              >
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="this_week">This Week</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_seven_days">Last 7 days</option>
+                <option value="last_fourteen_days">Last 14 days</option>
+                <option value="last_twenty_eight_days">Last 28 days</option>
+                <option value="last_thirty_days">Last 30 days</option>
+                <option value="last_sixty_days">Last 60 days</option>
+              </select>
             </div>
-            <div className="dashboard_card">
-              <h3 className="font_new">Registration</h3>
-              <p className="common_fonts dash_num">{reg ? reg : 0}</p>
+            <div>
+              <select className="selectSec">
+                <option value="bookmyplayer">bookmyplayer</option>
+                <option value="leadplaner">leadplaner</option>
+                <option value="firstcron">firstcron</option>
+                <option value="routplaner">routplaner</option>
+              </select>
             </div>
           </div>
 
-          <h2>USERS</h2>
-          <div className="dashboard_item">
-            {stats &&
-              stats.map((item, index) => (
-                <div className="dashboard_card" key={index}>
-                  <h3 className="common_fonts">{item.type}</h3>
-                  <p className="common_fonts dash_num">{item.type_count}</p>
+          <div className="dashboard_view">
+            <div className="dashboard_left">
+              <h2>OTP</h2>
+
+              <div className="dashboard_item">
+                <div className="dashboard_card">
+                  <h3 className="common_fontscommon_fonts" onClick={loginTableClick}>Login</h3>
+                  <p className="common_fonts dash_num">{login ? login?.length : 0}</p>
                 </div>
-              ))}
-          </div>
+                <div className="dashboard_card">
+                  <h3 className="font_new" onClick={signUpTableClick}>Registration</h3>
+                  <p className="common_fonts dash_num">{signUp ? signUp?.length : 0}</p>
+                </div>
+              </div>
 
-          <div className="dashboard_item">
-            <div className="dashboard_card">
-              <h3 className="common_fonts" onClick={leadTableClick}>
-                Leads
-              </h3>
-              <p className="common_fonts dash_num">
-                {leadsCount ? leadsCount?.length : 0}
-              </p>
-            </div>
-            <div className="dashboard_card">
-              <h3 className="font_new" onClick={subscriptionClick}>
-                Subscriptions
-              </h3>
-              <p className="common_fonts dash_num">34</p>
-            </div>
-            <div className="dashboard_card">
-              <h3 className="font_new" onClick={blogClick}>
-                Blogs
-              </h3>
-              <p className="common_fonts dash_num">{blog ? blog?.length : 0}</p>
-            </div>
-          </div>
-        </div>
+              <h2>USERS</h2>
+              <div className="dashboard_item">
+                <div className="dashboard_card">
+                  <h3 className="common_fonts" onClick={academyTableClick}>
+                    Academy
+                  </h3>
+                  <p className="common_fonts dash_num">
+                    {academyCount ? academyCount?.length : 0}
+                  </p>
+                </div>
+                <div className="dashboard_card">
+                  <h3 className="font_new" onClick={coachTableClick}>
+                    Coach
+                  </h3>
+                  <p className="common_fonts dash_num">{coach ? coach?.length : 0}</p>
+                </div>
+                <div className="dashboard_card">
+                  <h3 className="font_new" onClick={playerTableClick}>
+                    Player
+                  </h3>
+                  <p className="common_fonts dash_num">{playerCount ? playerCount?.length : 0}</p>
+                </div>
+              </div>
 
-        <div className="dashboard_right">
-          <div className="leads_new_btn">
-            {/* <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button> */}
-          </div>
+              <div className="dashboard_item">
+                <div className="dashboard_card">
+                  <h3 className="common_fonts" onClick={leadTableClick}>
+                    Leads
+                  </h3>
+                  <p className="common_fonts dash_num">
+                    {leadsCount ? leadsCount?.length : 0}
+                  </p>
+                </div>
+                <div className="dashboard_card">
+                  <h3 className="font_new" onClick={subscriptionClick}>
+                    Subscriptions
+                  </h3>
+                  <p className="common_fonts dash_num">{subsCount ? subsCount?.length : 0}</p>
+                </div>
+                <div className="dashboard_card">
+                  <h3 className="font_new" onClick={blogClick}>
+                    Blogs
+                  </h3>
+                  <p className="common_fonts dash_num">{blog ? blog?.length : 0}</p>
+                </div>
+              </div>
+            </div>
 
-          <div className="leads_new_tab leads_table_height">
-            {/* <ViewLeadsTable data={leadsCount}/> */}
+            <div className="dashboard_right">
+              <div className="leads_new_btn">
+                {/* <button className="common-fonts common-save-button" onClick={addLeadClick}>Add Leads</button> */}
+              </div>
+
+              <div className="leads_new_tab leads_table_height">
+                {/* <ViewLeadsTable data={leadsCount}/> */}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      {/* {
+          {/* {
     openLead && (
       <LeadModal onClose={addLeadClose} getData={getData} />
     )
   } */}
-    </section>
-  );
+        </section>
+      );
 };
 
 export default Dashboard;
