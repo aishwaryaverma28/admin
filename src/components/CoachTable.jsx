@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import Back from "../assets/image/arrow-left.svg";
 import axios from "axios";
-import { GET_STATS,getDecryptedToken } from "./utils/Constants";
+import { GET_STATS, getDecryptedToken } from "./utils/Constants";
 
-const CoachTable = ({onClose }) => {
-    const [coach, setCoach] = useState(null);
-    const [selectedOption, setSelectedOption] = useState("last_thirty_days");
+const CoachTable = ({ onClose }) => {
+  const [coach, setCoach] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
   const formatDate = (isoDate) => {
     const options = {
@@ -19,7 +19,7 @@ const CoachTable = ({onClose }) => {
     const date = new Date(isoDate);
     return date.toLocaleDateString("en-US", options);
   };
-    
+
   useEffect(() => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
@@ -48,7 +48,7 @@ const CoachTable = ({onClose }) => {
       .then((response) => {
         console.log(response?.data?.data?.CoachUserStats?.reverse());
         if (response?.data?.status === 1) {
-            setCoach(response?.data?.data?.CoachUserStats?.reverse());
+          setCoach(response?.data?.data?.CoachUserStats?.reverse());
         }
       })
       .catch((error) => {
@@ -136,67 +136,67 @@ const CoachTable = ({onClose }) => {
   };
   return (
     <>
-    <div className="performance_title">
-      <img src={Back} alt="" onClick={onClose} />
-      <span>COACH DATA</span>
-      <span>Total Coach: {coach ? coach?.length : 0}</span>
-      <div className="leads_new_btn">
-        <div className="dashboard_header">
-          <div>
-            <select
-              className="selectSec"
-              onChange={handleSelectChange}
-              value={selectedOption}
-            >
-              <option value="today">Today</option>
-              <option value="yesterday">Yesterday</option>
-              <option value="this_week">This Week</option>
-              <option value="last_week">Last Week</option>
-              <option value="last_seven_days">Last 7 days</option>
-              <option value="last_fourteen_days">Last 14 days</option>
-              <option value="last_twenty_eight_days">Last 28 days</option>
-              <option value="last_thirty_days">Last 30 days</option>
-              <option value="last_sixty_days">Last 60 days</option>
-            </select>
-          </div>
-          <div>
-            <select className="selectSec">
-              <option value="bookmyplayer">bookmyplayer</option>
-              <option value="leadplaner">leadplaner</option>
-              <option value="firstcron">firstcron</option>
-              <option value="routplaner">routplaner</option>
-            </select>
+      <div className="performance_title2">
+        <img src={Back} alt="" onClick={onClose} />
+        <span>COACH DATA</span>
+        <span>Total Coach: {coach ? coach?.length : 0}</span>
+        <div className="leads_new_btn">
+          <div className="dashboard_header2">
+            <div>
+              <select
+                className="selectSec"
+                onChange={handleSelectChange}
+                value={selectedOption}
+              >
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="this_week">This Week</option>
+                <option value="last_week">Last Week</option>
+                <option value="last_seven_days">Last 7 days</option>
+                <option value="last_fourteen_days">Last 14 days</option>
+                <option value="last_twenty_eight_days">Last 28 days</option>
+                <option value="last_thirty_days">Last 30 days</option>
+                <option value="last_sixty_days">Last 60 days</option>
+              </select>
+            </div>
+            <div>
+              <select className="selectSec">
+                <option value="bookmyplayer">bookmyplayer</option>
+                <option value="leadplaner">leadplaner</option>
+                <option value="firstcron">firstcron</option>
+                <option value="routplaner">routplaner</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div className="marketing-all-table lead_last_border new_table_1">
-      <table>
-        <thead>
-          <tr>
-            <th className="common-fonts">ID</th>
-            <th className="common-fonts">DATE</th>
-            <th className="common-fonts">NAME</th>
-            <th className="common-fonts">PHONE</th>
-          </tr>
-        </thead>
-        <tbody>
-          {coach?.map((item, index) => (
-            <tr key={item?.id}>
-              <td className="common-fonts">{item.id}</td>
-              <td className="common-fonts">
-                {formatDate(item?.creation_date)}
-              </td>
-              <td className="common-fonts">{item?.name}</td>
-              <td className="common-fonts">{item?.phone}</td>
+      <div className="marketing-all-table lead_last_border new_table_1 login_new_table">
+        <table>
+          <thead>
+            <tr>
+              <th className="common-fonts">ID</th>
+              <th className="common-fonts">DATE</th>
+              <th className="common-fonts">NAME</th>
+              <th className="common-fonts">PHONE</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {coach?.map((item, index) => (
+              <tr key={item?.id}>
+                <td className="common-fonts">{item.id}</td>
+                <td className="common-fonts">
+                  {formatDate(item?.creation_date)}
+                </td>
+                <td className="common-fonts">{item?.name}</td>
+                <td className="common-fonts">{item?.phone}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default CoachTable
+export default CoachTable;

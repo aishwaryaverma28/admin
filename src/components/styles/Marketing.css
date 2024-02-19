@@ -617,3 +617,12 @@
 .new_table_1 table td:nth-child(7) {
   border-right: 1px solid transparent;
 }
+
+.blog_performance tr th:nth-child(4){
+  width: 2rem;
+}
+
+
+.login_new_table table td:nth-child(4), .academy_new_table table td:nth-child(5) {
+  border-right: 1px solid #dcdcdc;
+}

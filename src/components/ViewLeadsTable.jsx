@@ -157,12 +157,12 @@ const ViewLeadsTable = ({ onClose }) => {
 
   return (
     <>
-      <div className="performance_title">
+      <div className="performance_title2">
         <img src={Back} alt="" onClick={onClose} />
         <span>LEAD DATA</span>
         <span>Total Lead: {leadsCount?.length}</span>
         <div className="leads_new_btn">
-          <div className="dashboard_header">
+          <div className="dashboard_header2">
             <div>
               <select
                 className="selectSec"

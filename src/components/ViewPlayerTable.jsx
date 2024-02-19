@@ -137,12 +137,12 @@ const ViewPlayerTable = ({ onClose }) => {
   };
   return (
     <>
-    <div className="performance_title">
+    <div className="performance_title2">
       <img src={Back} alt="" onClick={onClose} />
       <span>PLAYER DATA</span>
       <span>Total Player: {playerCount ? playerCount?.length : 0}</span>
       <div className="leads_new_btn">
-        <div className="dashboard_header">
+        <div className="dashboard_header2">
           <div>
             <select
               className="selectSec"
@@ -172,7 +172,7 @@ const ViewPlayerTable = ({ onClose }) => {
       </div>
     </div>
 
-    <div className="marketing-all-table lead_last_border new_table_1">
+    <div className="marketing-all-table lead_last_border new_table_1 login_new_table">
       <table>
         <thead>
           <tr>
