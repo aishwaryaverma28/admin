@@ -53,6 +53,9 @@ const LeadModal = ({ onClose, getData }) => {
           if(response?.data?.status === 1){
             setPhoneRed(true);
           }
+          else{
+            setPhoneRed(false);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -72,6 +75,9 @@ const LeadModal = ({ onClose, getData }) => {
           if(response?.data?.status === 1)
           {
             setEmailRed(true)
+          }
+          else{
+            setEmailRed(false)
           }
         })
         .catch((error) => {
