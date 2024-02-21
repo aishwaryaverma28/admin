@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ADD_BMP_LEADS, getDecryptedToken } from "./utils/Constants";
+import React, { useState, useEffect } from "react";
+import { ADD_BMP_LEADS,GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,8 +14,27 @@ const LeadModal = ({ onClose, getData }) => {
     object_id: "",
     name: "",
     phone: "",
+    source: "",
     description: ""
   })
+
+  useEffect(() => {
+    if (formData.object_id) {
+      axios
+      .post(GET_ACADEMY, { academy_id: formData.object_id }
+        , {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {  
+          console.log(response?.data?.data[0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [formData.object_id]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -30,49 +49,49 @@ const LeadModal = ({ onClose, getData }) => {
     const updatedFormData = {
       ...formData,
     };
+    console.log(updatedFormData);
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-
-    // Adjust the endDate calculation to increase it by 1 day
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-    axios
-      .post(ADD_BMP_LEADS, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response?.data);
-        if (response?.data?.status !== false) {
-          toast.success("Lead data added successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          setFormData({
-            object_type: "academy",
-            object_id: "",
-            name: "",
-            phone: "",
-            address: "",
-            email: "",
-            description: ""
-          });
-          setStateBtn(0);
-          getData(startDate, formattedEndDate);
-        } else {
-          toast.error(response?.data?.message, {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios
+    //   .post(ADD_BMP_LEADS, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response?.data);
+    //     if (response?.data?.status !== false) {
+    //       toast.success("Lead data added successfully", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //       setFormData({
+    //         object_type: "academy",
+    //         object_id: "",
+    //         name: "",
+    //         phone: "",
+    //         source: "",
+    //         address: "",
+    //         email: "",
+    //         description: ""
+    //       });
+    //       setStateBtn(0);
+    //       getData(startDate, formattedEndDate);
+    //     } else {
+    //       toast.error(response?.data?.message, {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   function handleCancel() {
@@ -81,6 +100,7 @@ const LeadModal = ({ onClose, getData }) => {
       object_id: "",
       name: "",
       phone: "",
+      source: "",
       address: "",
       email: "",
       description: ""
@@ -149,6 +169,17 @@ const LeadModal = ({ onClose, getData }) => {
                     value={formData?.phone}
                     className="common-input"
                     onChange={handleChange}
+                  ></input>
+                </div>
+                <div>
+                  <p className="helpTitle">Source</p>
+                  <input
+                    type="text"
+                    placeholder="Enter Lead Source"
+                    name="source"
+                    value={formData?.source}
+                    onChange={handleChange}
+                    className="common-input"
                   ></input>
                 </div>
                 <div>
