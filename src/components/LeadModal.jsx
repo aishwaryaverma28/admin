@@ -130,6 +130,7 @@ const LeadModal = ({ onClose, getData }) => {
           setEmailRed(false);
           setPhoneRed(false);
           setSport(null);
+          setAcademyName("")
           getData(startDate, formattedEndDate);
         } else {
           toast.error(response?.data?.message, {
