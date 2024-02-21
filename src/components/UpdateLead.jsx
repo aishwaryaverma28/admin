@@ -315,8 +315,7 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
             </div>
             <br/>
             <div className="academy_new_box">
-              <p className="common-fonts academy_name_style">{academyName?.name}</p>
-              <p className="common-fonts academy_name_style">{academyName?.city} , {academyName?.state}</p>
+              <p className="common-fonts academy_name_style">{academyName?.name}, {academyName?.city} , {academyName?.state}</p>
             </div>
 
             <div className="help-bottom-btn">
