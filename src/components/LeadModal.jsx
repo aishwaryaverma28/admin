@@ -15,7 +15,6 @@ const LeadModal = ({ onClose, getData }) => {
     object_id: "",
     name: "",
     phone: "",
-    source: "",
     description: ""
   })
 
@@ -58,41 +57,40 @@ const LeadModal = ({ onClose, getData }) => {
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-    // axios
-    //   .post(ADD_BMP_LEADS, updatedFormData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response?.data);
-    //     if (response?.data?.status !== false) {
-    //       toast.success("Lead data added successfully", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //       setFormData({
-    //         object_type: "academy",
-    //         object_id: "",
-    //         name: "",
-    //         phone: "",
-    //         source: "",
-    //         address: "",
-    //         email: "",
-    //         description: ""
-    //       });
-    //       setStateBtn(0);
-    //       getData(startDate, formattedEndDate);
-    //     } else {
-    //       toast.error(response?.data?.message, {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .post(ADD_BMP_LEADS, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        if (response?.data?.status !== false) {
+          toast.success("Lead data added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          setFormData({
+            object_type: "academy",
+            object_id: "",
+            name: "",
+            phone: "",
+            address: "",
+            email: "",
+            description: ""
+          });
+          setStateBtn(0);
+          getData(startDate, formattedEndDate);
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function handleCancel() {
@@ -101,7 +99,6 @@ const LeadModal = ({ onClose, getData }) => {
       object_id: "",
       name: "",
       phone: "",
-      source: "",
       address: "",
       email: "",
       description: ""
@@ -148,6 +145,7 @@ const LeadModal = ({ onClose, getData }) => {
                     <option value="academy">Academy</option>
                     <option value="player">Player</option>
                     <option value="coach">Coach</option>
+                    <option value="whatsapp">WhatsApp</option>
                   </select>
                 </div>
                 <div>
@@ -170,17 +168,6 @@ const LeadModal = ({ onClose, getData }) => {
                     value={formData?.phone}
                     className="common-input"
                     onChange={handleChange}
-                  ></input>
-                </div>
-                <div>
-                  <p className="helpTitle">Source</p>
-                  <input
-                    type="text"
-                    placeholder="Enter Lead Source"
-                    name="source"
-                    value={formData?.source}
-                    onChange={handleChange}
-                    className="common-input"
                   ></input>
                 </div>
                 <div>
