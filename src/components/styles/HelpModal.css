@@ -502,8 +502,8 @@ justify-content: space-between;
 .academy_name_style{
   position: absolute;
   left:1rem;
-  bottom: -1.5rem;
+  bottom: -2.2rem;
   font-size: 1rem;
-  color:blue;
+  color:#f49c00;
   text-transform: capitalize;
 }
