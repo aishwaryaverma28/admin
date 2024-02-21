@@ -323,4 +323,6 @@ textarea{
 .light-color{
   color: var( --font-light);
 }
-
+.red-border{
+  border: 2px solid red;
+}

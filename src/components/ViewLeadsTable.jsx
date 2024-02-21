@@ -203,7 +203,7 @@ const ViewLeadsTable = ({ onClose }) => {
               <th className="common-fonts">EMAIL</th>
               <th className="common-fonts">OBJ TYPE</th>
               <th className="common-fonts section_count">PHONE</th>
-              <th className="common-fonts section_count">TYPE</th>
+              {/* <th className="common-fonts section_count">TYPE</th> */}
               <th className="common-fonts section_count">DESCRIPTION</th>
             </tr>
           </thead>
@@ -218,7 +218,7 @@ const ViewLeadsTable = ({ onClose }) => {
                 <td className="common-fonts">{item?.email}</td>
                 <td className="common-fonts">{item?.object_type}</td>
                 <td className="common-fonts">{item?.phone}</td>
-                <td className="common-fonts">{item?.type}</td>
+                {/* <td className="common-fonts">{item?.type}</td> */}
                 <td className="common-fonts">
                   <div className="leads_desc">{item?.description}</div>
                 </td>

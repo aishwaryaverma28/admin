@@ -238,3 +238,5 @@ export const GET_ALL_LEADS = start + "/ezuka/leads/get-all";
 export const ADD_BMP_LEADS = bmpStart +"/bmp/createLeads";
 export const GET_STATS = bmpStart + "/bmp/getstats";
 export const UPDATE_LEADS = bmpStart + "/bmp/updateLead/";
+
+export const EMAIL_PHONE= bmpStart+"/bmp/checkLeadsExist";

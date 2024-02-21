@@ -107,3 +107,12 @@
 .help-save {
   margin-left: 1rem;
 }
+
+.lead-object-flex{
+  padding-right: 1.7rem;
+  display: flex;
+  justify-content: space-between;
+}
+.reduce-width{
+  width: 12rem;
+}
