@@ -49,7 +49,7 @@ const LeadModal = ({ onClose, getData }) => {
     const updatedFormData = {
       ...formData,
     };
-    console.log(updatedFormData);
+    // console.log(updatedFormData);
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
     lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
@@ -57,41 +57,41 @@ const LeadModal = ({ onClose, getData }) => {
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-    // axios
-    //   .post(ADD_BMP_LEADS, updatedFormData, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response?.data);
-    //     if (response?.data?.status !== false) {
-    //       toast.success("Lead data added successfully", {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //       setFormData({
-    //         object_type: "academy",
-    //         object_id: "",
-    //         name: "",
-    //         phone: "",
-    //         source: "",
-    //         address: "",
-    //         email: "",
-    //         description: ""
-    //       });
-    //       setStateBtn(0);
-    //       getData(startDate, formattedEndDate);
-    //     } else {
-    //       toast.error(response?.data?.message, {
-    //         position: "top-center",
-    //         autoClose: 2000,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    axios
+      .post(ADD_BMP_LEADS, updatedFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        if (response?.data?.status !== false) {
+          toast.success("Lead data added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          setFormData({
+            object_type: "academy",
+            object_id: "",
+            name: "",
+            phone: "",
+            source: "",
+            address: "",
+            email: "",
+            description: ""
+          });
+          setStateBtn(0);
+          getData(startDate, formattedEndDate);
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function handleCancel() {
