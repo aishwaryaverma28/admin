@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const LeadModal = ({ onClose, getData }) => {
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
+  const [academyName, setAcademyName] = useState("");
   const [formData, setFormData] = useState({
     object_type: "academy",
     address: "",
@@ -28,7 +29,7 @@ const LeadModal = ({ onClose, getData }) => {
         },
       })
       .then((response) => {  
-          console.log(response?.data?.data[0]);
+        setAcademyName(response?.data?.data[0]?.name);
         })
         .catch((error) => {
           console.log(error);
@@ -57,41 +58,41 @@ const LeadModal = ({ onClose, getData }) => {
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-    axios
-      .post(ADD_BMP_LEADS, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response?.data);
-        if (response?.data?.status !== false) {
-          toast.success("Lead data added successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          setFormData({
-            object_type: "academy",
-            object_id: "",
-            name: "",
-            phone: "",
-            source: "",
-            address: "",
-            email: "",
-            description: ""
-          });
-          setStateBtn(0);
-          getData(startDate, formattedEndDate);
-        } else {
-          toast.error(response?.data?.message, {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // axios
+    //   .post(ADD_BMP_LEADS, updatedFormData, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response?.data);
+    //     if (response?.data?.status !== false) {
+    //       toast.success("Lead data added successfully", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //       setFormData({
+    //         object_type: "academy",
+    //         object_id: "",
+    //         name: "",
+    //         phone: "",
+    //         source: "",
+    //         address: "",
+    //         email: "",
+    //         description: ""
+    //       });
+    //       setStateBtn(0);
+    //       getData(startDate, formattedEndDate);
+    //     } else {
+    //       toast.error(response?.data?.message, {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   function handleCancel() {
@@ -233,6 +234,10 @@ const LeadModal = ({ onClose, getData }) => {
                   ></input>
                 </div> */}
               </div>
+            </div>
+
+            <div className="academy_new_box">
+              <p className="common-fonts academy_name_style">{academyName}</p>
             </div>
 
             <div className="help-bottom-btn">
