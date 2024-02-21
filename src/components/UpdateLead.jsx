@@ -314,9 +314,10 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
               </div>
             </div>
             <br/>
-            <div className="academy_new_box">
-              <p className="common-fonts academy_name_style">{academyName?.name}, {academyName?.city} , {academyName?.state}</p>
+            {academyName ? <div className="academy_new_box">
+              <p className="common-fonts academy_name_style">{academyName?.name}, {academyName?.city}, {academyName?.state}</p>
             </div>
+              : <></>}
 
             <div className="help-bottom-btn">
               {selectedLead.is_deleted === 1 ? <button className="common-fonts common-save-button" onClick={handleRevoke}>

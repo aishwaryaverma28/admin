@@ -269,10 +269,10 @@ const LeadModal = ({ onClose, getData }) => {
               </div>
             </div>
             <br />
-            <div className="academy_new_box">
+            {academyName ? <div className="academy_new_box">
               <p className="common-fonts academy_name_style">{academyName?.name}, {academyName?.city}, {academyName?.state}</p>
             </div>
-
+              : <></>}
             <div className="help-bottom-btn">
               <button className="common-fonts common-delete-button" onClick={handleCancel}>
                 Cancel
