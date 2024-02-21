@@ -17,7 +17,7 @@ const LeadModal = ({ onClose, getData }) => {
     phone: "",
     description: "",
     sport: "",
-    source: "Whatsapp",
+    source: "whatsapp",
   })
   const [sport, setSport] = useState(null);
   const [phoneRed, setPhoneRed] = useState(false);
@@ -124,7 +124,7 @@ const LeadModal = ({ onClose, getData }) => {
             email: "",
             description: "",
             sport: "",
-            source: "Whatsapp",
+            source: "whatsapp",
           });
           setStateBtn(0);
           setEmailRed(false);
@@ -146,14 +146,14 @@ const LeadModal = ({ onClose, getData }) => {
 
   function handleCancel() {
     setFormData({
-      object_type: "",
+      object_type: "academy",
       object_id: "",
       name: "",
       phone: "",
       address: "",
       email: "",
       sport: "",
-      source: "Whatsapp",
+      source: "whatsapp",
       description: ""
     });
     setStateBtn(0);
