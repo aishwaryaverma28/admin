@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ADD_BMP_LEADS,EMAIL_PHONE, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
+import { ADD_BMP_LEADS, EMAIL_PHONE, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +32,7 @@ const LeadModal = ({ onClose, getData }) => {
             },
           })
         .then((response) => {
-          setAcademyName(response?.data?.data[0]?.name);
+          setAcademyName(response?.data?.data[0]);
           setSport(response?.data?.data[0]?.sport)
         })
         .catch((error) => {
@@ -50,10 +50,10 @@ const LeadModal = ({ onClose, getData }) => {
           },
         })
         .then((response) => {
-          if(response?.data?.status === 1){
+          if (response?.data?.status === 1) {
             setPhoneRed(true);
           }
-          else{
+          else {
             setPhoneRed(false);
           }
         })
@@ -72,11 +72,10 @@ const LeadModal = ({ onClose, getData }) => {
           },
         })
         .then((response) => {
-          if(response?.data?.status === 1)
-          {
+          if (response?.data?.status === 1) {
             setEmailRed(true)
           }
-          else{
+          else {
             setEmailRed(false)
           }
         })
@@ -189,17 +188,6 @@ const LeadModal = ({ onClose, getData }) => {
                   ></input>
                 </div>
                 <div>
-                  <p className="helpTitle">Phone <span className="common-fonts redAlert"> *</span></p>
-                  <input
-                    type="text"
-                    placeholder="Enter Lead Phone"
-                    name="phone"
-                    value={formData?.phone}
-                    className={`common-input ${phoneRed ? 'red-border' : ''}`}
-                    onChange={handleChange}
-                  ></input>
-                </div>
-                <div>
                   <p className="helpTitle">Email</p>
                   <input
                     type="text"
@@ -210,6 +198,18 @@ const LeadModal = ({ onClose, getData }) => {
                     className={`common-input ${emailRed ? 'red-border' : ''}`}
                   ></input>
                 </div>
+                <div>
+                  <p className="helpTitle">Phone <span className="common-fonts redAlert"> *</span></p>
+                  <input
+                    type="text"
+                    placeholder="Enter Lead Phone"
+                    name="phone"
+                    value={formData?.phone}
+                    className={`common-input ${phoneRed ? 'red-border' : ''}`}
+                    onChange={handleChange}
+                  ></input>
+                </div>
+
                 <div>
                   <p className="helpTitle">Address</p>
                   <input
@@ -245,32 +245,33 @@ const LeadModal = ({ onClose, getData }) => {
                   ></textarea>
                 </div>
                 <div className="lead-object-flex">
-                <div>
-                  <p className="helpTitle">Object Type</p>
-                  <select name="object_type" id="" className="common-select reduce-width" onChange={handleChange} value={formData?.object_type}>
-                    <option value="academy">Academy</option>
-                    <option value="player">Player</option>
-                    <option value="coach">Coach</option>
-                    <option value="whatsapp">WhatsApp</option>
-                  </select>
-                </div>
-                <div>
-                  <p className="helpTitle">Academy Id</p>
-                  <input
-                    type="text"
-                    placeholder="Enter Academy Id"
-                    name="object_id"
-                    value={formData?.object_id}
-                    onChange={handleChange}
-                    className="common-input reduce-width"
-                  ></input>
-                </div>
+                  <div>
+                    <p className="helpTitle">Object Type</p>
+                    <select name="object_type" id="" className="common-select reduce-width" onChange={handleChange} value={formData?.object_type}>
+                      <option value="academy">Academy</option>
+                      <option value="player">Player</option>
+                      <option value="coach">Coach</option>
+                      <option value="whatsapp">WhatsApp</option>
+                    </select>
+                  </div>
+                  <div>
+                    <p className="helpTitle">Academy Id</p>
+                    <input
+                      type="text"
+                      placeholder="Enter Academy Id"
+                      name="object_id"
+                      value={formData?.object_id}
+                      onChange={handleChange}
+                      className="common-input reduce-width"
+                    ></input>
+                  </div>
                 </div>
               </div>
             </div>
-
+            <br />
             <div className="academy_new_box">
-              <p className="common-fonts academy_name_style">{academyName}</p>
+              <p className="common-fonts academy_name_style">{academyName?.name}</p>
+              <p className="common-fonts academy_name_style">{academyName?.city} , {academyName?.state}</p>
             </div>
 
             <div className="help-bottom-btn">

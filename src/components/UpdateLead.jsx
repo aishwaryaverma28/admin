@@ -32,7 +32,7 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
             },
           })
         .then((response) => {
-          setAcademyName(response?.data?.data[0]?.name);
+          setAcademyName(response?.data?.data[0]);
           setSport(response?.data?.data[0]?.sport)
         })
         .catch((error) => {
@@ -234,17 +234,6 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
                   ></input>
                 </div>
                 <div>
-                  <p className="helpTitle">Phone <span className="common-fonts redAlert"> *</span></p>
-                  <input
-                    type="text"
-                    placeholder="Enter Lead Phone"
-                    name="phone"
-                    value={formData?.phone}
-                    className={`common-input ${phoneRed ? 'red-border' : ''}`}
-                    onChange={handleChange}
-                  ></input>
-                </div>
-                <div>
                   <p className="helpTitle">Email</p>
                   <input
                     type="text"
@@ -255,6 +244,18 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
                     className={`common-input ${emailRed ? 'red-border' : ''}`}
                   ></input>
                 </div>
+                <div>
+                  <p className="helpTitle">Phone <span className="common-fonts redAlert"> *</span></p>
+                  <input
+                    type="text"
+                    placeholder="Enter Lead Phone"
+                    name="phone"
+                    value={formData?.phone}
+                    className={`common-input ${phoneRed ? 'red-border' : ''}`}
+                    onChange={handleChange}
+                  ></input>
+                </div>
+                
                 <div>
                   <p className="helpTitle">Address</p>
                   <input
@@ -314,7 +315,8 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
             </div>
             <br/>
             <div className="academy_new_box">
-              <p className="common-fonts academy_name_style">{academyName}</p>
+              <p className="common-fonts academy_name_style">{academyName?.name}</p>
+              <p className="common-fonts academy_name_style">{academyName?.city} , {academyName?.state}</p>
             </div>
 
             <div className="help-bottom-btn">
