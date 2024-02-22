@@ -725,11 +725,12 @@ const BlogUpdate = () => {
               />
 
               <datalist id="sports">
-                <option value="archery"></option>
+              <option value="archery"></option>
                 <option value="arts"></option>
                 <option value="athletics"></option>
                 <option value="badminton"></option>
                 <option value="basketball"></option>
+                <option value="bodybuilding"></option>
                 <option value="billiards"></option>
                 <option value="boxing"></option>
                 <option value="chess"></option>
@@ -754,6 +755,7 @@ const BlogUpdate = () => {
                 <option value="tennis"></option>
                 <option value="volleyball"></option>
                 <option value="wrestling"></option>
+                <option value="yoga"></option>
               </datalist>
             </div>
             <div className="from-filed">
@@ -1018,7 +1020,7 @@ const BlogUpdate = () => {
                     {options
                       ?.filter(
                         (option) =>
-                          !tagId.split(",").includes(option.id.toString())
+                          !tagId.split(",")?.includes(option.id?.toString())
                       )
                       .map((option) => (
                         <option key={option?.id} value={option?.id}>

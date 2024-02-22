@@ -144,7 +144,7 @@ const BlogAdd = () => {
           },
         })
         .then((response) => {
-          // console.log(response?.data?.data)
+          console.log(response?.data?.data)
           setOptions(
             response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
           );
@@ -554,6 +554,7 @@ const BlogAdd = () => {
                 <option value="athletics"></option>
                 <option value="badminton"></option>
                 <option value="basketball"></option>
+                <option value="bodybuilding"></option>
                 <option value="billiards"></option>
                 <option value="boxing"></option>
                 <option value="chess"></option>
@@ -578,6 +579,7 @@ const BlogAdd = () => {
                 <option value="tennis"></option>
                 <option value="volleyball"></option>
                 <option value="wrestling"></option>
+                <option value="yoga"></option>
               </datalist>
 
             </div>
@@ -806,7 +808,7 @@ const BlogAdd = () => {
                   >
                     <option value="">Select a tag</option>
                     {options
-                      ?.filter(option => !tagId.split(",").includes(option.id.toString()))
+                      ?.filter(option => !tagId?.split(",")?.includes(option.id?.toString()))
                       .map((option) => (
                         <option key={option?.id} value={option?.id}>
                           {option?.tag}
