@@ -10,6 +10,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const [updateLead, setUpdateLead] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [leadsCount, setLeadsCount] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("last_thirty_days");
   const decryptedToken = getDecryptedToken();
   const formatDate = (isoDate) => {
@@ -155,12 +156,34 @@ const ViewLeadsTable = ({ onClose }) => {
   };
 
 
+  const handleSearchTermChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredItems = (leadsCount || []).filter((item) => {
+    const values = Object.values(item);
+    for (let i = 0; i < values?.length; i++) {
+      if (
+        values[i] &&
+        values[i]?.toString()?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+      ) {
+        return true;
+      }
+    }
+    return false;
+  });
+
   return (
     <>
       <div className="performance_title2">
         <img src={Back} alt="" onClick={onClose} />
         <span>LEAD DATA</span>
         <span>Total Lead: {leadsCount?.length}</span>
+        <div className="searchBar">
+          <label>
+            Search: <input type="text" onChange={handleSearchTermChange}/>
+          </label>
+        </div>
         <div className="leads_new_btn">
           <div className="dashboard_header2">
             <div>
@@ -208,7 +231,7 @@ const ViewLeadsTable = ({ onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {leadsCount?.map((item, index) => (
+            {filteredItems?.map((item, index) => (
               <tr key={item?.id} onClick={() => updateLeadClick(item)} className={item.is_deleted === 1 ? 'redText' : ''}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">
