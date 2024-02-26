@@ -30,7 +30,6 @@ const Lead = () => {
   "Contact","no contact",
   "Profile complete","Profile Pending",
   "Share leads"]);
-  // const [orgId, setOrgId] = useState(null);
   const orgId = localStorage.getItem('org_id');
   const [status, setStatus] = useState(["new",
   "contact","no contact",
