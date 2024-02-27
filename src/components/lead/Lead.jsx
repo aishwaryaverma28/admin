@@ -954,12 +954,12 @@ const Lead = () => {
                   }
                   return null;
                 })}
-                {statusCounts[item.id] > 0 && (
-                 <button onClick={handleLoadMore}>Load More</button>
-                )}
+
               </div>
               <div className="bottom-fixed">
-
+              {statusCounts[item.id] > 0 && (
+                 <button onClick={handleLoadMore} className="common-save-button">Load More</button>
+                )}
               </div>
             </div>
           </div>
