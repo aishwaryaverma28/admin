@@ -97,9 +97,12 @@ const Lead = () => {
   }, [limit]); 
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
+    getAllAcademy(event.target.value, cityLead);
+
   };
   const handleCityChange = (event) => {
     setCityLead(event.target.value);
+    getAllAcademy(sportsLead,event.target.value);
   };
   const handleDataReceived = (newData) => {
     setData(newData);
@@ -131,12 +134,23 @@ const Lead = () => {
     setOwnerOpen(false);
   };
   //=========================================================get all acadmies
-  const getAllAcademy = () => {
-    axios.post(ACADMEY_SEARCH, {
+  const getAllAcademy = (sport, city) => {
+    const hasSportOrCity = sport || city;
+
+    const requestBody = hasSportOrCity ? {
+      ...(sport && { sport }), 
+      ...(city && { location: city }), 
+      condition: "conditions",
+      limit_from: "1",
+      limit_to:"1000",
+    } : {
       condition: "all",
       limit_from: "1",
       limit_to: limit.toString(),
-    }, {
+    };
+
+
+    axios.post(ACADMEY_SEARCH, requestBody, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
@@ -176,7 +190,7 @@ const Lead = () => {
   useEffect(() => {
     const counts = {};
     stages.forEach((item) => {
-      counts[item.id] = acadmey.filter((obj) => obj.stage === item.id).length;
+      counts[item.id] = acadmey?.filter((obj) => obj.stage === item.id).length;
     });
     setStatusCounts(counts);
   }, [acadmey, stages]);
@@ -498,7 +512,7 @@ const Lead = () => {
 
   const handleChildCheckboxChange = (id) => {
     if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
     } else {
       setSelectedIds([...selectedIds, id]);
     }
@@ -507,8 +521,8 @@ const Lead = () => {
   const areAllChildCheckboxesChecked = (status) => {
     if (selectedStatusesData[status]) {
       const idsWithStatus = deals
-        .filter((deal) => deal.status === status)
-        .map((deal) => deal.id);
+        ?.filter((deal) => deal.status === status)
+        ?.map((deal) => deal.id);
       return idsWithStatus.every((id) => selectedIds.includes(id));
     }
     return false;
@@ -516,11 +530,11 @@ const Lead = () => {
 
   const handleHeaderCheckboxChange = (status) => {
     const idsWithStatus = deals
-      .filter((deal) => deal.status === status)
-      .map((deal) => deal.id);
+      ?.filter((deal) => deal.status === status)
+      ?.map((deal) => deal.id);
 
     if (areAllChildCheckboxesChecked(status)) {
-      setSelectedIds(selectedIds.filter((id) => !idsWithStatus.includes(id)));
+      setSelectedIds(selectedIds?.filter((id) => !idsWithStatus.includes(id)));
       setSelectedStatusesData((prevData) => ({
         ...prevData,
         [status]: false,
@@ -562,8 +576,8 @@ const Lead = () => {
   };
 
   const mergedLabels = labelData
-    .filter((item) => item?.entity?.includes("leads"))
-    .map((item) => ({
+    ?.filter((item) => item?.entity?.includes("leads"))
+    ?.map((item) => ({
       id: item?.id,
       name: item?.name,
       colour_code: item?.colour_code,
@@ -575,7 +589,7 @@ const Lead = () => {
       Papa.parse(file, {
         header: true,
         complete: (result) => {
-          const dataWithIntValues = result?.data.map((row) => ({
+          const dataWithIntValues = result?.data?.map((row) => ({
             ...row,
             value: parseInt(row?.value), // Parse the "value" field as an integer
             stage_id: parseInt(fStageId),
@@ -759,7 +773,7 @@ const Lead = () => {
               <label htmlFor="browserChoice">City:</label>
               <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} onChange={handleCityChange}></input>
               <datalist id="city_leads">
-                {cities.map((city, index) => (
+                {cities?.map((city, index) => (
                   <option key={index} value={city}></option>
                 ))}
               </datalist>
@@ -900,7 +914,7 @@ const Lead = () => {
         </div>
       </section>
       <section className="cards-body">
-        {stages.map((item, index) => (
+        {stages?.map((item, index) => (
           <div className="card-column" key={index}>
             <div className="card-details">
               <div className="main-cards">
@@ -925,7 +939,7 @@ const Lead = () => {
                     </label>
                   )}
                 </div>
-                {acadmey.map((obj) => {
+                {acadmey?.map((obj) => {
                   if (obj.stage === item.id) {
                     return (
                       <LeadCards
