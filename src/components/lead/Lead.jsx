@@ -195,7 +195,23 @@ const Lead = () => {
     setStatusCounts(counts);
   }, [acadmey, stages]);
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    const { value } = event.target;
+    setSearchQuery(value);
+    if (value.length < 3) {
+      return;
+    }
+    axios.get(`https://bmp.leadplaner.com/api/api/bmp/academy/search/${value}`, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then(response => {
+        console.log(response?.data?.data);
+        setAcademy(response?.data?.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
   };
 
   const toggleSortDropdown = () => {
