@@ -4,6 +4,8 @@ import CRMeditor from "../CRMeditor";
 import axios from "axios";
 import {
   ADD_NOTES,
+  ACADMEY_NOTE,
+  ACADMEY_NOTE_SOURCE,
   GETNOTEBYSOURCE,
   GETNOTEDEAL,
   UPDATE_NOTE,
@@ -23,6 +25,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router";
 
 const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
+  console.log(item)
   const { id } = useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
@@ -41,8 +44,11 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
 
   const fetchNotes = () => {
     if (type === "lead") {
+      const body = {
+        source_id: item.id,source_type:"academy"
+    }
       axios
-        .get(GETNOTEBYSOURCE + item.id, {
+        .post(ACADMEY_NOTE_SOURCE,body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -62,8 +68,6 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
 
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
-          // setNotes(response?.data?.data);
-          // setOriginalContents(response?.data?.data);
         })
 
         .catch((error) => {
@@ -180,23 +184,20 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
   const handleAddNote = () => {
     const updatedFormData = {
       source_id: type === "lead" ? item.id : id,
-      type: type,
+      source_type: "academy",
       description: dataFromChild,
       importance: "0",
-      created_by: "aishwarya",
-      label_id: 1,
     };
-
+    console.log(updatedFormData)
     axios
-      .post(ADD_NOTES, updatedFormData, {
+      .post(ACADMEY_NOTE, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        fetchNotes(); // Fetch the updated notes after adding a new note
+        fetchNotes();
         onNotesNum();
-
         if (response.data.status === 1) {
           toast.success("Notes added successfully", {
             position: "top-center",
@@ -212,7 +213,6 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
       .catch((error) => {
         console.log(error);
       });
-
     setDataFromChild("");
     setOpenEditor(false);
     setStateAdd(0);
@@ -269,11 +269,11 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     axios
       .post(MOVENOTE_TO_TRASH, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        const updatedNotes = notes.filter((note) => note.id !== id);
+        const updatedNotes = notes?.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         onNotesNum();
         toast.success("Note moved to trash successfully", {
@@ -391,39 +391,35 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
 
   return (
     <>
-      {ownerId === idOfOwner && (
+      {!openEditor ? (
+        <div className="colapedEditor" onClick={expandEditor}>
+          <p>Click here to add a note</p>
+        </div>
+      ) : (
         <>
-          {!openEditor ? (
-            <div className="colapedEditor" onClick={expandEditor}>
-              <p>Click here to add a note</p>
-            </div>
-          ) : (
-            <>
-              <div className="notesEditor">
-                <CRMeditor onDataTransfer={handleDataTransfer} />
-              </div>
-              <div className="addNoteBtn">
-                <button className="common-white-button" onClick={handleClose}>
-                  Cancel
-                </button>
-                {stateAdd === 0 ? (
-                  <button
-                    disabled
-                    className="common-fonts common-inactive-button note-btn"
-                  >
-                    Add Note
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleAddNote}
-                    className="common-fonts common-save-button note-btn"
-                  >
-                    Add Note
-                  </button>
-                )}
-              </div>
-            </>
-          )}
+          <div className="notesEditor">
+            <CRMeditor onDataTransfer={handleDataTransfer} />
+          </div>
+          <div className="addNoteBtn">
+            <button className="common-white-button" onClick={handleClose}>
+              Cancel
+            </button>
+            {stateAdd === 0 ? (
+              <button
+                disabled
+                className="common-fonts common-inactive-button note-btn"
+              >
+                Add Note
+              </button>
+            ) : (
+              <button
+                onClick={handleAddNote}
+                className="common-fonts common-save-button note-btn"
+              >
+                Add Note
+              </button>
+            )}
+          </div>
         </>
       )}
 
@@ -435,10 +431,8 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                 <div
                   className="note-content"
                   onClick={() => {
-                    if (ownerId === idOfOwner) {
-                      accordianClick(note.id);
-                    }
-                  }}
+                    accordianClick(note.id);
+                   }}
                 >
                   <div className="arrow-greater">
                     <img src={GreaterArrow} alt="" />
@@ -453,15 +447,13 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                       <div className="notes-date">
                         <p>
                           {note.creation_date &&
-                          note.creation_date.includes("T") &&
-                          note.creation_date.includes(".")
+                            note.creation_date.includes("T") &&
+                            note.creation_date.includes(".")
                             ? note.creation_date.split("T")[0] +
-                              " at " +
-                              note.creation_date.split("T")[1].split(".")[0]
+                            " at " +
+                            note.creation_date.split("T")[1].split(".")[0]
                             : "-"}
-                        </p>
-
-                        {ownerId === idOfOwner && (
+                        </p>                      
                           <div className="three-side-dots">
                             {note.importance === "1" ? (
                               <img
@@ -485,7 +477,6 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                               onClick={() => handleDeleteNote(note.id)}
                             />
                           </div>
-                        )}
                       </div>
                     </div>
                     <div className="notes-content">
