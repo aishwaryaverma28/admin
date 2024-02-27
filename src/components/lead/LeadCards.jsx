@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
-import user from "../../assets/image/user.svg";
-import pound from "../../assets/image/british-pound-symbol.svg";
-import { Link } from "react-router-dom";
 import LeadModal from "../lead/LeadModal.jsx";
 import LeadDeletePopUp from "../DeleteComponent.jsx";
 import axios from "axios";
@@ -20,6 +17,7 @@ const LeadCards = ({
   onLeadAdded,
   userData,
 }) => {
+  // console.log(object)
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
@@ -48,7 +46,7 @@ const LeadCards = ({
   const handleAssignLead = () => {
     if (assignLeadId) {
       const body = {
-        leadIds: [assignLeadId], // Use the stored ID
+        leadIds: [assignLeadId],
         owner: data,
       };
       axios
@@ -68,19 +66,19 @@ const LeadCards = ({
         .catch((error) => {
           console.log(error);
         });
-      setAssignLeadId(null); // Reset the stored ID
+      setAssignLeadId(null);
       setAssign(false);
     }
   };
 
 
   const openConvertModal = (item) => {
-    setSelectedConvertItem(item); // Set the selected item
-    setConvertModalVisible(true); // Open the modal
+    setSelectedConvertItem(item);
+    setConvertModalVisible(true);
   };
   const closeConvertModal = () => {
-    setSelectedConvertItem(null); // Clear the selected item
-    setConvertModalVisible(false); // Close the modal
+    setSelectedConvertItem(null);
+    setConvertModalVisible(false);
   };
 
   const handleLeadDelete = (id) => {
@@ -172,17 +170,17 @@ const LeadCards = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-                {/* <Link to={"/lp/deals/" + object.id}>{object.lead_name}</Link> */}
-                {object.lead_name}
+                {object.name}
               </p>
             </div>
             <div className="lead-value">
-            <img className="pound" src={pound} alt="pound"/>{object?.value?.toLocaleString("en-IN")}
             </div>
             <div className="contact-details">
               <div className="mail">
-                <img src={user} alt="" />
-                <p>{object.ownerf_name + " " + object.ownerl_name}</p>
+                <p>{object.sport}</p>
+              </div>
+              <div className="mail">
+                <p>{object.phone}</p>
               </div>
             </div>
 
@@ -245,7 +243,7 @@ const LeadCards = ({
           onClose={closeConvertModal}
           onLeadAdded={onLeadAdded}
           text="deal"
-          selectedItem={selectedConvertItem} // Pass the selected item to modal
+          selectedItem={selectedConvertItem}
         />
       )}
 

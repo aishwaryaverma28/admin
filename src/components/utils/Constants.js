@@ -218,7 +218,7 @@ export const GET_ACC_LEAD = start + "/bmp/academy/leads/get/";
 export const ADD_REPLY = start + "/bmp/academy/review/reply";
 export const GETALL_ACADEMY = start + "/bmp/academy/getall";
 export const RESTRICTED_KEYWORDS = start + "/bmp/getrestrictedkeywords";
-export const GET_ACADEMY_STATUS = start + "/bmp/academy/getall";
+export const GET_ACADEMY_STATUS = bmpStart + "/bmp/academy/getall";
 export const GET_APPROVAL = start + "/bmp/academy/getrequesthistory";
 export const UPDATE_ACADMEY_STATUS = start + "/bmp/academy/updateupdatedinfo/";
 export const GET_UPDATED_ACADEMY_INFO = start + "/bmp/academy/getupdatedinfo";
@@ -240,3 +240,6 @@ export const GET_STATS = bmpStart + "/bmp/getstats";
 export const UPDATE_LEADS = bmpStart + "/bmp/updateLead/";
 
 export const EMAIL_PHONE= bmpStart+"/bmp/checkLeadsExist";
+
+//==============================================================bmp lead apis
+export const ACADMEY_SEARCH = bmpStart + "/bmp/academy/search";

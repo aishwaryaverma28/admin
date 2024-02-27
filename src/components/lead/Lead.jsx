@@ -7,13 +7,13 @@ import Sort from "../../assets/image/sort.svg";
 import axios from "axios";
 import LeadCards from "./LeadCards";
 import CreateLead from "./CreateLead";
+import { cities } from "../utils/cities.js";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
-  GET_LEAD,
   IMPORT_CSV,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
-  GET_ALL_STAGE,
+  ACADMEY_SEARCH,
   GET_LABEL,
   GET_ACTIVE_TEAM_MEM,
   GET_OWNER_LEAD,
@@ -26,15 +26,34 @@ import Papa from "papaparse";
 import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
-  const [stages, setStages] = useState(["New",
-  "Contact","no contact",
-  "Profile complete","Profile Pending",
-  "Share leads"]);
+  const [stages, setStages] = useState([
+    {
+      "id": 1,
+      "stage": "new"
+    },
+    {
+      "id": 2,
+      "stage": "contact"
+    },
+    {
+      "id": 3,
+      "stage": "no contact"
+    },
+    {
+      "id": 4,
+      "stage": "profile complete"
+    },
+    {
+      "id": 5,
+      "stage": "profile not complete"
+    },
+    {
+      "id": 6,
+      "stage": "lead Shared"
+    }
+  ]
+  );
   const orgId = localStorage.getItem('org_id');
-  const [status, setStatus] = useState(["new",
-  "contact","no contact",
-  "profile complete","profile pending",
-  "share leads"]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);
@@ -52,7 +71,6 @@ const Lead = () => {
   const [statusCounts, setStatusCounts] = useState({});
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
-  const [statusTotalValues, setStatusTotalValues] = useState({});
   const [isDelete, setIsDelete] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None");
@@ -71,22 +89,21 @@ const Lead = () => {
   const [data, setData] = useState("");
   const [sportsLead, setSportsLead] = useState('');
   const [cityLead, setCityLead] = useState('');
-const [fStageId, setFStageId] = useState(0);
-
-const handleSportsChange = (event) => {
-  setSportsLead(event.target.value);
-};
-
-const handleCityChange = (event) => {
-  setCityLead(event.target.value);
-};
-
-
-
+  const [fStageId, setFStageId] = useState(0);
+  const [acadmey, setAcademy] = useState([])
+  const [limit, setLimit] = useState(500);
+  useEffect(() => {
+    getAllAcademy();
+  }, [limit]); 
+  const handleSportsChange = (event) => {
+    setSportsLead(event.target.value);
+  };
+  const handleCityChange = (event) => {
+    setCityLead(event.target.value);
+  };
   const handleDataReceived = (newData) => {
     setData(newData);
   };
-
   const handleMassUpdate = () => {
     setMassUpdateModalOpen(true);
   };
@@ -113,17 +130,38 @@ const handleCityChange = (event) => {
 
     setOwnerOpen(false);
   };
+  //=========================================================get all acadmies
+  const getAllAcademy = () => {
+    axios.post(ACADMEY_SEARCH, {
+      condition: "all",
+      limit_from: "1",
+      limit_to: limit.toString(),
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      console.log(response?.data?.data)
+      setAcademy(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const handleLoadMore = () => {
+    setLimit(prevLimit => prevLimit + 500); 
+  }
 
   const userAdded = () => {
     axios
-      .post(GET_ACTIVE_TEAM_MEM,{ orgId: orgId}, {
+      .post(GET_ACTIVE_TEAM_MEM, { orgId: orgId }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
         const responseData = response?.data?.data;
-        // const combinedData = [adminInfo, ...responseData];
         setUserData(responseData);
       })
       .catch((error) => {
@@ -131,22 +169,17 @@ const handleCityChange = (event) => {
       });
   };
 
-  useEffect(()=>{
-   userAdded();
+  useEffect(() => {
+    userAdded();
   }, [orgId])
 
-
-
-
   useEffect(() => {
-    // Calculate status counts
     const counts = {};
-    status.forEach((status) => {
-      counts[status] = deals.filter((obj) => obj.status === status).length;
+    stages.forEach((item) => {
+      counts[item.id] = acadmey.filter((obj) => obj.stage === item.id).length;
     });
     setStatusCounts(counts);
-  }, [deals, status]);
-
+  }, [acadmey, stages]);
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -158,28 +191,6 @@ const handleCityChange = (event) => {
     setOwnerOpen(!ownerOpen);
   };
   //======================================================================fetch lead data from api
-  const fetchLeadsData = () => {
-    axios
-      .get(GET_LEAD, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setDeals(response?.data?.data);
-        const counts = {};
-        status.forEach((status) => {
-          counts[status] = response?.data?.data.filter(
-            (obj) => obj.status === status
-          ).length;
-        });
-        setStatusCounts(counts);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const logRecord = () => {
     const updatedFormData = {
       attr1: "lead:export",
@@ -210,17 +221,12 @@ const handleCityChange = (event) => {
   };
 
   const exportToExcel = async () => {
-    // Check if you have data to export
     if (!deals || deals.length === 0) {
       console.log("No data to export.");
       return;
     }
-
-    // Create a new workbook and worksheet
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Leads");
-
-    // Add data to the worksheet
     worksheet.columns = [
       {
         header: "Id",
@@ -261,7 +267,6 @@ const handleCityChange = (event) => {
       { header: "Update Date", key: "update_date", width: 30 },
       { header: "Value", key: "value", width: 20 },
       { header: "Website", key: "website", width: 20 },
-      // Add more columns as needed
     ];
 
     deals.forEach((deal) => {
@@ -298,46 +303,18 @@ const handleCityChange = (event) => {
         update_date: deal.update_date,
         value: deal.value,
         website: deal.website,
-        // Add more columns as needed
       });
     });
 
-    // // Generate a blob containing the Excel file
-    // const blob = await workbook.xlsx.writeBuffer();
-
-    // // Create a download link
-    // const url = window.URL.createObjectURL(new Blob([blob]));
-    // const a = document.createElement("a");
-    // a.href = url;
-    // a.download = "leads.xlsx";
-    // a.style.display = "none";
-
-    // // Trigger the download
-    // document.body.appendChild(a);
-    // a.click();
-
-    // // Clean up
-    // window.URL.revokeObjectURL(url);
-    // document.body.removeChild(a);
-
-    // Convert JSON data to CSV format
     const csv = Papa.unparse(deals);
-
-    // Create a blob from the CSV data
     const blob = new Blob([csv], { type: "text/csv" });
-
-    // Create a download link
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "leads.csv";
     a.style.display = "none";
-
-    // Trigger the download
     document.body.appendChild(a);
     a.click();
-
-    // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
     logRecord();
@@ -345,7 +322,7 @@ const handleCityChange = (event) => {
 
   const fetchLabelData = async () => {
     const body = {
-      org_id:orgId
+      org_id: orgId
     }
     try {
       const response = await axios.post(GET_LABEL, body, {
@@ -366,7 +343,7 @@ const handleCityChange = (event) => {
   };
 
   const resetData = () => {
-    fetchLeadsData();
+    getAllAcademy();
     fetchLabelData();
   };
 
@@ -378,8 +355,8 @@ const handleCityChange = (event) => {
   };
 
   useEffect(() => {
-    fetchLeadsData();
     fetchLabelData();
+    getAllAcademy();
   }, []);
 
   const toggleSortOrder = () => {
@@ -448,34 +425,7 @@ const handleCityChange = (event) => {
 
   const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
 
-  // ======================================================================calculate total value of all leads
-  useEffect(() => {
-    const calculateTotalValue = () => {
-      let sum = 0;
-      deals.forEach((lead) => {
-        const value = Number(lead.value); // Parse value as a number
-        if (!isNaN(value)) {
-          sum += value;
-        }
-      });
-      return sum;
-    };
-    setTotalValue(calculateTotalValue());
-  }, [deals]);
 
-  useEffect(() => {
-    const calculateStatusTotalValues = () => {
-      const statusTotals = {};
-      status.forEach((status) => {
-        const totalValueForStatus = deals
-          .filter((deal) => deal.status === status)
-          .reduce((sum, deal) => sum + Number(deal.value), 0);
-        statusTotals[status] = totalValueForStatus;
-      });
-      setStatusTotalValues(statusTotals);
-    };
-    calculateStatusTotalValues();
-  }, [deals, status]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -484,10 +434,6 @@ const handleCityChange = (event) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  // const handleButtonClick = async () => {
-  //   fileInputRef.current.click();
-  // };
-
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
   };
@@ -609,9 +555,8 @@ const handleCityChange = (event) => {
         .catch((error) => {
           console.log(error);
         });
-      fetchLeadsData();
-      setSelectedIds([]); // Reset the stored ID
-
+      getAllAcademy();
+      setSelectedIds([]);
       handleMassDeletePopUpClose();
     }
   };
@@ -628,7 +573,7 @@ const handleCityChange = (event) => {
     const file = e.target.files[0];
     if (file) {
       Papa.parse(file, {
-        header: true, // Assume the first row contains headers
+        header: true,
         complete: (result) => {
           const dataWithIntValues = result?.data.map((row) => ({
             ...row,
@@ -670,7 +615,7 @@ const handleCityChange = (event) => {
           position: "top-center",
           autoClose: 2000,
         });
-        fetchLeadsData();
+        getAllAcademy();
         // You can add further logic here if needed
       } else {
         toast.error("Some Error Occured", {
@@ -694,9 +639,8 @@ const handleCityChange = (event) => {
               <div className="dropdown-header" onClick={toggleDropdown}>
                 all Leads{" "}
                 <i
-                  className={`fa-sharp fa-solid ${
-                    leadopen ? "fa-angle-up" : "fa-angle-down"
-                  }`}
+                  className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
                 ></i>
               </div>
               {leadopen && (
@@ -732,9 +676,8 @@ const handleCityChange = (event) => {
                 <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                   {display}
                   <i
-                    className={`fa-sharp fa-solid ${
-                      actionopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </div>
                 {ownerOpen && (
@@ -751,19 +694,17 @@ const handleCityChange = (event) => {
                             handleOwnerClick(
                               item.id,
                               item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name?.slice(1),
+                              item?.first_name?.slice(1),
                               item?.last_name?.charAt(0)?.toUpperCase() +
-                                item?.last_name?.slice(1)
+                              item?.last_name?.slice(1)
                             )
                           }
                         >
-                          {`${
-                            item?.first_name?.charAt(0)?.toUpperCase() +
+                          {`${item?.first_name?.charAt(0)?.toUpperCase() +
                             item?.first_name?.slice(1)
-                          } ${
-                            item?.last_name?.charAt(0)?.toUpperCase() +
+                            } ${item?.last_name?.charAt(0)?.toUpperCase() +
                             item?.last_name?.slice(1)
-                          }`}
+                            }`}
                         </li>
                       ))}
                   </ul>
@@ -773,407 +714,55 @@ const handleCityChange = (event) => {
 
           </div>
           <div className="right-side--btns">
-            {/* <p>
-              sub total: <img className="pound" src={pound} alt="pound"/>
-              {totalValue?.toLocaleString("en-IN")}
-            </p> */}
             <button type="button" className="secondary-btn" onClick={openModal}>
               Create Lead
             </button>
             <div className="select action-select">
-            <label for="browserChoice">Sports:</label>
-             <input list="sports_leads" name="sports_lead" id="sports_lead"  value={sportsLead}
-          onChange={handleSportsChange}></input>
-             <datalist id="sports_leads">
-             <option value="Archery"></option>
-    <option value="Arts"></option>
-    <option value="Athletics"></option>
-    <option value="Badminton"></option>
-    <option value="Basketball"></option>
-    <option value="Billiards"></option>
-    <option value="Boxing"></option>
-    <option value="Chess"></option>
-    <option value="Cricket"></option>
-    <option value="Fencing"></option>
-    <option value="Football"></option>
-    <option value="Golf"></option>
-    <option value="Hockey"></option>
-    <option value="Kabaddi"></option>
-    <option value="Karate"></option>
-    <option value="Kho-Kho"></option>
-    <option value="MMA"></option>
-    <option value="Motorsports"></option>
-    <option value="Rugby"></option>
-    <option value="Shooting"></option>
-    <option value="Skating"></option>
-    <option value="Sports"></option>
-    <option value="Squash"></option>
-    <option value="Swimming"></option>
-    <option value="Table-Tennis"></option>
-    <option value="Taekwondo"></option>
-    <option value="Tennis"></option>
-    <option value="Volleyball"></option>
-    <option value="Wrestling"></option>
-    <option value="Yoga"></option>
-    <option value="Bodybuilding"></option>
-             </datalist>
+              <label for="browserChoice">Sports:</label>
+              <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
+                onChange={handleSportsChange}></input>
+              <datalist id="sports_leads">
+                <option value="Archery"></option>
+                <option value="Arts"></option>
+                <option value="Athletics"></option>
+                <option value="Badminton"></option>
+                <option value="Basketball"></option>
+                <option value="Billiards"></option>
+                <option value="Boxing"></option>
+                <option value="Chess"></option>
+                <option value="Cricket"></option>
+                <option value="Fencing"></option>
+                <option value="Football"></option>
+                <option value="Golf"></option>
+                <option value="Hockey"></option>
+                <option value="Kabaddi"></option>
+                <option value="Karate"></option>
+                <option value="Kho-Kho"></option>
+                <option value="MMA"></option>
+                <option value="Motorsports"></option>
+                <option value="Rugby"></option>
+                <option value="Shooting"></option>
+                <option value="Skating"></option>
+                <option value="Sports"></option>
+                <option value="Squash"></option>
+                <option value="Swimming"></option>
+                <option value="Table-Tennis"></option>
+                <option value="Taekwondo"></option>
+                <option value="Tennis"></option>
+                <option value="Volleyball"></option>
+                <option value="Wrestling"></option>
+                <option value="Yoga"></option>
+                <option value="Bodybuilding"></option>
+              </datalist>
             </div>
             <div className="select action-select">
-            <label for="browserChoice">City:</label>
-             <input list="city_leads" name="city_lead" id="city_lead" value={cityLead}
-          onChange={handleCityChange}></input>
-             <datalist id="city_leads">
-             <option value="Delhi"></option>
-    <option value="Bengaluru"></option>
-    <option value="Pune"></option>
-    <option value="Gurugram"></option>
-    <option value="Ghaziabad"></option>
-    <option value="Noida"></option>
-    <option value="Chennai"></option>
-    <option value="Mumbai"></option>
-    <option value="Lucknow"></option>
-    <option value="Hyderabad"></option>
-    <option value="Jaipur"></option>
-    <option value="Faridabad"></option>
-    <option value="Coimbatore"></option>
-    <option value="Ahmedabad"></option>
-    <option value="Kolkata"></option>
-    <option value="Kochi"></option>
-    <option value="Greater Noida"></option>
-    <option value="Kanpur"></option>
-    <option value="Agra"></option>
-    <option value="Meerut"></option>
-    <option value="Dehradun"></option>
-    <option value="Nagpur"></option>
-    <option value="Aurangabad"></option>
-    <option value="Pimpri-Chinchwad"></option>
-    <option value="Thrissur"></option>
-    <option value="Patna"></option>
-    <option value="Erode"></option>
-    <option value="Guwahati"></option>
-    <option value="Ernakulam"></option>
-    <option value="Vadodara"></option>
-    <option value="Indore"></option>
-    <option value="Varanasi"></option>
-    <option value="Salem"></option>
-    <option value="Jammu"></option>
-    <option value="Thane"></option>
-    <option value="Jalandhar"></option>
-    <option value="Raipur"></option>
-    <option value="Chandigarh"></option>
-    <option value="Jamshedpur"></option>
-    <option value="Bhubaneswar"></option>
-    <option value="Panchkula"></option>
-    <option value="Ranchi"></option>
-    <option value="Surat"></option>
-    <option value="Ludhiana"></option>
-    <option value="Zirakpur"></option>
-    <option value="Nashik"></option>
-    <option value="Kozhikode"></option>
-    <option value="Secunderabad"></option>
-    <option value="Kalyan"></option>
-    <option value="Patiala"></option>
-    <option value="Dharwad"></option>
-    <option value="Madurai"></option>
-    <option value="Akola"></option>
-    <option value="Shillong"></option>
-    <option value="Sangli"></option>
-    <option value="Bhopal"></option>
-    <option value="Vadoodara"></option>
-    <option value="Tiruchirappalli"></option>
-    <option value="Thiruvananthapuram"></option>
-    <option value="Haridwar"></option>
-    <option value="Hosur"></option>
-    <option value="Ajmer"></option>
-    <option value="Nagercoil"></option>
-    <option value="Rohtak"></option>
-    <option value="Saharanpur"></option>
-    <option value="Imphal"></option>
-    <option value="Kadapa"></option>
-    <option value="Nandgaon"></option>
-    <option value="Kottayam"></option>
-    <option value="Bisokhar"></option>
-    <option value="Mysore"></option>
-    <option value="Mira Bhayandar"></option>
-    <option value="Amravati"></option>
-    <option value="Panaji"></option>
-    <option value="Sulumjuri"></option>
-    <option value="Tikri"></option>
-    <option value="Satara"></option>
-    <option value="Aluva"></option>
-    <option value="Malappuram"></option>
-    <option value="Anantapur"></option>
-    <option value="Periapillaivalasai"></option>
-    <option value="Dombivli"></option>
-    <option value="Belgaum"></option>
-    <option value="Aligarh"></option>
-    <option value="Itanagar"></option>
-    <option value="Kashipur"></option>
-    <option value="Ambernath"></option>
-    <option value="Jabalpur"></option>
-    <option value="Karnal"></option>
-    <option value="Solapur"></option>
-    <option value="Mathura"></option>
-    <option value="Samaspur"></option>
-    <option value="Muzaffarpur"></option>
-    <option value="Bagalkot"></option>
-    <option value="Hapur"></option>
-    <option value="Anantnag"></option>
-    <option value="Udumalpet"></option>
-    <option value="Nala Sopara"></option>
-    <option value="Howrah"></option>
-    <option value="Bareilly"></option>
-    <option value="Churachandpur"></option>
-    <option value="Tiruvannamalai"></option>
-    <option value="NilganjBazar"></option>
-    <option value="Siliguri"></option>
-    <option value="Tiruppur"></option>
-    <option value="Gobi"></option>
-    <option value="NikolGam"></option>
-    <option value="Khuntuni"></option>
-    <option value="Karur"></option>
-    <option value="Baraut"></option>
-    <option value="Baramula"></option>
-    <option value="Raiwala"></option>
-    <option value="Nallagandla"></option>
-  <option value="Sonipat"></option>
-  <option value="Rajkot"></option>
-  <option value="Doorbhash Nagar"></option>
-  <option value="Arjungan"></option>
-  <option value="Kotamangalam"></option>
-  <option value="Darbhanga"></option>
-  <option value="Kolhapur"></option>
-  <option value="Rajamahendravaram"></option>
-  <option value="Fatehpur"></option>
-  <option value="Perumbavoor"></option>
-  <option value="Morti"></option>
-  <option value="Pattambi"></option>
-  <option value="Mallapur"></option>
-  <option value="Margao"></option>
-  <option value="Birpara"></option>
-  <option value="Anand"></option>
-  <option value="Mithapukur more"></option>
-  <option value="KaranjaBhilai"></option>
-  <option value="Shyampura"></option>
-  <option value="Madikovil Vidhi"></option>
-  <option value="Vijayapuram"></option>
-  <option value="Chharodi"></option>
-  <option value="Raghujinagar"></option>
-  <option value="Kottarakara"></option>
-  <option value="Bikaner"></option>
-  <option value="Panipat"></option>
-  <option value="Bommanahalli"></option>
-  <option value="Ahmednagar"></option>
-  <option value="Gwalior"></option>
-  <option value="Manipur"></option>
-  <option value="Bandhwari"></option>
-  <option value="RajNagar"></option>
-  <option value="Ganganagar"></option>
-  <option value="Namrup"></option>
-  <option value="Bhiwandi"></option>
-  <option value="Aziznagar"></option>
-  <option value="Sanagner"></option>
-  <option value="Gopala Extension"></option>
-  <option value="Ulubari"></option>
-  <option value="Ambala Cantt"></option>
-  <option value="Banguluru"></option>
-  <option value="Warangal"></option>
-  <option value="Tikaitpur"></option>
-  <option value="Palakkad"></option>
-  <option value="Hajipur"></option>
-  <option value="Bokkaro steel city"></option>
-  <option value="KamlaNagar"></option>
-  <option value="Sitapura"></option>
-  <option value="Alwar"></option>
-  <option value="Bonda"></option>
-  <option value="PalladamRoad"></option>
-  <option value="Tilkamanjhi"></option>
-  <option value="Latifabad"></option>
-  <option value="Belagavi"></option>
-  <option value="Kerala"></option>
-  <option value="Pudupakkam"></option>
-  <option value="Ponneri"></option>
-  <option value="Chopda"></option>
-  <option value="Burhanpur"></option>
-  <option value="Jalalpur"></option>
-  <option value="Sherpur"></option>
-  <option value="Jhajra"></option>
-  <option value="Beawar"></option>
-  <option value="orrakadu"></option>
-  <option value="Bagadpur"></option>
-  <option value="Palayamkottai"></option>
-  <option value="Narsinghgar"></option>
-  <option value="Vijayawada"></option>
-  <option value="Belgaum City"></option>
-  <option value="Shimoga"></option>
-  <option value="Basirhat"></option>
-  <option value="Hisar"></option>
-  <option value="Vasundhara"></option>
-  <option value="Kommaghatta"></option>
-  <option value="Amritsar"></option>
-  <option value="Chittaranjan"></option>
-  <option value="Badlapur"></option>
-  <option value="Vallabh Vidyanagar Anand"></option>
-  <option value="Bhilwara"></option>
-  <option value="Jind"></option>
-  <option value="New Chandigarh"></option>
-  <option value="Azamgarh"></option>
-  <option value="Durgapur"></option>
-  <option value="Namkum"></option>
-  <option value="Dimapur"></option>
-  <option value="Vijayapura"></option>
-  <option value="Jwalasal Urf Karayal"></option>
-  <option value="Chainpur"></option>
-  <option value="Baluwa"></option>
-  <option value="DomkhelWasti"></option>
-  <option value="Eranamkulam"></option>
-  <option value="Poonamallee"></option>
-  <option value="Pothinamallayyapalem"></option>
-  <option value="Chakbanjarewal"></option>
-  <option value="Theri"></option>
-  <option value="VasantKunj"></option>
-  <option value="Chengalayi"></option>
-  <option value="Jharkhand"></option>
-  <option value="Hubballi"></option>
-  <option value="Kulti"></option>
-  <option value="Kushinagar"></option>
-  <option value="Govindanpe"></option>
-  <option value="Mehsana"></option>
-  <option value="Hubli"></option>
-  <option value="Palarivattom"></option>
-  <option value="Basavanakunte"></option>
-  <option value="Kolar"></option>
-  <option value="Maharashtra"></option>
-  <option value="Kakkanad"></option>
-  <option value="Bommasandra"></option>
-  <option value="Rudrapur"></option>
-  <option value="Vaduvucode"></option>
-  <option value="Kalol"></option>
-  <option value="Soobabazar"></option>
-  <option value="Paratwada"></option>
-  <option value="Sanquelim"></option>
-  <option value="Bilaspur"></option>
-  <option value="Pathankot"></option>
-  <option value="Talukamaval"></option>
-  <option value="Bhalariya"></option>
-  <option value="Raigarh"></option>
-  <option value="CollegeRoad"></option>
-  <option value="Rishikesh"></option>
-  <option value="Chakan"></option>
-  <option value="KorattiSouth"></option>
-  <option value="Perungalathur"></option>
-  <option value="Baghpat"></option>
-  <option value="Deoria"></option>
-  <option value="Nasik"></option>
-  <option value="Nanded"></option>
-    <option value="Mandhana"></option>
-    <option value="Dera Bassi"></option>
-    <option value="Bandra West"></option>
-    <option value="Nizamabad"></option>
-    <option value="Mohali"></option>
-    <option value="Puzhuthivakkam"></option>
-    <option value="Telangana"></option>
-    <option value="Mau"></option>
-    <option value="Panjgrainkalan"></option>
-    <option value="Kilmudalambedu"></option>
-    <option value="Moga"></option>
-    <option value="Kolhaura"></option>
-    <option value="Kadegaon"></option>
-    <option value="Kothamangalam"></option>
-    <option value="Kohima"></option>
-    <option value="Sasaram"></option>
-    <option value="Madukkarai"></option>
-    <option value="Dumardaga"></option>
-    <option value="Thaltej bodakdev"></option>
-    <option value="Achouba"></option>
-    <option value="Khaspur"></option>
-    <option value="Katedhan"></option>
-    <option value="Kalyangarh"></option>
-    <option value="Karumandapam"></option>
-    <option value="Tallakulam"></option>
-    <option value="Roing"></option>
-    <option value="Halduchaur"></option>
-    <option value="Fatehgunj"></option>
-    <option value="Sholinganallur"></option>
-    <option value="Roorkee"></option>
-    <option value="Trivandrum"></option>
-    <option value="Sambalpur"></option>
-    <option value="Bariatukhalsa"></option>
-    <option value="Mysuru"></option>
-    <option value="Sirsaim"></option>
-    <option value="Mulund West"></option>
-    <option value="Khordha"></option>
-    <option value="Gachibowli"></option>
-    <option value="Vandalur"></option>
-    <option value="Vannarpettai"></option>
-    <option value="Kota"></option>
-    <option value="Kannur"></option>
-    <option value="Puraisawakam"></option>
-    <option value="Hasanparthy"></option>
-    <option value="Zuarinagar"></option>
-    <option value="Begusarai"></option>
-    <option value="Vadavalli"></option>
-    <option value="bodakdev"></option>
-    <option value="Palawa"></option>
-    <option value="BandlagudaJagir"></option>
-    <option value="Chintal"></option>
-    <option value="Muragachha"></option>
-    <option value="Thalinji"></option>
-    <option value="Jodhpur"></option>
-    <option value="Tirunelveli"></option>
-    <option value="PethVadgaon"></option>
-    <option value="Selakui"></option>
-    <option value="Navi Mumbai"></option>
-    <option value="Samastipur"></option>
-    <option value="Thergaon"></option>
-    <option value="Pallikaranai"></option>
-    <option value="Gandhigramam"></option>
-    <option value="Karumathampatti"></option>
-    <option value="Jachonda"></option>
-    <option value="Purulia"></option>
-    <option value="Puppalguda"></option>
-    <option value="Shopian"></option>
-    <option value="Manjalpur"></option>
-    <option value="Gajuwaka"></option>
-    <option value="Vaishali Nagar"></option>
-    <option value="Chanakya Puri"></option>
-    <option value="Gautam Budh Nagar"></option>
-    <option value="Ghasauli"></option>
-    <option value="Hathod"></option>
-    <option value="Shirdi"></option>
-    <option value="NetuaGrameen"></option>
-    <option value="Faizabad"></option>
-    <option value="Shahbad"></option>
-    <option value="Cuttack"></option>
-    <option value="Davanagere"></option>
-    <option value="Amroha"></option>
-    <option value="Panihati"></option>
-    <option value="Alappuzha"></option>
-    <option value="Bhadravati"></option>
-    <option value="Ella"></option>
-    <option value="Padur"></option>
-    <option value="Calicut"></option>
-    <option value="Spituk Leh Union"></option>
-    <option value="BhayandarWest"></option>
-    <option value="Uppal"></option>
-    <option value="Aizwal"></option>
-    <option value="Permanallur"></option>
-    <option value="Kaniya"></option>
-    <option value="Dariyapur Patna"></option>
-    <option value="Salempur"></option>
-    <option value="Mudar"></option>
-    <option value="Bhagirathi"></option>
-    <option value="Ernamkulam"></option>
-    <option value="Kurukshetra"></option>
-    <option value="Pimpri"></option>
-    <option value="Muzaffarabad"></option>
-    <option value="Kelambakkam"></option>
-    <option value="Sharjah"></option>
-    <option value="Pratapgarh"></option>
-    <option value="Mandi Dabwali"></option>
-    <option value="Khar West"></option>
-    <option value="Ranjhawala"></option>
-             </datalist>
+              <label htmlFor="browserChoice">City:</label>
+              <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} onChange={handleCityChange}></input>
+              <datalist id="city_leads">
+                {cities.map((city, index) => (
+                  <option key={index} value={city}></option>
+                ))}
+              </datalist>
             </div>
 
             <input
@@ -1192,9 +781,8 @@ const handleCityChange = (event) => {
                 >
                   Actions{" "}
                   <i
-                    className={`fa-sharp fa-solid ${
-                      actionopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </div>
                 {actionopen && (
@@ -1245,9 +833,8 @@ const handleCityChange = (event) => {
                 <div className="dropdown-header2" onClick={toggleSortDropdown}>
                   Sort By
                   <i
-                    className={`fa-sharp fa-solid ${
-                      actionopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </div>
                 {sortOpen && (
@@ -1313,15 +900,15 @@ const handleCityChange = (event) => {
         </div>
       </section>
       <section className="cards-body">
-        {status.map((item, index) => (
+        {stages.map((item, index) => (
           <div className="card-column" key={index}>
             <div className="card-details">
               <div className="main-cards">
                 <div className="cards-new">
                   <p className="DealName">
-                    {stages[index]} ({statusCounts[item]})
+                    {item.stage}({statusCounts[item.id]})
                   </p>
-                  {statusCounts[item] > 0 && (
+                  {statusCounts[item.id] > 0 && (
                     <label className="custom-checkbox">
                       <input
                         type="checkbox"
@@ -1338,28 +925,27 @@ const handleCityChange = (event) => {
                     </label>
                   )}
                 </div>
-                {sortedDealData.map((obj) => {
-                  if (obj.status === item) {
+                {acadmey.map((obj) => {
+                  if (obj.stage === item.id) {
                     return (
                       <LeadCards
                         key={obj.id}
                         object={obj}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
-                        onLeadAdded={fetchLeadsData}
+                        onLeadAdded={getAllAcademy}
                         userData={userData}
                       />
                     );
                   }
                   return null;
                 })}
+                {statusCounts[item.id] > 0 && (
+                 <button onClick={handleLoadMore}>Load More</button>
+                )}
               </div>
               <div className="bottom-fixed">
-                <p>
-                  {" "}
-                  Total Value: <img className="pound" src={pound} alt="pound"/>
-                  {statusTotalValues[item]?.toLocaleString("en-IN") || 0}
-                </p>
+
               </div>
             </div>
           </div>
@@ -1369,7 +955,7 @@ const handleCityChange = (event) => {
       <CreateLead
         isOpen={isModalOpen}
         onClose={closeModal}
-        onLeadAdded={fetchLeadsData}
+        onLeadAdded={getAllAcademy}
         text="lead"
       />
       <ToastContainer />
@@ -1387,7 +973,7 @@ const handleCityChange = (event) => {
           text="Lead"
           ids={selectedIds}
           handleDataReceived={handleDataReceived}
-          fetchLeadsData={fetchLeadsData}
+          getAllAcademy={getAllAcademy}
         />
       )}
     </div>
