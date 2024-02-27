@@ -574,13 +574,18 @@
 .bottom-fixed {
   background: #ffffff;
   border: 1px solid #dcdcdc;
+  height:3.5rem;
   /* border-radius: 0 0 10px 10px; */
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
+
 
 .bottom-fixed p {
   font-size: 1rem;
