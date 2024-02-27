@@ -3,13 +3,10 @@ import "../styles/LPleads.css";
 import CRMeditor from "../CRMeditor";
 import axios from "axios";
 import {
-  // ADD_NOTES,
   ACADMEY_NOTE,
   ACADMEY_NOTE_SOURCE,
   ACADMEY_NOTE_UPDATE,
-  // GETNOTEBYSOURCE,
   GETNOTEDEAL,
-  UPDATE_NOTE,
   MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
@@ -66,7 +63,6 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
             ...notesWithImportance,
             ...notesWithoutImportance,
           ];
-
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
         })
