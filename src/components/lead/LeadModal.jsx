@@ -3,7 +3,7 @@ import "./../styles/LPleads.css";
 import axios from "axios";
 import {
   UPDATE_LEAD,
-  GETNOTEBYSOURCE,
+  ACADMEY_NOTE_SOURCE,
   GET_LEAD_ID,
   GET_ACTIVE_TEAM_MEM,
   handleLogout,
@@ -376,8 +376,11 @@ const LeadModal = ({ selectedItem, closeModal, onLeadAdded}) => {
   }, []);
 
   const fetchNotes = () => {
+    const body = {
+      source_id: selectedItem.id, source_type: "academy"
+    }
     axios
-      .get(GETNOTEBYSOURCE + selectedItem?.id, {
+      .post(ACADMEY_NOTE_SOURCE, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },

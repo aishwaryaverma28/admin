@@ -3,12 +3,10 @@ import "../styles/LPleads.css";
 import CRMeditor from "../CRMeditor";
 import axios from "axios";
 import {
-  ADD_NOTES,
   ACADMEY_NOTE,
   ACADMEY_NOTE_SOURCE,
-  GETNOTEBYSOURCE,
+  ACADMEY_NOTE_UPDATE,
   GETNOTEDEAL,
-  UPDATE_NOTE,
   MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
@@ -45,10 +43,10 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
   const fetchNotes = () => {
     if (type === "lead") {
       const body = {
-        source_id: item.id,source_type:"academy"
-    }
+        source_id: item.id, source_type: "academy"
+      }
       axios
-        .post(ACADMEY_NOTE_SOURCE,body, {
+        .post(ACADMEY_NOTE_SOURCE, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -65,7 +63,6 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
             ...notesWithImportance,
             ...notesWithoutImportance,
           ];
-
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
         })
@@ -227,15 +224,8 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToUpdate) {
       const updatedNote = {
         description: content,
-        status: "B",
-        sort: 1,
-        // importance: "1",
-        urgency: "No",
-        viewable: 1,
-        source_type: "source -2",
-        type: type,
-        attr2: "attr2",
-        label_id: 1,
+        source_id: item.id,
+        source_type: "academy",
       };
       const updatedNotes = notes.map((note) =>
         note.id === id ? updatedNote : note
@@ -243,7 +233,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
       setNotes(updatedNotes);
 
       axios
-        .put(UPDATE_NOTE + id, updatedNote, {
+        .put(ACADMEY_NOTE_UPDATE + id, updatedNote, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -318,18 +308,12 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToPin) {
       const updatedNote = {
         description: noteToPin.description,
-        status: "B",
-        sort: 1,
+        source_id: item.id,
+        source_type: "academy",
         importance: "1",
-        urgency: "No",
-        viewable: 1,
-        source_type: "source -2",
-        type: type,
-        attr2: "attr2",
-        label_id: 1,
-      };
+       };
       axios
-        .put(UPDATE_NOTE + id, updatedNote, {
+        .put(ACADMEY_NOTE_UPDATE + id, updatedNote, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -354,18 +338,12 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToUnpin) {
       const updatedNote = {
         description: noteToUnpin.description,
-        status: "B",
-        sort: 1,
+        source_id: item.id,
+        source_type: "academy",
         importance: "0",
-        urgency: "No",
-        viewable: 1,
-        source_type: "source -2",
-        type: type,
-        attr2: "attr2",
-        label_id: 1,
-      };
+        };
       axios
-        .put(UPDATE_NOTE + id, updatedNote, {
+        .put(ACADMEY_NOTE_UPDATE + id, updatedNote, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -432,7 +410,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                   className="note-content"
                   onClick={() => {
                     accordianClick(note.id);
-                   }}
+                  }}
                 >
                   <div className="arrow-greater">
                     <img src={GreaterArrow} alt="" />
@@ -453,30 +431,30 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                             " at " +
                             note.creation_date.split("T")[1].split(".")[0]
                             : "-"}
-                        </p>                      
-                          <div className="three-side-dots">
-                            {note.importance === "1" ? (
-                              <img
-                                src={pin}
-                                alt="pin"
-                                title="Pin"
-                                onClick={() => handleUnpinNote(note.id)}
-                              />
-                            ) : (
-                              <img
-                                src={unpin}
-                                alt="unpin"
-                                title="UnPin"
-                                onClick={() => handlePinNote(note.id)}
-                              />
-                            )}
+                        </p>
+                        <div className="three-side-dots">
+                          {note.importance === "1" ? (
                             <img
-                              src={bin}
-                              alt="trash"
-                              title="Delete"
-                              onClick={() => handleDeleteNote(note.id)}
+                              src={pin}
+                              alt="pin"
+                              title="Pin"
+                              onClick={() => handleUnpinNote(note.id)}
                             />
-                          </div>
+                          ) : (
+                            <img
+                              src={unpin}
+                              alt="unpin"
+                              title="UnPin"
+                              onClick={() => handlePinNote(note.id)}
+                            />
+                          )}
+                          <img
+                            src={bin}
+                            alt="trash"
+                            title="Delete"
+                            onClick={() => handleDeleteNote(note.id)}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="notes-content">
