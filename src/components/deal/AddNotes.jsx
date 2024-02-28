@@ -23,7 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router";
 
 const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
-  console.log(item)
   const { id } = useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");

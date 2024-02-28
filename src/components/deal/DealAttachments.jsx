@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import notUpload from "../../assets/image/notupload.svg";
 
-const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
+const DealAttachments = ({ dealId, type, onAttachNum }) => {
   const decryptedToken = getDecryptedToken();
   const orgId = localStorage.getItem('org_id');
   const [documentList, setDocumentList] = useState([]);
@@ -26,7 +26,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
 
   const fetchDocuments = () => {
     axios
-      .post(REQ_DOCUMENT + type, {org_id: orgId},{
+      .post(REQ_DOCUMENT + type, { org_id: orgId }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -55,7 +55,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
       .then((response) => {
         setAttachment(response?.data?.message);
 
-        const uploadedNames = response?.data?.message.map(
+        const uploadedNames = response?.data?.message?.map(
           (doc) => doc.document_name
         );
         setUploadedDocumentNames(uploadedNames);
@@ -140,9 +140,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
 
   return (
     <div>
-    {
-      ownerId === idOfOwner && (
-        <div className="deal-doc-list">
+      <div className="deal-doc-list">
         <p className="common-fonts deal-browse-doc">Browse-documents</p>
         <div>
           <select
@@ -159,7 +157,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
               .filter(
                 (doc) => !uploadedDocumentNames.includes(doc.document_name)
               )
-              .map((doc) => (
+              ?.map((doc) => (
                 <option key={doc.id} value={doc.document_name}>
                   {doc.document_name}
                 </option>
@@ -167,11 +165,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
           </select>
         </div>
       </div>
-      )
-    }
-
-
-      {selectedDocuments.map((doc, index) => (
+      {selectedDocuments?.map((doc, index) => (
         <div key={index} className="contact-tab-fields deal-doc-verify">
           <label className="common-fonts contact-tab-label deal-doc-label">
             <span>{doc.document_name}</span>
@@ -208,10 +202,6 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-              {/* <button className="deal-doc-eye">
-                {" "}
-                <i className="fa-sharp fa-solid fa-eye "></i>
-              </button> */}
               {fileName && (
                 <span className="common-fonts upload-file-name">
                   Selected File: {fileName.name}
@@ -222,7 +212,7 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
         </div>
       ))}
 
-      {attachment.map((doc, index) => (
+      {Array.isArray(attachment) && attachment.map((doc, index) => (
         <div key={index} className="contact-tab-fields deal-doc-verify">
           <label className="common-fonts contact-tab-label deal-doc-label">
             <span>{doc.document_name}</span>
@@ -240,13 +230,6 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
                 marginRight: "10px",
               }}
             >
-              {/* <button
-                className="contact-browse-btn common-fonts"
-                onClick={() => handleButtonClick(doc)}
-              >
-                Browse
-              </button> */}
-
               <input
                 type="file"
                 style={{
@@ -268,17 +251,13 @@ const DealAttachments = ({ dealId, type, onAttachNum, ownerId, idOfOwner }) => {
                 <i className="fa-sharp fa-solid fa-eye"></i>
               </button>
               <span className="common-fonts upload-file-name">
-                Selected File: {doc.document_url.length<30 ?  doc.document_url : doc.document_url.slice(0,30)+"..."}
+                Selected File: {doc.document_url.length < 30 ? doc.document_url : doc.document_url.slice(0, 30) + "..."}
               </span>
             </span>
           </div>
         </div>
       ))}
 
-      {/* <div className="deal-doc-btn">
-        <button className="common-fonts common-white-button">Cancel</button>
-        <button className="common-fonts common-save-button">Save</button>
-      </div> */}
     </div>
   );
 };

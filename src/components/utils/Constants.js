@@ -204,10 +204,10 @@ export const ENVELOPE_DETAILS =
 
 //============================================================bmp apis
 export const BMP_LOGIN = start + "/bmp/login";
-export const GET_ACADEMY = start + "/bmp/academy/get";
+export const GET_ACADEMY = bmpStart + "/bmp/academy/get";
 export const ADDRESS_API = start + "/bmp/academy/getaddressbyquery";
 export const UPDATE_ACADEMY_TABLE2 = start + "/bmp/academy/addupdaterequest";
-export const UPDATE_ACADEMY = start + "/bmp/academy/update/";
+export const UPDATE_ACADEMY = bmpStart + "/bmp/academy/update/";
 export const ADD_BATCH = start + "/bmp/batch/add";
 export const GET_BATCH = start + "/bmp/batch/get";
 export const UPDATE_BATCH = start + "/bmp/batch/update/";
@@ -246,3 +246,4 @@ export const ACADMEY_SEARCH = bmpStart + "/bmp/academy/search";
 export const ACADMEY_NOTE = bmpStart+ "/bmp/note/add";
 export const ACADMEY_NOTE_SOURCE = bmpStart+ "/bmp/note/getBySource";
 export const ACADMEY_NOTE_UPDATE= bmpStart + "/bmp/note/update/";
+export const ACADMEY_SEARCH_API = bmpStart + "/bmp/academy/search/";

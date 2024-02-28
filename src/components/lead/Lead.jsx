@@ -14,6 +14,7 @@ import {
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
   ACADMEY_SEARCH,
+  ACADMEY_SEARCH_API,
   GET_LABEL,
   GET_ACTIVE_TEAM_MEM,
   GET_OWNER_LEAD,
@@ -94,7 +95,7 @@ const Lead = () => {
   const [limit, setLimit] = useState(500);
   useEffect(() => {
     getAllAcademy();
-  }, [limit]); 
+  }, [limit]);
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
     getAllAcademy(event.target.value, cityLead);
@@ -102,7 +103,7 @@ const Lead = () => {
   };
   const handleCityChange = (event) => {
     setCityLead(event.target.value);
-    getAllAcademy(sportsLead,event.target.value);
+    getAllAcademy(sportsLead, event.target.value);
   };
   const handleDataReceived = (newData) => {
     setData(newData);
@@ -138,11 +139,11 @@ const Lead = () => {
     const hasSportOrCity = sport || city;
 
     const requestBody = hasSportOrCity ? {
-      ...(sport && { sport }), 
-      ...(city && { location: city }), 
+      ...(sport && { sport }),
+      ...(city && { location: city }),
       condition: "conditions",
       limit_from: "1",
-      limit_to:"1000",
+      limit_to: "1000",
     } : {
       condition: "all",
       limit_from: "1",
@@ -156,7 +157,6 @@ const Lead = () => {
       }
     }
     ).then((response) => {
-      console.log(response?.data?.data)
       setAcademy(response?.data?.data);
     }).catch((error) => {
       console.log(error);
@@ -164,7 +164,7 @@ const Lead = () => {
   }
 
   const handleLoadMore = () => {
-    setLimit(prevLimit => prevLimit + 500); 
+    setLimit(prevLimit => prevLimit + 500);
   }
 
   const userAdded = () => {
@@ -197,21 +197,25 @@ const Lead = () => {
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
-    if (value.length < 3) {
+    if (value.length === 0 ) {
+      getAllAcademy();
+    }
+    else if (value.length < 3) {
       return;
     }
-    axios.get(`https://bmp.leadplaner.com/api/api/bmp/academy/search/${value}`, {
+    else{    
+    axios.get(ACADMEY_SEARCH_API + value, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,
       },
     })
       .then(response => {
-        console.log(response?.data?.data);
         setAcademy(response?.data?.data);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
+    }
   };
 
   const toggleSortDropdown = () => {
@@ -973,8 +977,8 @@ const Lead = () => {
 
               </div>
               <div className="bottom-fixed">
-              {statusCounts[item.id] > 0 && (
-                 <button onClick={handleLoadMore} className="common-save-button">Load More</button>
+                {statusCounts[item.id] > 0 && (
+                  <button onClick={handleLoadMore} className="common-save-button">Load More</button>
                 )}
               </div>
             </div>

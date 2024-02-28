@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 import AssignModal from "./AssignModal.jsx";
+import AcadmeyLead from "./AcadmeyLead.jsx";
 
 const LeadCards = ({
   object,
@@ -225,7 +226,12 @@ const LeadCards = ({
         </div>
       </div>
       {modalVisible && (
-        <LeadModal
+        // <LeadModal
+        //   selectedItem={selectedObj}
+        //   closeModal={closeModal}
+        //   onLeadAdded={onLeadAdded}
+        // />
+        <AcadmeyLead
           selectedItem={selectedObj}
           closeModal={closeModal}
           onLeadAdded={onLeadAdded}
