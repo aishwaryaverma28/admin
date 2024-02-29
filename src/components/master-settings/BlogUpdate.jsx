@@ -170,18 +170,25 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
+        console.log(response?.data?.data)
         const secData = response?.data?.data;
         const sectionDataWithoutDate = removeDateFromSectionData(secData);
-        const tempSectionData = sectionDataWithoutDate.map((section) => ({
-          ...section,
-          data_table: JSON.parse(section.data_table),
-        }));
+        const tempSectionData = sectionDataWithoutDate.map((section) => {
+          const dataTable = section.data_table.replace(/\n\s*/g, '');
+          const parsedDataTable = JSON.parse(`[${dataTable}]`);
+          
+          return {
+            ...section,
+            data_table: parsedDataTable,
+          };
+        });
         setSectionData(tempSectionData);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  };  
+  console.log(sectionData)
   const removeDateFromSectionData = (data) => {
     return data?.map((section) => {
       const { date, ...newSection } = section;
