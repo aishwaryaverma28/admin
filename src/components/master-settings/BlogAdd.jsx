@@ -7,7 +7,7 @@ import {
   getDecryptedToken,
   GET_TAG_CATEGORY,
 } from "../utils/Constants";
-
+import JoditEditor from "jodit-react"
 import "../styles/BlogAdd.css";
 import ReactEditor from "../ReactEditor";
 import trash from "../../assets/image/delete-icon.svg";
@@ -29,6 +29,7 @@ const BlogAdd = () => {
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
+  const editor = useRef(null)
   const [isIndex, setIsIndex] = useState(-1);
   const [sectionData, setSectionData] = useState([]);
   const [dataFromTable, setDataFromTable] = useState([]);
@@ -144,7 +145,7 @@ const BlogAdd = () => {
           },
         })
         .then((response) => {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
           setOptions(
             response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
           );
@@ -230,9 +231,8 @@ const BlogAdd = () => {
 
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
-    const plainText = removeHtmlTags(data);
     const newSectionData = [...sectionData];
-    newSectionData[index].section = plainText;
+    newSectionData[index].section = data;
     setSectionData(newSectionData);
     setStateBtn(1);
   };
@@ -241,10 +241,9 @@ const BlogAdd = () => {
     newSectionData[index].data_table = data.map(row => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
-};
+  };
 
-
-  //======================================================================================= sort and title data change
+  //============================================================ sort and title data change
   const handleTitle = (event) => {
     const title = event.target.value;
     setSectionTitle(title);
@@ -270,14 +269,12 @@ const BlogAdd = () => {
     setTableDate(false);
     setDataFromChild(data);
     setStateBtn(1);
+    console.log(data)
   };
 
   const removeHtmlTags = (htmlString) => {
-    //   const tempDiv = document.createElement("div");
-    //   tempDiv.innerHTML = htmlString;
-    //   return tempDiv.textContent || tempDiv.innerText || "";
-          const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
-      return htmlString.replace(regex, '');
+    const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
+    return htmlString.replace(regex, '');
   };
 
   //====================================================================================== handle section data in an array of objects
@@ -285,25 +282,21 @@ const BlogAdd = () => {
   const handleAddSection = (e) => {
     e.preventDefault();
     console.log(dataFromChild)
-    const plainText = removeHtmlTags(dataFromChild);
-    console.log(plainText)
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
       image: blogImg2,
-      section: plainText,
+      section: dataFromChild,
       site: "",
       alt: "",
       data_table: dataFromTable,
     };
-    
     setSectionData([...sectionData, newSection]);
     setSectionTitle("");
     setSectionSort(sectionSort === null ? 2 : parseInt(sectionSort) + 1);
     setDataFromChild("");
     setStateBtn(1);
     setBlogImg2("");
-    editorRef.current.clearEditorContent();
     setDataFromTable([]);
     setTableDate(true);
   };
@@ -684,11 +677,16 @@ const BlogAdd = () => {
                     </button>
                   </div>
                 </div>
-                <Table onDataSave={handleDataSave} tableFlag = {tableData}/>
+                <Table onDataSave={handleDataSave} tableFlag={tableData} />
                 <div className="formEditor">
-                  <ReactEditor
+                  {/* <ReactEditor
                     ref={editorRef} // Add this line
                     onDataTransfer={handleDataTransfer}
+                  /> */}
+                  <JoditEditor
+                    ref={editor}
+                    value={dataFromChild}
+                    onChange={(data) => handleDataTransfer(data)}
                   />
                 </div>
               </div>
@@ -760,12 +758,16 @@ const BlogAdd = () => {
                       </div>
                       <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
                       <div className="formEditor">
-                        <ReactEditor
+                        {/* <ReactEditor
                           onDataTransfer={(data) =>
                             handleEditorChange(data, index)
                           }
                           initialContent={section?.section}
-                        />
+                        /> */}
+                        <JoditEditor
+                    value={section?.section}
+                    onChange={(data) => handleEditorChange(data, index)}
+                  />
                       </div>
                       <div className="deleteContainer">
                         <button

@@ -20,10 +20,13 @@ import "react-toastify/dist/ReactToastify.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
 import Table from "./blog/Table";
 import DynamicTable from "./blog/DynamicTable";
+import JoditEditor from "jodit-react"
+
 const BlogUpdate = () => {
   const { id } = useParams();
   const org_id = localStorage.getItem("org_id");
   // section states
+  const editor = useRef(null)
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
@@ -96,7 +99,7 @@ const BlogUpdate = () => {
       heading: updatedSection.heading,
       sort: updatedSection.sort,
       image: updatedSection.image,
-      section: plainText,
+      section: updatedSection.section,
       blogid: updatedSection.blogid,
       data_table: JSON.stringify(updatedSection.data_table),
     };
@@ -395,7 +398,7 @@ const BlogUpdate = () => {
       heading: sectionTitle,
       sort: parseInt(sectionSort),
       image: blogImg3.split("blog/")[1]?.replace(/\.jpg$/, ""),
-      section: plainText,
+      section: dataFromChild,
       data_table: JSON.stringify(dataFromTable),
       site: "",
       alt: "",
@@ -426,7 +429,6 @@ const BlogUpdate = () => {
     setSectionSort(parseInt(sectionSort) + 1);
     setDataFromChild("");
     setStateBtn(1);
-    editorRef.current.clearEditorContent();
     setBlogImg3("");
     setDataFromTable([]);
     setTableDate(true);
@@ -853,9 +855,14 @@ const BlogUpdate = () => {
                 </div>
                 <Table onDataSave={handleDataSave} tableFlag={tableData} />
                 <div className="formEditor">
-                  <ReactEditor
+                  {/* <ReactEditor
                     ref={editorRef} // Attach the ref here
                     onDataTransfer={handleDataTransfer}
+                  /> */}
+                  <JoditEditor
+                    ref={editor}
+                    value={dataFromChild}
+                    onChange={(data) => handleDataTransfer(data)}
                   />
                 </div>
               </div>
@@ -945,12 +952,16 @@ const BlogUpdate = () => {
                         />
                       </div>
                       <div className="formEditor">
-                        <ReactEditor
+                        {/* <ReactEditor
                           onDataTransfer={(data) =>
                             handleEditorChange(data, index)
                           }
                           initialContent={section.section}
-                        />
+                        /> */}
+                            <JoditEditor
+                    value={section?.section}
+                    onChange={(data) => handleEditorChange(data, index)}
+                  />
                       </div>
                       <div className="blog-disable">
                         {updateStateBtn === 0 ? (
