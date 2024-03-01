@@ -1031,7 +1031,7 @@ const BlogUpdate = () => {
                     ))}
                   </select>
                   <div className="dropdown-container" ref={actionOwnerRef}>
-                    <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
+                    <div className="new_tag" onClick={toggleOwnerDropdown}>
                       {display}
                       <i
                         className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
@@ -1039,14 +1039,15 @@ const BlogUpdate = () => {
                       ></i>
                     </div>
                     {ownerOpen && (
-                      <ul className="dropdown-menu owner-menu">
+                      <div className="dropdown_newtag">
+                      <ul>
                         {options
                           ?.filter(
                             (option) =>
                               !tagId?.split(",")?.includes(option.id?.toString())
                           )
                           .map((option) => (
-                            <li key={option?.id} value={option?.id}>
+                            <li key={option?.id} value={option?.id} className="tag_new_li">
                               <label className="custom-checkbox">
                                 <input
                                   type="checkbox"
@@ -1061,8 +1062,11 @@ const BlogUpdate = () => {
                               {option?.tag}
                             </li>
                           ))}
-                        <button onClick={addTag}>Add tags</button>
                       </ul>
+                      <div className="new_tags_btn">
+                      <button onClick={addTag} className="common-save-button">Add tags</button>
+                      </div>
+                      </div>
                     )}
                   </div>
                 </div>
