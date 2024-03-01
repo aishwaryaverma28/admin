@@ -133,13 +133,14 @@ const BlogAdd = () => {
       setSelectedTags(selectedTags.filter(tag => tag.id !== id));
     }
   };
-  
+
   const addTag = () => {
     const ids = selectedTags.map(tag => tag.id).join(',');
     setTagId(ids);
     const names = selectedTags.map(tag => tag.tag);
     setTagNames(names);
     setOwnerOpen(false);
+    setStateBtn(1);
   };
 
   const handleTagRemoval = (index) => {

@@ -39,6 +39,11 @@ const BlogUpdate = () => {
   const fileInputRefs = useRef(null);
   const decryptedToken = getDecryptedToken();
   // tags states
+   // tags states
+   const actionOwnerRef = useRef(null);
+   const [ownerOpen, setOwnerOpen] = useState(false);
+   const [display, setDisplay] = useState("Select Tag");
+   const [tagNames, setTagNames] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
   const [selectSite, setSelectSite] = useState("");
@@ -66,7 +71,6 @@ const BlogUpdate = () => {
 
   const [stateBtn, setStateBtn] = useState(0);
   const [updateStateBtn, setUpdateStateBtn] = useState(0);
-  const editorRef = useRef();
   useEffect(() => {
     getBlogInfo();
     getTagCategory();
@@ -89,7 +93,6 @@ const BlogUpdate = () => {
 
   const handleUpdateClick = (id) => {
     const updatedSection = sectionData.find((section) => section.id === id);
-    console.log(updatedSection);
     if (!updatedSection) {
       console.error(`Section with id ${id} not found.`);
       return;
@@ -163,7 +166,7 @@ const BlogUpdate = () => {
       // getTagBySite(data?.site);
     }
     sectionResponse();
-    tagData();
+    // tagData();
   }
   const sectionResponse = () => {
     axios
@@ -201,110 +204,115 @@ const BlogUpdate = () => {
     axios
       .post(GET_TAG, updatedForm, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
         setOptions(response?.data?.data);
-        tagData(); // Call tagData() after receiving the tag data
+        // tagData();
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const getTagBySite = (site) => {
-    axios
-      .get(GET_TAG_BY_SITE + site + "/" + org_id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        setOptions(response?.data?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const tagData = () => {
+   const tagData = () => {
     const ids = tagId?.split(",");
     const newTags = [];
     ids.forEach((item) => {
       const option = options.find((opt) => opt.id == item);
-      if (option && !selectedTags.includes(option.tag)) {
+      if (option && !tagNames.includes(option.tag)) {
         newTags.push(option.tag);
       }
     });
-    setSelectedTags((prevTags) => [...prevTags, ...newTags]);
+    setTagNames((prevTags) => [...prevTags, ...newTags]);
   };
 
   useEffect(() => {
     tagData();
   }, [options]);
 
-  const handleTagSelection = (event) => {
-    const { name = "categoryDropdown", value } = event?.target || {};
+  // ===================================================================functions for tags addition and removal
 
-    if (name === "categoryDropdown") {
-      let updatedForm = {};
+  const toggleOwnerDropdown = () => {
+    setOwnerOpen(!ownerOpen);
+  };
 
-      if (value) {
-        updatedForm = {
-          sport: value,
-          condition: "sport",
-          org_id: org_id,
-        };
-      } else {
-        updatedForm = {
-          condition: "all",
-          org_id: org_id,
-        };
-      }
-
-      // Call your API with updatedForm object
-      axios
-        .post(GET_TAG, updatedForm, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
-        .then((response) => {
-          setOptions(
-            response?.data?.data?.map((item) => ({
-              id: item.id,
-              tag: item.tag,
-            }))
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else if (name === "tagDropdown") {
-      const id = event.target.value;
-      setStateBtn(1);
-      setTagId((prevTags) => (prevTags ? `${prevTags},${id}` : id));
-      options?.map((option) => {
-        if (option.id == id) {
-          setSelectedTags((prev) => [...prev, option.tag]);
-        }
-      });
+  const handleOutsideClick = (event) => {
+    if (
+      actionOwnerRef.current &&
+      !actionOwnerRef.current.contains(event.target)
+    ) {
+      setOwnerOpen(false);
     }
+  };
+  document.addEventListener("click", handleOutsideClick);
+
+  useEffect(() => {
+    handleCatogorySelection();
+  }, []);
+
+  const handleCatogorySelection = (event) => {
+    const value = event?.target?.value;
+    let updatedForm = {};
+
+    if (value) {
+      updatedForm = {
+        sport: value,
+        condition: "sport",
+        org_id: org_id,
+      };
+    } else {
+      updatedForm = {
+        condition: "all",
+        org_id: org_id,
+      };
+    }
+    axios
+      .post(GET_TAG, updatedForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setOptions(
+          response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCheckboxChange = (event, id, tag) => {
+    const { checked, value } = event.target;
+    if (checked) {
+      setSelectedTags([...selectedTags, { id: id, tag: tag }]);
+    } else {
+      setSelectedTags(selectedTags.filter(tag => tag.id !== id));
+    }
+  };
+  
+  const addTag = () => {
+    const ids = selectedTags.map(tag => tag.id).join(',');
+    setTagId(ids);
+    const names = selectedTags.map(tag => tag.tag);
+    setTagNames(names);
+    setOwnerOpen(false);
+    setStateBtn(1);
   };
 
   const handleTagRemoval = (index) => {
-    setStateBtn(1);
     const numbersArray = tagId?.split(",");
-    numbersArray.splice(index, 1);
-    const updatedNumbersString = numbersArray.join(",");
+    numbersArray?.splice(index, 1);
+    const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
-    const tagUpdate = selectedTags.splice(index, 1);
+    const updatedNames = [...tagNames];
+    updatedNames.splice(index, 1);
+    setTagNames(updatedNames)
   };
 
-  function AddTag(event) {
-    event.preventDefault();
-  }
+
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
@@ -1006,12 +1014,12 @@ const BlogUpdate = () => {
           </div>
           <div className="addBlogRightForm">
             <div className="tags">
-              <div className="tagContent tag-box">
-                <h3>Tags</h3>
+            <div className="tagContent tag-box">
+                <h3>Tags <span className="common-fonts redAlert"> *</span></h3>
                 <div className="contentBox">
                   <select
                     name="categoryDropdown"
-                    onChange={handleTagSelection}
+                    onChange={handleCatogorySelection}
                     className="tagSelectBox"
                   >
                     <option value="">category</option>
@@ -1022,35 +1030,47 @@ const BlogUpdate = () => {
                       </option>
                     ))}
                   </select>
-                  <select
-                    onChange={handleTagSelection}
-                    className="tagSelectBox"
-                    name="tagDropdown"
-                  >
-                    <option value="">Select a tag</option>
-
-                    {options
-                      ?.filter(
-                        (option) =>
-                          !tagId.split(",")?.includes(option.id?.toString())
-                      )
-                      .map((option) => (
-                        <option key={option?.id} value={option?.id}>
-                          {option?.tag}
-                        </option>
-                      ))}
-                  </select>
-                  {/* 
-                  <button onClick={AddTag} type="button" className="primaryBtn">
-                    Add
-                  </button> */}
+                  <div className="dropdown-container" ref={actionOwnerRef}>
+                    <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
+                      {display}
+                      <i
+                        className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
+                          }`}
+                      ></i>
+                    </div>
+                    {ownerOpen && (
+                      <ul className="dropdown-menu owner-menu">
+                        {options
+                          ?.filter(
+                            (option) =>
+                              !tagId?.split(",")?.includes(option.id?.toString())
+                          )
+                          .map((option) => (
+                            <li key={option?.id} value={option?.id}>
+                              <label className="custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className={`cb1`}
+                                  name="headerCheckBox"
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, option.id, option.tag)
+                                  }
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                              {option?.tag}
+                            </li>
+                          ))}
+                        <button onClick={addTag}>Add tags</button>
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <div className="tagData">
-                  {selectedTags &&
-                    selectedTags?.map((tag, index) => (
+                  {tagNames &&
+                    tagNames?.map((tag, index) => (
                       <div key={index} className="tagItems">
                         {tag}
-
                         <i
                           className="fa-solid fa-x blog-cross"
                           onClick={() => handleTagRemoval(index)}
