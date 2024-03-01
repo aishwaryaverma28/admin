@@ -226,6 +226,11 @@ const BlogUpdate = () => {
       }
     });
     setTagNames((prevTags) => [...prevTags, ...newTags]);
+    const newTagObjects = ids.map((id, index) => ({
+      id: id.trim(),
+      tag: tagNames[index],
+    }));
+    setSelectedTags(newTagObjects);
   };
 
   useEffect(() => {
@@ -470,7 +475,7 @@ const BlogUpdate = () => {
       });
     }
   }
-
+  
   async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -486,6 +491,7 @@ const BlogUpdate = () => {
       tag: tagId,
       route: formData?.url,
     };
+   
     try {
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",

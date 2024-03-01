@@ -15,7 +15,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DynamicTable from "./blog/DynamicTable";
 import Table from "./blog/Table";
-import TagDropDown from "./blog/TagDropDown";
 
 const BlogAdd = () => {
   const org_id = localStorage.getItem("org_id");
@@ -355,6 +354,7 @@ const BlogAdd = () => {
     setSelectSite("");
     setTagId("");
     setSelectedTags([]);
+    setTagNames([]);
     setOptions([]);
     setSelectedDate("");
     setSectionData([]);
@@ -933,7 +933,6 @@ const BlogAdd = () => {
               <div className="tagData tag-box tag-box-2">
                 <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
               </div>
-              {/* <TagDropDown /> */}
             </div>
           </div>
 
