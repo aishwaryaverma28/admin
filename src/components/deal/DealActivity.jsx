@@ -175,7 +175,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
 
   useEffect(() => {
     if (selectedTimeFrom) {
-      // Filter timeOptions to get options for the second dropdown
       const filteredOptions = timeOptions.filter(
         (time) => time > selectedTimeFrom
       );
@@ -219,7 +218,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
     axios
       .post(ACADMEY_ACTIVITY, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -245,6 +244,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
           end_time: "",
         });
         setActiveTab("call");
+        fetchCall();
         count();
       })
       .catch((error) => {
@@ -345,6 +345,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
       end_time: newActivity[index].end_time,
       activity_name: newActivity[index].activity_name,
       scheduled_date: newActivity[index].scheduled_date.split("T")[0],
+      is_completed: newActivity[index].is_completed
     };
     console.log(updatedData);
     axios
