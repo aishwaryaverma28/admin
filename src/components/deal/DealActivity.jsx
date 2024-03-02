@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Call from "../../assets/image/call-activity.svg";
-import Meeting from "../../assets/image/meeting.svg";
-import Task from "../../assets/image/task.svg";
-import Deadline from "../../assets/image/deadline.svg";
 import bin from "../../assets/image/TrashFill.svg";
 import axios from "axios";
 import {
   GET_ACTIVITY,
+  ACADMEY_ACTIVITY_SOURCE,
   handleLogout,
   getDecryptedToken,
-  ADD_ACTIVITY,
+  ACADMEY_ACTIVITY,
   DELETE_LEAD_ACTIVITY,
   UPDATE_LEAD_ACTIVITY,
+  ACADMEY_ACTIVITY_UPDATE,
 } from "../utils/Constants";
 import "react-datepicker/dist/react-datepicker.css";
 import CalendarIcon from "../../assets/image/calendar-edit.svg";
@@ -29,7 +27,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
   const [selectedTimeFrom, setSelectedTimeFrom] = useState("");
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [expansion, setExpansion] = useState(false);
-  const [tick, setTick] = useState(false);
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -52,28 +49,32 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
     nextIndex < timeOptionsTo.length ? timeOptionsTo[nextIndex] : null;
   const [form, setForm] = useState({
     activity_description: "",
-    activity_for: type,
     activity_name: "",
     scheduled_date: "",
     scheduled_time: "",
     activity_title: "",
     end_time: "",
-    is_completed: null,
+    source_type: "academy",
     source_id: type === "lead" ? item.id : id,
   });
 
   const fetchCall = () => {
     if (type === "lead") {
+      const body = {
+        source_id: item.id,
+        source_type: "academy"
+      }
       axios
-        .get(GET_ACTIVITY + "lead/" + item.id, {
+        .post(ACADMEY_ACTIVITY_SOURCE, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
         })
         .then((response) => {
-          setActivity(response?.data?.data);
-          console.log(response.data.data)
-          setReplaceAct(response?.data?.data);
+          const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
+          setActivity(filteredNotes);
+          console.log(filteredNotes)
+          setReplaceAct(filteredNotes);
         })
 
         .catch((error) => {
@@ -91,7 +92,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
           },
         })
         .then((response) => {
-          // console.log(response?.data?.data);
           setActivity(response?.data?.data);
           setReplaceAct(response?.data?.data);
         })
@@ -102,7 +102,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
             handleLogout();
           }
         });
-    }else if (type === "xx_company") {
+    } else if (type === "xx_company") {
       axios
         .get(GET_ACTIVITY + "xx_company/" + id, {
           headers: {
@@ -121,7 +121,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
             handleLogout();
           }
         });
-    }else if (type === "xx_contact_person") {
+    } else if (type === "xx_contact_person") {
       axios
         .get(GET_ACTIVITY + "xx_contact_person/" + id, {
           headers: {
@@ -144,8 +144,11 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
   };
 
   const handleActivityDelete = (id) => {
+    const updatedData = {
+      is_deleted: 1
+    };
     axios
-      .delete(DELETE_LEAD_ACTIVITY + id, {
+      .put(ACADMEY_ACTIVITY_UPDATE + id, updatedData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -207,35 +210,33 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
 
     const updatedFormData = {
       ...form,
-      activity_for: type,
       activity_name: activeTab,
       scheduled_time: selectedTimeFrom,
       end_time: updatedEndTime,
       source_id: type === "lead" ? item.id : id,
+      source_type: "academy",
     };
     axios
-      .post(ADD_ACTIVITY, updatedFormData, {
+      .post(ACADMEY_ACTIVITY, updatedFormData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
         },
       })
       .then((response) => {
-        if(response.data.status===0){
+        if (response.data.status === 0) {
           toast.error(
-               response.data.message,
+            response.data.message,
             {
               position: "top-center",
               autoClose: 3000,
             }
           );
-         }else{
+        } else {
           toast.success("Activity added successfully", {
             position: "top-center",
             autoClose: 2000,
           });
-
-         }
-       
+        }
         setForm({
           activity_description: "",
           activity_name: "",
@@ -244,7 +245,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
           end_time: "",
         });
         setActiveTab("call");
-        fetchCall();
         count();
       })
       .catch((error) => {
@@ -273,7 +273,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
     });
     setUpdateBtn(1);
   };
-  
+
 
   const handleTitleChange = (event, index) => {
     const newActivity = [...activity];
@@ -333,25 +333,22 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
   };
 
   const handleCancleChange = () => {
-   fetchCall();
+    fetchCall();
   };
 
   const handleActivityUpdate = (actId, index) => {
     const newActivity = [...activity];
     const updatedData = {
-      activity_for: type,
       activity_title: newActivity[index].activity_title,
       activity_description: newActivity[index].activity_description,
       scheduled_time: newActivity[index].scheduled_time,
       end_time: newActivity[index].end_time,
       activity_name: newActivity[index].activity_name,
       scheduled_date: newActivity[index].scheduled_date.split("T")[0],
-      is_completed: newActivity[index].is_completed ,
-      assigned_to:newActivity[index].assigned_to
     };
     console.log(updatedData);
     axios
-      .put(UPDATE_LEAD_ACTIVITY + actId, updatedData, {
+      .put(ACADMEY_ACTIVITY_UPDATE + actId, updatedData, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -387,182 +384,172 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
   return (
     <>
       <div className="activity-container ">
-           {
-            ownerId === idOfOwner && (
-              <>
-              {!openEditor ? (
-          <div className="colapedEditor" onClick={expandEditor}>
-            <p>Click here to add an activity</p>
-          </div>
-        ) : (
-          <div className="activityBox">
-            <div className="add-call">
-              <input
-                type="text"
-                placeholder="Add Title *"
-                name="activity_title"
-                onChange={handleChange}
-              />
+        <>
+          {!openEditor ? (
+            <div className="colapedEditor" onClick={expandEditor}>
+              <p>Click here to add an activity</p>
             </div>
-            <div className="genral-setting-btn activity-tab genral-setting-fonts">
-              <button
-                className={`genral-btn ${
-                  activeTab === "call" ? "genral-active" : ""
-                }`}
-                onClick={() => handleTabClick("call")}
-              >
-                Call
-              </button>
-              <button
-                className={`genral-btn ${
-                  activeTab === "meeting" ? "genral-active" : ""
-                }`}
-                onClick={() => handleTabClick("meeting")}
-              >
-                Meeting
-              </button>
-              <button
-                className={`genral-btn ${
-                  activeTab === "task" ? "genral-active" : ""
-                }`}
-                onClick={() => handleTabClick("task")}
-              >
-                Task
-              </button>
-              <button
-                className={`genral-btn ${
-                  activeTab === "deadline" ? "genral-active" : ""
-                }`}
-                onClick={() => handleTabClick("deadline")}
-              >
-                Deadline
-              </button>
-            </div>
+          ) : (
+            <div className="activityBox">
+              <div className="add-call">
+                <input
+                  type="text"
+                  placeholder="Add Title *"
+                  name="activity_title"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="genral-setting-btn activity-tab genral-setting-fonts">
+                <button
+                  className={`genral-btn ${activeTab === "call" ? "genral-active" : ""
+                    }`}
+                  onClick={() => handleTabClick("call")}
+                >
+                  Call
+                </button>
+                <button
+                  className={`genral-btn ${activeTab === "meeting" ? "genral-active" : ""
+                    }`}
+                  onClick={() => handleTabClick("meeting")}
+                >
+                  Meeting
+                </button>
+                <button
+                  className={`genral-btn ${activeTab === "task" ? "genral-active" : ""
+                    }`}
+                  onClick={() => handleTabClick("task")}
+                >
+                  Task
+                </button>
+                <button
+                  className={`genral-btn ${activeTab === "deadline" ? "genral-active" : ""
+                    }`}
+                  onClick={() => handleTabClick("deadline")}
+                >
+                  Deadline
+                </button>
+              </div>
 
-            <div className="tab-content">
-              <div>
-                <div className="activity-call-btn">
-                  <button className="common-fonts log-meeting">Log Call</button>
-                  <button className="common-fonts log-meeting call-btn-active">
-                    Make a Phone Call
-                  </button>
-                </div>
+              <div className="tab-content">
+                <div>
+                  <div className="activity-call-btn">
+                    <button className="common-fonts log-meeting">Log Call</button>
+                    <button className="common-fonts log-meeting call-btn-active">
+                      Make a Phone Call
+                    </button>
+                  </div>
 
-                <div className="activity-time-travel">
-                  <div className="permission-input-box">
-                    <label className="common-fonts activity-label">Date  <span className="common-fonts redAlert"> *</span></label>
+                  <div className="activity-time-travel">
+                    <div className="permission-input-box">
+                      <label className="common-fonts activity-label">Date  <span className="common-fonts redAlert"> *</span></label>
 
-                    <div className="custom-date-input">
-                      <div className="activity-date-wrapper">
-                        <input
-                          type="date"
-                          onChange={handleChange}
-                          name="scheduled_date"
-                          className="activity-date"
-                        />
+                      <div className="custom-date-input">
+                        <div className="activity-date-wrapper">
+                          <input
+                            type="date"
+                            onChange={handleChange}
+                            name="scheduled_date"
+                            className="activity-date"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="permission-input-box">
-                    <label className="common-fonts activity-label activity-label-2">
-                      Time From
-                      <span className="common-fonts redAlert"> *</span>
-                    </label>
-                    <select
-                      name="timeFrom"
-                      id="timeFrom"
-                      className="common-fonts activity-select"
-                      onChange={(e) => setSelectedTimeFrom(e.target.value)}
-                    >
-                      {timeOptions?.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="permission-input-box">
-                    <label className="common-fonts activity-label activity-label-2">
-                      Time To
-                      <span className="common-fonts redAlert"> *</span>
-                    </label>
+                    <div className="permission-input-box">
+                      <label className="common-fonts activity-label activity-label-2">
+                        Time From
+                        <span className="common-fonts redAlert"> *</span>
+                      </label>
+                      <select
+                        name="timeFrom"
+                        id="timeFrom"
+                        className="common-fonts activity-select"
+                        onChange={(e) => setSelectedTimeFrom(e.target.value)}
+                      >
+                        {timeOptions?.map((time, index) => (
+                          <option key={index} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="permission-input-box">
+                      <label className="common-fonts activity-label activity-label-2">
+                        Time To
+                        <span className="common-fonts redAlert"> *</span>
+                      </label>
 
-                    <select
-                      name="end_time"
-                      id="timeTo"
+                      <select
+                        name="end_time"
+                        id="timeTo"
+                        onChange={handleChange}
+                        className="common-fonts activity-select"
+                      >
+                        {timeOptionsTo?.map((time, index) => (
+                          <option key={index} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="activity-text">
+                    <img src={TextIcon} alt="" />
+                    <textarea
+                      name="activity_description"
+                      id="activity_description"
+                      cols="30"
+                      rows="10"
+                      className="common-fonts activity-text-area"
+                      placeholder="Write Here"
                       onChange={handleChange}
-                      className="common-fonts activity-select"
+                    ></textarea>
+                  </div>
+                  <div className="activity-text">
+                    <img src={TextIcon} alt="" />
+                    <select
+                      name="assigned_to"
+                      onChange={handleChange}
+                      id=""
+                      className="common-fonts activity-select-area"
                     >
-                      {timeOptionsTo?.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
+                      <option value="">Select Assign to *</option>
+                      {userData?.map((item) => (
+                        <option
+                          key={item?.id}
+                          value={item?.id}
+                          className="owner-val"
+                        >
+                          {`${item?.first_name.charAt(0).toUpperCase() +
+                            item?.first_name.slice(1)
+                            } ${item?.last_name.charAt(0).toUpperCase() +
+                            item?.last_name.slice(1)
+                            }`}
                         </option>
                       ))}
                     </select>
                   </div>
-                </div>
 
-                <div className="activity-text">
-                  <img src={TextIcon} alt="" />
-                  <textarea
-                    name="activity_description"
-                    id="activity_description"
-                    cols="30"
-                    rows="10"
-                    className="common-fonts activity-text-area"
-                    placeholder="Write Here"
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div className="activity-text">
-                  <img src={TextIcon} alt="" />
-                  <select
-                    name="assigned_to"
-                    onChange={handleChange}
-                    id=""
-                    className="common-fonts activity-select-area"
-                  >
-                  <option value="">Select Assign to *</option>
-                                             {userData?.map((item) => (
-                            <option
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                            >
-                              {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
-                              } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
-                              }`}
-                            </option>
-                          ))}
-                  </select>
-                </div>
-
-                <div className="activity-button deal-activity-btn">
-                  <button className="common-fonts common-white-button" onClick={handleClose}>Cancel</button>
-                  {stateBtn === 0 ? (
-                    <button disabled className="common-fonts common-inactive-button">
-                      Save
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleAddNote}
-                      className="common-fonts common-save-button"
-                    >
-                      Save
-                    </button>
-                  )}
+                  <div className="activity-button deal-activity-btn">
+                    <button className="common-fonts common-white-button" onClick={handleClose}>Cancel</button>
+                    {stateBtn === 0 ? (
+                      <button disabled className="common-fonts common-inactive-button">
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleAddNote}
+                        className="common-fonts common-save-button"
+                      >
+                        Save
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-              </>
-            )
-           }
+          )}
+        </>
         <div className="activity-height">
           {activity &&
             activity?.map((item, index) => (
@@ -594,20 +581,18 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                   <img src={CalendarIcon} alt="" />
                                   <p className="common-fonts activity-due">
                                     {item.scheduled_date &&
-                                    item.scheduled_date.includes("T") &&
-                                    item.scheduled_date.includes(".")
+                                      item.scheduled_date.includes("T") &&
+                                      item.scheduled_date.includes(".")
                                       ? item.scheduled_date.split("T")[0] +
-                                        " at " +
-                                        item.scheduled_date
-                                          .split("T")[1]
-                                          .split(".")[0]
+                                      " at " +
+                                      item.scheduled_date
+                                        .split("T")[1]
+                                        .split(".")[0]
                                       : "-"}
                                   </p>
                                 </div>
                               </div>
-                              {
-                                ownerId === idOfOwner && (
-                                  <div className="three-side-dots activity-del">
+                              <div className="three-side-dots activity-del">
                                 <img
                                   src={bin}
                                   alt="trash"
@@ -616,45 +601,34 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                   className="activity-trash"
                                 />
                               </div>
-                                )
-                              }
-
                             </div>
 
                             <div
-                              className={`activity-phone ${
-                                expandedIndex !== index
-                                  ? "activity-disable-white"
-                                  : "activity-new-call"
-                              }`}
+                              className={`activity-phone ${expandedIndex !== index
+                                ? "activity-disable-white"
+                                : "activity-new-call"
+                                }`}
                             >
                               <div className="activity-ring">
                                 <i
-                                  className={`fa fa-check-circle ${
-                                    expandedIndex !== index
-                                      ? "hide-activity-tick"
-                                      : "show-activity-tick"
-                                  } ${
-                                    item.is_completed === 1
+                                  className={`fa fa-check-circle ${expandedIndex !== index
+                                    ? "hide-activity-tick"
+                                    : "show-activity-tick"
+                                    } ${item.is_completed === 1
                                       ? "green-activity-tick"
                                       : "white-activity-tick"
-                                  } `}
-                                  onClick={() => {
-    if (ownerId === idOfOwner) {
-      toggleCompletion(index);
-    }
-  }}
+                                    } `}
+                                  onClick={() => { toggleCompletion(index) }}
                                   aria-hidden="true"
                                 ></i>
                                 <input
                                   disabled={
                                     expandedIndex !== index ? true : false
                                   }
-                                  className={`common-fonts activity-call-name ${
-                                    expandedIndex !== index
-                                      ? "activity-new-disable-white"
-                                      : "activity-new-input"
-                                  }`}
+                                  className={`common-fonts activity-call-name ${expandedIndex !== index
+                                    ? "activity-new-disable-white"
+                                    : "activity-new-input"
+                                    }`}
                                   type="text"
                                   value={item?.activity_title}
                                   name="activity_title"
@@ -682,7 +656,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                           onChange={(event) =>
                                             handleDateChange(event, index)
                                           }
-                                          disabled={ownerId!==idOfOwner}
                                           id="date-bg"
                                         />
                                       </div>
@@ -698,7 +671,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                       onChange={(event) =>
                                         handleTimeChange(event, index)
                                       }
-                                      disabled={ownerId!==idOfOwner}
                                     >
                                       {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
@@ -717,7 +689,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                       onChange={(event) =>
                                         handleEndTimeChange(event, index)
                                       }
-                                      disabled={ownerId!==idOfOwner}
                                     >
                                       {timeOptions?.map((time, index) => (
                                         <option key={index} value={time}>
@@ -736,7 +707,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                       onChange={(event) =>
                                         handleTypeChange(event, index)
                                       }
-                                      disabled={ownerId!==idOfOwner}
                                     >
                                       <option value="Call">Call</option>
                                       <option value="Meeting">Meeting</option>
@@ -754,23 +724,20 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                         handleAssignChange(event, index)
                                       }
                                       value={item?.assigned_to}
-                                      disabled={ownerId!==idOfOwner}
                                     >
-                                                                                  {userData?.map((item,index) => (
-                            <option
-                              key={item?.id}
-                              value={item?.id}
-                              className="owner-val"
-                            >
-                              {`${
-                                item?.first_name.charAt(0).toUpperCase() +
-                                item?.first_name.slice(1)
-                              } ${
-                                item?.last_name.charAt(0).toUpperCase() +
-                                item?.last_name.slice(1)
-                              }`}
-                            </option>
-                          ))}
+                                      {userData?.map((item, index) => (
+                                        <option
+                                          key={item?.id}
+                                          value={item?.id}
+                                          className="owner-val"
+                                        >
+                                          {`${item?.first_name.charAt(0).toUpperCase() +
+                                            item?.first_name.slice(1)
+                                            } ${item?.last_name.charAt(0).toUpperCase() +
+                                            item?.last_name.slice(1)
+                                            }`}
+                                        </option>
+                                      ))}
                                     </select>
                                   </div>
                                 </div>
@@ -788,7 +755,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                     onChange={(event) =>
                                       handleDescriptionChange(event, index)
                                     }
-                                    disabled={ownerId!==idOfOwner}
                                   ></textarea>
                                 </div>
                               </>
@@ -803,35 +769,31 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                     </>
                   </div>
                 </div>
-                {
-                  ownerId===idOfOwner && (
-                    <>
-                    {expandedIndex === index && (
-                  <div className="activity-bottom-buttons">
-                    <button
-                      className="common-fonts common-white-button"
-                      onClick={handleCancleChange}
-                    >
-                      Cancel
-                    </button>
-
-                    {updateBtn === 0 ? (
-                      <button disabled className="common-fonts common-inactive-button note-btn">
-                        Save
-                      </button>
-                    ) : (
+                <>
+                  {expandedIndex === index && (
+                    <div className="activity-bottom-buttons">
                       <button
-                        className="common-save-button common-fonts activity-save-button note-btn"
-                        onClick={() => handleActivityUpdate(item.id, index)}
+                        className="common-fonts common-white-button"
+                        onClick={handleCancleChange}
                       >
-                        Save
+                        Cancel
                       </button>
-                    )}
-                  </div>
-                )}
-                    </>
-                  )
-                }
+
+                      {updateBtn === 0 ? (
+                        <button disabled className="common-fonts common-inactive-button note-btn">
+                          Save
+                        </button>
+                      ) : (
+                        <button
+                          className="common-save-button common-fonts activity-save-button note-btn"
+                          onClick={() => handleActivityUpdate(item.id, index)}
+                        >
+                          Save
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               </div>
             ))}
         </div>

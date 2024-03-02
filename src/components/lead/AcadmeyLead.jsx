@@ -8,6 +8,7 @@ import {
     getDecryptedToken,
     UPLOADED_DOCS,
     GET_ACTIVITY,
+    ACADMEY_ACTIVITY_SOURCE,
     UPDATE_ACADEMY,
     POST_EMAIL,
 } from "./../utils/Constants";
@@ -109,10 +110,8 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data[0]?.stage);
                 setLeadName(response?.data?.data[0]?.name);
                 setOwnerId(response.data.data[0]?.owner);
-
                 setEditedItem(response?.data?.data[0]);
                 setIsLoading(false);
             })
@@ -163,14 +162,19 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     };
 
     const fetchCall = () => {
-        axios
-            .get(GET_ACTIVITY + "lead/" + selectedItem.id, {
+        const body = {
+            source_id: selectedItem.id,
+            source_type: "academy"
+          }
+          axios
+            .post(ACADMEY_ACTIVITY_SOURCE, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
             })
             .then((response) => {
-                setActivityCount(response?.data?.data?.length);
+                const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
+                setActivityCount(filteredNotes?.length);
             })
 
             .catch((error) => {
@@ -211,7 +215,8 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             })
             .then((response) => {
                 if (response?.data?.status === 1) {
-                    setNotes(response?.data?.data?.length);
+                    const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
+                    setNotes(filteredNotes?.length);
                 }
             })
             .catch((error) => {

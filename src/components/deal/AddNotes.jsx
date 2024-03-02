@@ -62,7 +62,8 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
             ...notesWithImportance,
             ...notesWithoutImportance,
           ];
-          setNotes(sortedNotes);
+          const filteredNotes = sortedNotes.filter((note) => note.is_deleted !== 1);
+    setNotes(filteredNotes);
           setOriginalContents(sortedNotes);
         })
 
@@ -171,7 +172,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
         });
     }
   };
-
+  
   const handleDataTransfer = (data) => {
     setDataFromChild(data);
     setStateAdd(1);
@@ -251,12 +252,13 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     }
   };
   const handleDeleteNote = (id) => {
-    const updatedFormData = {
-      notes: [id],
-      source_type: type,
+    const updatedNote = {
+      is_deleted:1,
+      source_id: item.id,
+      source_type: "academy",
     };
     axios
-      .post(MOVENOTE_TO_TRASH, updatedFormData, {
+        .put(ACADMEY_NOTE_UPDATE + id, updatedNote, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -265,7 +267,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
         const updatedNotes = notes?.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         onNotesNum();
-        toast.success("Note moved to trash successfully", {
+        toast.success("Note is deleted successfully", {
           position: "top-center",
           autoClose: 2000,
         });
