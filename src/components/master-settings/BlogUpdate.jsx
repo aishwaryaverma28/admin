@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
+  BACKLINKS,
   SEC_ADD,
   BLOG_GETID,
   BLOG_EDIT,
@@ -21,6 +22,7 @@ import LeftArrow from "../../assets/image/arrow-left.svg";
 import Table from "./blog/Table";
 import DynamicTable from "./blog/DynamicTable";
 import JoditEditor from "jodit-react"
+import BackLinks from "./blog/BackLinks";
 
 const BlogUpdate = () => {
   const { id } = useParams();
@@ -38,7 +40,6 @@ const BlogUpdate = () => {
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
   const decryptedToken = getDecryptedToken();
-  // tags states
    // tags states
    const actionOwnerRef = useRef(null);
    const [ownerOpen, setOwnerOpen] = useState(false);
@@ -68,9 +69,50 @@ const BlogUpdate = () => {
   const [blogImgName, setBlogImgName] = useState("");
   const [blogImgName2, setBlogImgName2] = useState("");
   const [blogImg3, setBlogImg3] = useState("");
-
   const [stateBtn, setStateBtn] = useState(0);
   const [updateStateBtn, setUpdateStateBtn] = useState(0);
+//=================================================================backlink apis
+const [backlink, setBackLink] = useState(null);
+const [selectSportQuery, setSelectSportQuery] = useState(null);
+
+const getBanklink = () => {
+  const updatedForm = {
+    condition: "all",
+  }
+  axios
+  .post(BACKLINKS, updatedForm, {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`,
+    },
+})
+.then((response) => {
+  setBackLink(response?.data?.data);
+})
+.catch((error) => {
+  console.log(error);
+});
+}
+
+const handleCategorySelection = (selectedValue) => {
+  setSelectSportQuery(selectedValue);
+  const updatedForm = {
+    condition: "query",
+    query: `sport = '${selectedValue}'`
+  }
+  axios
+  .post(BACKLINKS, updatedForm, {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`,
+    },
+})
+.then((response) => {
+  setBackLink(response?.data?.data);
+})
+.catch((error) => {
+  console.log(error);
+});
+};
+
   useEffect(() => {
     getBlogInfo();
     getTagCategory();
@@ -163,10 +205,8 @@ const BlogUpdate = () => {
       setBlogImgName(data?.image?.split("blog/"));
       setTagId(data?.tag);
       setSelectSite(data?.site);
-      // getTagBySite(data?.site);
     }
     sectionResponse();
-    // tagData();
   }
   const sectionResponse = () => {
     axios
@@ -255,6 +295,7 @@ const BlogUpdate = () => {
 
   useEffect(() => {
     handleCatogorySelection();
+    getBanklink();
   }, []);
 
   const handleCatogorySelection = (event) => {
@@ -1138,6 +1179,7 @@ const BlogUpdate = () => {
                 </div>
               </div>
             </div>
+            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection}/>
           </div>
         </div>
       </form>

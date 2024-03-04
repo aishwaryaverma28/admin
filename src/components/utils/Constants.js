@@ -71,6 +71,7 @@ export const IMAGE_DEL = start + "/blog/deleteImg/";
 export const IMG_BASE = start + "blog/";
 export const SEC_UPDATE = bmpStart + "/blog/section/update/";
 export const SEC_ADD = bmpStart + "/blog/section/add/";
+export const BACKLINKS = bmpStart + "/bmp/backlinks/getall";
 // ====================================================================employee apis
 export const EMPLOYEE_UPDATE = start + "/employee/edit/";
 export const EMPLOYEE_ADD = start + "/employee/add";
