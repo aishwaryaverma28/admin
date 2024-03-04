@@ -392,7 +392,8 @@ const handleCategorySelection = (selectedValue) => {
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].section = data;
+    const cleanedContent = data.replace(/style="[^"]*"/g, '');
+    newSectionData[index].section = cleanedContent;
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
   };
@@ -429,7 +430,8 @@ const handleCategorySelection = (selectedValue) => {
 
   //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
-    setDataFromChild(data);
+    const cleanedContent = data.replace(/style="[^"]*"/g, '');
+    setDataFromChild(cleanedContent);
     setTableDate(false);
   };
   //===========================================================================================table data
