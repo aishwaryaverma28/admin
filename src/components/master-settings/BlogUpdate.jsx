@@ -111,12 +111,11 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredData = response?.data?.data.filter(obj => {
-          const isMultiWordKeyword = obj?.keyword?.split(" ")?.length !== 1;
-          const keywordExists = keywords.includes(obj.keyword);
-          return isMultiWordKeyword && !keywordExists;
-        });
-        setBackLink(filteredData);
+        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
+        const filteredAndCheckedData = filteredData.filter(obj =>
+          !keywords.includes(obj.keyword)
+        );
+        setBackLink(filteredAndCheckedData);
       })
       .catch((error) => {
         console.log(error);
