@@ -73,9 +73,10 @@ const BlogUpdate = () => {
   const [updateStateBtn, setUpdateStateBtn] = useState(0);
   //=================================================================backlink apis
   const [backlink, setBackLink] = useState(null);
+  const [keywords, setKeywords] = useState([]);
   const [selectSportQuery, setSelectSportQuery] = useState(null);
 
-  const getBanklink = () => {
+  const getBanklink = (tempKeywords) => {
     const updatedForm = {
       condition: "all",
     }
@@ -87,7 +88,10 @@ const BlogUpdate = () => {
       })
       .then((response) => {
         const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
-        setBackLink(filteredData);
+        const filteredAndCheckedData = filteredData.filter(obj =>
+          !tempKeywords.includes(obj.keyword)
+        );
+        setBackLink(filteredAndCheckedData);
       })
       .catch((error) => {
         console.log(error);
@@ -107,7 +111,11 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
+        const filteredData = response?.data?.data.filter(obj => {
+          const isMultiWordKeyword = obj?.keyword?.split(" ")?.length !== 1;
+          const keywordExists = keywords.includes(obj.keyword);
+          return isMultiWordKeyword && !keywordExists;
+        });
         setBackLink(filteredData);
       })
       .catch((error) => {
@@ -174,7 +182,7 @@ const BlogUpdate = () => {
     axios
       .put(SEC_UPDATE + updatedSection.id, updatedFormData, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
@@ -203,7 +211,7 @@ const BlogUpdate = () => {
   async function getBlogInfo() {
     const response = await axios.get(BLOG_GETID + id, {
       headers: {
-        Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+        Authorization: `Bearer ${decryptedToken}`,
       },
     });
     const data = response.data.data[0];
@@ -239,13 +247,35 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
+        // console.log(response?.data?.data)
         const secData = response?.data?.data;
         const sectionDataWithoutDate = removeDateFromSectionData(secData);
-        const tempSectionData = sectionDataWithoutDate.map((section) => ({
-          ...section,
-          data_table: JSON.parse(section.data_table),
-        }));
+        const tempKeywords = [];
+        const tempSectionData = sectionDataWithoutDate.map((section) => {
+          const hasAnchorTags = section.section.includes('<a');
+          if (hasAnchorTags) {
+            const htmlContent = document.createElement('div');
+            htmlContent.innerHTML = section.section;
+            const anchorTags = htmlContent.getElementsByTagName('a');
+            const keywords = [];
+            for (let i = 0; i < anchorTags.length; i++) {
+              keywords.push(anchorTags[i].textContent);
+            }
+            tempKeywords.push(...keywords);
+            return {
+              ...section,
+              data_table: JSON.parse(section.data_table),
+            };
+          } else {
+            return {
+              ...section,
+              data_table: JSON.parse(section.data_table),
+            };
+          }
+        });
+        setKeywords(tempKeywords);
         setSectionData(tempSectionData);
+        getBanklink(tempKeywords);
       })
       .catch((error) => {
         console.log(error);
@@ -318,7 +348,6 @@ const BlogUpdate = () => {
 
   useEffect(() => {
     handleCatogorySelection();
-    getBanklink();
   }, []);
 
   const handleCatogorySelection = (event) => {

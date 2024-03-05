@@ -53,7 +53,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isEditable, setIsEditable] = useState(false);
     const [editedItem, setEditedItem] = useState("");
-    const [activeTab, setActiveTab] = useState("notes"); // Initial active tab
+    const [activeTab, setActiveTab] = useState("activity"); // Initial active tab
     const [notes, setNotes] = useState();
     const [activityCount, setActivityCount] = useState();
     const [stateBtn, setStateBtn] = useState(0);
@@ -816,6 +816,13 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
+                    <button
+                            className={activeTab === "activity" ? "active" : ""}
+                            onClick={() => handleTabClick("activity")}
+                        >
+                            <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
+                            Activity ({activityCount})
+                        </button>
                         <button
                             className={activeTab === "notes" ? "active" : ""}
                             onClick={() => handleTabClick("notes")}
@@ -837,13 +844,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fab fa-whatsapp"></i>
                             Whatsapp
                         </button>
-                        <button
-                            className={activeTab === "activity" ? "active" : ""}
-                            onClick={() => handleTabClick("activity")}
-                        >
-                            <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
-                            Activity ({activityCount})
-                        </button>
+                       
                         <button
                             className={activeTab === "attachment" ? "active" : ""}
                             onClick={() => handleTabClick("attachment")}
