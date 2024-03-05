@@ -464,10 +464,11 @@
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
   display: flex;
-  justify-content: end; 
+  justify-content: space-between;
   align-items: center;
-  margin-left: 85%;
-  margin-right: 0.5rem;
+  margin-right: 2rem;
+  margin-top: 1.2rem;
+  margin-left: 0.5rem;
 }
 
 .blog-img{

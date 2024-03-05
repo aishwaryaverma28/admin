@@ -40,11 +40,11 @@ const BlogUpdate = () => {
   const fileInputRef3 = useRef(null);
   const fileInputRefs = useRef(null);
   const decryptedToken = getDecryptedToken();
-   // tags states
-   const actionOwnerRef = useRef(null);
-   const [ownerOpen, setOwnerOpen] = useState(false);
-   const [display, setDisplay] = useState("Select Tag");
-   const [tagNames, setTagNames] = useState([]);
+  // tags states
+  const actionOwnerRef = useRef(null);
+  const [ownerOpen, setOwnerOpen] = useState(false);
+  const [display, setDisplay] = useState("Select Tag");
+  const [tagNames, setTagNames] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tagId, setTagId] = useState("");
   const [selectSite, setSelectSite] = useState("");
@@ -71,47 +71,70 @@ const BlogUpdate = () => {
   const [blogImg3, setBlogImg3] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [updateStateBtn, setUpdateStateBtn] = useState(0);
-//=================================================================backlink apis
-const [backlink, setBackLink] = useState(null);
-const [selectSportQuery, setSelectSportQuery] = useState(null);
+  //=================================================================backlink apis
+  const [backlink, setBackLink] = useState(null);
+  const [selectSportQuery, setSelectSportQuery] = useState(null);
 
-const getBanklink = () => {
-  const updatedForm = {
-    condition: "all",
+  const getBanklink = () => {
+    const updatedForm = {
+      condition: "all",
+    }
+    axios
+      .post(BACKLINKS, updatedForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
+        setBackLink(filteredData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-  axios
-  .post(BACKLINKS, updatedForm, {
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`,
-    },
-})
-.then((response) => {
-  setBackLink(response?.data?.data);
-})
-.catch((error) => {
-  console.log(error);
-});
-}
 
-const handleCategorySelection = (selectedValue) => {
-  setSelectSportQuery(selectedValue);
-  const updatedForm = {
-    condition: "query",
-    query: `sport = '${selectedValue}'`
-  }
-  axios
-  .post(BACKLINKS, updatedForm, {
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`,
-    },
-})
-.then((response) => {
-  setBackLink(response?.data?.data);
-})
-.catch((error) => {
-  console.log(error);
-});
+  const handleCategorySelection = (selectedValue) => {
+    setSelectSportQuery(selectedValue);
+    const updatedForm = {
+      condition: "query",
+      query: `sport = '${selectedValue}'`
+    }
+    axios
+      .post(BACKLINKS, updatedForm, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
+        setBackLink(filteredData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleAddLink = (event, index) => {
+    event.preventDefault();
+    const newSectionData = [...sectionData];
+    let updatedContent = newSectionData[index].section;
+    let newArray = [...backlink];
+    newArray.forEach((item) => {
+      const regex = new RegExp(`\\b${item.keyword}\\b`, 'gi');
+      if (updatedContent.match(regex)) {
+        updatedContent = updatedContent.replace(regex, `<a href="${item.url}">${item.keyword}</a>`);
+        newArray = newArray.filter((arrayItem) => arrayItem.id !== item.id);
+      }
+    });
+    setBackLink(newArray);
+    newSectionData[index].section = updatedContent;
+    setSectionData(newSectionData);
+    setUpdateStateBtn(1);
 };
+
+
+  //======================================================================================================
 
   useEffect(() => {
     getBlogInfo();
@@ -256,7 +279,7 @@ const handleCategorySelection = (selectedValue) => {
       });
   }, []);
 
-   const tagData = () => {
+  const tagData = () => {
     const ids = tagId?.split(",");
     const newTags = [];
     ids.forEach((item) => {
@@ -338,7 +361,7 @@ const handleCategorySelection = (selectedValue) => {
       setSelectedTags(selectedTags.filter(tag => tag.id !== id));
     }
   };
-  
+
   const addTag = () => {
     const ids = selectedTags.map(tag => tag.id).join(',');
     setTagId(ids);
@@ -518,7 +541,7 @@ const handleCategorySelection = (selectedValue) => {
       });
     }
   }
-  
+
   async function handleFormSubmit(event) {
     event.preventDefault();
     const updatedFormData = {
@@ -534,7 +557,7 @@ const handleCategorySelection = (selectedValue) => {
       tag: tagId,
       route: formData?.url,
     };
-   
+
     try {
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
@@ -785,7 +808,7 @@ const handleCategorySelection = (selectedValue) => {
               />
 
               <datalist id="sports">
-              <option value="archery"></option>
+                <option value="archery"></option>
                 <option value="arts"></option>
                 <option value="athletics"></option>
                 <option value="badminton"></option>
@@ -1015,12 +1038,19 @@ const handleCategorySelection = (selectedValue) => {
                           }
                           initialContent={section.section}
                         /> */}
-                            <JoditEditor
-                    value={section?.section}
-                    onChange={(data) => handleEditorChange(data, index)}
-                  />
+                        <JoditEditor
+                          value={section?.section}
+                          onChange={(data) => handleEditorChange(data, index)}
+                        />
+                        <br />
                       </div>
                       <div className="blog-disable">
+                        <button
+                          className="common-fonts common-save-button"
+                          onClick={(event) => handleAddLink(event,index)}
+                        >
+                          Add Link
+                        </button>
                         {updateStateBtn === 0 ? (
                           <button
                             disabled
@@ -1063,7 +1093,7 @@ const handleCategorySelection = (selectedValue) => {
           </div>
           <div className="addBlogRightForm">
             <div className="tags">
-            <div className="tagContent tag-box">
+              <div className="tagContent tag-box">
                 <h3>Tags <span className="common-fonts redAlert"> *</span></h3>
                 <div className="contentBox">
                   <select
@@ -1089,32 +1119,32 @@ const handleCategorySelection = (selectedValue) => {
                     </div>
                     {ownerOpen && (
                       <div className="dropdown_newtag">
-                      <ul>
-                        {options
-                          ?.filter(
-                            (option) =>
-                              !tagId?.split(",")?.includes(option.id?.toString())
-                          )
-                          .map((option) => (
-                            <li key={option?.id} value={option?.id} className="tag_new_li">
-                              <label className="custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className={`cb1`}
-                                  name="headerCheckBox"
-                                  onChange={(e) =>
-                                    handleCheckboxChange(e, option.id, option.tag)
-                                  }
-                                />
-                                <span className="checkmark"></span>
-                              </label>
-                              {option?.tag}
-                            </li>
-                          ))}
-                      </ul>
-                      <div className="new_tags_btn">
-                      <button onClick={addTag} className="common-save-button">Add tags</button>
-                      </div>
+                        <ul>
+                          {options
+                            ?.filter(
+                              (option) =>
+                                !tagId?.split(",")?.includes(option.id?.toString())
+                            )
+                            .map((option) => (
+                              <li key={option?.id} value={option?.id} className="tag_new_li">
+                                <label className="custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className={`cb1`}
+                                    name="headerCheckBox"
+                                    onChange={(e) =>
+                                      handleCheckboxChange(e, option.id, option.tag)
+                                    }
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
+                                {option?.tag}
+                              </li>
+                            ))}
+                        </ul>
+                        <div className="new_tags_btn">
+                          <button onClick={addTag} className="common-save-button">Add tags</button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1181,7 +1211,7 @@ const handleCategorySelection = (selectedValue) => {
                 </div>
               </div>
             </div>
-            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection}/>
+            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection} />
           </div>
         </div>
       </form>
