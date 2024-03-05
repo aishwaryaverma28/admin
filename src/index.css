@@ -326,8 +326,3 @@ textarea{
 .red-border{
   border: 2px solid red;
 }
-a {
-  text-decoration: underline;
-  color: blue;
-  text-transform: lowercase;
-}

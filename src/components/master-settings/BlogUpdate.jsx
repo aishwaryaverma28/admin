@@ -765,13 +765,13 @@ const BlogUpdate = () => {
             <div className="from-view-img">
               <div className="blog-update-img">
                 <button
-                  className="common-fonts blog-add-img add-img-2 update-img"
+                  className="blog-add-img add-img-2 update-img"
                   onClick={handleViewSite}
                 >
                   View Site
                 </button>
                 <button
-                  className="common-fonts blog-add-img add-img-2 update-img"
+                  className="blog-add-img add-img-2 update-img"
                   onClick={handleButtonClick2}
                 >
                   Change Image
@@ -972,7 +972,7 @@ const BlogUpdate = () => {
                     </div>
                     <div
                       className={
-                        isIndex === index ? "answer display_answer" : "answer"
+                        isIndex === index ? "answer new_answer display_answer" : "answer new_answer"
                       }
                     >
                       <div className="sectionBlockOne">
@@ -1044,7 +1044,7 @@ const BlogUpdate = () => {
                         />
                         <br />
                       </div>
-                      <div className="blog-disable">
+                      <div className="new_add_link">
                         <button
                           className="common-fonts common-save-button"
                           onClick={(event) => handleAddLink(event,index)}
@@ -1060,7 +1060,7 @@ const BlogUpdate = () => {
                           </button>
                         ) : (
                           <button
-                            className="common-fonts common-save-button blog-update-btn"
+                            className="common-fonts common-save-button"
                             onClick={() => handleUpdateClick(section.id)}
                           >
                             Update

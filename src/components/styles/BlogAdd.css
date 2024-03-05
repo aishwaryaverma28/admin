@@ -500,12 +500,14 @@
   width: 10rem;
 }
 
-
 .blog-update-img{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap:1rem;
 }
+
+
 
 .blog-add-img{
  background-color: #2b74da;
@@ -769,3 +771,35 @@ width: 10rem;
 .new_tags_btn button{
   margin-left: 1rem;
 }
+
+.jodit-wysiwyg p a {
+  text-decoration: underline;
+  color: blue;
+  text-transform: lowercase;
+}
+
+.key_url_box{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 40vh;
+  overflow: scroll;
+}
+
+.key_url{
+  margin-bottom: 1rem;
+}
+
+.data_keyowrd{
+  color:#f49c00;
+}
+
+.new_add_link{
+  margin-top: 5rem;
+  width: 100%;
+  letter-spacing: -0.02563rem;
+  text-transform: capitalize;
+  padding:0.5rem;
+  display:flex;
+  justify-content: space-between;
+}
+
