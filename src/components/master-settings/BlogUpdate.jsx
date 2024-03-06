@@ -21,14 +21,14 @@ import "react-toastify/dist/ReactToastify.css";
 import LeftArrow from "../../assets/image/arrow-left.svg";
 import Table from "./blog/Table";
 import DynamicTable from "./blog/DynamicTable";
-import JoditEditor from "jodit-react"
+import JoditEditor from "jodit-react";
 import BackLinks from "./blog/BackLinks";
 
 const BlogUpdate = () => {
   const { id } = useParams();
   const org_id = localStorage.getItem("org_id");
   // section states
-  const editor = useRef(null)
+  const editor = useRef(null);
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
@@ -79,7 +79,7 @@ const BlogUpdate = () => {
   const getBanklink = (tempKeywords) => {
     const updatedForm = {
       condition: "all",
-    }
+    };
     axios
       .post(BACKLINKS, updatedForm, {
         headers: {
@@ -87,22 +87,22 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredAndCheckedData = response?.data?.data.filter(obj =>
-          !tempKeywords.includes(obj.keyword)
+        const filteredAndCheckedData = response?.data?.data.filter(
+          (obj) => !tempKeywords.includes(obj.keyword)
         );
         setBackLink(filteredAndCheckedData);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const handleCategorySelection = (selectedValue) => {
     setSelectSportQuery(selectedValue);
     const updatedForm = {
       condition: "query",
-      query: `sport = '${selectedValue}'`
-    }
+      query: `sport = '${selectedValue}'`,
+    };
     axios
       .post(BACKLINKS, updatedForm, {
         headers: {
@@ -110,8 +110,8 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredAndCheckedData = response?.data?.data.filter(obj =>
-          !keywords.includes(obj.keyword)
+        const filteredAndCheckedData = response?.data?.data.filter(
+          (obj) => !keywords.includes(obj.keyword)
         );
         setBackLink(filteredAndCheckedData);
       })
@@ -129,8 +129,11 @@ const BlogUpdate = () => {
     newArray.sort((a, b) => b.keyword.length - a.keyword.length);
     newArray.forEach((wordObj, index) => {
       const { keyword, url } = wordObj;
-      const regex = new RegExp(`(?<!<a[^>]*>)${keyword}(?![^<]*<\/a>)`, 'g');
-      updatedContent = updatedContent.replace(regex, `<a href="${url}">${keyword}</a>`);
+      const regex = new RegExp(`(?<!<a[^>]*>)${keyword}(?![^<]*<\/a>)`, "g");
+      updatedContent = updatedContent.replace(
+        regex,
+        `<a href="${url}">${keyword}</a>`
+      );
       if (updatedContent.includes(`<a href="${url}">${keyword}</a>`)) {
         newArray.splice(index, 1);
         keys.push(keyword);
@@ -142,7 +145,6 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     handleUpdateClick(id);
   };
-
 
   //======================================================================================================
 
@@ -254,11 +256,11 @@ const BlogUpdate = () => {
         const sectionDataWithoutDate = removeDateFromSectionData(secData);
         const tempKeywords = [];
         const tempSectionData = sectionDataWithoutDate.map((section) => {
-          const hasAnchorTags = section.section.includes('<a');
+          const hasAnchorTags = section.section.includes("<a");
           if (hasAnchorTags) {
-            const htmlContent = document.createElement('div');
+            const htmlContent = document.createElement("div");
             htmlContent.innerHTML = section.section;
-            const anchorTags = htmlContent.getElementsByTagName('a');
+            const anchorTags = htmlContent.getElementsByTagName("a");
             const keywords = [];
             for (let i = 0; i < anchorTags.length; i++) {
               keywords.push(anchorTags[i].textContent);
@@ -376,7 +378,10 @@ const BlogUpdate = () => {
       })
       .then((response) => {
         setOptions(
-          response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
+          response?.data?.data?.map((item) => ({
+            id: item?.id,
+            tag: item?.tag,
+          }))
         );
       })
       .catch((error) => {
@@ -389,14 +394,14 @@ const BlogUpdate = () => {
     if (checked) {
       setSelectedTags([...selectedTags, { id: id, tag: tag }]);
     } else {
-      setSelectedTags(selectedTags.filter(tag => tag.id !== id));
+      setSelectedTags(selectedTags.filter((tag) => tag.id !== id));
     }
   };
 
   const addTag = () => {
-    const ids = selectedTags.map(tag => tag.id).join(',');
+    const ids = selectedTags.map((tag) => tag.id).join(",");
     setTagId(ids);
-    const names = selectedTags.map(tag => tag.tag);
+    const names = selectedTags.map((tag) => tag.tag);
     setTagNames(names);
     setOwnerOpen(false);
     setStateBtn(1);
@@ -409,9 +414,8 @@ const BlogUpdate = () => {
     setTagId(updatedNumbersString);
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
-    setTagNames(updatedNames)
+    setTagNames(updatedNames);
   };
-
 
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
@@ -446,7 +450,7 @@ const BlogUpdate = () => {
   //==============================================================sub section editor
   const handleEditorChange = (data, index) => {
     const newSectionData = [...sectionData];
-    const cleanedContent = data.replace(/style="[^"]*"/g, '');
+    const cleanedContent = data.replace(/style="[^"]*"/g, "");
     newSectionData[index].section = cleanedContent;
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
@@ -484,7 +488,7 @@ const BlogUpdate = () => {
 
   //==================================================================editor data transfer
   const handleDataTransfer = (data) => {
-    const cleanedContent = data.replace(/style="[^"]*"/g, '');
+    const cleanedContent = data.replace(/style="[^"]*"/g, "");
     setDataFromChild(cleanedContent);
     setTableDate(false);
   };
@@ -744,18 +748,28 @@ const BlogUpdate = () => {
   return (
     <>
       <header className="headerEditor update-view">
-        <p className="common-fonts add-new-blog">Update Blog</p>
-        <p className="common-fonts add-new-blog">Number of views: {views}</p>
-        <p className="common-fonts add-new-blog">Number of links added: {keywords.length}</p>
+        <div>
+          <p className="common-fonts add-new-blog">Update Blog</p>
+          <div className="back-to-user general-refresh blog-back">
+            <Link to={"/lp/settings/blog/view"}>
+              <button className="common-fonts">
+                <img src={LeftArrow} alt="" />
+                <span>Back To Blog Table</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+
+        <div>
+          <p className="common-fonts add-new-blog">
+            <span className="orange_color">Number of views:</span> {views}
+          </p>
+          <p className="common-fonts add-new-blog">
+            <span className="orange_color">Number of links added:</span>{" "}
+            {keywords.length}
+          </p>
+        </div>
       </header>
-      <div className="back-to-user general-refresh blog-back">
-        <Link to={"/lp/settings/blog/view"}>
-          <button className="common-fonts">
-            <img src={LeftArrow} alt="" />
-            <span>Back To Blog Table</span>
-          </button>
-        </Link>
-      </div>
       <form className="scrollCover" onSubmit={handleFormSubmit}>
         <div className="addBlogContainer">
           {/*==============================================================right side of form starts here ============================================================*/}
@@ -1004,7 +1018,9 @@ const BlogUpdate = () => {
                     </div>
                     <div
                       className={
-                        isIndex === index ? "answer new_answer display_answer" : "answer new_answer"
+                        isIndex === index
+                          ? "answer new_answer display_answer"
+                          : "answer new_answer"
                       }
                     >
                       <div className="sectionBlockOne">
@@ -1079,7 +1095,9 @@ const BlogUpdate = () => {
                       <div className="new_add_link">
                         <button
                           className="common-fonts common-save-button"
-                          onClick={(event) => handleAddLink(event, index, section.id)}
+                          onClick={(event) =>
+                            handleAddLink(event, index, section.id)
+                          }
                         >
                           Add Link
                         </button>
@@ -1126,7 +1144,9 @@ const BlogUpdate = () => {
           <div className="addBlogRightForm">
             <div className="tags">
               <div className="tagContent tag-box">
-                <h3>Tags <span className="common-fonts redAlert"> *</span></h3>
+                <h3>
+                  Tags <span className="common-fonts redAlert"> *</span>
+                </h3>
                 <div className="contentBox">
                   <select
                     name="categoryDropdown"
@@ -1145,8 +1165,9 @@ const BlogUpdate = () => {
                     <div className="new_tag" onClick={toggleOwnerDropdown}>
                       {display}
                       <i
-                        className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
-                          }`}
+                        className={`fa-sharp fa-solid ${
+                          ownerOpen ? "fa-angle-up" : "fa-angle-down"
+                        }`}
                       ></i>
                     </div>
                     {ownerOpen && (
@@ -1155,17 +1176,27 @@ const BlogUpdate = () => {
                           {options
                             ?.filter(
                               (option) =>
-                                !tagId?.split(",")?.includes(option.id?.toString())
+                                !tagId
+                                  ?.split(",")
+                                  ?.includes(option.id?.toString())
                             )
                             .map((option) => (
-                              <li key={option?.id} value={option?.id} className="tag_new_li">
+                              <li
+                                key={option?.id}
+                                value={option?.id}
+                                className="tag_new_li"
+                              >
                                 <label className="custom-checkbox">
                                   <input
                                     type="checkbox"
                                     className={`cb1`}
                                     name="headerCheckBox"
                                     onChange={(e) =>
-                                      handleCheckboxChange(e, option.id, option.tag)
+                                      handleCheckboxChange(
+                                        e,
+                                        option.id,
+                                        option.tag
+                                      )
                                     }
                                   />
                                   <span className="checkmark"></span>
@@ -1175,7 +1206,12 @@ const BlogUpdate = () => {
                             ))}
                         </ul>
                         <div className="new_tags_btn">
-                          <button onClick={addTag} className="common-save-button">Add tags</button>
+                          <button
+                            onClick={addTag}
+                            className="common-save-button"
+                          >
+                            Add tags
+                          </button>
                         </div>
                       </div>
                     )}
@@ -1243,7 +1279,11 @@ const BlogUpdate = () => {
                 </div>
               </div>
             </div>
-            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection} keywords={keywords}/>
+            <BackLinks
+              backlink={backlink}
+              handleCategorySelection={handleCategorySelection}
+              keywords={keywords}
+            />
           </div>
         </div>
       </form>
