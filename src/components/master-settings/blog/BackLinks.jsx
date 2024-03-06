@@ -1,6 +1,7 @@
 import React from "react";
 
-const BackLinks = ({ backlink, handleCategorySelection }) => {
+const BackLinks = ({ backlink, handleCategorySelection, keywords }) => {
+  console.log(keywords)
   const handleChange = (event) => {
     const selectedValue = event.target.value;
     handleCategorySelection(selectedValue);
@@ -9,7 +10,7 @@ const BackLinks = ({ backlink, handleCategorySelection }) => {
   return (
     <div className="tags">
       <div className="tagContent tag-box">
-        <h3>Backlinks</h3>
+        <h3>Backlinks</h3>        
         <div className="contentBox">
           <select
             name="categoryDropdown"

@@ -87,8 +87,7 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
-        const filteredAndCheckedData = filteredData.filter(obj =>
+        const filteredAndCheckedData = response?.data?.data.filter(obj =>
           !tempKeywords.includes(obj.keyword)
         );
         setBackLink(filteredAndCheckedData);
@@ -111,8 +110,7 @@ const BlogUpdate = () => {
         },
       })
       .then((response) => {
-        const filteredData = response?.data?.data.filter(obj => obj?.keyword?.split(" ")?.length !== 1);
-        const filteredAndCheckedData = filteredData.filter(obj =>
+        const filteredAndCheckedData = response?.data?.data.filter(obj =>
           !keywords.includes(obj.keyword)
         );
         setBackLink(filteredAndCheckedData);
@@ -127,18 +125,23 @@ const BlogUpdate = () => {
     const newSectionData = [...sectionData];
     let updatedContent = newSectionData[index].section;
     let newArray = [...backlink];
-    newArray.forEach((item) => {
-      const regex = new RegExp(`\\b${item.keyword}\\b`, 'gi');
-      if (updatedContent.match(regex)) {
-        updatedContent = updatedContent.replace(regex, `<a href="${item.url}">${item.keyword}</a>`);
-        newArray = newArray.filter((arrayItem) => arrayItem.id !== item.id);
+    let keys = [...keywords];
+    newArray.sort((a, b) => b.keyword.length - a.keyword.length);
+    newArray.forEach((wordObj, index) => {
+      const { keyword, url } = wordObj;
+      const regex = new RegExp(`(?<!<a[^>]*>)${keyword}(?![^<]*<\/a>)`, 'g');
+      updatedContent = updatedContent.replace(regex, `<a href="${url}">${keyword}</a>`);
+      if (updatedContent.includes(`<a href="${url}">${keyword}</a>`)) {
+        newArray.splice(index, 1);
+        keys.push(keyword);
       }
     });
     setBackLink(newArray);
+    setKeywords(keys);
     newSectionData[index].section = updatedContent;
     setSectionData(newSectionData);
     setUpdateStateBtn(1);
-};
+  };
 
 
   //======================================================================================================
@@ -1075,7 +1078,7 @@ const BlogUpdate = () => {
                       <div className="new_add_link">
                         <button
                           className="common-fonts common-save-button"
-                          onClick={(event) => handleAddLink(event,index)}
+                          onClick={(event) => handleAddLink(event, index)}
                         >
                           Add Link
                         </button>
@@ -1239,7 +1242,7 @@ const BlogUpdate = () => {
                 </div>
               </div>
             </div>
-            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection} />
+            <BackLinks backlink={backlink} handleCategorySelection={handleCategorySelection} keywords={keywords}/>
           </div>
         </div>
       </form>
