@@ -120,7 +120,7 @@ const BlogUpdate = () => {
       });
   };
 
-  const handleAddLink = (event, index) => {
+  const handleAddLink = (event, index, id) => {
     event.preventDefault();
     const newSectionData = [...sectionData];
     let updatedContent = newSectionData[index].section;
@@ -140,7 +140,7 @@ const BlogUpdate = () => {
     setKeywords(keys);
     newSectionData[index].section = updatedContent;
     setSectionData(newSectionData);
-    setUpdateStateBtn(1);
+    handleUpdateClick(id);
   };
 
 
@@ -746,6 +746,7 @@ const BlogUpdate = () => {
       <header className="headerEditor update-view">
         <p className="common-fonts add-new-blog">Update Blog</p>
         <p className="common-fonts add-new-blog">Number of views: {views}</p>
+        <p className="common-fonts add-new-blog">Number of links added: {keywords.length}</p>
       </header>
       <div className="back-to-user general-refresh blog-back">
         <Link to={"/lp/settings/blog/view"}>
@@ -1078,7 +1079,7 @@ const BlogUpdate = () => {
                       <div className="new_add_link">
                         <button
                           className="common-fonts common-save-button"
-                          onClick={(event) => handleAddLink(event, index)}
+                          onClick={(event) => handleAddLink(event, index, section.id)}
                         >
                           Add Link
                         </button>
