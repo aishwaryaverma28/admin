@@ -145,7 +145,28 @@ const BlogUpdate = () => {
     setSectionData(newSectionData);
     handleUpdateClick(id);
   };
-
+  const addLink = (event) => {
+    event.preventDefault();
+    let updatedContent = dataFromChild;
+    let newArray = [...backlink];
+    let keys = [...keywords];
+    newArray.sort((a, b) => b.keyword.length - a.keyword.length);
+    newArray.forEach((wordObj, index) => {
+      const { keyword, url } = wordObj;
+      const regex = new RegExp(`(?<!<a[^>]*>)${keyword}(?![^<]*<\/a>)`, "g");
+      updatedContent = updatedContent.replace(
+        regex,
+        `<a href="${url}">${keyword}</a>`
+      );
+      if (updatedContent.includes(`<a href="${url}">${keyword}</a>`)) {
+        newArray.splice(index, 1);
+        keys.push(keyword);
+      }
+    });
+    setBackLink(newArray);
+    setKeywords(keys);
+    setDataFromChild(updatedContent);
+  };
   //======================================================================================================
 
   useEffect(() => {
@@ -980,6 +1001,14 @@ const BlogUpdate = () => {
                   </div>
                 </div>
                 <Table onDataSave={handleDataSave} tableFlag={tableData} />
+                <button
+                          className="common-fonts common-save-button"
+                          onClick={(event) =>
+                            addLink(event)
+                          }
+                        >
+                          Add Link
+                        </button>
                 <div className="formEditor">
                   {/* <ReactEditor
                     ref={editorRef} // Attach the ref here
@@ -990,6 +1019,9 @@ const BlogUpdate = () => {
                     value={dataFromChild}
                     onChange={(data) => handleDataTransfer(data)}
                   />
+                </div>
+                <div>
+                
                 </div>
               </div>
               <div>
