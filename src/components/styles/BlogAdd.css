@@ -23,10 +23,10 @@
   padding: 0.8rem;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); */
 }
-.keywordsLower{
+.keywordsLower {
   text-transform: lowercase;
 }
-.from-view-img{
+.from-view-img {
   padding-bottom: 30px;
 }
 .fromUrl {
@@ -88,8 +88,7 @@
   padding-bottom: 20px;
 }
 
-
-.from-blog-section input{
+.from-blog-section input {
   margin-bottom: 1.5rem;
 }
 .fromBlogSection input:hover {
@@ -166,7 +165,7 @@
   font-family: "Lexend Deca", sans-serif;
   color: rgb(30, 34, 36);
   height: 43px;
-  background-color: #F3F6FA;
+  background-color: #f3f6fa;
   font-weight: 500;
 }
 
@@ -179,9 +178,9 @@
   font-family: "Lexend Deca";
 }
 
-.new_tag{
+.new_tag {
   height: 43px;
-  border-radius:5px;
+  border-radius: 5px;
   display: flex;
   /* justify-content: space-between; */
   justify-content: center;
@@ -194,7 +193,7 @@
   color: rgb(30, 34, 36);
   font-weight: 500;
   border: 1px solid #dcdcdc;
-  background-color: #F3F6FA;
+  background-color: #f3f6fa;
 }
 .contentBox select:focus {
   border: 1px solid rgb(127, 126, 126);
@@ -286,7 +285,7 @@
   border-radius: 10px;
 }
 .sectionDropdown {
-  border:2px solid red;
+  border: 2px solid red;
   border: 1px solid #dcdcdc;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -449,11 +448,9 @@
   gap: 1rem;
 }
 
-
-
-.blog-update-btn{
+.blog-update-btn {
   display: flex;
-  justify-content: end; 
+  justify-content: end;
   align-items: center;
   margin-left: 85%;
   margin-bottom: 0.5rem;
@@ -471,28 +468,28 @@
   margin-left: 0.5rem;
 }
 
-.blog-img{
+.blog-img {
   border-radius: 50%;
   width: 3rem;
   height: 3rem;
 }
 
-.blog-browse-img{
+.blog-browse-img {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-right: -1rem;
 }
-.blog-browse-img-2{
+.blog-browse-img-2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.add-img-2{
+.add-img-2 {
   cursor: pointer;
   font-weight: 600;
-  font-size:17px ;
+  font-size: 17px;
   border-radius: 10px;
   height: 3rem;
   border: none;
@@ -500,62 +497,61 @@
   width: 10rem;
 }
 
-.blog-update-img{
+.blog-update-img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap:1rem;
+  gap: 1rem;
 }
 
-
-
-.blog-add-img{
- background-color: #2b74da;
- color:white;
- padding: 7px 15px;
- border-radius: 0.3125rem;
- border: 1px solid transparent;
- width: 10rem;
+.blog-add-img {
+  background-color: #2b74da;
+  color: white;
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+  border: 1px solid transparent;
+  width: 10rem;
 }
-.blog-add-img:hover{
- background-color: white;
- border:1px solid #2b74da;
- color:#2b74da;
- padding: 7px 15px;
- border-radius: 0.3125rem;
- transition: all 0.5s ease-in-out;
+.blog-add-img:hover {
+  background-color: white;
+  border: 1px solid #2b74da;
+  color: #2b74da;
+  padding: 7px 15px;
+  border-radius: 0.3125rem;
+  transition: all 0.5s ease-in-out;
 }
 
-
-.blog-img-2{
+.blog-img-2 {
   margin-right: 0.5rem;
 }
 
-.update-img{
-  width:16rem;
+.update-img {
+  width: 16rem;
   margin-left: 0;
 }
 
-.section-img-new{
+.section-img-new {
   margin-right: 0.5rem;
   margin-left: 0.5rem;
 }
 
-.from-filed{
+.from-filed {
   padding-bottom: 30px;
 }
 
-.from-filed input, .from-filed-2 input{
+.from-filed input,
+.from-filed-2 input {
   border-radius: 0.3125rem;
-border: 1px solid var(--Stroke, #DCDCDC);
-background: var(--Selected-State, #F3F6FA);
-width: 100%;
-padding: 1rem;
-margin-top:0.3rem;
+  border: 1px solid var(--Stroke, #dcdcdc);
+  background: var(--Selected-State, #f3f6fa);
+  width: 100%;
+  padding: 1rem;
+  margin-top: 0.3rem;
 }
 
-.from-filed input::placeholder, .from-filed-2 input::placeholder {
-  color:#1E2224;
+.from-filed input::placeholder,
+.from-filed-2 input::placeholder {
+  color: #1e2224;
   font-family: Lexend Deca;
   font-size: 1rem;
   font-style: normal;
@@ -564,118 +560,121 @@ margin-top:0.3rem;
   letter-spacing: -0.02563rem;
 }
 
-.blogs-new-label{
-color: #818181;
+.blogs-new-label {
+  color: #818181;
 }
 
-.blog-url-input{
+.blog-url-input {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
   width: 100%;
 }
-.blog-url-input-2{
+.blog-url-input-2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
 }
 
-.from-filed-2{
+.from-filed-2 {
   display: flex;
   justify-content: space-between;
   align-items: end;
   width: 100%;
 }
 
-.blog-sort input{
+.blog-sort input {
   width: 13rem;
 }
 
-.add-img-3{
-width: 12.5rem;
+.add-img-3 {
+  width: 12.5rem;
 }
 
-.blog-new-img{
+.blog-new-img {
   margin-left: 1rem;
   margin-right: 1rem;
 }
 
-.add-new-blog{
+.add-new-blog {
   margin-left: 1rem;
   margin-top: 1rem;
   font-size: 1rem;
 }
 
-.tag-box{
+.tag-box {
   background-color: #fff;
   border: 1px solid #dcdcdc;
 }
 
-.tag-box-1{
+.tag-box-1 {
   border-bottom: 1px solid transparent;
 }
-.tag-box-2{
+.tag-box-2 {
   border-top: 1px solid transparent;
 }
 
-.blog-add-date input{
+.blog-add-date input {
   height: 43px;
   width: 100%;
 }
 
-.blog-save-height{
+.blog-save-height {
   height: 43px;
   width: 100%;
   padding: 0 !important;
-
 }
 
-.first-section{
-  margin-top: 3rem;
+.first-section {
+  margin-top: 7.5rem;
 }
 
-.blog-cross{
+.add_link_top_btn {
+  margin-top: 1rem;
+}
+
+.blog-cross {
   margin-left: 0.2rem;
 }
 
-.blog-publish{
+.blog-publish {
   padding: 0 !important;
 }
 
-.blog-back{
+.blog-back {
   margin-left: 1rem;
 }
 
-.update-view{
+.update-view {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.update-view p:last-child{
+.update-view p:last-child {
   margin-right: 1rem;
 }
 
-.row_name{
+.row_name {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
-.dynamic-input{
-width: 10rem;
+.dynamic-input {
+  width: 10rem;
 }
-.row_label{
+.row_label {
   display: inline-block;
   width: 5rem;
   margin-bottom: 1rem;
 }
 
-.dynamic_table{
+.dynamic_table {
   border-color: green;
 }
 
-.dynamic-input{
+.dynamic-input {
   border-radius: 0.3125rem;
   border: 1px solid #dcdcdc;
   background: #f3f6fa;
@@ -687,30 +686,29 @@ width: 10rem;
   margin-bottom: 1rem;
 }
 
-.dynamic-box{
+.dynamic-box {
   width: 60rem;
 }
 
-
-.box_2{
+.box_2 {
   margin-left: 1rem;
 }
 
-.hhh{
- overflow-y: scroll;
+.hhh {
+  overflow-y: scroll;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   height: 0.5rem;
 }
 
-.blog_dynamic_table{
+.blog_dynamic_table {
   display: flex;
   gap: 10rem;
   align-items: center;
 }
 
-.btn_flex_new{
+.btn_flex_new {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -735,13 +733,13 @@ width: 10rem;
   max-height: 55vh;
 }
 
-.dropdown_newtag ul li{
+.dropdown_newtag ul li {
   padding: 10px;
   cursor: pointer;
   padding-left: 15px;
 }
 
-.dropdown_newtag ul{
+.dropdown_newtag ul {
   height: 40vh;
   overflow: scroll;
   overflow-x: hidden;
@@ -753,22 +751,22 @@ width: 10rem;
   transition: all 500ms ease-in-out;
 }
 
-.tag_new_li{
+.tag_new_li {
   display: flex;
   justify-content: start;
   align-items: start;
-  gap:0.3rem;
+  gap: 0.3rem;
   margin-left: -0.8rem;
 }
 
-.new_tags_btn{
-  padding-top:0.8rem;
+.new_tags_btn {
+  padding-top: 0.8rem;
   border-top: 1px solid #dcdcdc;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
 }
 
-.new_tags_btn button{
+.new_tags_btn button {
   margin-left: 1rem;
 }
 
@@ -778,28 +776,44 @@ width: 10rem;
   text-transform: lowercase;
 }
 
-.key_url_box{
+.key_url_box {
   padding-left: 1rem;
   padding-right: 1rem;
   height: 40vh;
   overflow: scroll;
 }
 
-.key_url{
+.key_url {
   margin-bottom: 1rem;
 }
 
-.data_keyowrd, .orange_color{
-  color:#f49c00;
+.data_keyowrd,
+.orange_color {
+  color: #f49c00;
 }
 
-.new_add_link{
-  margin-top: 5rem;
+.new_add_link {
+  margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
   width: 100%;
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
-  padding:0.5rem;
-  display:flex;
+  padding: 0.5rem;
+  display: flex;
   justify-content: space-between;
 }
 
+.jodit-workplace {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.jodit-wysiwyg {
+  min-height: 0 !important;
+  height: 10rem !important;
+  overflow: scroll !important;
+}
+
+.jodit-wysiwyg p {
+  font-size: 0.875rem !important;
+}

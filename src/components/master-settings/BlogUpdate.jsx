@@ -1001,14 +1001,7 @@ const BlogUpdate = () => {
                   </div>
                 </div>
                 <Table onDataSave={handleDataSave} tableFlag={tableData} />
-                <button
-                          className="common-fonts common-save-button"
-                          onClick={(event) =>
-                            addLink(event)
-                          }
-                        >
-                          Add Link
-                        </button>
+ 
                 <div className="formEditor">
                   {/* <ReactEditor
                     ref={editorRef} // Attach the ref here
@@ -1019,7 +1012,18 @@ const BlogUpdate = () => {
                     value={dataFromChild}
                     onChange={(data) => handleDataTransfer(data)}
                   />
+                  <div>
+                  <button
+                          className="common-fonts common-save-button add_link_top_btn"
+                          onClick={(event) =>
+                            addLink(event)
+                          }
+                        >
+                          Add Link
+                        </button>
+                  </div>
                 </div>
+
                 <div>
                 
                 </div>
