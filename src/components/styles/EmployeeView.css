@@ -108,7 +108,7 @@ tr:hover {
 }
 .employeeName {
   text-align: center;
-  width: 20rem;
+  /* width: 20rem; */
 }
 .employeeId {
   width: 5rem;
