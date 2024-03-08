@@ -817,3 +817,30 @@
 .jodit-wysiwyg p {
   font-size: 0.875rem !important;
 }
+
+/* back list css  */
+
+.backlist_table{
+  padding: 1rem;
+  height: 80vh;
+  overflow: scroll;
+}
+
+.backlist_table table th{
+  background-color: #f3f6fa;
+  text-align: left;
+}
+
+.backlist_table table td:nth-child(1),
+.backlist_table table td:nth-child(2),
+.backlist_table table td:nth-child(3){
+  border-right: 1px solid transparent;
+}
+
+.backlist_table table td{
+  text-align: left;
+}
+.backlist_table table td:nth-child(2){
+  color:#2b74da;
+}
+/* back list css ends */
