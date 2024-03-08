@@ -322,42 +322,40 @@ const LPSettingSidebar = () => {
               )}
             </div>
           )}
-
-
-          {/* {(isPathAllowed("/lp/settings/blog/add") ||
+          {(isPathAllowed("/lp/settings/blog/add") ||
             isPathAllowed("/lp/settings/blog/view")) && (
               <div
                 className="master-arrow"
-                onClick={() => toggleMasterSubMenu("leads")}
+                onClick={() => toggleMasterSubMenu("backlist")}
               >
                 <p className="company-options master-settings-options setting-font-style">
-                  Leads
+                  Backlist
                 </p>
                 <img
-                  src={masterSubMenu === "leads" ? GreaterUp : GreaterDown}
+                  src={masterSubMenu === "backlist" ? GreaterUp : GreaterDown}
                   alt=""
                 />
               </div>
             )}
 
-          {masterSubMenu === "leads" && (
+          {masterSubMenu === "backlist" && (
             <div className="sub-sub-menu">
-              {isPathAllowed("/lp/settings/blog/add") && (
+              {/* {isPathAllowed("/lp/settings/blog/add") && (
                 <p className="company-options setting-font-style blog-options">
                   <NavLink
                     exact
-                    to="/lp/settings/leads/add"
+                    to="/lp/settings/blog/add"
                     activeClassName="activeLink"
                   >
                     Add
                   </NavLink>
                 </p>
-              )}
+              )} */}
               {isPathAllowed("/lp/settings/blog/view") && (
                 <p className="company-options setting-font-style">
                   <NavLink
                     exact
-                    to="/lp/settings/leads/view"
+                    to="/lp/settings/backlist/view"
                     activeClassName="activeLink"
                   >
                     View
@@ -365,8 +363,7 @@ const LPSettingSidebar = () => {
                 </p>
               )}
             </div>
-          )} */}
-
+          )}
           {isPathAllowed("/lp/settings/review/view") && (
             <>
               <div

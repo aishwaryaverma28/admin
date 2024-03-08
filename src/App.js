@@ -75,6 +75,7 @@ import UpdateTournament from "./components/master-settings/tournament/UpdateTour
 import AddLeadPage from "./components/master-settings/leads/AddLeadPage.jsx";
 import ViewLeadsPage from "./components/master-settings/leads/ViewLeadsPage.jsx";
 import Opening from "./components/Opening.jsx";
+import BacklistTable from "./components/master-settings/backlist/BacklistTable.jsx";
 const router = createBrowserRouter([
   {
     path: "/:auth",
@@ -287,6 +288,10 @@ const router = createBrowserRouter([
           {
             path: "/lp/settings/blog/view/:id",
             element: <BlogUpdate />,
+          },
+          {
+            path: "/lp/settings/backlist/view",
+            element: <BacklistTable/>,
           },
           {
             path: "/lp/settings/tournament/add",

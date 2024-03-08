@@ -326,3 +326,9 @@ textarea{
 .red-border{
   border: 2px solid red;
 }
+.backlist_table{
+  border: 2px solid red;
+  height: 70%;
+  overflow-y: scroll;
+  padding: 1rem;
+}

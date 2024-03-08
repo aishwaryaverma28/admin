@@ -252,3 +252,5 @@ export const ACADMEY_SEARCH_API = bmpStart + "/bmp/academy/search/";
 export const ACADMEY_ACTIVITY = bmpStart + "/bmp/activity/add";
 export const ACADMEY_ACTIVITY_SOURCE = bmpStart+ "/bmp/activity/getBySource";
 export const ACADMEY_ACTIVITY_UPDATE = bmpStart+ "/bmp/activity/update/";
+
+export const BACKLIST_DATA = bmpStart+"/blog/backlink/getstats";
