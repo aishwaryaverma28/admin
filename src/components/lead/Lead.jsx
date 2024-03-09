@@ -144,11 +144,12 @@ const Lead = () => {
       condition: "conditions",
       limit_from: "1",
       limit_to: "1000",
-    } : {
-      condition: "all",
+    } : {  
+      sport: "football",
+      condition: "conditions",
       limit_from: "1",
-      limit_to: limit.toString(),
-    };
+      limit_to: "1000"
+      };
 
 
     axios.post(ACADMEY_SEARCH, requestBody, {
@@ -163,9 +164,9 @@ const Lead = () => {
     });
   }
 
-  const handleLoadMore = () => {
-    setLimit(prevLimit => prevLimit + 500);
-  }
+  // const handleLoadMore = () => {
+  //   setLimit(prevLimit => prevLimit + 500);
+  // }
 
   const userAdded = () => {
     axios
@@ -976,11 +977,11 @@ const Lead = () => {
                 })}
 
               </div>
-              <div className="bottom-fixed">
+              {/* <div className="bottom-fixed">
                 {statusCounts[item.id] > 0 && (
                   <button onClick={handleLoadMore} className="common-save-button">Load More</button>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         ))}
