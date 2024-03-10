@@ -7,7 +7,7 @@ import {
   getDecryptedToken,
   GET_TAG_CATEGORY,
 } from "../utils/Constants";
-import JoditEditor from "jodit-react"
+import JoditEditor from "jodit-react";
 import "../styles/BlogAdd.css";
 import ReactEditor from "../ReactEditor";
 import trash from "../../assets/image/delete-icon.svg";
@@ -29,11 +29,11 @@ const BlogAdd = () => {
   const [sectionTitle, setSectionTitle] = useState("");
   const [sectionSort, setSectionSort] = useState(null);
   const [dataFromChild, setDataFromChild] = useState("");
-  const editor = useRef(null)
+  const editor = useRef(null);
   const [isIndex, setIsIndex] = useState(-1);
   const [sectionData, setSectionData] = useState([]);
   const [dataFromTable, setDataFromTable] = useState([]);
-  const [tableData, setTableDate] = useState(false)
+  const [tableData, setTableDate] = useState(false);
   // tags states
   const actionOwnerRef = useRef(null);
   const [ownerOpen, setOwnerOpen] = useState(false);
@@ -116,7 +116,10 @@ const BlogAdd = () => {
       })
       .then((response) => {
         setOptions(
-          response?.data?.data?.map((item) => ({ id: item?.id, tag: item?.tag }))
+          response?.data?.data?.map((item) => ({
+            id: item?.id,
+            tag: item?.tag,
+          }))
         );
       })
       .catch((error) => {
@@ -129,14 +132,14 @@ const BlogAdd = () => {
     if (checked) {
       setSelectedTags([...selectedTags, { id: id, tag: tag }]);
     } else {
-      setSelectedTags(selectedTags.filter(tag => tag.id !== id));
+      setSelectedTags(selectedTags.filter((tag) => tag.id !== id));
     }
   };
 
   const addTag = () => {
-    const ids = selectedTags.map(tag => tag.id).join(',');
+    const ids = selectedTags.map((tag) => tag.id).join(",");
     setTagId(ids);
-    const names = selectedTags.map(tag => tag.tag);
+    const names = selectedTags.map((tag) => tag.tag);
     setTagNames(names);
     setOwnerOpen(false);
     setStateBtn(1);
@@ -149,9 +152,8 @@ const BlogAdd = () => {
     setTagId(updatedNumbersString);
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
-    setTagNames(updatedNames)
+    setTagNames(updatedNames);
   };
-
 
   const getTagBySite = (site) => {
     axios
@@ -199,7 +201,6 @@ const BlogAdd = () => {
     }
   };
 
-
   //===================================================================== function to add date in the form data
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -221,8 +222,7 @@ const BlogAdd = () => {
       setFormData((prev) => {
         return { ...prev, url: modifiedValue };
       });
-    }
-    else if (name === "keywords") {
+    } else if (name === "keywords") {
       modifiedValue = modifiedValue.toLowerCase();
       setFormData((prev) => {
         return { ...prev, keywords: modifiedValue };
@@ -264,7 +264,7 @@ const BlogAdd = () => {
   };
   const handleTableChange = (data, index) => {
     const newSectionData = [...sectionData];
-    newSectionData[index].data_table = data.map(row => [...row]);
+    newSectionData[index].data_table = data.map((row) => [...row]);
     setSectionData(newSectionData);
     setStateBtn(1);
   };
@@ -295,19 +295,19 @@ const BlogAdd = () => {
     setTableDate(false);
     setDataFromChild(data);
     setStateBtn(1);
-    console.log(data)
+    console.log(data);
   };
 
   const removeHtmlTags = (htmlString) => {
     const regex = /<(?!\/?a\s*\/?)[^>]*>/g;
-    return htmlString.replace(regex, '');
+    return htmlString.replace(regex, "");
   };
 
   //====================================================================================== handle section data in an array of objects
 
   const handleAddSection = (e) => {
     e.preventDefault();
-    console.log(dataFromChild)
+    console.log(dataFromChild);
     const newSection = {
       heading: sectionTitle,
       sort: sectionSort === null ? 1 : parseInt(sectionSort),
@@ -495,38 +495,40 @@ const BlogAdd = () => {
                 style={{ display: "none" }}
               />
             </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                Blog Title
-                <span className="common-fonts redAlert"> *</span>
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="title"
                 id="title"
-                placeholder="Enter Blog Title"
+                placeholder=""
                 value={formData?.title}
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
+              <label htmlFor="title" className="common-fonts form_label_blog">
+                Blog Title
+                <span className="common-fonts redAlert"> *</span>
+              </label>
             </div>
-            <div className="from-filed from-filed-2">
-              <div className="blog-url-input">
-                <label htmlFor="title" className="common-fonts blogs-new-label">
-                  Url
-                  <span className="common-fonts redAlert"> *</span>
-                </label>
+            <div className="new_blog_flex">
+              <div className="blog-url-input form_group_blog">
                 <input
                   type="text"
                   name="url"
                   id="url"
-                  placeholder="Url"
+                  placeholder=""
                   value={formData?.url}
                   onChange={handleChange}
+                  className="new_blog_input form_input_blog"
                   disabled
                 />
+                  <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+                  Url
+                  <span className="common-fonts redAlert"> *</span>
+                </label>
               </div>
 
-              <div>
+              <div className="browse_new_img">
                 <div className="blog-browse-img">
                   <button
                     className="common-fonts blog-add-img add-img-2"
@@ -537,33 +539,37 @@ const BlogAdd = () => {
                   <div className="blog-new-img">
                     {blogImg ? blogImg : <></>}
                   </div>
-
                 </div>
               </div>
             </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                Description
-                <span className="common-fonts redAlert"> *</span>
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="description"
                 id="description"
-                placeholder="Description"
+                placeholder=""
                 value={formData?.description}
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
+               <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+                Description
+                <span className="common-fonts redAlert"> *</span>
+              </label>
             </div>
-            <div className="from-filed">
-              <label htmlFor="sport" className="common-fonts blogs-new-label">
+            <div className="form_group_blog">
+              <input
+                list="sports"
+                name="sport"
+                id="sport"
+                placeholder=""
+                value={formData?.sport}
+                onChange={handleChange}
+                className="new_blog_input form_input_blog"
+              />
+               <label htmlFor="sport" className="common-fonts blogs-new-label form_label_blog">
                 Blog Sport
               </label>
-              <input list="sports" name="sport"
-                id="sport"
-                placeholder="Enter Blog Sport"
-                value={formData?.sport}
-                onChange={handleChange} />
               <datalist id="sports">
                 <option value="archery"></option>
                 <option value="arts"></option>
@@ -597,34 +603,34 @@ const BlogAdd = () => {
                 <option value="wrestling"></option>
                 <option value="yoga"></option>
               </datalist>
-
             </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                meta description
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="meta_description"
                 id="meta_description"
-                placeholder="Blog Meta Description"
+                placeholder=""
                 value={formData?.meta_description}
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
-            </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                keywords
+               <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+                meta description
               </label>
+            </div>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="keywords"
                 id="keywords"
                 value={formData?.keywords}
-                placeholder="Blog Keywords"
+                placeholder=""
                 onChange={handleChange}
-                className="keywordsLower"
+                className="keywordsLower new_blog_input form_input_blog"
               />
+              <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+                keywords
+              </label>
             </div>
             {/* <BlogSection/> */}
 
@@ -637,40 +643,46 @@ const BlogAdd = () => {
                   onChange={handleFileChange2}
                   style={{ display: "none" }}
                 />
-                <div className="from-blog-section from-filed">
-                  <label
+                <div className="">
+                <div className="form_group_blog">
+                <input
+                    type="text"
+                    name="sectionTitle"
+                    id="sectiontitle"
+                    placeholder=""
+                    onChange={handleTitle}
+                    value={sectionTitle}
+                    className="new_blog_input form_input_blog"
+                  />
+                    <label
                     htmlFor="title"
-                    className="common-fonts blogs-new-label"
+                    className="common-fonts blogs-new-label form_label_blog"
                   >
                     Section
                     <span className="common-fonts redAlert"> *</span>
                   </label>
-                  <input
-                    type="text"
-                    name="sectionTitle"
-                    id="sectiontitle"
-                    placeholder="Section Title"
-                    onChange={handleTitle}
-                    value={sectionTitle}
-                  />
+                 
+                </div>
+                
 
                   <div className="formBtnBox">
-                    <div className="blog-url-input-2 blog-sort">
-                      <label
-                        htmlFor="title"
-                        className="common-fonts blogs-new-label"
-                      >
-                        Sort
-                        <span className="common-fonts redAlert"> *</span>
-                      </label>
+                    <div className="blog-url-input-2 blog-sort form_group_blog">
                       <input
                         type="text"
                         name="Sort"
                         id="Sort"
                         value={sectionSort === null ? "" : sectionSort}
-                        placeholder="Sort"
+                        placeholder=""
                         onChange={handleSecSortChange}
+                        className="new_blog_input form_input_blog"
                       />
+                        <label
+                        htmlFor="title"
+                        className="common-fonts blogs-new-label form_label_blog"
+                      >
+                        Sort
+                        <span className="common-fonts redAlert"> *</span>
+                      </label>
                     </div>
 
                     {/* <input
@@ -681,19 +693,21 @@ const BlogAdd = () => {
                       placeholder="image"
                       onChange={handleSecImageChange}
                     /> */}
-                    <div className="blog-browse-img">
+                    <div className="blog-browse-img browse_new_img">
                       <button
                         className="common-fonts blog-add-img add-img-2 add-img-3"
                         onClick={handleButtonClick2}
                       >
                         Add Image
                       </button>
-                      <div className="blog-new-img"> {blogImg2 ? blogImg2 : <></>}</div>
-
+                      <div className="blog-new-img">
+                        {" "}
+                        {blogImg2 ? blogImg2 : <></>}
+                      </div>
                     </div>
                     <button
                       onClick={handleAddSection}
-                      className="common-fonts blog-add-img add-img-2 add-img-3"
+                      className="common-fonts blog-add-img add-img-2 add-img-3 browse_new_img"
                     >
                       Add Section
                       <span className="common-fonts redAlert"> *</span>
@@ -715,7 +729,10 @@ const BlogAdd = () => {
               </div>
               <div>
                 {sectionData?.map((section, index) => (
-                  <div key={index} className={`section ${index === 0 ? 'first-section' : ''}`}>
+                  <div
+                    key={index}
+                    className={`section ${index === 0 ? "first-section" : ""}`}
+                  >
                     <div
                       className="sectionDropdown"
                       onClick={() => accordianClick(index)}
@@ -756,7 +773,9 @@ const BlogAdd = () => {
                           placeholder="Section Title"
                           className="sectionHead"
                           value={section?.heading}
-                          onChange={(event) => handleSecTitleChange(event, index)}
+                          onChange={(event) =>
+                            handleSecTitleChange(event, index)
+                          }
                         />
 
                         <input
@@ -779,7 +798,10 @@ const BlogAdd = () => {
                           </div>
                         </div>
                       </div>
-                      <DynamicTable onDataSave={(data) => handleTableChange(data, index)} initialData={section.data_table} />
+                      <DynamicTable
+                        onDataSave={(data) => handleTableChange(data, index)}
+                        initialData={section.data_table}
+                      />
                       <div className="formEditor">
                         {/* <ReactEditor
                           onDataTransfer={(data) =>
@@ -797,7 +819,11 @@ const BlogAdd = () => {
                           onClick={() => handleDeleteSection(index)}
                           className="sectionDelete"
                         >
-                          <img src={trash} className="deleteIcon" alt="Delete" />
+                          <img
+                            src={trash}
+                            className="deleteIcon"
+                            alt="Delete"
+                          />
                         </button>
                       </div>
                     </div>
@@ -811,7 +837,9 @@ const BlogAdd = () => {
           <div className="addBlogRightForm">
             <div className="tags">
               <div className="tagContent tag-box">
-                <h3>Tags <span className="common-fonts redAlert"> *</span></h3>
+                <h3>
+                  Tags <span className="common-fonts redAlert"> *</span>
+                </h3>
                 <div className="contentBox">
                   <select
                     name="categoryDropdown"
@@ -830,39 +858,54 @@ const BlogAdd = () => {
                     <div className="new_tag" onClick={toggleOwnerDropdown}>
                       {display}
                       <i
-                        className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
-                          }`}
+                        className={`fa-sharp fa-solid ${
+                          ownerOpen ? "fa-angle-up" : "fa-angle-down"
+                        }`}
                       ></i>
                     </div>
                     {ownerOpen && (
                       <div className="dropdown_newtag">
-                      <ul>
-                        {options
-                          ?.filter(
-                            (option) =>
-                              !tagId?.split(",")?.includes(option.id?.toString())
-                          )
-                          .map((option) => (
-                            <li key={option?.id} value={option?.id} className="tag_new_li">
-                              <label className="custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className={`cb1`}
-                                  name="headerCheckBox"
-                                  onChange={(e) =>
-                                    handleCheckboxChange(e, option.id, option.tag)
-                                  }
-                                />
-                                <span className="checkmark"></span>
-                              </label>
-                              {option?.tag}
-                            </li>
-                          ))}
-                         
-                      </ul>
-                      <div className="new_tags_btn">
-                      <button onClick={addTag} className="common-save-button">Add tags</button>
-                      </div>
+                        <ul>
+                          {options
+                            ?.filter(
+                              (option) =>
+                                !tagId
+                                  ?.split(",")
+                                  ?.includes(option.id?.toString())
+                            )
+                            .map((option) => (
+                              <li
+                                key={option?.id}
+                                value={option?.id}
+                                className="tag_new_li"
+                              >
+                                <label className="custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className={`cb1`}
+                                    name="headerCheckBox"
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        e,
+                                        option.id,
+                                        option.tag
+                                      )
+                                    }
+                                  />
+                                  <span className="checkmark"></span>
+                                </label>
+                                {option?.tag}
+                              </li>
+                            ))}
+                        </ul>
+                        <div className="new_tags_btn">
+                          <button
+                            onClick={addTag}
+                            className="common-save-button"
+                          >
+                            Add tags
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -884,7 +927,9 @@ const BlogAdd = () => {
 
             <div className="tags">
               <div className="tagContent tag-box">
-                <h3>Publish <span className="common-fonts redAlert"> *</span></h3>
+                <h3>
+                  Publish <span className="common-fonts redAlert"> *</span>
+                </h3>
                 <div className="contentBox blog-add-date">
                   <input
                     type="date"
@@ -901,7 +946,6 @@ const BlogAdd = () => {
                         value="Publish"
                         className="common-fonts common-inactive-button blog-publish"
                         disabled
-
                       />
                     ) : (
                       <input
@@ -931,7 +975,7 @@ const BlogAdd = () => {
                 </div>
               </div>
               <div className="tagData tag-box tag-box-2">
-                <div className={selectSite ? 'tagItems' : ''}>{selectSite}</div>
+                <div className={selectSite ? "tagItems" : ""}>{selectSite}</div>
               </div>
             </div>
           </div>

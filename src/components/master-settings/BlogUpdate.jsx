@@ -802,32 +802,40 @@ const BlogUpdate = () => {
               onChange={handleFileChange2}
               style={{ display: "none" }}
             />
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                Blog Title
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="title"
                 id="title"
                 value={formData.title}
-                placeholder="Blog Title"
+                placeholder=""
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
-            </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                Url
+              <label
+                htmlFor="title"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                Blog Title
               </label>
+            </div>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="url"
                 id="url"
-                placeholder="Url"
+                placeholder=""
                 value={formData.url}
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
                 disabled
               />
+              <label
+                htmlFor="title"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                Url
+              </label>
             </div>
             <div className="from-view-img">
               <div className="blog-update-img">
@@ -848,31 +856,39 @@ const BlogUpdate = () => {
                 </div>
               </div>
             </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                description
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="description"
                 id="description"
                 value={formData.description}
-                placeholder="Description"
+                placeholder=""
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
-            </div>
-            <div className="from-filed">
-              <label htmlFor="sport" className="common-fonts blogs-new-label">
-                Blog Sport
+              <label
+                htmlFor="title"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                description
               </label>
+            </div>
+            <div className="form_group_blog">
               <input
                 list="sports"
                 name="sport"
                 id="sport"
-                placeholder="Enter Blog Sport"
+                placeholder=""
                 value={formData?.sport}
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
+              <label
+                htmlFor="sport"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                Blog Sport
+              </label>
 
               <datalist id="sports">
                 <option value="archery"></option>
@@ -908,32 +924,39 @@ const BlogUpdate = () => {
                 <option value="yoga"></option>
               </datalist>
             </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                meta description
-              </label>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="meta_description"
                 id="meta_description"
                 value={formData.meta_description}
-                placeholder="Blog Meta Description"
+                placeholder=""
                 onChange={handleChange}
+                className="new_blog_input form_input_blog"
               />
-            </div>
-            <div className="from-filed">
-              <label htmlFor="title" className="common-fonts blogs-new-label">
-                keywords
+              <label
+                htmlFor="title"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                meta description
               </label>
+            </div>
+            <div className="form_group_blog">
               <input
                 type="text"
                 name="keywords"
                 id="keywords"
                 value={formData.keywords}
-                placeholder="Blog Keywords"
+                placeholder=""
                 onChange={handleChange}
-                className="keywordsLower"
+                className="keywordsLower new_blog_input form_input_blog"
               />
+              <label
+                htmlFor="title"
+                className="common-fonts blogs-new-label form_label_blog"
+              >
+                keywords
+              </label>
             </div>
             <>
               <div className="addSection">
@@ -944,42 +967,46 @@ const BlogUpdate = () => {
                   onChange={handleFileChange3}
                   style={{ display: "none" }}
                 />
-                <div className="from-blog-section from-filed">
-                  <label
-                    htmlFor="title"
-                    className="common-fonts blogs-new-label"
-                  >
-                    Section Title
-                    <span className="common-fonts redAlert"> *</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="sectionTitle"
-                    id="sectiontitle"
-                    placeholder="Section Title"
-                    onChange={handleTitle}
-                    value={sectionTitle}
-                  />
+                <div className="">
+                  <div className="form_group_blog">
+                    <input
+                      type="text"
+                      name="sectionTitle"
+                      id="sectiontitle"
+                      placeholder=""
+                      onChange={handleTitle}
+                      value={sectionTitle}
+                      className="new_blog_input form_input_blog"
+                    />
+                    <label
+                      htmlFor="title"
+                      className="common-fonts blogs-new-label form_label_blog"
+                    >
+                      Section Title
+                      <span className="common-fonts redAlert"> *</span>
+                    </label>
+                  </div>
 
                   <div className="formBtnBox">
-                    <div className="blog-url-input-2 blog-sort">
-                      <label
-                        htmlFor="title"
-                        className="common-fonts blogs-new-label"
-                      >
-                        Sort<span className="common-fonts redAlert"> *</span>
-                      </label>
+                    <div className="blog-url-input-2 blog-sort form_group_blog">
                       <input
                         type="text"
                         name="Sort"
                         id="Sort"
                         value={sectionSort}
-                        placeholder="Sort"
+                        placeholder=""
                         onChange={handleSecSortChange}
+                        className="new_blog_input form_input_blog"
                       />
+                      <label
+                        htmlFor="title"
+                        className="common-fonts blogs-new-label form_label_blog"
+                      >
+                        Sort<span className="common-fonts redAlert"> *</span>
+                      </label>
                     </div>
 
-                    <div className="blog-browse-img">
+                    <div className="blog-browse-img browse_new_img">
                       <button
                         className="common-fonts blog-add-img add-img-2 add-img-3"
                         onClick={handleButtonClick3}
@@ -993,7 +1020,7 @@ const BlogUpdate = () => {
                     </div>
                     <button
                       onClick={handleAddSection}
-                      className="common-fonts blog-add-img add-img-2 add-img-3"
+                      className="common-fonts blog-add-img add-img-2 add-img-3 browse_new_img"
                     >
                       Add Section
                       <span className="common-fonts redAlert"> *</span>
@@ -1001,7 +1028,7 @@ const BlogUpdate = () => {
                   </div>
                 </div>
                 <Table onDataSave={handleDataSave} tableFlag={tableData} />
- 
+
                 <div className="formEditor">
                   {/* <ReactEditor
                     ref={editorRef} // Attach the ref here
@@ -1013,20 +1040,16 @@ const BlogUpdate = () => {
                     onChange={(data) => handleDataTransfer(data)}
                   />
                   <div>
-                  <button
-                          className="common-fonts common-save-button add_link_top_btn"
-                          onClick={(event) =>
-                            addLink(event)
-                          }
-                        >
-                          Add Link
-                        </button>
+                    <button
+                      className="common-fonts common-save-button add_link_top_btn"
+                      onClick={(event) => addLink(event)}
+                    >
+                      Add Link
+                    </button>
                   </div>
                 </div>
 
-                <div>
-                
-                </div>
+                <div></div>
               </div>
               <div>
                 {sectionData?.map((section, index) => (
