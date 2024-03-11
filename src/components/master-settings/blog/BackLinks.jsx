@@ -8,8 +8,8 @@ const BackLinks = ({ backlink, handleCategorySelection }) => {
 
   return (
     <div className="tags">
-      <div className="tagContent tag-box">
-        <h3>Backlinks</h3>  
+      <div className="tag-box">
+        <h3 className="common-fonts">Backlinks</h3>  
         <div className="contentBox">
           <select
             name="categoryDropdown"

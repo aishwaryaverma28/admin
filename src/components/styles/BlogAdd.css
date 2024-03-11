@@ -605,6 +605,9 @@
   background-color: #fff;
   border: 1px solid #dcdcdc;
 }
+.tag-box>h3{
+  font-size: 1rem;
+}
 
 .tag-box-1 {
   border-bottom: 1px solid transparent;
@@ -885,11 +888,11 @@
 .new_blog_input {
   height: 2rem;
   width: 100%;
-  font-size: 1rem;
+  font-size: 0.8rem;
   background: 0 0;
   padding:1rem;
   font-weight: 400;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   outline: 0;
   cursor: pointer;
   color: #222 !important;

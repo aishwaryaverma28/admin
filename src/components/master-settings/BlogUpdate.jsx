@@ -429,15 +429,20 @@ const BlogUpdate = () => {
   };
 
   const handleTagRemoval = (index) => {
+    const updatedSelectedTags = [...selectedTags];
+    updatedSelectedTags.splice(index, 1);
+    setSelectedTags(updatedSelectedTags);
+  
     const numbersArray = tagId?.split(",");
     numbersArray?.splice(index, 1);
     const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
+  
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
     setTagNames(updatedNames);
   };
-
+  
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
@@ -870,7 +875,7 @@ const BlogUpdate = () => {
                 htmlFor="title"
                 className="common-fonts blogs-new-label form_label_blog"
               >
-                description
+                Description
               </label>
             </div>
             <div className="form_group_blog">
@@ -938,7 +943,7 @@ const BlogUpdate = () => {
                 htmlFor="title"
                 className="common-fonts blogs-new-label form_label_blog"
               >
-                meta description
+                Meta Description
               </label>
             </div>
             <div className="form_group_blog">
@@ -955,7 +960,7 @@ const BlogUpdate = () => {
                 htmlFor="title"
                 className="common-fonts blogs-new-label form_label_blog"
               >
-                keywords
+                Keywords
               </label>
             </div>
             <>
@@ -1202,8 +1207,8 @@ const BlogUpdate = () => {
           </div>
           <div className="addBlogRightForm">
             <div className="tags">
-              <div className="tagContent tag-box">
-                <h3>
+              <div className="tag-box">
+                <h3 className="common-fonts">
                   Tags <span className="common-fonts redAlert"> *</span>
                 </h3>
                 <div className="contentBox">
@@ -1289,8 +1294,9 @@ const BlogUpdate = () => {
                     ))}
                 </div>
               </div>
-              <div className="tagContent tag-box">
-                <h3>Publish</h3>
+              <br/>
+              <div className="tag-box">
+                <h3 className="common-fonts">Publish</h3>
                 <div className="contentBox blog-add-date">
                   <input
                     type="date"
@@ -1315,9 +1321,10 @@ const BlogUpdate = () => {
                   </div>
                 </div>
               </div>
+              <br/>
               <div className="tags">
-                <div className="tagContent tag-box tag-box-1">
-                  <h3>Site</h3>
+                <div className="tag-box tag-box-1">
+                  <h3 className="common-fonts">Site</h3>
                   <div className="contentBox">
                     <select
                       onChange={handleSiteSelection}

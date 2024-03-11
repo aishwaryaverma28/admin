@@ -146,14 +146,20 @@ const BlogAdd = () => {
   };
 
   const handleTagRemoval = (index) => {
+    const updatedSelectedTags = [...selectedTags];
+    updatedSelectedTags.splice(index, 1);
+    setSelectedTags(updatedSelectedTags);
+  
     const numbersArray = tagId?.split(",");
     numbersArray?.splice(index, 1);
     const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
+  
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
     setTagNames(updatedNames);
   };
+  
 
   const getTagBySite = (site) => {
     axios
@@ -615,7 +621,7 @@ const BlogAdd = () => {
                 className="new_blog_input form_input_blog"
               />
                <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
-                meta description
+                Meta Description
               </label>
             </div>
             <div className="form_group_blog">
@@ -629,7 +635,7 @@ const BlogAdd = () => {
                 className="keywordsLower new_blog_input form_input_blog"
               />
               <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
-                keywords
+                Keywords
               </label>
             </div>
             {/* <BlogSection/> */}
@@ -836,8 +842,8 @@ const BlogAdd = () => {
           {/*==============================================================right side of form starts here ============================================================*/}
           <div className="addBlogRightForm">
             <div className="tags">
-              <div className="tagContent tag-box">
-                <h3>
+              <div className="tag-box">
+                <h3 className="common-fonts">
                   Tags <span className="common-fonts redAlert"> *</span>
                 </h3>
                 <div className="contentBox">
@@ -846,7 +852,7 @@ const BlogAdd = () => {
                     onChange={handleCatogorySelection}
                     className="tagSelectBox"
                   >
-                    <option value="">category</option>
+                    <option value="">Category</option>
 
                     {category?.map((data) => (
                       <option key={data?.sport} value={data?.sport}>
@@ -926,8 +932,8 @@ const BlogAdd = () => {
             </div>
 
             <div className="tags">
-              <div className="tagContent tag-box">
-                <h3>
+              <div className="tag-box">
+                <h3 className="common-fonts">
                   Publish <span className="common-fonts redAlert"> *</span>
                 </h3>
                 <div className="contentBox blog-add-date">
@@ -959,8 +965,8 @@ const BlogAdd = () => {
               </div>
             </div>
             <div className="tags">
-              <div className="tagContent tag-box tag-box-1">
-                <h3>Site</h3>
+              <div className="tag-box">
+                <h3 className="common-fonts">Site</h3>
                 <div className="contentBox">
                   <select
                     onChange={handleSiteSelection}
@@ -974,9 +980,9 @@ const BlogAdd = () => {
                   </select>
                 </div>
               </div>
-              <div className="tagData tag-box tag-box-2">
+              {/* <div className="tagData tag-box tag-box-2">
                 <div className={selectSite ? "tagItems" : ""}>{selectSite}</div>
-              </div>
+              </div> */}
             </div>
           </div>
 
