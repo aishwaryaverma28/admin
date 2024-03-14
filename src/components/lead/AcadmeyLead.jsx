@@ -495,7 +495,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                     <p>Stage</p>
                                     <p>Timing</p>
                                     <p>Experience</p>
-                                    <p>About</p>
+                                    <p className="about-textarea">About</p>
                                 </div>
                                 <div className="detailsRightContainer">
                                     <p>
@@ -560,6 +560,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                                     <option value="fencing"></option>
                                                     <option value="football"></option>
                                                     <option value="golf"></option>
+                                                    <option value="gym"></option>
                                                     <option value="hockey"></option>
                                                     <option value="kabaddi"></option>
                                                     <option value="karate"></option>

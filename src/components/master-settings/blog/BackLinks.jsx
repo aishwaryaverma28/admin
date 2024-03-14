@@ -39,6 +39,7 @@ const BackLinks = ({ backlink, handleCategorySelection }) => {
             <option value={"fencing"}>{"Fencing"}</option>
             <option value={"football"}>{"Football"}</option>
             <option value={"golf"}>{"Golf"}</option>
+            <option value={"gym"}>{"Gym"}</option>
             <option value={"hockey"}>{"Hockey"}</option>
             <option value={"kabaddi"}>{"Kabaddi"}</option>
             <option value={"karate"}>{"Karate"}</option>
