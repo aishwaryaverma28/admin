@@ -34,9 +34,8 @@ export { getDecryptedUserPath };
 
 //=============================================================logout function
 export const handleLogout = () => {
-  if (landingUrl === "/lp/bmp/overview" || landingUrl === "/lp/bmp/admin") {
-    localStorage.clear();
-    window.location.href = "https://www.bookmyplayer.com/profile/logout";
+  if (localStorage.length === 0) {
+    window.location.href = "https://core.leadplaner.com/login";
   } else {
     localStorage.clear();
     window.location.href = "https://core.leadplaner.com/login";
