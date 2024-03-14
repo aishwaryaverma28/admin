@@ -21,8 +21,11 @@ import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 import DealEmail from "../deal/DealEmail.jsx";
 import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
+import { default_about } from "../utils/bmp_about";
+import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
 const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
+    const [introduction, setIntroduction] = useState("");
     const [stages, setStages] = useState([
         {
             "id": 1,
@@ -112,6 +115,16 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 },
             })
             .then((response) => {
+                const sport = response?.data?.data[0]?.sport;
+                const academyName = response?.data?.data[0]?.name;
+                const cityName = response?.data?.data[0]?.city;
+                const academyObject = default_about?.find(obj => obj.sport === sport);
+                const updatedAbout = academyObject?.about?.replace(/ACADEMY_NAME/g, academyName);
+                const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
+                const intro = removeHtmlTags(finalAbout);
+                setIntroduction(intro);
+                if (sport === null || sport === "")
+                    setIntroduction("-")
                 setLeadName(response?.data?.data[0]?.name);
                 setOwnerId(response.data.data[0]?.owner);
                 setEditedItem(response?.data?.data[0]);
@@ -167,8 +180,8 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
         const body = {
             source_id: selectedItem.id,
             source_type: "academy"
-          }
-          axios
+        }
+        axios
             .post(ACADMEY_ACTIVITY_SOURCE, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
@@ -257,15 +270,11 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-
         setEditedItem({
             ...editedItem,
             [name]: value,
         });
-
         setStateBtn(1);
-
     };
 
     const toggleEditable = (e) => {
@@ -282,6 +291,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             stage: editedItem?.stage,
             name: editedItem?.name,
             phone: editedItem?.phone,
+            about: editedItem?.about,
             sport: editedItem?.sport,
             experience: editedItem?.experience,
             facebook: editedItem?.facebook,
@@ -400,7 +410,43 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             boxShadow: "none",
         },
     };
+    const editStylingTextarea = {
+        color: "#1e2224",
+        fontWeight: 400,
+        border: "1px solid #dcdcdc",
+        outline: "rgb(59, 59, 59)",
+        backgroundColor: "#ffffff",
+        fontSize: "0.8rem",
+        fontFamily: "Lexend Deca",
+        borderRadius: "0.3125rem",
+        padding: "0.3rem",
+        border: "1px solid #dcdcdc",
+        height: "5rem",
 
+        ":hover": {
+            backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
+            transition: isHoverDisabled ? "all .5s ease-in-out" : "",
+            cursor: isHoverDisabled ? "pointer" : "",
+        },
+        ":focus": {
+            border: "1px solid #E2E9F2",
+            boxShadow: "none",
+        },
+    };
+    
+    const normalStylingTextarea = {
+        color: "#1e2224",
+        fontWeight: 400,
+        border: "1px solid #dcdcdc",
+        outline: "rgb(59, 59, 59)",
+        backgroundColor: "#ffffff",
+        fontSize: "0.8rem",
+        fontFamily: "Lexend Deca",
+        borderRadius: "0.3125rem",
+        padding: "0.3rem",
+        border: "1px solid transparent",
+        height: "5rem",
+    };
     useEffect(() => {
         setOwnerName(userData?.find((item) => item.id === ownerId));
     }, []);
@@ -449,6 +495,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                     <p>Stage</p>
                                     <p>Timing</p>
                                     <p>Experience</p>
+                                    <p>About</p>
                                 </div>
                                 <div className="detailsRightContainer">
                                     <p>
@@ -633,10 +680,29 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                             </span>
                                         )}
                                     </p>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <textarea
+                                                    name="about"
+                                                    onChange={handleInputChange}
+                                                    value={isLoading ? "-" : editedItem?.about === null ? introduction : editedItem?.about}
+                                                    rows="5"
+                                                    id=""
+                                                    style={
+                                                        isEditable ? editStylingTextarea : normalStylingTextarea
+                                                    }
+                                                    disabled={isDisabled}
+                                                ></textarea>
+                                            </span>
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="detailsBox">
+                        {/* <div className="detailsBox">
                             <p className="detailHead">SOCIAL MEDIA</p>
                             <div className="detailsContent">
                                 <div className="detailsLeftContainer">
@@ -701,7 +767,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="detailsBox">
                             <p className="detailHead">ADDRESS INFORMATION</p>
@@ -843,7 +909,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
-                    <button
+                        <button
                             className={activeTab === "activity" ? "active" : ""}
                             onClick={() => handleTabClick("activity")}
                         >
@@ -878,7 +944,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fab fa-whatsapp"></i>
                             Whatsapp
                         </button>
-                       
+
                         <button
                             className={activeTab === "attachment" ? "active" : ""}
                             onClick={() => handleTabClick("attachment")}
@@ -927,7 +993,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
                                     dealId={selectedItem}
-                                    leadsDetails= {leads}
+                                    leadsDetails={leads}
                                 />
                             </div>
                         )}

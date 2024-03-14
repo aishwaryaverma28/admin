@@ -73,7 +73,6 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
         .then((response) => {
           const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
           setActivity(filteredNotes);
-          console.log(filteredNotes)
           setReplaceAct(filteredNotes);
         })
 
