@@ -1,0 +1,23 @@
+.leadDetails-section{
+    padding: 0rem 0.8rem;
+}
+.leadDetails-expand{
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+.lead-description{
+    padding:0rem 1rem 1rem 1rem;
+}
+.leads-details{
+color: #1e2224;
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    margin-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    text-align: left;
+}

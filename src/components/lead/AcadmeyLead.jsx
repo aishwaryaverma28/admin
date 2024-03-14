@@ -7,7 +7,7 @@ import {
     handleLogout,
     getDecryptedToken,
     UPLOADED_DOCS,
-    GET_ACTIVITY,
+    ACADMEY_LEADS_DETAILS,
     ACADMEY_ACTIVITY_SOURCE,
     UPDATE_ACADEMY,
     POST_EMAIL,
@@ -20,6 +20,7 @@ import CreateDeal from "../deal/CreateDeal";
 import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 import DealEmail from "../deal/DealEmail.jsx";
+import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [stages, setStages] = useState([
@@ -54,8 +55,9 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [isEditable, setIsEditable] = useState(false);
     const [editedItem, setEditedItem] = useState("");
     const [activeTab, setActiveTab] = useState("activity"); // Initial active tab
-    const [notes, setNotes] = useState();
-    const [activityCount, setActivityCount] = useState();
+    const [notes, setNotes] = useState(0);
+    const [activityCount, setActivityCount] = useState(0);
+    const [leads, setLeads] = useState(0);
     const [stateBtn, setStateBtn] = useState(0);
     const decryptedToken = getDecryptedToken();
     const [owner, setOwner] = useState("");
@@ -200,6 +202,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
         fetchLead();
         fetchNotes();
         fetchCall();
+        fetchLeads();
     }, []);
 
     //==================================================================notes count
@@ -217,6 +220,30 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 if (response?.data?.status === 1) {
                     const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
                     setNotes(filteredNotes?.length);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.message === "Invalid or expired token.") {
+                    alert(error?.response?.data?.message);
+                    handleLogout();
+                }
+            });
+    };
+
+    const fetchLeads = () => {
+        const body = {
+            object_id: selectedItem.id, object_type: "academy",
+        }
+        axios
+            .post(ACADMEY_LEADS_DETAILS, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+                },
+            })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    setLeads(response?.data?.data);
                 }
             })
             .catch((error) => {
@@ -831,6 +858,13 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             Notes ({notes})
                         </button>
                         <button
+                            className={activeTab === "leads" ? "active" : ""}
+                            onClick={() => handleTabClick("leads")}
+                        >
+                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            Leads ({leads?.length})
+                        </button>
+                        <button
                             className={activeTab === "email" ? "active" : ""}
                             onClick={() => handleTabClick("email")}
                         >
@@ -886,6 +920,14 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                     userData={userData}
                                     ownerId={ownerId}
                                     idOfOwner={idOfOwner}
+                                />
+                            </div>
+                        )}
+                        {activeTab === "leads" && (
+                            <div className="attachment-tab-content">
+                                <AcadmeyLeadDetails
+                                    dealId={selectedItem}
+                                    leadsDetails= {leads}
                                 />
                             </div>
                         )}
