@@ -200,6 +200,7 @@ const Lead = () => {
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
+    setSearchQuery("");
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
