@@ -94,10 +94,6 @@ const Lead = () => {
   const [fStageId, setFStageId] = useState(0);
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
-  const handleToggleChange = () => {
-    setToggleChecked(!toggleChecked);
-    // Add any additional functionality you want to execute when the toggle is changed
-  };
 
   useEffect(() => {
     getAllAcademy();
@@ -150,12 +146,12 @@ const Lead = () => {
       condition: "conditions",
       limit_from: "1",
       limit_to: "1000",
-    } : {  
+    } : {
       sport: "football",
       condition: "conditions",
       limit_from: "1",
       limit_to: "1000"
-      };
+    };
 
 
     axios.post(ACADMEY_SEARCH, requestBody, {
@@ -201,22 +197,30 @@ const Lead = () => {
     });
     setStatusCounts(counts);
   }, [acadmey, stages]);
-  
+
+  const handleToggleChange = () => {
+    setToggleChecked(!toggleChecked);
+  };
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
-    if (value.length === 0 ) {
+    
+    if (value.length === 0) {
       getAllAcademy();
-    }
-    else if (value.length < 3) {
-      return;
-    }
-    else{    
-    axios.get(ACADMEY_SEARCH_API + value, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`,
-      },
-    })
+    } else {
+      if (!toggleChecked && value.length < 3) {
+        return;
+      }
+      
+      const apiUrl = toggleChecked
+        ? `https://bmp.leadplaner.com/api/api/bmp/academy/search/id/${value}`
+        : ACADMEY_SEARCH_API + value;
+      
+      axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then(response => {
         setAcademy(response?.data?.data);
       })
@@ -225,8 +229,7 @@ const Lead = () => {
       });
     }
   };
-
-  const toggleSortDropdown = () => {
+    const toggleSortDropdown = () => {
     setSortOpen(!sortOpen);
   };
   const toggleOwnerDropdown = () => {
@@ -710,16 +713,16 @@ const Lead = () => {
                 onChange={handleSearchChange}
               />
               <span className="recycle-search-icon">
-              <div>
-                    <label className="password-switch lead-switch">
-                      <input
-                        type="checkbox"
-                        checked={toggleChecked}
-          onChange={handleToggleChange}
-                      />
-                      <span className="password-slider lead-slider password-round"></span>
-                    </label>
-                  </div>
+                <div>
+                  <label className="password-switch lead-switch">
+                    <input
+                      type="checkbox"
+                      checked={toggleChecked}
+                      onChange={handleToggleChange}
+                    />
+                    <span className="password-slider lead-slider password-round"></span>
+                  </label>
+                </div>
               </span>
             </div>
             {role_name === "admin" && (
@@ -771,7 +774,7 @@ const Lead = () => {
             <div className="select action-select">
               {/* <label for="browserChoice">Sports:</label> */}
               <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
-              placeholder="Sports"
+                placeholder="Sports"
                 onChange={handleSportsChange}></input>
               <datalist id="sports_leads">
                 <option value="archery"></option>
