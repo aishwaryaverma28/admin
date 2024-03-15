@@ -711,13 +711,13 @@ const Lead = () => {
               />
               <span className="recycle-search-icon">
               <div>
-                    <label className="password-switch">
+                    <label className="password-switch lead-switch">
                       <input
                         type="checkbox"
                         checked={toggleChecked}
           onChange={handleToggleChange}
                       />
-                      <span className="password-slider password-round"></span>
+                      <span className="password-slider lead-slider password-round"></span>
                     </label>
                   </div>
               </span>
