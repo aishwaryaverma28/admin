@@ -54,6 +54,7 @@ const Lead = () => {
     }
   ]
   );
+  const [toggleChecked, setToggleChecked] = useState(false);
   const orgId = localStorage.getItem('org_id');
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -93,6 +94,11 @@ const Lead = () => {
   const [fStageId, setFStageId] = useState(0);
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
+  const handleToggleChange = () => {
+    setToggleChecked(!toggleChecked);
+    // Add any additional functionality you want to execute when the toggle is changed
+  };
+
   useEffect(() => {
     getAllAcademy();
   }, [limit]);
@@ -195,6 +201,7 @@ const Lead = () => {
     });
     setStatusCounts(counts);
   }, [acadmey, stages]);
+  
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
@@ -703,7 +710,16 @@ const Lead = () => {
                 onChange={handleSearchChange}
               />
               <span className="recycle-search-icon">
-                <img src={Search} alt="" />
+              <div>
+                    <label className="password-switch">
+                      <input
+                        type="checkbox"
+                        checked={toggleChecked}
+          onChange={handleToggleChange}
+                      />
+                      <span className="password-slider password-round"></span>
+                    </label>
+                  </div>
               </span>
             </div>
             {role_name === "admin" && (
@@ -753,8 +769,9 @@ const Lead = () => {
               Create Lead
             </button>
             <div className="select action-select">
-              <label for="browserChoice">Sports:</label>
+              {/* <label for="browserChoice">Sports:</label> */}
               <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
+              placeholder="Sports"
                 onChange={handleSportsChange}></input>
               <datalist id="sports_leads">
                 <option value="archery"></option>
@@ -792,8 +809,8 @@ const Lead = () => {
               </datalist>
             </div>
             <div className="select action-select">
-              <label htmlFor="browserChoice">City:</label>
-              <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} onChange={handleCityChange}></input>
+              {/* <label htmlFor="browserChoice">City:</label> */}
+              <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} placeholder="City" onChange={handleCityChange}></input>
               <datalist id="city_leads">
                 {cities?.map((city, index) => (
                   <option key={index} value={city}></option>

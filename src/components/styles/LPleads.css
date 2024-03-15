@@ -884,6 +884,7 @@
   color: #818181;
   background: #fff;
   cursor: pointer;
+  margin-right: 0rem;
 }
 .tab-navigation button .fa-sharp {
   margin-right: 0.5rem;

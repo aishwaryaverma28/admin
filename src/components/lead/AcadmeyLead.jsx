@@ -17,12 +17,12 @@ import AddNotes from "../deal/AddNotes";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
-import DealAttachments from "../deal/DealAttachments";
 import DealActivity from "../deal/DealActivity";
 import DealEmail from "../deal/DealEmail.jsx";
 import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
 import { default_about } from "../utils/bmp_about";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
+import LeadImage from "./LeadImage.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [introduction, setIntroduction] = useState("");
@@ -57,7 +57,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isEditable, setIsEditable] = useState(false);
     const [editedItem, setEditedItem] = useState("");
-    const [activeTab, setActiveTab] = useState("activity"); // Initial active tab
+    const [activeTab, setActiveTab] = useState("gallery");
     const [notes, setNotes] = useState(0);
     const [activityCount, setActivityCount] = useState(0);
     const [leads, setLeads] = useState(0);
@@ -69,7 +69,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [userData, setUserData] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedConvertItem, setSelectedConvertItem] = useState(null);
-    const [convertModalVisible, setConvertModalVisible] = useState(false);
     const [attachedFile, setAttachedFiles] = useState();
     const [loading, setLoading] = useState(false);
     const [fieldNames, setFieldNames] = useState({});
@@ -143,38 +142,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     useEffect(() => {
         fetchLead();
     }, [fieldNames]);
-
-    const uploadedDocs = () => {
-        axios
-            .get(UPLOADED_DOCS + "lead" + "/" + selectedItem.id, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`,
-                },
-            })
-            .then((response) => {
-                setAttachedFiles(response?.data?.message?.length);
-            })
-            .catch((error) => {
-                console.log(error);
-                if (error?.response?.data?.message === "Invalid or expired token.") {
-                    alert(error?.response?.data?.message);
-                    handleLogout();
-                }
-            });
-    };
-
-    useEffect(() => {
-        uploadedDocs();
-    }, []);
-
-    const openConvertModal = (item) => {
-        setSelectedConvertItem(item); // Set the selected item
-        setConvertModalVisible(true); // Open the modal
-    };
-    const closeConvertModal = () => {
-        setSelectedConvertItem(null); // Clear the selected item
-        setConvertModalVisible(false); // Close the modal
-    };
 
     const fetchCall = () => {
         const body = {
@@ -305,7 +272,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             city: editedItem?.city,
             state: editedItem?.state,
         }
-        console.log(updatedFormData)
         axios
             .put(UPDATE_ACADEMY + selectedItem.id, updatedFormData
                 , {
@@ -330,7 +296,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 setIsDisabled(!isDisabled);
                 setStateBtn(0);
                 fetchLead();
-                onLeadAdded();
             })
             .catch((error) => {
                 console.log(error);
@@ -343,6 +308,16 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 setStateBtn(0);
             });
     }
+
+    const handleViewSite = (url) => {
+        const siteUrl = url;
+        if (siteUrl) {
+            window.open(siteUrl, "_blank");
+        } else {
+            alert("Site URL is not available");
+        }
+    };
+
 
     //======================================================================css variable
     const normalStyling = {
@@ -433,7 +408,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             boxShadow: "none",
         },
     };
-    
+
     const normalStylingTextarea = {
         color: "#1e2224",
         fontWeight: 400,
@@ -880,9 +855,9 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         <div className="modalLeftBtnBox">
                             <button
                                 className="convertToDeal"
-                                onClick={() => openConvertModal(selectedItem)}
+                                onClick={() => handleViewSite(editedItem?.url)}
                             >
-                                Convert to deal
+                                View Site
                             </button>
                             {stateBtn === 0 ? (
                                 <button disabled className="disabledBtn">
@@ -899,17 +874,25 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <span></span>
                             <button
                                 className="convertToDeal"
-                                onClick={() => openConvertModal(selectedItem)}
-                            >
-                                Convert to deal
+                                onClick={() => handleViewSite(editedItem?.url)}
+                            >View Site
                             </button>
                         </div>
                     )}
                 </div>
 
+
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
+                        <button
+                            className={activeTab === "gallery" ? "active" : ""}
+                            onClick={() => handleTabClick("gallery")}
+                        >
+                            <i class="fa-sharp fa-regular fa-images"></i>
+                            Images
+                        </button>
+
                         <button
                             className={activeTab === "activity" ? "active" : ""}
                             onClick={() => handleTabClick("activity")}
@@ -945,14 +928,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fab fa-whatsapp"></i>
                             Whatsapp
                         </button>
-
-                        <button
-                            className={activeTab === "attachment" ? "active" : ""}
-                            onClick={() => handleTabClick("attachment")}
-                        >
-                            <i className="fa-sharp fa-solid fa-paperclip"></i>
-                            Attachment ({attachedFile})
-                        </button>
                     </div>
                     <div className="tab-content">
                         {activeTab === "notes" && (
@@ -978,6 +953,11 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                 />
                             </div>
                         )}
+                        {activeTab === "gallery" && (
+                            <div className="activity-tab-content">
+                                <LeadImage item={selectedItem} />
+                            </div>
+                        )}
                         {activeTab === "activity" && (
                             <div className="activity-tab-content">
                                 <DealActivity
@@ -998,27 +978,10 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                 />
                             </div>
                         )}
-                        {activeTab === "attachment" && (
-                            <div className="attachment-tab-content">
-                                <DealAttachments
-                                    dealId={selectedItem.id}
-                                    type={"lead"}
-                                    onAttachNum={uploadedDocs}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
-            {/* modal container ends here */}
-            {convertModalVisible && (
-                <CreateDeal
-                    isOpen={true}
-                    onClose={closeConvertModal}
-                    onLeadAdded={onLeadAdded}
-                    selectedItem={selectedConvertItem} // Pass the selected item to modal
-                />
-            )}
+
         </div>
     );
 }

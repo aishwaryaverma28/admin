@@ -246,7 +246,7 @@ export const ACADMEY_SEARCH = bmpStart + "/bmp/academy/search";
 export const ACADMEY_NOTE = bmpStart+ "/bmp/note/add";
 export const ACADMEY_NOTE_SOURCE = bmpStart+ "/bmp/note/getBySource";
 export const ACADMEY_NOTE_UPDATE= bmpStart + "/bmp/note/update/";
-export const ACADMEY_SEARCH_API = bmpStart + "/bmp/academy/search/";
+export const ACADMEY_SEARCH_API = bmpStart + "/bmp/academy/search/entity/";
 
 export const ACADMEY_ACTIVITY = bmpStart + "/bmp/activity/add";
 export const ACADMEY_ACTIVITY_SOURCE = bmpStart+ "/bmp/activity/getBySource";
