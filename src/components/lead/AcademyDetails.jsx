@@ -253,9 +253,8 @@ const AcademyDetails = (selectedItem,) => {
                                             type="text"
                                             name="name"
                                             value={editedItem?.name}
-                                            onChange={handleInputChange}
-                                            style={isEditable ? editStyling : normalStyling}
-                                            disabled={isDisabled}
+                                            id='academyDetHead'
+                                            disabled
                                         />
                                         <br />
                                     </>

@@ -30,3 +30,12 @@ color: #1e2224;
 .divWidth{
     max-width: 51vw !important;
 }
+#academyDetHead{
+    text-align: left;
+    font-family: "Lexend Deca";
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1e2224;
+    width: 40rem;
+    border: none;
+}
