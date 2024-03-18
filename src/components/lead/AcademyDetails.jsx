@@ -141,7 +141,6 @@ const AcademyDetails = (selectedItem,) => {
         color: "#1e2224",
         lineHeight: "17px",
         border: "1px solid transparent",
-        width: "100%",
     };
 
     const editStyling = {
@@ -152,7 +151,6 @@ const AcademyDetails = (selectedItem,) => {
         fontWeight: 500,
         color: "#1e2224",
         lineHeight: "17px",
-        width: "100%",
 
         ":hover": {
             backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
@@ -173,6 +171,7 @@ const AcademyDetails = (selectedItem,) => {
         padding: "0.3rem",
         border: "1px solid transparent",
         height: "2rem",
+        width:"100%"
     };
 
     const editStylingInput = {
@@ -187,6 +186,7 @@ const AcademyDetails = (selectedItem,) => {
         padding: "0.3rem",
         border: "1px solid #dcdcdc",
         height: "2rem",
+        width:"100%",
 
         ":hover": {
             backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
@@ -210,6 +210,7 @@ const AcademyDetails = (selectedItem,) => {
         padding: "0.3rem",
         border: "1px solid #dcdcdc",
         height: "5rem",
+        width:"100%",
 
         ":hover": {
             backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
@@ -234,6 +235,7 @@ const AcademyDetails = (selectedItem,) => {
         padding: "0.3rem",
         border: "1px solid transparent",
         height: "5rem",
+        width:"100%"
     };
 
   return (

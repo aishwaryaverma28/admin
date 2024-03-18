@@ -610,7 +610,6 @@
 }
 .customization_popup_container {
   position: absolute;
-  width: 70%;
   right: 0;
   top: 0;
   height: 100vh;
@@ -727,8 +726,8 @@
   margin-bottom: 0.8rem;
 }
 .detailsContent {
-  display: flex;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns:auto 1fr;
 }
 .detailsLeftContainer {
   /* border: 2px solid red; */
@@ -754,6 +753,7 @@
   /* border: 2px solid aqua; */
   display: flex;
   flex-direction: column;
+  padding-right: 1rem;
   /* justify-content: space-between; */
 }
 .detailsRightContainer p {
@@ -903,9 +903,9 @@
   background: #fff;
   cursor: pointer;
 }
-.user-details--right {
+/* .user-details--right {
   width: 100%;
-}
+} */
 .tab-content {
   margin-top: 8px;
 }
