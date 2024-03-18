@@ -87,7 +87,7 @@ const AcademyDetails = (selectedItem,) => {
             state: editedItem?.state,
         }
         axios
-            .put(UPDATE_ACADEMY + selectedItem.id, updatedFormData
+            .put(UPDATE_ACADEMY + selectedItem?.selectedItem?.id, updatedFormData
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,

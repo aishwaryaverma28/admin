@@ -27,3 +27,6 @@ color: #1e2224;
 .sportCap{
     text-transform: capitalize;
 }
+.divWidth{
+    max-width: 51vw !important;
+}

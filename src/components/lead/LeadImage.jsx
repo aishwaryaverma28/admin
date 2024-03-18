@@ -60,6 +60,7 @@ const LeadImage = (item) => {
             .then((response) => {
                 if (response?.data?.data && response?.data?.data?.length !== 0) {
                     setAcademyData(response?.data?.data[0]);
+                    setBannerName(response?.data?.data[0]?.banner);
                     if (
                         response?.data?.data[0]?.photos !== "" &&
                         response?.data?.data[0]?.photos !== null
@@ -681,7 +682,7 @@ const LeadImage = (item) => {
                         <p className="common-fonts">No photos added</p>
                     </div>
                 ) : (
-                    <div className={`outerBox`}>
+                    <div className={`outerBox divWidth`}>
                         {photoUrls?.map((photo, index) => (
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
