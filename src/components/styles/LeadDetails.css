@@ -24,3 +24,6 @@ color: #1e2224;
 .about-textarea{
     margin-bottom:4rem !important;
 }
+.sportCap{
+    text-transform: capitalize;
+}

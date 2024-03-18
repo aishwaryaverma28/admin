@@ -650,10 +650,12 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  min-width: 350px;
-  border-right: 1px solid #dcdcdc;
+  /* min-width: 350px; */
+  /* border-right: 1px solid #dcdcdc; */
   padding: 15px;
   position: relative;
+  height: 80rem;
+  overflow-y: scroll;
 }
 
 .user-details--heading {
@@ -902,7 +904,7 @@
   cursor: pointer;
 }
 .user-details--right {
-  width: 62.5%;
+  width: 100%;
 }
 .tab-content {
   margin-top: 8px;
