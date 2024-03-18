@@ -39,3 +39,11 @@ color: #1e2224;
     width: 40rem;
     border: none;
 }
+.headingDet{
+    margin-bottom: 0;
+    margin-left: 1rem;
+    line-height: 0;
+}
+.logoRound{
+    border-radius: 50%;
+}

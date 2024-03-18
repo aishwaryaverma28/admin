@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import userIcon from "../../assets/image/user-img.png";
 import axios from "axios";
 import {
     GET_ACADEMY,
@@ -243,7 +242,15 @@ const AcademyDetails = (selectedItem,) => {
     <div className="user-details--left">
                     <div className="user-details--heading">
                         <div className="user-details-imgBox">
-                            <img src={userIcon} alt="user" />
+                        <img
+                                src={editedItem?.logo === null
+                                    ? "https://res.cloudinary.com/cloud2cdn/image/upload/q_20/bookmyplayer/default/academy_default_logo.webp"
+                                    : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${editedItem?.id}/${editedItem?.logo}`}
+                                alt="logo"
+                                className="bmp-preview-image logoRound"
+                            />
+                            <div>
+                            <p className="detailHead headingDet">ACADMEY DETAILS</p>
                             <p>
                                 {isLoading ? (
                                     <span>-</span>
@@ -260,15 +267,14 @@ const AcademyDetails = (selectedItem,) => {
                                     </>
                                 )}
                             </p>
+                            </div>                            
                         </div>
                         <a href="#" className="edit-details" onClick={toggleEditable}>
                             <i className="fa-solid fa-pen"></i>
                         </a>
                     </div>
                     <div className="leadDetailsLeft">
-
                         <div className="detailsBox">
-                            <p className="detailHead">ACADMEY DETAILS</p>
                             <div className="detailsContent">
                                 <div className="detailsLeftContainer">
                                     <p>Name</p>
