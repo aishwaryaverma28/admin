@@ -32,9 +32,8 @@ const AcademyLogs = (item) => {
     }, [])
     return (
         <>
-            <div>AcademyLogs</div>
             {logs?.length > 0 && (
-                <div className="savedNotes">
+                <div className="savedNotes logsHeight">
                     {logs?.map((note) => (
                         <>
                             <section key={note?.id} className="note-display newSectionCss">

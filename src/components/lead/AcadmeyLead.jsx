@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./../styles/LPleads.css";
 import axios from "axios";
 import {
+    ACADEMY_LOGS,
     ACADMEY_NOTE_SOURCE,
     GET_ACADEMY,
     handleLogout,
@@ -23,6 +24,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [editedItem, setEditedItem] = useState("");
     const [activeTab, setActiveTab] = useState("details");
     const [notes, setNotes] = useState(0);
+    const [logs, setLogs] = useState(0);
     const [activityCount, setActivityCount] = useState(0);
     const [leads, setLeads] = useState(0);
     const decryptedToken = getDecryptedToken();
@@ -116,6 +118,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
         fetchNotes();
         fetchCall();
         fetchLeads();
+        getLogs();
     }, []);
 
     //==================================================================notes count
@@ -143,7 +146,25 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 }
             });
     };
-
+    const getLogs = () => {
+        const body = {
+            entity: "Academy",
+            object_id: selectedItem.id
+        }
+        axios.post(ACADEMY_LOGS, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    setLogs(response?.data?.data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     const fetchLeads = () => {
         const body = {
             object_id: selectedItem.id, object_type: "academy",
@@ -204,7 +225,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             onClick={() => handleTabClick("logs")}
                         >
                             <i class="fa-sharp fa-regular fa-images"></i>
-                            Logs
+                            Logs ({logs?.length})
                         </button>
 
                         <button

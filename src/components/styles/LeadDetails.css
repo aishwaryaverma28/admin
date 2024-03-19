@@ -51,11 +51,14 @@ color: #1e2224;
     padding: 1rem;
     margin-bottom: 0.5rem;
 }
+.logsHeight{
+    max-height: 80vh;
+}
 .logDivs{
 margin-bottom: 0.7rem;
 }
 .logHeading{
     font-weight: 700;
     font-size: 0.8rem;
-    font-style: italic;
+ color: #2b74da;;
 }
