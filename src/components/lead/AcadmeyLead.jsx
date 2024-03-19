@@ -209,7 +209,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             className={activeTab === "details" ? "active" : ""}
                             onClick={() => handleTabClick("details")}
                         >
-                            <i class="fa-sharp fa-regular fa-images"></i>
+                            <i class="fa-sharp fa-regular fa fa-newspaper-o"></i>
                             Academy Details
                         </button>
 
@@ -224,7 +224,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             className={activeTab === "logs" ? "active" : ""}
                             onClick={() => handleTabClick("logs")}
                         >
-                            <i class="fa-sharp fa-regular fa-images"></i>
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Logs ({logs?.length})
                         </button>
 
@@ -246,7 +246,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             className={activeTab === "leads" ? "active" : ""}
                             onClick={() => handleTabClick("leads")}
                         >
-                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length})
                         </button>
                         <button
