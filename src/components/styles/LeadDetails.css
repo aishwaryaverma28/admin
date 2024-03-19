@@ -52,5 +52,10 @@ color: #1e2224;
     margin-bottom: 0.5rem;
 }
 .logDivs{
-
+margin-bottom: 0.7rem;
+}
+.logHeading{
+    font-weight: 700;
+    font-size: 0.8rem;
+    font-style: italic;
 }
