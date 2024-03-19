@@ -54,9 +54,6 @@ const AcademyLogs = (item) => {
                                     <p><span className='logHeading'>attr5: </span>{note?.attr5}</p>
                                     <p><span className='logHeading'>attr6: </span>{note?.attr6}</p>
                                 </div>
-                                <div className="notes-date">
-                                    {note.attr3}
-                                </div>
                             </section>
                         </>))}
                 </div>
