@@ -250,18 +250,16 @@ const AcademyDetails = (selectedItem,) => {
                             className="bmp-preview-image logoRound"
                         />
                         <div>
-                            <p className="detailHead headingDet">ACADMEY DETAILS</p>
-                            <br />
                             <p>
                                 {isLoading ? (
                                     <span>-</span>
                                 ) : (
                                     <>
                                         {editedItem?.name}, {editedItem?.city}, {editedItem?.state}
-                                        <br />
                                     </>
                                 )}
                             </p>
+                            <p style={normalStylingInput}>{editedItem?.url}</p>
                         </div>
                     </div>
                     <a href="#" className="edit-details" onClick={toggleEditable}>

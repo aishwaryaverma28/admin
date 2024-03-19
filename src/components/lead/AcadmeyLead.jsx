@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./../styles/LPleads.css";
 import axios from "axios";
 import {
@@ -6,24 +6,18 @@ import {
     GET_ACADEMY,
     handleLogout,
     getDecryptedToken,
-    UPLOADED_DOCS,
     ACADMEY_LEADS_DETAILS,
     ACADMEY_ACTIVITY_SOURCE,
-    UPDATE_ACADEMY,
     POST_EMAIL,
 } from "./../utils/Constants";
-import userIcon from "../../assets/image/user-img.png";
 import AddNotes from "../deal/AddNotes";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CreateDeal from "../deal/CreateDeal";
 import DealActivity from "../deal/DealActivity";
 import DealEmail from "../deal/DealEmail.jsx";
 import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
-import { default_about } from "../utils/bmp_about";
-import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 import LeadImage from "./LeadImage.jsx";
 import AcademyDetails from "./AcademyDetails.jsx";
+import AcademyLogs from "./AcademyLogs.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const [editedItem, setEditedItem] = useState("");
@@ -186,10 +180,11 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 <span className="close" onClick={closeModal}>
                     <i className="fa-sharp fa-solid fa-xmark"></i>
                 </span>
-               {/* left side of modal ends here */}
+                {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
-                    <button
+                        {/* ===================================================================tabination buttons */}
+                        <button
                             className={activeTab === "details" ? "active" : ""}
                             onClick={() => handleTabClick("details")}
                         >
@@ -203,6 +198,13 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         >
                             <i class="fa-sharp fa-regular fa-images"></i>
                             Images
+                        </button>
+                        <button
+                            className={activeTab === "logs" ? "active" : ""}
+                            onClick={() => handleTabClick("logs")}
+                        >
+                            <i class="fa-sharp fa-regular fa-images"></i>
+                            Logs
                         </button>
 
                         <button
@@ -241,10 +243,33 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             Whatsapp
                         </button>
                     </div>
+                    {/* ===================================================================tabination content */}
                     <div className="tab-content">
-                    {activeTab === "details" && (
+                        {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails selectedItem={selectedItem}/>
+                                <AcademyDetails selectedItem={selectedItem} />
+                            </div>
+                        )}
+                        {activeTab === "gallery" && (
+                            <div className="activity-tab-content">
+                                <LeadImage item={selectedItem} />
+                            </div>
+                        )}
+                        {activeTab === "logs" && (
+                            <div className="activity-tab-content">
+                                <AcademyLogs />
+                            </div>
+                        )}
+                        {activeTab === "activity" && (
+                            <div className="activity-tab-content">
+                                <DealActivity
+                                    item={selectedItem}
+                                    type={"lead"}
+                                    count={fetchCall}
+                                    userData={userData}
+                                    ownerId={ownerId}
+                                    idOfOwner={idOfOwner}
+                                />
                             </div>
                         )}
                         {activeTab === "notes" && (
@@ -267,23 +292,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                     ownerId={ownerId}
                                     idOfOwner={idOfOwner}
                                     email={editedItem?.email}
-                                />
-                            </div>
-                        )}
-                        {activeTab === "gallery" && (
-                            <div className="activity-tab-content">
-                                <LeadImage item={selectedItem} />
-                            </div>
-                        )}
-                        {activeTab === "activity" && (
-                            <div className="activity-tab-content">
-                                <DealActivity
-                                    item={selectedItem}
-                                    type={"lead"}
-                                    count={fetchCall}
-                                    userData={userData}
-                                    ownerId={ownerId}
-                                    idOfOwner={idOfOwner}
                                 />
                             </div>
                         )}
