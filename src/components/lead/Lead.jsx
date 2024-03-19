@@ -954,9 +954,9 @@ const Lead = () => {
         <div className="main-cards">
           <div className="cards-new">
             <p className="DealName">
-              {item.stage}({statusCounts[item.id]})
+              {item?.stage}({statusCounts[item?.id]})
             </p>
-            {statusCounts[item.id] > 0 && (
+            {statusCounts[item?.id] > 0 && (
               <label className="custom-checkbox">
                 <input
                   type="checkbox"
@@ -973,11 +973,11 @@ const Lead = () => {
             )}
           </div>
           {(() => {
-            switch (item.stage) {
+            switch (item?.stage) {
               case 'academy':
-                return acadmey.map((obj) => (
+                return acadmey?.map((obj) => (
                   <LeadCards
-                    key={obj.id}
+                    key={obj?.id}
                     object={obj}
                     selectedIds={selectedIds}
                     setSelectedIds={setSelectedIds}
@@ -986,9 +986,9 @@ const Lead = () => {
                   />
                 ));
               // case 'player':
-              //   return player.map((obj) => (
+              //   return player?.map((obj) => (
               //     <LeadCards
-              //       key={obj.id}
+              //       key={obj?.id}
               //       object={obj}
               //       selectedIds={selectedIds}
               //       setSelectedIds={setSelectedIds}
@@ -997,9 +997,9 @@ const Lead = () => {
               //     />
               //   ));
               // case 'coach':
-              //   return coach.map((obj) => (
+              //   return coach?.map((obj) => (
               //     <LeadCards
-              //       key={obj.id}
+              //       key={obj?.id}
               //       object={obj}
               //       selectedIds={selectedIds}
               //       setSelectedIds={setSelectedIds}
@@ -1008,9 +1008,9 @@ const Lead = () => {
               //     />
               //   ));
               // case 'user':
-              //   return user.map((obj) => (
+              //   return user?.map((obj) => (
               //     <LeadCards
-              //       key={obj.id}
+              //       key={obj?.id}
               //       object={obj}
               //       selectedIds={selectedIds}
               //       setSelectedIds={setSelectedIds}
