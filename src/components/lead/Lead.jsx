@@ -30,30 +30,21 @@ const Lead = () => {
   const [stages, setStages] = useState([
     {
       "id": 1,
-      "stage": "new"
+      "stage": "academy"
     },
     {
       "id": 2,
-      "stage": "contact"
+      "stage": "player"
     },
     {
       "id": 3,
-      "stage": "no contact"
+      "stage": "coach"
     },
     {
       "id": 4,
-      "stage": "profile complete"
+      "stage": "user"
     },
-    {
-      "id": 5,
-      "stage": "profile not complete"
-    },
-    {
-      "id": 6,
-      "stage": "lead Shared"
-    }
-  ]
-  );
+  ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const orgId = localStorage.getItem('org_id');
   const [leadopen, setLeadOpen] = useState(false);
@@ -957,57 +948,91 @@ const Lead = () => {
         </div>
       </section>
       <section className="cards-body">
-        {stages?.map((item, index) => (
-          <div className="card-column" key={index}>
-            <div className="card-details">
-              <div className="main-cards">
-                <div className="cards-new">
-                  <p className="DealName">
-                    {item.stage}({statusCounts[item.id]})
-                  </p>
-                  {statusCounts[item.id] > 0 && (
-                    <label className="custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className={`cb1 ${item}-header-checkbox`}
-                        name="headerCheckBox"
-                        checked={
-                          selectedStatusesData[item] &&
-                          areAllChildCheckboxesChecked(item)
-                        }
-                        onChange={() => handleHeaderCheckboxChange(item)}
-                      />
-
-                      <span className="checkmark"></span>
-                    </label>
-                  )}
-                </div>
-                {acadmey?.map((obj) => {
-                  if (obj.stage === item.id) {
-                    return (
-                      <LeadCards
-                        key={obj.id}
-                        object={obj}
-                        selectedIds={selectedIds}
-                        setSelectedIds={setSelectedIds}
-                        onLeadAdded={getAllAcademy}
-                        userData={userData}
-                      />
-                    );
+  {stages?.map((item, index) => (
+    <div className="card-column" key={index}>
+      <div className="card-details">
+        <div className="main-cards">
+          <div className="cards-new">
+            <p className="DealName">
+              {item.stage}({statusCounts[item.id]})
+            </p>
+            {statusCounts[item.id] > 0 && (
+              <label className="custom-checkbox">
+                <input
+                  type="checkbox"
+                  className={`cb1 ${item}-header-checkbox`}
+                  name="headerCheckBox"
+                  checked={
+                    selectedStatusesData[item] &&
+                    areAllChildCheckboxesChecked(item)
                   }
-                  return null;
-                })}
-
-              </div>
-              {/* <div className="bottom-fixed">
-                {statusCounts[item.id] > 0 && (
-                  <button onClick={handleLoadMore} className="common-save-button">Load More</button>
-                )}
-              </div> */}
-            </div>
+                  onChange={() => handleHeaderCheckboxChange(item)}
+                />
+                <span className="checkmark"></span>
+              </label>
+            )}
           </div>
-        ))}
-      </section>
+          {(() => {
+            switch (item.stage) {
+              case 'academy':
+                return acadmey.map((obj) => (
+                  <LeadCards
+                    key={obj.id}
+                    object={obj}
+                    selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                    onLeadAdded={getAllAcademy}
+                    userData={userData}
+                  />
+                ));
+              // case 'player':
+              //   return player.map((obj) => (
+              //     <LeadCards
+              //       key={obj.id}
+              //       object={obj}
+              //       selectedIds={selectedIds}
+              //       setSelectedIds={setSelectedIds}
+              //       onLeadAdded={getAllPlayer}
+              //       userData={userData}
+              //     />
+              //   ));
+              // case 'coach':
+              //   return coach.map((obj) => (
+              //     <LeadCards
+              //       key={obj.id}
+              //       object={obj}
+              //       selectedIds={selectedIds}
+              //       setSelectedIds={setSelectedIds}
+              //       onLeadAdded={getAllCoach}
+              //       userData={userData}
+              //     />
+              //   ));
+              // case 'user':
+              //   return user.map((obj) => (
+              //     <LeadCards
+              //       key={obj.id}
+              //       object={obj}
+              //       selectedIds={selectedIds}
+              //       setSelectedIds={setSelectedIds}
+              //       onLeadAdded={getAllUser}
+              //       userData={userData}
+              //     />
+              //   ));
+              default:
+                return null;
+            }
+          })()}
+        </div>
+        {/* <div className="bottom-fixed">
+          {statusCounts[item.id] > 0 && (
+            <button onClick={handleLoadMore} className="common-save-button">Load More</button>
+          )}
+        </div> */}
+      </div>
+    </div>
+  ))}
+</section>
+
 
       <CreateLead
         isOpen={isModalOpen}
