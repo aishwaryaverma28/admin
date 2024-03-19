@@ -257,7 +257,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs />
+                                <AcademyLogs item={selectedItem}/>
                             </div>
                         )}
                         {activeTab === "activity" && (
