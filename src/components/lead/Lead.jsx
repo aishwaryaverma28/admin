@@ -9,6 +9,7 @@ import { cities } from "../utils/cities.js";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
   IMPORT_CSV,
+  GET_COACH,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
   ACADMEY_SEARCH,
@@ -76,6 +77,7 @@ const Lead = () => {
   const [fStageId, setFStageId] = useState(0);
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
+  const [coach, setCoach] = useState([]);
 
   useEffect(() => {
     getAllAcademy();
@@ -130,10 +132,28 @@ const Lead = () => {
       console.log(error);
     });
   }
+//=========================================================get all coaches
+const getAllCoaches = () => {
+  const requestBody = {
+    "entity": "bmp_coach_details",
+    "limit_from": 1,
+    "limit_to": 500
+};
+  axios.post(GET_COACH, requestBody, {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`
+    }
+  }
+  ).then((response) => {
+    setCoach(response?.data?.data);
+  }).catch((error) => {
+    console.log(error);
+  });
+}
 
-  // const handleLoadMore = () => {
-  //   setLimit(prevLimit => prevLimit + 500);
-  // }
+  const handleLoadMore = () => {
+    setLimit(prevLimit => prevLimit + 500);
+  }
 
   const userAdded = () => {
     axios
@@ -156,13 +176,15 @@ const Lead = () => {
   }, [orgId])
 
   useEffect(() => {
-    const counts = {};
-    stages.forEach((item) => {
-      counts[item.id] = acadmey?.filter((obj) => obj.stage === item.id).length;
-    });
+    const counts = {
+      academy: acadmey.length,
+      coach: coach.length,
+      player:0,
+      user: 0,
+    };
     setStatusCounts(counts);
-  }, [acadmey, stages]);
-
+  }, [acadmey, coach, stages]);
+  
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -368,6 +390,7 @@ const Lead = () => {
   useEffect(() => {
     fetchLabelData();
     getAllAcademy();
+    getAllCoaches();
   }, []);
 
   const toggleSortOrder = () => {
@@ -404,32 +427,32 @@ const Lead = () => {
       case "Amount":
         return data?.slice()?.sort((a, b) => {
           const result = a?.value - b?.value;
-          return order === "asc" ? result : -result; // Toggle sorting order
+          return order === "asc" ? result : -result;
         });
       case "LeadName":
         return data?.slice()?.sort((a, b) => {
           const result = a?.lead_name
             ?.toLowerCase()
             .localeCompare(b?.lead_name?.toLowerCase());
-          return order === "asc" ? result : -result; // Toggle sorting order
+          return order === "asc" ? result : -result;
         });
       case "Label":
         return data?.slice()?.sort((a, b) => {
           const result = a?.label_name
             ?.toLowerCase()
             .localeCompare(b?.label_name?.toLowerCase());
-          return order === "asc" ? result : -result; // Toggle sorting order
+          return order === "asc" ? result : -result;
         });
       case "Owner":
         return data?.slice()?.sort((a, b) => {
           const result = a.ownerf_name
             ?.toLowerCase()
             ?.localeCompare(b?.lead_name?.toLowerCase());
-          return order === "asc" ? result : -result; // Toggle sorting order
+          return order === "asc" ? result : -result;
         });
       default:
         return data?.slice()?.sort(() => {
-          return order === "asc" ? 1 : -1; // Toggle sorting order
+          return order === "asc" ? 1 : -1;
         });
     }
   };
@@ -497,8 +520,6 @@ const Lead = () => {
     document.addEventListener("click", handleOutsideClick3);
     document.addEventListener("click", handleOutsideClick4);
     document.addEventListener("click", handleOutsideClick5);
-
-    // Clean up the event listener when the component unmounts
     return () => {
       document.removeEventListener("click", handleOutsideClick);
       document.removeEventListener("click", handleOutsideClick3);
@@ -548,7 +569,7 @@ const Lead = () => {
   const handleDeleteLead = () => {
     if (selectedIds) {
       const body = {
-        leadIds: [selectedIds], // Use the stored ID
+        leadIds: [selectedIds],
       };
       axios
         .delete(MOVELEAD_TO_TRASH, {
@@ -572,14 +593,6 @@ const Lead = () => {
     }
   };
 
-  const mergedLabels = labelData
-    ?.filter((item) => item?.entity?.includes("leads"))
-    ?.map((item) => ({
-      id: item?.id,
-      name: item?.name,
-      colour_code: item?.colour_code,
-    }));
-
   const handleCsvFileImport = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -588,11 +601,10 @@ const Lead = () => {
         complete: (result) => {
           const dataWithIntValues = result?.data?.map((row) => ({
             ...row,
-            value: parseInt(row?.value), // Parse the "value" field as an integer
+            value: parseInt(row?.value),
             stage_id: parseInt(fStageId),
             org_id: parseInt(orgId)
           }));
-          // Store CSV data in state
           const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);
           setCsvData(dataWithoutLastValue);
           postCsvDataToAPI(dataWithoutLastValue);
@@ -603,9 +615,8 @@ const Lead = () => {
       });
     }
   };
-  // Function to handle "Import" menu item click
+
   const handleImportClick = () => {
-    // Trigger a click event on the hidden file input element
     fileInputRef.current.click();
   };
   const postCsvDataToAPI = async (csvData) => {
@@ -627,17 +638,14 @@ const Lead = () => {
           autoClose: 2000,
         });
         getAllAcademy();
-        // You can add further logic here if needed
       } else {
         toast.error("Some Error Occured", {
           position: "top-center",
           autoClose: 2000,
         });
-        // Handle the error as needed
       }
     } catch (error) {
       console.error("Error posting CSV data:", error);
-      // Handle the error as needed
     }
   };
 
@@ -910,7 +918,7 @@ const Lead = () => {
         <div className="main-cards">
           <div className="cards-new">
             <p className="DealName">
-              {item?.stage}({statusCounts[item?.id]})
+              {item?.stage}({statusCounts[item.stage]})
             </p>
             {statusCounts[item?.id] > 0 && (
               <label className="custom-checkbox">
@@ -938,6 +946,7 @@ const Lead = () => {
                     selectedIds={selectedIds}
                     setSelectedIds={setSelectedIds}
                     onLeadAdded={getAllAcademy}
+                    itemName={"academy"}
                     userData={userData}
                   />
                 ));
@@ -952,17 +961,18 @@ const Lead = () => {
               //       userData={userData}
               //     />
               //   ));
-              // case 'coach':
-              //   return coach?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       selectedIds={selectedIds}
-              //       setSelectedIds={setSelectedIds}
-              //       onLeadAdded={getAllCoach}
-              //       userData={userData}
-              //     />
-              //   ));
+              case 'coach':
+                return coach?.map((obj) => (
+                  <LeadCards
+                    key={obj?.id}
+                    object={obj}
+                    selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                    onLeadAdded={getAllCoaches}
+                    itemName={"coach"}
+                    userData={userData}
+                  />
+                ));
               // case 'user':
               //   return user?.map((obj) => (
               //     <LeadCards

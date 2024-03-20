@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import LeadModal from "../lead/LeadModal.jsx";
 import LeadDeletePopUp from "../DeleteComponent.jsx";
 import axios from "axios";
-import {UPDATE_LEAD, MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
+import { UPDATE_LEAD, MOVELEAD_TO_TRASH, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
@@ -16,9 +16,9 @@ const LeadCards = ({
   setSelectedIds,
   status,
   onLeadAdded,
+  itemName,
   userData,
 }) => {
-  // console.log(object)
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef(null);
@@ -51,7 +51,7 @@ const LeadCards = ({
         owner: data,
       };
       axios
-      .put(UPDATE_LEAD, body, {
+        .put(UPDATE_LEAD, body, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -91,8 +91,10 @@ const LeadCards = ({
   };
 
   const openModal = (object) => {
-    setModalVisible(true);
-    setSelectedObj(object);
+    if (itemName === "academy") {
+      setModalVisible(true);
+      setSelectedObj(object);
+    }
   };
 
   const closeModal = () => {
@@ -180,9 +182,17 @@ const LeadCards = ({
               <div className="mail sportCap">
                 <p>{object.sport}</p>
               </div>
-              <div className="mail">
-                <p>{object.phone}</p>
-              </div>
+              {itemName === "academy" && (
+                <div className="mail">
+                  <p>{object.phone}</p>
+                </div>
+              )}
+
+              {itemName === "coach" && (
+                <div className="mail">
+                  <p>{object.mobile}</p>
+                </div>
+              )}
               <div className="mail sportCap">
                 <p>{object.city}, {object.state}</p>
               </div>
@@ -263,7 +273,7 @@ const LeadCards = ({
           text="Lead"
           handleConfirmed={handleAssignLead}
           handleDataReceived={handleDataReceived}
-          dataAdded={onLeadAdded}   
+          dataAdded={onLeadAdded}
         />
       )}
     </>

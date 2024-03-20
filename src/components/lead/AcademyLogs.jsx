@@ -17,7 +17,6 @@ const AcademyLogs = (item) => {
             },
         })
             .then((response) => {
-                console.log(response?.data?.data);
                 if (response?.data?.status === 1) {
                     setLogs(response?.data?.data);
                 }
@@ -52,11 +51,6 @@ const AcademyLogs = (item) => {
                                             : "-"}
                                     </p>
                                 </div>
-                                {/* <div className="notes-date logDivs">
-                                    <p>{note?.attr2}</p>
-                                    <p><span className='logHeading'>attr5: </span>{note?.attr5}</p>
-                                    <p><span className='logHeading'>attr6: </span>{note?.attr6}</p>
-                                </div> */}
                             </section>
                         </>))}
                 </div>
