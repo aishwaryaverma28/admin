@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
-import pound from "../../assets/image/british-pound-symbol.svg";
-import Search from "../../assets/image/search.svg";
 import Sort from "../../assets/image/sort.svg";
 import axios from "axios";
 import LeadCards from "./LeadCards";
@@ -17,7 +15,6 @@ import {
   ACADMEY_SEARCH_API,
   GET_LABEL,
   GET_ACTIVE_TEAM_MEM,
-  GET_OWNER_LEAD,
   LOG_RECORD,
 } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
@@ -25,6 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ExcelJS from "exceljs";
 import Papa from "papaparse";
 import MassUpdateModal from "./MassUpdateModal.jsx";
+
 
 const Lead = () => {
   const [stages, setStages] = useState([
@@ -34,11 +32,11 @@ const Lead = () => {
     },
     {
       "id": 2,
-      "stage": "player"
+      "stage": "coach"
     },
     {
       "id": 3,
-      "stage": "coach"
+      "stage": "player"
     },
     {
       "id": 4,
@@ -71,14 +69,7 @@ const Lead = () => {
   const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
-  const [display, setDisplay] = useState("Select Owner");
-  const role_name = localStorage.getItem("role_name");
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
-  const [adminInfo, setAdminInfo] = useState({
-    first_name: "",
-    last_name: "",
-    id: 0,
-  });
   const [data, setData] = useState("");
   const [sportsLead, setSportsLead] = useState('');
   const [cityLead, setCityLead] = useState('');
@@ -109,24 +100,7 @@ const Lead = () => {
     setSelectedIds([]);
   };
 
-  const handleOwnerClick = (id, firstName, lastName) => {
-    axios
-      .get(GET_OWNER_LEAD + id, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setDeals(response?.data?.data);
-        const fullName = `${firstName} ${lastName}`;
-        setDisplay(fullName);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    setOwnerOpen(false);
-  };
+  
   //=========================================================get all acadmies
   const getAllAcademy = (sport, city) => {
     const hasSportOrCity = sport || city;
@@ -135,12 +109,12 @@ const Lead = () => {
       ...(sport && { sport }),
       ...(city && { location: city }),
       condition: "conditions",
-      limit_from: "1",
+      limit_from: "0",
       limit_to: "1000",
     } : {
       sport: "football",
       condition: "conditions",
-      limit_from: "1",
+      limit_from: "0",
       limit_to: "1000"
     };
 
@@ -717,46 +691,28 @@ const Lead = () => {
                 </div>
               </span>
             </div>
-            {role_name === "admin" && (
-              <div className="dropdown-container" ref={actionOwnerRef}>
-                <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                  {display}
-                  <i
-                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                      }`}
-                  ></i>
-                </div>
-                {ownerOpen && (
-                  <ul className="dropdown-menu owner-menu">
-                    {userData
-                      ?.slice()
-                      ?.reverse()
-                      ?.map((item) => (
-                        <li
-                          key={item?.id}
-                          value={item?.id}
-                          className="owner-val"
-                          onClick={() =>
-                            handleOwnerClick(
-                              item.id,
-                              item?.first_name.charAt(0).toUpperCase() +
-                              item?.first_name?.slice(1),
-                              item?.last_name?.charAt(0)?.toUpperCase() +
-                              item?.last_name?.slice(1)
-                            )
-                          }
-                        >
-                          {`${item?.first_name?.charAt(0)?.toUpperCase() +
-                            item?.first_name?.slice(1)
-                            } ${item?.last_name?.charAt(0)?.toUpperCase() +
-                            item?.last_name?.slice(1)
-                            }`}
-                        </li>
-                      ))}
-                  </ul>
-                )}
+            <div className="dropdown-container" ref={actionOwnerRef}>
+              <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
+                Select Category
+                <i
+                  className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                ></i>
               </div>
-            )}
+              {ownerOpen && (
+                <ul className="dropdown-menu owner-menu">
+                  {stages?.map((item) => (
+                    <li
+                      key={item?.id}
+                      value={item?.id}
+                      className="owner-val"
+                    >
+                      {item.stage}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
           </div>
           <div className="right-side--btns">

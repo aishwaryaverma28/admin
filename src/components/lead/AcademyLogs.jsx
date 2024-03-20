@@ -39,6 +39,9 @@ const AcademyLogs = (item) => {
                             <section key={note?.id} className="note-display newSectionCss">
                                 <div className="notes-date logDivs">
                                     <p><span className='logHeading'>Id: </span>{note?.id}</p>
+                                    <p><span className='logHeading'>attr2: </span>{note?.attr2}</p>
+                                    <p><span className='logHeading'>attr5: </span>{note?.attr5}</p>
+                                    <p><span className='logHeading'>attr6: </span>{note?.attr6}</p>
                                     <p>
                                         {note?.creation_date &&
                                             note?.creation_date?.includes("T") &&
@@ -49,11 +52,11 @@ const AcademyLogs = (item) => {
                                             : "-"}
                                     </p>
                                 </div>
-                                <div className="notes-date logDivs">
+                                {/* <div className="notes-date logDivs">
                                     <p>{note?.attr2}</p>
                                     <p><span className='logHeading'>attr5: </span>{note?.attr5}</p>
                                     <p><span className='logHeading'>attr6: </span>{note?.attr6}</p>
-                                </div>
+                                </div> */}
                             </section>
                         </>))}
                 </div>
