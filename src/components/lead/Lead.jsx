@@ -45,6 +45,7 @@ const Lead = () => {
     },
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState('academy');
   const orgId = localStorage.getItem('org_id');
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -177,14 +178,18 @@ const getAllCoaches = () => {
 
   useEffect(() => {
     const counts = {
-      academy: acadmey.length,
-      coach: coach.length,
+      academy: acadmey?.length,
+      coach: coach?.length,
       player:0,
       user: 0,
     };
     setStatusCounts(counts);
   }, [acadmey, coach, stages]);
   
+  const handleEntityChange = (entity) => {
+    setSelectedEntity(entity);
+    setSearchQuery('');
+  };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -193,17 +198,28 @@ const getAllCoaches = () => {
     const { value } = event.target;
     setSearchQuery(value);
     
-    if (value.length === 0) {
+    if (value?.length === 0) {
       getAllAcademy();
     } else {
-      if (!toggleChecked && value.length < 3) {
+      if (!toggleChecked && value?.length < 3) {
         return;
       }
-      
-      const apiUrl = toggleChecked
-        ? `https://bmp.leadplaner.com/api/api/bmp/academy/search/id/${value}`
-        : ACADMEY_SEARCH_API + value;
-      
+      let apiUrl = '';
+      if (selectedEntity === 'academy' || selectedEntity === '') {
+        apiUrl = toggleChecked
+          ? `https://bmp.leadplaner.com/api/api/bmp/academy/search/id/${value}`
+          : `${ACADMEY_SEARCH_API}${value}`;
+      } else {
+        const entityMap = {
+          coach: 'bmp_coach_details',
+          player: 'bmp_player_details',
+          user: 'bmp_user',
+        };
+        const entity = entityMap[selectedEntity] || selectedEntity;
+        apiUrl = toggleChecked
+          ? `https://bmp.leadplaner.com/api/api/bmp/${entity}/search/id/${value}`
+          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/${entity}/global/${value}`;
+      }
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
@@ -254,7 +270,7 @@ const getAllCoaches = () => {
   };
 
   const exportToExcel = async () => {
-    if (!deals || deals.length === 0) {
+    if (!deals || deals?.length === 0) {
       console.log("No data to export.");
       return;
     }
@@ -714,6 +730,7 @@ const getAllCoaches = () => {
                       key={item?.id}
                       value={item?.id}
                       className="owner-val"
+                      onClick={() => handleEntityChange(item.stage)}
                     >
                       {item.stage}
                     </li>

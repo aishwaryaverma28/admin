@@ -197,6 +197,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     }, []);
     return (
         <div className="modal">
+        <div className="leftClose" onClick={closeModal}></div>
             <div className="customization_popup_container">
                 <span className="close" onClick={closeModal}>
                     <i className="fa-sharp fa-solid fa-xmark"></i>
