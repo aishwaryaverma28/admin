@@ -24,7 +24,6 @@ import ExcelJS from "exceljs";
 import Papa from "papaparse";
 import MassUpdateModal from "./MassUpdateModal.jsx";
 
-
 const Lead = () => {
   const [stages, setStages] = useState([
     {
@@ -46,6 +45,7 @@ const Lead = () => {
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
+  const [display, setDisplay] = useState("Select Category")
   const orgId = localStorage.getItem('org_id');
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -187,8 +187,10 @@ const getAllCoaches = () => {
   }, [acadmey, coach, stages]);
   
   const handleEntityChange = (entity) => {
+    setDisplay(entity);
     setSelectedEntity(entity);
     setSearchQuery('');
+    setOwnerOpen(false);
   };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -199,7 +201,12 @@ const getAllCoaches = () => {
     setSearchQuery(value);
     
     if (value?.length === 0) {
-      getAllAcademy();
+      if (selectedEntity === 'academy' || selectedEntity === '') {
+        getAllAcademy();
+      } else if (selectedEntity === 'coach') {
+        getAllCoaches();
+      }
+
     } else {
       if (!toggleChecked && value?.length < 3) {
         return;
@@ -217,7 +224,7 @@ const getAllCoaches = () => {
         };
         const entity = entityMap[selectedEntity] || selectedEntity;
         apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/${entity}/search/id/${value}`
+          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/${entity}/id/${value}`
           : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/${entity}/global/${value}`;
       }
       axios.get(apiUrl, {
@@ -226,7 +233,11 @@ const getAllCoaches = () => {
         },
       })
       .then(response => {
-        setAcademy(response?.data?.data);
+        if (selectedEntity === 'academy' || selectedEntity === '') {
+          setAcademy(response?.data?.data);
+        } else if (selectedEntity === 'coach') {
+          setCoach(response?.data?.data);
+        }
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -717,7 +728,7 @@ const getAllCoaches = () => {
             </div>
             <div className="dropdown-container" ref={actionOwnerRef}>
               <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                Select Category
+                {display}
                 <i
                   className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
                     }`}
@@ -960,8 +971,8 @@ const getAllCoaches = () => {
                   <LeadCards
                     key={obj?.id}
                     object={obj}
-                    selectedIds={selectedIds}
-                    setSelectedIds={setSelectedIds}
+                    // selectedIds={selectedIds}
+                    // setSelectedIds={setSelectedIds}
                     onLeadAdded={getAllAcademy}
                     itemName={"academy"}
                     userData={userData}
@@ -983,8 +994,8 @@ const getAllCoaches = () => {
                   <LeadCards
                     key={obj?.id}
                     object={obj}
-                    selectedIds={selectedIds}
-                    setSelectedIds={setSelectedIds}
+                    // selectedIds={selectedIds}
+                    // setSelectedIds={setSelectedIds}
                     onLeadAdded={getAllCoaches}
                     itemName={"coach"}
                     userData={userData}

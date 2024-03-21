@@ -607,7 +607,6 @@
   align-items: center;
   justify-content: center;
   z-index: 9;
-  border: 2px solid red;
 }
 .customization_popup_container {
   position: absolute;
@@ -619,14 +618,12 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-wrap: nowrap;
-  border: 2px solid blueviolet;
 }
 .leftClose{
   position: absolute;
   left: 0;
   top: 0;
   height: 100vh;
-  border: 2px solid yellow;
   width: 40%;
 }
 .close {

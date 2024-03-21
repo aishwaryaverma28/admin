@@ -12,8 +12,6 @@ import AcadmeyLead from "./AcadmeyLead.jsx";
 
 const LeadCards = ({
   object,
-  selectedIds,
-  setSelectedIds,
   status,
   onLeadAdded,
   itemName,
@@ -119,25 +117,25 @@ const LeadCards = ({
     };
   }, [isMenuOpen]);
 
-  const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
+  // const handleChildCheckboxChange = (id) => {
+  //   if (selectedIds.includes(id)) {
+  //     setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+  //   } else {
+  //     setSelectedIds([...selectedIds, id]);
+  //   }
+  // };
 
-  // Add a useEffect to update selectedIds when the status changes
-  useEffect(() => {
-    if (selectedIds.includes(object.id) && object.status !== status) {
-      setSelectedIds((prevSelectedIds) =>
-        prevSelectedIds.filter((selectedId) => selectedId !== object.id)
-      );
-    }
-    if (!selectedIds.includes(object.id) && object.status === status) {
-      setSelectedIds([...selectedIds, object.id]);
-    }
-  }, [object.status, status]);
+  // // Add a useEffect to update selectedIds when the status changes
+  // useEffect(() => {
+  //   if (selectedIds.includes(object.id) && object.status !== status) {
+  //     setSelectedIds((prevSelectedIds) =>
+  //       prevSelectedIds.filter((selectedId) => selectedId !== object.id)
+  //     );
+  //   }
+  //   if (!selectedIds.includes(object.id) && object.status === status) {
+  //     setSelectedIds([...selectedIds, object.id]);
+  //   }
+  // }, [object.status, status]);
 
   const handleDeleteLead = () => {
     if (deleteLeadId) {
@@ -230,8 +228,8 @@ const LeadCards = ({
                 type="checkbox"
                 className={`cb1 ${object.status}-card-checkbox`}
                 name={object.id}
-                checked={selectedIds.includes(object.id)}
-                onChange={() => handleChildCheckboxChange(object.id)}
+                // checked={selectedIds.includes(object.id)}
+                // onChange={() => handleChildCheckboxChange(object.id)}
               />
               <span class="checkmark"></span>
             </label>
