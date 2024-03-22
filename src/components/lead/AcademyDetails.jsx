@@ -73,6 +73,7 @@ const AcademyDetails = (selectedItem,) => {
             phone: editedItem?.phone,
             about: editedItem?.about,
             sport: editedItem?.sport,
+            fee: editedItem?.fee,
             experience: editedItem?.experience,
             facebook: editedItem?.facebook,
             instagram: editedItem?.instagram,
@@ -274,6 +275,7 @@ const AcademyDetails = (selectedItem,) => {
                                 <p>Email</p>
                                 <p>Sport</p>
                                 <p>Phone</p>
+                                <p>Fees</p>
                                 <p>Timing</p>
                                 <p>Experience</p>
                                 <p className="about-textarea">About</p>
@@ -383,7 +385,24 @@ const AcademyDetails = (selectedItem,) => {
                                         </span>
                                     )}
                                 </p>
-
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="fee"
+                                                value={editedItem?.fee}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>
