@@ -257,13 +257,6 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i className="fa-sharp fa-regular fa-envelope-open"></i>
                             Email ({allEmails.length})
                         </button>
-                        <button
-                            className={activeTab === "whatsapp" ? "active" : ""}
-                            onClick={() => handleTabClick("whatsapp")}
-                        >
-                            <i class="fa-sharp fa-regular fab fa-whatsapp"></i>
-                            Whatsapp
-                        </button>
                     </div>
                     {/* ===================================================================tabination content */}
                     <div className="tab-content">

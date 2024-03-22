@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CreateDeal from "../deal/CreateDeal";
 import AssignModal from "./AssignModal.jsx";
 import AcadmeyLead from "./AcadmeyLead.jsx";
+import CoachLead from "./CoachLead.jsx";
 
 const LeadCards = ({
   object,
@@ -19,6 +20,7 @@ const LeadCards = ({
 }) => {
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [coachMenu, setCoachMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -93,12 +95,18 @@ const LeadCards = ({
       setModalVisible(true);
       setSelectedObj(object);
     }
+    if (itemName === "coach") {
+      setCoachMenu(true);
+      setSelectedObj(object);
+    }
   };
 
   const closeModal = () => {
     setModalVisible(false);
   };
-
+  const closeCoachModal = () => {
+    setCoachMenu(false);
+  };
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (
@@ -246,6 +254,12 @@ const LeadCards = ({
           selectedItem={selectedObj}
           closeModal={closeModal}
           onLeadAdded={onLeadAdded}
+        />
+      )}
+      {coachMenu && (
+        <CoachLead
+          selectedItem={selectedObj}
+          closeModal={closeCoachModal}
         />
       )}
       {isDelete && (
