@@ -163,7 +163,7 @@ const CoachDetails = (selectedItem) => {
   };
 
   //======================================================================css variable
-  
+
   const normalStylingSelect1 = {
     color: "white !important",
     fontSize: " 0.8rem",
@@ -647,21 +647,6 @@ const CoachDetails = (selectedItem) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      {/* <select
-                        name="training_location"
-                        id="training_location"
-                        value={editedItem?.training_location || ""}
-                        onChange={handleInputChange}
-                        disabled={isDisabled}
-                        style={
-                          isEditable
-                            ? editStylingSelect1
-                            : normalStylingSelect1
-                        }
-                      >
-                        <option value="1">Online</option>
-                        <option value="2">Home</option>
-                      </select> */}
                       <div className="form-group-radio">
                         <label className="radio-inline">
                           <input
@@ -711,38 +696,37 @@ const CoachDetails = (selectedItem) => {
               </div>
             </div>
           </div>
-          <div className="leadDetailsLeft">
-                    <div className="detailsBox">
-                        <div className="detailsContent">
-                            <div className="detailsLeftContainer">
-                                <p>Skills</p>
-                            </div>
-                            <div className="detailsRightContainer">
-                  <p>
-                    {isLoading ? (
-                      <span>-</span>
-                    ) : (
-                      <span>
-                        <div className="form-group-radio">
-                          {userSkills.map((skill, index) => (
-                            <label className="radio-inline" key={index}>
-                              <input
-                                type="checkbox"
-                                name="userSkills"
-                                value={skill}
-                                className="radio_disable check_input"
-                                disabled={isDisabled}
+          <div className="detailsBox">
+            <p className="detailHead">ADDITIONAL INFORMATION</p>
+            <div className="detailsContent">
+              <div className="detailsLeftContainer">
+                <p>Skills</p>
+              </div>
+              <div className="detailsRightContainer">
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <div className="form-group-radio">
+                        {userSkills.map((skill, index) => (
+                          <label className="radio-inline" key={index}>
+                            <input
+                              type="checkbox"
+                              name="userSkills"
+                              value={skill}
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
                               onChange={handleSkillChange}
                               checked={addedSkils.includes(skill)}
-                              />
-                              {skill}
-                            </label>
-                          ))}
-                        </div>
-                      </span>
-                    )}
-                  </p>
-                </div>
+                            />
+                            {skill}
+                          </label>
+                        ))}
+                      </div>
+                    </span>
+                  )}
+                </p>
               </div>
             </div>
           </div>
