@@ -257,3 +257,5 @@ export const ACADMEY_LEADS_DETAILS = bmpStart + "/bmp/leads/get";
 export const ACADEMY_LOGS = bmpStart +"/bmp/academy/getentity";
 
 export const GET_COACH = bmpStart + "/bmp/getEntities";
+export const GET_COACH_ID = bmpStart+"/bmp/coach/get";
+export const UPDATE_COACH = bmpStart+"/bmp/coach/update/";

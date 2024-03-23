@@ -11,7 +11,7 @@ import { default_about } from "../utils/bmp_about";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
 
-const AcademyDetails = (selectedItem,) => {
+const AcademyDetails = (selectedItem) => {
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
     const [editedItem, setEditedItem] = useState("");

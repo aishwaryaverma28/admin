@@ -33,26 +33,38 @@ const AcademyLogs = (item) => {
         <>
             {logs?.length > 0 && (
                 <div className="savedNotes logsHeight">
-                    {logs?.map((note) => (
-                        <>
-                            <section key={note?.id} className="note-display newSectionCss">
-                                <div className="notes-date logDivs">
-                                    <p><span className='logHeading'>Id: </span>{note?.id}</p>
-                                    <p><span className='logHeading'>attr2: </span>{note?.attr2}</p>
-                                    <p><span className='logHeading'>attr5: </span>{note?.attr5}</p>
-                                    <p><span className='logHeading'>attr6: </span>{note?.attr6}</p>
-                                    <p>
-                                        {note?.creation_date &&
-                                            note?.creation_date?.includes("T") &&
-                                            note?.creation_date?.includes(".")
-                                            ? note?.creation_date?.split("T")[0] +
-                                            " at " +
-                                            note?.creation_date?.split("T")[1]?.split(".")[0]
-                                            : "-"}
-                                    </p>
-                                </div>
-                            </section>
-                        </>))}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className="common-fonts">ID</th>
+                                <th className="common-fonts">Attr2</th>
+                                <th className="common-fonts">Attr3</th>
+                                <th className="common-fonts">Attr5</th>
+                                <th className="common-fonts">Attr6</th>
+                                <th className="common-fonts">Date</th>
+                            </tr>
+                        </thead>
+                        {logs?.map((note) => (
+                            <tr key={note?.id}>
+                                <td className="common-fonts">{note.id}</td>
+                                <td className="common-fonts">
+                                    {note?.attr2}
+                                </td>
+                                <td className="common-fonts">{note?.attr4}</td>
+                                <td className="common-fonts">{note?.attr5}</td>
+                                <td className="common-fonts">{note?.attr6}</td>
+                                <td className="common-fonts">
+                                    {note?.creation_date &&
+                                        note?.creation_date?.includes("T") &&
+                                        note?.creation_date?.includes(".")
+                                        ? note?.creation_date?.split("T")[0] +
+                                        " at " +
+                                        note?.creation_date?.split("T")[1]?.split(".")[0]
+                                        : "-"}
+                                </td>
+                            </tr>
+                        ))}
+                    </table>
                 </div>
             )}
         </>
