@@ -38,7 +38,7 @@ const AcademyLogs = (item) => {
                             <tr>
                                 <th className="common-fonts">ID</th>
                                 <th className="common-fonts">Attr2</th>
-                                <th className="common-fonts">Attr3</th>
+                                <th className="common-fonts">Attr4</th>
                                 <th className="common-fonts">Attr5</th>
                                 <th className="common-fonts">Attr6</th>
                                 <th className="common-fonts">Date</th>

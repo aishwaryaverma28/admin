@@ -17,7 +17,7 @@ const CoachDetails = (selectedItem) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  // const [introduction, setIntroduction] = useState("");
+  const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
   const fetchLead = () => {
     axios
@@ -28,18 +28,12 @@ const CoachDetails = (selectedItem) => {
       })
       .then((response) => {
         console.log(response?.data?.data[0])
-        // const sport = response?.data?.data[0]?.sport;
-        // const academyName = response?.data?.data[0]?.name;
-        // const cityName = response?.data?.data[0]?.city;
-        // const academyObject = default_about?.find(obj => obj.sport === sport);
-        // const updatedAbout = academyObject?.about?.replace(/ACADEMY_NAME/g, academyName);
-        // const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
-        // const intro = removeHtmlTags(finalAbout);
-        // setIntroduction(intro);
-        // if (sport === null || sport === "")
-        // setIntroduction("-")
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
+        if (response?.data?.data[0]?.training_location) {
+          const trainingLocationArray = response.data.data[0].training_location.split(',');
+          setTrainingLocation(trainingLocationArray);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -65,6 +59,17 @@ const CoachDetails = (selectedItem) => {
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
   };
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    if (event.target.checked) {
+      setTrainingLocation(prevLocations => [...prevLocations, value]);
+    } else {
+      setTrainingLocation(prevLocations =>
+        prevLocations.filter(location => location !== value)
+      );
+    }
+    setStateBtn(1);
+  };
 
   const handleUpdateClick = () => {
     const updatedFormData = {
@@ -76,14 +81,13 @@ const CoachDetails = (selectedItem) => {
       fee: editedItem?.fee,
       package: editedItem?.package,
       experience: editedItem?.experience,
-      heighlight:editedItem?.heighlight,
+      heighlight: editedItem?.heighlight,
       facebook: editedItem?.facebook,
       instagram: editedItem?.instagram,
       website: editedItem?.website,
       email: editedItem?.email,
-      spoken_languages: editedItem?.spoken_languages,
       common_location: editedItem?.common_location,
-      address2: editedItem?.address2,
+      training_location: trainingLocation.toString(),
       city: editedItem?.city,
       state: editedItem?.state,
     }
@@ -595,31 +599,12 @@ const CoachDetails = (selectedItem) => {
             <p className="detailHead">ADDRESS INFORMATION</p>
             <div className="detailsContent">
               <div className="detailsLeftContainer">
-                <p>Address 1</p>
                 <p>City</p>
                 <p>State</p>
                 <p>Training Location</p>
                 <p>Common Location</p>
               </div>
               <div className="detailsRightContainer">
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="common_location"
-                        value={editedItem?.common_location}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
                 <p>
                   {isLoading ? (
                     <span>-</span>
@@ -647,6 +632,72 @@ const CoachDetails = (selectedItem) => {
                         type="text"
                         name="state"
                         value={editedItem?.state}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      {/* <select
+                        name="training_location"
+                        id="training_location"
+                        value={editedItem?.training_location || ""}
+                        onChange={handleInputChange}
+                        disabled={isDisabled}
+                        style={
+                          isEditable
+                            ? editStylingSelect1
+                            : normalStylingSelect1
+                        }
+                      >
+                        <option value="1">Online</option>
+                        <option value="2">Home</option>
+                      </select> */}
+                      <div className="form-group-radio">
+                        <label className="radio-inline">
+                          <input
+                            type="checkbox"
+                            name="training_location"
+                            value="1"
+                            className="radio_disable check_input"
+                            disabled={isDisabled}
+                            onChange={handleCheckboxChange}
+                            checked={trainingLocation.includes("1")}
+                          /> Online
+                        </label>
+                        <label className="radio-inline">
+                          <input
+                            type="checkbox"
+                            name="training_location"
+                            value="2"
+                            className="radio_disable check_input"
+                            disabled={isDisabled}
+                            onChange={handleCheckboxChange}
+                            checked={trainingLocation.includes("2")}
+                          /> Home
+                        </label>
+                      </div>
+                    </span>
+                  )}
+                </p>
+                <br />
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="common_location"
+                        value={editedItem?.common_location}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput

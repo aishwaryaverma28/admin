@@ -80,7 +80,6 @@ const AcademyDetails = (selectedItem) => {
             website: editedItem?.website,
             email: editedItem?.email,
             timing: editedItem?.timing,
-            spoken_languages: editedItem?.spoken_languages,
             address1: editedItem?.address1,
             address2: editedItem?.address2,
             city: editedItem?.city,
