@@ -139,19 +139,26 @@ background: #F3F6FA;
   }
   
   .form-group-radio {
+    max-width: 45vw;
     display: flex;
     align-items: center;
     justify-content: start;
     box-sizing: border-box;
+    flex-wrap: wrap;
     gap: 1rem;
     padding-left: 14px;
     padding-right: 14px;
     padding-top: 14px;
   }
-  .radio-inline{
+  .radio-inline{    
+    color: #4b5054;
+    font-family: "Lexend Deca";
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
     margin-right: 20px;
-    font-size: 16px;
-    color: #666;
     display: flex;
     justify-content: start;
     align-items: center;

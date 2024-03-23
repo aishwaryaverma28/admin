@@ -7,6 +7,7 @@ import {
   UPDATE_COACH
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
+import { skills } from '../utils/coachSkils';
 // import { default_about } from "../utils/bmp_about";
 // import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
@@ -19,6 +20,9 @@ const CoachDetails = (selectedItem) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
+  const [userSkills, setUserSkills] = useState([]);
+  const [addedSkils, setAddedSkills] = useState([]);
+
   const fetchLead = () => {
     axios
       .post(GET_COACH_ID, { coachId: selectedItem?.selectedItem?.id }, {
@@ -27,12 +31,22 @@ const CoachDetails = (selectedItem) => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data[0])
+        console.log(response?.data?.data[0]);
+        const sport = response?.data?.data[0]?.sport?.toLowerCase();
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
         if (response?.data?.data[0]?.training_location) {
-          const trainingLocationArray = response.data.data[0].training_location.split(',');
+          const trainingLocationArray = response?.data?.data[0]?.training_location?.split(',');
           setTrainingLocation(trainingLocationArray);
+        }
+        if (response?.data?.data[0]?.skill) {
+          const oldSkill = response?.data?.data[0]?.skill?.split(',');
+          setAddedSkills(oldSkill);
+        }
+        if (sport && skills[sport]) {
+          setUserSkills(skills[sport]);
+        } else {
+          setUserSkills([]);
         }
       })
       .catch((error) => {
@@ -40,7 +54,7 @@ const CoachDetails = (selectedItem) => {
         setIsLoading(false);
       });
   };
-
+  console.log(addedSkils);
   useEffect(() => {
     fetchLead();
   }, []);
@@ -70,7 +84,17 @@ const CoachDetails = (selectedItem) => {
     }
     setStateBtn(1);
   };
-
+  const handleSkillChange = (event) => {
+    const value = event.target.value;
+    if (event.target.checked) {
+      setAddedSkills(prevLocations => [...prevLocations, value]);
+    } else {
+      setAddedSkills(prevLocations =>
+        prevLocations.filter(location => location !== value)
+      );
+    }
+    setStateBtn(1);
+  };
   const handleUpdateClick = () => {
     const updatedFormData = {
       name: editedItem?.name,
@@ -90,6 +114,7 @@ const CoachDetails = (selectedItem) => {
       training_location: trainingLocation.toString(),
       city: editedItem?.city,
       state: editedItem?.state,
+      skill: addedSkils.toString(),
     }
     axios
       .put(UPDATE_COACH + selectedItem?.selectedItem?.id, updatedFormData
@@ -138,31 +163,7 @@ const CoachDetails = (selectedItem) => {
   };
 
   //======================================================================css variable
-  const normalStyling = {
-    textAlign: "left",
-    fontFamily: "Lexend Deca",
-    fontSize: "1.125rem",
-    fontWeight: 500,
-    color: "#1e2224",
-    lineHeight: "17px",
-    border: "1px solid transparent",
-  };
-
-  const editStyling = {
-    border: "1px solid #dcdcdc",
-    textAlign: "left",
-    fontFamily: "Lexend Deca",
-    fontSize: "1.125rem",
-    fontWeight: 500,
-    color: "#1e2224",
-    lineHeight: "17px",
-
-    ":hover": {
-      backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-      transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-      cursor: isHoverDisabled ? "pointer" : "",
-    },
-  };
+  
   const normalStylingSelect1 = {
     color: "white !important",
     fontSize: " 0.8rem",
@@ -278,8 +279,8 @@ const CoachDetails = (selectedItem) => {
           <div className="user-details-imgBox">
             <img
               src={editedItem?.logo === null
-                ? "https://res.cloudinary.com/cloud2cdn/image/upload/q_20/bookmyplayer/default/academy_default_logo.webp"
-                : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${editedItem?.id}/${editedItem?.logo}`}
+                ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
+                : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${editedItem?.id}/${editedItem?.profile_img}`}
               alt="logo"
               className="bmp-preview-image logoRound"
             />
@@ -707,6 +708,41 @@ const CoachDetails = (selectedItem) => {
                     </span>
                   )}
                 </p>
+              </div>
+            </div>
+          </div>
+          <div className="leadDetailsLeft">
+                    <div className="detailsBox">
+                        <div className="detailsContent">
+                            <div className="detailsLeftContainer">
+                                <p>Skills</p>
+                            </div>
+                            <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <div className="form-group-radio">
+                          {userSkills.map((skill, index) => (
+                            <label className="radio-inline" key={index}>
+                              <input
+                                type="checkbox"
+                                name="userSkills"
+                                value={skill}
+                                className="radio_disable check_input"
+                                disabled={isDisabled}
+                              onChange={handleSkillChange}
+                              checked={addedSkils.includes(skill)}
+                              />
+                              {skill}
+                            </label>
+                          ))}
+                        </div>
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
