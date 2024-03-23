@@ -287,7 +287,7 @@ const CoachDetails = (selectedItem) => {
         <div className="user-details--heading">
           <div className="user-details-imgBox">
             <img
-              src={editedItem?.logo === null
+              src={editedItem?.profile_img === null
                 ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
                 : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${editedItem?.id}/${editedItem?.profile_img}`}
               alt="logo"
@@ -380,6 +380,7 @@ const CoachDetails = (selectedItem) => {
                         <option value="archery"></option>
                         <option value="arts"></option>
                         <option value="athletics"></option>
+                        <option value="aerobics"></option>
                         <option value="badminton"></option>
                         <option value="basketball"></option>
                         <option value="bodybuilding"></option>
@@ -409,8 +410,10 @@ const CoachDetails = (selectedItem) => {
                         <option value="volleyball"></option>
                         <option value="wrestling"></option>
                         <option value="yoga"></option>
+                        <option value="Personal Gym Trainer"></option>
+                        <option value="Fitness Training"></option>
+                        <option value="Pilates"></option>
                       </datalist>
-
                     </span>
                   )}
                 </p>
