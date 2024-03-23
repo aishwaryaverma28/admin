@@ -62,3 +62,17 @@ margin-bottom: 0.7rem;
     font-size: 0.8rem;
  color: #2b74da;;
 }
+
+.logsHeight table th{
+    background-color: #f4f5f9;
+    text-align: left;
+}
+
+
+.logsHeight table td:nth-child(1),
+.logsHeight table td:nth-child(2),
+.logsHeight table td:nth-child(3),
+.logsHeight table td:nth-child(4),
+.logsHeight table td:nth-child(5){
+  border-right: 1px solid transparent;
+}
