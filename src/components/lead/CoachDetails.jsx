@@ -65,6 +65,15 @@ const CoachDetails = (selectedItem) => {
       ...editedItem,
       [name]: value,
     });
+    if (name === "sport") {
+      const sport = value.toLowerCase();
+      if (skills[sport]) {
+        setUserSkills(skills[sport]);
+      } else {
+        setUserSkills([]);
+      }
+      setAddedSkills([]); // Assuming you want to clear added skills when sport changes
+    }
     setStateBtn(1);
   };
 
