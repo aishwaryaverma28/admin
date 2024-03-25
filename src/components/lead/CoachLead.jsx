@@ -3,7 +3,6 @@ import CoachDetails from './CoachDetails';
 import CoachImage from './CoachImage';
 
 const CoachLead = ({ selectedItem, closeModal }) => {
-    console.log(selectedItem)
     const [activeTab, setActiveTab] = useState("details");
     const handleTabClick = (tab) => {
         setActiveTab(tab);

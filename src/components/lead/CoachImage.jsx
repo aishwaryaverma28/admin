@@ -22,10 +22,6 @@ const CoachImage = (item) => {
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
-    const fileBannerRef = useRef(null);
-    const [bannerUploading, setBannerUploading] = useState(false);
-    const [selectedBannerFile, setSelectedBannerFile] = useState(null);
-    const [bannerName, setBannerName] = useState("");
     const fileInputRef2 = useRef(null);
     const [alertShown, setAlertShown] = useState(false);
     const [alertVideoShown, setAlertVideoShown] = useState(false);
@@ -50,8 +46,7 @@ const CoachImage = (item) => {
 
     const academyDetails = () => {
         axios
-            .post(GET_COACH_ID, { academy_id: item?.item?.id }
-                , {
+            .post(GET_COACH_ID, { coachId: item?.item?.id }, {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
                     },
@@ -59,21 +54,25 @@ const CoachImage = (item) => {
             )
             .then((response) => {
                 if (response?.data?.data && response?.data?.data?.length !== 0) {
-                    console.log(response?.data?.data);
                     setAcademyData(response?.data?.data[0]);
-                    setBannerName(response?.data?.data[0]?.banner);
                     if (
-                        response?.data?.data[0]?.photos !== "" &&
-                        response?.data?.data[0]?.photos !== null
+                        response?.data?.data[0]?.profile_img !== "" &&
+                        response?.data?.data[0]?.profile_img !== null
                     ) {
-                        setPhotoUrls(response?.data?.data[0]?.photos?.split(",")?.reverse());
+                        setFileName(response?.data?.data[0]?.profile_img);
                     }
                     if (
-                        response?.data?.data[0].videos !== "" &&
-                        response?.data?.data[0].videos !== null
+                        response?.data?.data[0]?.photo !== "" &&
+                        response?.data?.data[0]?.photo !== null
                     ) {
-                        setVideoUrls(response.data.data[0].videos?.split(",").reverse());
+                        setPhotoUrls(response?.data?.data[0]?.photo?.split(",")?.reverse());
                     }
+                    // if (
+                    //     response?.data?.data[0].videos !== "" &&
+                    //     response?.data?.data[0].videos !== null
+                    // ) {
+                    //     setVideoUrls(response.data.data[0].videos?.split(",").reverse());
+                    // }
                 }
             })
             .catch((error) => {
@@ -146,66 +145,6 @@ const CoachImage = (item) => {
         }
     };
 
-    //===================================================================for banner upload
-    const handleBannerButtonClick = (event) => {
-        event.preventDefault();
-        fileBannerRef.current.click();
-    };
-
-    const handleBannerChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitBannerImage(event.target.files[0]);
-        }
-    };
-
-    const submitBannerImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            if (selectedImage.size > 2 * 1024 * 1024) {
-                alert(
-                    "Image size should be less than 2MB. Please choose a smaller image."
-                );
-                return;
-            }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
-            setBannerUploading(true);
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    setSelectedBannerFile(selectedImage);
-                    setBannerName(processImageName(selectedImage.name));
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-                .finally(() => {
-                    setBannerUploading(false);
-                });
-        }
-    };
     //=================================================================================photo and video upload
     const showAlertOnce = (message) => {
         if (!alertVideoShown) {
@@ -369,10 +308,9 @@ const CoachImage = (item) => {
 
     const handleSubmit2 = () => {
         const updatedFormData = {
-            logo: fileName,
-            banner: bannerName,
-            photos: photoUrls?.join(","),
-            videos: videoUrls?.join(","),
+            profile_img: fileName,
+            photo: photoUrls?.join(","),
+            // videos: videoUrls?.join(","),
         }
         axios
             .put(UPDATE_COACH + item?.item?.id, updatedFormData
@@ -475,7 +413,7 @@ const CoachImage = (item) => {
                 console.error("API call failed:", error);
             });
     };
-
+console.log(photoUrls);
     return (
         <>
             {/* ================================================================================upload the logo */}
@@ -517,7 +455,7 @@ const CoachImage = (item) => {
                                 </span>
                             ) : (
                                 <span className="common-fonts upload-file-name">
-                                    {fileName ? fileName : academyData?.logo}
+                                    {fileName ? fileName : academyData?.profile_img}
                                     { }
                                 </span>
                             )}
@@ -533,92 +471,19 @@ const CoachImage = (item) => {
                             />
                         </div>
                     )}
-
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <img
                                 src={academyData?.profile_img === null
                                     ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
                                     : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${academyData?.profile_img}`}
-                                alt=""
+                                alt="pofile"
                                 className="bmp-preview-image"
                             />
                         </div>
                     )}
                 </div>
             </section>
-            {/* =============================================================================upload banner */}
-
-            <section>
-                <p className="common-fonts">
-                    Upload banner image
-                </p>
-                <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className="common-fonts common-input contact-tab-input"
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleBannerButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileBannerRef}
-                                onChange={handleBannerChange}
-                            />
-                            {bannerUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {bannerName ? bannerName : academyData?.banner}
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedBannerFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedBannerFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
-
-                    {!selectedBannerFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={item?.item?.banner === null
-                                    ? `https://res.cloudinary.com/cloud2cdn/image/upload/q_20/bookmyplayer/default/${academyData?.sport}_banner.webp`
-                                    : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyData?.id}/${academyData?.banner}`}
-                                alt=""
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
-                </div>
-            </section>
-
             {/* =========================================================multiple photo and video upload */}
             <section>
                 <p className="common-fonts">
@@ -682,7 +547,7 @@ const CoachImage = (item) => {
                                     <div className="bmp-img-name">
                                         <div className="bmp-video">
                                             <img
-                                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyData?.id}/${photo}`}
+                                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         </div>
@@ -713,7 +578,7 @@ const CoachImage = (item) => {
                     </div>
                 )}
             </>
-            <>
+            {/* <>
                 {videoUrls?.length === 0 ? (
                     <div className="support-no-ticket-found">
                         <p className="common-fonts">No videos added</p>
@@ -758,7 +623,7 @@ const CoachImage = (item) => {
                         ))}
                     </div>
                 )}
-            </>
+            </> */}
 
 
             <div className="bmp-bottom-btn">

@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import {
   GET_COACH_ID,
-  handleLogout,
   getDecryptedToken,
   UPDATE_COACH
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
-// import { default_about } from "../utils/bmp_about";
-// import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
-
 const CoachDetails = (selectedItem) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +27,6 @@ const CoachDetails = (selectedItem) => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data[0]);
         const sport = response?.data?.data[0]?.sport?.toLowerCase();
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
@@ -54,7 +49,7 @@ const CoachDetails = (selectedItem) => {
         setIsLoading(false);
       });
   };
-  console.log(addedSkils);
+  
   useEffect(() => {
     fetchLead();
   }, []);
@@ -289,7 +284,7 @@ const CoachDetails = (selectedItem) => {
               src={editedItem?.profile_img === null
                 ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
                 : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${editedItem?.id}/${editedItem?.profile_img}`}
-              alt="logo"
+              alt="pofile"
               className="bmp-preview-image logoRound"
             />
             <div>
