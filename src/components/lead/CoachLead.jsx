@@ -1,5 +1,6 @@
 import React,{ useState } from 'react'
 import CoachDetails from './CoachDetails';
+import CoachImage from './CoachImage';
 
 const CoachLead = ({ selectedItem, closeModal }) => {
     console.log(selectedItem)
@@ -74,6 +75,11 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
                                 <CoachDetails selectedItem={selectedItem} />
+                            </div>
+                        )}
+                        {activeTab === "gallery" && (
+                            <div className="activity-tab-content">
+                                <CoachImage item={selectedItem} />
                             </div>
                         )}
                         </div>
