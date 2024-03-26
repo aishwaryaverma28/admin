@@ -10,6 +10,7 @@ import LeadDeletePopUp from "../DeleteComponent";
 import {
   IMPORT_CSV,
   GET_COACH,
+  ALL_BMP_USER,
   MOVELEAD_TO_TRASH,
   getDecryptedToken,
   ACADMEY_SEARCH,
@@ -79,6 +80,7 @@ const Lead = () => {
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
   const [coach, setCoach] = useState([]);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     getAllAcademy();
@@ -152,6 +154,19 @@ const getAllCoaches = () => {
   });
 }
 
+//=========================================================get all users
+const getAllUsers = () => {
+  axios.post(ALL_BMP_USER, {}, {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`
+    }
+  }
+  ).then((response) => {
+    setUser(response?.data?.data);
+  }).catch((error) => {
+    console.log(error);
+  });
+}
   const handleLoadMore = () => {
     setLimit(prevLimit => prevLimit + 500);
   }
@@ -181,7 +196,7 @@ const getAllCoaches = () => {
       academy: acadmey?.length,
       coach: coach?.length,
       player:0,
-      user: 0,
+      user: user?.length,
     };
     setStatusCounts(counts);
   }, [acadmey, coach, stages]);
@@ -205,8 +220,9 @@ const getAllCoaches = () => {
         getAllAcademy();
       } else if (selectedEntity === 'coach') {
         getAllCoaches();
+      } else if (selectedEntity === 'user') {
+        getAllUsers();
       }
-
     } else {
       if (!toggleChecked && value?.length < 3) {
         return;
@@ -237,6 +253,8 @@ const getAllCoaches = () => {
           setAcademy(response?.data?.data);
         } else if (selectedEntity === 'coach') {
           setCoach(response?.data?.data);
+        }else if (selectedEntity === 'user') {
+          setUser(response?.data?.data);
         }
       })
       .catch(error => {
@@ -404,7 +422,6 @@ const getAllCoaches = () => {
 
   const resetData = () => {
     getAllAcademy();
-    fetchLabelData();
   };
 
   const handleDeletePopUpOpen = () => {
@@ -418,6 +435,7 @@ const getAllCoaches = () => {
     fetchLabelData();
     getAllAcademy();
     getAllCoaches();
+    getAllUsers();
   }, []);
 
   const toggleSortOrder = () => {
@@ -994,24 +1012,21 @@ const getAllCoaches = () => {
                   <LeadCards
                     key={obj?.id}
                     object={obj}
-                    // selectedIds={selectedIds}
-                    // setSelectedIds={setSelectedIds}
                     onLeadAdded={getAllCoaches}
                     itemName={"coach"}
                     userData={userData}
                   />
                 ));
-              // case 'user':
-              //   return user?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       selectedIds={selectedIds}
-              //       setSelectedIds={setSelectedIds}
-              //       onLeadAdded={getAllUser}
-              //       userData={userData}
-              //     />
-              //   ));
+              case 'user':
+                return user?.map((obj) => (
+                  <LeadCards
+                    key={obj?.id}
+                    object={obj}
+                    onLeadAdded={getAllUsers}
+                    itemName={"user"}
+                    userData={userData}
+                  />
+                ));
               default:
                 return null;
             }

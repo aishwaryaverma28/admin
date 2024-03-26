@@ -179,14 +179,14 @@ const LeadCards = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-                {object.id} - {object.name}
+              {itemName === "user" ? object.parent_id : object.id} - {object.name}
               </p>
             </div>
             <div className="lead-value">
             </div>
             <div className="contact-details">
               <div className="mail sportCap">
-                <p>{object.sport}</p>
+                <p>{itemName === "user" ? object.type : object.sport}</p>
               </div>
               {itemName === "academy" && (
                 <div className="mail">
@@ -199,9 +199,11 @@ const LeadCards = ({
                   <p>{object.mobile}</p>
                 </div>
               )}
+              {itemName !== "user" && (
               <div className="mail sportCap">
                 <p>{object.city}, {object.state}</p>
               </div>
+              )}
             </div>
 
             <div className="priorityBox">
