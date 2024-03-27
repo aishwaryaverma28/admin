@@ -5,7 +5,6 @@ import Download from "../../assets/image/download.svg";
 import "../styles/HelpModal.css";
 
 const ServiceRequestTab = ({ ticket, onClose }) => {
-  console.log(ticket);
   return (
     <div className="service-request-container">
       <div className="service-req-modal-box ">
@@ -39,6 +38,10 @@ const ServiceRequestTab = ({ ticket, onClose }) => {
             <div className="service-user-details">
               <p className="common-fonts service-user-name">priority</p>
               <p className="common-fonts">{ticket.priority}</p>
+            </div>
+            <div className="service-user-details">
+              <p className="common-fonts service-user-name">description</p>
+              <p className="common-fonts">{ticket.description}</p>
             </div>
           </div>
           {ticket.status === "Open" ? (

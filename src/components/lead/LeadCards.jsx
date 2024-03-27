@@ -10,6 +10,7 @@ import CreateDeal from "../deal/CreateDeal";
 import AssignModal from "./AssignModal.jsx";
 import AcadmeyLead from "./AcadmeyLead.jsx";
 import CoachLead from "./CoachLead.jsx";
+import UserLead from "./UserLead.jsx";
 
 const LeadCards = ({
   object,
@@ -21,6 +22,7 @@ const LeadCards = ({
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -99,6 +101,10 @@ const LeadCards = ({
       setCoachMenu(true);
       setSelectedObj(object);
     }
+    if (itemName === "user") {
+      setUserMenu(true);
+      setSelectedObj(object);
+    }
   };
 
   const closeModal = () => {
@@ -106,6 +112,9 @@ const LeadCards = ({
   };
   const closeCoachModal = () => {
     setCoachMenu(false);
+  };
+  const closeUserModal = () => {
+    setUserMenu(false);
   };
   useEffect(() => {
     const handleDocumentClick = (event) => {
@@ -179,7 +188,7 @@ const LeadCards = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-              {itemName === "user" ? object.parent_id : object.id} - {object.name}
+              {object.id} - {object.name}
               </p>
             </div>
             <div className="lead-value">
@@ -262,6 +271,12 @@ const LeadCards = ({
         <CoachLead
           selectedItem={selectedObj}
           closeModal={closeCoachModal}
+        />
+      )}
+      {userMenu && (
+        <UserLead
+          selectedItem={selectedObj}
+          closeModal={closeUserModal}
         />
       )}
       {isDelete && (

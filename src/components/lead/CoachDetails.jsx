@@ -7,7 +7,7 @@ import {
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
-const CoachDetails = (selectedItem) => {
+const CoachDetails = (id) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState("");
@@ -21,7 +21,7 @@ const CoachDetails = (selectedItem) => {
 
   const fetchLead = () => {
     axios
-      .post(GET_COACH_ID, { coachId: selectedItem?.selectedItem?.id }, {
+      .post(GET_COACH_ID, { coachId: id?.id }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -120,7 +120,7 @@ const CoachDetails = (selectedItem) => {
       achievement:editedItem?.achievement,
     }
     axios
-      .put(UPDATE_COACH + selectedItem?.selectedItem?.id, updatedFormData
+      .put(UPDATE_COACH + id?.id, updatedFormData
         , {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,

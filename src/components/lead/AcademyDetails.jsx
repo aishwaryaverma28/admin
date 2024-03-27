@@ -11,7 +11,7 @@ import { default_about } from "../utils/bmp_about";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
 
-const AcademyDetails = (selectedItem) => {
+const AcademyDetails = (id) => {
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
     const [editedItem, setEditedItem] = useState("");
@@ -22,7 +22,7 @@ const AcademyDetails = (selectedItem) => {
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
         axios
-            .post(GET_ACADEMY, { academy_id: selectedItem?.selectedItem?.id }, {
+            .post(GET_ACADEMY, { academy_id: id?.id }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -84,9 +84,10 @@ const AcademyDetails = (selectedItem) => {
             address2: editedItem?.address2,
             city: editedItem?.city,
             state: editedItem?.state,
+            postcode: editedItem?.postcode,
         }
         axios
-            .put(UPDATE_ACADEMY + selectedItem?.selectedItem?.id, updatedFormData
+            .put(UPDATE_ACADEMY + id?.id, updatedFormData
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,

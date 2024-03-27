@@ -73,12 +73,12 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                      <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <CoachDetails selectedItem={selectedItem} />
+                                <CoachDetails id={selectedItem?.id} />
                             </div>
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <CoachImage item={selectedItem} />
+                                <CoachImage id={selectedItem?.id} />
                             </div>
                         )}
                         </div>

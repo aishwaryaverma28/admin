@@ -5,7 +5,8 @@ import { GET_COACH_ID, UPDATE_COACH, getDecryptedToken, } from "../utils/Constan
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
-const CoachImage = (item) => {
+const CoachImage = (id) => {
+    console.log(id)
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -46,7 +47,7 @@ const CoachImage = (item) => {
 
     const academyDetails = () => {
         axios
-            .post(GET_COACH_ID, { coachId: item?.item?.id }, {
+            .post(GET_COACH_ID, { coachId: id?.id }, {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
                     },
@@ -65,14 +66,20 @@ const CoachImage = (item) => {
                         response?.data?.data[0]?.photo !== "" &&
                         response?.data?.data[0]?.photo !== null
                     ) {
-                        setPhotoUrls(response?.data?.data[0]?.photo?.split(",")?.reverse());
+                        const files = response?.data?.data[0]?.photo?.split(",");
+                        const uniquePhotoUrls = new Set();
+                        const uniqueVideoUrls = new Set();
+                        files.forEach(file => {
+                            const extension = file.split('.').pop().toLowerCase();
+                            if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                                uniquePhotoUrls.add(file);
+                            } else if (['mov', 'mp4', 'webm', 'ogg'].includes(extension)) {
+                                uniqueVideoUrls.add(file);
+                            }
+                        });
+                        setPhotoUrls(Array.from(uniquePhotoUrls));
+                        setVideoUrls(Array.from(uniqueVideoUrls));
                     }
-                    // if (
-                    //     response?.data?.data[0].videos !== "" &&
-                    //     response?.data?.data[0].videos !== null
-                    // ) {
-                    //     setVideoUrls(response.data.data[0].videos?.split(",").reverse());
-                    // }
                 }
             })
             .catch((error) => {
@@ -80,7 +87,8 @@ const CoachImage = (item) => {
             });
     };
 
-
+console.log(photoUrls);
+console.log(videoUrls)
     useEffect(() => {
         academyDetails();
     }, []);
@@ -111,7 +119,7 @@ const CoachImage = (item) => {
                 );
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/coach/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -200,7 +208,7 @@ const CoachImage = (item) => {
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/coach/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -244,14 +252,14 @@ const CoachImage = (item) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 10 * 1024 * 1024) {
+            if (selectedImage.size > 20 * 1024 * 1024) {
                 showAlertOnce(
                     "Video size should be less than 10MB. Please choose a smaller video."
                 );
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/coach/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -307,13 +315,13 @@ const CoachImage = (item) => {
     };
 
     const handleSubmit2 = () => {
+        const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
             profile_img: fileName,
-            photo: photoUrls?.join(","),
-            // videos: videoUrls?.join(","),
+            photo: allUrls?.join(","),
         }
         axios
-            .put(UPDATE_COACH + item?.item?.id, updatedFormData
+            .put(UPDATE_COACH + id?.id, updatedFormData
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
@@ -363,12 +371,13 @@ const CoachImage = (item) => {
         }
     };
     const updateDataAndCallAPI = (updatedNameArray) => {
-        const updatedNameString = updatedNameArray.reverse().join(",");
+    const combinedDataString = [...updatedNameArray, ...videoUrls].join(",");
+    
         axios
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
-                    photos: updatedNameString,
+                    photo: combinedDataString,
                 },
                 {
                     headers: {
@@ -393,12 +402,12 @@ const CoachImage = (item) => {
         }
     };
     const updateData = (updatedNameArray) => {
-        const updatedNameString = updatedNameArray.reverse().join(",");
+        const combinedDataString = [...updatedNameArray, ...photoUrls].join(",");
         axios
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
-                    videos: updatedNameString,
+                    photo: combinedDataString,
                 },
                 {
                     headers: {
@@ -413,7 +422,7 @@ const CoachImage = (item) => {
                 console.error("API call failed:", error);
             });
     };
-console.log(photoUrls);
+
     return (
         <>
             {/* ================================================================================upload the logo */}
@@ -569,7 +578,7 @@ console.log(photoUrls);
                                     </div>
                                 </div>
                                 <img
-                                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyData?.id}/${photo}`}
+                                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />
@@ -578,13 +587,13 @@ console.log(photoUrls);
                     </div>
                 )}
             </>
-            {/* <>
+            <>
                 {videoUrls?.length === 0 ? (
                     <div className="support-no-ticket-found">
                         <p className="common-fonts">No videos added</p>
                     </div>
                 ) : (
-                    <div className="outerBox">
+                    <div className="outerBox divWidth">
                         {videoUrls?.map((video, index) => (
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
@@ -614,7 +623,7 @@ console.log(photoUrls);
                                 <div className="bmp-player-img">
                                     <video width="270" height="140" controls>
                                         <source
-                                            src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/academy/${academyData?.id}/${video}`}
+                                            src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/coach/${academyData?.id}/${video}`}
                                             type="video/mp4"
                                         />
                                     </video>
@@ -623,9 +632,7 @@ console.log(photoUrls);
                         ))}
                     </div>
                 )}
-            </> */}
-
-
+            </>
             <div className="bmp-bottom-btn">
                 <button
                     className="common-fonts common-white-button"

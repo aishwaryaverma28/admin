@@ -259,15 +259,16 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         </button>
                     </div>
                     {/* ===================================================================tabination content */}
+                    {/* {console.log(selectedItem?.id)} */}
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails selectedItem={selectedItem} />
+                                <AcademyDetails id={selectedItem?.id} />
                             </div>
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <LeadImage item={selectedItem} />
+                                <LeadImage id={selectedItem?.id} />
                             </div>
                         )}
                         {activeTab === "logs" && (

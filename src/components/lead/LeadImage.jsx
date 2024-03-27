@@ -5,7 +5,7 @@ import { GET_ACADEMY, UPDATE_ACADEMY, getDecryptedToken, } from "../utils/Consta
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
-const LeadImage = (item) => {
+const LeadImage = (id) => {
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -50,7 +50,7 @@ const LeadImage = (item) => {
 
     const academyDetails = () => {
         axios
-            .post(GET_ACADEMY, { academy_id: item?.item?.id }
+            .post(GET_ACADEMY, { academy_id: id?.id }
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
@@ -60,25 +60,31 @@ const LeadImage = (item) => {
             .then((response) => {
                 if (response?.data?.data && response?.data?.data?.length !== 0) {
                     setAcademyData(response?.data?.data[0]);
+                    if (
+                        response?.data?.data[0]?.logo !== "" &&
+                        response?.data?.data[0]?.logo !== null
+                    ) {
+                        setFileName(response?.data?.data[0]?.logo);
+                    }
                     setBannerName(response?.data?.data[0]?.banner);
                     if (
                         response?.data?.data[0]?.photos !== "" &&
                         response?.data?.data[0]?.photos !== null
                     ) {
-                        setPhotoUrls(response?.data?.data[0]?.photos?.split(",")?.reverse());
+                        setPhotoUrls(response?.data?.data[0]?.photos?.split(","));
                     }
                     if (
                         response?.data?.data[0].videos !== "" &&
                         response?.data?.data[0].videos !== null
                     ) {
-                        setVideoUrls(response.data.data[0].videos?.split(",").reverse());
+                        setVideoUrls(response?.data?.data[0]?.videos?.split(","));
                     }
                     if (
                         response?.data?.data[0].updated_column !== "" &&
                         response?.data?.data[0].updated_column !== null
                     ) {
                         updatedFields(
-                            response.data.data[0].updated_column?.split(",").reverse()
+                            response?.data?.data[0]?.updated_column?.split(",")
                         );
                     }
                 }
@@ -119,7 +125,7 @@ const LeadImage = (item) => {
                 );
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/academy/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -180,7 +186,7 @@ const LeadImage = (item) => {
                 );
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/academy/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -268,7 +274,7 @@ const LeadImage = (item) => {
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/academy/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -319,7 +325,7 @@ const LeadImage = (item) => {
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/academy/" + item?.item?.id;
+            const folder = "bookmyplayer/academy/" + id?.id;
             const imageNameWithoutExtension = selectedImage.name.replace(
                 /\.[^/.]+$/,
                 ""
@@ -380,9 +386,12 @@ const LeadImage = (item) => {
             banner: bannerName,
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
+            name: academyData?.name,
+            sport: academyData?.sport,
+            city: academyData?.city,
         }
         axios
-            .put(UPDATE_ACADEMY + item?.item?.id, updatedFormData
+            .put(UPDATE_ACADEMY + id?.id, updatedFormData
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
@@ -432,12 +441,15 @@ const LeadImage = (item) => {
         }
     };
     const updateDataAndCallAPI = (updatedNameArray) => {
-        const updatedNameString = updatedNameArray.reverse().join(",");
+        const updatedNameString = updatedNameArray.join(",");
         axios
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
                     photos: updatedNameString,
+                    name: academyData?.name,
+                    sport: academyData?.sport,
+                    city: academyData?.city,
                 },
                 {
                     headers: {
@@ -462,12 +474,15 @@ const LeadImage = (item) => {
         }
     };
     const updateData = (updatedNameArray) => {
-        const updatedNameString = updatedNameArray.reverse().join(",");
+        const updatedNameString = updatedNameArray.join(",");
         axios
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
                     videos: updatedNameString,
+                    name: academyData?.name,
+                    sport: academyData?.sport,
+                    city: academyData?.city,
                 },
                 {
                     headers: {
@@ -615,7 +630,7 @@ const LeadImage = (item) => {
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
                             <img
-                                src={item?.item?.banner === null
+                                src={academyData?.banner === null
                                     ? `https://res.cloudinary.com/cloud2cdn/image/upload/q_20/bookmyplayer/default/${academyData?.sport}_banner.webp`
                                     : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${academyData?.id}/${academyData?.banner}`}
                                 alt=""
