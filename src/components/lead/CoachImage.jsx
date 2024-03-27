@@ -354,21 +354,10 @@ console.log(videoUrls)
             });
     }
     // ==================================================================================delete the phots and videos
-    const handleDeleteOpen = (index, prop) => {
-        setDeleteIndex(index);
-        if (prop === "image") {
-            deleteStrategy();
-        } else if (prop === "video") {
-            deleteVideo();
-        }
-    };
-    const deleteStrategy = () => {
-        if (deleteIndex !== null) {
-            const updatedNameOfStrategy = [...photoUrls];
-            updatedNameOfStrategy.splice(deleteIndex, 1);
-            setPhotoUrls(updatedNameOfStrategy);
-            updateDataAndCallAPI(updatedNameOfStrategy);
-        }
+    const deleteStrategy = (photoToDelete) => {
+        const updatedNameOfStrategy = photoUrls.filter(photo => photo !== photoToDelete);
+        setPhotoUrls(updatedNameOfStrategy);
+        updateDataAndCallAPI(updatedNameOfStrategy);
     };
     const updateDataAndCallAPI = (updatedNameArray) => {
     const combinedDataString = [...updatedNameArray, ...videoUrls].join(",");
@@ -393,13 +382,11 @@ console.log(videoUrls)
             });
     };
 
-    const deleteVideo = () => {
-        if (deleteIndex !== null) {
-            const updatedNameOfStrategy = [...videoUrls];
-            updatedNameOfStrategy.splice(deleteIndex, 1);
-            setPhotoUrls(updatedNameOfStrategy);
-            updateData(updatedNameOfStrategy);
-        }
+    const deleteVideo = (videoToDelete) => {
+        console.log(videoToDelete);
+        const updatedNameOfStrategy = videoUrls.filter(photo => photo !== videoToDelete);
+        setVideoUrls(updatedNameOfStrategy);
+        updateData(updatedNameOfStrategy);
     };
     const updateData = (updatedNameArray) => {
         const combinedDataString = [...updatedNameArray, ...photoUrls].join(",");
@@ -573,7 +560,7 @@ console.log(videoUrls)
                                         <img
                                             src={Trash}
                                             alt=""
-                                            onClick={() => handleDeleteOpen(index, "image")}
+                                            onClick={() => deleteStrategy(photo)}
                                         />
                                     </div>
                                 </div>
@@ -616,7 +603,7 @@ console.log(videoUrls)
                                         <img
                                             src={Trash}
                                             alt=""
-                                            onClick={() => handleDeleteOpen(index, "video")}
+                                            onClick={() => deleteVideo(video)}
                                         />
                                     </div>
                                 </div>

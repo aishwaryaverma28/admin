@@ -424,21 +424,11 @@ const LeadImage = (id) => {
             });
     }
     // ==================================================================================delete the phots and videos
-    const handleDeleteOpen = (index, prop) => {
-        setDeleteIndex(index);
-        if (prop === "image") {
-            deleteStrategy();
-        } else if (prop === "video") {
-            deleteVideo();
-        }
-    };
-    const deleteStrategy = () => {
-        if (deleteIndex !== null) {
-            const updatedNameOfStrategy = [...photoUrls];
-            updatedNameOfStrategy.splice(deleteIndex, 1);
-            setPhotoUrls(updatedNameOfStrategy);
-            updateDataAndCallAPI(updatedNameOfStrategy);
-        }
+    console.log(photoUrls);
+    const deleteStrategy = (photoToDelete) => {
+        const updatedNameOfStrategy = photoUrls.filter(photo => photo !== photoToDelete);
+        setPhotoUrls(updatedNameOfStrategy);
+        updateDataAndCallAPI(updatedNameOfStrategy);
     };
     const updateDataAndCallAPI = (updatedNameArray) => {
         const updatedNameString = updatedNameArray.join(",");
@@ -465,13 +455,10 @@ const LeadImage = (id) => {
             });
     };
 
-    const deleteVideo = () => {
-        if (deleteIndex !== null) {
-            const updatedNameOfStrategy = [...videoUrls];
-            updatedNameOfStrategy.splice(deleteIndex, 1);
-            setPhotoUrls(updatedNameOfStrategy);
+    const deleteVideo = (videoToDelete) => {
+        const updatedNameOfStrategy = videoUrls.filter(photo => photo !== videoToDelete);
+            setVideoUrls(updatedNameOfStrategy);
             updateData(updatedNameOfStrategy);
-        }
     };
     const updateData = (updatedNameArray) => {
         const updatedNameString = updatedNameArray.join(",");
@@ -721,7 +708,7 @@ const LeadImage = (id) => {
                                         <img
                                             src={Trash}
                                             alt=""
-                                            onClick={() => handleDeleteOpen(index, "image")}
+                                            onClick={() => deleteStrategy(photo)}
                                         />
                                     </div>
                                 </div>
@@ -764,7 +751,7 @@ const LeadImage = (id) => {
                                         <img
                                             src={Trash}
                                             alt=""
-                                            onClick={() => handleDeleteOpen(index, "video")}
+                                            onClick={() => deleteVideo(video)}
                                         />
                                     </div>
                                 </div>
