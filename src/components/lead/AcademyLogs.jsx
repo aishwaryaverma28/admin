@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ACADEMY_LOGS, getDecryptedToken } from '../utils/Constants'
 
-const AcademyLogs = (item) => {
+const AcademyLogs = (id) => {
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(null);
 
     const getLogs = () => {
         const body = {
-            entity: "Academy",
-            object_id: item?.item?.id
+            entity: id?.type,
+            object_id: id?.id
         }
         axios.post(ACADEMY_LOGS, body, {
             headers: {

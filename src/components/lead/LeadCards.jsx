@@ -188,14 +188,14 @@ const LeadCards = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-              {object.id} - {object.name}
+                {object.id} - {object.name}
               </p>
             </div>
             <div className="lead-value">
             </div>
             <div className="contact-details">
               <div className="mail sportCap">
-                <p>{itemName === "user" ? object.type : object.sport}</p>
+                <p>{itemName === "user" ? <span> {object.type} - {object.parent_id}</span> : object.sport}</p>
               </div>
               {itemName === "academy" && (
                 <div className="mail">
@@ -209,9 +209,9 @@ const LeadCards = ({
                 </div>
               )}
               {itemName !== "user" && (
-              <div className="mail sportCap">
-                <p>{object.city}, {object.state}</p>
-              </div>
+                <div className="mail sportCap">
+                  <p>{object.city}, {object.state}</p>
+                </div>
               )}
             </div>
 
@@ -247,8 +247,8 @@ const LeadCards = ({
                 type="checkbox"
                 className={`cb1 ${object.status}-card-checkbox`}
                 name={object.id}
-                // checked={selectedIds.includes(object.id)}
-                // onChange={() => handleChildCheckboxChange(object.id)}
+              // checked={selectedIds.includes(object.id)}
+              // onChange={() => handleChildCheckboxChange(object.id)}
               />
               <span class="checkmark"></span>
             </label>

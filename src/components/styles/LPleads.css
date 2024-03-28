@@ -618,13 +618,14 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-wrap: nowrap;
+  width: 60%;
 }
 .leftClose{
   position: absolute;
   left: 0;
   top: 0;
   height: 100vh;
-  width: 50%;
+  width: 40%;
 }
 .close {
   cursor: pointer;
@@ -898,9 +899,9 @@
   background: #fff;
   cursor: pointer;
 }
-/* .user-details--right {
+.user-details--right {
   width: 100%;
-} */
+}
 .tab-content {
   margin-top: 8px;
 }

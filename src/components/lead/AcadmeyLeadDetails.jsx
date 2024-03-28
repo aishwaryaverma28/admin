@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import '../styles/LeadDetails.css';
-const AcadmeyLeadDetails = ({ dealId, leadsDetails }) => {
-    console.log(leadsDetails)
+const AcadmeyLeadDetails = ({ leadsDetails }) => {
     const [isIndex, setIsIndex] = useState(0);
     function accordianClick(id) {
         if (id === isIndex) {

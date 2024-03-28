@@ -37,26 +37,11 @@ const UserLead = ({ selectedItem, closeModal }) => {
                             Images
                         </button>
                         <button
-                            className={activeTab === "logs" ? "active" : ""}
-                            onClick={() => handleTabClick("logs")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            Logs
-                        </button>
-                        <button
                             className={activeTab === "tickets" ? "active" : ""}
                             onClick={() => handleTabClick("tickets")}
                         >
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Tickets
-                        </button>
-                        
-                        <button
-                            className={activeTab === "leads" ? "active" : ""}
-                            onClick={() => handleTabClick("leads")}
-                        >
-                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads
                         </button>
                         <button
                             className={activeTab === "email" ? "active" : ""}

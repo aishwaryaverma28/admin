@@ -6,7 +6,6 @@ import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
 const CoachImage = (id) => {
-    console.log(id)
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -87,8 +86,6 @@ const CoachImage = (id) => {
             });
     };
 
-console.log(photoUrls);
-console.log(videoUrls)
     useEffect(() => {
         academyDetails();
     }, []);

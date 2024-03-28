@@ -228,7 +228,13 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Logs ({logs?.length})
                         </button>
-
+                        <button
+                            className={activeTab === "leads" ? "active" : ""}
+                            onClick={() => handleTabClick("leads")}
+                        >
+                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
+                            Leads ({leads?.length})
+                        </button>
                         <button
                             className={activeTab === "activity" ? "active" : ""}
                             onClick={() => handleTabClick("activity")}
@@ -242,14 +248,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         >
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
                             Notes ({notes})
-                        </button>
-                        <button
-                            className={activeTab === "leads" ? "active" : ""}
-                            onClick={() => handleTabClick("leads")}
-                        >
-                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads ({leads?.length})
-                        </button>
+                        </button>                        
                         <button
                             className={activeTab === "email" ? "active" : ""}
                             onClick={() => handleTabClick("email")}
@@ -259,7 +258,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         </button>
                     </div>
                     {/* ===================================================================tabination content */}
-                    {/* {console.log(selectedItem?.id)} */}
+
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
@@ -273,7 +272,14 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs item={selectedItem}/>
+                                <AcademyLogs id={selectedItem?.id} type={"Academy"}/>
+                            </div>
+                        )}
+                        {activeTab === "leads" && (
+                            <div className="attachment-tab-content">
+                                <AcadmeyLeadDetails
+                                    leadsDetails={leads}
+                                />
                             </div>
                         )}
                         {activeTab === "activity" && (
@@ -311,14 +317,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                                 />
                             </div>
                         )}
-                        {activeTab === "leads" && (
-                            <div className="attachment-tab-content">
-                                <AcadmeyLeadDetails
-                                    dealId={selectedItem}
-                                    leadsDetails={leads}
-                                />
-                            </div>
-                        )}
+                        
                     </div>
                 </div>
             </div>
