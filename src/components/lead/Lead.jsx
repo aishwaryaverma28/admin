@@ -139,8 +139,8 @@ const Lead = () => {
 const getAllCoaches = () => {
   const requestBody = {
     "entity": "bmp_coach_details",
-    "limit_from": 1,
-    "limit_to": 500
+    "limit_from": "0",
+    "limit_to": "1000"
 };
   axios.post(GET_COACH, requestBody, {
     headers: {
