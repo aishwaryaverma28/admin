@@ -177,7 +177,7 @@ const LeadModal = ({ onClose, getData }) => {
             <div className="helpContainer">
               <div className="lead_input_box">
                 <div>
-                  <p className="helpTitle">Name <span className="common-fonts redAlert"> *</span></p>
+                  <p className="helpTitle">Name </p>
                   <input
                     type="text"
                     placeholder="Enter Lead Name"
@@ -199,7 +199,7 @@ const LeadModal = ({ onClose, getData }) => {
                   ></input>
                 </div>
                 <div>
-                  <p className="helpTitle">Phone <span className="common-fonts redAlert"> *</span></p>
+                  <p className="helpTitle">Phone </p>
                   <input
                     type="text"
                     placeholder="Enter Lead Phone"
@@ -214,7 +214,7 @@ const LeadModal = ({ onClose, getData }) => {
                   <p className="helpTitle">Address</p>
                   <input
                     type="text"
-                    placeholder="Enter Lead Name"
+                    placeholder="Enter Address"
                     name="address"
                     value={formData?.address}
                     onChange={handleChange}
@@ -231,7 +231,7 @@ const LeadModal = ({ onClose, getData }) => {
                 <div className="lead_text_area">
                   <p className="helpTitle">
                     Description
-                    <span className="common-fonts redAlert"> *</span>
+                    
                   </p>
                   <textarea
                     name="description"
