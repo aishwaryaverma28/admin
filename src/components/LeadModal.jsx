@@ -12,7 +12,7 @@ const LeadModal = ({ onClose, getData }) => {
     object_type: "academy",
     address: "",
     email: "",
-    object_id: "",
+    object_id: null,
     name: "",
     phone: "",
     description: "",
