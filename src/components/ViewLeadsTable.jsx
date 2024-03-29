@@ -216,7 +216,7 @@ const ViewLeadsTable = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="marketing-all-table lead_last_border new_table_1">
+      <div className="marketing-all-table lead_home">
         <table>
           <thead>
             <tr>
@@ -225,8 +225,8 @@ const ViewLeadsTable = ({ onClose }) => {
               <th className="common-fonts">NAME</th>
               <th className="common-fonts">EMAIL</th>
               <th className="common-fonts">OBJ TYPE</th>
-              <th className="common-fonts section_count">ACADMEY ID</th>
-              <th className="common-fonts section_count">PHONE</th>
+              <th className="common-fonts academy_count_table">ACADMEY ID</th>
+              <th className="common-fonts">PHONE</th>
               <th className="common-fonts section_count">DESCRIPTION</th>
             </tr>
           </thead>
