@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
 import { GET_COACH_ID, UPDATE_COACH, getDecryptedToken, } from "../utils/Constants";
@@ -6,6 +7,7 @@ import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
 const CoachImage = (id) => {
+    window.Buffer = window.Buffer || require("buffer").Buffer;
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -18,6 +20,13 @@ const CoachImage = (id) => {
         "video/webm",
         "video/ogg",
     ];
+    const config = {
+        bucketName: "bmpcdn",
+        region: "ap-south-1",
+        dirName: "test/17",
+        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    };
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -116,33 +125,19 @@ const CoachImage = (id) => {
                 );
                 return;
             }
-            const folder = "bookmyplayer/coach/" + id?.id;
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
             setIsUploading(true);
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "coach/" + id?.id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
+                    console.log(data);
                     setSelectedFile(selectedImage);
                     setFileName(processImageName(selectedImage.name));
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsUploading(false);
@@ -205,39 +200,23 @@ const CoachImage = (id) => {
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/coach/" + id?.id;
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
-
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "coach/" + id?.id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
+                    console.log(data);
                     setFileName2(processImageName(selectedImage.name));
                     const imageUrl = processImageName(selectedImage.name);
-                    if (data.secure_url) {
+                    if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
-                        updateField("photos");
                         setStateBtn(1);
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
@@ -249,46 +228,30 @@ const CoachImage = (id) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 20 * 1024 * 1024) {
+            if (selectedImage.size > 10 * 1024 * 1024) {
                 showAlertOnce(
                     "Video size should be less than 10MB. Please choose a smaller video."
                 );
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/coach/" + id?.id;
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
-
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/video/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "coach/" + id?.id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
+                    console.log(data);
                     setFileName2(processImageName(selectedImage.name));
                     const imageUrl = processImageName(selectedImage.name);
-                    if (data.secure_url) {
+                    if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
-                        updateField("videos");
                         setStateBtn(1);
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
@@ -468,8 +431,8 @@ const CoachImage = (id) => {
                         <div className="bmp-image-preview">
                             <img
                                 src={academyData?.profile_img === null
-                                    ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
-                                    : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                                    : `https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
                                 alt="pofile"
                                 className="bmp-preview-image"
                             />
@@ -540,7 +503,7 @@ const CoachImage = (id) => {
                                     <div className="bmp-img-name">
                                         <div className="bmp-video">
                                             <img
-                                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${photo}`}
+                                                src={`https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         </div>
@@ -562,7 +525,7 @@ const CoachImage = (id) => {
                                     </div>
                                 </div>
                                 <img
-                                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${academyData?.id}/${photo}`}
+                                    src={`https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />

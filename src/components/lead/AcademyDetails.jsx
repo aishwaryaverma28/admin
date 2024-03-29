@@ -246,8 +246,8 @@ const AcademyDetails = (id) => {
                     <div className="user-details-imgBox">
                         <img
                             src={editedItem?.logo === null
-                                ? "https://res.cloudinary.com/cloud2cdn/image/upload/q_20/bookmyplayer/default/academy_default_logo.webp"
-                                : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/academy/${editedItem?.id}/${editedItem?.logo}`}
+                                ? "https://bmpcdn.s3.amazonaws.com/default/academy_default_logo.webp"
+                                : `https://bmpcdn.s3.amazonaws.com/academy/${editedItem?.id}/${editedItem?.logo}`}
                             alt="logo"
                             className="bmp-preview-image logoRound"
                         />

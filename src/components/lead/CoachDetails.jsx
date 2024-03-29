@@ -282,8 +282,8 @@ const CoachDetails = (id) => {
           <div className="user-details-imgBox">
             <img
               src={editedItem?.profile_img === null
-                ? "https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/asset/images/logo.svg"
-                : `https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/coach/${editedItem?.id}/${editedItem?.profile_img}`}
+                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
               alt="pofile"
               className="bmp-preview-image logoRound"
             />
