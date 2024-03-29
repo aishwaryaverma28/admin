@@ -76,3 +76,6 @@ margin-bottom: 0.7rem;
 .logsHeight table td:nth-child(5){
   border-right: 1px solid transparent;
 }
+.compressEmail{
+    width: 10rem !important;
+}

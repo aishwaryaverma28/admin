@@ -67,7 +67,7 @@ const ViewLeadsTable = ({ onClose }) => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          // console.log(response?.data?.data?.otpStats[0])
+          console.log(response?.data?.data?.leads)
           setLeadsCount(response?.data?.data?.leads?.reverse());
         }
       })
@@ -149,7 +149,7 @@ const ViewLeadsTable = ({ onClose }) => {
     }
 
     const adjustedEndDate = new Date(endDate);
-    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1); // Add one day to end date
+    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
     const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
 
     getData(startDate, formattedEndDate);
@@ -225,8 +225,8 @@ const ViewLeadsTable = ({ onClose }) => {
               <th className="common-fonts">NAME</th>
               <th className="common-fonts">EMAIL</th>
               <th className="common-fonts">OBJ TYPE</th>
+              <th className="common-fonts section_count">ACADMEY ID</th>
               <th className="common-fonts section_count">PHONE</th>
-              {/* <th className="common-fonts section_count">TYPE</th> */}
               <th className="common-fonts section_count">DESCRIPTION</th>
             </tr>
           </thead>
@@ -240,8 +240,8 @@ const ViewLeadsTable = ({ onClose }) => {
                 <td className="common-fonts">{item?.name}</td>
                 <td className="common-fonts">{item?.email}</td>
                 <td className="common-fonts">{item?.object_type}</td>
+                <td className="common-fonts compressEmail">{item?.object_id}</td>
                 <td className="common-fonts">{item?.phone}</td>
-                {/* <td className="common-fonts">{item?.type}</td> */}
                 <td className="common-fonts">
                   <div className="leads_desc">{item?.description}</div>
                 </td>
