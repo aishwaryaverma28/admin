@@ -446,6 +446,7 @@ const CoachDetails = (id) => {
                             : normalStylingSelect1
                         }
                       >
+                        <option value=""></option>
                         <option value="female">Female</option>
                         <option value="male">Male</option>
                       </select>

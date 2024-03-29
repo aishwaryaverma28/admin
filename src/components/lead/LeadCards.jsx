@@ -19,7 +19,6 @@ const LeadCards = ({
   itemName,
   userData,
 }) => {
-  console.log(object)
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
@@ -204,11 +203,12 @@ const LeadCards = ({
                 </div>
               )}
 
-              {itemName === "coach" && (
+              {(itemName === "coach" || itemName === "player") && (
                 <div className="mail">
                   <p>{object.mobile}</p>
                 </div>
               )}
+
               {itemName !== "user" && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>

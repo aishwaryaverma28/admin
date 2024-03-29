@@ -180,6 +180,7 @@ const getAllUsers = () => {
     }
   }
   ).then((response) => {
+    console.log(response?.data?.data);
     setUser(response?.data?.data);
   }).catch((error) => {
     console.log(error);

@@ -85,6 +85,7 @@ const AcademyDetails = (id) => {
             city: editedItem?.city,
             state: editedItem?.state,
             postcode: editedItem?.postcode,
+            categories:editedItem?.categories,
         }
         axios
             .put(UPDATE_ACADEMY + id?.id, updatedFormData
@@ -274,6 +275,7 @@ const AcademyDetails = (id) => {
                                 <p>Name</p>
                                 <p>Email</p>
                                 <p>Sport</p>
+                                <p>Categories</p>
                                 <p>Phone</p>
                                 <p>Fees</p>
                                 <p>Timing</p>
@@ -364,6 +366,24 @@ const AcademyDetails = (id) => {
                                                 <option value="yoga"></option>
                                             </datalist>
 
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="categories"
+                                                value={editedItem?.categories}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
                                         </span>
                                     )}
                                 </p>
