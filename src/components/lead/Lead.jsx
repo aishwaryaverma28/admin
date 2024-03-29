@@ -80,6 +80,7 @@ const Lead = () => {
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
   const [coach, setCoach] = useState([]);
+  const [player, setPlayer] = useState([]);
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -153,7 +154,24 @@ const getAllCoaches = () => {
     console.log(error);
   });
 }
-
+//=========================================================get all players
+const getAllPlayers = () => {
+  const requestBody = {
+    "entity": "bmp_player_details",
+    "limit_from": "0",
+    "limit_to": "1000"
+};
+  axios.post(GET_COACH, requestBody, {
+    headers: {
+      Authorization: `Bearer ${decryptedToken}`
+    }
+  }
+  ).then((response) => {
+    setPlayer(response?.data?.data);
+  }).catch((error) => {
+    console.log(error);
+  });
+}
 //=========================================================get all users
 const getAllUsers = () => {
   axios.post(ALL_BMP_USER, {}, {
@@ -195,11 +213,11 @@ const getAllUsers = () => {
     const counts = {
       academy: acadmey?.length,
       coach: coach?.length,
-      player:0,
+      player:player?.length,
       user: user?.length,
     };
     setStatusCounts(counts);
-  }, [acadmey, coach, stages]);
+  }, [acadmey, coach,player,user]);
   
   const handleEntityChange = (entity) => {
     setDisplay(entity);
@@ -222,6 +240,8 @@ const getAllUsers = () => {
         getAllCoaches();
       } else if (selectedEntity === 'user') {
         getAllUsers();
+      }else if (selectedEntity === 'player') {
+        getAllPlayers();
       }
     } else {
       if (!toggleChecked && value?.length < 3) {
@@ -255,6 +275,8 @@ const getAllUsers = () => {
           setCoach(response?.data?.data);
         }else if (selectedEntity === 'user') {
           setUser(response?.data?.data);
+        }else if (selectedEntity === 'player') {
+          setPlayer(response?.data?.data);
         }
       })
       .catch(error => {
@@ -435,6 +457,7 @@ const getAllUsers = () => {
     fetchLabelData();
     getAllAcademy();
     getAllCoaches();
+    getAllPlayers();
     getAllUsers();
   }, []);
 
@@ -996,17 +1019,16 @@ const getAllUsers = () => {
                     userData={userData}
                   />
                 ));
-              // case 'player':
-              //   return player?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       selectedIds={selectedIds}
-              //       setSelectedIds={setSelectedIds}
-              //       onLeadAdded={getAllPlayer}
-              //       userData={userData}
-              //     />
-              //   ));
+              case 'player':
+                return player?.map((obj) => (
+                  <LeadCards
+                    key={obj?.id}
+                    object={obj}
+                    onLeadAdded={getAllPlayers}
+                    itemName={"player"}
+                    userData={userData}
+                  />
+                ));
               case 'coach':
                 return coach?.map((obj) => (
                   <LeadCards

@@ -19,6 +19,7 @@ const LeadCards = ({
   itemName,
   userData,
 }) => {
+  console.log(object)
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
