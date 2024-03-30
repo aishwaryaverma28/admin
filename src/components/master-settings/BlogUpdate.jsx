@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
+import S3FileUpload from 'react-s3';
 import axios from "axios";
 import {
   BACKLINKS,
@@ -10,6 +11,7 @@ import {
   GET_TAG,
   GET_TAG_BY_SITE,
   SEC_UPDATE,
+  config,
   getDecryptedToken,
   GET_TAG_CATEGORY,
 } from "../utils/Constants";
@@ -26,6 +28,7 @@ import BackLinks from "./blog/BackLinks";
 
 const BlogUpdate = () => {
   const { id } = useParams();
+  window.Buffer = window.Buffer || require("buffer").Buffer;
   const org_id = localStorage.getItem("org_id");
   // section states
   const editor = useRef(null);
@@ -543,15 +546,13 @@ const BlogUpdate = () => {
       site: "",
       alt: "",
     };
-    console.log(newSection);
     axios
       .post(SEC_ADD + id, newSection, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        console.log(response?.data?.status);
         if (response.data.status === 1) {
           toast.success("Section Added successfully", {
             position: "top-center",
@@ -623,14 +624,13 @@ const BlogUpdate = () => {
       const response = await fetch(BLOG_EDIT + id, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${decryptedToken}`,
         },
-        body: JSON.stringify(updatedFormData), // Convert the data to JSON string
+        body: JSON.stringify(updatedFormData),
       });
 
       const data = await response.json();
-      console.log(data);
       if (data?.status === 1) {
         toast.success("Blog updated successfully", {
           position: "top-center",
@@ -647,29 +647,16 @@ const BlogUpdate = () => {
     }
     setStateBtn(0);
   }
-
   const submitImage2 = (file) => {
     const selectedImage = file;
-    console.log(selectedImage);
     if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
-          setBlogImg2(data?.url);
+          setBlogImg2(data?.location);
           const part = selectedImage.name;
           setBlogImgName(part);
           setFormData((prev) => {
@@ -677,39 +664,28 @@ const BlogUpdate = () => {
           });
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.error(err);
+        })
     }
   };
 
   const submitImage3 = (file) => {
-    const selectedImage = file;
-    if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setBlogImg3(data?.url);
-          setBlogImgName2(selectedImage.name);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
+      const selectedImage = file;
+      if (selectedImage) {
+        const updatedConfig = {
+          ...config,
+          dirName: "blog",
+        };
+        S3FileUpload.uploadFile(selectedImage, updatedConfig)
+          .then((data) => {
+            setBlogImg3(data?.location);
+            setBlogImgName2(selectedImage.name);
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      }
+  }  
 
   const handleFileChange2 = (event) => {
     submitImage2(event.target.files[0]);
@@ -731,35 +707,22 @@ const BlogUpdate = () => {
   const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
-          console.log(data);
-          // Update the image URL in the sectionData state
           const newSectionData = [...sectionData];
           newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.error(err);
+        })
     }
   };
+
   const handleViewSite = (e) => {
     e.preventDefault();
     if (selectSite === "bookmyplayer") {

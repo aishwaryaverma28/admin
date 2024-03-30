@@ -192,7 +192,6 @@ const BlogAdd = () => {
           const newSectionData = [...sectionData];
           newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
-          // setBlogImg(selectedImage.name);
         })
         .catch((err) => {
           console.error(err);
