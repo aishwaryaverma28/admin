@@ -903,6 +903,8 @@
   width: 100%;
 }
 .tab-content {
+  height: 90vh;
+  overflow-y: scroll;
   margin-top: 8px;
 }
 

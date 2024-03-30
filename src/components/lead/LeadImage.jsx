@@ -23,18 +23,18 @@ const LeadImage = (id) => {
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [fileName, setFileName] = useState("");
+    const [fileName, setFileName] = useState(null);
     const fileBannerRef = useRef(null);
     const [bannerUploading, setBannerUploading] = useState(false);
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
-    const [bannerName, setBannerName] = useState("");
+    const [bannerName, setBannerName] = useState(null);
     const fileInputRef2 = useRef(null);
     const [alertShown, setAlertShown] = useState(false);
     const [alertVideoShown, setAlertVideoShown] = useState(false);
     const [isUploadingMulti, setIsUploadingMulti] = useState(false);
     const [photoUrls, setPhotoUrls] = useState([]);
     const [videoUrls, setVideoUrls] = useState([]);
-    const [fileName2, setFileName2] = useState("");
+    const [fileName2, setFileName2] = useState(null);
     const [academyData, setAcademyData] = useState({});
     const [deleteIndex, setDeleteIndex] = useState(null);
 
