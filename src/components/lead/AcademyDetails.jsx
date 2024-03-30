@@ -78,7 +78,7 @@ const AcademyDetails = (id) => {
         }
         setStateBtn(1);
       };
-
+console.log(trainingLocation);
     const handleUpdateClick = () => {
         const updatedFormData = {
             stage: editedItem?.stage,
@@ -480,22 +480,22 @@ const AcademyDetails = (id) => {
                           <input
                             type="checkbox"
                             name="friendly"
-                            value="women_friendly"
+                            value="Women Friendly"
                             className="radio_disable check_input"
                             disabled={isDisabled}
                             onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("women_friendly")}
+                            checked={trainingLocation.includes("Women Friendly")}
                           /> Women Friendly
                         </label>
                         <label className="radio-inline">
                           <input
                             type="checkbox"
                             name="friendly"
-                            value="kids_friendly"
+                            value="Kids Friendly"
                             className="radio_disable check_input"
                             disabled={isDisabled}
                             onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("kids_friendly")}
+                            checked={trainingLocation.includes("Kids Friendly")}
                           /> Kids Friendly
                         </label>
                       </div>
