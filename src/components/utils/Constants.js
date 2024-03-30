@@ -31,7 +31,14 @@ const getDecryptedUserPath = () => {
   return "";
 };
 export { getDecryptedUserPath };
-
+//=============================================================config
+export const config = {
+  bucketName: "bmpcdn",
+  region: "ap-south-1",
+  dirName: "test/17",
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+};
 //=============================================================logout function
 export const handleLogout = () => {
   if (localStorage.length === 0) {

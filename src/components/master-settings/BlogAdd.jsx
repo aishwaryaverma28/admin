@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import S3FileUpload from 'react-s3';
 import axios from "axios";
 import {
   BLOG_ADD,
   GET_TAG,
   GET_TAG_BY_SITE,
+  config,
   getDecryptedToken,
   GET_TAG_CATEGORY,
 } from "../utils/Constants";
@@ -17,6 +19,7 @@ import DynamicTable from "./blog/DynamicTable";
 import Table from "./blog/Table";
 
 const BlogAdd = () => {
+  window.Buffer = window.Buffer || require("buffer").Buffer;
   const org_id = localStorage.getItem("org_id");
   //cloudaniary images
   const fileInputRef = useRef(null);
@@ -149,17 +152,17 @@ const BlogAdd = () => {
     const updatedSelectedTags = [...selectedTags];
     updatedSelectedTags.splice(index, 1);
     setSelectedTags(updatedSelectedTags);
-  
+
     const numbersArray = tagId?.split(",");
     numbersArray?.splice(index, 1);
     const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
-  
+
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
     setTagNames(updatedNames);
   };
-  
+
 
   const getTagBySite = (site) => {
     axios
@@ -176,37 +179,26 @@ const BlogAdd = () => {
       });
   };
 
-  const handleReplaceImage = (event, index) => {
+ const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
+          console.log(data);
           const newSectionData = [...sectionData];
           newSectionData[index].image = selectedImage.name;
           setSectionData(newSectionData);
+          // setBlogImg(selectedImage.name);
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.error(err);
+        })
     }
   };
-
   //===================================================================== function to add date in the form data
   const handleDateChange = (event) => {
     const date = event.target.value;
@@ -301,7 +293,6 @@ const BlogAdd = () => {
     setTableDate(false);
     setDataFromChild(data);
     setStateBtn(1);
-    console.log(data);
   };
 
   const removeHtmlTags = (htmlString) => {
@@ -429,60 +420,37 @@ const BlogAdd = () => {
   const submitImage = (file) => {
     const selectedImage = file;
     if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-      // data.append("overwrite", true);
-
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
           setBlogImg(selectedImage.name);
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.error(err);
+        })
     }
   };
+
   const submitImage2 = (file) => {
     const selectedImage = file;
     if (selectedImage) {
-      const folder = "bookmyplayer/blog";
-      const uniqueFileName = `${folder}/${selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      )}`;
-
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
+          console.log(data)
           setBlogImg2(selectedImage?.name);
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.error(err);
+        })
     }
   };
-
   return (
     <>
       <header className="headerEditor">
@@ -528,7 +496,7 @@ const BlogAdd = () => {
                   className="new_blog_input form_input_blog"
                   disabled
                 />
-                  <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+                <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
                   Url
                   <span className="common-fonts redAlert"> *</span>
                 </label>
@@ -558,7 +526,7 @@ const BlogAdd = () => {
                 onChange={handleChange}
                 className="new_blog_input form_input_blog"
               />
-               <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+              <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
                 Description
                 <span className="common-fonts redAlert"> *</span>
               </label>
@@ -573,7 +541,7 @@ const BlogAdd = () => {
                 onChange={handleChange}
                 className="new_blog_input form_input_blog"
               />
-               <label htmlFor="sport" className="common-fonts blogs-new-label form_label_blog">
+              <label htmlFor="sport" className="common-fonts blogs-new-label form_label_blog">
                 Blog Sport
               </label>
               <datalist id="sports">
@@ -621,7 +589,7 @@ const BlogAdd = () => {
                 onChange={handleChange}
                 className="new_blog_input form_input_blog"
               />
-               <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
+              <label htmlFor="title" className="common-fonts blogs-new-label form_label_blog">
                 Meta Description
               </label>
             </div>
@@ -651,26 +619,26 @@ const BlogAdd = () => {
                   style={{ display: "none" }}
                 />
                 <div className="">
-                <div className="form_group_blog">
-                <input
-                    type="text"
-                    name="sectionTitle"
-                    id="sectiontitle"
-                    placeholder=""
-                    onChange={handleTitle}
-                    value={sectionTitle}
-                    className="new_blog_input form_input_blog"
-                  />
+                  <div className="form_group_blog">
+                    <input
+                      type="text"
+                      name="sectionTitle"
+                      id="sectiontitle"
+                      placeholder=""
+                      onChange={handleTitle}
+                      value={sectionTitle}
+                      className="new_blog_input form_input_blog"
+                    />
                     <label
-                    htmlFor="title"
-                    className="common-fonts blogs-new-label form_label_blog"
-                  >
-                    Section
-                    <span className="common-fonts redAlert"> *</span>
-                  </label>
-                 
-                </div>
-                
+                      htmlFor="title"
+                      className="common-fonts blogs-new-label form_label_blog"
+                    >
+                      Section
+                      <span className="common-fonts redAlert"> *</span>
+                    </label>
+
+                  </div>
+
 
                   <div className="formBtnBox">
                     <div className="blog-url-input-2 blog-sort form_group_blog">
@@ -683,7 +651,7 @@ const BlogAdd = () => {
                         onChange={handleSecSortChange}
                         className="new_blog_input form_input_blog"
                       />
-                        <label
+                      <label
                         htmlFor="title"
                         className="common-fonts blogs-new-label form_label_blog"
                       >
@@ -865,9 +833,8 @@ const BlogAdd = () => {
                     <div className="new_tag" onClick={toggleOwnerDropdown}>
                       {display}
                       <i
-                        className={`fa-sharp fa-solid ${
-                          ownerOpen ? "fa-angle-up" : "fa-angle-down"
-                        }`}
+                        className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
+                          }`}
                       ></i>
                     </div>
                     {ownerOpen && (

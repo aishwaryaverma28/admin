@@ -19,6 +19,7 @@ const AcademyDetails = (id) => {
     const [isEditable, setIsEditable] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
     const [introduction, setIntroduction] = useState("");
+    const [trainingLocation, setTrainingLocation] = useState([]);
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
         axios
@@ -66,6 +67,18 @@ const AcademyDetails = (id) => {
         setIsDisabled(!isDisabled);
     };
 
+    const handleCheckboxChange = (event) => {
+        const value = event.target.value;
+        if (event.target.checked) {
+          setTrainingLocation(prevLocations => [...prevLocations, value]);
+        } else {
+          setTrainingLocation(prevLocations =>
+            prevLocations.filter(location => location !== value)
+          );
+        }
+        setStateBtn(1);
+      };
+
     const handleUpdateClick = () => {
         const updatedFormData = {
             stage: editedItem?.stage,
@@ -85,7 +98,10 @@ const AcademyDetails = (id) => {
             city: editedItem?.city,
             state: editedItem?.state,
             postcode: editedItem?.postcode,
-            categories:editedItem?.categories,
+            facebook: editedItem?.facebook,
+            instagram: editedItem?.instagram,
+            categories: editedItem?.categories,
+            friendly: trainingLocation.toString(),
         }
         axios
             .put(UPDATE_ACADEMY + id?.id, updatedFormData
@@ -134,33 +150,7 @@ const AcademyDetails = (id) => {
     };
 
     //======================================================================css variable
-    const normalStyling = {
-        textAlign: "left",
-        fontFamily: "Lexend Deca",
-        fontSize: "1.125rem",
-        fontWeight: 500,
-        color: "#1e2224",
-        lineHeight: "17px",
-        border: "1px solid transparent",
-    };
-
-    const editStyling = {
-        border: "1px solid #dcdcdc",
-        textAlign: "left",
-        fontFamily: "Lexend Deca",
-        fontSize: "1.125rem",
-        fontWeight: 500,
-        color: "#1e2224",
-        lineHeight: "17px",
-
-        ":hover": {
-            backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-            transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-            cursor: isHoverDisabled ? "pointer" : "",
-        },
-    };
-
-    const normalStylingInput = {
+       const normalStylingInput = {
         color: "#1e2224",
         fontWeight: 400,
         border: "1px solid #dcdcdc",
@@ -280,6 +270,7 @@ const AcademyDetails = (id) => {
                                 <p>Fees</p>
                                 <p>Timing</p>
                                 <p>Experience</p>
+                                <p>Enviornment</p>
                                 <p className="about-textarea">About</p>
                             </div>
                             <div className="detailsRightContainer">
@@ -480,6 +471,38 @@ const AcademyDetails = (id) => {
                                     )}
                                 </p>
                                 <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <div className="form-group-radio">
+                        <label className="radio-inline">
+                          <input
+                            type="checkbox"
+                            name="friendly"
+                            value="women_friendly"
+                            className="radio_disable check_input"
+                            disabled={isDisabled}
+                            onChange={handleCheckboxChange}
+                            checked={trainingLocation.includes("women_friendly")}
+                          /> Women Friendly
+                        </label>
+                        <label className="radio-inline">
+                          <input
+                            type="checkbox"
+                            name="friendly"
+                            value="kids_friendly"
+                            className="radio_disable check_input"
+                            disabled={isDisabled}
+                            onChange={handleCheckboxChange}
+                            checked={trainingLocation.includes("kids_friendly")}
+                          /> Kids Friendly
+                        </label>
+                      </div>
+                    </span>
+                  )}
+                </p>
+                                <p>
                                     {isLoading ? (
                                         <span>-</span>
                                     ) : (
@@ -495,6 +518,53 @@ const AcademyDetails = (id) => {
                                                 }
                                                 disabled={isDisabled}
                                             ></textarea>
+                                        </span>
+                                    )}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="detailsBox">
+                        <p className="detailHead">SOCIAL MEDIA</p>
+                        <div className="detailsContent">
+                            <div className="detailsLeftContainer">
+                                <p>Facebook</p>
+                                <p>Instagram</p>
+                            </div>
+                            <div className="detailsRightContainer">
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="facebook"
+                                                value={editedItem?.facebook}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="instagram"
+                                                value={editedItem?.instagram}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
                                         </span>
                                     )}
                                 </p>

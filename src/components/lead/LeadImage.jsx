@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
-import { GET_ACADEMY, UPDATE_ACADEMY, getDecryptedToken, } from "../utils/Constants";
+import { GET_ACADEMY, UPDATE_ACADEMY,config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -20,13 +20,6 @@ const LeadImage = (id) => {
         "video/webm",
         "video/ogg",
     ];
-    const config = {
-        bucketName: "bmpcdn",
-        region: "ap-south-1",
-        dirName: "test/17",
-        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-    };
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
