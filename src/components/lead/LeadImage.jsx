@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
-import { GET_ACADEMY, UPDATE_ACADEMY,config, getDecryptedToken, } from "../utils/Constants";
+import { GET_ACADEMY, UPDATE_ACADEMY, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -37,17 +37,6 @@ const LeadImage = (id) => {
     const [fileName2, setFileName2] = useState(null);
     const [academyData, setAcademyData] = useState({});
     const [deleteIndex, setDeleteIndex] = useState(null);
-
-    const processImageName = (imageName) => {
-        const nameParts = imageName?.split(".");
-        if (nameParts.length > 1) {
-            const namePart = nameParts?.slice(0, -1)?.join(".");
-            const processedName = namePart?.replace(/[^\w-]/g, "-");
-            return `${processedName}.${nameParts[nameParts.length - 1]}`;
-        } else {
-            return imageName.replace(/[^\w-]/g, "-");
-        }
-    };
 
     const academyDetails = () => {
         axios
@@ -126,9 +115,8 @@ const LeadImage = (id) => {
             console.log(updatedConfig);
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    console.log(data);
                     setSelectedFile(selectedImage);
-                    setFileName(processImageName(selectedImage.name));
+                    setFileName(selectedImage.name);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -138,7 +126,6 @@ const LeadImage = (id) => {
                 });
         }
     };
-
     //===================================================================for banner upload
     const handleBannerButtonClick = (event) => {
         event.preventDefault();
@@ -166,8 +153,6 @@ const LeadImage = (id) => {
                 );
                 return;
             }
-            const fileName = selectedImage.name.replace(/\.[^/.]+$/, "");
-
             setIsUploading(true);
             const updatedConfig = {
                 ...config,
@@ -176,9 +161,10 @@ const LeadImage = (id) => {
             console.log(updatedConfig);
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    console.log(data);
                     setSelectedBannerFile(selectedImage);
-                    setBannerName(processImageName(selectedImage.name));
+                    const imageUrl = data.location;
+                    const imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+                    setBannerName(imageName);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -243,8 +229,8 @@ const LeadImage = (id) => {
             };
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    setFileName2(processImageName(selectedImage.name));
-                    const imageUrl = processImageName(selectedImage.name);
+                    setFileName2(selectedImage.name);
+                    const imageUrl = selectedImage.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
@@ -277,8 +263,8 @@ const LeadImage = (id) => {
             };
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    setFileName2(processImageName(selectedImage.name));
-                    const imageUrl = processImageName(selectedImage.name);
+                    setFileName2(selectedImage.name);
+                    const imageUrl = selectedImage.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);

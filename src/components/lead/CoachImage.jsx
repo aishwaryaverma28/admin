@@ -42,17 +42,6 @@ const CoachImage = (id) => {
     const [academyData, setAcademyData] = useState({});
     const [deleteIndex, setDeleteIndex] = useState(null);
 
-    const processImageName = (imageName) => {
-        const nameParts = imageName?.split(".");
-        if (nameParts.length > 1) {
-            const namePart = nameParts?.slice(0, -1)?.join(".");
-            const processedName = namePart?.replace(/[^\w-]/g, "-");
-            return `${processedName}.${nameParts[nameParts.length - 1]}`;
-        } else {
-            return imageName.replace(/[^\w-]/g, "-");
-        }
-    };
-
     const academyDetails = () => {
         axios
             .post(GET_COACH_ID, { coachId: id?.id }, {
@@ -132,9 +121,8 @@ const CoachImage = (id) => {
             };
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    console.log(data);
                     setSelectedFile(selectedImage);
-                    setFileName(processImageName(selectedImage.name));
+                    setFileName(selectedImage.name);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -207,8 +195,8 @@ const CoachImage = (id) => {
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
                     console.log(data);
-                    setFileName2(processImageName(selectedImage.name));
-                    const imageUrl = processImageName(selectedImage.name);
+                    setFileName2(selectedImage.name);
+                    const imageUrl = selectedImage.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
@@ -242,8 +230,8 @@ const CoachImage = (id) => {
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
                     console.log(data);
-                    setFileName2(processImageName(selectedImage.name));
-                    const imageUrl = processImageName(selectedImage.name);
+                    setFileName2(selectedImage.name);
+                    const imageUrl = selectedImage.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);

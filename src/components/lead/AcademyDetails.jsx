@@ -78,7 +78,6 @@ const AcademyDetails = (id) => {
         }
         setStateBtn(1);
       };
-console.log(trainingLocation);
     const handleUpdateClick = () => {
         const updatedFormData = {
             stage: editedItem?.stage,
