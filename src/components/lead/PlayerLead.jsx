@@ -7,6 +7,7 @@ import {
     handleLogout
 } from "./../utils/Constants";
 import PlayerDetails from './PlayerDetails';
+import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 const PlayerLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
@@ -15,25 +16,25 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-    const getLogs = () => {
-        const body = {
-            entity: "Player",
-            object_id: selectedItem.id
-        }
-        axios.post(ACADEMY_LOGS, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                if (response?.data?.status === 1) {
-                    setLogs(response?.data?.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+    // const getLogs = () => {
+    //     const body = {
+    //         entity: "Player",
+    //         object_id: selectedItem.id
+    //     }
+    //     axios.post(ACADEMY_LOGS, body, {
+    //         headers: {
+    //             Authorization: `Bearer ${decryptedToken}`,
+    //         },
+    //     })
+    //         .then((response) => {
+    //             if (response?.data?.status === 1) {
+    //                 setLogs(response?.data?.data);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
     const fetchLeads = () => {
         const body = {
             object_id: selectedItem.id, object_type: "player",
@@ -58,7 +59,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
             });
     };
     useEffect(() => {
-        getLogs();
+        // getLogs();
         fetchLeads();
     }, [])
   return (
@@ -100,27 +101,6 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length})
                         </button>
-                        <button
-                            className={activeTab === "activity" ? "active" : ""}
-                            onClick={() => handleTabClick("activity")}
-                        >
-                            <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
-                            Activity
-                        </button>
-                        <button
-                            className={activeTab === "notes" ? "active" : ""}
-                            onClick={() => handleTabClick("notes")}
-                        >
-                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
-                            Notes
-                        </button>                        
-                        <button
-                            className={activeTab === "email" ? "active" : ""}
-                            onClick={() => handleTabClick("email")}
-                        >
-                            <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                            Email
-                        </button>
                     </div>
                      {/* ===================================================================tabination content */}
                      <div className="tab-content">
@@ -138,14 +118,14 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                             <div className="activity-tab-content">
                                 <AcademyLogs id={selectedItem?.id} type={"Coach"}/>
                             </div>
-                        )}
+                        )} */}
                         {activeTab === "leads" && (
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
                                     leadsDetails={leads}
                                 />
                             </div>
-                        )} */}
+                        )}
                         </div>
                 </div>
             </div>

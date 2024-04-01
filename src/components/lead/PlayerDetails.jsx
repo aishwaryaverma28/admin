@@ -14,31 +14,36 @@ const PlayerDetails = ({ id }) => {
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
   const [userSkills, setUserSkills] = useState([]);
   const [addedSkils, setAddedSkills] = useState([]);
-    const getAllPlayers = () => {
-        const requestBody = {
-            entity: 'bmp_player_details',
-            limit_from: '0',
-            limit_to: '1000',
-        };
-        axios
-            .post(GET_COACH, requestBody, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`,
-                },
-            })
-            .then((response) => {
-                const players = response?.data?.data;
-                const foundPlayer = players.find((player) => player.id === id);
-                if (foundPlayer) {
-                    setEditedItem(foundPlayer);
-                    setIsLoading(false);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+  
+const getAllPlayers = () => {
+    const requestBody = {
+        entity: 'bmp_player_details',
+        limit_from: '0',
+        limit_to: '1000',
     };
+    axios
+        .post(GET_COACH, requestBody, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+        .then((response) => {
+            const players = response?.data?.data;
+            const foundPlayer = players.find((player) => player.id === id);
+            if (foundPlayer) {
+                foundPlayer.dob = foundPlayer.dob?.split("T")[0];
+                foundPlayer.expiry_date = foundPlayer.expiry_date?.split("T")[0];
+                foundPlayer.join_date = foundPlayer.join_date?.split("T")[0];
+                setEditedItem(foundPlayer);
+                setIsLoading(false);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 
+console.log(editedItem)
     useEffect(() => {
         getAllPlayers();
     }, []);
@@ -51,7 +56,6 @@ const PlayerDetails = ({ id }) => {
         });
         setStateBtn(1);
       };
-    
       const toggleEditable = (e) => {
         e.preventDefault();
         setIsEditable(!isEditable);
@@ -67,9 +71,22 @@ const PlayerDetails = ({ id }) => {
           state: editedItem?.state,
           about: editedItem?.about,
           description: editedItem?.description,
+          agent:editedItem?.agent,
+          awards:editedItem?.awards,
+          career: editedItem?.career,
+          dob: editedItem?.dob,
+          expiry_date: editedItem?.expiry_date,
+          foot:editedItem?.foot,
+          goals:editedItem?.goals,
+          height: editedItem?.height,
+          join_date:editedItem?.join_date,
+          place_of_birth:editedItem?.place_of_birth,
+          position: editedItem?.position,
+          social_profile: editedItem?.social_profile,
+          team_number: editedItem?.team_number,
         }
         axios
-          .put(UPDATE_PLAYER + id?.id, updatedFormData
+          .put(UPDATE_PLAYER + id, updatedFormData
             , {
               headers: {
                 Authorization: `Bearer ${decryptedToken}`,
@@ -259,6 +276,20 @@ const PlayerDetails = ({ id }) => {
                   <p>Email</p>
                   <p>Mobile</p>
                   <p>Sport</p>
+                  <p>Agent</p>
+                  <p>Awards</p>
+                  <p>Career</p>
+                  <p>Current Club</p>
+                  <p>Expire Date</p>
+                  <p>Joining Date</p>
+                  <p>Team Number</p>
+                  <p>Goals</p>
+                  <p>Date of Birth</p>                  
+                  <p>Place of Birth</p>
+                  <p>Foot</p>
+                  <p>Height</p>
+                  <p>Position</p>
+                  <p>Social Link</p>
                   <p className="about-textarea">Description</p>
                   <p className="about-textarea">About</p>
                 </div>
@@ -367,6 +398,258 @@ const PlayerDetails = ({ id }) => {
                           <option value="Fitness Training"></option>
                           <option value="Pilates"></option>
                         </datalist>
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="agent"
+                          value={editedItem?.agent}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="awards"
+                          value={editedItem?.awards}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="career"
+                          value={editedItem?.career}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="current_club"
+                          value={editedItem?.current_club}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="date"
+                          name="expiry_date"
+                          value={editedItem?.expiry_date || ''}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="date"
+                          name="join_date"
+                          value={editedItem?.join_date || ''}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="team_number"
+                          value={editedItem?.team_number}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="goals"
+                          value={editedItem?.goals}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="date"
+                          name="dob"
+                          value={editedItem?.dob || ''}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="place_of_birth"
+                          value={editedItem?.place_of_birth}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="foot"
+                          value={editedItem?.foot}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="height"
+                          value={editedItem?.height}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="position"
+                          value={editedItem?.position}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="social_profile"
+                          value={editedItem?.social_profile}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
                       </span>
                     )}
                   </p>

@@ -92,6 +92,7 @@ const AcademyDetails = (id) => {
             website: editedItem?.website,
             email: editedItem?.email,
             timing: editedItem?.timing,
+            closed_on: editedItem?.closed_on,
             address1: editedItem?.address1,
             address2: editedItem?.address2,
             city: editedItem?.city,
@@ -268,6 +269,7 @@ const AcademyDetails = (id) => {
                                 <p>Phone</p>
                                 <p>Fees</p>
                                 <p>Timing</p>
+                                <p>Closed On</p>
                                 <p>Experience</p>
                                 <p>Enviornment</p>
                                 <p className="about-textarea">About</p>
@@ -422,6 +424,24 @@ const AcademyDetails = (id) => {
                                                 type="text"
                                                 name="timing"
                                                 value={editedItem?.timing}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="closed_on"
+                                                value={editedItem?.closed_on}
                                                 onChange={handleInputChange}
                                                 style={
                                                     isEditable ? editStylingInput : normalStylingInput
