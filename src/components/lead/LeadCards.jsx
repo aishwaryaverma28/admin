@@ -11,6 +11,7 @@ import AssignModal from "./AssignModal.jsx";
 import AcadmeyLead from "./AcadmeyLead.jsx";
 import CoachLead from "./CoachLead.jsx";
 import UserLead from "./UserLead.jsx";
+import PlayerLead from "./PlayerLead.jsx";
 
 const LeadCards = ({
   object,
@@ -23,6 +24,7 @@ const LeadCards = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
+  const [playerMenu, setPlayerMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -105,6 +107,10 @@ const LeadCards = ({
       setUserMenu(true);
       setSelectedObj(object);
     }
+    if (itemName === "player") {
+      setPlayerMenu(true);
+      setSelectedObj(object);
+    }
   };
 
   const closeModal = () => {
@@ -115,6 +121,9 @@ const LeadCards = ({
   };
   const closeUserModal = () => {
     setUserMenu(false);
+  };
+  const closePlayerModal = () => {
+    setPlayerMenu(false);
   };
   useEffect(() => {
     const handleDocumentClick = (event) => {
@@ -278,6 +287,12 @@ const LeadCards = ({
         <UserLead
           selectedItem={selectedObj}
           closeModal={closeUserModal}
+        />
+      )}
+       {playerMenu && (
+        <PlayerLead
+          selectedItem={selectedObj}
+          closeModal={closePlayerModal}
         />
       )}
       {isDelete && (

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
-import { GET_COACH_ID, UPDATE_COACH, getDecryptedToken, } from "../utils/Constants";
+import { GET_COACH_ID, UPDATE_COACH,config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -20,13 +20,6 @@ const CoachImage = (id) => {
         "video/webm",
         "video/ogg",
     ];
-    const config = {
-        bucketName: "bmpcdn",
-        region: "ap-south-1",
-        dirName: "test/17",
-        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-    };
     const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -87,6 +80,17 @@ const CoachImage = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
+    
+    const processImageName = (imageName) => {
+        const nameParts = imageName.split(".");
+        if (nameParts?.length > 1) {
+            const namePart = nameParts.slice(0, -1).join(".");
+            const processedName = namePart.replace(/[^\w-]/g, "-");
+            return `${processedName}.${nameParts[nameParts.length - 1]}`;
+        } else {
+            return imageName.replace(/[^\w-]/g, "-");
+        }
+    };
     //================================================= for logo upload
     const handleButtonClick = (event) => {
         event.preventDefault();
@@ -115,14 +119,17 @@ const CoachImage = (id) => {
                 return;
             }
             setIsUploading(true);
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "coach/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
+                    console.log(data);
                     setSelectedFile(selectedImage);
-                    setFileName(selectedImage.name);
+                    setFileName(modifiedFile.name);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -188,15 +195,17 @@ const CoachImage = (id) => {
                 setIsUploadingMulti(false);
                 return;
             }
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "coach/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     console.log(data);
-                    setFileName2(selectedImage.name);
-                    const imageUrl = selectedImage.name;
+                    setFileName2(modifiedFile.name);
+                    const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
@@ -223,15 +232,17 @@ const CoachImage = (id) => {
                 setIsUploadingMulti(false);
                 return;
             }
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "coach/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     console.log(data);
-                    setFileName2(selectedImage.name);
-                    const imageUrl = selectedImage.name;
+                    setFileName2(modifiedFile.name);
+                    const imageUrl = modifiedFile.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
@@ -420,7 +431,7 @@ const CoachImage = (id) => {
                             <img
                                 src={academyData?.profile_img === null
                                     ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                    : `https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
                                 alt="pofile"
                                 className="bmp-preview-image"
                             />
@@ -491,7 +502,7 @@ const CoachImage = (id) => {
                                     <div className="bmp-img-name">
                                         <div className="bmp-video">
                                             <img
-                                                src={`https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                                src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         </div>
@@ -513,7 +524,7 @@ const CoachImage = (id) => {
                                     </div>
                                 </div>
                                 <img
-                                    src={`https://bmpcdn.s3.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                    src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />
@@ -558,7 +569,7 @@ const CoachImage = (id) => {
                                 <div className="bmp-player-img">
                                     <video width="270" height="140" controls>
                                         <source
-                                            src={`https://res.cloudinary.com/cloud2cdn/video/upload/bookmyplayer/coach/${academyData?.id}/${video}`}
+                                            src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`}
                                             type="video/mp4"
                                         />
                                     </video>

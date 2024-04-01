@@ -25,8 +25,8 @@ const BlogAdd = () => {
   const fileInputRef = useRef(null);
   const fileInputRef2 = useRef(null);
   const fileInputRefs = useRef(null);
-  const [blogImg, setBlogImg] = useState("");
-  const [blogImg2, setBlogImg2] = useState("");
+  const [blogImg, setBlogImg] = useState(null);
+  const [blogImg2, setBlogImg2] = useState(null);
   const [selectSite, setSelectSite] = useState("");
   // section states
   const [sectionTitle, setSectionTitle] = useState("");
@@ -74,6 +74,16 @@ const BlogAdd = () => {
         console.log(error);
       });
   };
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split(".");
+    if (nameParts?.length > 1) {
+        const namePart = nameParts.slice(0, -1).join(".");
+        const processedName = namePart.replace(/[^\w-]/g, "-");
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, "-");
+    }
+};
   // ===================================================================functions for tags addition and removal
 
   const toggleOwnerDropdown = () => {
@@ -182,15 +192,17 @@ const BlogAdd = () => {
  const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
-      const updatedConfig = {
+      const processedFileName = processImageName(selectedImage.name);
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+       const updatedConfig = {
         ...config,
         dirName: "blog",
       };
-      S3FileUpload.uploadFile(selectedImage, updatedConfig)
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
         .then((data) => {
           console.log(data);
           const newSectionData = [...sectionData];
-          newSectionData[index].image = selectedImage.name;
+          newSectionData[index].image = modifiedFile.name;
           setSectionData(newSectionData);
         })
         .catch((err) => {
@@ -419,13 +431,16 @@ const BlogAdd = () => {
   const submitImage = (file) => {
     const selectedImage = file;
     if (selectedImage) {
-      const updatedConfig = {
+      const processedFileName = processImageName(selectedImage.name);
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+       const updatedConfig = {
         ...config,
         dirName: "blog",
       };
-      S3FileUpload.uploadFile(selectedImage, updatedConfig)
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
         .then((data) => {
-          setBlogImg(selectedImage.name);
+          console.log(data)
+          setBlogImg(modifiedFile.name);
         })
         .catch((err) => {
           console.error(err);
@@ -436,14 +451,16 @@ const BlogAdd = () => {
   const submitImage2 = (file) => {
     const selectedImage = file;
     if (selectedImage) {
+      const processedFileName = processImageName(selectedImage.name);
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
       const updatedConfig = {
         ...config,
         dirName: "blog",
       };
-      S3FileUpload.uploadFile(selectedImage, updatedConfig)
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
         .then((data) => {
           console.log(data)
-          setBlogImg2(selectedImage?.name);
+          setBlogImg2(modifiedFile.name);
         })
         .catch((err) => {
           console.error(err);

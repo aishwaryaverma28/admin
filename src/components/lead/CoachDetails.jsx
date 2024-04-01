@@ -293,7 +293,7 @@ const CoachDetails = (id) => {
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.name}, {editedItem?.city}, {editedItem?.state}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}, {editedItem?.state}
                   </>
                 )}
               </p>

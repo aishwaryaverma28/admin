@@ -41,6 +41,7 @@ const AcademyLogs = (id) => {
                                 <th className="common-fonts">Attr4</th>
                                 <th className="common-fonts">Attr5</th>
                                 <th className="common-fonts">Attr6</th>
+                                <th className="common-fonts">Attr7</th>
                                 <th className="common-fonts">Date</th>
                             </tr>
                         </thead>
@@ -53,6 +54,7 @@ const AcademyLogs = (id) => {
                                 <td className="common-fonts">{note?.attr4}</td>
                                 <td className="common-fonts">{note?.attr5}</td>
                                 <td className="common-fonts">{note?.attr6}</td>
+                                <td className="common-fonts">{note?.attr7}</td>
                                 <td className="common-fonts">
                                     {note?.creation_date &&
                                         note?.creation_date?.includes("T") &&

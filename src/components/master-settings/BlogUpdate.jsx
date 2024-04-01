@@ -68,10 +68,10 @@ const BlogUpdate = () => {
     site: "",
     route: "",
   });
-  const [blogImg2, setBlogImg2] = useState("");
-  const [blogImgName, setBlogImgName] = useState("");
-  const [blogImgName2, setBlogImgName2] = useState("");
-  const [blogImg3, setBlogImg3] = useState("");
+  const [blogImg2, setBlogImg2] = useState(null);
+  const [blogImgName, setBlogImgName] = useState(null);
+  const [blogImgName2, setBlogImgName2] = useState(null);
+  const [blogImg3, setBlogImg3] = useState(null);
   const [stateBtn, setStateBtn] = useState(0);
   const [updateStateBtn, setUpdateStateBtn] = useState(0);
   //=================================================================backlink apis
@@ -171,6 +171,16 @@ const BlogUpdate = () => {
     setDataFromChild(updatedContent);
   };
   //======================================================================================================
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split(".");
+    if (nameParts?.length > 1) {
+        const namePart = nameParts.slice(0, -1).join(".");
+        const processedName = namePart.replace(/[^\w-]/g, "-");
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, "-");
+    }
+};
 
   useEffect(() => {
     getBlogInfo();
@@ -650,14 +660,16 @@ const BlogUpdate = () => {
   const submitImage2 = (file) => {
     const selectedImage = file;
     if (selectedImage) {
-      const updatedConfig = {
+      const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+            const updatedConfig = {
         ...config,
         dirName: "blog",
       };
-      S3FileUpload.uploadFile(selectedImage, updatedConfig)
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
         .then((data) => {
           setBlogImg2(data?.location);
-          const part = selectedImage.name;
+          const part = modifiedFile.name;
           setBlogImgName(part);
           setFormData((prev) => {
             return { ...prev, image: part };
@@ -672,14 +684,16 @@ const BlogUpdate = () => {
   const submitImage3 = (file) => {
       const selectedImage = file;
       if (selectedImage) {
-        const updatedConfig = {
+        const processedFileName = processImageName(selectedImage.name);
+        const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+       const updatedConfig = {
           ...config,
           dirName: "blog",
         };
-        S3FileUpload.uploadFile(selectedImage, updatedConfig)
+        S3FileUpload.uploadFile(modifiedFile, updatedConfig)
           .then((data) => {
             setBlogImg3(data?.location);
-            setBlogImgName2(selectedImage.name);
+            setBlogImgName2(modifiedFile.name);
           })
           .catch((err) => {
             console.error(err);
@@ -707,14 +721,16 @@ const BlogUpdate = () => {
   const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
-      const updatedConfig = {
+      const processedFileName = processImageName(selectedImage.name);
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+     const updatedConfig = {
         ...config,
         dirName: "blog",
       };
-      S3FileUpload.uploadFile(selectedImage, updatedConfig)
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
         .then((data) => {
           const newSectionData = [...sectionData];
-          newSectionData[index].image = selectedImage.name;
+          newSectionData[index].image = modifiedFile.name;
           setSectionData(newSectionData);
         })
         .catch((err) => {

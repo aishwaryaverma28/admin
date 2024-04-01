@@ -271,3 +271,4 @@ export const BMP_USER_ID = bmpStart+"/bmp/user/get";
 export const BMP_USER_UPDATE = bmpStart+"/bmp/user/update/";
 export const BMP_USER_DATA = bmpStart+ "/bmp/user/get";
 export const BMP_USER_TICKETS= bmpStart+"/bmp/user/getTickets";
+export const UPDATE_PLAYER = bmpStart+"/bmp/player/update/";

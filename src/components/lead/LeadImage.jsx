@@ -80,6 +80,17 @@ const LeadImage = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
+
+    const processImageName = (imageName) => {
+        const nameParts = imageName.split(".");
+        if (nameParts?.length > 1) {
+            const namePart = nameParts.slice(0, -1).join(".");
+            const processedName = namePart.replace(/[^\w-]/g, "-");
+            return `${processedName}.${nameParts[nameParts.length - 1]}`;
+        } else {
+            return imageName.replace(/[^\w-]/g, "-");
+        }
+    };
     //================================================= for logo upload
     const handleButtonClick = (event) => {
         event.preventDefault();
@@ -108,14 +119,16 @@ const LeadImage = (id) => {
                 return;
             }
             setIsUploading(true);
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     setSelectedFile(selectedImage);
-                    setFileName(selectedImage.name);
+                    setFileName(modifiedFile.name);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -152,21 +165,23 @@ const LeadImage = (id) => {
                 );
                 return;
             }
-            setIsUploading(true);
+            setBannerUploading(true);
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     setSelectedBannerFile(selectedImage);
-                    setBannerName(selectedImage.name);
+                    setBannerName(modifiedFile.name);
                 })
                 .catch((err) => {
                     console.error(err);
                 })
                 .finally(() => {
-                    setIsUploading(false);
+                    setBannerUploading(false);
                 });
         }
     };
@@ -219,14 +234,16 @@ const LeadImage = (id) => {
                 setIsUploadingMulti(false);
                 return;
             }
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
-                    setFileName2(selectedImage.name);
-                    const imageUrl = selectedImage.name;
+                    setFileName2(modifiedFile.name);
+                    const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
@@ -253,14 +270,16 @@ const LeadImage = (id) => {
                 setIsUploadingMulti(false);
                 return;
             }
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
-                    setFileName2(selectedImage.name);
-                    const imageUrl = selectedImage.name;
+                    setFileName2(modifiedFile.name);
+                    const imageUrl = modifiedFile.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
@@ -458,8 +477,8 @@ const LeadImage = (id) => {
                         <div className="bmp-image-preview">
                             <img
                                 src={academyData?.logo === null
-                                    ? "https://bmpcdn.s3.amazonaws.com/default/academy_default_logo.webp"
-                                    : `https://bmpcdn.s3.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
+                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
                                 alt=""
                                 className="bmp-preview-image"
                             />
@@ -529,8 +548,8 @@ const LeadImage = (id) => {
                         <div className="bmp-image-preview">
                             <img
                                 src={academyData?.banner === null
-                                    ? `https://bmpcdn.s3.amazonaws.com/default/${academyData?.sport}_banner.webp`
-                                    : `https://bmpcdn.s3.amazonaws.com/academy/${academyData?.id}/${academyData?.banner}`}
+                                    ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.banner}`}
                                 alt=""
                                 className="bmp-preview-image"
                             />
@@ -602,7 +621,7 @@ const LeadImage = (id) => {
                                     <div className="bmp-img-name">
                                         <div className="bmp-video">
                                             <img
-                                                src={`https://bmpcdn.s3.amazonaws.com/academy/${academyData?.id}/${photo}`}
+                                                src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         </div>
@@ -624,7 +643,7 @@ const LeadImage = (id) => {
                                     </div>
                                 </div>
                                 <img
-                                    src={`https://bmpcdn.s3.amazonaws.com/academy/${academyData?.id}/${photo}`}
+                                    src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />
@@ -669,7 +688,7 @@ const LeadImage = (id) => {
                                 <div className="bmp-player-img">
                                     <video width="270" height="140" controls>
                                         <source
-                                            src={`https://bmpcdn.s3.amazonaws.com/academy/${academyData?.id}/${video}`}
+                                            src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${video}`}
                                             type="video/mp4"
                                         />
                                     </video>

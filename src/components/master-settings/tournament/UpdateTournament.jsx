@@ -15,19 +15,19 @@ const UpdateTournament = () => {
     //==============================================multiple photo upload
     const fileInputRef = useRef(null);
     const [photoUrls, setPhotoUrls] = useState([]);
-    const [fileName, setFileName] = useState("");
+    const [fileName, setFileName] = useState(null);
     const [isUploadingMulti, setIsUploadingMulti] = useState(false);
     const [alertShown, setAlertShown] = useState(false);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const [alertVideoShown, setAlertVideoShown] = useState(false);
     //==================================================logo upload
     const [selectedFile, setSelectedFile] = useState(null);
-    const [fileLogoName, setFileLogoName] = useState("");
+    const [fileLogoName, setFileLogoName] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const fileLogoInputRef = useRef(null);
     //=======================================================banner upload
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
-    const [fileBannerName, setFileBannerName] = useState("");
+    const [fileBannerName, setFileBannerName] = useState(null);
     const [isBannerUploading, setIsBannerUploading] = useState(false);
     const fileBannerInputRef = useRef(null);
 
@@ -138,14 +138,16 @@ const UpdateTournament = () => {
                 setIsUploadingMulti(false);
                 return;
             }
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "league/" + id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
-                    setFileName(selectedImage.name);
-                    const imageUrl = selectedImage.name;
+                    setFileName(modifiedFile.name);
+                    const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
@@ -187,14 +189,16 @@ const UpdateTournament = () => {
                 return;
             }
             setIsUploading(true);
-            const updatedConfig = {
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+           const updatedConfig = {
                 ...config,
                 dirName: "league/" + id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     setSelectedFile(selectedImage);
-                    setFileLogoName(selectedImage.name);
+                    setFileLogoName(modifiedFile.name);
                 })
                 .catch((err) => {
                     console.error(err);
@@ -231,14 +235,16 @@ const UpdateTournament = () => {
                 return;
             }
             setIsBannerUploading(true);
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
                 ...config,
                 dirName: "league/" + id,
             };
-            S3FileUpload.uploadFile(selectedImage, updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
                     setSelectedBannerFile(selectedImage);
-                    setFileBannerName(selectedImage.name);
+                    setFileBannerName(modifiedFile.name);
                 })
                 .catch((err) => {
                     console.error(err);
