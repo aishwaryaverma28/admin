@@ -112,7 +112,6 @@ const LeadImage = (id) => {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            console.log(updatedConfig);
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
                     setSelectedFile(selectedImage);
@@ -158,13 +157,10 @@ const LeadImage = (id) => {
                 ...config,
                 dirName: "academy/" + id?.id,
             };
-            console.log(updatedConfig);
             S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
                     setSelectedBannerFile(selectedImage);
-                    const imageUrl = data.location;
-                    const imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-                    setBannerName(imageName);
+                    setBannerName(selectedImage.name);
                 })
                 .catch((err) => {
                     console.error(err);

@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
+import S3FileUpload from 'react-s3';
 import "../../styles/HelpModal.css";
-import { getDecryptedToken, UPDATE_LEAGUE } from "../../utils/Constants";
+import { getDecryptedToken, config, UPDATE_LEAGUE } from "../../utils/Constants";
 import axios from "axios";
 import Trash from "../../../assets/image/red-bin.svg";
 import { toast, ToastContainer } from "react-toastify";
 
 const TournamentModal = ({ onClose, id }) => {
+  window.Buffer = window.Buffer || require("buffer").Buffer;
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
   //==============================================multiple photo upload
@@ -77,38 +79,22 @@ const TournamentModal = ({ onClose, id }) => {
         setIsUploadingMulti(false);
         return;
       }
-      const folder = "bookmyplayer/league/" + id + "/";
-      const imageNameWithoutExtension = selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      );
-      const sanitizedImageName = imageNameWithoutExtension.replace(
-        /[^\w-]/g,
-        "-"
-      );
-      const uniqueFileName = `${folder}/${sanitizedImageName}`;
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
-
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "league/" + id,
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
-          setFileName(processImageName(selectedImage.name));
-          const imageUrl = processImageName(selectedImage.name);
-          if (data.secure_url) {
-            photoUrls.push(imageUrl);
+          setFileName(selectedImage.name);
+          const imageUrl = selectedImage.name;
+          if (data.location) {
+            photoUrls?.push(imageUrl);
             setPhotoUrls(photoUrls);
             setStateBtn(1);
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .finally(() => {
           setIsUploadingMulti(false);
@@ -132,6 +118,7 @@ const TournamentModal = ({ onClose, id }) => {
       submitLogoImage(event.target.files[0]);
     }
   };
+
   const submitLogoImage = (file) => {
     const selectedImage = file;
     if (selectedImage) {
@@ -141,40 +128,24 @@ const TournamentModal = ({ onClose, id }) => {
         );
         return;
       }
-      const folder = "bookmyplayer/league/" + id + "/";
-      const imageNameWithoutExtension = selectedImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      );
-      const sanitizedImageName = imageNameWithoutExtension.replace(
-        /[^\w-]/g,
-        "-"
-      );
-      const uniqueFileName = `${folder}/${sanitizedImageName}`;
-      const data = new FormData();
-      data.append("file", selectedImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
       setIsUploading(true);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "league/" + id,
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
           setSelectedFile(selectedImage);
-          setFileLogoName(processImageName(selectedImage.name));
+          setFileLogoName(selectedImage.name);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .finally(() => {
           setIsUploading(false);
         });
     }
-  };
-
+  }
   //=======================================================banner upload
   const handleBannerButtonClick = (event) => {
     event.preventDefault();
@@ -192,48 +163,32 @@ const TournamentModal = ({ onClose, id }) => {
     }
   };
   const submitBannerImage = (file) => {
-    const selectedBannerImage = file;
-    if (selectedBannerImage) {
-      if (selectedBannerImage.size > 2 * 1024 * 1024) {
+    const selectedImage = file;
+    if (selectedImage) {
+      if (selectedImage.size > 2 * 1024 * 1024) {
         alert(
           "Image size should be less than 2MB. Please choose a smaller image."
         );
         return;
       }
-      const folder = "bookmyplayer/league/" + id + "/";
-      const imageNameWithoutExtension = selectedBannerImage.name.replace(
-        /\.[^/.]+$/,
-        ""
-      );
-      const sanitizedImageName = imageNameWithoutExtension.replace(
-        /[^\w-]/g,
-        "-"
-      );
-      const uniqueFileName = `${folder}/${sanitizedImageName}`;
-      const data = new FormData();
-      data.append("file", selectedBannerImage);
-      data.append("upload_preset", "zbxquqvw");
-      data.append("cloud_name", "cloud2cdn");
-      data.append("public_id", uniqueFileName);
       setIsBannerUploading(true);
-      fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
+      const updatedConfig = {
+        ...config,
+        dirName: "league/" + id,
+      };
+      S3FileUpload.uploadFile(selectedImage, updatedConfig)
         .then((data) => {
-          setSelectedBannerFile(selectedBannerImage);
-          setFileBannerName(processImageName(selectedBannerImage.name));
+          setSelectedBannerFile(selectedImage);
+          setFileBannerName(selectedImage.name);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         })
         .finally(() => {
           setIsBannerUploading(false);
         });
     }
   };
-
   //===================================================================form function
   const handleDelete = (index) => {
     const updatedPhotoUrls = [...photoUrls];
@@ -266,7 +221,7 @@ const TournamentModal = ({ onClose, id }) => {
         setStateBtn(0);
       })
       .catch((error) => {
-                toast.error("some error occured", {
+        toast.error("some error occured", {
           position: "top-center",
           autoClose: 1000,
         });
@@ -320,7 +275,7 @@ const TournamentModal = ({ onClose, id }) => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileLogoName ? fileLogoName : ""}
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
@@ -339,7 +294,7 @@ const TournamentModal = ({ onClose, id }) => {
               {!selectedFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${fileLogoName}`}
+                    src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileLogoName}`}
                     alt="logo"
                     className="bmp-preview-image"
                   />
@@ -384,7 +339,7 @@ const TournamentModal = ({ onClose, id }) => {
                   ) : (
                     <span className="common-fonts upload-file-name">
                       {fileBannerName ? fileBannerName : ""}
-                      {}
+                      { }
                     </span>
                   )}
                 </span>
@@ -403,7 +358,7 @@ const TournamentModal = ({ onClose, id }) => {
               {!selectedBannerFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${fileBannerName}`}
+                    src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileBannerName}`}
                     alt="logo"
                     className="bmp-preview-image"
                   />
@@ -452,7 +407,7 @@ const TournamentModal = ({ onClose, id }) => {
                     <p className="common-fonts bmp-format">
                       Upload image in format png, jpg, jpeg, webp{" "}
                     </p>
-                    {}
+                    { }
                   </span>
                 )}
               </span>
@@ -470,7 +425,7 @@ const TournamentModal = ({ onClose, id }) => {
                     <div className="bmp-img-name">
                       <div className="bmp-video">
                         <img
-                          src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                          src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
                           alt="Selected Preview"
                         />
                       </div>
@@ -492,7 +447,7 @@ const TournamentModal = ({ onClose, id }) => {
                     </div>
                   </div>
                   <img
-                    src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                    src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
                     alt="Selected Preview"
                     key={index}
                   />
@@ -522,7 +477,7 @@ const TournamentModal = ({ onClose, id }) => {
           X
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

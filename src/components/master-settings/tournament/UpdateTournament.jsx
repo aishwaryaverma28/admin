@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import S3FileUpload from 'react-s3';
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
-    getDecryptedToken, UPDATE_LEAGUE, GET_LEAGUE_BY_ID
+    config, getDecryptedToken, UPDATE_LEAGUE, GET_LEAGUE_BY_ID
 } from "../../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import LeftArrow from "../../../assets/image/arrow-left.svg";
@@ -10,6 +11,7 @@ import Trash from "../../../assets/image/red-bin.svg"
 const UpdateTournament = () => {
     const { id } = useParams();
     const decryptedToken = getDecryptedToken();
+    window.Buffer = window.Buffer || require("buffer").Buffer;
     //==============================================multiple photo upload
     const fileInputRef = useRef(null);
     const [photoUrls, setPhotoUrls] = useState([]);
@@ -136,38 +138,22 @@ const UpdateTournament = () => {
                 setIsUploadingMulti(false);
                 return;
             }
-            const folder = "bookmyplayer/league/" + id + "/";
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
-
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "league/" + id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    setFileName(processImageName(selectedImage.name));
-                    const imageUrl = processImageName(selectedImage.name);
-                    if (data.secure_url) {
-                        photoUrls.push(imageUrl);
+                    setFileName(selectedImage.name);
+                    const imageUrl = selectedImage.name;
+                    if (data.location) {
+                        photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
                         setStateBtn(1);
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
@@ -200,39 +186,24 @@ const UpdateTournament = () => {
                 );
                 return;
             }
-            const folder = "bookmyplayer/league/" + id + "/";
-            const imageNameWithoutExtension = selectedImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
             setIsUploading(true);
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "league/" + id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
                     setSelectedFile(selectedImage);
-                    setFileLogoName(processImageName(selectedImage.name));
+                    setFileLogoName(selectedImage.name);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsUploading(false);
                 });
         }
-    };
+    }
 
     //=======================================================banner upload
     const handleBannerButtonClick = (event) => {
@@ -251,48 +222,32 @@ const UpdateTournament = () => {
         }
     };
     const submitBannerImage = (file) => {
-        const selectedBannerImage = file;
-        if (selectedBannerImage) {
-            if (selectedBannerImage.size > 2 * 1024 * 1024) {
+        const selectedImage = file;
+        if (selectedImage) {
+            if (selectedImage.size > 2 * 1024 * 1024) {
                 alert(
                     "Image size should be less than 2MB. Please choose a smaller image."
                 );
                 return;
             }
-            const folder = "bookmyplayer/league/" + id + "/";
-            const imageNameWithoutExtension = selectedBannerImage.name.replace(
-                /\.[^/.]+$/,
-                ""
-            );
-            const sanitizedImageName = imageNameWithoutExtension.replace(
-                /[^\w-]/g,
-                "-"
-            );
-            const uniqueFileName = `${folder}/${sanitizedImageName}`;
-            const data = new FormData();
-            data.append("file", selectedBannerImage);
-            data.append("upload_preset", "zbxquqvw");
-            data.append("cloud_name", "cloud2cdn");
-            data.append("public_id", uniqueFileName);
             setIsBannerUploading(true);
-            fetch("https://api.cloudinary.com/v1_1/cloud2cdn/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
+            const updatedConfig = {
+                ...config,
+                dirName: "league/" + id,
+            };
+            S3FileUpload.uploadFile(selectedImage, updatedConfig)
                 .then((data) => {
-                    setSelectedBannerFile(selectedBannerImage);
-                    setFileBannerName(processImageName(selectedBannerImage.name));
+                    setSelectedBannerFile(selectedImage);
+                    setFileBannerName(selectedImage.name);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                 })
                 .finally(() => {
                     setIsBannerUploading(false);
                 });
         }
     };
-
     //===================================================================form function
     const handleDelete = (index) => {
         const updatedPhotoUrls = [...photoUrls];
@@ -302,14 +257,14 @@ const UpdateTournament = () => {
     }
     const handleViewSite = (e) => {
         e.preventDefault();
-       const siteUrl = formData?.url;
+        const siteUrl = formData?.url;
         if (siteUrl) {
             window.open(siteUrl, '_blank');
         } else {
             alert('Site URL is not available');
         }
     };
-    
+
     function handleChange(event) {
         const { name, value } = event.target;
         setFormData((prev) => {
@@ -492,7 +447,7 @@ const UpdateTournament = () => {
                             {!selectedFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${fileLogoName}`}
+                                        src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileLogoName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -557,7 +512,7 @@ const UpdateTournament = () => {
                             {!selectedBannerFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${fileBannerName}`}
+                                        src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileBannerName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -703,7 +658,7 @@ const UpdateTournament = () => {
                         ></input>
                     </div>
                     <div className='tournamentRight'>
-                        <br/>
+                        <br />
                         <button
                             className="common-fonts blog-add-img add-img-2 update-img"
                             onClick={handleViewSite}
@@ -725,7 +680,7 @@ const UpdateTournament = () => {
                                 <div className="bmp-img-name">
                                     <div className="bmp-video">
                                         <img
-                                            src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                                            src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
                                             alt="Selected Preview"
                                         />
                                     </div>
@@ -747,7 +702,7 @@ const UpdateTournament = () => {
                                 </div>
                             </div>
                             <img
-                                src={`https://res.cloudinary.com/cloud2cdn/image/upload/bookmyplayer/league/${id}/${photo}`}
+                                src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
                                 alt="Selected Preview"
                                 key={index}
                             />
