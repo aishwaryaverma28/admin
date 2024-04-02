@@ -270,7 +270,7 @@ const Acadmey = () => {
 
   return (
     <>
-    {/* <div>
+    <div>
       <section className="lead-body">
         <div className="top-head">
           <div className="left-side--btns">
@@ -504,7 +504,7 @@ const Acadmey = () => {
   ))}
 </section>
       <ToastContainer />
-</div> */}
+</div>
 </>
   );
 };

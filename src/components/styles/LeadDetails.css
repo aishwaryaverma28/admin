@@ -76,7 +76,8 @@ margin-bottom: 0.7rem;
 .logsHeight table td:nth-child(3),
 .logsHeight table td:nth-child(4),
 .logsHeight table td:nth-child(5),
-.logsHeight table td:nth-child(6){
+.logsHeight table td:nth-child(6),
+.logsHeight table td:nth-child(7){
   border-right: 1px solid transparent;
 }
 .compressEmail{

@@ -10,6 +10,7 @@ import {
     ACADMEY_LEADS_DETAILS,
     ACADMEY_ACTIVITY_SOURCE,
     POST_EMAIL,
+    USER_LOG,
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,12 +20,14 @@ import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
 import LeadImage from "./LeadImage.jsx";
 import AcademyDetails from "./AcademyDetails.jsx";
 import AcademyLogs from "./AcademyLogs.jsx";
+import UserLogs from "./UserLogs.jsx";
 
-const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
+const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [editedItem, setEditedItem] = useState("");
     const [activeTab, setActiveTab] = useState("details");
     const [notes, setNotes] = useState(0);
     const [logs, setLogs] = useState(0);
+    const [userLog, setUserLog] = useState(0);
     const [activityCount, setActivityCount] = useState(0);
     const [leads, setLeads] = useState(0);
     const decryptedToken = getDecryptedToken();
@@ -73,8 +76,25 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 console.log(error);
             });
     };
+    const fetchUserLog = () => {
+        axios
+            .post(USER_LOG, { object_type: 2,
+            object_id: selectedItem?.id }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setUserLog(response?.data?.data);
+                console.log(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     useEffect(() => {
+        fetchUserLog();
         handleGetEmail();
     }, []);
 
@@ -229,6 +249,13 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             Logs ({logs?.length})
                         </button>
                         <button
+                            className={activeTab === "user" ? "active" : ""}
+                            onClick={() => handleTabClick("user")}
+                        >
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                            User Logs ({userLog?.length})
+                        </button>
+                        <button
                             className={activeTab === "leads" ? "active" : ""}
                             onClick={() => handleTabClick("leads")}
                         >
@@ -258,7 +285,7 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         </button>
                     </div>
                     {/* ===================================================================tabination content */}
-
+ 
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
@@ -273,6 +300,11 @@ const AcadmeyLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
                                 <AcademyLogs id={selectedItem?.id} type={"Academy"}/>
+                            </div>
+                        )}
+                         {activeTab === "user" && (
+                            <div className="activity-tab-content">
+                                <UserLogs id={selectedItem?.id} type={2}/>
                             </div>
                         )}
                         {activeTab === "leads" && (

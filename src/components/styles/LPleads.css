@@ -892,9 +892,9 @@
   color: #2b74da;
   border-radius: 0.3125rem;
   font-family: "Lexend Deca";
-  font-size: 0.875rem;
+  /* font-size: 0.875rem; */
   font-style: normal;
-  font-weight: 400;
+  /* font-weight: 400; */
   line-height: normal;
   background: #fff;
   cursor: pointer;

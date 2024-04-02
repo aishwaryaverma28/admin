@@ -7,12 +7,14 @@ import {
     ACADEMY_LOGS,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
-    handleLogout
+    handleLogout, USER_LOG
 } from "./../utils/Constants";
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
+import UserLogs from './UserLogs';
 const CoachLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
+    const [userLog, setUserLog] = useState(0);
     const [leads, setLeads] = useState(0);
     const [activeTab, setActiveTab] = useState("details");
     const handleTabClick = (tab) => {
@@ -60,9 +62,26 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
+    const fetchUserLog = () => {
+        axios
+            .post(USER_LOG, { object_type: 1,
+            object_id: selectedItem?.id }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setUserLog(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     useEffect(() => {
         getLogs();
         fetchLeads();
+        fetchUserLog();
     }, [])
     return (
         <div className="modal">
@@ -95,6 +114,13 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         >
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Logs ({logs?.length})
+                        </button>
+                        <button
+                            className={activeTab === "user" ? "active" : ""}
+                            onClick={() => handleTabClick("user")}
+                        >
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                            User Logs ({userLog?.length})
                         </button>
                         <button
                             className={activeTab === "leads" ? "active" : ""}
@@ -140,6 +166,11 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
                                 <AcademyLogs id={selectedItem?.id} type={"Coach"}/>
+                            </div>
+                        )}
+                         {activeTab === "user" && (
+                            <div className="activity-tab-content">
+                                <UserLogs id={selectedItem?.id} type={1}/>
                             </div>
                         )}
                         {activeTab === "leads" && (

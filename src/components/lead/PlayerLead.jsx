@@ -8,6 +8,7 @@ import {
 } from "./../utils/Constants";
 import PlayerDetails from './PlayerDetails';
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
+import AcademyLogs from './AcademyLogs';
 const PlayerLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
@@ -16,25 +17,25 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-    // const getLogs = () => {
-    //     const body = {
-    //         entity: "Player",
-    //         object_id: selectedItem.id
-    //     }
-    //     axios.post(ACADEMY_LOGS, body, {
-    //         headers: {
-    //             Authorization: `Bearer ${decryptedToken}`,
-    //         },
-    //     })
-    //         .then((response) => {
-    //             if (response?.data?.status === 1) {
-    //                 setLogs(response?.data?.data);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }
+    const getLogs = () => {
+        const body = {
+            entity: "Player",
+            object_id: selectedItem.id
+        }
+        axios.post(ACADEMY_LOGS, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    setLogs(response?.data?.data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     const fetchLeads = () => {
         const body = {
             object_id: selectedItem.id, object_type: "player",
@@ -59,7 +60,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
             });
     };
     useEffect(() => {
-        // getLogs();
+        getLogs();
         fetchLeads();
     }, [])
   return (
@@ -109,16 +110,16 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                                 <PlayerDetails id={selectedItem?.id} />
                             </div>
                         )}
-                        {/* {activeTab === "gallery" && (
+                        {/* {activeTab === "gallery" && (*
                             <div className="activity-tab-content">
                                 <CoachImage id={selectedItem?.id} />
                             </div>
-                        )}
+                        )}*/}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
                                 <AcademyLogs id={selectedItem?.id} type={"Coach"}/>
                             </div>
-                        )} */}
+                        )} 
                         {activeTab === "leads" && (
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
