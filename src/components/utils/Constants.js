@@ -261,7 +261,7 @@ export const ACADMEY_ACTIVITY_UPDATE = bmpStart+ "/bmp/activity/update/";
 
 export const BACKLIST_DATA = bmpStart+"/blog/backlink/getstats";
 export const ACADMEY_LEADS_DETAILS = bmpStart + "/bmp/leads/get";
-export const ACADEMY_LOGS = bmpStart +"/bmp/academy/getentity";
+export const ACADEMY_LOGS = bmpStart +"/bmp/log/byentity";
 
 export const GET_COACH = bmpStart + "/bmp/getEntities";
 export const GET_COACH_ID = bmpStart+"/bmp/coach/get";

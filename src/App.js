@@ -52,21 +52,9 @@ import HelpView from "./components/master-settings/HelpView";
 import Reset from "./components/Reset";
 import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
 import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
-import Testing from "./components/Testing";
-import BmpOverview from "./components/bookmyplayer/BmpOverview";
-import FeesNBatches from "./components/bookmyplayer/FeesNBatches";
-import TraningNStrategy from "./components/bookmyplayer/TraningNStrategy";
-import Gallery from "./components/bookmyplayer/Gallery";
-import Review from "./components/bookmyplayer/Review.jsx";
-import BMPLeads from "./components/bookmyplayer/BMPLeads.jsx";
-import BMPHelp from "./components/bookmyplayer/BMPHelp.jsx";
 import Campaign from "./components/marketing/Campaign.jsx";
 import ListFilter from "./components/marketing/ListFilter.jsx";
 import WhatsappView from "./components/marketing/WhatsappView.jsx";
-import SupportTab from "./components/settings/SupportTab.jsx";
-import BmpAdmin from "./components/bookmyplayer/BmpAdmin.jsx";
-import OverviewById from "./components/bookmyplayer/OverviewById.jsx";
-import Approval from "./components/bookmyplayer/Approval.jsx";
 import BmpReviewsView from "./components/master-settings/bmp/BmpReviewsView.jsx";
 import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.jsx";
 import AddTournament from "./components/master-settings/tournament/AddTournament.jsx";
@@ -74,19 +62,9 @@ import ViewTournament from "./components/master-settings/tournament/ViewTourname
 import UpdateTournament from "./components/master-settings/tournament/UpdateTournament.jsx";
 import AddLeadPage from "./components/master-settings/leads/AddLeadPage.jsx";
 import ViewLeadsPage from "./components/master-settings/leads/ViewLeadsPage.jsx";
-import Opening from "./components/Opening.jsx";
 import BacklistTable from "./components/master-settings/backlist/BacklistTable.jsx";
+import Acadmey from "./components/acadmey/Acadmey.jsx";
 const router = createBrowserRouter([
-  {
-    path: "/:auth",
-    element: <Testing />,
-    errorElement:<Error/>,
-  },
-  {
-    path: "/:source/:id",
-    element: <Opening/>,
-    errorElement:<Error/>,
-  },
   {
     path: "/login",
     element: <Login />,
@@ -114,16 +92,16 @@ const router = createBrowserRouter([
         element: <SecureRoutes Component={Lead} />,
       },
       {
+        path: "/lp/bmp",
+        element: <SecureRoutes Component={Acadmey} />,
+      },
+      {
         path: "/lp/home",
         element: <SecureRoutes Component={Home} />,
       },
       {
         path: "/lp/admin",
         element: <SecureRoutes Component={Editor} />,
-      },
-      {
-        path: "/lp/mail",
-        element: <SecureRoutes Component={Mail} />,
       },
       {
         path: "/lp/contacts",
@@ -148,65 +126,6 @@ const router = createBrowserRouter([
       {
         path: "/lp/marketing/campaign",
         element: <WhatsappView/>
-      },
-      {
-        path: "/lp/bmp/admin",
-        element: <BmpAdmin />,
-      },
-      {
-        path: "/lp/bmp",
-        element: <BmpDashboard />,
-        errorElement: <Error />,
-        children: [
-          {
-            path: "/lp/bmp",
-            element: <Navigate to="/lp/bmp/overview" replace />,
-          },
-          {
-            path:"/lp/bmp/overview",
-            element:<SecureRoutes Component={BmpOverview}/>,
-          },
-          {
-            path: "/lp/bmp/overview/:id",
-            element: <OverviewById/>,
-          },
-          {
-            path:"/lp/bmp/fees",
-            element:<SecureRoutes Component={FeesNBatches}/>,
-          },
-          {
-            path:"/lp/bmp/training",
-            element:<SecureRoutes Component={TraningNStrategy}/>,
-          },
-          {
-            path:"/lp/bmp/gallery",
-            element:<SecureRoutes Component={Gallery}/>,
-          },
-          {
-            path:"/lp/bmp/reviews",
-            element:<SecureRoutes Component={Review}/>,
-          },
-          {
-            path:"/lp/bmp/approval",
-            element:<Approval/>,
-          },
-          {
-            path:"/lp/bmp/leads",
-            element:<SecureRoutes Component={BMPLeads}/>,
-          },
-          {
-            path:"/lp/bmp/support",
-            element: (
-              <div style={{ padding: '1rem' }}>
-                <SecureRoutes Component={SupportTab} />
-              </div>
-            ),
-          },
-          {
-            path:"/lp/bmp/help",
-            element:<SecureRoutes Component={BMPHelp}/>,
-          },
-        ],
       },
       {
         path: "/lp/deals",

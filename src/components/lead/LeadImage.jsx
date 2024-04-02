@@ -112,12 +112,6 @@ const LeadImage = (id) => {
     const submitImage = (file) => {
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 2 * 1024 * 1024) {
-                alert(
-                    "Image size should be less than 2MB. Please choose a smaller image."
-                );
-                return;
-            }
             setIsUploading(true);
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
@@ -159,13 +153,7 @@ const LeadImage = (id) => {
     const submitBannerImage = (file) => {
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 2 * 1024 * 1024) {
-                alert(
-                    "Image size should be less than 2MB. Please choose a smaller image."
-                );
-                return;
-            }
-            setBannerUploading(true);
+             setBannerUploading(true);
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
@@ -227,13 +215,6 @@ const LeadImage = (id) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 2 * 1024 * 1024) {
-                showAlertOnce(
-                    "Image size should be less than 2MB. Please choose a smaller image."
-                );
-                setIsUploadingMulti(false);
-                return;
-            }
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
@@ -263,13 +244,6 @@ const LeadImage = (id) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
         if (selectedImage) {
-            if (selectedImage.size > 10 * 1024 * 1024) {
-                showAlertOnce(
-                    "Video size should be less than 10MB. Please choose a smaller video."
-                );
-                setIsUploadingMulti(false);
-                return;
-            }
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
