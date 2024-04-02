@@ -5,9 +5,11 @@
     padding: 1rem;
     display: flex;
     justify-content: space-between;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 .lead-description{
-    padding:0rem 1rem 1rem 1rem;
+    padding:0rem 2rem 1rem 2rem;
 }
 .leads-details{
 color: #1e2224;
@@ -79,4 +81,14 @@ margin-bottom: 0.7rem;
 }
 .compressEmail{
     width: 10rem !important;
+}
+.newEditableArea{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+.radio-space{
+    width: 15rem;
+    margin-right: 0;
 }

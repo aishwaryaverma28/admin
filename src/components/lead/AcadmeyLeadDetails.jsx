@@ -1,15 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import GreaterArrow from "../../assets/image/greater-arrow.svg";
 import '../styles/LeadDetails.css';
+
 const AcadmeyLeadDetails = ({ leadsDetails }) => {
-    const [isIndex, setIsIndex] = useState(0);
-    function accordianClick(id) {
-        if (id === isIndex) {
-            setIsIndex(-1);
-        } else {
-            setIsIndex(id);
-        }
-    }
+    const [isIndex, setIsIndex] = useState(-1);
+
+    const accordianClick = (id) => {
+        setIsIndex(isIndex === id ? -1 : id);
+    };
 
     const getShortenedContent = (content) => {
         const strippedContent = content.replace(/<[^>]+>/g, "");
@@ -20,59 +18,36 @@ const AcadmeyLeadDetails = ({ leadsDetails }) => {
         return strippedContent;
     };
 
-
     return (
         <section className='leadDetails-section'>
             {leadsDetails.length > 0 && (
                 <div className="savedNotes">
                     {leadsDetails.map((note) => (
-                        <>
-                            <section key={note.id} className="note-display">
-                                <div
-                                    className="note-content"
-                                    onClick={() => {
-                                        accordianClick(note.id);
-                                    }}
-                                >
-                                    <div className="arrow-greater">
-                                        <img src={GreaterArrow} alt="" />
-                                    </div>
-
-                                    <div className="notes-main">
-                                        <div className="notes-by">
-                                            <p>
-                                                <span>{note?.name}</span>
-                                            </p>
-                                            <div className="notes-date">
-                                                <p>
-                                                    {note.creation_date &&
-                                                        note.creation_date.includes("T") &&
-                                                        note.creation_date.includes(".")
-                                                        ? note.creation_date.split("T")[0] +
-                                                        " at " +
-                                                        note.creation_date.split("T")[1].split(".")[0]
-                                                        : "-"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="notes-content">
-                                            <p classNames="notes-content">
-                                                {" "}
-                                                {isIndex === note.id
-                                                    ? ""
-                                                    : getShortenedContent(note.description)}
-                                            </p>
-                                        </div>
-                                    </div>
+                        <div key={note.id} className="note-display">
+                            <div className="note-content" onClick={() => accordianClick(note.id)}>
+                                <div className="arrow-greater">
+                                    <img src={GreaterArrow} alt="" />
                                 </div>
-                            </section>
 
-                            <div
-                                className={
-                                    isIndex === note.id ? "answer display_answer" : "answer"
-                                }
-                            >
-                                <div className="note-display ">
+                                <div className="notes-main">
+                                    <div className="notes-by">
+                                        <p><span>{note?.name}</span></p>
+                                        <div className="notes-date">
+                                            <p>{note.creation_date && note.creation_date.includes("T") && note.creation_date.includes(".") ? 
+                                                note.creation_date.split("T")[0] + " at " + note.creation_date.split("T")[1].split(".")[0] : "-"}</p>
+                                        </div>
+                                    </div>
+                                    {/* Conditionally render notes-content */}
+                                    {isIndex !== note.id && (
+                                        <div className="notes-content">
+                                            <p>{getShortenedContent(note.description)}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {isIndex === note.id && (
+                                <div className="answer display_answer">
                                     <div className='leadDetails-expand'>
                                         <div className='left-expand'>
                                             <div>{note?.phone}</div>
@@ -84,13 +59,13 @@ const AcadmeyLeadDetails = ({ leadsDetails }) => {
                                     </div>
                                     <div className='lead-description leads-details'>{note.description}</div>
                                 </div>
-                            </div>
-                        </>
+                            )}
+                        </div>
                     ))}
                 </div>
             )}
         </section>
-    )
-}
+    );
+};
 
-export default AcadmeyLeadDetails
+export default AcadmeyLeadDetails;

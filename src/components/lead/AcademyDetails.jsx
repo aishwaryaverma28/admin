@@ -14,7 +14,7 @@ import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 const AcademyDetails = (id) => {
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
-    const [editedItem, setEditedItem] = useState("");
+    const [editedItem, setEditedItem] = useState({});
     const [stateBtn, setStateBtn] = useState(0);
     const [isEditable, setIsEditable] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
@@ -40,6 +40,10 @@ const AcademyDetails = (id) => {
                 if (sport === null || sport === "")
                     setIntroduction("-")
                 setEditedItem(response?.data?.data[0]);
+                if (response?.data?.data[0]?.friendly) {
+                    const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
+                    setTrainingLocation(trainingLocationArray);
+                }
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -47,16 +51,16 @@ const AcademyDetails = (id) => {
                 setIsLoading(false);
             });
     };
-
     useEffect(() => {
         fetchLead();
     }, []);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
+        const newValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
         setEditedItem({
             ...editedItem,
-            [name]: value,
+            [name]: newValue,
         });
         setStateBtn(1);
     };
@@ -70,19 +74,21 @@ const AcademyDetails = (id) => {
     const handleCheckboxChange = (event) => {
         const value = event.target.value;
         if (event.target.checked) {
-          setTrainingLocation(prevLocations => [...prevLocations, value]);
+            setTrainingLocation(prevLocations => [...prevLocations, value]);
         } else {
-          setTrainingLocation(prevLocations =>
-            prevLocations.filter(location => location !== value)
-          );
+            setTrainingLocation(prevLocations =>
+                prevLocations.filter(location => location !== value)
+            );
         }
         setStateBtn(1);
-      };
+    };
     const handleUpdateClick = () => {
         const updatedFormData = {
             stage: editedItem?.stage,
             name: editedItem?.name,
+            owner: editedItem?.owner,
             phone: editedItem?.phone,
+            mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about,
             sport: editedItem?.sport,
             fee: editedItem?.fee,
@@ -91,6 +97,7 @@ const AcademyDetails = (id) => {
             instagram: editedItem?.instagram,
             website: editedItem?.website,
             email: editedItem?.email,
+            email_verified: editedItem?.email_verified,
             timing: editedItem?.timing,
             closed_on: editedItem?.closed_on,
             address1: editedItem?.address1,
@@ -150,7 +157,7 @@ const AcademyDetails = (id) => {
     };
 
     //======================================================================css variable
-       const normalStylingInput = {
+    const normalStylingInput = {
         color: "#1e2224",
         fontWeight: 400,
         border: "1px solid #dcdcdc",
@@ -263,10 +270,11 @@ const AcademyDetails = (id) => {
                         <div className="detailsContent">
                             <div className="detailsLeftContainer">
                                 <p>Name</p>
+                                <p>Owner Name</p>
+                                <p>Phone</p>
                                 <p>Email</p>
                                 <p>Sport</p>
                                 <p>Categories</p>
-                                <p>Phone</p>
                                 <p>Fees</p>
                                 <p>Timing</p>
                                 <p>Closed On</p>
@@ -300,6 +308,54 @@ const AcademyDetails = (id) => {
                                         <span>
                                             <input
                                                 type="text"
+                                                name="owner"
+                                                value={editedItem?.owner}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span className='newEditableArea'>
+                                            <input
+                                                type="text"
+                                                name="phone"
+                                                value={editedItem?.phone}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                            <label className="radio-inline radio-space">
+                                                <input
+                                                    type="checkbox"
+                                                    name="mobile_verified"
+                                                    value={editedItem?.mobile_verified}
+                                                    className="radio_disable check_input"
+                                                    disabled={isDisabled}
+                                                    onChange={handleInputChange}
+                                                    checked={editedItem.mobile_verified === 1}
+                                                /> Mobile Verified
+
+                                            </label>
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span className='newEditableArea'>
+                                            <input
+                                                type="text"
                                                 name="email"
                                                 value={editedItem?.email}
                                                 onChange={handleInputChange}
@@ -308,6 +364,18 @@ const AcademyDetails = (id) => {
                                                 }
                                                 disabled={isDisabled}
                                             />
+                                            <label className="radio-inline radio-space">
+                                                <input
+                                                    type="checkbox"
+                                                    name="email_verified"
+                                                    value={editedItem.email_verified}
+                                                    className="radio_disable check_input"
+                                                    disabled={isDisabled}
+                                                    onChange={handleInputChange}
+                                                    checked={editedItem.email_verified === 1}
+                                                /> Email Verified
+
+                                            </label>
                                         </span>
                                     )}
                                 </p>
@@ -370,24 +438,6 @@ const AcademyDetails = (id) => {
                                                 type="text"
                                                 name="categories"
                                                 value={editedItem?.categories}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="phone"
-                                                value={editedItem?.phone}
                                                 onChange={handleInputChange}
                                                 style={
                                                     isEditable ? editStylingInput : normalStylingInput
@@ -490,37 +540,37 @@ const AcademyDetails = (id) => {
                                     )}
                                 </p>
                                 <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <div className="form-group-radio">
-                        <label className="radio-inline">
-                          <input
-                            type="checkbox"
-                            name="friendly"
-                            value="Women Friendly"
-                            className="radio_disable check_input"
-                            disabled={isDisabled}
-                            onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("Women Friendly")}
-                          /> Women Friendly
-                        </label>
-                        <label className="radio-inline">
-                          <input
-                            type="checkbox"
-                            name="friendly"
-                            value="Kids Friendly"
-                            className="radio_disable check_input"
-                            disabled={isDisabled}
-                            onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("Kids Friendly")}
-                          /> Kids Friendly
-                        </label>
-                      </div>
-                    </span>
-                  )}
-                </p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <div className="form-group-radio">
+                                                <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Women Friendly"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Women Friendly")}
+                                                    /> Women Friendly
+                                                </label>
+                                                <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Kids Friendly"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Kids Friendly")}
+                                                    /> Kids Friendly
+                                                </label>
+                                            </div>
+                                        </span>
+                                    )}
+                                </p>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>
