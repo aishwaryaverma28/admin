@@ -79,7 +79,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     };
     const getUserId = () => {
         const body = {
-            object_id: selectedItem.id, object_type: 1,
+            object_id: selectedItem.id, object_type: 2,
         }
         axios
             .post(GET_BMPUSER_ID, body, {
@@ -103,7 +103,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     }
     
     const fetchUserLog = (id) => {
-        console.log(id?.id)
         axios
             .post(USER_LOG, { object_type: 2,
             object_id: id?.id }, {
@@ -112,7 +111,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
                 setUserLog(response?.data?.data);
             })
             .catch((error) => {
