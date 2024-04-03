@@ -11,7 +11,7 @@ import { default_about } from "../utils/bmp_about";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
 
-const AcademyDetails = (id) => {
+const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
     const [editedItem, setEditedItem] = useState({});
@@ -23,7 +23,7 @@ const AcademyDetails = (id) => {
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
         axios
-            .post(GET_ACADEMY, { academy_id: id?.id }, {
+            .post(GET_ACADEMY, { academy_id: id}, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -62,7 +62,11 @@ const AcademyDetails = (id) => {
             ...editedItem,
             [name]: newValue,
         });
+        handleClick();
         setStateBtn(1);
+    };
+    const handleClick = () => {
+        updateCheckState(true);
     };
 
     const toggleEditable = (e) => {
@@ -111,7 +115,7 @@ const AcademyDetails = (id) => {
             friendly: trainingLocation.toString(),
         }
         axios
-            .put(UPDATE_ACADEMY + id?.id, updatedFormData
+            .put(UPDATE_ACADEMY + id, updatedFormData
                 , {
                     headers: {
                         Authorization: `Bearer ${decryptedToken}`,
@@ -146,7 +150,9 @@ const AcademyDetails = (id) => {
                 setStateBtn(0);
             });
     }
-
+    React.useImperativeHandle(ref, () => ({
+        handleUpdateClick
+      }));
     const handleViewSite = (url) => {
         const siteUrl = url;
         if (siteUrl) {
@@ -777,6 +783,6 @@ const AcademyDetails = (id) => {
             </div>
         </>
     )
-}
+});
 
 export default AcademyDetails

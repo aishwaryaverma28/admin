@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./../styles/LPleads.css";
 import axios from "axios";
 import {
@@ -10,7 +10,7 @@ import {
     ACADMEY_LEADS_DETAILS,
     ACADMEY_ACTIVITY_SOURCE,
     POST_EMAIL,
-    USER_LOG,GET_BMPUSER_ID
+    USER_LOG, GET_BMPUSER_ID
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,6 +23,8 @@ import AcademyLogs from "./AcademyLogs.jsx";
 import UserLogs from "./UserLogs.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
+    const [check, setCheck] = useState(false);
+    const childRef = useRef(null);
     const [editedItem, setEditedItem] = useState("");
     const [activeTab, setActiveTab] = useState("details");
     const [notes, setNotes] = useState(0);
@@ -101,11 +103,13 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 }
             });
     }
-    
+
     const fetchUserLog = (id) => {
         axios
-            .post(USER_LOG, { object_type: 2,
-            object_id: id?.id }, {
+            .post(USER_LOG, {
+                object_type: 2,
+                object_id: id?.id
+            }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -233,16 +237,38 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
-
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
+    const updateCheckState = (value) => {
+        setCheck(value);
     };
+console.log(check);
+const handleTabClick = (tab) => {
+    if (!check) {
+        setActiveTab(tab);
+    } else {
+        const confirmed = window.confirm("Please save your data. Are you sure you want to continue?");
+        if (confirmed) {
+            callChildFunction()
+            setCheck(false);
+        }else{
+            setCheck(false);
+        }
+    }
+};
+const callChildFunction = () => {
+    if (childRef.current) {
+        childRef.current.handleUpdateClick();
+      } else {
+        console.error("Child component reference is not initialized yet");
+      }
+  };
+
+
     useEffect(() => {
         setOwnerName(userData?.find((item) => item.id === ownerId));
     }, []);
     return (
         <div className="modal">
-        <div className="leftClose" onClick={closeModal}></div>
+            <div className="leftClose" onClick={closeModal}></div>
             <div className="customization_popup_container">
                 <span className="close" onClick={closeModal}>
                     <i className="fa-sharp fa-solid fa-xmark"></i>
@@ -300,7 +326,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         >
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
                             Notes ({notes})
-                        </button>                        
+                        </button>
                         <button
                             className={activeTab === "email" ? "active" : ""}
                             onClick={() => handleTabClick("email")}
@@ -310,13 +336,18 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         </button>
                     </div>
                     {/* ===================================================================tabination content */}
- 
+
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails id={selectedItem?.id} />
+                                <AcademyDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef}/>
                             </div>
                         )}
+                        {/* {(!check && activeTab === "gallery") && (
+                            <div className="activity-tab-content">
+                                <LeadImage id={selectedItem?.id} />
+                            </div>
+                        )} */}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
                                 <LeadImage id={selectedItem?.id} />
@@ -324,12 +355,12 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem?.id} type={"Academy"}/>
+                                <AcademyLogs id={selectedItem?.id} type={"Academy"} />
                             </div>
                         )}
-                         {activeTab === "user" && (
+                        {activeTab === "user" && (
                             <div className="activity-tab-content">
-                                <UserLogs id={userId?.id} type={2}/>
+                                <UserLogs id={userId?.id} type={2} />
                             </div>
                         )}
                         {activeTab === "leads" && (
@@ -374,7 +405,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        
+
                     </div>
                 </div>
             </div>
