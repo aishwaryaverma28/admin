@@ -8,21 +8,14 @@ import CreateLead from "./CreateLead";
 import { cities } from "../utils/cities.js";
 import LeadDeletePopUp from "../DeleteComponent";
 import {
-  IMPORT_CSV,
   GET_COACH,
   ALL_BMP_USER,
-  MOVELEAD_TO_TRASH,
   getDecryptedToken,
   ACADMEY_SEARCH,
-  ACADMEY_SEARCH_API,
-  GET_LABEL,
-  GET_ACTIVE_TEAM_MEM,
-  LOG_RECORD,
+  ACADMEY_SEARCH_API
 } from "../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ExcelJS from "exceljs";
-import Papa from "papaparse";
 import MassUpdateModal from "./MassUpdateModal.jsx";
 
 const Lead = () => {
@@ -58,10 +51,8 @@ const Lead = () => {
   const actionOwnerRef = useRef(null);
   const [deals, setDeals] = useState([]);
   const fileInputRef = useRef(null);
-  const [totalValue, setTotalValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
-  const [labelData, setLabelData] = useState([]);
   const [statusCounts, setStatusCounts] = useState({});
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedStatusesData, setSelectedStatusesData] = useState({});
@@ -69,14 +60,12 @@ const Lead = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("None");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [csvData, setCsvData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [ownerOpen, setOwnerOpen] = useState(false);
   const [massUpdateModalOpen, setMassUpdateModalOpen] = useState(false);
   const [data, setData] = useState("");
   const [sportsLead, setSportsLead] = useState('');
   const [cityLead, setCityLead] = useState('');
-  const [fStageId, setFStageId] = useState(0);
   const [acadmey, setAcademy] = useState([])
   const [limit, setLimit] = useState(500);
   const [coach, setCoach] = useState([]);
@@ -89,7 +78,6 @@ const Lead = () => {
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
     getAllAcademy(event.target.value, cityLead);
-
   };
   const handleCityChange = (event) => {
     setCityLead(event.target.value);
@@ -185,29 +173,6 @@ const getAllUsers = () => {
     console.log(error);
   });
 }
-  const handleLoadMore = () => {
-    setLimit(prevLimit => prevLimit + 500);
-  }
-
-  const userAdded = () => {
-    axios
-      .post(GET_ACTIVE_TEAM_MEM, { orgId: orgId }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        const responseData = response?.data?.data;
-        setUserData(responseData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    userAdded();
-  }, [orgId])
 
   useEffect(() => {
     const counts = {
@@ -290,158 +255,6 @@ const getAllUsers = () => {
   const toggleOwnerDropdown = () => {
     setOwnerOpen(!ownerOpen);
   };
-  //======================================================================fetch lead data from api
-  const logRecord = () => {
-    const updatedFormData = {
-      attr1: "lead:export",
-      attr4: "lead exported",
-    };
-    axios
-      .post(LOG_RECORD, updatedFormData, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
-        },
-      })
-      .then((response) => {
-        if (response?.data?.status === 1) {
-          toast.success("export successfull", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        } else {
-          toast.error("Some Error Occured", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const exportToExcel = async () => {
-    if (!deals || deals?.length === 0) {
-      console.log("No data to export.");
-      return;
-    }
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Leads");
-    worksheet.columns = [
-      {
-        header: "Id",
-        key: "id",
-        width: 20,
-        bold: true,
-        alignment: { horizontal: "center" },
-      },
-      { header: "Address 1", key: "address1", width: 20 },
-      { header: "Address 2", key: "address2", width: 20 },
-      { header: "City", key: "city", width: 20 },
-      { header: "Company Name", key: "company_name", width: 20 },
-      { header: "Country", key: "country", width: 20 },
-      { header: "Date Created", key: "creation_date", width: 30 },
-      { header: "Doc Number", key: "doc_number", width: 20 },
-      { header: "Email", key: "email", width: 30 },
-      { header: "Employees", key: "employees", width: 20 },
-      { header: "First Name", key: "first_name", width: 20 },
-      { header: "Last Name", key: "last_name", width: 20 },
-      { header: "Is Deleted", key: "is_deleted", width: 20 },
-      { header: "Label Colour", key: "label_coloure", width: 20 },
-      { header: "Label Id", key: "label_id", width: 20 },
-      { header: "Label Name", key: "label_name", width: 20 },
-      { header: "Lead Name", key: "lead_name", width: 20 },
-      { header: "Owner", key: "owner", width: 20 },
-      { header: "Owner Email", key: "owner_email", width: 20 },
-      { header: "Owner Phone", key: "owner_phone", width: 20 },
-      { header: "Owner First Name", key: "ownerf_name", width: 20 },
-      { header: "Owner Last Name", key: "ownerl_name", width: 20 },
-      { header: "Phone", key: "phone", width: 20 },
-      { header: "Pin", key: "pin", width: 20 },
-      { header: "Position", key: "position", width: 20 },
-      { header: "Registration Number", key: "registration_no", width: 20 },
-      { header: "Source", key: "source", width: 20 },
-      { header: "State", key: "state", width: 20 },
-      { header: "Status", key: "status", width: 20 },
-      { header: "Type", key: "type", width: 20 },
-      { header: "Update Date", key: "update_date", width: 30 },
-      { header: "Value", key: "value", width: 20 },
-      { header: "Website", key: "website", width: 20 },
-    ];
-
-    deals.forEach((deal) => {
-      worksheet.addRow({
-        id: deal.id,
-        address1: deal.address1,
-        address2: deal.address2,
-        city: deal.city,
-        company_name: deal.company_name,
-        country: deal.country,
-        creation_date: deal.creation_date,
-        doc_number: deal.doc_number,
-        email: deal.email,
-        employees: deal.employees,
-        first_name: deal.first_name,
-        last_name: deal.last_name,
-        is_deleted: deal.is_deleted,
-        label_coloure: deal.label_coloure,
-        label_id: deal.label_id,
-        label_name: deal.label_name,
-        lead_name: deal.lead_name,
-        owner: deal.owner,
-        owner_email: deal.owner_email,
-        owner_phone: deal.owner_phone,
-        ownerf_name: deal.ownerf_name,
-        ownerl_name: deal.ownerl_name,
-        phone: deal.phone,
-        pin: deal.pin,
-        position: deal.position,
-        registration_no: deal.registration_no,
-        source: deal.source,
-        state: deal.state,
-        status: deal.status,
-        update_date: deal.update_date,
-        value: deal.value,
-        website: deal.website,
-      });
-    });
-
-    const csv = Papa.unparse(deals);
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "leads.csv";
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    logRecord();
-  };
-
-  const fetchLabelData = async () => {
-    const body = {
-      org_id: orgId
-    }
-    try {
-      const response = await axios.post(GET_LABEL, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      });
-      if (response.data.status === 1) {
-        setLabelData(response.data.data);
-      } else {
-        if (response.data.message === "Token has expired") {
-          alert(response.data.message);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const resetData = () => {
     getAllAcademy();
   };
@@ -454,7 +267,6 @@ const getAllUsers = () => {
   };
 
   useEffect(() => {
-    fetchLabelData();
     getAllAcademy();
     getAllCoaches();
     getAllPlayers();
@@ -525,9 +337,6 @@ const getAllUsers = () => {
     }
   };
 
-  const sortedDealData = sortData(filterDealData, sortOption, sortOrder);
-
-
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -542,11 +351,8 @@ const getAllUsers = () => {
   const togglePipeDropdown = () => {
     setPipeOpen(!pipeopen);
   };
-  const toggleActionDropdown = (option) => {
-    if (option === "Export") {
-      exportToExcel();
-    }
-    setActionOpen(!actionopen);
+  const toggleActionDropdown = () => {
+     setActionOpen(!actionopen);
   };
 
   useEffect(() => {
@@ -635,89 +441,9 @@ const getAllUsers = () => {
   };
 
   const handleDeleteLead = () => {
-    if (selectedIds) {
-      const body = {
-        leadIds: [selectedIds],
-      };
-      axios
-        .delete(MOVELEAD_TO_TRASH, {
-          data: body,
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
-        .then((response) => {
-          toast.success("Lead moved to trash successfully", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      getAllAcademy();
-      setSelectedIds([]);
-      handleMassDeletePopUpClose();
-    }
-  };
+    };
 
-  const handleCsvFileImport = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        complete: (result) => {
-          const dataWithIntValues = result?.data?.map((row) => ({
-            ...row,
-            value: parseInt(row?.value),
-            stage_id: parseInt(fStageId),
-            org_id: parseInt(orgId)
-          }));
-          const dataWithoutLastValue = dataWithIntValues?.slice(0, -1);
-          setCsvData(dataWithoutLastValue);
-          postCsvDataToAPI(dataWithoutLastValue);
-        },
-        error: (error) => {
-          console.error("Error parsing CSV:", error.message);
-        },
-      });
-    }
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current.click();
-  };
-  const postCsvDataToAPI = async (csvData) => {
-    try {
-      const response = await axios.post(
-        IMPORT_CSV,
-        {
-          data: csvData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      );
-      if (response.data.status === 1) {
-        toast.success("Import successfull", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        getAllAcademy();
-      } else {
-        toast.error("Some Error Occured", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }
-    } catch (error) {
-      console.error("Error posting CSV data:", error);
-    }
-  };
-
-  return (
+   return (
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -851,7 +577,6 @@ const getAllUsers = () => {
               accept=".csv"
               ref={fileInputRef}
               style={{ display: "none" }}
-              onChange={handleCsvFileImport}
             />
 
             <div className="select action-select">
@@ -876,7 +601,7 @@ const getAllUsers = () => {
                     {/* <li>Mass Convert</li> */}
                     {/* <li>Drafts</li> */}
                     {/* <li>Mass Email</li> */}
-                    <li onClick={handleImportClick}>Import</li>
+                    <li>Import</li>
                     <li onClick={() => toggleActionDropdown("Export")}>
                       Export Leads
                     </li>

@@ -244,11 +244,8 @@ const LeadCards = ({
               <i className="fas fa-ellipsis-h"></i>
               {isMenuOpen && (
                 <ul className="cardMenu" ref={menuRef}>
-                  <li onClick={() => openConvertModal(object)}>
-                    Convert to deal
-                  </li>
-                  <li onClick={() => handleAssignModal(object.id)}>Assign</li>
-                  <li onClick={() => handleLeadDelete(object.id)}>Delete</li>
+                  <li>Assign</li>
+                  <li>Delete</li>
                 </ul>
               )}
             </button>

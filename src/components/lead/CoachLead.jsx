@@ -7,7 +7,7 @@ import {
     ACADEMY_LOGS,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
-    handleLogout, USER_LOG
+    handleLogout, USER_LOG, GET_BMPUSER_ID
 } from "./../utils/Constants";
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
@@ -15,6 +15,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
     const [userLog, setUserLog] = useState(0);
+    const [userId, setUserId] = useState(0);
     const [leads, setLeads] = useState(0);
     const [activeTab, setActiveTab] = useState("details");
     const handleTabClick = (tab) => {
@@ -37,6 +38,30 @@ const CoachLead = ({ selectedItem, closeModal }) => {
             })
             .catch((error) => {
                 console.log(error);
+            });
+    }
+    const getUserId = () => {
+        const body = {
+            object_id: selectedItem.id, object_type: 1,
+        }
+        axios
+            .post(GET_BMPUSER_ID, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    setUserId(response?.data?.data[0]);
+                    fetchUserLog(response?.data?.data[0])
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.message === "Invalid or expired token.") {
+                    alert(error?.response?.data?.message);
+                    handleLogout();
+                }
             });
     }
     const fetchLeads = () => {
@@ -62,15 +87,17 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
-    const fetchUserLog = () => {
+    const fetchUserLog = (id) => {
+        console.log(id?.id)
         axios
             .post(USER_LOG, { object_type: 1,
-            object_id: selectedItem?.id }, {
+            object_id: id?.id }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
             })
             .then((response) => {
+                console.log(response?.data?.data)
                 setUserLog(response?.data?.data);
             })
             .catch((error) => {
@@ -81,7 +108,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     useEffect(() => {
         getLogs();
         fetchLeads();
-        fetchUserLog();
+        getUserId();
     }, [])
     return (
         <div className="modal">
@@ -170,7 +197,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         )}
                          {activeTab === "user" && (
                             <div className="activity-tab-content">
-                                <UserLogs id={selectedItem?.id} type={1}/>
+                                <UserLogs id={userId?.id} type={1}/>
                             </div>
                         )}
                         {activeTab === "leads" && (

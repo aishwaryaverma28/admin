@@ -364,16 +364,16 @@ const LPheader = () => {
                 </NavLink>
               </li>
             )}
-            {isPathAllowed("/lp/lead") && (
+            {isPathAllowed("/lp/bmp") && (
               <li onClick={() => handleNavigationClick("Lead")}>
-                <NavLink exact to="/lp/lead" activeClassName="activeNav">
-                  Bmp Users
+                <NavLink exact to="/lp/bmp" activeClassName="activeNav">
+                  Dashboard
                 </NavLink>
               </li>
             )}
-            {isPathAllowed("/lp/bmp") && (
+            {isPathAllowed("/lp/lead") && (
               <li onClick={() => handleNavigationClick("Acadmey")}>
-                <NavLink exact to="/lp/bmp" activeClassName="activeNav">
+                <NavLink exact to="/lp/lead" activeClassName="activeNav">
                   Academies
                 </NavLink>
               </li>

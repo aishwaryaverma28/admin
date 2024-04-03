@@ -88,11 +88,11 @@ const router = createBrowserRouter([
         element: <Navigate to="/lp/home" replace />,
       },
       {
-        path: "/lp/lead",
+        path: "/lp/bmp",
         element: <SecureRoutes Component={Lead} />,
       },
       {
-        path: "/lp/bmp",
+        path: "/lp/lead",
         element: <SecureRoutes Component={Acadmey} />,
       },
       {

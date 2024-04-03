@@ -1,16 +1,41 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
+import axios from "axios";
+import {
+    getDecryptedToken,USER_LOG
+} from "./../utils/Constants";
 import UserDetails from './UserDetails';
 import BmpTickets from './BmpTickets';
 import LeadImage from './LeadImage';
 import CoachImage from './CoachImage';
 import CoachDetails from './CoachDetails';
 import AcademyDetails from './AcademyDetails';
+import UserLogs from './UserLogs';
 
 const UserLead = ({ selectedItem, closeModal }) => {
+    const decryptedToken = getDecryptedToken();
     const [activeTab, setActiveTab] = useState("details");
+    const [userLog, setUserLog] = useState(0);
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
+    const fetchUserLog = () => {
+        axios
+            .post(USER_LOG, { object_type: selectedItem?.type_id,
+            object_id: selectedItem?.id }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setUserLog(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+useEffect(()=>{
+    fetchUserLog();
+},[])
   return (
     <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
@@ -35,6 +60,13 @@ const UserLead = ({ selectedItem, closeModal }) => {
                         >
                             <i class="fa-sharp fa-regular fa-images"></i>
                             Images
+                        </button>
+                        <button
+                            className={activeTab === "user" ? "active" : ""}
+                            onClick={() => handleTabClick("user")}
+                        >
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                            User Logs ({userLog?.length})
                         </button>
                         <button
                             className={activeTab === "tickets" ? "active" : ""}
@@ -64,6 +96,12 @@ const UserLead = ({ selectedItem, closeModal }) => {
                                 
                             </div>
                         )}
+                        {activeTab === "user" && (
+                            <div className="activity-tab-content">
+                                <UserLogs id={selectedItem?.id} type={selectedItem?.type_id}/>
+                            </div>
+                        )}
+
                         {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <BmpTickets selectedItem={selectedItem} />

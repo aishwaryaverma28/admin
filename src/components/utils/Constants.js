@@ -272,5 +272,6 @@ export const BMP_USER_UPDATE = bmpStart+"/bmp/user/update/";
 export const BMP_USER_DATA = bmpStart+ "/bmp/user/get";
 export const BMP_USER_TICKETS= bmpStart+"/bmp/user/getTickets";
 export const UPDATE_PLAYER = bmpStart+"/bmp/player/update/";
+export const GET_BMPUSER_ID = bmpStart+"/bmp/user/getbyobj";
 export const USER_LOG = bmpStart+"/bmp/log/getUserActivity";
 // 3: player

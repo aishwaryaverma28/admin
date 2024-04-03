@@ -10,7 +10,7 @@ import {
     ACADMEY_LEADS_DETAILS,
     ACADMEY_ACTIVITY_SOURCE,
     POST_EMAIL,
-    USER_LOG,
+    USER_LOG,GET_BMPUSER_ID
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +27,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [activeTab, setActiveTab] = useState("details");
     const [notes, setNotes] = useState(0);
     const [logs, setLogs] = useState(0);
+    const [userId, setUserId] = useState(0);
     const [userLog, setUserLog] = useState(0);
     const [activityCount, setActivityCount] = useState(0);
     const [leads, setLeads] = useState(0);
@@ -76,17 +77,43 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 console.log(error);
             });
     };
-    const fetchUserLog = () => {
+    const getUserId = () => {
+        const body = {
+            object_id: selectedItem.id, object_type: 1,
+        }
         axios
-            .post(USER_LOG, { object_type: 2,
-            object_id: selectedItem?.id }, {
+            .post(GET_BMPUSER_ID, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
             })
             .then((response) => {
+                if (response?.data?.status === 1) {
+                    setUserId(response?.data?.data[0]);
+                    fetchUserLog(response?.data?.data[0])
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.message === "Invalid or expired token.") {
+                    alert(error?.response?.data?.message);
+                    handleLogout();
+                }
+            });
+    }
+    
+    const fetchUserLog = (id) => {
+        console.log(id?.id)
+        axios
+            .post(USER_LOG, { object_type: 2,
+            object_id: id?.id }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                console.log(response?.data?.data)
                 setUserLog(response?.data?.data);
-                console.log(response?.data?.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -94,7 +121,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     };
 
     useEffect(() => {
-        fetchUserLog();
+        getUserId();
         handleGetEmail();
     }, []);
 
@@ -304,7 +331,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         )}
                          {activeTab === "user" && (
                             <div className="activity-tab-content">
-                                <UserLogs id={selectedItem?.id} type={2}/>
+                                <UserLogs id={userId?.id} type={2}/>
                             </div>
                         )}
                         {activeTab === "leads" && (

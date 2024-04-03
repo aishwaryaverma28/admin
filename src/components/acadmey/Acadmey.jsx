@@ -6,27 +6,26 @@ import axios from "axios";
 import { cities } from "../utils/cities.js";
 import {
   getDecryptedToken,
-  ACADMEY_SEARCH,
-  ACADMEY_SEARCH_API,
-  GET_ACTIVE_TEAM_MEM,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LeadCards from "../lead/LeadCards.jsx";
 
 const Acadmey = () => {
   const [stages, setStages] = useState([
     {
       "id": 1,
-      "stage": "academy"
+      "stage": "academy_logs",
+      "name": "Academy Logs"
     },
     {
       "id": 2,
-      "stage": "Acadmey with Leads"
+      "stage": "acadmey_with_leads",
+      "name": "Acadmey with Leads"
     },
     {
       "id": 3,
-      "stage": "Acadmey without Leads"
+      "stage": "verified_acadmey",
+      "name":"Verified Acadmey"
     }
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
@@ -51,70 +50,17 @@ const Acadmey = () => {
   const [sportsLead, setSportsLead] = useState('');
   const [cityLead, setCityLead] = useState('');
   const [acadmey, setAcademy] = useState([])
-  const [limit, setLimit] = useState(500);
 
-  useEffect(() => {
-    getAllAcademy();
-  }, [limit]);
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
-    getAllAcademy(event.target.value, cityLead);
 
   };
   const handleCityChange = (event) => {
     setCityLead(event.target.value);
-    getAllAcademy(sportsLead, event.target.value);
   };
    
   //=========================================================get all acadmies
-  const getAllAcademy = (sport, city) => {
-    const hasSportOrCity = sport || city;
-
-    const requestBody = hasSportOrCity ? {
-      ...(sport && { sport }),
-      ...(city && { location: city }),
-      condition: "conditions",
-      limit_from: "0",
-      limit_to: "1000",
-    } : {
-      sport: "football",
-      condition: "conditions",
-      limit_from: "0",
-      limit_to: "1000"
-    };
-
-
-    axios.post(ACADMEY_SEARCH, requestBody, {
-      headers: {
-        Authorization: `Bearer ${decryptedToken}`
-      }
-    }
-    ).then((response) => {
-      setAcademy(response?.data?.data);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-  const userAdded = () => {
-    axios
-      .post(GET_ACTIVE_TEAM_MEM, { orgId: orgId }, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        const responseData = response?.data?.data;
-        setUserData(responseData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    userAdded();
-  }, [orgId])
-
+  
   useEffect(() => {
     const counts = {
       academy: acadmey?.length,
@@ -136,45 +82,14 @@ const Acadmey = () => {
     const { value } = event.target;
     setSearchQuery(value);
     
-    if (value?.length === 0) {
-      if (selectedEntity === 'academy' || selectedEntity === '') {
-        getAllAcademy();
-      } 
-    } else {
-      if (!toggleChecked && value?.length < 3) {
-        return;
-      }
-      let apiUrl = '';
-      if (selectedEntity === 'academy' || selectedEntity === '') {
-        apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/academy/search/id/${value}`
-          : `${ACADMEY_SEARCH_API}${value}`;
-      } 
-      axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then(response => {
-        if (selectedEntity === 'academy' || selectedEntity === '') {
-          setAcademy(response?.data?.data);
-        } 
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-    }
+    
   };
   const toggleOwnerDropdown = () => {
     setOwnerOpen(!ownerOpen);
   };
   const resetData = () => {
-    getAllAcademy();
   };
-  useEffect(() => {
-    getAllAcademy();
-  }, []);
-
+ 
   //======================================================modal box
    const toggleDropdown = () => {
     setLeadOpen(!leadopen);
@@ -434,7 +349,7 @@ const Acadmey = () => {
         <div className="main-cards">
           <div className="cards-new">
             <p className="DealName">
-              {item?.stage}({statusCounts[item.stage]})
+              {item?.name}({statusCounts[item.stage]})
             </p>
             {statusCounts[item?.id] > 0 && (
               <label className="custom-checkbox">
@@ -452,52 +367,6 @@ const Acadmey = () => {
               </label>
             )}
           </div>
-          {(() => {
-            switch (item?.stage) {
-              case 'academy':
-                return acadmey?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllAcademy}
-                    itemName={"academy"}
-                    userData={userData}
-                  />
-                ));
-              // case 'player':
-              //   return player?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       onLeadAdded={getAllPlayers}
-              //       itemName={"player"}
-              //       userData={userData}
-              //     />
-              //   ));
-              // case 'coach':
-              //   return coach?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       onLeadAdded={getAllCoaches}
-              //       itemName={"coach"}
-              //       userData={userData}
-              //     />
-              //   ));
-              // case 'user':
-              //   return user?.map((obj) => (
-              //     <LeadCards
-              //       key={obj?.id}
-              //       object={obj}
-              //       onLeadAdded={getAllUsers}
-              //       itemName={"user"}
-              //       userData={userData}
-              //     />
-              //   ));
-              default:
-                return null;
-            }
-          })()}
         </div>
       </div>
     </div>
