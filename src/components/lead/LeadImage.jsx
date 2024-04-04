@@ -8,6 +8,7 @@ import Trash from "../../assets/image/red-bin.svg";
 
 const LeadImage = (id) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
+    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -91,6 +92,12 @@ const LeadImage = (id) => {
             return imageName.replace(/[^\w-]/g, "-");
         }
     };
+
+    const handleCheckboxChange = (photo, index) => {
+        setBannerName(photo);
+        setSelectedPhotoIndex(index);
+        setStateBtn(1);
+    };
     //================================================= for logo upload
     const handleButtonClick = (event) => {
         event.preventDefault();
@@ -153,7 +160,7 @@ const LeadImage = (id) => {
     const submitBannerImage = (file) => {
         const selectedImage = file;
         if (selectedImage) {
-             setBannerUploading(true);
+            setBannerUploading(true);
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
@@ -174,12 +181,6 @@ const LeadImage = (id) => {
         }
     };
     //=================================================================================photo and video upload
-    const showAlertOnce = (message) => {
-        if (!alertVideoShown) {
-            alert(message);
-            setAlertVideoShown(true);
-        }
-    };
 
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
@@ -593,6 +594,12 @@ const LeadImage = (id) => {
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
+                                        <input
+                                            type="checkbox"
+                                            className="radio_disable check_input"
+                                            checked={selectedPhotoIndex === index}
+                                            onChange={() => handleCheckboxChange(photo, index)}
+                                        />
                                         <div className="bmp-video">
                                             <img
                                                 src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${photo}`}

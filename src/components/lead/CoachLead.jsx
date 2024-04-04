@@ -1,4 +1,4 @@
-import React,{ useState,useEffect } from 'react'
+import React,{ useState,useEffect, useRef } from 'react'
 import CoachDetails from './CoachDetails';
 import CoachImage from './CoachImage';
 import AcademyLogs from './AcademyLogs';
@@ -11,16 +11,46 @@ import {
 } from "./../utils/Constants";
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
+import Confirmation from './Confirmation';
 const CoachLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
+    const [check, setCheck] = useState(false);
+    const childRef = useRef(null);
+    const [isDelete, setIsDelete] = useState(false);
     const [logs, setLogs] = useState(0);
     const [userLog, setUserLog] = useState(0);
     const [userId, setUserId] = useState(0);
     const [leads, setLeads] = useState(0);
     const [activeTab, setActiveTab] = useState("details");
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
+    const handleDeletePopUpOpen = () => {
+        setIsDelete(true);
+      };
+      const handleMassDeletePopUpClose = () => {
+        setIsDelete(false);
+        setCheck(false);
+      };
+    const updateCheckState = (value) => {
+        setCheck(value);
     };
+
+    const handleTabClick = (tab) => {
+        if (!check) {
+            setActiveTab(tab);
+        } else {
+            handleDeletePopUpOpen();
+        }
+    };
+    const callChildFunction = () => {
+        if (childRef.current) {
+            childRef.current.handleUpdateClick();
+            setCheck(false);
+            handleMassDeletePopUpClose();
+        } else {
+            console.error("Child component reference is not initialized yet");
+        }
+    };
+
+
     const getLogs = () => {
         const body = {
             entity: "Coach",
@@ -182,7 +212,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                      <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <CoachDetails id={selectedItem?.id} />
+                                <CoachDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
                         {activeTab === "gallery" && (
@@ -210,6 +240,12 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         </div>
                 </div>
             </div>
+            {isDelete && (
+        <Confirmation
+          onClose={handleMassDeletePopUpClose}
+          onDeleteConfirmed={callChildFunction}
+        />
+      )}
         </div>
     )
 }

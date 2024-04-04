@@ -7,7 +7,7 @@ import {
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
-const CoachDetails = (id) => {
+const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState("");
@@ -21,7 +21,7 @@ const CoachDetails = (id) => {
 
   const fetchLead = () => {
     axios
-      .post(GET_COACH_ID, { coachId: id?.id }, {
+      .post(GET_COACH_ID, { coachId: id }, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -67,10 +67,14 @@ const CoachDetails = (id) => {
       } else {
         setUserSkills([]);
       }
-      setAddedSkills([]); // Assuming you want to clear added skills when sport changes
+      setAddedSkills([]);
     }
+    handleClick();
     setStateBtn(1);
   };
+  const handleClick = () => {
+    updateCheckState(true);
+};
 
   const toggleEditable = (e) => {
     e.preventDefault();
@@ -87,6 +91,7 @@ const CoachDetails = (id) => {
       );
     }
     setStateBtn(1);
+    handleClick();
   };
   const handleSkillChange = (event) => {
     const value = event.target.value;
@@ -98,6 +103,7 @@ const CoachDetails = (id) => {
       );
     }
     setStateBtn(1);
+    handleClick();
   };
   const handleUpdateClick = () => {
     const updatedFormData = {
@@ -120,7 +126,7 @@ const CoachDetails = (id) => {
       achievement:editedItem?.achievement,
     }
     axios
-      .put(UPDATE_COACH + id?.id, updatedFormData
+      .put(UPDATE_COACH + id, updatedFormData
         , {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -155,7 +161,10 @@ const CoachDetails = (id) => {
         setStateBtn(0);
       });
   }
-
+  
+  React.useImperativeHandle(ref, () => ({
+    handleUpdateClick
+  }));
   const handleViewSite = (url) => {
     const siteUrl = url;
     if (siteUrl) {
@@ -770,6 +779,6 @@ const CoachDetails = (id) => {
       </div>
     </>
   )
-}
+});
 
 export default CoachDetails

@@ -21,12 +21,14 @@ import LeadImage from "./LeadImage.jsx";
 import AcademyDetails from "./AcademyDetails.jsx";
 import AcademyLogs from "./AcademyLogs.jsx";
 import UserLogs from "./UserLogs.jsx";
+import Confirmation from "./Confirmation.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
     const [editedItem, setEditedItem] = useState("");
     const [activeTab, setActiveTab] = useState("details");
+    const [isDelete, setIsDelete] = useState(false);
     const [notes, setNotes] = useState(0);
     const [logs, setLogs] = useState(0);
     const [userId, setUserId] = useState(0);
@@ -237,30 +239,34 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
+    //===========================================================new code
+    const handleDeletePopUpOpen = () => {
+        setIsDelete(true);
+      };
+      const handleMassDeletePopUpClose = () => {
+        setIsDelete(false);
+        setCheck(false);
+      };
     const updateCheckState = (value) => {
         setCheck(value);
     };
-console.log(check);
-const handleTabClick = (tab) => {
-    if (!check) {
-        setActiveTab(tab);
-    } else {
-        const confirmed = window.confirm("Please save your data. Are you sure you want to continue?");
-        if (confirmed) {
-            callChildFunction()
-            setCheck(false);
-        }else{
-            setCheck(false);
+
+    const handleTabClick = (tab) => {
+        if (!check) {
+            setActiveTab(tab);
+        } else {
+            handleDeletePopUpOpen();
         }
-    }
-};
-const callChildFunction = () => {
-    if (childRef.current) {
-        childRef.current.handleUpdateClick();
-      } else {
-        console.error("Child component reference is not initialized yet");
-      }
-  };
+    };
+    const callChildFunction = () => {
+        if (childRef.current) {
+            childRef.current.handleUpdateClick();
+            setCheck(false);
+            handleMassDeletePopUpClose();
+        } else {
+            console.error("Child component reference is not initialized yet");
+        }
+    };
 
 
     useEffect(() => {
@@ -340,7 +346,7 @@ const callChildFunction = () => {
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef}/>
+                                <AcademyDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
                         {/* {(!check && activeTab === "gallery") && (
@@ -409,7 +415,12 @@ const callChildFunction = () => {
                     </div>
                 </div>
             </div>
-
+            {isDelete && (
+        <Confirmation
+          onClose={handleMassDeletePopUpClose}
+          onDeleteConfirmed={callChildFunction}
+        />
+      )}
         </div>
     );
 }
