@@ -64,6 +64,7 @@ import AddLeadPage from "./components/master-settings/leads/AddLeadPage.jsx";
 import ViewLeadsPage from "./components/master-settings/leads/ViewLeadsPage.jsx";
 import BacklistTable from "./components/master-settings/backlist/BacklistTable.jsx";
 import Acadmey from "./components/acadmey/Acadmey.jsx";
+import Coach from "./components/coach/Coach.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/bmp",
         element: <SecureRoutes Component={Acadmey} />,
+      },
+      {
+        path: "/lp/coach",
+        element: <SecureRoutes Component={Coach} />,
       },
       {
         path: "/lp/home",

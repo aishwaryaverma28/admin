@@ -12,6 +12,7 @@ import {
   ALL_BMP_USER,
   getDecryptedToken,
   ACADMEY_SEARCH,
+  SEARCH_ACADMEY_ID,
   ACADMEY_SEARCH_API
 } from "../utils/Constants";
 import { ToastContainer } from "react-toastify";
@@ -215,7 +216,7 @@ const getAllUsers = () => {
       let apiUrl = '';
       if (selectedEntity === 'academy' || selectedEntity === '') {
         apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/academy/search/id/${value}`
+          ? `${SEARCH_ACADMEY_ID}${value}`
           : `${ACADMEY_SEARCH_API}${value}`;
       } else {
         const entityMap = {

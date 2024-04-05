@@ -6,6 +6,8 @@ import { cities } from "../utils/cities.js";
 import {
   MOST_LEADS,
   ACADMEY_VEREFIED,
+  SEARCH_ACADMEY_ID,
+  ACADMEY_SEARCH_API,
   getDecryptedToken,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
@@ -16,22 +18,22 @@ const Acadmey = () => {
   const [stages, setStages] = useState([
     {
       "id": 1,
+      "stage": "verified_acadmey",
+      "name": "Verified Acadmey"
+    },
+    {
+      "id": 2,
       "stage": "acadmey_logs",
       "name": "Academy Logs"
     },
     {
-      "id": 2,
+      "id": 3,
       "stage": "acadmey_with_leads",
       "name": "Acadmey with Leads"
-    },
-    {
-      "id": 3,
-      "stage": "verified_acadmey",
-      "name": "Verified Acadmey"
-    }
+    }    
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState('acadmey_with_leads');
+  const [selectedEntity, setSelectedEntity] = useState('verified_acadmey');
   const [display, setDisplay] = useState("Select Category")
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -164,14 +166,35 @@ const Acadmey = () => {
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
-    setSearchQuery(value);
-
-
+    setSearchQuery(value);    
+    if (value?.length === 0) {
+      getAllVerify();
+    } else {
+      if (!toggleChecked && value?.length < 3) {
+        return;
+      }
+      let apiUrl = '';
+        apiUrl = toggleChecked
+          ? `${SEARCH_ACADMEY_ID}${value}`
+          : `${ACADMEY_SEARCH_API}${value}`;
+      axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then(response => {
+        setVerified(response?.data?.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+    }
   };
-  const toggleOwnerDropdown = () => {
-    setOwnerOpen(!ownerOpen);
-  };
+  
   const resetData = () => {
+    getAllLeads();
+    getAllLogs();
+    getAllVerify();
   };
 
   //======================================================modal box
@@ -256,7 +279,7 @@ const Acadmey = () => {
       }));
     }
   };
-  
+
   return (
     <>
       <div>
@@ -308,30 +331,6 @@ const Acadmey = () => {
                   </div>
                 </span>
               </div>
-              <div className="dropdown-container" ref={actionOwnerRef}>
-                <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                  {display}
-                  <i
-                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                      }`}
-                  ></i>
-                </div>
-                {ownerOpen && (
-                  <ul className="dropdown-menu owner-menu">
-                    {stages?.map((item) => (
-                      <li
-                        key={item?.id}
-                        value={item?.id}
-                        className="owner-val"
-                        onClick={() => handleEntityChange(item.stage)}
-                      >
-                        {item.stage}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
             </div>
             <div className="right-side--btns">
               <div className="select action-select">

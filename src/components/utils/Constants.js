@@ -254,7 +254,7 @@ export const ACADMEY_NOTE = bmpStart+ "/bmp/note/add";
 export const ACADMEY_NOTE_SOURCE = bmpStart+ "/bmp/note/getBySource";
 export const ACADMEY_NOTE_UPDATE= bmpStart + "/bmp/note/update/";
 export const ACADMEY_SEARCH_API = bmpStart + "/bmp/academy/search/entity/";
-
+export const SEARCH_ACADMEY_ID = bmpStart+"/bmp/academy/search/id/";
 export const ACADMEY_ACTIVITY = bmpStart + "/bmp/activity/add";
 export const ACADMEY_ACTIVITY_SOURCE = bmpStart+ "/bmp/activity/getBySource";
 export const ACADMEY_ACTIVITY_UPDATE = bmpStart+ "/bmp/activity/update/";
@@ -276,4 +276,3 @@ export const GET_BMPUSER_ID = bmpStart+"/bmp/user/getbyobj";
 export const USER_LOG = bmpStart+"/bmp/log/getUserActivity";
 export const MOST_LEADS= bmpStart+"/bmp/academy/getstats";
 export const ACADMEY_VEREFIED = bmpStart+"/bmp/academy/getverified";
-// "condition": "both"

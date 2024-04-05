@@ -65,13 +65,18 @@ const AcadmeyCard = ({
               )}
               {itemName === "verified_acadmey" && (
                 <>
-                <div className="mail">
-                  <p>Email Verified: {object.email_verified}</p>
-                </div>
-                <div className="mail">
-                <p>Mobile Verified: {object.mobile_verified}</p>
-              </div>
+                {object.email_verified === 1 &&
+                  <div className="mail">
+                    <p>Email Verified</p>
+                  </div>
+                }
+                {object.mobile_verified === 1 &&
+                  <div className="mail">
+                    <p>Mobile Verified</p>
+                  </div>
+                }
               </>
+              
               )}
            </div>
           </div>

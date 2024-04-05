@@ -84,6 +84,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                 prevLocations.filter(location => location !== value)
             );
         }
+        handleClick();
         setStateBtn(1);
     };
     const handleUpdateClick = () => {
