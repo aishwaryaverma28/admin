@@ -15,11 +15,10 @@ import PlayerLead from "./PlayerLead.jsx";
 
 const LeadCards = ({
   object,
-  status,
   onLeadAdded,
   itemName,
-  userData,
 }) => {
+  console.log(object);
   const decryptedToken = getDecryptedToken();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
@@ -311,7 +310,6 @@ const LeadCards = ({
       {assign && (
         <AssignModal
           onClose={handleAssignModalClose}
-          userData={userData}
           text="Lead"
           handleConfirmed={handleAssignLead}
           handleDataReceived={handleDataReceived}
