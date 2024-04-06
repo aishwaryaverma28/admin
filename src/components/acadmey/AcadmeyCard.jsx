@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import "../styles/LPleads.css";import "react-toastify/dist/ReactToastify.css";
+import "../styles/LPleads.css";
+import "react-toastify/dist/ReactToastify.css";
 import AcadmeyLead from "../lead/AcadmeyLead.jsx";
 
 const AcadmeyCard = ({
@@ -15,12 +16,13 @@ const AcadmeyCard = ({
 
   const openModal = (object) => {
     setModalVisible(true);
-      setSelectedObj(object);
+    setSelectedObj(object);
   };
 
   const closeModal = () => {
     setModalVisible(false);
   };
+
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (
@@ -39,7 +41,6 @@ const AcadmeyCard = ({
     };
   }, [isMenuOpen]);
 
-  
   return (
     <>
       <div key={object.id} className="user-card2">
@@ -50,57 +51,61 @@ const AcadmeyCard = ({
                 {object.id} - {object.name}
               </p>
             </div>
-            <div className="lead-value">
-            </div>
             <div className="contact-details">
               {itemName === "academyLeads" && (
                 <div className="mail">
                   <p>Leads Count: {object.lead_count}</p>
                 </div>
               )}
-               {itemName === "academyLogs" && (
+              {itemName === "academyLogs" && (
                 <div className="mail">
-                  <p>Visit Count: {object.visit_count}</p>
+                  <p>Count: {object.visit_count}</p>
+                </div>
+              )}
+              {itemName === "academyLogs" && (
+                <div className="mail">
+                  <p>{object.sport}</p>
+                </div>
+              )}
+              {itemName === "academyLogs" && (
+                <div className="mail">
+                  <p>{object.city}</p>
                 </div>
               )}
               {itemName === "verified_acadmey" && (
                 <>
-                {object.email_verified === 1 &&
-                  <div className="mail">
-                    <p>Email Verified</p>
-                  </div>
-                }
-                {object.mobile_verified === 1 &&
-                  <div className="mail">
-                    <p>Mobile Verified</p>
-                  </div>
-                }
-              </>
-              
+                  {object.email_verified === 1 && (
+                    <div className="mail">
+                      <p>Email Verified</p>
+                    </div>
+                  )}
+                  {object.mobile_verified === 1 && (
+                    <div className="mail">
+                      <p>Mobile Verified</p>
+                    </div>
+                  )}
+                </>
               )}
-           </div>
+            </div>
           </div>
           <div className="DealCard-rightBox">
-            <button
-              className="user-setting--btn"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              ref={menuButtonRef}
-            >
-              <i className="fas fa-ellipsis-h"></i>
-              {isMenuOpen && (
-                <ul className="cardMenu" ref={menuRef}>
-                  <li>Assign</li>
-                  <li>Delete</li>
-                </ul>
-              )}
-            </button>
-            <label class="custom-checkbox">
-              <input
-                type="checkbox"
-                className={`cb1 ${object.status}-card-checkbox`}
-                name={object.id}/>
-              <span class="checkmark"></span>
-            </label>
+            {itemName === "academyLogs" && (
+              <>
+                {(object.email_verified === 1 || object.mobile_verified === 1) && (
+                  <div className="greenVerified"></div>
+                )}
+                {(object.logged_in === 1) && (
+                  <div className="yellowLogIn"></div>
+                )}
+              </>
+            )}
+            {itemName === "verified_acadmey" && (
+              <>
+                {(object.email_verified === 1 || object.mobile_verified === 1) && (
+                  <div className="greenVerified"></div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -111,7 +116,7 @@ const AcadmeyCard = ({
           onLeadAdded={onLeadAdded}
         />
       )}
-     </>
+    </>
   );
 };
 

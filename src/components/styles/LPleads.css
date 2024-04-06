@@ -1324,3 +1324,15 @@
   width: 6rem;
   margin-left: 0.3rem;
 }
+.greenVerified{
+  min-width: 1.5rem;
+  height: 1rem;
+  background-color: #0bfa73;
+  border-radius: 5px;
+}
+.yellowLogIn{
+  min-width: 1.5rem;
+  height: 1rem;
+  background-color: #ffe246;
+  border-radius: 5px;
+}

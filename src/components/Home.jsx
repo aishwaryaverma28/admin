@@ -51,7 +51,7 @@ const Home = () => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data)
+          // console.log(response?.data?.data)
           setIsLoading(false);
           setLeadsCount(response?.data?.data?.leads?.reverse());
           setAcademyCount(response?.data?.data?.AcademyUserStats?.reverse());
