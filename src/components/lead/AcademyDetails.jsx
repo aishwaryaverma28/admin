@@ -7,7 +7,6 @@ import {
     UPDATE_ACADEMY,
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
-import { default_about } from "../utils/bmp_about";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 
 
@@ -18,7 +17,6 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     const [stateBtn, setStateBtn] = useState(0);
     const [isEditable, setIsEditable] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
-    const [introduction, setIntroduction] = useState("");
     const [trainingLocation, setTrainingLocation] = useState([]);
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
@@ -29,16 +27,6 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                 },
             })
             .then((response) => {
-                const sport = response?.data?.data[0]?.sport;
-                const academyName = response?.data?.data[0]?.name;
-                const cityName = response?.data?.data[0]?.city;
-                const academyObject = default_about?.find(obj => obj.sport === sport);
-                const updatedAbout = academyObject?.about?.replace(/ACADEMY_NAME/g, academyName);
-                const finalAbout = updatedAbout?.replace(/CITY_NAME/g, cityName);
-                const intro = removeHtmlTags(finalAbout);
-                setIntroduction(intro);
-                if (sport === null || sport === "")
-                    setIntroduction("-")
                 setEditedItem(response?.data?.data[0]);
                 if (response?.data?.data[0]?.friendly) {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
@@ -92,6 +80,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             stage: editedItem?.stage,
             name: editedItem?.name,
             owner: editedItem?.owner,
+            website:editedItem?.website,
             phone: editedItem?.phone,
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about,
@@ -587,7 +576,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                             <textarea
                                                 name="about"
                                                 onChange={handleInputChange}
-                                                value={isLoading ? "-" : editedItem?.about === null ? introduction : editedItem?.about}
+                                                value={isLoading ? "-" : editedItem?.about}
                                                 rows="5"
                                                 id=""
                                                 style={
@@ -605,10 +594,29 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                         <p className="detailHead">SOCIAL MEDIA</p>
                         <div className="detailsContent">
                             <div className="detailsLeftContainer">
+                                <p>Website</p>
                                 <p>Facebook</p>
                                 <p>Instagram</p>
                             </div>
                             <div className="detailsRightContainer">
+                            <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="website"
+                                                value={editedItem?.website}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>

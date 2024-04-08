@@ -521,7 +521,7 @@ const getAllUsers = () => {
           </div>
           <div className="right-side--btns">
             <button type="button" className="secondary-btn" onClick={openModal}>
-              Create Lead
+            Add Academy
             </button>
             <div className="select action-select">
               {/* <label for="browserChoice">Sports:</label> */}
@@ -790,13 +790,12 @@ const getAllUsers = () => {
   ))}
 </section>
 
-
+{isModalOpen && (
       <CreateLead
         isOpen={isModalOpen}
         onClose={closeModal}
-        onLeadAdded={getAllAcademy}
-        text="lead"
       />
+    )}
       <ToastContainer />
       {isDelete && (
         <LeadDeletePopUp
