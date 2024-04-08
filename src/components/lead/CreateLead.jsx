@@ -7,36 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CreateLead = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
-  const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState({});
   const [stateBtn, setStateBtn] = useState(0);
-  const [isEditable, setIsEditable] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
   const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
-  const fetchLead = () => {
-    axios
-      .post(GET_ACADEMY, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setEditedItem(response?.data?.data[0]);
-        if (response?.data?.data[0]?.friendly) {
-          const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
-          setTrainingLocation(trainingLocationArray);
-        }
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-      });
-  };
-  useEffect(() => {
-    fetchLead();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,12 +20,6 @@ const CreateLead = ({ onClose }) => {
       [name]: newValue,
     });
     setStateBtn(1);
-  };
-
-  const toggleEditable = (e) => {
-    e.preventDefault();
-    setIsEditable(!isEditable);
-    setIsDisabled(!isDisabled);
   };
 
   const handleCheckboxChange = (event) => {
@@ -114,10 +82,7 @@ const CreateLead = ({ onClose }) => {
             autoClose: 1000,
           });
         }
-        setIsEditable(false);
-        setIsDisabled(!isDisabled);
-        setStateBtn(0);
-        fetchLead();
+       setStateBtn(0);
       })
       .catch((error) => {
         console.log(error);
@@ -184,6 +149,7 @@ const CreateLead = ({ onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
+      <div className="leftClose" onClick={onClose}></div>
         <div class="create-lead-top">
           <p>Add Academy</p>
           <p className="close-icon" onClick={onClose}>
