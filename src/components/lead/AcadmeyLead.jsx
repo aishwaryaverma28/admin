@@ -46,7 +46,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const handleGetEmail = () => {
         const updatedFormData = {
             source: "lead",
-            source_id: selectedItem.id,
+            source_id: selectedItem,
         };
         axios
             .post(POST_EMAIL, updatedFormData, {
@@ -67,7 +67,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
 
     const fetchLead = () => {
         axios
-            .post(GET_ACADEMY, { academy_id: selectedItem?.id }, {
+            .post(GET_ACADEMY, { academy_id: selectedItem }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -83,7 +83,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     };
     const getUserId = () => {
         const body = {
-            object_id: selectedItem.id, object_type: 2,
+            object_id: selectedItem, object_type: 2,
         }
         axios
             .post(GET_BMPUSER_ID, body, {
@@ -131,7 +131,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
 
     const fetchCall = () => {
         const body = {
-            source_id: selectedItem.id,
+            source_id: selectedItem,
             source_type: "academy"
         }
         axios
@@ -175,7 +175,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     //==================================================================notes count
     const fetchNotes = () => {
         const body = {
-            source_id: selectedItem.id, source_type: "academy"
+            source_id: selectedItem, source_type: "academy"
         }
         axios
             .post(ACADMEY_NOTE_SOURCE, body, {
@@ -200,7 +200,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const getLogs = () => {
         const body = {
             entity: "Academy",
-            object_id: selectedItem.id
+            object_id: selectedItem
         }
         axios.post(ACADEMY_LOGS, body, {
             headers: {
@@ -218,7 +218,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     }
     const fetchLeads = () => {
         const body = {
-            object_id: selectedItem.id, object_type: "academy",
+            object_id: selectedItem, object_type: "academy",
         }
         axios
             .post(ACADMEY_LEADS_DETAILS, body, {
@@ -333,35 +333,30 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
                             Notes ({notes})
                         </button>
-                        <button
+                        {/* <button
                             className={activeTab === "email" ? "active" : ""}
                             onClick={() => handleTabClick("email")}
                         >
                             <i className="fa-sharp fa-regular fa-envelope-open"></i>
                             Email ({allEmails.length})
-                        </button>
+                        </button> */}
                     </div>
                     {/* ===================================================================tabination content */}
 
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef} />
+                                <AcademyDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
-                        {/* {(!check && activeTab === "gallery") && (
-                            <div className="activity-tab-content">
-                                <LeadImage id={selectedItem?.id} />
-                            </div>
-                        )} */}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <LeadImage id={selectedItem?.id} />
+                                <LeadImage id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem?.id} type={"Academy"} />
+                                <AcademyLogs id={selectedItem} type={"Academy"} />
                             </div>
                         )}
                         {activeTab === "user" && (
@@ -399,10 +394,10 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        {activeTab === "email" && (
+                        {/* {activeTab === "email" && (
                             <div className="email-tab-content">
                                 <DealEmail
-                                    id={selectedItem.id}
+                                    id={selectedItem}
                                     type="lead"
                                     dealName={leadName}
                                     ownerId={ownerId}
@@ -410,7 +405,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                     email={editedItem?.email}
                                 />
                             </div>
-                        )}
+                        )} */}
 
                     </div>
                 </div>

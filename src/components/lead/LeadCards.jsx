@@ -95,7 +95,7 @@ const LeadCards = ({
   const openModal = (object) => {
     if (itemName === "academy") {
       setModalVisible(true);
-      setSelectedObj(object);
+      setSelectedObj(object?.id);
     }
     if (itemName === "coach") {
       setCoachMenu(true);

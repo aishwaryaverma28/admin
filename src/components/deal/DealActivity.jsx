@@ -55,13 +55,13 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
     activity_title: "",
     end_time: "",
     source_type: "academy",
-    source_id: type === "lead" ? item.id : id,
+    source_id: type === "lead" ? item : id,
   });
 
   const fetchCall = () => {
     if (type === "lead") {
       const body = {
-        source_id: item.id,
+        source_id: item,
         source_type: "academy"
       }
       axios
@@ -211,7 +211,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
       activity_name: activeTab,
       scheduled_time: selectedTimeFrom,
       end_time: updatedEndTime,
-      source_id: type === "lead" ? item.id : id,
+      source_id: type === "lead" ? item : id,
       source_type: "academy",
     };
     axios
@@ -505,31 +505,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                       onChange={handleChange}
                     ></textarea>
                   </div>
-                  <div className="activity-text">
-                    <img src={TextIcon} alt="" />
-                    <select
-                      name="assigned_to"
-                      onChange={handleChange}
-                      id=""
-                      className="common-fonts activity-select-area"
-                    >
-                      <option value="">Select Assign to *</option>
-                      {userData?.map((item) => (
-                        <option
-                          key={item?.id}
-                          value={item?.id}
-                          className="owner-val"
-                        >
-                          {`${item?.first_name.charAt(0).toUpperCase() +
-                            item?.first_name.slice(1)
-                            } ${item?.last_name.charAt(0).toUpperCase() +
-                            item?.last_name.slice(1)
-                            }`}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                  
                   <div className="activity-button deal-activity-btn">
                     <button className="common-fonts common-white-button" onClick={handleClose}>Cancel</button>
                     {stateBtn === 0 ? (
@@ -573,8 +549,7 @@ const DealActivity = ({ item, type, id, count, userData, ownerId, idOfOwner }) =
                                 onClick={() => toggleExpand(index)}
                               >
                                 <p className="common-fonts activity-assigned-to">
-                                  {item.activity_name} Assigned to :
-                                  <span>{item.assigned_user_fname} {item.assigned_user_lname}</span>
+                                  {item.activity_name} Assigned:
                                 </p>
 
                                 <div className="activity-date-time">

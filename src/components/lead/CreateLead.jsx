@@ -4,9 +4,12 @@ import axios from "axios";
 import { ADD_NEW_ACADMEY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AcadmeyLead from "./AcadmeyLead";
 
 const CreateLead = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
+  const [selectedObj, setSelectedObj] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   const [editedItem, setEditedItem] = useState({
     name:"",
     owner:"",
@@ -37,6 +40,13 @@ const CreateLead = ({ onClose }) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
+  const openModal = (object) => {
+    setModalVisible(true);
+      setSelectedObj(object);
+    }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -84,7 +94,9 @@ const CreateLead = ({ onClose }) => {
         }
       )
       .then((response) => {
-        if (response.data.status === 1) {
+        console.log(response?.data?.data);
+        if (response?.data?.status === 1) {
+          openModal(response?.data?.data?.insertId)
           toast.success("Details updated successfully", {
             position: "top-center",
             autoClose: 1000,
@@ -575,6 +587,13 @@ const CreateLead = ({ onClose }) => {
           </div>
         </>
       </div>
+      {modalVisible && (
+        <AcadmeyLead
+          selectedItem={selectedObj}
+          closeModal={closeModal}
+        />
+      )}
+     
       <ToastContainer />
     </div>
   );

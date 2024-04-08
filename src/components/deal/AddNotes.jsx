@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router";
 
-const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
+const AddNotes = ({ onNotesNum, type, item }) => {
   const { id } = useParams();
   const [dataFromChild, setDataFromChild] = useState("");
   const [content, setContent] = useState("");
@@ -42,7 +42,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
   const fetchNotes = () => {
     if (type === "lead") {
       const body = {
-        source_id: item.id, source_type: "academy"
+        source_id: item, source_type: "academy"
       }
       axios
         .post(ACADMEY_NOTE_SOURCE, body, {
@@ -180,7 +180,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
 
   const handleAddNote = () => {
     const updatedFormData = {
-      source_id: type === "lead" ? item.id : id,
+      source_id: type === "lead" ? item : id,
       source_type: "academy",
       description: dataFromChild,
       importance: "0",
@@ -224,7 +224,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToUpdate) {
       const updatedNote = {
         description: content,
-        source_id: item.id,
+        source_id: item,
         source_type: "academy",
       };
       const updatedNotes = notes.map((note) =>
@@ -254,7 +254,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
   const handleDeleteNote = (id) => {
     const updatedNote = {
       is_deleted:1,
-      source_id: item.id,
+      source_id: item,
       source_type: "academy",
     };
     axios
@@ -309,7 +309,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToPin) {
       const updatedNote = {
         description: noteToPin.description,
-        source_id: item.id,
+        source_id: item,
         source_type: "academy",
         importance: "1",
        };
@@ -339,7 +339,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
     if (noteToUnpin) {
       const updatedNote = {
         description: noteToUnpin.description,
-        source_id: item.id,
+        source_id: item,
         source_type: "academy",
         importance: "0",
         };
@@ -420,8 +420,7 @@ const AddNotes = ({ onNotesNum, type, item, ownerId, idOfOwner }) => {
                   <div className="notes-main">
                     <div className="notes-by">
                       <p>
-                        <span>Note</span> by{" "}
-                        {note.ownerf_name + " " + note.ownerl_name}
+                        <span>Note</span> 
                       </p>
                       <div className="notes-date">
                         <p>
