@@ -307,12 +307,12 @@ const LeadImage = (id) => {
                 if (response.data.status === 1) {
                     toast.success("Details updated successfully", {
                         position: "top-center",
-                        autoClose: 2000,
+                        autoClose: 1000,
                     });
                 } else {
                     toast.error("Some Error Occurred", {
                         position: "top-center",
-                        autoClose: 2000,
+                        autoClose: 1000,
                     });
                 }
                 academyDetails();
@@ -321,7 +321,7 @@ const LeadImage = (id) => {
                 console.log(error);
                 toast.error("An error occurred while updating details", {
                     position: "top-center",
-                    autoClose: 2000,
+                    autoClose: 1000,
                 });
             })
             .finally(() => {

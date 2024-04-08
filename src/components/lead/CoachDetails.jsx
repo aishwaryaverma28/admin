@@ -137,16 +137,17 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",
-            autoClose: 2000,
+            autoClose: 1000,
           });
         } else {
           toast.error("Some Error Occurred", {
             position: "top-center",
-            autoClose: 2000,
+            autoClose: 1000,
           });
         }
         setIsEditable(false);
         setIsDisabled(!isDisabled);
+        updateCheckState(false);
         setStateBtn(0);
         fetchLead();
       })
@@ -154,7 +155,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
         console.log(error);
         toast.error("An error occurred while updating details", {
           position: "top-center",
-          autoClose: 2000,
+          autoClose: 1000,
         });
       })
       .finally(() => {
