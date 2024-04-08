@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { UPDATE_ACADEMY, GET_ACADEMY, getDecryptedToken } from "../utils/Constants";
+import { ADD_NEW_ACADMEY, getDecryptedToken } from "../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateLead = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
-  const [editedItem, setEditedItem] = useState({});
+  const [editedItem, setEditedItem] = useState({
+    name:"",
+    owner:"",
+    website:"",
+    phone:"",
+    mobile_verified:"",
+    about:"",
+    sport:"",
+    fee:"",
+    experience:"",
+    facebook:"",
+    instagram:"",
+    website:"",
+    email:"",
+    email_verified:"",
+    timing:"",
+    closed_on:"",
+    address1:"",
+    address2:"",
+    city:"",
+    state:"",
+    postcode:"",
+    facebook:"",
+    instagram:"",
+    categories:"",
+    friendly:"",
+  });
   const [stateBtn, setStateBtn] = useState(0);
   const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
@@ -34,36 +60,23 @@ const CreateLead = ({ onClose }) => {
     setStateBtn(1);
   };
   const handleUpdateClick = () => {
-    const updatedFormData = {
-      stage: editedItem?.stage,
-      name: editedItem?.name,
-      owner: editedItem?.owner,
-      website: editedItem?.website,
-      phone: editedItem?.phone,
-      mobile_verified: editedItem?.mobile_verified,
-      about: editedItem?.about,
-      sport: editedItem?.sport,
-      fee: editedItem?.fee,
-      experience: editedItem?.experience,
-      facebook: editedItem?.facebook,
-      instagram: editedItem?.instagram,
-      website: editedItem?.website,
-      email: editedItem?.email,
-      email_verified: editedItem?.email_verified,
-      timing: editedItem?.timing,
-      closed_on: editedItem?.closed_on,
-      address1: editedItem?.address1,
-      address2: editedItem?.address2,
-      city: editedItem?.city,
-      state: editedItem?.state,
-      postcode: editedItem?.postcode,
-      facebook: editedItem?.facebook,
-      instagram: editedItem?.instagram,
-      categories: editedItem?.categories,
-      friendly: trainingLocation.toString(),
+    
+    const updatedFields = {};
+    for (const key in editedItem) {
+      if (editedItem.hasOwnProperty(key)) {
+        if (editedItem[key] !== "") {
+          updatedFields[key] = editedItem[key];
+        }
+      }
     }
+    const updatedFormData = {
+      ...updatedFields,
+      friendly: trainingLocation.toString(),
+    };
+
+    console.log(updatedFormData);
     axios
-      .post(UPDATE_ACADEMY, updatedFormData
+      .post(ADD_NEW_ACADMEY, updatedFormData
         , {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -75,6 +88,34 @@ const CreateLead = ({ onClose }) => {
           toast.success("Details updated successfully", {
             position: "top-center",
             autoClose: 1000,
+          });
+          setTrainingLocation([]);
+          setEditedItem({
+            name:"",
+            owner:"",
+            website:"",
+            phone:"",
+            mobile_verified:"",
+            about:"",
+            sport:"",
+            fee:"",
+            experience:"",
+            facebook:"",
+            instagram:"",
+            website:"",
+            email:"",
+            email_verified:"",
+            timing:"",
+            closed_on:"",
+            address1:"",
+            address2:"",
+            city:"",
+            state:"",
+            postcode:"",
+            facebook:"",
+            instagram:"",
+            categories:"",
+            friendly:"",
           });
         } else {
           toast.error("Some Error Occurred", {
@@ -162,18 +203,18 @@ const CreateLead = ({ onClose }) => {
               <div className="detailsBox">
                 <div className="detailsContent">
                   <div className="detailsLeftContainer">
-                    <p>Name</p>
+                    <p>Name<span className="common-fonts redAlert"> *</span></p>
                     <p>Owner Name</p>
-                    <p>Phone</p>
+                    <p>Phone<span className="common-fonts redAlert"> *</span></p>
                     <p>Email</p>
-                    <p>Sport</p>
+                    <p>Sport<span className="common-fonts redAlert"> *</span></p>
                     <p>Categories</p>
                     <p>Fees</p>
                     <p>Timing</p>
                     <p>Closed On</p>
                     <p>Experience</p>
                     <p>Enviornment</p>
-                    <p className="about-textarea">About</p>
+                    <p className="about-textarea">About<span className="common-fonts redAlert"> *</span></p>
                   </div>
                   <div className="detailsRightContainer">
                     <p>
@@ -451,11 +492,11 @@ const CreateLead = ({ onClose }) => {
                 <p className="detailHead">ADDRESS INFORMATION</p>
                 <div className="detailsContent">
                   <div className="detailsLeftContainer">
-                    <p>Address 1</p>
+                    <p>Address 1<span className="common-fonts redAlert"> *</span></p>
                     <p>Address 2</p>
-                    <p>City</p>
-                    <p>State</p>
-                    <p>Zipcode</p>
+                    <p>City<span className="common-fonts redAlert"> *</span></p>
+                    <p>State<span className="common-fonts redAlert"> *</span></p>
+                    <p>Zipcode<span className="common-fonts redAlert"> *</span></p>
                   </div>
                   <div className="detailsRightContainer">
                     <p>
