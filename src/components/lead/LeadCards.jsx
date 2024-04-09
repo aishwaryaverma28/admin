@@ -164,7 +164,7 @@ const LeadCards = ({
   const handleDeleteLead = () => {
     if (deleteLeadId) {
       const body = {
-        leadIds: [deleteLeadId], // Use the stored ID
+        leadIds: [deleteLeadId],
       };
       axios
         .delete(MOVELEAD_TO_TRASH, {
@@ -184,7 +184,7 @@ const LeadCards = ({
           console.log(error);
         });
       onLeadAdded();
-      setDeleteLeadId(null); // Reset the stored ID
+      setDeleteLeadId(null);
     }
   };
 

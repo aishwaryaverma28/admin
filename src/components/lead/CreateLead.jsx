@@ -201,8 +201,8 @@ const CreateLead = ({ onClose }) => {
   };
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-      <div className="leftClose" onClick={onClose}></div>
+      <div className="leftCreateClose" onClick={onClose}></div>
+      <div className="modal-content">      
         <div class="create-lead-top">
           <p>Add Academy</p>
           <p className="close-icon" onClick={onClose}>

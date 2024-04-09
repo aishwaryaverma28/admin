@@ -23,7 +23,13 @@
   letter-spacing: -0.02563rem;
   text-transform: capitalize;
 }
-
+.leftCreateClose{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 55%;
+}
 .close-icon {
   cursor: pointer;
   font-size: 20px;
