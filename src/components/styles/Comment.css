@@ -146,12 +146,9 @@ background: #F3F6FA;
     box-sizing: border-box;
     flex-wrap: wrap;
     gap: 1rem;
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-top: 14px;
-    margin-bottom: 1rem;
+    padding: 12px;
   }
-  .radio-inline{    
+  .radio-inline{     
     color: #4b5054;
     font-family: "Lexend Deca";
     font-size: 0.8rem;

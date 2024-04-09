@@ -8,7 +8,7 @@ import {
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
-
+import '../styles/Comment.css'
 
 const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     const decryptedToken = getDecryptedToken();
@@ -101,6 +101,8 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             facebook: editedItem?.facebook,
             instagram: editedItem?.instagram,
             categories: editedItem?.categories,
+            rating:editedItem?.rating,
+            reviews:editedItem?.reviews,
             friendly: trainingLocation.toString(),
         }
         axios
@@ -275,6 +277,8 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                 <p>Timing</p>
                                 <p>Closed On</p>
                                 <p>Experience</p>
+                                <p>Reviews</p>
+                                <p>Rating</p>
                                 <p>Enviornment</p>
                                 <p className="about-textarea">About</p>
                             </div>
@@ -532,6 +536,42 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                                 <option value="20"></option>
                                                 <option value="20+"></option>
                                             </datalist>
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="number"
+                                                name="reviews"
+                                                value={editedItem?.reviews}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="number"
+                                                name="rating"
+                                                value={editedItem?.rating}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
                                         </span>
                                     )}
                                 </p>
