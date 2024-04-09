@@ -274,5 +274,5 @@ export const BMP_USER_TICKETS= bmpStart+"/bmp/user/getTickets";
 export const UPDATE_PLAYER = bmpStart+"/bmp/player/update/";
 export const GET_BMPUSER_ID = bmpStart+"/bmp/user/getbyobj";
 export const USER_LOG = bmpStart+"/bmp/log/getUserActivity";
-export const MOST_LEADS= bmpStart+"/bmp/academy/getstats";
-export const ACADMEY_VEREFIED = bmpStart+"/bmp/academy/getverified";
+export const MOST_LEADS= bmpStart+"/bmp/entity/getstats";
+export const ACADMEY_VEREFIED = bmpStart+"/bmp/entity/getverified";

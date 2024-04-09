@@ -12,7 +12,8 @@ import {
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AcadmeyCard from "../acadmey/AcadmeyCard.jsx";
+import AcadmeyCard from "./CoachCard.jsx";
+import CoachCard from "./CoachCard.jsx";
 
 const Coach = () => {
   const [stages, setStages] = useState([
@@ -49,6 +50,10 @@ const Coach = () => {
   const [ownerOpen, setOwnerOpen] = useState(false);
   const [sportsLead, setSportsLead] = useState('');
   const [cityLead, setCityLead] = useState('');
+  const [acadmeyLeads, setAcademyLeads] = useState([])
+  const [academyLogs, setAcademyLogs] = useState([]);
+  const [verified, setVerified] = useState([]);
+
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
 
@@ -57,27 +62,144 @@ const Coach = () => {
     setCityLead(event.target.value);
   };
 
- 
+  //=========================================================get all acadmey leads
+  const getAllLeads = () => {
+    const requestBody = {
+      "condition": "leads",
+      "limit_from": "0",
+      "limit_to": "1000",
+      "entity": "coach"
+    };
+    axios.post(MOST_LEADS, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setAcademyLeads(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getAllLeads();
+    getAllLogs();
+    getAllVerify();
+  }, []);
+  //=========================================================get all acadmey logs
+  const getAllLogs = () => {
+    const requestBody = {
+      "condition": "hits",
+      "limit_from": "0",
+      "limit_to": "1000",
+      "entity": "coach"
+    };
+    axios.post(MOST_LEADS, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setAcademyLogs(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  //=========================================================get all acadmey verifeid
+   const getAllVerify = () => {
+    // const requestBodyBoth = {
+    //   "condition": "both",
+    //   "entity": "coach"
+    // };
+  
+    // const requestBodyAnyone = {
+    //   "condition": "anyone",
+    //    "entity": "coach"
+    // };
+  
+    // Promise.all([
+    //   axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`
+    //     }
+    //   }),
+    //   axios.post(ACADMEY_VEREFIED, requestBodyAnyone, {
+    //     headers: {
+    //       Authorization: `Bearer ${decryptedToken}`
+    //     }
+    //   })
+    // ]).then(([bothResponse, anyoneResponse]) => {
+    //   const bothData = bothResponse?.data?.data || [];
+    // const anyoneData = anyoneResponse?.data?.data || [];
+    // const combinedData = [...bothData, ...anyoneData];
+    // const uniqueIds = new Set();
+    // const filteredData = combinedData.filter(item => {
+    //   if (uniqueIds.has(item.id)) {
+    //     return false;
+    //   } else {
+    //     uniqueIds.add(item.id);
+    //     return true;
+    //   }
+    // });
+
+    // setVerified(filteredData);
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
+  }
+
   useEffect(() => {
     const counts = {
-      coach_logs: 0,
-      coach_with_leads: 0,
-      verified_coach: 0,
+      coach_logs: academyLogs?.length,
+      coach_with_leads: acadmeyLeads?.length,
+      verified_coach: verified?.length,
     };
     setStatusCounts(counts);
-  }, []);
+  }, [acadmeyLeads, academyLogs]);
 
-   const handleToggleChange = () => {
+  const handleEntityChange = (entity) => {
+    setDisplay(entity);
+    setSelectedEntity(entity);
+    setSearchQuery('');
+    setOwnerOpen(false);
+  };
+  const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);    
- 
+    if (value?.length === 0) {
+      getAllVerify();
+    } else {
+      if (!toggleChecked && value?.length < 3) {
+        return;
+      }
+      let apiUrl = '';
+        apiUrl = toggleChecked
+          ? `${SEARCH_ACADMEY_ID}${value}`
+          : `${ACADMEY_SEARCH_API}${value}`;
+      axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then(response => {
+        setVerified(response?.data?.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+    }
   };
   
   const resetData = () => {
+    getAllLeads();
+    getAllLogs();
+    getAllVerify();
   };
 
   //======================================================modal box
@@ -162,175 +284,220 @@ const Coach = () => {
       }));
     }
   };
-
   return (
     <>
-      <div>
-        <section className="lead-body">
-          <div className="top-head">
-            <div className="left-side--btns">
-              <div className="dropdown-container" ref={leadDropDownRef}>
-                <div className="dropdown-header" onClick={toggleDropdown}>
-                  all Leads{" "}
+    <div>
+      <section className="lead-body">
+        <div className="top-head">
+          <div className="left-side--btns">
+            <div className="dropdown-container" ref={leadDropDownRef}>
+              <div className="dropdown-header" onClick={toggleDropdown}>
+                all Leads{" "}
+                <i
+                  className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                ></i>
+              </div>
+              {leadopen && (
+                <ul className="dropdown-menuLead">
+                  <li>Lead 1</li>
+                  <li>Lead 2</li>
+                  <li>Lead 3</li>
+                </ul>
+              )}
+            </div>
+            <div className="view">
+              <a href="#" className="grid-view--btn active-btn">
+                <img src={chart} alt="chart" />
+              </a>
+              <a href="#" className="list-view--btn">
+                <i className="fas fa-list-ul"></i>
+              </a>
+            </div>
+            <div className="recycle-search-box">
+              <input
+                type="text"
+                className="recycle-search-input recycle-fonts"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <span className="recycle-search-icon">
+                <div>
+                  <label className="password-switch lead-switch">
+                    <input
+                      type="checkbox"
+                      checked={toggleChecked}
+                      onChange={handleToggleChange}
+                    />
+                    <span className="password-slider lead-slider password-round"></span>
+                  </label>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div className="right-side--btns">
+            <div className="select action-select">
+              <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
+                placeholder="Sports"
+                onChange={handleSportsChange}></input>
+              <datalist id="sports_leads">
+                <option value="archery"></option>
+                <option value="arts"></option>
+                <option value="athletics"></option>
+                <option value="badminton"></option>
+                <option value="basketball"></option>
+                <option value="billiards"></option>
+                <option value="boxing"></option>
+                <option value="chess"></option>
+                <option value="cricket"></option>
+                <option value="fencing"></option>
+                <option value="football"></option>
+                <option value="golf"></option>
+                <option value="gym"></option>
+                <option value="hockey"></option>
+                <option value="kabaddi"></option>
+                <option value="karate"></option>
+                <option value="kho-kho"></option>
+                <option value="mma"></option>
+                <option value="motorsports"></option>
+                <option value="rugby"></option>
+                <option value="shooting"></option>
+                <option value="skating"></option>
+                <option value="sports"></option>
+                <option value="squash"></option>
+                <option value="swimming"></option>
+                <option value="table-tennis"></option>
+                <option value="taekwondo"></option>
+                <option value="tennis"></option>
+                <option value="volleyball"></option>
+                <option value="wrestling"></option>
+                <option value="yoga"></option>
+                <option value="bodybuilding"></option>
+              </datalist>
+            </div>
+            <div className="select action-select">
+              <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} placeholder="City" onChange={handleCityChange}></input>
+              <datalist id="city_leads">
+                {cities?.map((city, index) => (
+                  <option key={index} value={city}></option>
+                ))}
+              </datalist>
+            </div>
+
+            <div className="select action-select">
+              <div className="dropdown-container" ref={actionDropDownRef}>
+                <div
+                  className="dropdown-header2"
+                  onClick={toggleActionDropdown}
+                >
+                  Actions{" "}
                   <i
-                    className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
+                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
                       }`}
                   ></i>
                 </div>
-                {leadopen && (
-                  <ul className="dropdown-menuLead">
-                    <li>Lead 1</li>
-                    <li>Lead 2</li>
-                    <li>Lead 3</li>
+                {actionopen && (
+                  <ul className="dropdown-menu">
+                    <li>Mass Delete</li>
+                    <li>Mass Update</li>
+                    <li>Import</li>
+                    <li>
+                      Export Leads
+                    </li>
                   </ul>
-                )}
-              </div>
-              <div className="view">
-                <a href="#" className="grid-view--btn active-btn">
-                  <img src={chart} alt="chart" />
-                </a>
-                <a href="#" className="list-view--btn">
-                  <i className="fas fa-list-ul"></i>
-                </a>
-              </div>
-              <div className="recycle-search-box">
-                <input
-                  type="text"
-                  className="recycle-search-input recycle-fonts"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <span className="recycle-search-icon">
-                  <div>
-                    <label className="password-switch lead-switch">
+                )}</div>
+            </div>
+            <button
+              type="button"
+              className="helpBtn genral-refresh-icon"
+              title="Refresh"
+              onClick={resetData}
+            >
+              <i class="fa-sharp fa-solid fa-rotate "></i>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section className="cards-body">
+        {stages?.map((item, index) => (
+          <div className="card-column" key={index}>
+            <div className="card-details">
+              <div className="main-cards">
+                <div className="cards-new">
+                  <p className="DealName">
+                    {item?.name}({statusCounts[item.stage]})
+                  </p>
+                  {statusCounts[item?.id] > 0 && (
+                    <label className="custom-checkbox">
                       <input
                         type="checkbox"
-                        checked={toggleChecked}
-                        onChange={handleToggleChange}
+                        className={`cb1 ${item}-header-checkbox`}
+                        name="headerCheckBox"
+                        checked={
+                          selectedStatusesData[item] &&
+                          areAllChildCheckboxesChecked(item)
+                        }
+                        onChange={() => handleHeaderCheckboxChange(item)}
                       />
-                      <span className="password-slider lead-slider password-round"></span>
+                      <span className="checkmark"></span>
                     </label>
-                  </div>
-                </span>
-              </div>
-            </div>
-            <div className="right-side--btns">
-              <div className="select action-select">
-                <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
-                  placeholder="Sports"
-                  onChange={handleSportsChange}></input>
-                <datalist id="sports_leads">
-                  <option value="archery"></option>
-                  <option value="arts"></option>
-                  <option value="athletics"></option>
-                  <option value="badminton"></option>
-                  <option value="basketball"></option>
-                  <option value="billiards"></option>
-                  <option value="boxing"></option>
-                  <option value="chess"></option>
-                  <option value="cricket"></option>
-                  <option value="fencing"></option>
-                  <option value="football"></option>
-                  <option value="golf"></option>
-                  <option value="gym"></option>
-                  <option value="hockey"></option>
-                  <option value="kabaddi"></option>
-                  <option value="karate"></option>
-                  <option value="kho-kho"></option>
-                  <option value="mma"></option>
-                  <option value="motorsports"></option>
-                  <option value="rugby"></option>
-                  <option value="shooting"></option>
-                  <option value="skating"></option>
-                  <option value="sports"></option>
-                  <option value="squash"></option>
-                  <option value="swimming"></option>
-                  <option value="table-tennis"></option>
-                  <option value="taekwondo"></option>
-                  <option value="tennis"></option>
-                  <option value="volleyball"></option>
-                  <option value="wrestling"></option>
-                  <option value="yoga"></option>
-                  <option value="bodybuilding"></option>
-                </datalist>
-              </div>
-              <div className="select action-select">
-                <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} placeholder="City" onChange={handleCityChange}></input>
-                <datalist id="city_leads">
-                  {cities?.map((city, index) => (
-                    <option key={index} value={city}></option>
-                  ))}
-                </datalist>
-              </div>
+                  )}
+                </div>
+                {(() => {
+                  switch (item?.stage) {
+                    case 'coach_logs':
+                      if (academyLogs && academyLogs.length > 0) {
+                        return academyLogs.map((obj) => (
+                          <CoachCard
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getAllLogs}
+                            itemName={"coach_logs"}
+                          />
+                        ));
+                      } else {
+                        return <p>Loading...</p>;
+                      };
+                    case 'coach_with_leads':
+                      if (acadmeyLeads && acadmeyLeads.length > 0) {
+                        return acadmeyLeads.map((obj) => (
+                          <CoachCard
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getAllLeads}
+                            itemName={"coach_with_leads"}
+                          />
+                        ));
+                      } else {
+                        return <p>Loading...</p>;
+                      }
+                      // case 'verified_coach':
+                      //   if (verified && verified.length > 0) {
+                      //     return verified.map((obj) => (
+                      //       <CoachCard
+                      //         key={obj?.id}
+                      //         object={obj}
+                      //         onLeadAdded={getAllLogs}
+                      //         itemName={"verified_coach"}
+                      //       />
+                      //     ));
+                      //   } else {
+                      //     return <p>Loading...</p>;
+                      //   };
+                    default:
+                      return null;
+                  }
+                })()}
 
-              <div className="select action-select">
-                <div className="dropdown-container" ref={actionDropDownRef}>
-                  <div
-                    className="dropdown-header2"
-                    onClick={toggleActionDropdown}
-                  >
-                    Actions{" "}
-                    <i
-                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                        }`}
-                    ></i>
-                  </div>
-                  {actionopen && (
-                    <ul className="dropdown-menu">
-                      <li>Mass Delete</li>
-                      <li>Mass Update</li>
-                      <li>Import</li>
-                      <li>
-                        Export Leads
-                      </li>
-                    </ul>
-                  )}</div>
               </div>
-              <button
-                type="button"
-                className="helpBtn genral-refresh-icon"
-                title="Refresh"
-                onClick={resetData}
-              >
-                <i class="fa-sharp fa-solid fa-rotate "></i>
-              </button>
             </div>
           </div>
-        </section>
-        <section className="cards-body">
-          {stages?.map((item, index) => (
-            <div className="card-column" key={index}>
-              <div className="card-details">
-                <div className="main-cards">
-                  <div className="cards-new">
-                    <p className="DealName">
-                      {item?.name}({statusCounts[item.stage]})
-                    </p>
-                    {statusCounts[item?.id] > 0 && (
-                      <label className="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className={`cb1 ${item}-header-checkbox`}
-                          name="headerCheckBox"
-                          checked={
-                            selectedStatusesData[item] &&
-                            areAllChildCheckboxesChecked(item)
-                          }
-                          onChange={() => handleHeaderCheckboxChange(item)}
-                        />
-                        <span className="checkmark"></span>
-                      </label>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
-        <ToastContainer />
-      </div>
-    </>
+        ))}
+      </section>
+      <ToastContainer />
+    </div>
+  </>
   );
 };
 

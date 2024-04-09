@@ -66,7 +66,8 @@ const Acadmey = () => {
     const requestBody = {
       "condition": "leads",
       "limit_from": "0",
-      "limit_to": "1000"
+      "limit_to": "1000",
+      "entity": "academy"
     };
     axios.post(MOST_LEADS, requestBody, {
       headers: {
@@ -90,7 +91,8 @@ const Acadmey = () => {
     const requestBody = {
       "condition": "hits",
       "limit_from": "0",
-      "limit_to": "1000"
+      "limit_to": "1000",
+      "entity": "academy"
     };
     axios.post(MOST_LEADS, requestBody, {
       headers: {
@@ -107,11 +109,13 @@ const Acadmey = () => {
   //=========================================================get all acadmey verifeid
    const getAllVerify = () => {
     const requestBodyBoth = {
-      "condition": "both"
+      "condition": "both",
+      "entity": "academy"
     };
   
     const requestBodyAnyone = {
-      "condition": "anyone"
+      "condition": "anyone",
+       "entity": "academy"
     };
   
     Promise.all([
