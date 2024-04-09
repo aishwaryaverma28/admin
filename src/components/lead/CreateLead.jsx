@@ -94,7 +94,6 @@ const CreateLead = ({ onClose }) => {
         }
       )
       .then((response) => {
-        console.log(response?.data?.data?.insertId)
         if (response?.data?.status === 1) {
           openModal(response?.data?.data?.insertId)
           toast.success("Details updated successfully", {
