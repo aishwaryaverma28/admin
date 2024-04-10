@@ -286,6 +286,7 @@ const LeadImage = (id) => {
     };
 
     const handleSubmit2 = () => {
+        setStateBtn(0);
         const updatedFormData = {
             logo: fileName,
             banner: bannerName,

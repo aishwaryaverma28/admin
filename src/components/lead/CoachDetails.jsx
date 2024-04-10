@@ -106,6 +106,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     handleClick();
   };
   const handleUpdateClick = () => {
+    setStateBtn(0);
     const updatedFormData = {
       name: editedItem?.name,
       mobile: editedItem?.mobile,

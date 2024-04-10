@@ -76,6 +76,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
         setStateBtn(1);
     };
     const handleUpdateClick = () => {
+        setStateBtn(0);
         const updatedFormData = {
             name: editedItem?.name,
             owner: editedItem?.owner,

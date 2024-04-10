@@ -254,6 +254,7 @@ const CoachImage = (id) => {
     };
 
     const handleSubmit2 = () => {
+        setStateBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
             profile_img: fileName,
