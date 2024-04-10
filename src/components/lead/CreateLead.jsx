@@ -218,7 +218,7 @@ const CreateLead = ({ onClose }) => {
                   <div className="detailsLeftContainer">
                     <p>Name<span className="common-fonts redAlert"> *</span></p>
                     <p>Owner Name</p>
-                    <p>Phone<span className="common-fonts redAlert"> *</span></p>
+                    <p>Phone</p>
                     <p>Email</p>
                     <p>Sport<span className="common-fonts redAlert"> *</span></p>
                     <p>Categories</p>
@@ -229,7 +229,7 @@ const CreateLead = ({ onClose }) => {
                     <p>Rating</p>
                     <p>Experience</p>
                     <p>Enviornment</p>
-                    <p className="about-textarea">About<span className="common-fonts redAlert"> *</span></p>
+                    <p className="about-textarea">About</p>
                   </div>
                   <div className="detailsRightContainer">
                     <p>
