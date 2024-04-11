@@ -171,7 +171,8 @@ const Coach = () => {
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
-    setSearchQuery(value);    
+    setSearchQuery(value);
+    
     if (value?.length === 0) {
       getAllVerify();
     } else {
@@ -179,9 +180,9 @@ const Coach = () => {
         return;
       }
       let apiUrl = '';
-        apiUrl = toggleChecked
-          ? `${SEARCH_ACADMEY_ID}${value}`
-          : `${ACADMEY_SEARCH_API}${value}`;
+      apiUrl = toggleChecked
+          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/id/${value}`
+          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
@@ -195,7 +196,7 @@ const Coach = () => {
       });
     }
   };
-  
+   
   const resetData = () => {
     getAllLeads();
     getAllLogs();
@@ -472,19 +473,20 @@ const Coach = () => {
                       } else {
                         return <p>Loading...</p>;
                       }
-                      // case 'verified_coach':
-                      //   if (verified && verified.length > 0) {
-                      //     return verified.map((obj) => (
-                      //       <CoachCard
-                      //         key={obj?.id}
-                      //         object={obj}
-                      //         onLeadAdded={getAllLogs}
-                      //         itemName={"verified_coach"}
-                      //       />
-                      //     ));
-                      //   } else {
-                      //     return <p>Loading...</p>;
-                      //   };
+                      case 'verified_coach':
+                        if (verified && verified.length > 0) {
+                          return verified.map((obj) => (
+                            <CoachCard
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getAllLogs}
+                              itemName={"verified_coach"}
+                            />
+                          ));
+                        } else {
+                          return
+                          // return <p>Loading...</p>;
+                        };
                     default:
                       return null;
                   }
