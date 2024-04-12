@@ -18,6 +18,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MassUpdateModal from "./MassUpdateModal.jsx";
+import LeadModal from "../LeadModal.jsx";
 
 const Lead = () => {
   const [stages, setStages] = useState([
@@ -38,6 +39,7 @@ const Lead = () => {
       "stage": "user"
     },
   ]);
+  const [openLead, setOpenLead] = useState(false);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
   const [display, setDisplay] = useState("Select Category")
@@ -72,6 +74,13 @@ const Lead = () => {
   const [coach, setCoach] = useState([]);
   const [player, setPlayer] = useState([]);
   const [user, setUser] = useState([]);
+  const addLeadClick = () => {
+    setOpenLead(true)
+  }
+  const addLeadClose = () => {
+    setOpenLead(false)
+  }
+  
 
   useEffect(() => {
     getAllAcademy();
@@ -520,6 +529,9 @@ const getAllUsers = () => {
 
           </div>
           <div className="right-side--btns">
+          <button type="button" className="secondary-btn" onClick={addLeadClick}>
+            Add Leads
+            </button>
             <button type="button" className="secondary-btn" onClick={openModal}>
             Add Academy
             </button>
@@ -814,6 +826,11 @@ const getAllUsers = () => {
           getAllAcademy={getAllAcademy}
         />
       )}
+      {
+        openLead && (
+          <LeadModal onClose={addLeadClose}/>
+        )
+      }
     </div>
   );
 };

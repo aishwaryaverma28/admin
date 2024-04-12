@@ -163,7 +163,6 @@ const LeadModal = ({ onClose, getData }) => {
     });
     setStateBtn(0);
   }
-  console.log(phoneRed);
 
   return (
     <>
