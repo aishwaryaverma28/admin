@@ -91,7 +91,7 @@ const Acadmey = () => {
     const requestBody = {
       "condition": "hits",
       "limit_from": "0",
-      "limit_to": "1000",
+      "limit_to": "200",
       "entity": "academy"
     };
     axios.post(MOST_LEADS, requestBody, {

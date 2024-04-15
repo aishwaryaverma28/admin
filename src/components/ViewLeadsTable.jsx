@@ -11,7 +11,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [leadsCount, setLeadsCount] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedOption, setSelectedOption] = useState("last_thirty_days");
+  const [selectedOption, setSelectedOption] = useState("last_seven_days");
   const decryptedToken = getDecryptedToken();
   const formatDate = (isoDate) => {
     const options = {
@@ -42,7 +42,7 @@ const ViewLeadsTable = ({ onClose }) => {
   useEffect(() => {
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
-    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
     // Adjust the endDate calculation to increase it by 1 day
     const endDate = new Date(today);
@@ -67,7 +67,6 @@ const ViewLeadsTable = ({ onClose }) => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data?.leads)
           setLeadsCount(response?.data?.data?.leads?.reverse());
         }
       })

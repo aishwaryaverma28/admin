@@ -11,7 +11,7 @@ import SignUpTable from "./SignUpTable.jsx";
 import LoginTable from "./LoginTable.jsx";
 import CoachTable from "./CoachTable.jsx";
 const Dashboard = ({ blog, getData, leadsCount, academyCount, playerCount, subsCount, signUp, login, coach }) => {
-  const [selectedOption, setSelectedOption] = useState("last_thirty_days");
+  const [selectedOption, setSelectedOption] = useState("last_seven_days");
 
   const [openBlog, setOpenBlog] = useState(false);
   const [openLeadTable, setOpenLeadTable] = useState(false);

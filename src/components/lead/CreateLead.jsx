@@ -96,7 +96,7 @@ const CreateLead = ({ onClose }) => {
       .then((response) => {
         if (response?.data?.status === 1) {
           openModal(response?.data?.data?.insertId)
-          toast.success("Details updated successfully", {
+          toast.success("Acadmey added successfully", {
             position: "top-center",
             autoClose: 1000,
           });
@@ -131,7 +131,7 @@ const CreateLead = ({ onClose }) => {
             rating:"",
           });
         } else {
-          toast.error("Some Error Occurred", {
+          toast.error("Name, sport, address1, City, State and Zipcode are necessary fields", {
             position: "top-center",
             autoClose: 1000,
           });

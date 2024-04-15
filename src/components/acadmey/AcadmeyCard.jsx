@@ -16,7 +16,7 @@ const AcadmeyCard = ({
 
   const openModal = (object) => {
     setModalVisible(true);
-    setSelectedObj(object);
+    setSelectedObj(object?.id);
   };
 
   const closeModal = () => {

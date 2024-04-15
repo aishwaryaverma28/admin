@@ -102,7 +102,7 @@ const LeadModal = ({ onClose, getData }) => {
     console.log(updatedFormData);
     const today = new Date();
     const lastThirtyDaysStartDate = new Date(today);
-    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
     const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
