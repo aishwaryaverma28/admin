@@ -412,44 +412,6 @@ const getAllUsers = () => {
     };
   }, []);
 
-  const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  const areAllChildCheckboxesChecked = (status) => {
-    if (selectedStatusesData[status]) {
-      const idsWithStatus = deals
-        ?.filter((deal) => deal.status === status)
-        ?.map((deal) => deal.id);
-      return idsWithStatus.every((id) => selectedIds.includes(id));
-    }
-    return false;
-  };
-
-  const handleHeaderCheckboxChange = (status) => {
-    const idsWithStatus = deals
-      ?.filter((deal) => deal.status === status)
-      ?.map((deal) => deal.id);
-
-    if (areAllChildCheckboxesChecked(status)) {
-      setSelectedIds(selectedIds?.filter((id) => !idsWithStatus.includes(id)));
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: false,
-      }));
-    } else {
-      setSelectedIds([...selectedIds, ...idsWithStatus]);
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: true,
-      }));
-    }
-  };
-
   const handleDeleteLead = () => {
     };
 
@@ -727,21 +689,6 @@ const getAllUsers = () => {
             <p className="DealName">
               {item?.stage}({statusCounts[item.stage]})
             </p>
-            {statusCounts[item?.id] > 0 && (
-              <label className="custom-checkbox">
-                <input
-                  type="checkbox"
-                  className={`cb1 ${item}-header-checkbox`}
-                  name="headerCheckBox"
-                  checked={
-                    selectedStatusesData[item] &&
-                    areAllChildCheckboxesChecked(item)
-                  }
-                  onChange={() => handleHeaderCheckboxChange(item)}
-                />
-                <span className="checkmark"></span>
-              </label>
-            )}
           </div>
           {(() => {
             switch (item?.stage) {
@@ -750,8 +697,6 @@ const getAllUsers = () => {
                   <LeadCards
                     key={obj?.id}
                     object={obj}
-                    // selectedIds={selectedIds}
-                    // setSelectedIds={setSelectedIds}
                     onLeadAdded={getAllAcademy}
                     itemName={"academy"}
                     userData={userData}
