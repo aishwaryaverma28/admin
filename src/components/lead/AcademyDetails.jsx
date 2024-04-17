@@ -280,7 +280,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                 <p>Experience</p>
                                 <p>Reviews</p>
                                 <p>Rating</p>
-                                <p>Enviornment</p>
+                                <p>Option</p>
                                 <p className="about-textarea">About</p>
                             </div>
                             <div className="detailsRightContainer">
@@ -582,6 +582,39 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                     ) : (
                                         <span>
                                             <div className="form-group-radio">
+                                            <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Free Trail"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Free Trail")}
+                                                    /> Free Trial
+                                                </label>
+                                                <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Coaching"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Coaching")}
+                                                    /> Coaching
+                                                </label>
+                                                <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Admission Open"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Admission Open")}
+                                                    /> Admission Open
+                                                </label>
                                                 <label className="radio-inline">
                                                     <input
                                                         type="checkbox"
@@ -603,18 +636,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                                         onChange={handleCheckboxChange}
                                                         checked={trainingLocation?.includes("Kids Friendly")}
                                                     /> Kids Friendly
-                                                </label>
-                                                <label className="radio-inline">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="friendly"
-                                                        value="Free Trail"
-                                                        className="radio_disable check_input"
-                                                        disabled={isDisabled}
-                                                        onChange={handleCheckboxChange}
-                                                        checked={trainingLocation?.includes("Free Trail")}
-                                                    /> Free Trail
-                                                </label>
+                                                </label>                                               
                                             </div>
                                         </span>
                                     )}

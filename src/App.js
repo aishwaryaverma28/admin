@@ -28,8 +28,6 @@ import SitePagesView from "./components/master-settings/SitePagesView";
 import SitePagesUpdate from "./components/master-settings/SitePagesUpdate";
 import Home from "./components/Home";
 import Contacts from "./components/contacts/Contacts.jsx";
-import Deal from "./components/deal/Deal";
-import Mail from "./components/Mail";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import SecureRoutes from "./components/SecureRoutes";
@@ -65,6 +63,7 @@ import ViewLeadsPage from "./components/master-settings/leads/ViewLeadsPage.jsx"
 import BacklistTable from "./components/master-settings/backlist/BacklistTable.jsx";
 import Acadmey from "./components/acadmey/Acadmey.jsx";
 import Coach from "./components/coach/Coach.jsx";
+import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -134,7 +133,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/deals",
-        element: <SecureRoutes Component={Deal} />,
+        element: <SecureRoutes Component={BmpLeads} />,
       },
       {
         path: "/lp/deals/:id",

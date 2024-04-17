@@ -33,18 +33,13 @@ const Acadmey = () => {
     }    
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState('verified_acadmey');
-  const [display, setDisplay] = useState("Select Category")
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const actionOwnerRef = useRef(null);
-  const [deals, setDeals] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [statusCounts, setStatusCounts] = useState({});
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [ownerOpen, setOwnerOpen] = useState(false);
   const [sportsLead, setSportsLead] = useState('');
@@ -156,14 +151,8 @@ const Acadmey = () => {
       verified_acadmey: verified?.length,
     };
     setStatusCounts(counts);
-  }, [acadmeyLeads, academyLogs]);
+  }, [acadmeyLeads, academyLogs, verified]);
 
-  const handleEntityChange = (entity) => {
-    setDisplay(entity);
-    setSelectedEntity(entity);
-    setSearchQuery('');
-    setOwnerOpen(false);
-  };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -245,44 +234,6 @@ const Acadmey = () => {
       document.removeEventListener("click", handleOutsideClick5);
     };
   }, []);
-
-  const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  const areAllChildCheckboxesChecked = (status) => {
-    if (selectedStatusesData[status]) {
-      const idsWithStatus = deals
-        ?.filter((deal) => deal.status === status)
-        ?.map((deal) => deal.id);
-      return idsWithStatus.every((id) => selectedIds.includes(id));
-    }
-    return false;
-  };
-
-  const handleHeaderCheckboxChange = (status) => {
-    const idsWithStatus = deals
-      ?.filter((deal) => deal.status === status)
-      ?.map((deal) => deal.id);
-
-    if (areAllChildCheckboxesChecked(status)) {
-      setSelectedIds(selectedIds?.filter((id) => !idsWithStatus.includes(id)));
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: false,
-      }));
-    } else {
-      setSelectedIds([...selectedIds, ...idsWithStatus]);
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: true,
-      }));
-    }
-  };
 
   return (
     <>
@@ -428,21 +379,6 @@ const Acadmey = () => {
                     <p className="DealName">
                       {item?.name}({statusCounts[item.stage]})
                     </p>
-                    {statusCounts[item?.id] > 0 && (
-                      <label className="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className={`cb1 ${item}-header-checkbox`}
-                          name="headerCheckBox"
-                          checked={
-                            selectedStatusesData[item] &&
-                            areAllChildCheckboxesChecked(item)
-                          }
-                          onChange={() => handleHeaderCheckboxChange(item)}
-                        />
-                        <span className="checkmark"></span>
-                      </label>
-                    )}
                   </div>
                   {(() => {
                     switch (item?.stage) {
