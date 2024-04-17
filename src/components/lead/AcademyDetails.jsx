@@ -604,6 +604,17 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                                         checked={trainingLocation?.includes("Kids Friendly")}
                                                     /> Kids Friendly
                                                 </label>
+                                                <label className="radio-inline">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="friendly"
+                                                        value="Free Trail"
+                                                        className="radio_disable check_input"
+                                                        disabled={isDisabled}
+                                                        onChange={handleCheckboxChange}
+                                                        checked={trainingLocation?.includes("Free Trail")}
+                                                    /> Free Trail
+                                                </label>
                                             </div>
                                         </span>
                                     )}
