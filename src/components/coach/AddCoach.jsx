@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CoachDetails from "../lead/CoachDetails";
 import { skills } from '../utils/coachSkils';
+import CoachLead from "../lead/CoachLead";
 
 const AddCoach = ({ onClose }) => {
     const decryptedToken = getDecryptedToken();
@@ -80,6 +81,7 @@ const AddCoach = ({ onClose }) => {
         setModalVisible(true);
         setSelectedObj(object);
     }
+
     const closeModal = () => {
         setModalVisible(false);
     };
@@ -94,7 +96,8 @@ const AddCoach = ({ onClose }) => {
         }
         const updatedFormData = {
             ...updatedFields,
-            friendly: trainingLocation.toString(),
+            training_location: trainingLocation.toString(),
+            skill: addedSkils.toString(),
         };
         axios
             .post(ADD_COACH, updatedFormData
@@ -132,7 +135,7 @@ const AddCoach = ({ onClose }) => {
                         achievement: "",
                     });
                 } else {
-                    toast.error("Name, sport, address1, City, State and Zipcode are necessary fields", {
+                    toast.error("Name, sport and City are necessary fields", {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -277,13 +280,371 @@ const AddCoach = ({ onClose }) => {
                         <div className="leadDetailsLeft">
                             <div className="detailsBox">
                                 <div className="detailsContent">
-                                    <div className="detailsLeftContainer"></div>
+                                    <div className="detailsLeftContainer">
+                                        <p>Name <span className="common-fonts redAlert"> *</span></p>
+                                        <p>Email</p>
+                                        <p>Sport <span className="common-fonts redAlert"> *</span></p>
+                                        <p>Mobile</p>
+                                        <p>Gender</p>
+                                        <p>Fees</p>
+                                        <p>Package</p>
+                                        <p>Experience</p>
+                                        <p>Education</p>
+                                        <p>Achievement</p>
+                                        <p>Profile Heading</p>
+                                        <p>Certification</p>
+                                        <p className="about-textarea">About</p>
+                                    </div>
+                                    <div className="detailsRightContainer">
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={editedItem?.name}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="email"
+                                                    value={editedItem?.email}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input list="sports" name="sport"
+                                                    value={editedItem?.sport}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                     />
+                                                <datalist id="sports">
+                                                    <option value="archery"></option>
+                                                    <option value="arts"></option>
+                                                    <option value="athletics"></option>
+                                                    <option value="aerobics"></option>
+                                                    <option value="badminton"></option>
+                                                    <option value="basketball"></option>
+                                                    <option value="bodybuilding"></option>
+                                                    <option value="billiards"></option>
+                                                    <option value="boxing"></option>
+                                                    <option value="chess"></option>
+                                                    <option value="cricket"></option>
+                                                    <option value="fencing"></option>
+                                                    <option value="football"></option>
+                                                    <option value="golf"></option>
+                                                    <option value="gym"></option>
+                                                    <option value="hockey"></option>
+                                                    <option value="kabaddi"></option>
+                                                    <option value="karate"></option>
+                                                    <option value="kho-kho"></option>
+                                                    <option value="mma"></option>
+                                                    <option value="motorsports"></option>
+                                                    <option value="rugby"></option>
+                                                    <option value="shooting"></option>
+                                                    <option value="skating"></option>
+                                                    <option value="sports"></option>
+                                                    <option value="squash"></option>
+                                                    <option value="swimming"></option>
+                                                    <option value="table-tennis"></option>
+                                                    <option value="taekwondo"></option>
+                                                    <option value="tennis"></option>
+                                                    <option value="volleyball"></option>
+                                                    <option value="wrestling"></option>
+                                                    <option value="yoga"></option>
+                                                    <option value="Personal Gym Trainer"></option>
+                                                    <option value="Fitness Training"></option>
+                                                    <option value="Pilates"></option>
+                                                </datalist>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="mobile"
+                                                    value={editedItem?.mobile}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <select
+                                                    name="gender"
+                                                    id="gender"
+                                                    value={editedItem?.gender || ""}
+                                                    onChange={handleInputChange}
+                                                    
+                                                    style={editStylingSelect1}
+                                                >
+                                                    <option value=""></option>
+                                                    <option value="female">Female</option>
+                                                    <option value="male">Male</option>
+                                                </select>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="fee"
+                                                    value={editedItem?.fee}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="package"
+                                                    value={editedItem?.package}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input list="experience" name="experience"
+                                                    value={editedItem?.experience}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                     />
+                                                <datalist id="experience">
+                                                    <option value="1"></option>
+                                                    <option value="2"></option>
+                                                    <option value="3"></option>
+                                                    <option value="4"></option>
+                                                    <option value="5"></option>
+                                                    <option value="6"></option>
+                                                    <option value="7"></option>
+                                                    <option value="8"></option>
+                                                    <option value="9"></option>
+                                                    <option value="10"></option>
+                                                    <option value="11"></option>
+                                                    <option value="12"></option>
+                                                    <option value="13"></option>
+                                                    <option value="14"></option>
+                                                    <option value="15"></option>
+                                                    <option value="16"></option>
+                                                    <option value="17"></option>
+                                                    <option value="18"></option>
+                                                    <option value="19"></option>
+                                                    <option value="20"></option>
+                                                    <option value="20+"></option>
+                                                </datalist>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="education"
+                                                    value={editedItem?.education}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="achievement"
+                                                    value={editedItem?.achievement}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="heighlight"
+                                                    value={editedItem?.heighlight}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="certificate"
+                                                    value={editedItem?.certificate}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <textarea
+                                                    name="about_coach"
+                                                    onChange={handleInputChange}
+                                                    value={editedItem?.about_coach}
+                                                    rows="5"
+                                                    id=""
+                                                    style={editStylingTextarea}
+                                                    
+                                                ></textarea>
+                                            </span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
+                            <div className="detailsBox">
+                                <p className="detailHead">ADDRESS INFORMATION</p>
+                                <div className="detailsContent">
+                                    <div className="detailsLeftContainer">
+                                        <p>City <span className="common-fonts redAlert"> *</span></p>
+                                        <p>State</p>
+                                        <p>Training Location</p>
+                                        <p>Common Location</p>
+                                    </div>
+                                    <div className="detailsRightContainer">
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="city"
+                                                    value={editedItem?.city}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={editedItem?.state}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <div className="form-group-radio">
+                                                    <label className="radio-inline">
+                                                        <input
+                                                            type="checkbox"
+                                                            name="training_location"
+                                                            value="1"
+                                                            className="radio_disable check_input"
+                                                            
+                                                            onChange={handleCheckboxChange}
+                                                            checked={trainingLocation.includes("1")}
+                                                        /> Online
+                                                    </label>
+                                                    <label className="radio-inline">
+                                                        <input
+                                                            type="checkbox"
+                                                            name="training_location"
+                                                            value="2"
+                                                            className="radio_disable check_input"
+                                                            
+                                                            onChange={handleCheckboxChange}
+                                                            checked={trainingLocation.includes("2")}
+                                                        /> Home
+                                                    </label>
+                                                </div>
+                                            </span>
+                                        </p>
+                                        <br />
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="common_location"
+                                                    value={editedItem?.common_location}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+                                                    
+                                                />
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="detailsBox">
+                                <p className="detailHead">ADDITIONAL INFORMATION</p>
+                                <div className="detailsContent">
+                                    <div className="detailsLeftContainer">
+                                        <p>Skills</p>
+                                    </div>
+                                    <div className="detailsRightContainer">
+                                        <p>
+                                            <span>
+                                                <div className="form-group-radio">
+                                                    {userSkills.map((skill, index) => (
+                                                        <label className="radio-inline" key={index}>
+                                                            <input
+                                                                type="checkbox"
+                                                                name="userSkills"
+                                                                value={skill}
+                                                                className="radio_disable check_input"
+                                                                
+                                                                onChange={handleSkillChange}
+                                                                checked={addedSkils.includes(skill)}
+                                                            />
+                                                            {skill}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modalLeftBtnBox">
+                            <span></span>
+                            {stateBtn === 0 ? (
+                                <button disabled className="disabledBtn">
+                                    Save
+                                </button>
+                            ) : (
+                                <button onClick={handleUpdateClick} className="convertToDeal">
+                                    Save
+                                </button>
+                            )}
                         </div>
                     </div>
                 </>
             </div>
+            {modalVisible && (
+                <CoachLead
+                    selectedItem={selectedObj}
+                    closeModal={closeModal}
+                />
+            )}
         </div>
     )
 }

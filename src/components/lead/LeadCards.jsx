@@ -26,7 +26,7 @@ const LeadCards = ({
     }
     if (itemName === "coach") {
       setCoachMenu(true);
-      setSelectedObj(object);
+      setSelectedObj(object?.id);
     }
     if (itemName === "user") {
       setUserMenu(true);

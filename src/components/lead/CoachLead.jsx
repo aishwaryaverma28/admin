@@ -13,6 +13,7 @@ import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
 import Confirmation from './Confirmation';
 const CoachLead = ({ selectedItem, closeModal }) => {
+    console.log(selectedItem)
     const decryptedToken = getDecryptedToken();
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
@@ -54,7 +55,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     const getLogs = () => {
         const body = {
             entity: "Coach",
-            object_id: selectedItem.id
+            object_id: selectedItem
         }
         axios.post(ACADEMY_LOGS, body, {
             headers: {
@@ -72,7 +73,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     }
     const getUserId = () => {
         const body = {
-            object_id: selectedItem.id, object_type: 1,
+            object_id: selectedItem, object_type: 1,
         }
         axios
             .post(GET_BMPUSER_ID, body, {
@@ -96,7 +97,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     }
     const fetchLeads = () => {
         const body = {
-            object_id: selectedItem.id, object_type: "coach",
+            object_id: selectedItem, object_type: "coach",
         }
         axios
             .post(ACADMEY_LEADS_DETAILS, body, {
@@ -118,7 +119,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
             });
     };
     const fetchUserLog = (id) => {
-        console.log(id?.id)
         axios
             .post(USER_LOG, { object_type: 1,
             object_id: id?.id }, {
@@ -127,7 +127,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
                 setUserLog(response?.data?.data);
             })
             .catch((error) => {
@@ -212,17 +211,17 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                      <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <CoachDetails id={selectedItem?.id} updateCheckState={updateCheckState} ref={childRef} />
+                                <CoachDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <CoachImage id={selectedItem?.id} />
+                                <CoachImage id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem?.id} type={"Coach"}/>
+                                <AcademyLogs id={selectedItem} type={"Coach"}/>
                             </div>
                         )}
                          {activeTab === "user" && (
