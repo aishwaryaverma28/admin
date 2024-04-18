@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
 import { ADD_NEW_ACADMEY, getDecryptedToken } from "../utils/Constants";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyLead from "./AcadmeyLead";
 
@@ -618,8 +618,6 @@ const CreateLead = ({ onClose }) => {
           closeModal={closeModal}
         />
       )}
-
-      <ToastContainer />
     </div>
   );
 };

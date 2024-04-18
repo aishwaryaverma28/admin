@@ -107,6 +107,11 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
   };
   const handleUpdateClick = () => {
     setStateBtn(0);
+    const formattedName = editedItem.name.toLowerCase().replace(/ /g, '-');
+      const formattedCity = editedItem.city.toLowerCase().replace(/ /g, '-');
+      const formattedSport = editedItem.sport.toLowerCase().replace(/ /g, '-');
+      const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
+      
     const updatedFormData = {
       name: editedItem?.name,
       mobile: editedItem?.mobile,
@@ -125,6 +130,8 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
       experience: editedItem?.experience,
       education: editedItem?.education,
       achievement:editedItem?.achievement,
+      certificate:editedItem?.certificate,
+      url:url,
     }
     axios
       .put(UPDATE_COACH + id, updatedFormData
@@ -330,6 +337,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                 <p>Education</p>
                 <p>Achievement</p>
                 <p>Profile Heading</p>
+                <p>Certification</p>
                 <p className="about-textarea">About</p>
               </div>
               <div className="detailsRightContainer">
@@ -409,7 +417,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                         <option value="sports"></option>
                         <option value="squash"></option>
                         <option value="swimming"></option>
-                        <option value="table-Tennis"></option>
+                        <option value="table-tennis"></option>
                         <option value="taekwondo"></option>
                         <option value="tennis"></option>
                         <option value="volleyball"></option>
@@ -583,6 +591,24 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                         type="text"
                         name="heighlight"
                         value={editedItem?.heighlight}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="certificate"
+                        value={editedItem?.certificate}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput

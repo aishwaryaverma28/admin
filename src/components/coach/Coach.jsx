@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyCard from "./CoachCard.jsx";
 import CoachCard from "./CoachCard.jsx";
+import AddCoach from "./AddCoach.jsx";
 
 const Coach = () => {
   const [stages, setStages] = useState([
@@ -53,6 +54,15 @@ const Coach = () => {
   const [acadmeyLeads, setAcademyLeads] = useState([])
   const [academyLogs, setAcademyLogs] = useState([]);
   const [verified, setVerified] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  //======================================================modal box
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
@@ -338,6 +348,9 @@ const Coach = () => {
             </div>
           </div>
           <div className="right-side--btns">
+          <button type="button" className="secondary-btn" onClick={openModal}>
+            Add Coach
+            </button>
             <div className="select action-select">
               <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
                 placeholder="Sports"
@@ -498,6 +511,12 @@ const Coach = () => {
         ))}
       </section>
       <ToastContainer />
+      {isModalOpen && (
+      <AddCoach
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
+    )}
     </div>
   </>
   );
