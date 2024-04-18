@@ -105,6 +105,19 @@ const LeadCards = ({
             </div>
           </div>
           <div className="DealCard-rightBox">
+          {itemName === "coach" && (
+            <div className="mail">
+            <div className="bmp-image-preview2">
+                            <img
+                                src={object?.profile_img === null
+                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                                alt="pofile"
+                                className="bmp-preview-image"
+                            />
+                        </div>
+          </div>
+          )}
           </div>
         </div>
       </div>
