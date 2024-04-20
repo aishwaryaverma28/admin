@@ -64,6 +64,7 @@ import BacklistTable from "./components/master-settings/backlist/BacklistTable.j
 import Acadmey from "./components/acadmey/Acadmey.jsx";
 import Coach from "./components/coach/Coach.jsx";
 import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
+import Support from "./components/tickets/Support.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -87,10 +88,12 @@ const router = createBrowserRouter([
         path: "/lp",
         element: <Navigate to="/lp/home" replace />,
       },
+      // path: "/lp/dashboard",
       {
         path: "/lp/lead",
         element: <SecureRoutes Component={Lead} />,
       },
+      // path: "/lp/acadmey",
       {
         path: "/lp/bmp",
         element: <SecureRoutes Component={Acadmey} />,
@@ -107,30 +110,7 @@ const router = createBrowserRouter([
         path: "/lp/admin",
         element: <SecureRoutes Component={Editor} />,
       },
-      {
-        path: "/lp/contacts",
-        element: <SecureRoutes Component={Contacts} />,
-      },
-      {
-        path: "/lp/contacts/company/:id",
-        element: <CompanyUpdate />,
-      },
-      {
-        path: "/lp/contacts/people/:id",
-        element: <PeopleUpdate />,
-      },
-      {
-        path: "/lp/marketing",
-        element: <Campaign/>,
-      },
-      {
-        path: "/lp/marketing/list",
-        element: <ListFilter/>
-      },
-      {
-        path: "/lp/marketing/campaign",
-        element: <WhatsappView/>
-      },
+      // path: "/lp/lead",
       {
         path: "/lp/deals",
         element: <SecureRoutes Component={BmpLeads} />,
@@ -138,6 +118,11 @@ const router = createBrowserRouter([
       {
         path: "/lp/deals/:id",
         element: <DealUpdate />,
+      },
+      // path: "/lp/tickets",
+      {
+        path: "/lp/contacts",
+        element: <SecureRoutes Component={Support} />,
       },
       {
         path: "/lp/settings",

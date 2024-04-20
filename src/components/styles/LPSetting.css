@@ -119,4 +119,10 @@ button {
 .sub-sub-menu a{
   padding-left: 2rem;
 }
-
+.ticket-head-left{
+  padding-left: 1rem;
+}
+.ticket-table{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
