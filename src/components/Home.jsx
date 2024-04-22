@@ -51,15 +51,15 @@ const Home = () => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          // console.log(response?.data?.data)
+          console.log(response?.data?.data[0])
           setIsLoading(false);
-          setLeadsCount(response?.data?.data?.leads?.reverse());
-          setAcademyCount(response?.data?.data?.AcademyUserStats?.reverse());
-          setPlayerCount(response?.data?.data?.PlayerUserStats?.reverse());
-          setSubsCount(response?.data?.data?.subs?.reverse());
-          setSignUp(response?.data?.data?.signUpSuccess?.reverse());
-          setLogin(response?.data?.data?.loginSuccess?.reverse());
-          setCoach(response?.data?.data?.CoachUserStats?.reverse());
+          setLeadsCount(response?.data?.data[0]?.leads);
+          setAcademyCount(response?.data?.data[0]?.AcademyUserStats);
+          setPlayerCount(response?.data?.data[0]?.PlayerUserStats);
+          setSubsCount(response?.data?.data[0]?.subs);
+          setSignUp(response?.data?.data[0]?.signUpSuccess);
+          setLogin(response?.data?.data[0]?.loginSuccess);
+          setCoach(response?.data?.data[0]?.CoachUserStats);
         }
       })
       .catch((error) => {

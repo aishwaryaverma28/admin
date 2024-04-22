@@ -212,11 +212,11 @@ const Dashboard = ({ blog, getData, leadsCount, academyCount, playerCount, subsC
               <div className="dashboard_item">
                 <div className="dashboard_card">
                   <h3 className="common_fontscommon_fonts" onClick={loginTableClick}>Login</h3>
-                  <p className="common_fonts dash_num">{login ? login?.length : 0}</p>
+                  <p className="common_fonts dash_num">{login}</p>
                 </div>
                 <div className="dashboard_card">
                   <h3 className="font_new" onClick={signUpTableClick}>Registration</h3>
-                  <p className="common_fonts dash_num">{signUp ? signUp?.length : 0}</p>
+                  <p className="common_fonts dash_num">{signUp}</p>
                 </div>
               </div>
 
@@ -227,20 +227,20 @@ const Dashboard = ({ blog, getData, leadsCount, academyCount, playerCount, subsC
                     Academy
                   </h3>
                   <p className="common_fonts dash_num">
-                    {academyCount ? academyCount?.length : 0}
+                    {academyCount}
                   </p>
                 </div>
                 <div className="dashboard_card">
                   <h3 className="font_new" onClick={coachTableClick}>
                     Coach
                   </h3>
-                  <p className="common_fonts dash_num">{coach ? coach?.length : 0}</p>
+                  <p className="common_fonts dash_num">{coach}</p>
                 </div>
                 <div className="dashboard_card">
                   <h3 className="font_new" onClick={playerTableClick}>
                     Player
                   </h3>
-                  <p className="common_fonts dash_num">{playerCount ? playerCount?.length : 0}</p>
+                  <p className="common_fonts dash_num">{playerCount}</p>
                 </div>
               </div>
 
@@ -250,14 +250,14 @@ const Dashboard = ({ blog, getData, leadsCount, academyCount, playerCount, subsC
                     Leads
                   </h3>
                   <p className="common_fonts dash_num">
-                    {leadsCount ? leadsCount?.length : 0}
+                    {leadsCount}
                   </p>
                 </div>
                 <div className="dashboard_card">
                   <h3 className="font_new" onClick={subscriptionClick}>
                     Subscriptions
                   </h3>
-                  <p className="common_fonts dash_num">{subsCount ? subsCount?.length : 0}</p>
+                  <p className="common_fonts dash_num">{subsCount}</p>
                 </div>
                 <div className="dashboard_card">
                   <h3 className="font_new" onClick={blogClick}>
