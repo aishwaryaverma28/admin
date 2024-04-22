@@ -19,7 +19,7 @@ const Acadmey = () => {
     {
       "id": 1,
       "stage": "verified_acadmey",
-      "name": "Verified Acadmey"
+      "name": "Verified Academy"
     },
     {
       "id": 2,
@@ -29,7 +29,7 @@ const Acadmey = () => {
     {
       "id": 3,
       "stage": "acadmey_with_leads",
-      "name": "Acadmey with Leads"
+      "name": "Academy with Leads"
     }    
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);

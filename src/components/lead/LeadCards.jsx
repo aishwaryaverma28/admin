@@ -18,7 +18,20 @@ const LeadCards = ({
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedObj, setSelectedObj] = useState({});
- 
+
+  const formatDate = (isoDate) => {
+    const options = {
+      year: "2-digit",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    const date = new Date(isoDate);
+    return date.toLocaleDateString("en-US", options);
+  };
+
   const openModal = (object) => {
     if (itemName === "academy") {
       setModalVisible(true);
@@ -96,7 +109,11 @@ const LeadCards = ({
                   <p>{object.mobile}</p>
                 </div>
               )}
-
+              {itemName === "user" && (
+                <div className="mail">
+                  {formatDate(object?.creation_date)}
+                </div>
+              )}
               {itemName !== "user" && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>
@@ -105,19 +122,20 @@ const LeadCards = ({
             </div>
           </div>
           <div className="DealCard-rightBox">
-          {itemName === "coach" && (
-            <div className="mail">
-            <div className="bmp-image-preview2">
-                            <img
-                                src={object?.profile_img === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
-                                alt="pofile"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-          </div>
-          )}
+            {itemName === "coach" && (
+              <div className="mail">
+                <div className="bmp-image-preview2">
+                  <img
+                    src={object?.profile_img === null
+                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                    alt="pofile"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -140,13 +158,13 @@ const LeadCards = ({
           closeModal={closeUserModal}
         />
       )}
-       {playerMenu && (
+      {playerMenu && (
         <PlayerLead
           selectedItem={selectedObj}
           closeModal={closePlayerModal}
         />
       )}
-      
+
     </>
   );
 };
