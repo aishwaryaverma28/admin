@@ -253,7 +253,7 @@ const BlogUpdate = () => {
       },
     });
     const data = response.data.data[0];
-    setViews(response?.data?.views);
+    setViews(response?.data?.views[0]?.MatchCount);
     if (data) {
       setFormData({
         ...formData,
