@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import {
-  BMP_USER_ID,
   BMP_USER_DATA,
   getDecryptedToken,
   BMP_USER_UPDATE

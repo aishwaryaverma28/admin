@@ -38,6 +38,10 @@ const Lead = () => {
       "id": 4,
       "stage": "user"
     },
+    {
+      "id": 5,
+      "stage": "new academy user"
+    },
   ]);
   const [openLead, setOpenLead] = useState(false);
   const [toggleChecked, setToggleChecked] = useState(false);

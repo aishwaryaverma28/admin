@@ -267,7 +267,6 @@ export const GET_COACH = bmpStart + "/bmp/getEntities";
 export const GET_COACH_ID = bmpStart+"/bmp/coach/get";
 export const UPDATE_COACH = bmpStart+"/bmp/coach/update/";
 export const ALL_BMP_USER = bmpStart+"/bmp/user/getall";
-export const BMP_USER_ID = bmpStart+"/bmp/user/get";
 export const BMP_USER_UPDATE = bmpStart+"/bmp/user/update/";
 export const BMP_USER_DATA = bmpStart+ "/bmp/user/get";
 export const BMP_USER_TICKETS= bmpStart+"/bmp/user/getTickets";
