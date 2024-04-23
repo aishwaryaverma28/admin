@@ -352,7 +352,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <LeadImage2 id={selectedItem} />
+                                <LeadImage id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (
