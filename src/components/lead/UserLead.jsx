@@ -1,7 +1,7 @@
-import React,{ useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import {
-    getDecryptedToken,USER_LOG
+    getDecryptedToken, USER_LOG
 } from "./../utils/Constants";
 import UserDetails from './UserDetails';
 import BmpTickets from './BmpTickets';
@@ -10,6 +10,7 @@ import CoachImage from './CoachImage';
 import CoachDetails from './CoachDetails';
 import AcademyDetails from './AcademyDetails';
 import UserLogs from './UserLogs';
+import AssignAcademy from '../acadmey/AssignAcademy';
 
 const UserLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
@@ -20,8 +21,10 @@ const UserLead = ({ selectedItem, closeModal }) => {
     };
     const fetchUserLog = () => {
         axios
-            .post(USER_LOG, { object_type: selectedItem?.type_id,
-            object_id: selectedItem?.id }, {
+            .post(USER_LOG, {
+                object_type: selectedItem?.type_id,
+                object_id: selectedItem?.id
+            }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -33,11 +36,11 @@ const UserLead = ({ selectedItem, closeModal }) => {
                 console.log(error);
             });
     };
-useEffect(()=>{
-    fetchUserLog();
-},[])
-  return (
-    <div className="modal">
+    useEffect(() => {
+        fetchUserLog();
+    }, [])
+    return (
+        <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
             <div className="customization_popup_container">
                 <span className="close" onClick={closeModal}>
@@ -46,8 +49,8 @@ useEffect(()=>{
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
-                         {/* ===================================================================tabination buttons */}
-                         <button
+                        {/* ===================================================================tabination buttons */}
+                        <button
                             className={activeTab === "details" ? "active" : ""}
                             onClick={() => handleTabClick("details")}
                         >
@@ -61,6 +64,16 @@ useEffect(()=>{
                             <i class="fa-sharp fa-regular fa-images"></i>
                             Images
                         </button>
+                        {selectedItem?.type === "Academy" ?
+                            <button
+                                className={activeTab === "assign" ? "active" : ""}
+                                onClick={() => handleTabClick("assign")}
+                            >
+                                <i className="fa-sharp fa-regular fa-envelope-open"></i>
+                                Assign
+                            </button>
+                            : <></>
+                        }
                         <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
@@ -75,30 +88,29 @@ useEffect(()=>{
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Tickets
                         </button>
-                        <button
-                            className={activeTab === "email" ? "active" : ""}
-                            onClick={() => handleTabClick("email")}
-                        >
-                            <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                            Email
-                        </button>
                     </div>
-                     {/* ===================================================================tabination content */}
-                     <div className="tab-content">
+                    {/* ===================================================================tabination content */}
+                    <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                {selectedItem?.type === "Coach" ? <CoachDetails id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <AcademyDetails id={selectedItem?.parent_id} />: null}
+                                {selectedItem?.type === "Coach" ? <CoachDetails id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <AcademyDetails id={selectedItem?.parent_id} /> : null}
                             </div>
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                {selectedItem?.type === "Coach" ? <CoachImage id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <LeadImage id={selectedItem?.parent_id} />: null}
-                                
+                                {selectedItem?.type === "Coach" ? <CoachImage id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <LeadImage id={selectedItem?.parent_id} /> : null}
+
+                            </div>
+                        )}
+                        {activeTab === "assign" && (
+                            <div className="activity-tab-content">
+                                {selectedItem?.type === "Academy" ? <AssignAcademy /> : null}
+
                             </div>
                         )}
                         {activeTab === "user" && (
                             <div className="activity-tab-content">
-                                <UserLogs id={selectedItem?.id} type={selectedItem?.type_id}/>
+                                <UserLogs id={selectedItem?.id} type={selectedItem?.type_id} />
                             </div>
                         )}
 
@@ -107,11 +119,11 @@ useEffect(()=>{
                                 <BmpTickets selectedItem={selectedItem} />
                             </div>
                         )}
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default UserLead

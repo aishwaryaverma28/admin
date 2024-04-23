@@ -22,6 +22,7 @@ import AcademyDetails from "./AcademyDetails.jsx";
 import AcademyLogs from "./AcademyLogs.jsx";
 import UserLogs from "./UserLogs.jsx";
 import Confirmation from "./Confirmation.jsx";
+import LeadImage2 from "./LeadImage2.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
@@ -351,7 +352,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <LeadImage id={selectedItem} />
+                                <LeadImage2 id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (
