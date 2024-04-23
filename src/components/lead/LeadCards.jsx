@@ -135,7 +135,19 @@ const LeadCards = ({
                 </div>
               </div>
             )}
-
+{itemName === "academy" && (
+              <div className="mail">
+                <div className="bmp-image-preview2">
+                  <img
+                    src={object?.logo === null
+                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                    alt="pofile"
+                    className="bmp-preview-image"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

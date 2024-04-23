@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Back from "../assets/image/arrow-left.svg";
 import LeadModal from "./LeadModal.jsx";
 import axios from "axios";
-import { GET_STATS,getDecryptedToken } from "./utils/Constants";
+import { GET_ALL_BMP_LEADS, getDecryptedToken } from "./utils/Constants";
 import UpdateLead from "./UpdateLead.jsx";
 
 const ViewLeadsTable = ({ onClose }) => {
@@ -54,7 +54,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const getData = (startDate, endDate) => {
     axios
       .post(
-        GET_STATS,
+        GET_ALL_BMP_LEADS,
         {
           startDate: startDate,
           endDate: endDate,
@@ -67,7 +67,8 @@ const ViewLeadsTable = ({ onClose }) => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          setLeadsCount(response?.data?.data?.leads?.reverse());
+          console.log(response?.data?.data);
+          setLeadsCount(response?.data?.data);
         }
       })
       .catch((error) => {
