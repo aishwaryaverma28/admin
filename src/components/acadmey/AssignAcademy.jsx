@@ -127,7 +127,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
               </div>
               <div className="DealCard-rightBox">
                 <div className="mail">
-                  <div className="bmp-image-preview2">
+                  <div className="new_preview_flex">
                     <img
                       src={object?.logo === null
                         ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
@@ -135,14 +135,18 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                       alt="pofile"
                       className="bmp-preview-image"
                     />
-                  </div>
-                </div>
-                {/* <button type="button" className="common-save-button ">
+                    <div className='new_btnflex'>
+                    <button type="button" className="common-save-button ">
                     New Academy
-                  </button> */}
+                  </button> 
                 <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
                   Assign
                 </button>
+                    </div>
+
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>
