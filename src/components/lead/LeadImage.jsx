@@ -516,7 +516,7 @@ const LeadImage = ({id}) => {
                         <div className="bmp-image-preview">
                             <img
                                 src={academyData?.logo === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                                    ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
                                     : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy_temp/${academyData?.id}/${academyData?.logo}`}
                                 alt=""
                                 className="bmp-preview-image"
