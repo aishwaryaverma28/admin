@@ -259,6 +259,7 @@ export const ACADMEY_ACTIVITY = bmpStart + "/bmp/activity/add";
 export const ACADMEY_ACTIVITY_SOURCE = bmpStart+ "/bmp/activity/getBySource";
 export const ACADMEY_ACTIVITY_UPDATE = bmpStart+ "/bmp/activity/update/";
 export const ADD_NEW_ACADMEY = bmpStart+"/bmp/academy/add";
+export const ASSIGN_ACADEMY = bmpStart+"/bmp/user/assignacademy";
 export const BACKLIST_DATA = bmpStart+"/blog/backlink/getstats";
 export const ACADMEY_LEADS_DETAILS = bmpStart + "/bmp/leads/get";
 export const ACADEMY_LOGS = bmpStart +"/bmp/log/byentity";

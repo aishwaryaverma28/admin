@@ -3,9 +3,11 @@ import axios from 'axios';
 import {
   SEARCH_ACADMEY_ID,
   ACADMEY_SEARCH_API,
+  ASSIGN_ACADEMY,
   getDecryptedToken,
 } from "../utils/Constants.js"
-const AssignAcademy = () => {
+import { toast } from 'react-toastify';
+const AssignAcademy = ({ id, tempAcademyId }) => {
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
   const [toggleChecked, setToggleChecked] = useState(false);
@@ -41,7 +43,40 @@ const AssignAcademy = () => {
         });
     }
   };
-
+  //==========================================api call to assign the academy to user
+  function academyAssign(object) {
+    const body = {
+      userId: id,
+      academyId: object.id,
+      tempAcademyId: tempAcademyId
+    }
+    axios.post(ASSIGN_ACADEMY, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        if (response?.data?.status === 1){
+          console.log(response?.data)
+        toast.success("Acadmey assigned successfully", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      }else{
+        toast.error(response?.data?.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      })
+  }
   return (
     <>
       <div className="recycle-search-box">
@@ -100,13 +135,13 @@ const AssignAcademy = () => {
                       className="bmp-preview-image"
                     />
                   </div>
-                 </div>
-                 {/* <button type="button" className="common-save-button ">
+                </div>
+                {/* <button type="button" className="common-save-button ">
                     
                   </button> */}
-                 <button type="button" className="common-save-button">
-                    Assign
-                  </button>
+                <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
+                  Assign
+                </button>
               </div>
             </div>
           </div>

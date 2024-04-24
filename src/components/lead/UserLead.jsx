@@ -104,7 +104,7 @@ const UserLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "assign" && (
                             <div className="activity-tab-content">
-                                {selectedItem?.type === "Academy" ? <AssignAcademy /> : null}
+                                {selectedItem?.type === "Academy" ? <AssignAcademy id={selectedItem?.id} tempAcademyId={selectedItem?.parent_id}/> : null}
 
                             </div>
                         )}
