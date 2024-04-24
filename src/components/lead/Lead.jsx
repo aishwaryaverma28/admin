@@ -78,6 +78,7 @@ const Lead = () => {
   const [coach, setCoach] = useState([]);
   const [player, setPlayer] = useState([]);
   const [user, setUser] = useState([]);
+  const [newUser, setNewUser] = useState([]);
   const addLeadClick = () => {
     setOpenLead(true)
   }
@@ -182,7 +183,11 @@ const getAllUsers = () => {
     }
   }
   ).then((response) => {
-    setUser(response?.data?.data);
+    const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl === null);
+    const filteredNewUser = response?.data?.data.filter(obj => obj.parent_tbl === 0);
+    
+    setUser(filteredUser);
+    setNewUser(filteredNewUser);
   }).catch((error) => {
     console.log(error);
   });
@@ -190,13 +195,14 @@ const getAllUsers = () => {
 
   useEffect(() => {
     const counts = {
-      academy: acadmey?.length,
-      coach: coach?.length,
-      player:player?.length,
-      user: user?.length,
+      "academy": acadmey?.length,
+      "coach": coach?.length,
+      'player':player?.length,
+      'user': user?.length,
+      'new academy user': newUser?.length
     };
     setStatusCounts(counts);
-  }, [acadmey, coach,player,user]);
+  }, [acadmey, coach,player,user, newUser]);
   
   const handleEntityChange = (entity) => {
     setDisplay(entity);
@@ -703,7 +709,6 @@ const getAllUsers = () => {
                     object={obj}
                     onLeadAdded={getAllAcademy}
                     itemName={"academy"}
-                    userData={userData}
                   />
                 ));
               case 'player':
@@ -713,7 +718,6 @@ const getAllUsers = () => {
                     object={obj}
                     onLeadAdded={getAllPlayers}
                     itemName={"player"}
-                    userData={userData}
                   />
                 ));
               case 'coach':
@@ -723,7 +727,6 @@ const getAllUsers = () => {
                     object={obj}
                     onLeadAdded={getAllCoaches}
                     itemName={"coach"}
-                    userData={userData}
                   />
                 ));
               case 'user':
@@ -733,19 +736,21 @@ const getAllUsers = () => {
                     object={obj}
                     onLeadAdded={getAllUsers}
                     itemName={"user"}
-                    userData={userData}
                   />
+                ));
+                case 'new academy user':
+                return newUser?.map((obj) => (
+                  <LeadCards
+                    key={obj?.id}
+                    object={obj}
+                    onLeadAdded={getAllUsers}
+                    itemName={"newuser"}/>
                 ));
               default:
                 return null;
             }
           })()}
         </div>
-        {/* <div className="bottom-fixed">
-          {statusCounts[item.id] > 0 && (
-            <button onClick={handleLoadMore} className="common-save-button">Load More</button>
-          )}
-        </div> */}
       </div>
     </div>
   ))}

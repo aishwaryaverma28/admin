@@ -7,10 +7,9 @@ import {
     UPDATE_ACADEMY,
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
-import { removeHtmlTags } from "../bookmyplayer/removeHtml.js";
 import '../styles/Comment.css'
 
-const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
+const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => {
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
     const [editedItem, setEditedItem] = useState({});
@@ -20,8 +19,19 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     const [trainingLocation, setTrainingLocation] = useState([]);
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
+        let body = {
+            academy_id: id
+          };
+          
+          if (type === "temp") {
+            body = {
+              ...body,
+              type: "temp"
+            };
+          }
+          
         axios
-            .post(GET_ACADEMY, { academy_id: id}, {
+            .post(GET_ACADEMY, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },

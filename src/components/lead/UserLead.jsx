@@ -64,16 +64,6 @@ const UserLead = ({ selectedItem, closeModal }) => {
                             <i class="fa-sharp fa-regular fa-images"></i>
                             Images
                         </button>
-                        {selectedItem?.type === "Academy" ?
-                            <button
-                                className={activeTab === "assign" ? "active" : ""}
-                                onClick={() => handleTabClick("assign")}
-                            >
-                                <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                                Assign
-                            </button>
-                            : <></>
-                        }
                         <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
@@ -99,12 +89,6 @@ const UserLead = ({ selectedItem, closeModal }) => {
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
                                 {selectedItem?.type === "Coach" ? <CoachImage id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <LeadImage2 id={selectedItem?.parent_id} /> : null}
-
-                            </div>
-                        )}
-                        {activeTab === "assign" && (
-                            <div className="activity-tab-content">
-                                {selectedItem?.type === "Academy" ? <AssignAcademy id={selectedItem?.id} tempAcademyId={selectedItem?.parent_id}/> : null}
 
                             </div>
                         )}

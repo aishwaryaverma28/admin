@@ -7,7 +7,7 @@ import {
   getDecryptedToken,
 } from "../utils/Constants.js"
 import { toast } from 'react-toastify';
-const AssignAcademy = ({ id, tempAcademyId }) => {
+const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
   const [toggleChecked, setToggleChecked] = useState(false);
@@ -62,6 +62,7 @@ const AssignAcademy = ({ id, tempAcademyId }) => {
           position: "top-center",
           autoClose: 1000,
         });
+        onLeadAdded();
       }else{
         toast.error(response?.data?.message, {
           position: "top-center",
@@ -137,7 +138,7 @@ const AssignAcademy = ({ id, tempAcademyId }) => {
                   </div>
                 </div>
                 {/* <button type="button" className="common-save-button ">
-                    
+                    New Academy
                   </button> */}
                 <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
                   Assign

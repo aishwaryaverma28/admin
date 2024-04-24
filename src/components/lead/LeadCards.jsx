@@ -4,6 +4,7 @@ import AcadmeyLead from "./AcadmeyLead.jsx";
 import CoachLead from "./CoachLead.jsx";
 import UserLead from "./UserLead.jsx";
 import PlayerLead from "./PlayerLead.jsx";
+import NewUserLead from "./NewUserLead.jsx";
 
 const LeadCards = ({
   object,
@@ -13,6 +14,7 @@ const LeadCards = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
+  const [newUserMenu, setNewUserMenu] = useState(false);
   const [playerMenu, setPlayerMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
@@ -45,6 +47,10 @@ const LeadCards = ({
       setUserMenu(true);
       setSelectedObj(object);
     }
+    if (itemName === "newuser") {
+      setNewUserMenu(true);
+      setSelectedObj(object);
+    }
     if (itemName === "player") {
       setPlayerMenu(true);
       setSelectedObj(object);
@@ -59,6 +65,9 @@ const LeadCards = ({
   };
   const closeUserModal = () => {
     setUserMenu(false);
+  };
+  const closeNewUserModal = () => {
+    setNewUserMenu(false);
   };
   const closePlayerModal = () => {
     setPlayerMenu(false);
@@ -96,7 +105,7 @@ const LeadCards = ({
             </div>
             <div className="contact-details">
               <div className="mail sportCap">
-                <p>{itemName === "user" ? <span> {object.type} - {object.parent_id}</span> : object.sport}</p>
+                <p>{itemName === "user" || itemName === "newuser" ? <span> {object.type} - {object.parent_id}</span> : object.sport}</p>
               </div>
               {itemName === "academy" && (
                 <div className="mail">
@@ -109,12 +118,12 @@ const LeadCards = ({
                   <p>{object.mobile}</p>
                 </div>
               )}
-              {itemName === "user" && (
+              {itemName === "user" || itemName === "newuser"  && (
                 <div className="mail">
                   {formatDate(object?.creation_date)}
                 </div>
               )}
-              {itemName !== "user" && (
+              {itemName !== "user"  || itemName === "newuser" && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>
                 </div>
@@ -135,7 +144,7 @@ const LeadCards = ({
                 </div>
               </div>
             )}
-{itemName === "academy" && (
+            {itemName === "academy" && (
               <div className="mail">
                 <div className="bmp-image-preview2">
                   <img
@@ -168,6 +177,14 @@ const LeadCards = ({
         <UserLead
           selectedItem={selectedObj}
           closeModal={closeUserModal}
+          onLeadAdded={onLeadAdded}
+        />
+      )}
+      {newUserMenu && (
+        <NewUserLead
+          selectedItem={selectedObj}
+          closeModal={closeNewUserModal}
+          onLeadAdded={onLeadAdded}
         />
       )}
       {playerMenu && (

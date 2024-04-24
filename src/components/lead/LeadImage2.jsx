@@ -40,7 +40,6 @@ const LeadImage2 = (id) => {
     const [videoUrls, setVideoUrls] = useState([]);
     const [fileName2, setFileName2] = useState(null);
     const [academyData, setAcademyData] = useState({});
-    const [deleteIndex, setDeleteIndex] = useState(null);
 
     const academyDetails = () => {
         axios
@@ -652,7 +651,7 @@ const LeadImage2 = (id) => {
                 ) : (
                     <div className={`outerBox divWidth`}>
                         {photoUrls?.map((photo, index) => (
-                            <div className="bmp-new-img">
+                            <div className="bmp-new-img" key={index}>
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
                                         <input
@@ -702,7 +701,7 @@ const LeadImage2 = (id) => {
                 ) : (
                     <div className="outerBox">
                         {videoUrls?.map((video, index) => (
-                            <div className="bmp-new-img">
+                            <div className="bmp-new-img" key={index}>
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
                                     <input
