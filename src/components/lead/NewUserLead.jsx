@@ -3,14 +3,10 @@ import axios from "axios";
 import {
     getDecryptedToken, USER_LOG
 } from "./../utils/Constants";
-import UserDetails from './UserDetails';
 import BmpTickets from './BmpTickets';
-import CoachImage from './CoachImage';
-import CoachDetails from './CoachDetails';
 import AcademyDetails from './AcademyDetails';
 import UserLogs from './UserLogs';
 import AssignAcademy from '../acadmey/AssignAcademy';
-import LeadImage2 from './LeadImage2';
 import LeadImage from './LeadImage';
 
 const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {

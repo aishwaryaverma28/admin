@@ -353,7 +353,7 @@ const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => 
                                                     className="radio_disable check_input"
                                                     disabled={isDisabled}
                                                     onChange={handleInputChange}
-                                                    checked={editedItem.mobile_verified === 1}
+                                                    checked={editedItem?.mobile_verified === 1}
                                                 /> Mobile Verified
 
                                             </label>
@@ -379,11 +379,11 @@ const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => 
                                                 <input
                                                     type="checkbox"
                                                     name="email_verified"
-                                                    value={editedItem.email_verified}
+                                                    value={editedItem?.email_verified}
                                                     className="radio_disable check_input"
                                                     disabled={isDisabled}
                                                     onChange={handleInputChange}
-                                                    checked={editedItem.email_verified === 1}
+                                                    checked={editedItem?.email_verified === 1}
                                                 /> Email Verified
 
                                             </label>
