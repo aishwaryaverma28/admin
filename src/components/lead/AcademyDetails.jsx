@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import '../styles/Comment.css'
 
 const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => {
+    console.log(type);
     const decryptedToken = getDecryptedToken();
     const [isLoading, setIsLoading] = useState(true);
     const [editedItem, setEditedItem] = useState({});
@@ -250,6 +251,13 @@ const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => 
             <div className="user-details--left">
                 <div className="user-details--heading">
                     <div className="user-details-imgBox">
+                        {type === "temp" ? <img
+                            src={editedItem?.logo === null
+                                ? "https://bmpcdn.s3.amazonaws.com/default/academy_default_logo.webp"
+                                : `https://bmpcdn.s3.amazonaws.com/academy_temp/${editedItem?.id}/${editedItem?.logo}`}
+                            alt="logo"
+                            className="bmp-preview-image logoRound"
+                        />:
                         <img
                             src={editedItem?.logo === null
                                 ? "https://bmpcdn.s3.amazonaws.com/default/academy_default_logo.webp"
@@ -257,6 +265,7 @@ const AcademyDetails = React.forwardRef(({id, type, updateCheckState}, ref ) => 
                             alt="logo"
                             className="bmp-preview-image logoRound"
                         />
+                            }
                         <div>
                             <p>
                                 {isLoading ? (

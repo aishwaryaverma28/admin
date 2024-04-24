@@ -183,7 +183,7 @@ const getAllUsers = () => {
     }
   }
   ).then((response) => {
-    const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl === null);
+    const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== 0);
     const filteredNewUser = response?.data?.data.filter(obj => obj.parent_tbl === 0);
     
     setUser(filteredUser);
