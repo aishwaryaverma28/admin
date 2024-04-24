@@ -10,8 +10,10 @@ const LeadImage2 = (id) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const [photoChoose, setPhotoChoose] = useState(null);
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
+    const [photoBtn, setPhotoBtn] = useState(0);
     const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const allowedFileTypes = [
         "image/jpeg",
@@ -94,9 +96,10 @@ const LeadImage2 = (id) => {
         }
     };
     const handleCheckbox = (photo, index) => {
-        setBannerName(photo);
+        console.log(photo)
+        setPhotoChoose(photo);
         setSelectedPhoto(index);
-        setStateBtn(1);
+        setPhotoBtn(1);
         setSelectedPhotoIndex(null);
     };
     const handleCheckboxChange = (video, index) => {
@@ -291,7 +294,57 @@ const LeadImage2 = (id) => {
         setFileName2(initialFileName2);
         setSelectedFile(initialSelectedFile);
     };
-
+    const handleSubmit = (logoValue, bannerValue) => {
+        setPhotoBtn(0);
+        const updatedFormData = {
+            logo: logoValue,
+            banner: bannerValue,
+            photos: photoUrls?.join(","),
+            videos: videoUrls?.join(","),
+            name: academyData?.name,
+            sport: academyData?.sport,
+            city: academyData?.city,
+        };
+        axios
+            .put(UPDATE_ACADEMY + id?.id, updatedFormData, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Details updated successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                } else {
+                    toast.error("Some Error Occurred", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+                academyDetails();
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+            .finally(() => {
+                setPhotoBtn(0);
+            });
+    };
+    
+    const handleSubmitlogo = () => {
+        handleSubmit(photoChoose, bannerName);
+    };
+    
+    const handleSubmitbanner = () => {
+        handleSubmit(fileName, photoChoose);
+    };
+    
     const handleSubmit2 = () => {
         setStateBtn(0);
         const updatedFormData = {
@@ -702,6 +755,31 @@ const LeadImage2 = (id) => {
                 >
                     Cancel
                 </button>
+            {photoBtn === 0 ? (
+                <>
+                    <button className="disabledBtn" disabled>
+                    Save as logo
+                    </button>
+                    <button className="disabledBtn" disabled>
+                    Save as Banner
+                    </button>
+                    </>
+                ) : (
+                    <>
+                    <button
+                        className="common-fonts common-save-button"
+                        onClick={handleSubmitlogo}
+                    >
+                        Save as logo
+                    </button>
+                     <button
+                     className="common-fonts common-save-button"
+                     onClick={handleSubmitbanner}
+                 >
+                     Save as Banner
+                 </button>
+                 </>
+                )}
                 {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
                         Save

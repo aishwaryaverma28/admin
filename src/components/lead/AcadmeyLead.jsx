@@ -15,9 +15,7 @@ import {
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
 import DealActivity from "../deal/DealActivity";
-import DealEmail from "../deal/DealEmail.jsx";
 import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
-import LeadImage from "./LeadImage.jsx";
 import AcademyDetails from "./AcademyDetails.jsx";
 import AcademyLogs from "./AcademyLogs.jsx";
 import UserLogs from "./UserLogs.jsx";
@@ -352,7 +350,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <LeadImage id={selectedItem} />
+                                <LeadImage2 id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (

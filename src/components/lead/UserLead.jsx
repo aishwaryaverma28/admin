@@ -5,12 +5,12 @@ import {
 } from "./../utils/Constants";
 import UserDetails from './UserDetails';
 import BmpTickets from './BmpTickets';
-import LeadImage from './LeadImage';
 import CoachImage from './CoachImage';
 import CoachDetails from './CoachDetails';
 import AcademyDetails from './AcademyDetails';
 import UserLogs from './UserLogs';
 import AssignAcademy from '../acadmey/AssignAcademy';
+import LeadImage2 from './LeadImage2';
 
 const UserLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
@@ -98,7 +98,7 @@ const UserLead = ({ selectedItem, closeModal }) => {
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                {selectedItem?.type === "Coach" ? <CoachImage id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <LeadImage id={selectedItem?.parent_id} /> : null}
+                                {selectedItem?.type === "Coach" ? <CoachImage id={selectedItem?.parent_id} /> : selectedItem?.type === "Academy" ? <LeadImage2 id={selectedItem?.parent_id} /> : null}
 
                             </div>
                         )}
