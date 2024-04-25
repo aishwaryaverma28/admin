@@ -89,7 +89,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             phone: editedItem?.phone,
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about,
-            sport: editedItem?.sport || "select",
+            sport: editedItem?.sport || "sports",
             fee: editedItem?.fee,
             experience: editedItem?.experience,
             facebook: editedItem?.facebook,

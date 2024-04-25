@@ -306,7 +306,7 @@ const LeadImage = ({id}) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport|| "select",
+            sport: academyData?.sport|| "sports",
             city: academyData?.city|| "select",
         };
         axios
@@ -358,7 +358,7 @@ const LeadImage = ({id}) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport|| "select",
+            sport: academyData?.sport|| "sports",
             city: academyData?.city|| "select",
         }
         axios
