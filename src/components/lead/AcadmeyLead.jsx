@@ -393,19 +393,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        {/* {activeTab === "email" && (
-                            <div className="email-tab-content">
-                                <DealEmail
-                                    id={selectedItem}
-                                    type="lead"
-                                    dealName={leadName}
-                                    ownerId={ownerId}
-                                    idOfOwner={idOfOwner}
-                                    email={editedItem?.email}
-                                />
-                            </div>
-                        )} */}
-
                     </div>
                 </div>
             </div>

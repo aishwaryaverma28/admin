@@ -4,7 +4,7 @@ import AcadmeyLead from "./AcadmeyLead.jsx";
 import CoachLead from "./CoachLead.jsx";
 import UserLead from "./UserLead.jsx";
 import PlayerLead from "./PlayerLead.jsx";
-import NewUserLead from "./NewUserLead.jsx";
+import NewUserLead from "../newuser/NewUserLead.jsx"
 
 const LeadCards = ({
   object,

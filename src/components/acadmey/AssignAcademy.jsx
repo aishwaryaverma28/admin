@@ -136,9 +136,9 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                       className="bmp-preview-image"
                     />
                     <div className='new_btnflex'>
-                    <button type="button" className="common-save-button ">
+                    {/* <button type="button" className="common-save-button ">
                     New Academy
-                  </button> 
+                  </button>  */}
                 <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
                   Assign
                 </button>
