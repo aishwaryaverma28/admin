@@ -9,12 +9,24 @@ import {
   getDecryptedToken,
 } from "../utils/Constants.js"
 import { toast } from 'react-toastify';
+import AcadmeyLead from '../lead/AcadmeyLead.jsx';
 const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
   const decryptedToken = getDecryptedToken();
   const [searchQuery, setSearchQuery] = useState("");
   const [toggleChecked, setToggleChecked] = useState(false);
   const [academy, setAcademy] = useState([])
   const [data, setData] = useState({})
+  const [selectedObj, setSelectedObj] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = (object) => {
+    setModalVisible(true);
+    setSelectedObj(object);
+  }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   const fetchLead = () => {
     let body = {
         academy_id: tempAcademyId,
@@ -115,13 +127,12 @@ useEffect(() => {
       },
     })
       .then((response) => {
+      openModal(response?.data?.data?.insertId)
         if (response?.data?.status === 1){
-          console.log(response?.data)
-        toast.success("Acadmey assigned successfully", {
+        toast.success("Acadmey added successfully", {
           position: "top-center",
           autoClose: 1000,
         });
-        onLeadAdded();
       }else{
         toast.error(response?.data?.message, {
           position: "top-center",
@@ -258,6 +269,12 @@ useEffect(() => {
           </div>
         ))}
       </>
+      {modalVisible && (
+        <AcadmeyLead
+          selectedItem={selectedObj}
+          closeModal={closeModal}
+        />
+      )}
     </>
   )
 }
