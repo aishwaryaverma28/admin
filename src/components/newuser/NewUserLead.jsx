@@ -63,7 +63,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 console.log(error);
             });
     };
-    console.log(check);
+    
     useEffect(() => {
         fetchUserLog();
     }, [])

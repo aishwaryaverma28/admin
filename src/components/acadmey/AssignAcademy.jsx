@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import {
+  GET_ACADEMY,
   SEARCH_ACADMEY_ID,
   ACADMEY_SEARCH_API,
   ASSIGN_ACADEMY,
+  ASSIGN_NEW_ACADEMY,
   getDecryptedToken,
 } from "../utils/Constants.js"
 import { toast } from 'react-toastify';
@@ -12,6 +14,29 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [toggleChecked, setToggleChecked] = useState(false);
   const [academy, setAcademy] = useState([])
+  const [data, setData] = useState({})
+  const fetchLead = () => {
+    let body = {
+        academy_id: tempAcademyId,
+        type: "temp"
+      };
+      
+    axios
+        .post(GET_ACADEMY, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+        .then((response) => {
+            setData(response?.data?.data[0]);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+useEffect(() => {
+    fetchLead();
+}, []);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -78,6 +103,41 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
         });
       })
   }
+
+  function academyNewAssign() {
+    const body = {
+      userId: id,
+      tempAcademyId: tempAcademyId
+    }
+    axios.post(ASSIGN_NEW_ACADEMY, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        if (response?.data?.status === 1){
+          console.log(response?.data)
+        toast.success("Acadmey assigned successfully", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+        onLeadAdded();
+      }else{
+        toast.error(response?.data?.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      })
+  }
+ 
   return (
     <>
       <div className="recycle-search-box">
@@ -101,6 +161,52 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
           </div>
         </span>
       </div>
+      <>
+      <div className="academy-card">
+            <div className="card-container">
+              <div className="card-leftBox">
+                <div className="user-details">
+                  <p className="heading">
+                    {data.id} - {data.name}
+                  </p>
+                </div>
+                <div className="lead-value">
+                </div>
+                <div className="contact-details">
+                  <div className="mail sportCap">
+                    <p>{data.sport}</p>
+                  </div>
+                  <div className="mail">
+                    <p>{data.phone}</p>
+                  </div>
+                  <div className="mail sportCap">
+                    <p>{data.city}, {data.state}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="DealCard-rightBox">
+                <div className="mail">
+                  <div className="new_preview_flex">
+                    <img
+                      src={data?.logo === null
+                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy_temp/${data?.id}/${data?.logo}`}
+                      alt="pofile"
+                      className="bmp-preview-image"
+                    />
+                    <div className='new_btnflex'>
+                    <button type="button" className="common-save-button " onClick={academyNewAssign}>
+                    New Academy
+                  </button> 
+                    </div>
+
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+      </>
       <>
         {academy.map((object) => (
           <div key={object.id} className="academy-card">
