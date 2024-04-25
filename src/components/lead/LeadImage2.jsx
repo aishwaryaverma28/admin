@@ -296,6 +296,7 @@ const LeadImage2 = (id) => {
     const handleSubmit = (logoValue, bannerValue) => {
         setPhotoBtn(0);
         const updatedFormData = {
+            type : "org",
             logo: logoValue,
             banner: bannerValue,
             photos: photoUrls?.join(","),
@@ -347,6 +348,7 @@ const LeadImage2 = (id) => {
     const handleSubmit2 = () => {
         setStateBtn(0);
         const updatedFormData = {
+            type : "org",
             logo: fileName,
             banner: bannerName,
             photos: photoUrls?.join(","),
@@ -401,6 +403,7 @@ const LeadImage2 = (id) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
+                    type : "org",
                     photos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -431,6 +434,7 @@ const LeadImage2 = (id) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
+                    type : "org",
                     videos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -669,7 +673,7 @@ const LeadImage2 = (id) => {
 
                                         <p className="common-fonts bmp-tour">
                                             {photo?.length > 20 ? (
-                                                <>{photo?.slice(20)}...</>
+                                                <>{photo?.slice(0,20)}...</>
                                             ) : (
                                                 <>{photo}</>
                                             )}

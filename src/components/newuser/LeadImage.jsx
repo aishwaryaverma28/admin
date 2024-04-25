@@ -300,6 +300,7 @@ const LeadImage = ({id}) => {
     const handleSubmit = (logoValue, bannerValue) => {
         setPhotoBtn(0);
         const updatedFormData = {
+            type : "temp",
             logo: logoValue,
             banner: bannerValue,
             photos: photoUrls?.join(","),
@@ -351,6 +352,7 @@ const LeadImage = ({id}) => {
     const handleSubmit2 = () => {
         setStateBtn(0);
         const updatedFormData = {
+            type : "temp",
             logo: fileName,
             banner: bannerName,
             photos: photoUrls?.join(","),
@@ -405,6 +407,7 @@ const LeadImage = ({id}) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
+                    type : "temp",
                     photos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -435,6 +438,7 @@ const LeadImage = ({id}) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
+                    type : "temp",
                     videos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -673,7 +677,7 @@ const LeadImage = ({id}) => {
 
                                         <p className="common-fonts bmp-tour">
                                             {photo?.length > 20 ? (
-                                                <>{photo?.slice(20)}...</>
+                                                <>{photo?.slice(0,20)}...</>
                                             ) : (
                                                 <>{photo}</>
                                             )}
@@ -751,7 +755,7 @@ const LeadImage = ({id}) => {
             </>
 
 
-            {/* <div className="bmp-bottom-btn">
+            <div className="bmp-bottom-btn">
                 <button
                     className="common-fonts common-white-button"
                     onClick={resetState}
@@ -795,7 +799,7 @@ const LeadImage = ({id}) => {
                         Save
                     </button>
                 )}
-            </div> */}
+            </div>
         </>
     )
 }

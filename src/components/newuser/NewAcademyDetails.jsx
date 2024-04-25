@@ -82,13 +82,14 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
     const handleUpdateClick = () => {
         setStateBtn(0);
         const updatedFormData = {
+            type : "temp",
             name: editedItem?.name,
             owner: editedItem?.owner,
             website:editedItem?.website,
             phone: editedItem?.phone,
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about,
-            sport: editedItem?.sport,
+            sport: editedItem?.sport || "select",
             fee: editedItem?.fee,
             experience: editedItem?.experience,
             facebook: editedItem?.facebook,
@@ -100,7 +101,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             closed_on: editedItem?.closed_on,
             address1: editedItem?.address1,
             address2: editedItem?.address2,
-            city: editedItem?.city,
+            city: editedItem?.city || "select",
             state: editedItem?.state,
             postcode: editedItem?.postcode,
             facebook: editedItem?.facebook,
@@ -111,42 +112,42 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             friendly: trainingLocation.toString(),
         }
         
-        // axios
-        //     .put(UPDATE_ACADEMY + id, updatedFormData
-        //         , {
-        //             headers: {
-        //                 Authorization: `Bearer ${decryptedToken}`,
-        //             },
-        //         }
-        //     )
-        //     .then((response) => {
-        //         if (response.data.status === 1) {
-        //             toast.success("Details updated successfully", {
-        //                 position: "top-center",
-        //                 autoClose: 1000,
-        //             });
-        //         } else {
-        //             toast.error("Some Error Occurred", {
-        //                 position: "top-center",
-        //                 autoClose: 1000,
-        //             });
-        //         }
-        //         setIsEditable(false);
-        //         setIsDisabled(!isDisabled);
-        //         updateCheckState(false);
-        //         setStateBtn(0);
-        //         fetchLead();
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //         toast.error("An error occurred while updating details", {
-        //             position: "top-center",
-        //             autoClose: 1000,
-        //         });
-        //     })
-        //     .finally(() => {
-        //         setStateBtn(0);
-        //     });
+        axios
+            .put(UPDATE_ACADEMY + id, updatedFormData
+                , {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Details updated successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                } else {
+                    toast.error("Some Error Occurred", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+                setIsEditable(false);
+                setIsDisabled(!isDisabled);
+                updateCheckState(false);
+                setStateBtn(0);
+                fetchLead();
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+            .finally(() => {
+                setStateBtn(0);
+            });
     }
     React.useImperativeHandle(ref, () => ({
         handleUpdateClick
@@ -840,7 +841,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                     </div>
 
                 </div>
-                {/* <>
+                <>
                 {isEditable ? (
                     <div className="modalLeftBtnBox">
                         <button
@@ -869,7 +870,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                         </button>
                     </div>
                 )}
-                </> */}
+                </>
             </div>
         </>
     )
