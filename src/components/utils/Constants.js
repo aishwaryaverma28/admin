@@ -277,3 +277,6 @@ export const GET_BMPUSER_ID = bmpStart+"/bmp/user/getbyobj";
 export const USER_LOG = bmpStart+"/bmp/log/getUserActivity";
 export const MOST_LEADS= bmpStart+"/bmp/entity/getstats";
 export const ACADMEY_VEREFIED = bmpStart+"/bmp/entity/getverified";
+
+export const FILTER_TICKETS = bmpStart+"/bmp/tickets/filter"; 
+export const REPLY_TICKET = bmpStart+"/bmp/tickets/addreply";

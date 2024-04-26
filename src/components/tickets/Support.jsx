@@ -2,25 +2,28 @@ import React, { useEffect, useState } from 'react';
 import '../styles/CPGenral.css';
 import axios from 'axios';
 import {
+  FILTER_TICKETS,
   getDecryptedToken,
-  SERVICE_SUPPORT,GET_SERVICE 
 } from '../utils/Constants';
 import ServiceRequestTab from '../settings/ServiceRequestTab';
-import EditRequest from '../settings/EditRequest';
+import EditRequest from './EditRequest';
 
 const Support = () => {
-  const orgId = localStorage.getItem('org_id');
-  const landingUrl = localStorage.getItem("landingUrl");
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
-  const [selectedTicket, setSelectedTicket] = useState(null); // State for selected ticket
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [isServiceTabOpen, setIsServiceTabOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLoading,setLoading] = useState(true);
+  const [selectedOption, setSelectedOption] = useState('0');
 
   const getTicket = () => {
+    const body ={
+      cond: "filter",
+      type: selectedOption,
+  }
     axios
-      .post(SERVICE_SUPPORT,{org_id: orgId}, {
+      .post(FILTER_TICKETS,body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -35,32 +38,16 @@ const Support = () => {
       });
   };
 
-  const getMyTicket = () => {
-    axios
-      .get(GET_SERVICE + orgId, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-      .then((response) => {
-        setTicket(response?.data?.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  };
   useEffect(() => {
-    if (landingUrl === "/lp/bmp/overview" || landingUrl === '/lp/bmp/admin') {
-      getMyTicket();
-    } else {
-      getTicket();
-    }    
-  }, []);
+    getTicket();
+  }, [selectedOption]);
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const handleOpenServiceTab = (item) => {
-    setSelectedTicket(item); // Set the selected ticket item
+    setSelectedTicket(item);
     setIsServiceTabOpen(true);
     
   };
@@ -96,6 +83,13 @@ const Support = () => {
           <>
           <div className='service-req-top'>
             <p className="common-fonts ss-heading ticket-head-left">Tickets</p>
+            <div className="select action-select">
+            <select value={selectedOption} onChange={handleOptionChange} id="sports_lead">
+              <option value="0">Open</option>
+              <option value="1">Answered</option>
+              <option value="2">Closed</option>
+            </select>
+            </div>
             <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={serviceRefresh}>
               <i class="fa-sharp fa-solid fa-rotate "></i>
               </button>

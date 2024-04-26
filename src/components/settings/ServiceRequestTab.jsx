@@ -115,9 +115,9 @@ const ServiceRequestTab = ({ ticket, onClose }) => {
 
           <div className="attachments-section">
             <p className="common-fonts time-attachments">Attachments</p>
-            <p className="common-fonts time-screenshot">
+            {/* <p className="common-fonts time-screenshot">
               screenshot_deals_2023 <img src={Download} alt="" />
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
