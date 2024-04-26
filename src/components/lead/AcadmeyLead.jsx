@@ -272,7 +272,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
         setOwnerName(userData?.find((item) => item.id === ownerId));
     }, []);
     return (
-        <div className="modal">
+        <div className="modal modal-zindex">
             <div className="leftClose" onClick={closeModal}></div>
             <div className="customization_popup_container">
                 <span className="close" onClick={closeModal}>

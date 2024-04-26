@@ -326,3 +326,6 @@ textarea{
 .red-border{
   border: 2px solid red;
 }
+.modal-zindex{
+  z-index: 100;
+}

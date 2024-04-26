@@ -94,7 +94,6 @@ useEffect(() => {
     })
       .then((response) => {
         if (response?.data?.status === 1){
-          console.log(response?.data)
         toast.success("Acadmey assigned successfully", {
           position: "top-center",
           autoClose: 1000,
@@ -127,7 +126,7 @@ useEffect(() => {
       },
     })
       .then((response) => {
-      // openModal(response?.data?.data?.insertId)
+      openModal(response?.data?.data?.insertId)
         if (response?.data?.status === 1){
         toast.success("Acadmey added successfully", {
           position: "top-center",
