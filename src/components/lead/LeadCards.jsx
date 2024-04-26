@@ -117,17 +117,20 @@ const LeadCards = ({
                 <div className="mail">
                   <p>{object.mobile}</p>
                 </div>
-              )}
-              {(itemName === "user" || itemName === "newuser")  && (
-                <div className="mail">
-                  {formatDate(object?.creation_date)}
-                </div>
-              )}
+              )}               
               {(itemName === "academy"  || itemName === "coach") && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>
                 </div>
               )}
+               <div className="mail">
+                  {formatDate(object?.creation_date)}
+                </div>
+              {/* {(itemName === "user" || itemName === "newuser")  && (
+                <div className="mail">
+                  {formatDate(object?.creation_date)}
+                </div>
+              )} */}
             </div>
           </div>
           <div className="DealCard-rightBox">

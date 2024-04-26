@@ -127,12 +127,13 @@ useEffect(() => {
       },
     })
       .then((response) => {
-      openModal(response?.data?.data?.insertId)
+      // openModal(response?.data?.data?.insertId)
         if (response?.data?.status === 1){
         toast.success("Acadmey added successfully", {
           position: "top-center",
           autoClose: 1000,
         });
+        onLeadAdded();
       }else{
         toast.error(response?.data?.message, {
           position: "top-center",
