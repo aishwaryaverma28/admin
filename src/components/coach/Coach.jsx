@@ -2,22 +2,24 @@ import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-import { cities } from "../utils/cities.js";
 import {
   MOST_LEADS,
-  ACADMEY_VEREFIED,
-  SEARCH_ACADMEY_ID,
-  ACADMEY_SEARCH_API,
+  GET_COACH,
   getDecryptedToken,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AcadmeyCard from "./CoachCard.jsx";
 import CoachCard from "./CoachCard.jsx";
 import AddCoach from "./AddCoach.jsx";
+import LeadCards from "../lead/LeadCards.jsx";
 
 const Coach = () => {
   const [stages, setStages] = useState([
+    {
+      "id": 0,
+      "stage": "coach",
+      "name": "Coach"
+    },
     {
       "id": 1,
       "stage": "verified_coach",
@@ -32,25 +34,18 @@ const Coach = () => {
       "id": 3,
       "stage": "coach_with_leads",
       "name": "Coach with Leads"
-    }    
+    }
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState('verified_coach');
-  const [display, setDisplay] = useState("Select Category")
+  const [coach, setCoach] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
   const actionDropDownRef = useRef(null);
   const actionOwnerRef = useRef(null);
-  const [deals, setDeals] = useState([]);
   const decryptedToken = getDecryptedToken();
   const [statusCounts, setStatusCounts] = useState({});
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [selectedStatusesData, setSelectedStatusesData] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [ownerOpen, setOwnerOpen] = useState(false);
-  const [sportsLead, setSportsLead] = useState('');
-  const [cityLead, setCityLead] = useState('');
   const [acadmeyLeads, setAcademyLeads] = useState([])
   const [academyLogs, setAcademyLogs] = useState([]);
   const [verified, setVerified] = useState([]);
@@ -63,15 +58,24 @@ const Coach = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  const handleSportsChange = (event) => {
-    setSportsLead(event.target.value);
-
-  };
-  const handleCityChange = (event) => {
-    setCityLead(event.target.value);
-  };
-
+  //=========================================================get all coaches
+  const getAllCoaches = () => {
+    const requestBody = {
+      "entity": "bmp_coach_details",
+      "limit_from": "0",
+      "limit_to": "1000"
+    };
+    axios.post(GET_COACH, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setCoach(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
   //=========================================================get all acadmey leads
   const getAllLeads = () => {
     const requestBody = {
@@ -93,6 +97,7 @@ const Coach = () => {
   }
 
   useEffect(() => {
+    getAllCoaches();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -118,17 +123,17 @@ const Coach = () => {
   }
 
   //=========================================================get all acadmey verifeid
-   const getAllVerify = () => {
+  const getAllVerify = () => {
     // const requestBodyBoth = {
     //   "condition": "both",
     //   "entity": "coach"
     // };
-  
+
     // const requestBodyAnyone = {
     //   "condition": "anyone",
     //    "entity": "coach"
     // };
-  
+
     // Promise.all([
     //   axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
     //     headers: {
@@ -162,19 +167,14 @@ const Coach = () => {
 
   useEffect(() => {
     const counts = {
+      coach: coach?.length,
       coach_logs: academyLogs?.length,
       coach_with_leads: acadmeyLeads?.length,
       verified_coach: verified?.length,
     };
     setStatusCounts(counts);
-  }, [acadmeyLeads, academyLogs]);
+  }, [coach, acadmeyLeads, academyLogs]);
 
-  const handleEntityChange = (entity) => {
-    setDisplay(entity);
-    setSelectedEntity(entity);
-    setSearchQuery('');
-    setOwnerOpen(false);
-  };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -182,32 +182,33 @@ const Coach = () => {
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
-    
+
     if (value?.length === 0) {
-      getAllVerify();
+      getAllCoaches();
     } else {
       if (!toggleChecked && value?.length < 3) {
         return;
       }
       let apiUrl = '';
       apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/id/${value}`
-          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/${value}`;
+        ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/id/${value}`
+        : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
-      .then(response => {
-        setVerified(response?.data?.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+        .then(response => {
+          setCoach(response?.data?.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
   };
-   
+
   const resetData = () => {
+    getAllCoaches();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -244,7 +245,6 @@ const Coach = () => {
         actionOwnerRef.current &&
         !actionOwnerRef.current.contains(event.target)
       ) {
-        setOwnerOpen(false);
       }
     };
 
@@ -258,234 +258,144 @@ const Coach = () => {
     };
   }, []);
 
-  const handleChildCheckboxChange = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds?.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  const areAllChildCheckboxesChecked = (status) => {
-    if (selectedStatusesData[status]) {
-      const idsWithStatus = deals
-        ?.filter((deal) => deal.status === status)
-        ?.map((deal) => deal.id);
-      return idsWithStatus.every((id) => selectedIds.includes(id));
-    }
-    return false;
-  };
-
-  const handleHeaderCheckboxChange = (status) => {
-    const idsWithStatus = deals
-      ?.filter((deal) => deal.status === status)
-      ?.map((deal) => deal.id);
-
-    if (areAllChildCheckboxesChecked(status)) {
-      setSelectedIds(selectedIds?.filter((id) => !idsWithStatus.includes(id)));
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: false,
-      }));
-    } else {
-      setSelectedIds([...selectedIds, ...idsWithStatus]);
-      setSelectedStatusesData((prevData) => ({
-        ...prevData,
-        [status]: true,
-      }));
-    }
-  };
+  
   return (
     <>
-    <div>
-      <section className="lead-body">
-        <div className="top-head">
-          <div className="left-side--btns">
-            <div className="dropdown-container" ref={leadDropDownRef}>
-              <div className="dropdown-header" onClick={toggleDropdown}>
-                all Leads{" "}
-                <i
-                  className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                ></i>
-              </div>
-              {leadopen && (
-                <ul className="dropdown-menuLead">
-                  <li>Lead 1</li>
-                  <li>Lead 2</li>
-                  <li>Lead 3</li>
-                </ul>
-              )}
-            </div>
-            <div className="view">
-              <a href="#" className="grid-view--btn active-btn">
-                <img src={chart} alt="chart" />
-              </a>
-              <a href="#" className="list-view--btn">
-                <i className="fas fa-list-ul"></i>
-              </a>
-            </div>
-            <div className="recycle-search-box">
-              <input
-                type="text"
-                className="recycle-search-input recycle-fonts"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <span className="recycle-search-icon">
-                <div>
-                  <label className="password-switch lead-switch">
-                    <input
-                      type="checkbox"
-                      checked={toggleChecked}
-                      onChange={handleToggleChange}
-                    />
-                    <span className="password-slider lead-slider password-round"></span>
-                  </label>
-                </div>
-              </span>
-            </div>
-          </div>
-          <div className="right-side--btns">
-          <button type="button" className="secondary-btn" onClick={openModal}>
-            Add Coach
-            </button>
-            <div className="select action-select">
-              <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
-                placeholder="Sports"
-                onChange={handleSportsChange}></input>
-              <datalist id="sports_leads">
-                <option value="archery"></option>
-                <option value="arts"></option>
-                <option value="athletics"></option>
-                <option value="badminton"></option>
-                <option value="basketball"></option>
-                <option value="billiards"></option>
-                <option value="boxing"></option>
-                <option value="chess"></option>
-                <option value="cricket"></option>
-                <option value="fencing"></option>
-                <option value="football"></option>
-                <option value="golf"></option>
-                <option value="gym"></option>
-                <option value="hockey"></option>
-                <option value="kabaddi"></option>
-                <option value="karate"></option>
-                <option value="kho-kho"></option>
-                <option value="mma"></option>
-                <option value="motorsports"></option>
-                <option value="rugby"></option>
-                <option value="shooting"></option>
-                <option value="skating"></option>
-                <option value="sports"></option>
-                <option value="squash"></option>
-                <option value="swimming"></option>
-                <option value="table-tennis"></option>
-                <option value="taekwondo"></option>
-                <option value="tennis"></option>
-                <option value="volleyball"></option>
-                <option value="wrestling"></option>
-                <option value="yoga"></option>
-                <option value="bodybuilding"></option>
-              </datalist>
-            </div>
-            <div className="select action-select">
-              <input list="city_leads" name="city_lead" id="city_lead" value={cityLead} placeholder="City" onChange={handleCityChange}></input>
-              <datalist id="city_leads">
-                {cities?.map((city, index) => (
-                  <option key={index} value={city}></option>
-                ))}
-              </datalist>
-            </div>
-
-            <div className="select action-select">
-              <div className="dropdown-container" ref={actionDropDownRef}>
-                <div
-                  className="dropdown-header2"
-                  onClick={toggleActionDropdown}
-                >
-                  Actions{" "}
+      <div>
+        <section className="lead-body">
+          <div className="top-head">
+            <div className="left-side--btns">
+              <div className="dropdown-container" ref={leadDropDownRef}>
+                <div className="dropdown-header" onClick={toggleDropdown}>
+                  all Leads{" "}
                   <i
-                    className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                    className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
                       }`}
                   ></i>
                 </div>
-                {actionopen && (
-                  <ul className="dropdown-menu">
-                    <li>Mass Delete</li>
-                    <li>Mass Update</li>
-                    <li>Import</li>
-                    <li>
-                      Export Leads
-                    </li>
+                {leadopen && (
+                  <ul className="dropdown-menuLead">
+                    <li>Lead 1</li>
+                    <li>Lead 2</li>
+                    <li>Lead 3</li>
                   </ul>
-                )}</div>
-            </div>
-            <button
-              type="button"
-              className="helpBtn genral-refresh-icon"
-              title="Refresh"
-              onClick={resetData}
-            >
-              <i class="fa-sharp fa-solid fa-rotate "></i>
-            </button>
-          </div>
-        </div>
-      </section>
-      <section className="cards-body">
-        {stages?.map((item, index) => (
-          <div className="card-column" key={index}>
-            <div className="card-details">
-              <div className="main-cards">
-                <div className="cards-new">
-                  <p className="DealName">
-                    {item?.name}({statusCounts[item.stage]})
-                  </p>
-                  {statusCounts[item?.id] > 0 && (
-                    <label className="custom-checkbox">
+                )}
+              </div>
+              <div className="view">
+                <a href="#" className="grid-view--btn active-btn">
+                  <img src={chart} alt="chart" />
+                </a>
+                <a href="#" className="list-view--btn">
+                  <i className="fas fa-list-ul"></i>
+                </a>
+              </div>
+              <div className="recycle-search-box">
+                <input
+                  type="text"
+                  className="recycle-search-input recycle-fonts"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+                <span className="recycle-search-icon">
+                  <div>
+                    <label className="password-switch lead-switch">
                       <input
                         type="checkbox"
-                        className={`cb1 ${item}-header-checkbox`}
-                        name="headerCheckBox"
-                        checked={
-                          selectedStatusesData[item] &&
-                          areAllChildCheckboxesChecked(item)
-                        }
-                        onChange={() => handleHeaderCheckboxChange(item)}
+                        checked={toggleChecked}
+                        onChange={handleToggleChange}
                       />
-                      <span className="checkmark"></span>
+                      <span className="password-slider lead-slider password-round"></span>
                     </label>
-                  )}
-                </div>
-                {(() => {
-                  switch (item?.stage) {
-                    case 'coach_logs':
-                      if (academyLogs && academyLogs.length > 0) {
-                        return academyLogs.map((obj) => (
-                          <CoachCard
+                  </div>
+                </span>
+              </div>
+            </div>
+            <div className="right-side--btns">
+              <button type="button" className="secondary-btn" onClick={openModal}>
+                Add Coach
+              </button>
+              <div className="select action-select">
+                <div className="dropdown-container" ref={actionDropDownRef}>
+                  <div
+                    className="dropdown-header2"
+                    onClick={toggleActionDropdown}
+                  >
+                    Actions{" "}
+                    <i
+                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                        }`}
+                    ></i>
+                  </div>
+                  {actionopen && (
+                    <ul className="dropdown-menu">
+                      <li>Mass Delete</li>
+                      <li>Mass Update</li>
+                      <li>Import</li>
+                      <li>
+                        Export Leads
+                      </li>
+                    </ul>
+                  )}</div>
+              </div>
+              <button
+                type="button"
+                className="helpBtn genral-refresh-icon"
+                title="Refresh"
+                onClick={resetData}
+              >
+                <i class="fa-sharp fa-solid fa-rotate "></i>
+              </button>
+            </div>
+          </div>
+        </section>
+        <section className="cards-body">
+          {stages?.map((item, index) => (
+            <div className="card-column" key={index}>
+              <div className="card-details">
+                <div className="main-cards">
+                  <div className="cards-new">
+                    <p className="DealName">
+                      {item?.name}({statusCounts[item.stage]})
+                    </p>
+                  </div>
+                  {(() => {
+                    switch (item?.stage) {
+                      case 'coach':
+                        return coach?.map((obj) => (
+                          <LeadCards
                             key={obj?.id}
                             object={obj}
-                            onLeadAdded={getAllLogs}
-                            itemName={"coach_logs"}
+                            onLeadAdded={getAllCoaches}
+                            itemName={"coach"}
                           />
                         ));
-                      } else {
-                        return <p>Loading...</p>;
-                      };
-                    case 'coach_with_leads':
-                      if (acadmeyLeads && acadmeyLeads.length > 0) {
-                        return acadmeyLeads.map((obj) => (
-                          <CoachCard
-                            key={obj?.id}
-                            object={obj}
-                            onLeadAdded={getAllLeads}
-                            itemName={"coach_with_leads"}
-                          />
-                        ));
-                      } else {
-                        return <p>Loading...</p>;
-                      }
+                      case 'coach_logs':
+                        if (academyLogs && academyLogs.length > 0) {
+                          return academyLogs.map((obj) => (
+                            <CoachCard
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getAllLogs}
+                              itemName={"coach_logs"}
+                            />
+                          ));
+                        } else {
+                          return <p>Loading...</p>;
+                        };
+                      case 'coach_with_leads':
+                        if (acadmeyLeads && acadmeyLeads.length > 0) {
+                          return acadmeyLeads.map((obj) => (
+                            <CoachCard
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getAllLeads}
+                              itemName={"coach_with_leads"}
+                            />
+                          ));
+                        } else {
+                          return <p>Loading...</p>;
+                        }
                       case 'verified_coach':
                         if (verified && verified.length > 0) {
                           return verified.map((obj) => (
@@ -500,25 +410,25 @@ const Coach = () => {
                           return
                           // return <p>Loading...</p>;
                         };
-                    default:
-                      return null;
-                  }
-                })()}
+                      default:
+                        return null;
+                    }
+                  })()}
 
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </section>
-      <ToastContainer />
-      {isModalOpen && (
-      <AddCoach
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      />
-    )}
-    </div>
-  </>
+          ))}
+        </section>
+        <ToastContainer />
+        {isModalOpen && (
+          <AddCoach
+            isOpen={isModalOpen}
+            onClose={closeModal}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

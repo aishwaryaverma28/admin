@@ -4,6 +4,7 @@ import { GET_COACH,UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants
 import { toast } from "react-toastify";
 import USER from "../../assets/image/user-img.png"
 const PlayerDetails = ({ id }) => {
+  console.log(id);
     const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState("");
@@ -11,7 +12,7 @@ const PlayerDetails = ({ id }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
-  
+
 const getAllPlayers = () => {
     const requestBody = {
         entity: 'bmp_player_details',
@@ -40,7 +41,6 @@ const getAllPlayers = () => {
         });
 };
 
-console.log(editedItem)
     useEffect(() => {
         getAllPlayers();
     }, []);

@@ -10,6 +10,7 @@ import PlayerDetails from './PlayerDetails';
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import AcademyLogs from './AcademyLogs';
 const PlayerLead = ({ selectedItem, closeModal }) => {
+    console?.log(selectedItem);
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
     const [leads, setLeads] = useState(0);
@@ -117,7 +118,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                         )}*/}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem} type={"Coach"}/>
+                                <AcademyLogs id={selectedItem} type={"Player"}/>
                             </div>
                         )} 
                         {activeTab === "leads" && (

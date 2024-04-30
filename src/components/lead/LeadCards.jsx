@@ -53,7 +53,7 @@ const LeadCards = ({
     }
     if (itemName === "player") {
       setPlayerMenu(true);
-      setSelectedObj(object);
+      setSelectedObj(object?.id);
     }
   };
 

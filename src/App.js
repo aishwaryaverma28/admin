@@ -59,6 +59,7 @@ import Coach from "./components/coach/Coach.jsx";
 import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 import Support from "./components/tickets/Support.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
+import Player from "./components/player/Player.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/coach",
         element: <SecureRoutes Component={Coach} />,
+      },
+      {
+        path: "/lp/player",
+        element: <Player/>,
       },
       {
         path: "/lp/home",
