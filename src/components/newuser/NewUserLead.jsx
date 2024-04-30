@@ -10,6 +10,7 @@ import AssignAcademy from '../acadmey/AssignAcademy';
 import LeadImage from './LeadImage';
 import Confirmation from "../lead/Confirmation.jsx";
 const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
+    console.log(selectedItem)
     const decryptedToken = getDecryptedToken();
     const [activeTab, setActiveTab] = useState("details");
     const [userLog, setUserLog] = useState(0);

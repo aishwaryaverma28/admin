@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import Leadplaner from "./components/Leadplaner";
-import Lead from "./components/lead/Lead";
 import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
 import BmpDashboard from "./components/bookmyplayer/BmpDashboard.jsx";
@@ -27,7 +26,6 @@ import BlogUpdate from "./components/master-settings/BlogUpdate";
 import SitePagesView from "./components/master-settings/SitePagesView";
 import SitePagesUpdate from "./components/master-settings/SitePagesUpdate";
 import Home from "./components/Home";
-import Contacts from "./components/contacts/Contacts.jsx";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import SecureRoutes from "./components/SecureRoutes";
@@ -48,11 +46,6 @@ import SettingImpExp from "./components/settings/SettingImpExp";
 import DealUpdate from "./components/deal/DealUpdate";
 import HelpView from "./components/master-settings/HelpView";
 import Reset from "./components/Reset";
-import CompanyUpdate from "./components/contacts/CompanyUpdate.jsx";
-import PeopleUpdate from "./components/contacts/PeopleUpdate.jsx";
-import Campaign from "./components/marketing/Campaign.jsx";
-import ListFilter from "./components/marketing/ListFilter.jsx";
-import WhatsappView from "./components/marketing/WhatsappView.jsx";
 import BmpReviewsView from "./components/master-settings/bmp/BmpReviewsView.jsx";
 import BmpReviewsUpdate from "./components/master-settings/bmp/BmpReviewsUpdate.jsx";
 import AddTournament from "./components/master-settings/tournament/AddTournament.jsx";
@@ -65,6 +58,7 @@ import Acadmey from "./components/acadmey/Acadmey.jsx";
 import Coach from "./components/coach/Coach.jsx";
 import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 import Support from "./components/tickets/Support.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -91,7 +85,7 @@ const router = createBrowserRouter([
       // path: "/lp/dashboard",
       {
         path: "/lp/lead",
-        element: <SecureRoutes Component={Lead} />,
+        element: <SecureRoutes Component={Dashboard} />,
       },
       // path: "/lp/acadmey",
       {

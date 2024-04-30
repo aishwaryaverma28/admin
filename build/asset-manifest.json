@@ -1,10 +1,9 @@
 {
   "files": {
-    "main.css": "/static/css/main.972bdfe3.css",
-    "main.js": "/static/js/main.50cad359.js",
+    "main.css": "/static/css/main.0624aa2a.css",
+    "main.js": "/static/js/main.5da9830a.js",
     "static/js/703.a43ad199.chunk.js": "/static/js/703.a43ad199.chunk.js",
     "static/js/598.05b88d6d.chunk.js": "/static/js/598.05b88d6d.chunk.js",
-    "static/media/whatsapp.png": "/static/media/whatsapp.4b37dbe87e980c9d4045.png",
     "static/media/404.jpg": "/static/media/404.848d7a9bea70cb1616e0.jpg",
     "static/media/latest.jpg": "/static/media/latest.cdd6fdbb45bf5f076274.jpg",
     "static/media/blue_logo.png": "/static/media/blue_logo.30c789734165428b1203.png",
@@ -15,8 +14,6 @@
     "static/media/logo.svg": "/static/media/logo.827671c11d02d24eac1721a33a848b22.svg",
     "static/media/setup.svg": "/static/media/setup.caddf8411392607bb2e0e2a711faf70c.svg",
     "static/media/calendar.svg": "/static/media/calendar.61918c5c96ba9fa2cd99af5cb3c68538.svg",
-    "static/media/gallery-2.svg": "/static/media/gallery-2.8b35685cc2cd93a8f507f5e82d0e4092.svg",
-    "static/media/no-img.svg": "/static/media/no-img.985ab469a8aad210be40ee5dde42e60f.svg",
     "static/media/whatsapp.svg": "/static/media/whatsapp.520744a3ab71241d60eeab739604c77f.svg",
     "static/media/lock.svg": "/static/media/lock.c6323ba76ed8d88e71821c71f5bab1d8.svg",
     "static/media/time-blue.svg": "/static/media/time-blue.fbb92ac834a4c162dde60fef41b3ff32.svg",
@@ -30,14 +27,11 @@
     "static/media/british-pound-symbol.svg": "/static/media/british-pound-symbol.4800b053bcd7ce8c9c12e381c2e94827.svg",
     "static/media/call.svg": "/static/media/call.2d32e1ac07835fdc9f4edc8f6a902a30.svg",
     "static/media/calendar-edit.svg": "/static/media/calendar-edit.6df918d2d3b4c28b140171f6d030374f.svg",
-    "static/media/building.svg": "/static/media/building.00dadb10b83dc56f4de53afa654cb24f.svg",
     "static/media/lead-icon.svg": "/static/media/lead-icon.e5b4e076cfb9dca9c11c38a3446d9173.svg",
     "static/media/device.svg": "/static/media/device.29408215e3985b92050f7c3ed7ea0d98.svg",
-    "static/media/sort.svg": "/static/media/sort.6cfd86b51d6a46ab1f1770317e54152d.svg",
     "static/media/calender2.svg": "/static/media/calender2.6990b3569885fc1ee6b4f571887ac188.svg",
     "index.html": "/index.html",
     "static/media/stage-icon.svg": "/static/media/stage-icon.d32879ae69800bf2cb152f39df49f17e.svg",
-    "static/media/calendar-new.svg": "/static/media/calendar-new.bca10e71f2dbf5bf5c33788d64af35cb.svg",
     "static/media/unpin.svg": "/static/media/unpin.a0033fdddc161590d00a131e223d1f1e.svg",
     "static/media/profile-circle.svg": "/static/media/profile-circle.60faed22ac12830da5a28405f00439f8.svg",
     "static/media/video.svg": "/static/media/video.09761fcb8db651caf76fcb29dcda5b88.svg",
@@ -48,7 +42,6 @@
     "static/media/question-black.svg": "/static/media/question-black.a6dcbd523fbc1d8dd02ee17bb5ac38f2.svg",
     "static/media/question-icon.svg": "/static/media/question-icon.5b2ff5ebf0be8ee74f79ab99d987c495.svg",
     "static/media/chart.svg": "/static/media/chart.04c7770aaf3062e7df84157df37e7292.svg",
-    "static/media/more.svg": "/static/media/more.6966df8e3f1b1a19010e6b6a5073b498.svg",
     "static/media/finance.svg": "/static/media/finance.649ae31e0e6607e01f2caff739fee02b.svg",
     "static/media/deal-icon.svg": "/static/media/deal-icon.1aa4b318b1284c7f629e786e90c27fe3.svg",
     "static/media/performence.svg": "/static/media/performence.044bf29f63be43165266058fc581aa2e.svg",
@@ -60,9 +53,7 @@
     "static/media/text-icon.svg": "/static/media/text-icon.18ab1d838e3b2b7a33ef072194aafec9.svg",
     "static/media/search.svg": "/static/media/search.572c29d13d44a3c7a353761df32f1352.svg",
     "static/media/small-pen.svg": "/static/media/small-pen.2a5e57fcce6e09517a35604c322f67c8.svg",
-    "static/media/copy.svg": "/static/media/copy.b74ccb8bb0b3bfeb012afc6ff4376dcf.svg",
     "static/media/download.svg": "/static/media/download.84bdeecf17179ae2cae3d1120fe05f9f.svg",
-    "static/media/user.svg": "/static/media/user.e468134c57aae25db816063c9fb2b920.svg",
     "static/media/user-icon.svg": "/static/media/user-icon.2413b5dcd61632d21a0690fcb1fb894c.svg",
     "static/media/clock.svg": "/static/media/clock.9323cb1a3a6f1572d970b8ad2ef323a6.svg",
     "static/media/arrow-left.svg": "/static/media/arrow-left.af777ae4728f6f24c223225e3178bb10.svg",
@@ -83,13 +74,13 @@
     "static/media/greater-arrow.svg": "/static/media/greater-arrow.c22fdd72da9beca5e3f40a18bb66fdb7.svg",
     "static/media/greater-up.svg": "/static/media/greater-up.a8eef9ef909059b38a5aaebf46db2763.svg",
     "static/media/bluedot.svg": "/static/media/bluedot.8d480cafc752076cfa9b3ffc75b9a1c2.svg",
-    "main.972bdfe3.css.map": "/static/css/main.972bdfe3.css.map",
-    "main.50cad359.js.map": "/static/js/main.50cad359.js.map",
+    "main.0624aa2a.css.map": "/static/css/main.0624aa2a.css.map",
+    "main.5da9830a.js.map": "/static/js/main.5da9830a.js.map",
     "703.a43ad199.chunk.js.map": "/static/js/703.a43ad199.chunk.js.map",
     "598.05b88d6d.chunk.js.map": "/static/js/598.05b88d6d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.972bdfe3.css",
-    "static/js/main.50cad359.js"
+    "static/css/main.0624aa2a.css",
+    "static/js/main.5da9830a.js"
   ]
 }

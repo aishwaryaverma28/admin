@@ -1330,6 +1330,11 @@
   background-color: #0bfa73;
   border-radius: 5px;
 }
+.newData{
+  padding: 0.1rem 0.3rem;
+  background-color: #fe5c4d;
+  border-radius: 5px;
+}
 .yellowLogIn{
   min-width: 1.5rem;
   height: 1rem;
