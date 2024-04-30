@@ -7,12 +7,10 @@ import CreateLead from "../lead/CreateLead.jsx";
 import {
   ALL_BMP_USER,
   getDecryptedToken,
-  SEARCH_ACADMEY_ID,
-  ACADMEY_SEARCH_API
 } from "../utils/Constants";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LeadModal from "../lead/LeadModal.jsx";
+import LeadModal from "../LeadModal.jsx";
 import DashboardCards from "./DashboardCards.jsx";
 
 const Dashboard = () => {

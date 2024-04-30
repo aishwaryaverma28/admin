@@ -296,7 +296,7 @@ const LeadImage2 = (id) => {
     const handleSubmit = (logoValue, bannerValue) => {
         setPhotoBtn(0);
         const updatedFormData = {
-            type : "org",
+            type: "org",
             logo: logoValue,
             banner: bannerValue,
             photos: photoUrls?.join(","),
@@ -336,19 +336,19 @@ const LeadImage2 = (id) => {
                 setPhotoBtn(0);
             });
     };
-    
+
     const handleSubmitlogo = () => {
         handleSubmit(photoChoose, bannerName);
     };
-    
+
     const handleSubmitbanner = () => {
         handleSubmit(fileName, photoChoose);
     };
-    
+
     const handleSubmit2 = () => {
         setStateBtn(0);
         const updatedFormData = {
-            type : "org",
+            type: "org",
             logo: fileName,
             banner: bannerName,
             photos: photoUrls?.join(","),
@@ -403,7 +403,7 @@ const LeadImage2 = (id) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
-                    type : "org",
+                    type: "org",
                     photos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -434,7 +434,7 @@ const LeadImage2 = (id) => {
             .put(
                 UPDATE_ACADEMY + academyData?.id,
                 {
-                    type : "org",
+                    type: "org",
                     videos: updatedNameString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -514,13 +514,18 @@ const LeadImage2 = (id) => {
 
                     {!selectedFile && (
                         <div className="bmp-image-preview">
-                            <img
-                                src={academyData?.logo === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
-                                alt=""
-                                className="bmp-preview-image"
-                            />
+                            <a href={academyData?.logo === null
+                                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
+                                target="_blank" rel="noopener noreferrer">
+                                <img
+                                    src={academyData?.logo === null
+                                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
+                                    alt=""
+                                    className="bmp-preview-image"
+                                />
+                            </a>
                         </div>
                     )}
                 </div>
@@ -585,6 +590,10 @@ const LeadImage2 = (id) => {
 
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
+                            <a href={academyData?.banner === null
+                                    ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.banner}`}
+                                target="_blank" rel="noopener noreferrer">
                             <img
                                 src={academyData?.banner === null
                                     ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
@@ -592,6 +601,7 @@ const LeadImage2 = (id) => {
                                 alt=""
                                 className="bmp-preview-image"
                             />
+                            </a>
                         </div>
                     )}
                 </div>
@@ -673,7 +683,7 @@ const LeadImage2 = (id) => {
 
                                         <p className="common-fonts bmp-tour">
                                             {photo?.length > 20 ? (
-                                                <>{photo?.slice(0,20)}...</>
+                                                <>{photo?.slice(0, 20)}...</>
                                             ) : (
                                                 <>{photo}</>
                                             )}
@@ -687,11 +697,13 @@ const LeadImage2 = (id) => {
                                         />
                                     </div>
                                 </div>
+                                <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />
+                                </a>
                             </div>
                         ))}
                     </div>
@@ -708,7 +720,7 @@ const LeadImage2 = (id) => {
                             <div className="bmp-new-img" key={index}>
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
-                                    <input
+                                        <input
                                             type="checkbox"
                                             className="radio_disable check_input"
                                             checked={selectedPhotoIndex === index}
@@ -737,12 +749,14 @@ const LeadImage2 = (id) => {
                                     </div>
                                 </div>
                                 <div className="bmp-player-img">
+                                <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
                                     <video width="270" height="140" controls>
                                         <source
                                             src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${video}`}
                                             type="video/mp4"
                                         />
                                     </video>
+                                    </a>
                                 </div>
                             </div>
                         ))}
@@ -758,30 +772,30 @@ const LeadImage2 = (id) => {
                 >
                     Cancel
                 </button>
-            {photoBtn === 0 ? (
-                <>
-                    <button className="disabledBtn" disabled>
-                    Save as logo
-                    </button>
-                    <button className="disabledBtn" disabled>
-                    Save as Banner
-                    </button>
+                {photoBtn === 0 ? (
+                    <>
+                        <button className="disabledBtn" disabled>
+                            Save as logo
+                        </button>
+                        <button className="disabledBtn" disabled>
+                            Save as Banner
+                        </button>
                     </>
                 ) : (
                     <>
-                    <button
-                        className="common-fonts common-save-button"
-                        onClick={handleSubmitlogo}
-                    >
-                        Save as logo
-                    </button>
-                     <button
-                     className="common-fonts common-save-button"
-                     onClick={handleSubmitbanner}
-                 >
-                     Save as Banner
-                 </button>
-                 </>
+                        <button
+                            className="common-fonts common-save-button"
+                            onClick={handleSubmitlogo}
+                        >
+                            Save as logo
+                        </button>
+                        <button
+                            className="common-fonts common-save-button"
+                            onClick={handleSubmitbanner}
+                        >
+                            Save as Banner
+                        </button>
+                    </>
                 )}
                 {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
