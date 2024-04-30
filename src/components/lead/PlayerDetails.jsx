@@ -10,10 +10,7 @@ const PlayerDetails = ({ id }) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [trainingLocation, setTrainingLocation] = useState([]);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
-  const [userSkills, setUserSkills] = useState([]);
-  const [addedSkils, setAddedSkills] = useState([]);
   
 const getAllPlayers = () => {
     const requestBody = {

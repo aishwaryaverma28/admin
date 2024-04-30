@@ -4,6 +4,7 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import { cities } from "../utils/cities.js";
 import {
+  ACADMEY_SEARCH,
   MOST_LEADS,
   ACADMEY_VEREFIED,
   SEARCH_ACADMEY_ID,
@@ -13,9 +14,15 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyCard from "./AcadmeyCard.jsx";
+import LeadCards from "../lead/LeadCards.jsx";
 
 const Acadmey = () => {
   const [stages, setStages] = useState([
+    {
+      "id": 0,
+      "stage": "academy",
+      "name": "Academy"
+    },
     {
       "id": 1,
       "stage": "verified_acadmey",
@@ -30,8 +37,9 @@ const Acadmey = () => {
       "id": 3,
       "stage": "acadmey_with_leads",
       "name": "Academy with Leads"
-    }    
+    }
   ]);
+  const [academy, setAcademy] = useState([])
   const [toggleChecked, setToggleChecked] = useState(false);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
@@ -55,7 +63,33 @@ const Acadmey = () => {
   const handleCityChange = (event) => {
     setCityLead(event.target.value);
   };
+  //=========================================================get all acadmies
+  const getAllAcademy = (sport, city) => {
+    const hasSportOrCity = sport || city;
 
+    const requestBody = hasSportOrCity ? {
+      ...(sport && { sport }),
+      ...(city && { location: city }),
+      condition: "conditions",
+      limit_from: "0",
+      limit_to: "1000",
+    } : {
+      sport: "football",
+      condition: "conditions",
+      limit_from: "0",
+      limit_to: "1000"
+    };
+    axios.post(ACADMEY_SEARCH, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setAcademy(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
   //=========================================================get all acadmey leads
   const getAllLeads = () => {
     const requestBody = {
@@ -77,6 +111,7 @@ const Acadmey = () => {
   }
 
   useEffect(() => {
+    getAllAcademy();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -102,17 +137,17 @@ const Acadmey = () => {
   }
 
   //=========================================================get all acadmey verifeid
-   const getAllVerify = () => {
+  const getAllVerify = () => {
     const requestBodyBoth = {
       "condition": "both",
       "entity": "academy"
     };
-  
+
     const requestBodyAnyone = {
       "condition": "anyone",
-       "entity": "academy"
+      "entity": "academy"
     };
-  
+
     Promise.all([
       axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
         headers: {
@@ -126,19 +161,19 @@ const Acadmey = () => {
       })
     ]).then(([bothResponse, anyoneResponse]) => {
       const bothData = bothResponse?.data?.data || [];
-    const anyoneData = anyoneResponse?.data?.data || [];
-    const combinedData = [...bothData, ...anyoneData];
-    const uniqueIds = new Set();
-    const filteredData = combinedData.filter(item => {
-      if (uniqueIds.has(item.id)) {
-        return false;
-      } else {
-        uniqueIds.add(item.id);
-        return true;
-      }
-    });
+      const anyoneData = anyoneResponse?.data?.data || [];
+      const combinedData = [...bothData, ...anyoneData];
+      const uniqueIds = new Set();
+      const filteredData = combinedData.filter(item => {
+        if (uniqueIds.has(item.id)) {
+          return false;
+        } else {
+          uniqueIds.add(item.id);
+          return true;
+        }
+      });
 
-    setVerified(filteredData);
+      setVerified(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -146,12 +181,13 @@ const Acadmey = () => {
 
   useEffect(() => {
     const counts = {
+      academy: academy?.length,
       acadmey_logs: academyLogs?.length,
       acadmey_with_leads: acadmeyLeads?.length,
       verified_acadmey: verified?.length,
     };
     setStatusCounts(counts);
-  }, [acadmeyLeads, academyLogs, verified]);
+  }, [academy, acadmeyLeads, academyLogs, verified]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -159,31 +195,31 @@ const Acadmey = () => {
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
-    setSearchQuery(value);    
+    setSearchQuery(value);
     if (value?.length === 0) {
-      getAllVerify();
+      getAllAcademy();
     } else {
       if (!toggleChecked && value?.length < 3) {
         return;
       }
       let apiUrl = '';
-        apiUrl = toggleChecked
-          ? `${SEARCH_ACADMEY_ID}${value}`
-          : `${ACADMEY_SEARCH_API}${value}`;
+      apiUrl = toggleChecked
+        ? `${SEARCH_ACADMEY_ID}${value}`
+        : `${ACADMEY_SEARCH_API}${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
-      .then(response => {
-        setVerified(response?.data?.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+        .then(response => {
+          setAcademy(response?.data?.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
   };
-  
+
   const resetData = () => {
     getAllLeads();
     getAllLogs();
@@ -382,6 +418,15 @@ const Acadmey = () => {
                   </div>
                   {(() => {
                     switch (item?.stage) {
+                      case 'academy':
+                        return academy?.map((obj) => (
+                          <LeadCards
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getAllAcademy}
+                            itemName={"academy"}
+                          />
+                        ));
                       case 'acadmey_logs':
                         if (academyLogs && academyLogs.length > 0) {
                           return academyLogs.map((obj) => (
@@ -408,19 +453,19 @@ const Acadmey = () => {
                         } else {
                           return <p>Loading...</p>;
                         }
-                        case 'verified_acadmey':
-                          if (verified && verified.length > 0) {
-                            return verified.map((obj) => (
-                              <AcadmeyCard
-                                key={obj?.id}
-                                object={obj}
-                                onLeadAdded={getAllLogs}
-                                itemName={"verified_acadmey"}
-                              />
-                            ));
-                          } else {
-                            return <p>Loading...</p>;
-                          };
+                      case 'verified_acadmey':
+                        if (verified && verified.length > 0) {
+                          return verified.map((obj) => (
+                            <AcadmeyCard
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getAllLogs}
+                              itemName={"verified_acadmey"}
+                            />
+                          ));
+                        } else {
+                          return <p>Loading...</p>;
+                        };
                       default:
                         return null;
                     }

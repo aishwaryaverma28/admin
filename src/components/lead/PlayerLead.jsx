@@ -20,7 +20,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     const getLogs = () => {
         const body = {
             entity: "Player",
-            object_id: selectedItem.id
+            object_id: selectedItem
         }
         axios.post(ACADEMY_LOGS, body, {
             headers: {
@@ -38,7 +38,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     }
     const fetchLeads = () => {
         const body = {
-            object_id: selectedItem.id, object_type: "player",
+            object_id: selectedItem, object_type: "player",
         }
         axios
             .post(ACADMEY_LEADS_DETAILS, body, {
@@ -107,7 +107,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                      <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <PlayerDetails id={selectedItem?.id} />
+                                <PlayerDetails id={selectedItem} />
                             </div>
                         )}
                         {/* {activeTab === "gallery" && (*
@@ -117,7 +117,7 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                         )}*/}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem?.id} type={"Coach"}/>
+                                <AcademyLogs id={selectedItem} type={"Coach"}/>
                             </div>
                         )} 
                         {activeTab === "leads" && (

@@ -29,26 +29,26 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
 
   const fetchLead = () => {
     let body = {
-        academy_id: tempAcademyId,
-        type: "temp"
-      };
-      
+      academy_id: tempAcademyId,
+      type: "temp"
+    };
+
     axios
-        .post(GET_ACADEMY, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-        .then((response) => {
-            setData(response?.data?.data[0]);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-};
-useEffect(() => {
+      .post(GET_ACADEMY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setData(response?.data?.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
     fetchLead();
-}, []);
+  }, []);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -93,18 +93,18 @@ useEffect(() => {
       },
     })
       .then((response) => {
-        if (response?.data?.status === 1){
-        toast.success("Acadmey assigned successfully", {
-          position: "top-center",
-          autoClose: 1000,
-        });
-        onLeadAdded();
-      }else{
-        toast.error(response?.data?.message, {
-          position: "top-center",
-          autoClose: 1000,
-        });
-      }
+        if (response?.data?.status === 1) {
+          toast.success("Acadmey assigned successfully", {
+            position: "top-center",
+            autoClose: 1000,
+          });
+          onLeadAdded();
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -126,19 +126,19 @@ useEffect(() => {
       },
     })
       .then((response) => {
-      openModal(response?.data?.data?.insertId)
-        if (response?.data?.status === 1){
-        toast.success("Acadmey added successfully", {
-          position: "top-center",
-          autoClose: 1000,
-        });
-        onLeadAdded();
-      }else{
-        toast.error(response?.data?.message, {
-          position: "top-center",
-          autoClose: 1000,
-        });
-      }
+        openModal(response?.data?.data?.insertId)
+        if (response?.data?.status === 1) {
+          toast.success("Acadmey added successfully", {
+            position: "top-center",
+            autoClose: 1000,
+          });
+          onLeadAdded();
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -148,7 +148,7 @@ useEffect(() => {
         });
       })
   }
- 
+
   return (
     <>
       <div className="recycle-search-box">
@@ -173,31 +173,34 @@ useEffect(() => {
         </span>
       </div>
       <>
-      <div className="academy-card">
-            <div className="card-container">
-              <div className="card-leftBox">
-                <div className="user-details">
-                  <p className="heading">
-                    {data.id} - {data.name}
-                  </p>
+        <div className="academy-card">
+          <div className="card-container">
+            <div className="card-leftBox">
+              <div className="user-details">
+                <p className="heading">
+                  {data.id} - {data.name}
+                </p>
+              </div>
+              <div className="lead-value">
+              </div>
+              <div className="contact-details">
+                <div className="mail sportCap">
+                  <p>{data.sport}</p>
                 </div>
-                <div className="lead-value">
+                <div className="mail">
+                  <p>{data.phone}</p>
                 </div>
-                <div className="contact-details">
-                  <div className="mail sportCap">
-                    <p>{data.sport}</p>
-                  </div>
-                  <div className="mail">
-                    <p>{data.phone}</p>
-                  </div>
-                  <div className="mail sportCap">
-                    <p>{data.city}, {data.state}</p>
-                  </div>
+                <div className="mail sportCap">
+                  <p>{data.city}, {data.state}</p>
                 </div>
               </div>
-              <div className="DealCard-rightBox">
-                <div className="mail">
-                  <div className="new_preview_flex">
+            </div>
+            <div className="DealCard-rightBox">
+              <div className="mail">
+                <div className="new_preview_flex">
+                  <a href={data?.logo === null
+                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
                     <img
                       src={data?.logo === null
                         ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
@@ -205,18 +208,19 @@ useEffect(() => {
                       alt="pofile"
                       className="bmp-preview-image"
                     />
-                    <div className='new_btnflex'>
+                  </a>
+                  <div className='new_btnflex'>
                     <button type="button" className="common-save-button " onClick={academyNewAssign}>
-                    New Academy
-                  </button> 
-                    </div>
-
+                      New Academy
+                    </button>
                   </div>
+
                 </div>
-                
               </div>
+
             </div>
           </div>
+        </div>
       </>
       <>
         {academy.map((object) => (
@@ -245,25 +249,26 @@ useEffect(() => {
               <div className="DealCard-rightBox">
                 <div className="mail">
                   <div className="new_preview_flex">
-                    <img
-                      src={object?.logo === null
-                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
-                      alt="pofile"
-                      className="bmp-preview-image"
-                    />
+                    <a href={object?.logo === null
+                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
+                      <img
+                        src={object?.logo === null
+                          ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                          : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                        alt="pofile"
+                        className="bmp-preview-image"
+                      />
+                    </a>
                     <div className='new_btnflex'>
-                    {/* <button type="button" className="common-save-button ">
-                    New Academy
-                  </button>  */}
-                <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
-                  Assign
-                </button>
+                      <button type="button" className="common-save-button" onClick={() => academyAssign(object)}>
+                        Assign
+                      </button>
                     </div>
 
                   </div>
                 </div>
-                
+
               </div>
             </div>
           </div>

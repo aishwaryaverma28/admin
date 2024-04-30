@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
-import { GET_COACH_ID, UPDATE_COACH,config, getDecryptedToken, } from "../utils/Constants";
+import { GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -38,10 +38,10 @@ const CoachImage = (id) => {
     const academyDetails = () => {
         axios
             .post(GET_COACH_ID, { coachId: id?.id }, {
-                    headers: {
-                        Authorization: `Bearer ${decryptedToken}`,
-                    },
-                }
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            }
             )
             .then((response) => {
                 if (response?.data?.data && response?.data?.data?.length !== 0) {
@@ -80,7 +80,7 @@ const CoachImage = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
-    
+
     const processImageName = (imageName) => {
         const nameParts = imageName.split(".");
         if (nameParts?.length > 1) {
@@ -112,7 +112,7 @@ const CoachImage = (id) => {
     const submitImage = (file) => {
         const selectedImage = file;
         if (selectedImage) {
-             setIsUploading(true);
+            setIsUploading(true);
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
             const updatedConfig = {
@@ -300,8 +300,8 @@ const CoachImage = (id) => {
         updateDataAndCallAPI(updatedNameOfStrategy);
     };
     const updateDataAndCallAPI = (updatedNameArray) => {
-    const combinedDataString = [...updatedNameArray, ...videoUrls].join(",");
-    
+        const combinedDataString = [...updatedNameArray, ...videoUrls].join(",");
+
         axios
             .put(
                 UPDATE_COACH + academyData?.id,
@@ -409,13 +409,18 @@ const CoachImage = (id) => {
                     )}
                     {!selectedFile && (
                         <div className="bmp-image-preview">
-                            <img
-                                src={academyData?.profile_img === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
-                                alt="pofile"
-                                className="bmp-preview-image"
-                            />
+                            <a href={academyData?.profile_img === null
+                                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                target="_blank" rel="noopener noreferrer">
+                                <img
+                                    src={academyData?.profile_img === null
+                                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                    alt="pofile"
+                                    className="bmp-preview-image"
+                                />
+                            </a>
                         </div>
                     )}
                 </div>
@@ -482,10 +487,12 @@ const CoachImage = (id) => {
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
                                         <div className="bmp-video">
-                                            <img
-                                                src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
-                                                alt="Selected Preview"
-                                            />
+                                            <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                                    alt="Selected Preview"
+                                                />
+                                            </a>
                                         </div>
 
                                         <p className="common-fonts bmp-tour">
@@ -504,11 +511,13 @@ const CoachImage = (id) => {
                                         />
                                     </div>
                                 </div>
-                                <img
-                                    src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
-                                    alt="Selected Preview"
-                                    key={index}
-                                />
+                                <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                    <img
+                                        src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                        alt="Selected Preview"
+                                        key={index}
+                                    />
+                                </a>
                             </div>
                         ))}
                     </div>
@@ -548,12 +557,14 @@ const CoachImage = (id) => {
                                     </div>
                                 </div>
                                 <div className="bmp-player-img">
-                                    <video width="270" height="140" controls>
-                                        <source
-                                            src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`}
-                                            type="video/mp4"
-                                        />
-                                    </video>
+                                    <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
+                                        <video width="270" height="140" controls>
+                                            <source
+                                                src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`}
+                                                type="video/mp4"
+                                            />
+                                        </video>
+                                    </a>
                                 </div>
                             </div>
                         ))}

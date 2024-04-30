@@ -117,15 +117,15 @@ const LeadCards = ({
                 <div className="mail">
                   <p>{object.mobile}</p>
                 </div>
-              )}               
-              {(itemName === "academy"  || itemName === "coach") && (
+              )}
+              {(itemName === "academy" || itemName === "coach") && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>
                 </div>
               )}
-               <div className="mail">
-                  {formatDate(object?.creation_date)}
-                </div>
+              <div className="mail">
+                {formatDate(object?.creation_date)}
+              </div>
               {/* {(itemName === "user" || itemName === "newuser")  && (
                 <div className="mail">
                   {formatDate(object?.creation_date)}
@@ -137,26 +137,36 @@ const LeadCards = ({
             {itemName === "coach" && (
               <div className="mail">
                 <div className="bmp-image-preview2">
-                  <img
-                    src={object?.profile_img === null
-                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
-                    alt="pofile"
-                    className="bmp-preview-image"
-                  />
+                  <a href={object?.profile_img === null
+                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                    target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={object?.profile_img === null
+                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                      alt="pofile"
+                      className="bmp-preview-image"
+                    />
+                  </a>
                 </div>
               </div>
             )}
             {itemName === "academy" && (
               <div className="mail">
                 <div className="bmp-image-preview2">
-                  <img
-                    src={object?.logo === null
-                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
-                    alt="pofile"
-                    className="bmp-preview-image"
-                  />
+                  <a href={object?.logo === null
+                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                    target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={object?.logo === null
+                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                      alt="pofile"
+                      className="bmp-preview-image"
+                    />
+                  </a>
                 </div>
               </div>
             )}

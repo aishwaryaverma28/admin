@@ -7,7 +7,7 @@ import {
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
-const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
+const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState("");
@@ -49,7 +49,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
         setIsLoading(false);
       });
   };
-  
+
   useEffect(() => {
     fetchLead();
   }, []);
@@ -74,7 +74,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
   };
   const handleClick = () => {
     updateCheckState(true);
-};
+  };
 
   const toggleEditable = (e) => {
     e.preventDefault();
@@ -108,10 +108,10 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
   const handleUpdateClick = () => {
     setStateBtn(0);
     const formattedName = editedItem.name.toLowerCase().replace(/ /g, '-');
-      const formattedCity = editedItem.city.toLowerCase().replace(/ /g, '-');
-      const formattedSport = editedItem.sport.toLowerCase().replace(/ /g, '-');
-      const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
-      
+    const formattedCity = editedItem.city.toLowerCase().replace(/ /g, '-');
+    const formattedSport = editedItem.sport.toLowerCase().replace(/ /g, '-');
+    const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
+
     const updatedFormData = {
       name: editedItem?.name,
       mobile: editedItem?.mobile,
@@ -129,9 +129,9 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
       common_location: editedItem?.common_location,
       experience: editedItem?.experience,
       education: editedItem?.education,
-      achievement:editedItem?.achievement,
-      certificate:editedItem?.certificate,
-      url:url,
+      achievement: editedItem?.achievement,
+      certificate: editedItem?.certificate,
+      url: url,
     }
     axios
       .put(UPDATE_COACH + id, updatedFormData
@@ -170,7 +170,7 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
         setStateBtn(0);
       });
   }
-  
+
   React.useImperativeHandle(ref, () => ({
     handleUpdateClick
   }));
@@ -298,13 +298,17 @@ const CoachDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
       <div className="user-details--left">
         <div className="user-details--heading">
           <div className="user-details-imgBox">
-            <img
-              src={editedItem?.profile_img === null
-                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
-              alt="pofile"
-              className="bmp-preview-image logoRound"
-            />
+            <a href={editedItem?.profile_img === null
+              ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+              : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
+              <img
+                src={editedItem?.profile_img === null
+                  ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                  : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
+                alt="pofile"
+                className="bmp-preview-image logoRound"
+              />
+            </a>
             <div>
               <p>
                 {isLoading ? (

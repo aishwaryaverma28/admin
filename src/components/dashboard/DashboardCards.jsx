@@ -13,6 +13,7 @@ const DashboardCards = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [academyOpen, setAcademyOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
+  const [coachNewMenu, setCoachNewMenu] = useState(false);
   const [playerMenu, setPlayerMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
@@ -42,17 +43,25 @@ const DashboardCards = ({
     }
     else{
       setAcademyOpen(true);
-      setSelectedObj(object?.id);
+      setSelectedObj(object?.parent_id);
     }
     }
-    // if (itemName === "coach") {
-    //   setCoachMenu(true);
-    //   setSelectedObj(object?.id);
-    // }
-    // if (itemName === "player") {
-    //   setPlayerMenu(true);
-    //   setSelectedObj(object);
-    // }
+    if (itemName === "coach") {
+      if(object?.parent_tbl === 0)
+      {}
+      else{
+      setCoachMenu(true);
+      setSelectedObj(object?.parent_id);
+      }
+    }
+    if (itemName === "player") {
+      if(object?.parent_tbl === 0)
+      {}
+      else{
+      setPlayerMenu(true);
+      setSelectedObj(object?.parent_id);
+      }
+    }
   };
 
   const closeModal = () => {
