@@ -461,10 +461,11 @@ const LeadImage = ({ id }) => {
     return (
         <>
             {/* ================================================================================upload the logo */}
-            <section>
-                <p className="common-fonts">Upload Academic Logo</p>
+            <section className='img_upload_newflex'>
+                <p className="common-fonts">Academic Logo</p>
+                <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
                 <div className="bmp-upload">
-                    <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
+                   
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
@@ -484,14 +485,15 @@ const LeadImage = ({ id }) => {
             </section>
             {/* =============================================================================upload banner */}
 
-            <section>
+            <section className='img_upload_newflex'>
                 <p className="common-fonts">
                     Upload banner image
                 </p>
-                <div className="bmp-upload">
-                    <span className="common-fonts">
+                <span className="common-fonts">
                         {bannerName ? bannerName : academyData?.banner}
                     </span>
+                <div className="bmp-upload">
+                   
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.banner === null
