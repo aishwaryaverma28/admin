@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { GET_ACADEMY, UPDATE_ACADEMY, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
@@ -14,7 +14,6 @@ const LeadImage2 = (id) => {
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const [photoBtn, setPhotoBtn] = useState(0);
-    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const allowedFileTypes = [
         "image/jpeg",
         "image/png",
@@ -24,12 +23,8 @@ const LeadImage2 = (id) => {
         "video/webm",
         "video/ogg",
     ];
-    const fileInputRef = useRef(null);
-    const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState(null);
-    const fileBannerRef = useRef(null);
-    const [bannerUploading, setBannerUploading] = useState(false);
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
     const [bannerName, setBannerName] = useState(null);
     const fileInputRef2 = useRef(null);
@@ -107,88 +102,7 @@ const LeadImage2 = (id) => {
         setStateBtn(1);
         setSelectedPhoto(null);
     };
-    //================================================= for logo upload
-    const handleButtonClick = (event) => {
-        event.preventDefault();
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitImage(event.target.files[0]);
-        }
-    };
-
-    const submitImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            setIsUploading(true);
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "academy/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setSelectedFile(selectedImage);
-                    setFileName(modifiedFile.name);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setIsUploading(false);
-                });
-        }
-    };
-    //===================================================================for banner upload
-    const handleBannerButtonClick = (event) => {
-        event.preventDefault();
-        fileBannerRef.current.click();
-    };
-
-    const handleBannerChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitBannerImage(event.target.files[0]);
-        }
-    };
-
-    const submitBannerImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            setBannerUploading(true);
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "academy/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setSelectedBannerFile(selectedImage);
-                    setBannerName(modifiedFile.name);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setBannerUploading(false);
-                });
-        }
-    };
+    
     //=================================================================================photo and video upload
 
     const handleButtonClick2 = () => {
@@ -334,6 +248,7 @@ const LeadImage2 = (id) => {
             })
             .finally(() => {
                 setPhotoBtn(0);
+                setStateBtn(0);
             });
     };
 
@@ -457,70 +372,18 @@ const LeadImage2 = (id) => {
     return (
         <>
             {/* ================================================================================upload the logo */}
-            <section>
-                <p className="common-fonts">Upload Academic Logo</p>
+            <section className='img_upload_newflex'>
+                <p className="common-fonts">Academy Logo : </p>
+                <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
                 <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className={`common-fonts common-input contact-tab-input`}
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                            />
-                            {isUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {fileName ? fileName : academyData?.logo}
-                                    { }
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
-
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
-                                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
-                                target="_blank" rel="noopener noreferrer">
+                                ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
+                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.logo === null
-                                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
+                                        ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
                                         : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.logo}`}
                                     alt=""
                                     className="bmp-preview-image"
@@ -532,68 +395,20 @@ const LeadImage2 = (id) => {
             </section>
             {/* =============================================================================upload banner */}
 
-            <section>
+            <section className='img_upload_newflex'>
                 <p className="common-fonts">
-                    Upload banner image
+                    Academy banner image :
                 </p>
+                <span className="common-fonts">
+                    {bannerName ? bannerName : academyData?.banner}
+                </span>
                 <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className="common-fonts common-input contact-tab-input"
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleBannerButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileBannerRef}
-                                onChange={handleBannerChange}
-                            />
-                            {bannerUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {bannerName ? bannerName : academyData?.banner}
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedBannerFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedBannerFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
 
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.banner === null
                                 ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
-                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.banner}`}
-                                target="_blank" rel="noopener noreferrer">
+                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${academyData?.id}/${academyData?.banner}`} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.banner === null
                                         ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
@@ -606,7 +421,6 @@ const LeadImage2 = (id) => {
                     )}
                 </div>
             </section>
-
             {/* =========================================================multiple photo and video upload */}
             <section>
                 <p className="common-fonts">

@@ -14,7 +14,6 @@ const LeadImage = ({ id }) => {
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const [photoBtn, setPhotoBtn] = useState(0);
-    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const allowedFileTypes = [
         "image/jpeg",
         "image/png",
@@ -24,12 +23,9 @@ const LeadImage = ({ id }) => {
         "video/webm",
         "video/ogg",
     ];
-    const fileInputRef = useRef(null);
-    const [isUploading, setIsUploading] = useState(false);
+   
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState(null);
-    const fileBannerRef = useRef(null);
-    const [bannerUploading, setBannerUploading] = useState(false);
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
     const [bannerName, setBannerName] = useState(null);
     const fileInputRef2 = useRef(null);
@@ -111,88 +107,7 @@ const LeadImage = ({ id }) => {
         setStateBtn(1);
         setSelectedPhoto(null);
     };
-    //================================================= for logo upload
-    const handleButtonClick = (event) => {
-        event.preventDefault();
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitImage(event.target.files[0]);
-        }
-    };
-
-    const submitImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            setIsUploading(true);
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "academy_temp/" + id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setSelectedFile(selectedImage);
-                    setFileName(modifiedFile.name);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setIsUploading(false);
-                });
-        }
-    };
-    //===================================================================for banner upload
-    const handleBannerButtonClick = (event) => {
-        event.preventDefault();
-        fileBannerRef.current.click();
-    };
-
-    const handleBannerChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitBannerImage(event.target.files[0]);
-        }
-    };
-
-    const submitBannerImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            setBannerUploading(true);
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "academy_temp/" + id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setSelectedBannerFile(selectedImage);
-                    setBannerName(modifiedFile.name);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setBannerUploading(false);
-                });
-        }
-    };
+   
     //=================================================================================photo and video upload
 
     const handleButtonClick2 = () => {
@@ -338,6 +253,7 @@ const LeadImage = ({ id }) => {
             })
             .finally(() => {
                 setPhotoBtn(0);
+                setStateBtn(0);
             });
     };
 
@@ -462,10 +378,9 @@ const LeadImage = ({ id }) => {
         <>
             {/* ================================================================================upload the logo */}
             <section className='img_upload_newflex'>
-                <p className="common-fonts">Academic Logo</p>
+                <p className="common-fonts">Academy Logo : </p>
                 <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
-                <div className="bmp-upload">
-                   
+                <div className="bmp-upload">                   
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
@@ -487,7 +402,7 @@ const LeadImage = ({ id }) => {
 
             <section className='img_upload_newflex'>
                 <p className="common-fonts">
-                    Upload banner image
+                Academy banner image : 
                 </p>
                 <span className="common-fonts">
                         {bannerName ? bannerName : academyData?.banner}

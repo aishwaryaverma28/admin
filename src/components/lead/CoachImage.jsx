@@ -31,9 +31,7 @@ const CoachImage = (id) => {
     const [photoUrls, setPhotoUrls] = useState([]);
     const [videoUrls, setVideoUrls] = useState([]);
     const [fileName2, setFileName2] = useState("");
-    const [updatedFields, setUpdatedFields] = useState([]);
     const [academyData, setAcademyData] = useState({});
-    const [deleteIndex, setDeleteIndex] = useState(null);
 
     const academyDetails = () => {
         axios
@@ -135,22 +133,10 @@ const CoachImage = (id) => {
     };
 
     //=================================================================================photo and video upload
-    const showAlertOnce = (message) => {
-        if (!alertVideoShown) {
-            alert(message);
-            setAlertVideoShown(true);
-        }
-    };
-
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
         setAlertVideoShown(false);
         setAlertShown(false);
-    };
-    const updateField = (fieldName) => {
-        if (!updatedFields.includes(fieldName)) {
-            setUpdatedFields([...updatedFields, fieldName]);
-        }
     };
 
     const handleFileChange2 = (event) => {
@@ -257,6 +243,9 @@ const CoachImage = (id) => {
         setStateBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
+            name: academyData?.name,
+            sport: academyData?.sport,
+            city: academyData?.city,
             profile_img: fileName,
             photo: allUrls?.join(","),
         }
@@ -307,6 +296,9 @@ const CoachImage = (id) => {
                 UPDATE_COACH + academyData?.id,
                 {
                     photo: combinedDataString,
+                    name: academyData?.name,
+                    sport: academyData?.sport,
+                    city: academyData?.city,
                 },
                 {
                     headers: {
@@ -335,6 +327,9 @@ const CoachImage = (id) => {
                 UPDATE_COACH + academyData?.id,
                 {
                     photo: combinedDataString,
+                    name: academyData?.name,
+                    sport: academyData?.sport,
+                    city: academyData?.city,
                 },
                 {
                     headers: {

@@ -131,7 +131,6 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       education: editedItem?.education,
       achievement: editedItem?.achievement,
       certificate: editedItem?.certificate,
-      url: url,
     }
     axios
       .put(UPDATE_COACH + id, updatedFormData
