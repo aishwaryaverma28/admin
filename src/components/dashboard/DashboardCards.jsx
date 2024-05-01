@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import CoachLead from "../lead/CoachLead.jsx";
-import PlayerLead from "../lead/PlayerLead.jsx";
 import NewUserLead from "../newuser/NewUserLead.jsx";
 import AcadmeyLead from "../lead/AcadmeyLead.jsx";
+import PlayerLead from "../player/PlayerLead.jsx";
+import NewCoachLead from "../coach/NewCoachLead.jsx";
 
 const DashboardCards = ({
   object,
@@ -34,32 +35,31 @@ const DashboardCards = ({
   };
 
   const openModal = (object) => {
-    console.log(object)
     if (itemName === "academy") {
-      if(object?.parent_tbl === 0)
-      {
-      setModalVisible(true);
-      setSelectedObj(object);
-    }
-    else{
-      setAcademyOpen(true);
-      setSelectedObj(object?.parent_id);
-    }
+      if (object?.parent_tbl === 0) {
+        setModalVisible(true);
+        setSelectedObj(object);
+      }
+      else {
+        setAcademyOpen(true);
+        setSelectedObj(object?.parent_id);
+      }
     }
     if (itemName === "coach") {
-      if(object?.parent_tbl === 0)
-      {}
-      else{
-      setCoachMenu(true);
-      setSelectedObj(object?.parent_id);
+      if (object?.parent_tbl === 0) {
+        setCoachNewMenu(true);
+        setSelectedObj(object);
+      }
+      else {
+        setCoachMenu(true);
+        setSelectedObj(object?.parent_id);
       }
     }
     if (itemName === "player") {
-      if(object?.parent_tbl === 0)
-      {}
-      else{
-      setPlayerMenu(true);
-      setSelectedObj(object?.parent_id);
+      if (object?.parent_tbl === 0) { }
+      else {
+        setPlayerMenu(true);
+        setSelectedObj(object?.parent_id);
       }
     }
   };
@@ -72,6 +72,9 @@ const DashboardCards = ({
   };
   const closeCoachModal = () => {
     setCoachMenu(false);
+  };
+  const closeNewCoachModal = () => {
+    setCoachNewMenu(false);
   };
   const closePlayerModal = () => {
     setPlayerMenu(false);
@@ -130,14 +133,21 @@ const DashboardCards = ({
       )}
       {academyOpen && (
         <AcadmeyLead
-         selectedItem={selectedObj}
-        closeModal={closeAcademyModal}
-        onLeadAdded={onLeadAdded}/>
+          selectedItem={selectedObj}
+          closeModal={closeAcademyModal}
+          onLeadAdded={onLeadAdded} />
       )}
       {coachMenu && (
         <CoachLead
           selectedItem={selectedObj}
           closeModal={closeCoachModal}
+        />
+      )}
+      {coachNewMenu && (
+        <NewCoachLead
+          selectedItem={selectedObj}
+          closeModal={closeNewCoachModal}
+          onLeadAdded={onLeadAdded}
         />
       )}
       {playerMenu && (

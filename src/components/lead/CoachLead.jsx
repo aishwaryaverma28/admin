@@ -13,7 +13,6 @@ import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
 import Confirmation from './Confirmation';
 const CoachLead = ({ selectedItem, closeModal }) => {
-    console.log(selectedItem)
     const decryptedToken = getDecryptedToken();
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);

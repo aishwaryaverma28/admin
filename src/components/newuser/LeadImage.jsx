@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { GET_ACADEMY, UPDATE_ACADEMY, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
@@ -464,58 +464,7 @@ const LeadImage = ({ id }) => {
             <section>
                 <p className="common-fonts">Upload Academic Logo</p>
                 <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className={`common-fonts common-input contact-tab-input`}
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                            />
-                            {isUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {fileName ? fileName : academyData?.logo}
-                                    { }
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
-
+                    <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
@@ -540,57 +489,9 @@ const LeadImage = ({ id }) => {
                     Upload banner image
                 </p>
                 <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className="common-fonts common-input contact-tab-input"
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleBannerButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileBannerRef}
-                                onChange={handleBannerChange}
-                            />
-                            {bannerUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {bannerName ? bannerName : academyData?.banner}
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedBannerFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedBannerFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
-
+                    <span className="common-fonts">
+                        {bannerName ? bannerName : academyData?.banner}
+                    </span>
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.banner === null
@@ -779,7 +680,7 @@ const LeadImage = ({ id }) => {
                 {photoBtn === 0 ? (
                     <>
                         <button className="disabledBtn" disabled>
-                            Save as logo
+                            Select your logo
                         </button>
                         <button className="disabledBtn" disabled>
                             Save as Banner
@@ -791,13 +692,13 @@ const LeadImage = ({ id }) => {
                             className="common-fonts common-save-button"
                             onClick={handleSubmitlogo}
                         >
-                            Save as logo
+                            Select your logo
                         </button>
                         <button
                             className="common-fonts common-save-button"
                             onClick={handleSubmitbanner}
                         >
-                            Save as Banner
+                            Select your Banner
                         </button>
                     </>
                 )}

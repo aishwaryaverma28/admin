@@ -3,8 +3,8 @@ import "../styles/LPleads.css";
 import AcadmeyLead from "./AcadmeyLead.jsx";
 import CoachLead from "./CoachLead.jsx";
 import UserLead from "./UserLead.jsx";
-import PlayerLead from "./PlayerLead.jsx";
 import NewUserLead from "../newuser/NewUserLead.jsx"
+import PlayerLead from "../player/PlayerLead.jsx";
 
 const LeadCards = ({
   object,

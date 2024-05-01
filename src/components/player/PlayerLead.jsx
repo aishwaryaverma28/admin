@@ -5,10 +5,10 @@ import {
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
     handleLogout
-} from "./../utils/Constants";
-import PlayerDetails from './PlayerDetails';
-import AcadmeyLeadDetails from './AcadmeyLeadDetails';
-import AcademyLogs from './AcademyLogs';
+} from "./../utils/Constants"
+import PlayerDetails from "./PlayerDetails"
+import AcademyLogs from '../lead/AcademyLogs';
+import AcadmeyLeadDetails from '../lead/AcadmeyLeadDetails';
 const PlayerLead = ({ selectedItem, closeModal }) => {
     console?.log(selectedItem);
     const decryptedToken = getDecryptedToken();

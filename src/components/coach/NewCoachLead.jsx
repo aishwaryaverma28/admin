@@ -3,13 +3,14 @@ import axios from "axios";
 import {
     getDecryptedToken, USER_LOG
 } from "./../utils/Constants";
-import BmpTickets from '../lead/BmpTickets';
-import NewAcademyDetails from './NewAcademyDetails';
 import UserLogs from '../lead/UserLogs';
-import AssignAcademy from '../acadmey/AssignAcademy';
-import LeadImage from './LeadImage';
 import Confirmation from "../lead/Confirmation.jsx";
-const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
+import CoachAssign from './CoachAssign.jsx';
+import NewCoachImages from './NewCoachImages.jsx';
+import NewCoachDetails from './NewCoachDetails.jsx';
+
+const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
+    console.log(selectedItem)
     const decryptedToken = getDecryptedToken();
     const [activeTab, setActiveTab] = useState("details");
     const [userLog, setUserLog] = useState(0);
@@ -106,42 +107,29 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             User Logs ({userLog?.length})
                         </button>
-                        <button
-                            className={activeTab === "tickets" ? "active" : ""}
-                            onClick={() => handleTabClick("tickets")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            Tickets
-                        </button>
                     </div>
                     {/* ===================================================================tabination content */}
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <NewAcademyDetails id={selectedItem?.parent_id} updateCheckState={updateCheckState} ref={childRef} /> 
+                                <NewCoachDetails id={selectedItem?.parent_id} updateCheckState={updateCheckState} ref={childRef} /> 
                             </div>
                         )}
                         {activeTab === "images" && (
                             <div className="activity-tab-content">
-                                <LeadImage id={selectedItem?.parent_id} />
+                                <NewCoachImages id={selectedItem?.parent_id} />
 
                             </div>
                         )}
                         {activeTab === "assign" && (
                             <div className="activity-tab-content">
-                                {selectedItem?.type === "Academy" ? <AssignAcademy id={selectedItem?.id} tempAcademyId={selectedItem?.parent_id} onLeadAdded={onLeadAdded} /> : null}
+                                <CoachAssign id={selectedItem?.id} tempAcademyId={selectedItem?.parent_id} onLeadAdded={onLeadAdded} />
 
                             </div>
                         )}
                         {activeTab === "user" && (
                             <div className="activity-tab-content">
                                 <UserLogs id={selectedItem?.id} type={selectedItem?.type_id} />
-                            </div>
-                        )}
-
-                        {activeTab === "tickets" && (
-                            <div className="notes-tab-content">
-                                <BmpTickets selectedItem={selectedItem} />
                             </div>
                         )}
                     </div>
@@ -157,4 +145,4 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     )
 }
 
-export default NewUserLead
+export default NewCoachLead
