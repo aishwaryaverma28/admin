@@ -1203,3 +1203,15 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+.img_upload_newflex{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap:0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.img_upload_newflex span{
+  color:#3498db;
+}
