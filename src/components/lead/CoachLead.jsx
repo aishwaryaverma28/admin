@@ -185,27 +185,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length})
                         </button>
-                        <button
-                            className={activeTab === "activity" ? "active" : ""}
-                            onClick={() => handleTabClick("activity")}
-                        >
-                            <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
-                            Activity ()
-                        </button>
-                        <button
-                            className={activeTab === "notes" ? "active" : ""}
-                            onClick={() => handleTabClick("notes")}
-                        >
-                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
-                            Notes ()
-                        </button>                        
-                        <button
-                            className={activeTab === "email" ? "active" : ""}
-                            onClick={() => handleTabClick("email")}
-                        >
-                            <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                            Email ()
-                        </button>
                     </div>
                      {/* ===================================================================tabination content */}
                      <div className="tab-content">

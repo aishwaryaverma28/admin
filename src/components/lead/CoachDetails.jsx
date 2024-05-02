@@ -113,6 +113,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
 
     const updatedFormData = {
+      type : "org",
       name: editedItem?.name,
       mobile: editedItem?.mobile,
       email: editedItem?.email,

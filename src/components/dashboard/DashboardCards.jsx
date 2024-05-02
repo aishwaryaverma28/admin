@@ -5,6 +5,7 @@ import NewUserLead from "../newuser/NewUserLead.jsx";
 import AcadmeyLead from "../lead/AcadmeyLead.jsx";
 import PlayerLead from "../player/PlayerLead.jsx";
 import NewCoachLead from "../coach/NewCoachLead.jsx";
+import NewPlayerLeads from "../player/NewPlayerLeads.jsx";
 
 const DashboardCards = ({
   object,
@@ -16,6 +17,7 @@ const DashboardCards = ({
   const [coachMenu, setCoachMenu] = useState(false);
   const [coachNewMenu, setCoachNewMenu] = useState(false);
   const [playerMenu, setPlayerMenu] = useState(false);
+  const [playerNewMenu, setPlayerNewMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,7 +42,7 @@ const DashboardCards = ({
         setModalVisible(true);
         setSelectedObj(object);
       }
-      else {
+      else if (object?.parent_tbl === 1) {
         setAcademyOpen(true);
         setSelectedObj(object?.parent_id);
       }
@@ -50,14 +52,17 @@ const DashboardCards = ({
         setCoachNewMenu(true);
         setSelectedObj(object);
       }
-      else {
+      else if (object?.parent_tbl === 1) {
         setCoachMenu(true);
         setSelectedObj(object?.parent_id);
       }
     }
     if (itemName === "player") {
-      if (object?.parent_tbl === 0) { }
-      else {
+      if (object?.parent_tbl === 0) { 
+        setPlayerNewMenu(true);
+        setSelectedObj(object);
+      }
+      else if (object?.parent_tbl === 1) {
         setPlayerMenu(true);
         setSelectedObj(object?.parent_id);
       }
@@ -78,6 +83,9 @@ const DashboardCards = ({
   };
   const closePlayerModal = () => {
     setPlayerMenu(false);
+  };
+  const closeNewPlayerModal = () => {
+    setPlayerNewMenu(false);
   };
   useEffect(() => {
     const handleDocumentClick = (event) => {
@@ -156,7 +164,13 @@ const DashboardCards = ({
           closeModal={closePlayerModal}
         />
       )}
-
+ {playerNewMenu && (
+        <NewPlayerLeads
+          selectedItem={selectedObj}
+          closeModal={closeNewPlayerModal}
+          onLeadAdded={onLeadAdded}
+        />
+      )}
     </>
   );
 };

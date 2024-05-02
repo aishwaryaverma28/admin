@@ -1,6 +1,8 @@
-import React,{ useState,useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from "axios";
 import {
+    USER_LOG,
+    GET_BMPUSER_ID,
     ACADEMY_LOGS,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
@@ -9,16 +11,48 @@ import {
 import PlayerDetails from "./PlayerDetails"
 import AcademyLogs from '../lead/AcademyLogs';
 import AcadmeyLeadDetails from '../lead/AcadmeyLeadDetails';
+import UserLogs from '../lead/UserLogs';
+import Confirmation from '../lead/Confirmation';
+import PlayerImage from './PlayerImage';
 const PlayerLead = ({ selectedItem, closeModal }) => {
-    console?.log(selectedItem);
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(0);
     const [leads, setLeads] = useState(0);
+    const [userLog, setUserLog] = useState(0);
+    const [userId, setUserId] = useState(0);
     const [activeTab, setActiveTab] = useState("details");
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
+    const [check, setCheck] = useState(false);
+    const childRef = useRef(null);
+    const [isDelete, setIsDelete] = useState(false);
+   
+    const handleDeletePopUpOpen = () => {
+        setIsDelete(true);
+      };
+      const handleMassDeletePopUpClose = () => {
+        setIsDelete(false);
+        setCheck(false);
+      };
+    const updateCheckState = (value) => {
+        setCheck(value);
     };
-    const getLogs = () => {
+
+    const handleTabClick = (tab) => {
+        if (!check) {
+            setActiveTab(tab);
+        } else {
+            handleDeletePopUpOpen();
+        }
+    };
+    const callChildFunction = () => {
+        if (childRef.current) {
+            childRef.current.handleUpdateClick();
+            setCheck(false);
+            handleMassDeletePopUpClose();
+        } else {
+            console.error("Child component reference is not initialized yet");
+        }
+    };
+const getLogs = () => {
         const body = {
             entity: "Player",
             object_id: selectedItem
@@ -60,12 +94,55 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
+    const getUserId = () => {
+        const body = {
+            object_id: selectedItem, object_type: 3,
+        }
+        axios
+            .post(GET_BMPUSER_ID, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    setUserId(response?.data?.data[0]);
+                    fetchUserLog(response?.data?.data[0])
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.message === "Invalid or expired token.") {
+                    alert(error?.response?.data?.message);
+                    handleLogout();
+                }
+            });
+    }
+    const fetchUserLog = (id) => {
+        axios
+            .post(USER_LOG, {
+                object_type: 3,
+                object_id: id?.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setUserLog(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     useEffect(() => {
         getLogs();
         fetchLeads();
+        getUserId();
     }, [])
-  return (
-    <div className="modal">
+    return (
+        <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
             <div className="customization_popup_container">
                 <span className="close" onClick={closeModal}>
@@ -74,8 +151,8 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
                     <div className="tab-navigation">
-                         {/* ===================================================================tabination buttons */}
-                         <button
+                        {/* ===================================================================tabination buttons */}
+                        <button
                             className={activeTab === "details" ? "active" : ""}
                             onClick={() => handleTabClick("details")}
                         >
@@ -97,6 +174,13 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                             Logs ({logs?.length})
                         </button>
                         <button
+                            className={activeTab === "user" ? "active" : ""}
+                            onClick={() => handleTabClick("user")}
+                        >
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                            User Logs ({userLog?.length})
+                        </button>
+                        <button
                             className={activeTab === "leads" ? "active" : ""}
                             onClick={() => handleTabClick("leads")}
                         >
@@ -104,23 +188,28 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                             Leads ({leads?.length})
                         </button>
                     </div>
-                     {/* ===================================================================tabination content */}
-                     <div className="tab-content">
+                    {/* ===================================================================tabination content */}
+                    <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <PlayerDetails id={selectedItem} />
+                                <PlayerDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
-                        {/* {activeTab === "gallery" && (*
+                        {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <CoachImage id={selectedItem?.id} />
+                                <PlayerImage id={selectedItem?.id} />
                             </div>
-                        )}*/}
+                        )}
                         {activeTab === "logs" && (
                             <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem} type={"Player"}/>
+                                <AcademyLogs id={selectedItem} type={"Player"} />
                             </div>
-                        )} 
+                        )}
+                        {activeTab === "user" && (
+                            <div className="activity-tab-content">
+                                <UserLogs id={userId?.id} type={3} />
+                            </div>
+                        )}
                         {activeTab === "leads" && (
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
@@ -128,11 +217,17 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        </div>
+                    </div>
                 </div>
             </div>
+            {isDelete && (
+        <Confirmation
+          onClose={handleMassDeletePopUpClose}
+          onDeleteConfirmed={callChildFunction}
+        />
+      )}
         </div>
-  )
+    )
 }
 
 export default PlayerLead

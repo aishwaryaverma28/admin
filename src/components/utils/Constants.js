@@ -270,3 +270,6 @@ export const ACADMEY_VEREFIED = bmpStart+"/bmp/entity/getverified";
 
 export const FILTER_TICKETS = bmpStart+"/bmp/tickets/filter"; 
 export const REPLY_TICKET = bmpStart+"/bmp/tickets/addreply";
+
+export const GET_PLAYER_ID = bmpStart+"/bmp/player/getById";
+export const ADD_PLAYER = bmpStart+"/bmp/player/add";

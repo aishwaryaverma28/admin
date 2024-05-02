@@ -180,15 +180,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     React.useImperativeHandle(ref, () => ({
       handleUpdateClick
     }));
-    const handleViewSite = (url) => {
-      const siteUrl = url;
-      if (siteUrl) {
-        window.open(siteUrl, "_blank");
-      } else {
-        alert("Site URL is not available");
-      }
-    };
-  
+      
     //======================================================================css variable
   
     const normalStylingSelect1 = {
@@ -305,11 +297,11 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               <div className="user-details-imgBox">
                 <a href={editedItem?.profile_img === null
                   ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                  : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
+                  : `https://bmpcdn.s3.amazonaws.com/coach_temp/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
                   <img
                     src={editedItem?.profile_img === null
                       ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                      : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
+                      : `https://bmpcdn.s3.amazonaws.com/coach_temp/${editedItem?.id}/${editedItem?.profile_img}`}
                     alt="pofile"
                     className="bmp-preview-image logoRound"
                   />

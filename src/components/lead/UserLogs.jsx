@@ -3,7 +3,6 @@ import axios from 'axios'
 import { USER_LOG, getDecryptedToken } from '../utils/Constants'
 
 const UserLogs = (id) => {
-    console.log(id);
     const decryptedToken = getDecryptedToken();
     const [logs, setLogs] = useState(null);
 

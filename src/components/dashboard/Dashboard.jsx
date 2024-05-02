@@ -64,9 +64,8 @@ const Dashboard = () => {
       }
     }
     ).then((response) => {
-      setAcademy(response?.data?.data);
-      // const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== 0);
-      // const filteredNewUser = response?.data?.data.filter(obj => obj.parent_tbl === 0);
+      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      setAcademy(filteredUser);
     }).catch((error) => {
       console.log(error);
     });
@@ -78,7 +77,8 @@ const Dashboard = () => {
       }
     }
     ).then((response) => {
-      setCoach(response?.data?.data);
+      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      setCoach(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -88,9 +88,9 @@ const Dashboard = () => {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
-    }
-    ).then((response) => {
-      setPlayer(response?.data?.data);
+    }).then((response) => {
+      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      setPlayer(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -102,15 +102,16 @@ const Dashboard = () => {
         Authorization: `Bearer ${decryptedToken}`
       }
     }).then((response) => {
+      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
       switch (typeId) {
         case 1:
-          setCoach(response?.data?.data);
+          setCoach(filteredData);
           break;
         case 2:
-          setAcademy(response?.data?.data);
+          setAcademy(filteredData);
           break;
         case 3:
-          setPlayer(response?.data?.data);
+          setPlayer(filteredData);
           break;
         default:
           break;

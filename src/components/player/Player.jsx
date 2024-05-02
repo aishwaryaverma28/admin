@@ -10,6 +10,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LeadCards from "../lead/LeadCards.jsx";
+import AddPlayer from "./AddPlayer.jsx";
 
 const Player = () => {
     const [stages, setStages] = useState([
@@ -30,14 +31,18 @@ const Player = () => {
       const decryptedToken = getDecryptedToken();
       const [statusCounts, setStatusCounts] = useState({});
       const [searchQuery, setSearchQuery] = useState("");
-      const [acadmeyLeads, setAcademyLeads] = useState([])
-      const [academyLogs, setAcademyLogs] = useState([]);
-      const [verified, setVerified] = useState([]);
-      
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const openModal = () => {
+        setIsModalOpen(true);
+      };
+    
+      const closeModal = () => {
+        setIsModalOpen(false);
+      };
       //=========================================================get all players
       const getAllPlayers = () => {
         const requestBody = {
-          "entity": "bmp_coach_details",
+          "entity": "bmp_player_details",
           "limit_from": "0",
           "limit_to": "1000"
         };
@@ -47,6 +52,7 @@ const Player = () => {
           }
         }
         ).then((response) => {
+          console.log(response?.data?.data);
           setPlayer(response?.data?.data);
         }).catch((error) => {
           console.log(error);
@@ -198,6 +204,9 @@ const Player = () => {
                   </div>
                 </div>
                 <div className="right-side--btns">
+                <button type="button" className="secondary-btn" onClick={openModal}>
+              Add Player
+            </button>
                   <div className="select action-select">
                     <div className="dropdown-container" ref={actionDropDownRef}>
                       <div
@@ -263,6 +272,12 @@ const Player = () => {
                 </div>
               ))}
             </section>
+            {isModalOpen && (
+        <AddPlayer
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
+      )}
             <ToastContainer />
             </div>
         </>

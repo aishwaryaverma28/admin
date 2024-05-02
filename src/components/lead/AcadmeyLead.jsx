@@ -318,13 +318,13 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length})
                         </button>
-                        <button
+                        {/* <button
                             className={activeTab === "activity" ? "active" : ""}
                             onClick={() => handleTabClick("activity")}
                         >
                             <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
                             Activity ({activityCount})
-                        </button>
+                        </button> */}
                         <button
                             className={activeTab === "notes" ? "active" : ""}
                             onClick={() => handleTabClick("notes")}
@@ -370,7 +370,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        {activeTab === "activity" && (
+                        {/* {activeTab === "activity" && (
                             <div className="activity-tab-content">
                                 <DealActivity
                                     item={selectedItem}
@@ -381,7 +381,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                     idOfOwner={idOfOwner}
                                 />
                             </div>
-                        )}
+                        )} */}
                         {activeTab === "notes" && (
                             <div className="notes-tab-content">
                                 <AddNotes
