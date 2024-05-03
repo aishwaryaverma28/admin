@@ -250,7 +250,7 @@ const handleSubmit2 = () => {
         sport: academyData?.sport,
         city: academyData?.city,
         picture: fileName,
-        // photo: allUrls?.join(","),
+        photo: allUrls?.join(","),
     }
     axios
         .put(UPDATE_PLAYER + id?.id, updatedFormData
