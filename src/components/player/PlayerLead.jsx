@@ -197,7 +197,7 @@ const getLogs = () => {
                         )}
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
-                                <PlayerImage id={selectedItem?.id} />
+                                <PlayerImage id={selectedItem} />
                             </div>
                         )}
                         {activeTab === "logs" && (

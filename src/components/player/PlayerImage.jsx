@@ -35,7 +35,7 @@ const PlayerImage = (id) => {
   const [academyData, setAcademyData] = useState({});
   const academyDetails = () => {
     const requestBody = {
-        "playerId": id,
+        "playerId": id?.id,
         "type": "org"
       };
     axios
@@ -410,12 +410,12 @@ return (
                 {!selectedFile && (
                     <div className="bmp-image-preview">
                         <a href={academyData?.picture === null
-                            ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/player/14/logo1.jpg"
+                            ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
                             : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${academyData?.id}/${academyData?.picture}`}
                             target="_blank" rel="noopener noreferrer">
                             <img
                                 src={academyData?.picture === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/player/14/logo1.jpg"
+                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
                                     : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${academyData?.id}/${academyData?.picture}`}
                                 alt="pofile"
                                 className="bmp-preview-image"
