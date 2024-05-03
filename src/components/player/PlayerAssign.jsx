@@ -185,13 +185,13 @@ const PlayerAssign = ({ id, tempAcademyId, onLeadAdded }) => {
               <div className="DealCard-rightBox">
                 <div className="mail">
                   <div className="new_preview_flex">
-                    <a href={data?.profile_img === null
+                    <a href={data?.picture === null
                       ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.profile_img}`} target="_blank" rel="noopener noreferrer">
+                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.picture}`} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={data?.profile_img === null
+                        src={data?.picture === null
                           ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                          : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.profile_img}`}
+                          : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.picture}`}
                         alt="pofile"
                         className="bmp-preview-image"
                       />
@@ -239,13 +239,13 @@ const PlayerAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                 <div className="DealCard-rightBox">
                   <div className="mail">
                     <div className="new_preview_flex">
-                      <a href={object?.profile_img === null
+                      <a href={object?.picture === null
                         ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.profile_img}`} target="_blank" rel="noopener noreferrer">
+                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.picture}`} target="_blank" rel="noopener noreferrer">
                         <img
-                          src={object?.profile_img === null
+                          src={object?.picture === null
                             ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.profile_img}`}
+                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.picture}`}
                           alt="pofile"
                           className="bmp-preview-image"
                         />

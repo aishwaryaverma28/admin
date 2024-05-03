@@ -52,7 +52,6 @@ const Player = () => {
           }
         }
         ).then((response) => {
-          console.log(response?.data?.data);
           setPlayer(response?.data?.data);
         }).catch((error) => {
           console.log(error);

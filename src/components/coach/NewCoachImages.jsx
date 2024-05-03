@@ -270,7 +270,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -413,12 +413,12 @@ const NewCoachImages = (id) => {
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.profile_img === null
-                                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach_temp/14/logo1.jpg"
+                                ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
                                 : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach_temp/${academyData?.id}/${academyData?.profile_img}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.profile_img === null
-                                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach_temp/14/logo1.jpg"
+                                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
                                         : `https://bmpcdn.s3.ap-south-1.amazonaws.com/coach_temp/${academyData?.id}/${academyData?.profile_img}`}
                                     alt="pofile"
                                     className="bmp-preview-image"

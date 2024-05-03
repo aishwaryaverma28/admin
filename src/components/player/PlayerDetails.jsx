@@ -126,13 +126,14 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
         }
       )
       .then((response) => {
+        console.log(response?.data?.message)
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",
             autoClose: 2000,
           });
         } else {
-          toast.error("Some Error Occurred", {
+          toast.error(response?.data?.message, {
             position: "top-center",
             autoClose: 2000,
           });
@@ -282,11 +283,17 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     <div className="user-details--left">
       <div className="user-details--heading">
         <div className="user-details-imgBox">
-          <img
-            src={USER}
-            alt="logo"
-            className="bmp-preview-image logoRound"
-          />
+        <a href={editedItem?.picture === null
+              ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+              : `https://bmpcdn.s3.amazonaws.com/player/${editedItem?.id}/${editedItem?.picture}`} target="_blank" rel="noopener noreferrer">
+              <img
+                src={editedItem?.picture === null
+                  ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                  : `https://bmpcdn.s3.amazonaws.com/player/${editedItem?.id}/${editedItem?.picture}`}
+                alt="pofile"
+                className="bmp-preview-image logoRound"
+              />
+            </a>
           <div>
             <p>
               {isLoading ? (

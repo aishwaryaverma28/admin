@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
@@ -243,6 +243,7 @@ const CoachImage = (id) => {
         setStateBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
+            type : "org",
             name: academyData?.name,
             sport: academyData?.sport,
             city: academyData?.city,
@@ -264,7 +265,7 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -295,6 +296,7 @@ const CoachImage = (id) => {
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
+                    type : "org",
                     photo: combinedDataString,
                     name: academyData?.name,
                     sport: academyData?.sport,
@@ -326,6 +328,7 @@ const CoachImage = (id) => {
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
+                    type : "org",
                     photo: combinedDataString,
                     name: academyData?.name,
                     sport: academyData?.sport,

@@ -154,7 +154,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               autoClose: 1000,
             });
           } else {
-            toast.error("Some Error Occurred", {
+            toast.error(response?.data?.message, {
               position: "top-center",
               autoClose: 1000,
             });
