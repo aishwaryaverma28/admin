@@ -751,6 +751,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       </div>
       {isEditable ? (
         <div className="modalLeftBtnBox">
+          <span></span>
           {/* <button
             className="convertToDeal"
             onClick={() => handleViewSite(editedItem?.url)}

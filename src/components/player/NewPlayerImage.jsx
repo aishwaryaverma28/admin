@@ -24,6 +24,7 @@ const NewPlayerImage = (id) => {
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [fileName, setFileName] = useState("");
   const fileInputRef2 = useRef(null);
   const [alertShown, setAlertShown] = useState(false);
@@ -285,6 +286,51 @@ const handleSubmit2 = () => {
             setStateBtn(0);
         });
 }
+const handleSubmit = (file) => {
+    setStateBtn(0);
+    const allUrls = [...photoUrls, ...videoUrls];
+    const updatedFormData = {
+      type : "temp",
+        name: academyData?.name,
+        sport: academyData?.sport,
+        city: academyData?.city,
+        picture: file,
+        photo: allUrls?.join(","),
+    }
+    axios
+        .put(UPDATE_PLAYER + id?.id, updatedFormData
+            , {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            }
+        )
+        .then((response) => {
+            if (response.data.status === 1) {
+                toast.success("Details updated successfully", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            } else {
+                toast.error(response?.data?.message, {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            }
+            academyDetails();
+        })
+        .catch((error) => {
+            console.log(error);
+            toast.error("An error occurred while updating details", {
+                position: "top-center",
+                autoClose: 1000,
+            });
+        })
+        .finally(() => {
+            setStateBtn(0);
+        });
+}
+
 // ==================================================================================delete the phots and videos
 const deleteStrategy = (photoToDelete) => {
     const updatedNameOfStrategy = photoUrls.filter(photo => photo !== photoToDelete);
@@ -349,7 +395,11 @@ const updateData = (updatedNameArray) => {
             console.error("API call failed:", error);
         });
 };
-
+const handleCheckbox = (photo, index) => {
+    setFileName(photo);
+    setSelectedPhoto(index);
+    handleSubmit(photo)
+};
 return (
     <>
         {/* ================================================================================upload the logo */}
@@ -486,6 +536,12 @@ return (
                         <div className="bmp-new-img">
                             <div className="bmp-img-top-icon">
                                 <div className="bmp-img-name">
+                                <input
+                                            type="checkbox"
+                                            className="radio_disable check_input"
+                                            checked={selectedPhoto === index}
+                                            onChange={() => handleCheckbox(photo, index)}
+                                        />
                                     <div className="bmp-video">
                                         <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                             <img

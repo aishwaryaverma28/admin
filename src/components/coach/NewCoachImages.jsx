@@ -25,6 +25,7 @@ const NewCoachImages = (id) => {
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     const fileInputRef2 = useRef(null);
     const [alertShown, setAlertShown] = useState(false);
     const [alertVideoShown, setAlertVideoShown] = useState(false);
@@ -288,6 +289,51 @@ const NewCoachImages = (id) => {
                 setStateBtn(0);
             });
     }
+
+    const handleSubmit = (file) => {
+        setStateBtn(0);
+        const allUrls = [...photoUrls, ...videoUrls];
+        const updatedFormData = {
+            profile_img: file,
+            photo: allUrls?.join(","),
+            name: academyData?.name,
+            sport: academyData?.sport,
+            city: academyData?.city,
+            type : "temp",
+        }
+        axios
+            .put(UPDATE_COACH + id?.id, updatedFormData
+                , {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Details updated successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+                academyDetails();
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+            .finally(() => {
+                setStateBtn(0);
+            });
+    }
     // ==================================================================================delete the phots and videos
     const deleteStrategy = (photoToDelete) => {
         const updatedNameOfStrategy = photoUrls.filter(photo => photo !== photoToDelete);
@@ -353,6 +399,12 @@ const NewCoachImages = (id) => {
             });
     };
 
+    const handleCheckbox = (photo, index) => {
+        setFileName(photo);
+        setSelectedPhoto(index);
+        handleSubmit(photo)
+    };
+    
     return (
         <>
             {/* ================================================================================upload the logo */}
@@ -489,6 +541,12 @@ const NewCoachImages = (id) => {
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
+                                    <input
+                                            type="checkbox"
+                                            className="radio_disable check_input"
+                                            checked={selectedPhoto === index}
+                                            onChange={() => handleCheckbox(photo, index)}
+                                        />
                                         <div className="bmp-video">
                                             <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img

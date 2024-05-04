@@ -25,6 +25,7 @@ const CoachImage = (id) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const fileInputRef2 = useRef(null);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [alertShown, setAlertShown] = useState(false);
     const [alertVideoShown, setAlertVideoShown] = useState(false);
     const [isUploadingMulti, setIsUploadingMulti] = useState(false);
@@ -283,6 +284,50 @@ const CoachImage = (id) => {
                 setStateBtn(0);
             });
     }
+    const handleSubmit = (file) => {
+        setStateBtn(0);
+        const allUrls = [...photoUrls, ...videoUrls];
+        const updatedFormData = {
+            type : "org",
+            name: academyData?.name,
+            sport: academyData?.sport,
+            city: academyData?.city,
+            profile_img: file,
+            photo: allUrls?.join(","),
+        }
+        axios
+            .put(UPDATE_COACH + id?.id, updatedFormData
+                , {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Details updated successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+                academyDetails();
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+            .finally(() => {
+                setStateBtn(0);
+            });
+    }
     // ==================================================================================delete the phots and videos
     const deleteStrategy = (photoToDelete) => {
         const updatedNameOfStrategy = photoUrls.filter(photo => photo !== photoToDelete);
@@ -346,6 +391,12 @@ const CoachImage = (id) => {
             .catch((error) => {
                 console.error("API call failed:", error);
             });
+    };
+
+    const handleCheckbox = (photo, index) => {
+        setFileName(photo);
+        setSelectedPhoto(index);
+        handleSubmit(photo)
     };
 
     return (
@@ -484,6 +535,12 @@ const CoachImage = (id) => {
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
+                                    <input
+                                            type="checkbox"
+                                            className="radio_disable check_input"
+                                            checked={selectedPhoto === index}
+                                            onChange={() => handleCheckbox(photo, index)}
+                                        />
                                         <div className="bmp-video">
                                             <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img
