@@ -390,6 +390,11 @@ const LPheader = () => {
                   Player
                 </NavLink>
               </li>
+              <li onClick={() => handleNavigationClick("Acadmey Leads")}>
+                <NavLink exact to="/lp/academyLeads" activeClassName="activeNav">
+                  Academy Leads
+                </NavLink>
+              </li>
             {isPathAllowed("/lp/deals") && (
               <li onClick={() => handleNavigationClick("Deal")}>
                 <NavLink exact to="/lp/deals" activeClassName="activeNav">
