@@ -4,6 +4,7 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import { cities } from "../utils/cities.js";
 import {
+  ALL_BMP_USER,
   ACADMEY_SEARCH,
   MOST_LEADS,
   ACADMEY_VEREFIED,
@@ -15,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyCard from "./AcadmeyCard.jsx";
 import LeadCards from "../lead/LeadCards.jsx";
+import DashboardCards from "../dashboard/DashboardCards.jsx";
 
 const Acadmey = () => {
   const [stages, setStages] = useState([
@@ -25,16 +27,21 @@ const Acadmey = () => {
     },
     {
       "id": 1,
+      "stage": "new_academy",
+      "name": "New Academy"
+    },
+    {
+      "id": 2,
       "stage": "verified_acadmey",
       "name": "Verified Academy"
     },
     {
-      "id": 2,
+      "id": 3,
       "stage": "acadmey_logs",
       "name": "Academy Logs"
     },
     {
-      "id": 3,
+      "id": 4,
       "stage": "acadmey_with_leads",
       "name": "Academy with Leads"
     }
@@ -55,6 +62,7 @@ const Acadmey = () => {
   const [acadmeyLeads, setAcademyLeads] = useState([])
   const [academyLogs, setAcademyLogs] = useState([]);
   const [verified, setVerified] = useState([]);
+  const [newacadmey, setNewAcademy] = useState([])
 
   const handleSportsChange = (event) => {
     setSportsLead(event.target.value);
@@ -64,6 +72,19 @@ const Acadmey = () => {
     setCityLead(event.target.value);
   };
   //=========================================================get all acadmies
+  const getNewAcademy = () => {
+    axios.post(ALL_BMP_USER, { type_id: 2 }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      setNewAcademy(filteredUser);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
   const getAllAcademy = (sport, city) => {
     const hasSportOrCity = sport || city;
 
@@ -112,6 +133,7 @@ const Acadmey = () => {
 
   useEffect(() => {
     getAllAcademy();
+    getNewAcademy();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -182,6 +204,7 @@ const Acadmey = () => {
   useEffect(() => {
     const counts = {
       academy: academy?.length,
+      new_academy: newacadmey?.length,
       acadmey_logs: academyLogs?.length,
       acadmey_with_leads: acadmeyLeads?.length,
       verified_acadmey: verified?.length,
@@ -425,6 +448,15 @@ const Acadmey = () => {
                             object={obj}
                             onLeadAdded={getAllAcademy}
                             itemName={"academy"}
+                          />
+                        ));
+                        case 'new_academy':
+                        return newacadmey?.map((obj) => (
+                          <DashboardCards
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getNewAcademy}
+                            itemName="academy"
                           />
                         ));
                       case 'acadmey_logs':

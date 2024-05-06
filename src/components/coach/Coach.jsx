@@ -3,6 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
+  ALL_BMP_USER,
   MOST_LEADS,
   GET_COACH,
   getDecryptedToken,
@@ -12,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CoachCard from "./CoachCard.jsx";
 import AddCoach from "./AddCoach.jsx";
 import LeadCards from "../lead/LeadCards.jsx";
+import DashboardCards from "../dashboard/DashboardCards.jsx";
 
 const Coach = () => {
   const [stages, setStages] = useState([
@@ -22,16 +24,21 @@ const Coach = () => {
     },
     {
       "id": 1,
+      "stage": "new_coach",
+      "name": "New Coach"
+    },
+    {
+      "id": 2,
       "stage": "verified_coach",
       "name": "Verified Coach"
     },
     {
-      "id": 2,
+      "id": 3,
       "stage": "coach_logs",
       "name": "Coach Logs"
     },
     {
-      "id": 3,
+      "id": 4,
       "stage": "coach_with_leads",
       "name": "Coach with Leads"
     }
@@ -50,6 +57,7 @@ const Coach = () => {
   const [academyLogs, setAcademyLogs] = useState([]);
   const [verified, setVerified] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newcoach, setNewCoach] = useState([]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -76,6 +84,21 @@ const Coach = () => {
       console.log(error);
     });
   }
+
+  const getNewCoaches = () => {
+    axios.post(ALL_BMP_USER, { type_id: 1 }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      setNewCoach(filteredData);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+ 
   //=========================================================get all acadmey leads
   const getAllLeads = () => {
     const requestBody = {
@@ -98,6 +121,7 @@ const Coach = () => {
 
   useEffect(() => {
     getAllCoaches();
+    getNewCoaches();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -168,12 +192,13 @@ const Coach = () => {
   useEffect(() => {
     const counts = {
       coach: coach?.length,
+      new_coach: newcoach?.length,
       coach_logs: academyLogs?.length,
       coach_with_leads: acadmeyLeads?.length,
       verified_coach: verified?.length,
     };
     setStatusCounts(counts);
-  }, [coach, acadmeyLeads, academyLogs]);
+  }, [coach, acadmeyLeads, newcoach,academyLogs]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -209,6 +234,7 @@ const Coach = () => {
 
   const resetData = () => {
     getAllCoaches();
+    getNewCoaches();
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -370,6 +396,19 @@ const Coach = () => {
                             itemName={"coach"}
                           />
                         ));
+                        case 'new_coach':
+                        if (newcoach && newcoach.length > 0) {
+                          return newcoach.map((obj) => (
+                            <DashboardCards
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getNewCoaches}
+                              itemName="coach"
+                            />
+                          ));
+                        } else {
+                          return <p>Loading...</p>;
+                        };
                       case 'coach_logs':
                         if (academyLogs && academyLogs.length > 0) {
                           return academyLogs.map((obj) => (
