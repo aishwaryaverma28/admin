@@ -135,7 +135,7 @@ const AddCoach = ({ onClose }) => {
                         achievement: "",
                     });
                 } else {
-                    toast.error("Name, sport and City are necessary fields", {
+                    toast.error(response.data.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -282,9 +282,9 @@ const AddCoach = ({ onClose }) => {
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer">
                                         <p>Name <span className="common-fonts redAlert"> *</span></p>
-                                        <p>Email</p>
+                                        <p>Email <span className="common-fonts redAlert"> *</span></p>
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
-                                        <p>Mobile</p>
+                                        <p>Mobile <span className="common-fonts redAlert"> *</span></p>
                                         <p>Gender</p>
                                         <p>Fees</p>
                                         <p>Package</p>
