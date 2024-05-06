@@ -1,13 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
+import AllLeadsModal from './AllLeadsModal';
 
 const AllLeadsCards = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+const openModal = () => {
+    setModalVisible(true);
+  }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <>
     <div className="user-card2">
       <div className="card-container">
         <div className="card-leftBox">
           <div className="user-details">
-            <p className="heading">
+            <p className="heading" onClick={openModal}>
               Mumbai- <span>5 Leads</span>
             </p>
           </div>
@@ -24,7 +32,11 @@ const AllLeadsCards = () => {
         </div>
       </div>
     </div>
-    
+    {modalVisible && (
+        <AllLeadsModal
+          closeModal={closeModal}
+        />
+      )}
   </>
   )
 }
