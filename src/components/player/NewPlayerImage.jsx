@@ -553,7 +553,7 @@ return (
 
                                     <p className="common-fonts bmp-tour">
                                         {photo?.length > 20 ? (
-                                            <>{photo?.slice(20)}...</>
+                                            <>{photo?.slice(0,20)}...</>
                                         ) : (
                                             <>{photo}</>
                                         )}
