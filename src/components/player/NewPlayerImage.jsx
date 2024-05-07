@@ -50,16 +50,16 @@ const NewPlayerImage = (id) => {
             if (response?.data?.data && response?.data?.data?.length !== 0) {
                 setAcademyData(response?.data?.data[0]);
                 if (
-                    response?.data?.data[0]?.picture !== "" &&
-                    response?.data?.data[0]?.picture !== null
+                    response?.data?.data[0]?.logo !== "" &&
+                    response?.data?.data[0]?.logo !== null
                 ) {
-                    setFileName(response?.data?.data[0]?.picture);
+                    setFileName(response?.data?.data[0]?.logo);
                 }
                 if (
-                    response?.data?.data[0]?.photo !== "" &&
-                    response?.data?.data[0]?.photo !== null
+                    response?.data?.data[0]?.photos !== "" &&
+                    response?.data?.data[0]?.photos !== null
                 ) {
-                    const files = response?.data?.data[0]?.photo?.split(",");
+                    const files = response?.data?.data[0]?.photos?.split(",");
                     const uniquePhotoUrls = new Set();
                     const uniqueVideoUrls = new Set();
                     files.forEach(file => {
@@ -250,8 +250,8 @@ const handleSubmit2 = () => {
         name: academyData?.name,
         sport: academyData?.sport,
         city: academyData?.city,
-        picture: fileName,
-        photo: allUrls?.join(","),
+        logo: fileName,
+        photos: allUrls?.join(","),
     }
     axios
         .put(UPDATE_PLAYER + id?.id, updatedFormData
@@ -294,8 +294,8 @@ const handleSubmit = (file) => {
         name: academyData?.name,
         sport: academyData?.sport,
         city: academyData?.city,
-        picture: file,
-        photo: allUrls?.join(","),
+        logo: file,
+        photos: allUrls?.join(","),
     }
     axios
         .put(UPDATE_PLAYER + id?.id, updatedFormData
@@ -345,7 +345,7 @@ const updateDataAndCallAPI = (updatedNameArray) => {
             UPDATE_PLAYER + academyData?.id,
             {
               type : "temp",
-                photo: combinedDataString,
+                photos: combinedDataString,
                 name: academyData?.name,
                 sport: academyData?.sport,
                 city: academyData?.city,
@@ -377,7 +377,7 @@ const updateData = (updatedNameArray) => {
             UPDATE_PLAYER + academyData?.id,
             {
               type : "temp",
-                photo: combinedDataString,
+                photos: combinedDataString,
                 name: academyData?.name,
                 sport: academyData?.sport,
                 city: academyData?.city,
@@ -441,7 +441,7 @@ return (
                             </span>
                         ) : (
                             <span className="common-fonts upload-file-name">
-                                {fileName ? fileName : academyData?.picture}
+                                {fileName ? fileName : academyData?.logo}
                                 { }
                             </span>
                         )}
@@ -459,14 +459,14 @@ return (
                 )}
                 {!selectedFile && (
                     <div className="bmp-image-preview">
-                        <a href={academyData?.picture === null
+                        <a href={academyData?.logo === null
                             ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.picture}`}
+                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
                             target="_blank" rel="noopener noreferrer">
                             <img
-                                src={academyData?.picture === null
+                                src={academyData?.logo === null
                                     ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.picture}`}
+                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
                                 alt="pofile"
                                 className="bmp-preview-image"
                             />

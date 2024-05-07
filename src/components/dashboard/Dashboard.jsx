@@ -41,7 +41,6 @@ const Dashboard = () => {
   const actionDropDownRef = useRef(null);
   const actionSortRef = useRef(null);
   const actionOwnerRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const decryptedToken = getDecryptedToken();
   const [statusCounts, setStatusCounts] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,13 +185,6 @@ const Dashboard = () => {
 
 
   //======================================================modal box
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
   };
@@ -324,10 +316,7 @@ const Dashboard = () => {
           <div className="right-side--btns">
             <button type="button" className="secondary-btn" onClick={addLeadClick}>
               Add Leads
-            </button>
-            <button type="button" className="secondary-btn" onClick={openModal}>
-              Add Academy
-            </button>
+            </button>            
             <div className="select action-select">
               <div className="dropdown-container" ref={actionDropDownRef}>
                 <div
@@ -411,13 +400,6 @@ const Dashboard = () => {
           </div>
         ))}
       </section>
-
-      {isModalOpen && (
-        <CreateLead
-          isOpen={isModalOpen}
-          onClose={closeModal}
-        />
-      )}
       <ToastContainer />
       {
         openLead && (
