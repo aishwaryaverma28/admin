@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     GET_COACH_ID,
   ASSIGN_ACADEMY,
-  ASSIGN_NEW_ACADEMY,
+  ASSIGN_NEW_COACH,
   getDecryptedToken,
 } from "../utils/Constants.js"
 import { toast } from 'react-toastify';
@@ -102,13 +102,13 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
           });
         })
     }
-  
+  console.log(tempAcademyId);
     function academyNewAssign() {
       const body = {
         userId: id,
-        tempAcademyId: tempAcademyId
+        tempCoachId: tempAcademyId
       }
-      axios.post(ASSIGN_NEW_ACADEMY, body, {
+      axios.post(ASSIGN_NEW_COACH, body, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
@@ -197,12 +197,12 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                       />
                     </a>
                     <div className='new_btnflex'>
-                      {/* <button type="button" className="common-save-button " onClick={academyNewAssign}>
-                        New Coach
-                      </button> */}
-                      <button type="button" className="common-save-button ">
+                      <button type="button" className="common-save-button " onClick={academyNewAssign}>
                         New Coach
                       </button>
+                      {/* <button type="button" className="common-save-button ">
+                        New Coach
+                      </button> */}
                     </div>
   
                   </div>
