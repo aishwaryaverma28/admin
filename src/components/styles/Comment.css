@@ -163,6 +163,20 @@ background: #F3F6FA;
     gap: 0.3rem;
     cursor: pointer;
   }
+  .radio-inline2{     
+    color: #4b5054;
+    font-family: "Lexend Deca";
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.02563rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+  }
 
   .assign-search{
     width: 27rem;

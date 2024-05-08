@@ -4,7 +4,8 @@ import {
     getDecryptedToken
 } from "./../utils/Constants";
 import axios from 'axios';
-
+import tick from "../../assets/image/star_tick.svg"
+import cross from "../../assets/image/unverified.svg"
 const AllLeadsModal = ({ closeModal, object, sport }) => {
     const decryptedToken = getDecryptedToken();
     const [editedItem, setEditedItem] = useState({});
@@ -115,7 +116,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </>
                         {isLoading ? (
                             <div className='support-no-ticket-found'>
@@ -142,20 +143,22 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                                             </div>
                                         </div>
                                         <div className="DealCard-rightBox">
-                                        {(item.email_verified === 1 || item.mobile_verified === 1) && (
-                  <div className="greenVerified"></div>
-                )}
+                                        <div className="mail">
+                                            {item.mobile_verified === 1 ?
+                                                <img src={tick} alt="verified" /> : <img src={cross} alt="unverified" />
+                                            }
+                                            </div>
                                             <div className="mail">
-                                            <label className="radio-inline">
-                          <input
-                            type="checkbox"
-                            name=""
-                            value="1"
-                            className="radio_disable check_input"
-                            // onChange={handleCheckboxChange}
-                            // checked={trainingLocation.includes("1")}
-                          />
-                        </label>
+                                                <label className="radio-inline2">
+                                                    <input
+                                                        type="checkbox"
+                                                        name=""
+                                                        value="1"
+                                                        className="radio_disable check_input"
+                                                    // onChange={handleCheckboxChange}
+                                                    // checked={trainingLocation.includes("1")}
+                                                    />
+                                                </label>
                                             </div>
 
                                         </div>
