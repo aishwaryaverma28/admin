@@ -137,7 +137,7 @@ const AllLeads = () => {
           if (!sportTotals[sportName]) {
             sportTotals[sportName] = 0;
           }
-          sportTotals[sportName] += sportData['COUNT(l.id)'];
+          sportTotals[sportName] += sportData?.cnt;
         });
       });
     });
@@ -301,7 +301,7 @@ const AllLeads = () => {
                       {item?.sport}({statusCounts[item.sport] || 0})
                     </p>
                   </div>
-                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} />)}
+                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} sport={item?.sport} />)}
                 </div>
               </div>
             </div>

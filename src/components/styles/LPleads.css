@@ -1324,6 +1324,9 @@
   width: 6rem;
   margin-left: 0.3rem;
 }
+.margin-left{
+  margin-left: 1rem;
+}
 .greenVerified{
   min-width: 1.5rem;
   height: 1rem;
