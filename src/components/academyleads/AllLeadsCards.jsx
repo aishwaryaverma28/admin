@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import AllLeadsModal from './AllLeadsModal';
 
-const AllLeadsCards = () => {
+const AllLeadsCards = ({obj}) => {
   const [modalVisible, setModalVisible] = useState(false);
 const openModal = () => {
     setModalVisible(true);
@@ -16,16 +16,18 @@ const openModal = () => {
         <div className="card-leftBox">
           <div className="user-details">
             <p className="heading" onClick={openModal}>
-              Mumbai- <span>5 Leads</span>
+              {obj?.city}
+              {/* - <span>5 Leads</span> */}
             </p>
           </div>
+          {obj?.academies?.map((item) => (
+            <>
           <div className="contact-details">
-          Dolphin Swimming Pool SAAP Edupugallu: <span className='greenText'>3leads</span>
+          {item?.academy_id} - {item?.academy_name}: <span className='greenText'>{item?.['COUNT(l.id)']} leads</span>
           </div>
           <br/>
-          <div className="contact-details">
-          RRC Swimming Pool Vishwamanya Swimming Academy: <span className='greenText'>2leads</span>
-          </div>          
+          </>
+          ))}         
         </div>
         <div className="DealCard-rightBox">
           

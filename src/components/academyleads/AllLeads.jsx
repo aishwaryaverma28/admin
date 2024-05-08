@@ -10,37 +10,9 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllLeadsCards from "./AllLeadsCards.jsx";
-import LeadsCardsCopy from "./LeadsCardCopy.jsx";
 
 const AllLeads = () => {
-  const [stages, setStages] = useState([
-    {
-      "id": 0,
-      "stage": "swimming",
-      "name": "Swimming",
-      "count": 7
-    },
-    {
-      "id": 1,
-      "stage": "cricket",
-      "name": "Cricket",
-      "count": 5
-    },
-    {
-      "id": 2,
-      "stage": "football",
-      "name": "Football",
-      "count": 2
-    },
-    {
-      "id": 3,
-      "stage": "hockey",
-      "name": "Hockey",
-      "count": 0
-    }
-  ]);
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [coach, setCoach] = useState([]);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
@@ -50,15 +22,132 @@ const AllLeads = () => {
   const [statusCounts, setStatusCounts] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [acadmeyLeads, setAcademyLeads] = useState([])
-  const [academyLogs, setAcademyLogs] = useState([]);
-  const [verified, setVerified] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  
+  const [selectedOption, setSelectedOption] = useState("last_seven_days");
+  const handleSelectChange = (e) => {
+    setSelectedOption(e.target.value);
+    let startDate, endDate;
+    const today = new Date();
+    switch (e.target.value) {
+      case "today":
+        startDate = today.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "yesterday":
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        startDate = yesterday.toISOString().split("T")[0];
+        endDate = startDate;
+        break;
+      case "this_week":
+        const firstDayOfWeek = new Date(
+          today.setDate(today.getDate() - today.getDay())
+        );
+        startDate = firstDayOfWeek.toISOString().split("T")[0];
+        endDate = today.toISOString().split("T")[0];
+        break;
+      case "last_week":
+        const lastWeekEndDate = new Date();
+        lastWeekEndDate.setDate(
+          lastWeekEndDate.getDate() - lastWeekEndDate.getDay() - 1
+        );
+        const lastWeekStartDate = new Date(lastWeekEndDate);
+        lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 6);
+        startDate = lastWeekStartDate.toISOString().split("T")[0];
+        endDate = lastWeekEndDate.toISOString().split("T")[0];
+        break;
+      case "last_seven_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSevenDaysStartDate = new Date(today);
+        lastSevenDaysStartDate.setDate(lastSevenDaysStartDate.getDate() - 6);
+        startDate = lastSevenDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_fourteen_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastFourteenDaysStartDate = new Date(today);
+        lastFourteenDaysStartDate.setDate(
+          lastFourteenDaysStartDate.getDate() - 13
+        );
+        startDate = lastFourteenDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_twenty_eight_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastTwentyEightDaysStartDate = new Date(today);
+        lastTwentyEightDaysStartDate.setDate(
+          lastTwentyEightDaysStartDate.getDate() - 27
+        );
+        startDate = lastTwentyEightDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_thirty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastThirtyDaysStartDate = new Date(today);
+        lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 29);
+        startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+        break;
+      case "last_sixty_days":
+        endDate = today.toISOString().split("T")[0];
+        const lastSixtyDaysStartDate = new Date(today);
+        lastSixtyDaysStartDate.setDate(lastSixtyDaysStartDate.getDate() - 59);
+        startDate = lastSixtyDaysStartDate.toISOString().split("T")[0];
+        break;
+      default:
+        startDate = "";
+        endDate = "";
+        break;
+    }
+
+    const adjustedEndDate = new Date(endDate);
+    adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
+    const formattedEndDate = adjustedEndDate.toISOString().split("T")[0];
+
+    getAllLeads(startDate, formattedEndDate);
+  };
+  const getAllLeads = (startDate, endDate) => {
+    axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/getbycity", {
+      startDate: startDate,
+      endDate: endDate,
+    }, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setAcademyLeads(response?.data?.data)
+      total(response?.data?.data)
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+  useEffect(() => {
+    const today = new Date();
+    const lastThirtyDaysStartDate = new Date(today);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 1);
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+    getAllLeads(startDate, formattedEndDate);
+  }, []);
+  const total = (data) => {
+    const sportTotals = {};
+    data.forEach((cityData) => {
+      const sportName = cityData.sport;
+      const cityName = cityData.cities;
+      cityData.cities.forEach((academy) => {
+        academy.academies.forEach((sportData) => {
+          if (!sportTotals[sportName]) {
+            sportTotals[sportName] = 0;
+          }
+          sportTotals[sportName] += sportData['COUNT(l.id)'];
+        });
+      });
+    });
+    setStatusCounts(sportTotals);
+  }
+
   const handleToggleChange = () => {
   };
   const handleSearchChange = (event) => {
-  
+
   };
 
   //======================================================modal box
@@ -105,7 +194,7 @@ const AllLeads = () => {
     };
   }, []);
 
-  
+
   return (
     <>
       <div>
@@ -135,6 +224,23 @@ const AllLeads = () => {
                 <a href="#" className="list-view--btn">
                   <i className="fas fa-list-ul"></i>
                 </a>
+              </div>
+              <div>
+                <select
+                  className="selectSec"
+                  onChange={handleSelectChange}
+                  value={selectedOption}
+                >
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="this_week">This Week</option>
+                  <option value="last_week">Last Week</option>
+                  <option value="last_seven_days">Last 7 days</option>
+                  <option value="last_fourteen_days">Last 14 days</option>
+                  <option value="last_twenty_eight_days">Last 28 days</option>
+                  <option value="last_thirty_days">Last 30 days</option>
+                  <option value="last_sixty_days">Last 60 days</option>
+                </select>
               </div>
               <div className="recycle-search-box">
                 <input
@@ -186,84 +292,22 @@ const AllLeads = () => {
           </div>
         </section>
         <section className="cards-body">
-          {stages?.map((item, index) => (
+          {acadmeyLeads?.map((item, index) => (
             <div className="card-column" key={index}>
               <div className="card-details">
                 <div className="main-cards">
                   <div className="cards-new">
                     <p className="DealName">
-                      {item?.name}({item?.count})
+                      {item?.sport}({statusCounts[item.sport] || 0})
                     </p>
                   </div>
-                  {(() => {
-                    switch (item?.stage) {
-                      case 'swimming':
-                        return (
-                        <>
-                        <AllLeadsCards/>
-                        <LeadsCardsCopy/>
-                        </>
-                        )
-                      case 'coach_logs':
-                        if (academyLogs && academyLogs.length > 0) {
-                          return academyLogs.map((obj) => (
-                            <></>
-                            // <CoachCard
-                            //   key={obj?.id}
-                            //   object={obj}
-                            //   onLeadAdded={getAllLogs}
-                            //   itemName={"coach_logs"}
-                            // />
-                          ));
-                        } else {
-                          return <p>Loading...</p>;
-                        };
-                      case 'coach_with_leads':
-                        if (acadmeyLeads && acadmeyLeads.length > 0) {
-                          return acadmeyLeads.map((obj) => (
-                            <></>
-                            // <CoachCard
-                            //   key={obj?.id}
-                            //   object={obj}
-                            //   onLeadAdded={getAllLeads}
-                            //   itemName={"coach_with_leads"}
-                            // />
-                          ));
-                        } else {
-                          return <p>Loading...</p>;
-                        }
-                      case 'verified_coach':
-                        if (verified && verified.length > 0) {
-                          return verified.map((obj) => (
-                            <></>
-                            // <CoachCard
-                            //   key={obj?.id}
-                            //   object={obj}
-                            //   onLeadAdded={getAllLogs}
-                            //   itemName={"verified_coach"}
-                            // />
-                          ));
-                        } else {
-                          return
-                          // return <p>Loading...</p>;
-                        };
-                      default:
-                        return null;
-                    }
-                  })()}
-
+                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} />)}
                 </div>
               </div>
             </div>
           ))}
         </section>
         <ToastContainer />
-        {/* {isModalOpen && (
-          <AddCoach
-            isOpen={isModalOpen}
-            onClose={closeModal}
-          />
-        )} */}
       </div>
     </>
   );
