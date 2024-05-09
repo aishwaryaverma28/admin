@@ -34,7 +34,6 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
                 setDistAcad(response?.data?.data);
                 setIsLoading(false);
             })
@@ -146,6 +145,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 });
             })
     }
+
     return (
         <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
