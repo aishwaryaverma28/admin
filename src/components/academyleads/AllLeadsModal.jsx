@@ -16,6 +16,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [distAcad, setDistAcad] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
+    const [selectedData, setSelectedData] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState(100);
     const [leads, setLeads] = useState([]);
     const [allData, setAllData] = useState([]);
@@ -103,9 +104,16 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
         setSelectedDistance(parseInt(event.target.value));
     };
 
-    const handleCheckboxChange = (event, id) => {
+    const handleCheckboxChange = (event, id, email) => {
         const isChecked = event.target.checked;
-        setSelectedIds(prevIds => {
+        setSelectedData(prevIds => {
+            if (isChecked) {
+                return [...prevIds, { id, email }];
+            } else {
+                return prevIds.filter(selectedItem => selectedItem.id !== id);
+            }
+        });
+            setSelectedIds(prevIds => {
             if (isChecked) {
                 return [...prevIds, id];
             } else {
@@ -113,6 +121,8 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             }
         });
     };
+    console.log(selectedIds)
+    console.log(selectedData)
     const handleSubmit = () => {
         const today = new Date();
         const lastThirtyDaysStartDate = new Date(today);
@@ -125,7 +135,8 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             leadIds: leads,
             object_ids: selectedIds,
             type: "academy",
-            allLeads: allData
+            allLeads: allData,
+            email_academy: selectedData
         };
         axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body, {
             headers: {
@@ -209,7 +220,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                 <input
                                                     type="checkbox"
                                                     className="radio_disable check_input_2"
-                                                    onChange={(event) => handleCheckboxChange(event, editedItem.id)}
+                                                    onChange={(event) => handleCheckboxChange(event, editedItem.id, editedItem.email)}
                                                     checked={selectedIds.includes(editedItem.id)}
                                                 />
                                             </label>
@@ -258,7 +269,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                     <input
                                                         type="checkbox"
                                                         className="radio_disable check_input_2"
-                                                        onChange={(event) => handleCheckboxChange(event, item.id)}
+                                                        onChange={(event) => handleCheckboxChange(event, item.id, item.email)}
                                                         checked={selectedIds.includes(item.id)}
                                                     />
                                                 </label>
