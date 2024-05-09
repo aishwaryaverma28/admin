@@ -243,7 +243,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                         <div className="DealCard-rightBox">
                                             <div className="mail">
                                                 {item.verification_status === "Unverified" ?
-                                                    <img src={cross} alt="unverified" />: <img src={tick} alt="verified" />
+                                                    <img src={cross} alt="unverified" className='img_size' />: <img src={tick} alt="verified" className='img_size_1' />
                                                 }
                                             </div>
                                             <div className="mail">

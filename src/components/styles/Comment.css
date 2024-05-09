@@ -184,6 +184,15 @@ background: #F3F6FA;
     cursor: pointer;
   }
 
+  .mail img.img_size{
+    width: 1rem;
+    height: 1rem;
+  }
+  .mail img.img_size_1{
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
   .assign-search{
     width: 27rem;
     padding: 0.94rem 1rem;
