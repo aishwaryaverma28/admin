@@ -169,7 +169,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                                                 <label className="radio-inline2">
                                                     <input
                                                         type="checkbox"
-                                                        className="radio_disable check_input"
+                                                        className="radio_disable check_input_2"
                                                         onChange={(event) => handleCheckboxChange(event, item.id)}
                                             checked={selectedIds.includes(item.id)}
                                                     />
