@@ -178,6 +178,12 @@ background: #F3F6FA;
     cursor: pointer;
   }
 
+  .check_input_2{
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+  }
+
   .assign-search{
     width: 27rem;
     padding: 0.94rem 1rem;
