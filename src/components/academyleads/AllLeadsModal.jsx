@@ -118,18 +118,18 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + 1);
     const formattedEndDate = endDate.toISOString().split("T")[0];
-    getAllLeads(startDate, formattedEndDate);
         const body ={
             leadIds: leads, 
             object_ids: selectedIds,
             type: "academy" 
         };
-        axios.post("", body,{
+        axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body,{
             headers: {
                 Authorization: `Bearer ${decryptedToken}`,
             }})
             .then((response) => {
-                if (response?.data?.status === 1) {
+                console.log(response)
+                if (response?.data?.status === true) {
                     toast.success("Leads assigned successfully", {
                         position: "top-center",
                         autoClose: 1000,
