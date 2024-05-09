@@ -34,6 +34,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 },
             })
             .then((response) => {
+                console.log(response?.data?.data)
                 setDistAcad(response?.data?.data);
                 setIsLoading(false);
             })
@@ -90,7 +91,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 }
             });
     };
-    console.log(leads)
+    
     useEffect(() => {
         fetchLead(selectedDistance);
         academyDist();
@@ -112,37 +113,38 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     };
     const handleSubmit = () => {
         const today = new Date();
-    const lastThirtyDaysStartDate = new Date(today);
-    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
-    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
-    const endDate = new Date(today);
-    endDate.setDate(endDate.getDate() + 1);
-    const formattedEndDate = endDate.toISOString().split("T")[0];
-        const body ={
-            leadIds: leads, 
+        const lastThirtyDaysStartDate = new Date(today);
+        lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
+        const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+        const endDate = new Date(today);
+        endDate.setDate(endDate.getDate() + 1);
+        const formattedEndDate = endDate.toISOString().split("T")[0];
+        const body = {
+            leadIds: leads,
             object_ids: selectedIds,
-            type: "academy" 
+            type: "academy"
         };
-        axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body,{
+        axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body, {
             headers: {
                 Authorization: `Bearer ${decryptedToken}`,
-            }})
+            }
+        })
             .then((response) => {
-                console.log(response)
                 if (response?.data?.status === true) {
                     toast.success("Leads assigned successfully", {
                         position: "top-center",
                         autoClose: 1000,
                     });
                     getAllLeads(startDate, formattedEndDate);
-                }})
-                    .catch((error) => {
-                        console.log(error);
-                        toast.error(error.data.message, {
-                            position: "top-center",
-                            autoClose: 1000,
-                        });
-                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error(error.data.message, {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
     }
     return (
         <div className="modal">
@@ -165,8 +167,6 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                 {editedItem?.id} - {editedItem?.name}
                                             </p>
                                         </div>
-                                        <div className="lead-value">
-                                        </div>
                                         <div className="contact-details">
                                             <div className="mail sportCap">
                                                 <p>{editedItem?.sport}</p>
@@ -177,6 +177,11 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                             <div className="mail sportCap">
                                                 <p>{editedItem?.city}, {editedItem?.state}</p>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="contact-details">
+                                        <div className="sportCap">
+                                            <p>Leads:{leads?.length}</p>
                                         </div>
                                     </div>
                                     <div className="DealCard-rightBox">
@@ -194,6 +199,16 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                     />
                                                 </a>
                                             </div>
+                                        </div>
+                                        <div className="mail">
+                                            <label className="radio-inline2">
+                                                <input
+                                                    type="checkbox"
+                                                    className="radio_disable check_input_2"
+                                                    onChange={(event) => handleCheckboxChange(event, editedItem.id)}
+                                                    checked={selectedIds.includes(editedItem.id)}
+                                                />
+                                            </label>
                                         </div>
 
                                     </div>
@@ -227,8 +242,8 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                         </div>
                                         <div className="DealCard-rightBox">
                                             <div className="mail">
-                                                {item.mobile_verified === 1 ?
-                                                    <img src={tick} alt="verified" /> : <img src={cross} alt="unverified" />
+                                                {item.verification_status === "Unverified" ?
+                                                    <img src={cross} alt="unverified" />: <img src={tick} alt="verified" />
                                                 }
                                             </div>
                                             <div className="mail">
@@ -270,7 +285,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                         </div>
                         <button
                             className="convertToDeal"
-                        onClick={handleSubmit}
+                            onClick={handleSubmit}
                         >Assign
                         </button>
                     </div>
