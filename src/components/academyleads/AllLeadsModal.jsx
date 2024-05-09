@@ -18,6 +18,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState(100);
     const [leads, setLeads] = useState([]);
+    const [allData, setAllData] = useState([]);
     const fetchLead = (distance) => {
         let body = {
             lat: parseInt(object?.academy_lat),
@@ -78,6 +79,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             })
             .then((response) => {
                 if (response?.data?.status === 1) {
+                    setAllData(response?.data?.data);
                     const ids = response?.data?.data.map(item => item.id); // Extracting IDs
                     setLeads(ids);
                 }
@@ -90,7 +92,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 }
             });
     };
-    
+    console.log(allData)
     useEffect(() => {
         fetchLead(selectedDistance);
         academyDist();
@@ -121,7 +123,8 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
         const body = {
             leadIds: leads,
             object_ids: selectedIds,
-            type: "academy"
+            type: "academy",
+            allLeads: allData
         };
         axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body, {
             headers: {
