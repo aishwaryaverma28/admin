@@ -11,14 +11,16 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
     const [editedItem, setEditedItem] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [distAcad, setDistAcad] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [selectedDistance, setSelectedDistance] = useState(100);
 
-    const fetchLead = () => {
+    const fetchLead = (distance) => {
         let body = {
             lat: parseInt(object?.academy_lat),
             lng: parseInt(object?.academy_lng),
             count: parseInt(object?.cnt),
             sport: sport,
-            distance: 100,
+            distance: distance,
         };
 
         axios
@@ -28,7 +30,6 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
                 setDistAcad(response?.data?.data);
                 setIsLoading(false);
             })
@@ -37,6 +38,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                 setIsLoading(false);
             });
     };
+
     const academyDist = () => {
         let body = {
             academy_id: object?.academy_id
@@ -48,7 +50,6 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
                 setEditedItem(response?.data?.data[0]);
                 setIsLoading(false);
             })
@@ -58,9 +59,25 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
             });
     };
     useEffect(() => {
-        fetchLead();
-        academyDist()
-    }, []);
+        fetchLead(selectedDistance);
+        academyDist();
+    }, [selectedDistance]);
+
+    const handleDistanceChange = (event) => {
+        setSelectedDistance(parseInt(event.target.value));
+    };
+
+    const handleCheckboxChange = (event, id) => {
+        const isChecked = event.target.checked;
+        setSelectedIds(prevIds => {
+            if (isChecked) {
+                return [...prevIds, id];
+            } else {
+                return prevIds.filter(selectedId => selectedId !== id);
+            }
+        });
+    };
+    console.log(selectedIds);
     return (
         <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
@@ -69,9 +86,9 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                     <i className="fa-sharp fa-solid fa-xmark"></i>
                 </span>
                 <div className="user-details--right">
-                    <div className="tab-navigation">
+                    {/* <div className="tab-navigation">
 
-                    </div>
+                    </div> */}
                     <div className="tab-content margin-left">
                         <>
                             <div className="academy-card">
@@ -143,20 +160,18 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                                             </div>
                                         </div>
                                         <div className="DealCard-rightBox">
-                                        <div className="mail">
-                                            {item.mobile_verified === 1 ?
-                                                <img src={tick} alt="verified" /> : <img src={cross} alt="unverified" />
-                                            }
+                                            <div className="mail">
+                                                {item.mobile_verified === 1 ?
+                                                    <img src={tick} alt="verified" /> : <img src={cross} alt="unverified" />
+                                                }
                                             </div>
                                             <div className="mail">
                                                 <label className="radio-inline2">
                                                     <input
                                                         type="checkbox"
-                                                        name=""
-                                                        value="1"
                                                         className="radio_disable check_input"
-                                                    // onChange={handleCheckboxChange}
-                                                    // checked={trainingLocation.includes("1")}
+                                                        onChange={(event) => handleCheckboxChange(event, item.id)}
+                                            checked={selectedIds.includes(item.id)}
                                                     />
                                                 </label>
                                             </div>
@@ -167,6 +182,31 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
 
                             ))}
                         </>)}
+                    </div>
+                    <div className="modalLeftBtnBox2">
+                    <div className='new_btnflex'>
+                            <select id="distance_lead" value={selectedDistance} onChange={handleDistanceChange}>
+                                <option value="">Distance</option>
+                                <option value="100">100 Km</option>
+                                <option value="200">200 km</option>
+                                <option value="300">300 Km</option>
+                                <option value="400">400 Km</option>
+                                <option value="500">500 Km</option></select>
+                        </div>
+                        <div className='new_btnflex'>
+                            <select id="sports_lead">
+                                <option value="">Gap</option>
+                                <option value="1">1 Hour</option>
+                                <option value="2">2 Hour</option>
+                                <option value="3">3 Hour</option>
+                                <option value="4">4 Hour</option>
+                                <option value="5">5 Hour</option></select>
+                        </div>
+                        <button
+                            className="convertToDeal"
+                        // onClick={() => handleViewSite(editedItem?.url)}
+                        >Assign
+                        </button>
                     </div>
                 </div>
             </div>

@@ -726,7 +726,6 @@
   grid-template-columns:auto 1fr;
 }
 .detailsLeftContainer {
-  /* border: 2px solid red; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -746,11 +745,9 @@
 }
 
 .detailsRightContainer {
-  /* border: 2px solid aqua; */
   display: flex;
   flex-direction: column;
   padding-right: 1rem;
-  /* justify-content: space-between; */
 }
 .detailsRightContainer p {
   color: #1e2224;
@@ -780,7 +777,11 @@
   justify-content: space-between;
   padding-top: 1rem;
 }
-
+.modalLeftBtnBox2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
 .convertToDeal {
   padding: 8px 20px;
   font-family: "Lexend Deca", sans-serif;
@@ -1313,7 +1314,7 @@
   position: relative;
 }
 
-#sports_lead, #city_lead{
+#sports_lead, #city_lead, #distance_lead{
   cursor: pointer;
   padding: 7px 8px;
   border-radius: 0.3125rem;
