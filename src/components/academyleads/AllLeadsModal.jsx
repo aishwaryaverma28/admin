@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import {
+    DISTANCE_API,
+    ACADMEY_LEADS_DETAILS,
     GET_ACADEMY,
-    getDecryptedToken
+    getDecryptedToken,
+    handleLogout
 } from "./../utils/Constants";
 import axios from 'axios';
 import tick from "../../assets/image/star_tick.svg"
 import cross from "../../assets/image/unverified.svg"
-const AllLeadsModal = ({ closeModal, object, sport }) => {
+import { toast } from 'react-toastify';
+const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     const decryptedToken = getDecryptedToken();
     const [editedItem, setEditedItem] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [distAcad, setDistAcad] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState(100);
-
+    const [leads, setLeads] = useState([]);
     const fetchLead = (distance) => {
         let body = {
             lat: parseInt(object?.academy_lat),
@@ -24,7 +28,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
         };
 
         axios
-            .post("https://bmp.leadplaner.com/api/api/bmp/academy/getnearby", body, {
+            .post(DISTANCE_API, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -51,6 +55,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
             })
             .then((response) => {
                 setEditedItem(response?.data?.data[0]);
+                fetchLeads();
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -58,6 +63,34 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                 setIsLoading(false);
             });
     };
+
+    const fetchLeads = () => {
+        const body = {
+            object_id: object?.academy_id,
+            object_type: "academy",
+        };
+
+        axios
+            .post(ACADMEY_LEADS_DETAILS, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    const ids = response?.data?.data.map(item => item.id); // Extracting IDs
+                    setLeads(ids);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.data?.message === "Invalid or expired token.") {
+                    alert(error?.response?.data?.message);
+                    handleLogout();
+                }
+            });
+    };
+    console.log(leads)
     useEffect(() => {
         fetchLead(selectedDistance);
         academyDist();
@@ -77,7 +110,40 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
             }
         });
     };
-    console.log(selectedIds);
+    const handleSubmit = () => {
+        const today = new Date();
+    const lastThirtyDaysStartDate = new Date(today);
+    lastThirtyDaysStartDate.setDate(lastThirtyDaysStartDate.getDate() - 6);
+    const startDate = lastThirtyDaysStartDate.toISOString().split("T")[0];
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 1);
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+    getAllLeads(startDate, formattedEndDate);
+        const body ={
+            leadIds: leads, 
+            object_ids: selectedIds,
+            type: "academy" 
+        };
+        axios.post("", body,{
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            }})
+            .then((response) => {
+                if (response?.data?.status === 1) {
+                    toast.success("Leads assigned successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                    getAllLeads(startDate, formattedEndDate);
+                }})
+                    .catch((error) => {
+                        console.log(error);
+                        toast.error(error.data.message, {
+                            position: "top-center",
+                            autoClose: 1000,
+                        });
+                    })
+    }
     return (
         <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
@@ -171,7 +237,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                                                         type="checkbox"
                                                         className="radio_disable check_input_2"
                                                         onChange={(event) => handleCheckboxChange(event, item.id)}
-                                            checked={selectedIds.includes(item.id)}
+                                                        checked={selectedIds.includes(item.id)}
                                                     />
                                                 </label>
                                             </div>
@@ -184,7 +250,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                         </>)}
                     </div>
                     <div className="modalLeftBtnBox2">
-                    <div className='new_btnflex'>
+                        <div className='new_btnflex'>
                             <select id="distance_lead" value={selectedDistance} onChange={handleDistanceChange}>
                                 <option value="">Distance</option>
                                 <option value="100">100 Km</option>
@@ -204,7 +270,7 @@ const AllLeadsModal = ({ closeModal, object, sport }) => {
                         </div>
                         <button
                             className="convertToDeal"
-                        // onClick={() => handleViewSite(editedItem?.url)}
+                        onClick={handleSubmit}
                         >Assign
                         </button>
                     </div>

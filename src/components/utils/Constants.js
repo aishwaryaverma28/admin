@@ -274,3 +274,6 @@ export const REPLY_TICKET = bmpStart+"/bmp/tickets/addreply";
 
 export const GET_PLAYER_ID = bmpStart+"/bmp/player/getById";
 export const ADD_PLAYER = bmpStart+"/bmp/player/add";
+
+export const DISTANCE_API = bmpStart+"/bmp/academy/getnearby";
+export const LEADS_CITY = bmpStart+"/bmp/leads/getbycity";

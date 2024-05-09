@@ -3,8 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  MOST_LEADS,
-  GET_COACH,
+  LEADS_CITY,
   getDecryptedToken,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
@@ -102,7 +101,7 @@ const AllLeads = () => {
     getAllLeads(startDate, formattedEndDate);
   };
   const getAllLeads = (startDate, endDate) => {
-    axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/getbycity", {
+    axios.post(LEADS_CITY, {
       startDate: startDate,
       endDate: endDate,
     }, {
@@ -301,7 +300,7 @@ const AllLeads = () => {
                       {item?.sport}({statusCounts[item.sport] || 0})
                     </p>
                   </div>
-                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} sport={item?.sport} />)}
+                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} sport={item?.sport} getAllLeads={getAllLeads}/>)}
                 </div>
               </div>
             </div>

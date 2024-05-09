@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import AllLeadsModal from './AllLeadsModal';
 
-const AllLeadsCards = ({ obj , sport }) => {
+const AllLeadsCards = ({ obj , sport, getAllLeads }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [object, setObject] = useState();
   const openModal = (item) => {
@@ -41,6 +41,7 @@ const AllLeadsCards = ({ obj , sport }) => {
           closeModal={closeModal}
           object= {object}
           sport={sport}
+          getAllLeads={getAllLeads}
         />
       )}
     </>
