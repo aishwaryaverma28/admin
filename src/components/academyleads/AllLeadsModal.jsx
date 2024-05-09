@@ -27,7 +27,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             sport: sport,
             distance: distance,
         };
-
+    
         axios
             .post(DISTANCE_API, body, {
                 headers: {
@@ -35,7 +35,8 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 },
             })
             .then((response) => {
-                setDistAcad(response?.data?.data);
+                const filteredObjects = response?.data?.data.filter(obj => obj.email !== null || obj.verification_status === "Verified");
+                setDistAcad(filteredObjects);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -43,7 +44,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 setIsLoading(false);
             });
     };
-
+    
     const academyDist = () => {
         let body = {
             academy_id: object?.academy_id
@@ -240,6 +241,9 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                 </div>
                                                 <div className="mail">
                                                     <p>{item?.phone}</p>
+                                                </div>
+                                                <div className="mail">
+                                                    <p>{item?.email}</p>
                                                 </div>
                                             </div>
                                         </div>
