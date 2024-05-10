@@ -908,6 +908,10 @@
   overflow-y: scroll;
   margin-top: 8px;
 }
+.tab_content_new {
+  height: 80vh;
+  overflow-y: scroll;
+}
 
 .email-tab-content,
 .activity-tab-content,

@@ -196,7 +196,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
 
-                                <div className="tab-content margin-left">
+                                <div className="tab_content_new margin-left">
                                     <>
                                         <div className="academy-card">
                                             <div className="card-container">
