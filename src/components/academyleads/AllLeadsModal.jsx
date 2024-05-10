@@ -39,7 +39,10 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 },
             })
             .then((response) => {
-                const filteredObjects = response?.data?.data.filter(obj => obj.email !== null || obj.verification_status === "Verified");
+                const filteredObjects = response?.data?.data.filter(obj => 
+                    (obj.email !== null || obj.verification_status === "Verified") && 
+                    obj.id !== object?.academy_id
+                );
                 setDistAcad(filteredObjects);
                 setIsLoading(false);
             })
