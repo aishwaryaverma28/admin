@@ -10,10 +10,10 @@ const AcadmeyLeadDetails = ({ leadsDetails }) => {
     };
 
     const getShortenedContent = (content) => {
-        const strippedContent = content.replace(/<[^>]+>/g, "");
-        const words = strippedContent.split(" ");
+        const strippedContent = content?.replace(/<[^>]+>/g, "");
+        const words = strippedContent?.split(" ");
         if (words.length > 10) {
-            return words.slice(0, 10).join(" ") + "...";
+            return words.slice(0, 10)?.join(" ") + "...";
         }
         return strippedContent;
     };
