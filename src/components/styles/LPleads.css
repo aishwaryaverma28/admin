@@ -476,6 +476,10 @@
   line-height: 22px;
 }
 
+.city_cards p{
+  color:#f49c00;
+}
+
 .user-details p span {
   font-size: 0.7rem;
   font-weight: 300;
@@ -535,6 +539,16 @@
   font-size: 0.87rem;
   color: #818181;
   font-weight: 500;
+}
+.details_flex{
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap:1rem;
+}
+
+.right_width{
+  white-space: nowrap;
 }
 .mail,
 .call {
