@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {
     DISTANCE_API,
     ACADMEY_LEADS_DETAILS,
+    ASSIGN_LEADS_USER,
     GET_ACADEMY,
     getDecryptedToken,
     handleLogout
@@ -16,10 +17,10 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [distAcad, setDistAcad] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
-    const [selectedData, setSelectedData] = useState([]);
+    // const [selectedData, setSelectedData] = useState([]);
     const [selectedDistance, setSelectedDistance] = useState(100);
     const [leads, setLeads] = useState([]);
-    const [allData, setAllData] = useState([]);
+    // const [allData, setAllData] = useState([]);
     const fetchLead = (distance) => {
         let body = {
             lat: parseInt(object?.academy_lat),
@@ -81,7 +82,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             })
             .then((response) => {
                 if (response?.data?.status === 1) {
-                    setAllData(response?.data?.data);
+                    // setAllData(response?.data?.data);
                     const ids = response?.data?.data.map(item => item.id); // Extracting IDs
                     setLeads(ids);
                 }
@@ -94,7 +95,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 }
             });
     };
-    console.log(allData)
+    // console.log(allData)
     useEffect(() => {
         fetchLead(selectedDistance);
         academyDist();
@@ -106,13 +107,13 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
 
     const handleCheckboxChange = (event, id, email) => {
         const isChecked = event.target.checked;
-        setSelectedData(prevIds => {
-            if (isChecked) {
-                return [...prevIds, { id, email }];
-            } else {
-                return prevIds.filter(selectedItem => selectedItem.id !== id);
-            }
-        });
+        // setSelectedData(prevIds => {
+        //     if (isChecked) {
+        //         return [...prevIds, { id, email }];
+        //     } else {
+        //         return prevIds.filter(selectedItem => selectedItem.id !== id);
+        //     }
+        // });
             setSelectedIds(prevIds => {
             if (isChecked) {
                 return [...prevIds, id];
@@ -122,7 +123,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
         });
     };
     console.log(selectedIds)
-    console.log(selectedData)
+    // console.log(selectedData)
     const handleSubmit = () => {
         const today = new Date();
         const lastThirtyDaysStartDate = new Date(today);
@@ -135,10 +136,10 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             leadIds: leads,
             object_ids: selectedIds,
             type: "academy",
-            allLeads: allData,
-            email_academy: selectedData
+            // allLeads: allData,
+            // email_academy: selectedData
         };
-        axios.post("https://bmp.leadplaner.com/api/api/bmp/leads/assign", body, {
+        axios.post(ASSIGN_LEADS_USER, body, {
             headers: {
                 Authorization: `Bearer ${decryptedToken}`,
             }
@@ -287,10 +288,10 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                             <select id="distance_lead" value={selectedDistance} onChange={handleDistanceChange}>
                                 <option value="">Distance</option>
                                 <option value="100">100 Km</option>
-                                <option value="200">200 km</option>
-                                <option value="300">300 Km</option>
-                                <option value="400">400 Km</option>
-                                <option value="500">500 Km</option></select>
+                                <option value="300">300 km</option>
+                                <option value="500">500 Km</option>
+                                <option value="1000">1000 Km</option>
+                                <option value="2000">2000 Km</option></select>
                         </div>
                         <div className='new_btnflex'>
                             <select id="sports_lead">

@@ -277,14 +277,4 @@ export const ADD_PLAYER = bmpStart+"/bmp/player/add";
 
 export const DISTANCE_API = bmpStart+"/bmp/academy/getnearby";
 export const LEADS_CITY = bmpStart+"/bmp/leads/getbycity";
-
-// const handleCheckboxChange = (event, id) => {
-//   const isChecked = event.target.checked;
-//   setSelectedIds(prevIds => {
-//       if (isChecked) {
-//           return [...prevIds, id];
-//       } else {
-//           return prevIds.filter(selectedId => selectedId !== id);
-//       }
-//   });
-// };
+export const ASSIGN_LEADS_USER = bmpStart+"/bmp/leads/assign";
