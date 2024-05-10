@@ -545,8 +545,14 @@
   align-items: start;
   justify-content: space-between;
   gap:1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dcdcdc;
+  margin-bottom: 0.5rem;
 }
 
+.no-border {
+  border-bottom: none;
+}
 .right_width{
   white-space: nowrap;
 }
