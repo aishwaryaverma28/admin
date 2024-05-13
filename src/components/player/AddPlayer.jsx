@@ -23,6 +23,7 @@ const AddPlayer = ({ onClose }) => {
         foot: "",
         goals: "",
         height: "",
+        weight: "",
         join_date: "",
         mobile: "",
         name: "",
@@ -93,6 +94,7 @@ const AddPlayer = ({ onClose }) => {
                         foot: "",
                         goals: "",
                         height: "",
+                        weight:"",
                         join_date: "",
                         mobile: "",
                         name: "",
@@ -206,6 +208,7 @@ const AddPlayer = ({ onClose }) => {
                                         <p>Place of Birth</p>
                                         <p>Foot</p>
                                         <p>Height</p>
+                                        <p>Weight</p>
                                         <p>Position</p>
                                         <p>Social Link</p>
                                         <p className="about-textarea">Description</p>
@@ -473,12 +476,25 @@ const AddPlayer = ({ onClose }) => {
                                             </span>
                                         </p>
                                         <p>
-
                                             <span>
                                                 <input
                                                     type="text"
                                                     name="height"
                                                     value={editedItem?.height}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        editStylingInput
+                                                    }
+
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="weight"
+                                                    value={editedItem?.weight}
                                                     onChange={handleInputChange}
                                                     style={
                                                         editStylingInput

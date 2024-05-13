@@ -20,6 +20,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     foot: "",
     goals: "",
     height: "",
+    weight: "",
     join_date: "",
     mobile: "",
     name: "",
@@ -112,6 +113,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       foot: editedItem?.foot,
       goals: editedItem?.goals,
       height: editedItem?.height,
+      weight: editedItem?.weight,
       join_date: editedItem?.join_date,
       place_of_birth: editedItem?.place_of_birth,
       position: editedItem?.position,
@@ -294,6 +296,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
               <p>Place of Birth</p>
               <p>Foot</p>
               <p>Height</p>
+              <p>Weight</p>
               <p>Position</p>
               <p>Social Link</p>
               <p className="about-textarea">Description</p>
@@ -614,6 +617,24 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                       type="text"
                       name="height"
                       value={editedItem?.height}
+                      onChange={handleInputChange}
+                      style={
+                        isEditable ? editStylingInput : normalStylingInput
+                      }
+                      disabled={isDisabled}
+                    />
+                  </span>
+                )}
+              </p>
+              <p>
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <input
+                      type="text"
+                      name="weight"
+                      value={editedItem?.weight}
                       onChange={handleInputChange}
                       style={
                         isEditable ? editStylingInput : normalStylingInput
