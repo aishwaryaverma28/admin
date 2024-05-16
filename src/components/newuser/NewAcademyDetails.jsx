@@ -844,12 +844,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                 <>
                 {isEditable ? (
                     <div className="modalLeftBtnBox">
-                        <button
-                            className="convertToDeal"
-                            onClick={() => handleViewSite(editedItem?.url)}
-                        >
-                            View Site
-                        </button>
+                       <span></span>
                         {stateBtn === 0 ? (
                             <button disabled className="disabledBtn">
                                 Save
@@ -862,13 +857,7 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                     </div>
                 ) : (
                     <div className="modalLeftBtnBox">
-                        <span></span>
-                        <button
-                            className="convertToDeal"
-                            onClick={() => handleViewSite(editedItem?.url)}
-                        >View Site
-                        </button>
-                    </div>
+                     </div>
                 )}
                 </>
             </div>
