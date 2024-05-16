@@ -460,13 +460,13 @@ return (
                 {!selectedFile && (
                     <div className="bmp-image-preview">
                         <a href={academyData?.logo === null
-                            ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
+                            ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                            : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
                             target="_blank" rel="noopener noreferrer">
                             <img
                                 src={academyData?.logo === null
-                                    ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                    : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
+                                    ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                                    : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${academyData?.logo}`}
                                 alt="pofile"
                                 className="bmp-preview-image"
                             />
@@ -543,9 +543,9 @@ return (
                                             onChange={() => handleCheckbox(photo, index)}
                                         />
                                     <div className="bmp-video">
-                                        <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                             <img
-                                                src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`}
+                                                src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         </a>
@@ -567,9 +567,9 @@ return (
                                     />
                                 </div>
                             </div>
-                            <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                            <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                 <img
-                                    src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`}
+                                    src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${photo}`}
                                     alt="Selected Preview"
                                     key={index}
                                 />
@@ -613,10 +613,10 @@ return (
                                 </div>
                             </div>
                             <div className="bmp-player-img">
-                                <a href={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
+                                <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
                                     <video width="270" height="140" controls>
                                         <source
-                                            src={`https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${video}`}
+                                            src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${academyData?.id}/${video}`}
                                             type="video/mp4"
                                         />
                                     </video>

@@ -299,12 +299,12 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         <div className="user-details--heading">
           <div className="user-details-imgBox">
             <a href={editedItem?.profile_img === null
-              ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-              : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
+              ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+              : `https://bmpcdn1.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
               <img
                 src={editedItem?.profile_img === null
-                  ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                  : `https://bmpcdn.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
+                  ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                  : `https://bmpcdn1.s3.amazonaws.com/coach/${editedItem?.id}/${editedItem?.profile_img}`}
                 alt="pofile"
                 className="bmp-preview-image logoRound"
               />

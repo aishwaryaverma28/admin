@@ -230,12 +230,12 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                     <div className="mail">
                                                         <div className="new_preview_flex">
                                                             <a href={editedItem?.logo === null
-                                                                ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
-                                                                : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
+                                                                ? `https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
+                                                                : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
                                                                 <img
                                                                     src={editedItem?.logo === null
-                                                                        ? `https://bmpcdn.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
-                                                                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/academy/${editedItem?.id}/${editedItem?.logo}`}
+                                                                        ? `https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp`
+                                                                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${editedItem?.id}/${editedItem?.logo}`}
                                                                     alt="pofile"
                                                                     className="bmp-preview-image"
                                                                 />

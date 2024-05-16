@@ -26,7 +26,7 @@ const getDecryptedUserPath = () => {
 export { getDecryptedUserPath };
 //=============================================================config
 export const config = {
-  bucketName: "bmpcdn",
+  bucketName: "bmpcdn1",
   region: "ap-south-1",
   dirName: "test/17",
   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,

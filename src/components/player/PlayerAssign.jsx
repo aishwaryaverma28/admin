@@ -186,12 +186,12 @@ const PlayerAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                 <div className="mail">
                   <div className="new_preview_flex">
                     <a href={data?.logo === null
-                      ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                      : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
+                      ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                      : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
                       <img
                         src={data?.logo === null
-                          ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                          : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.logo}`}
+                          ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                          : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player_temp/${data?.id}/${data?.logo}`}
                         alt="pofile"
                         className="bmp-preview-image"
                       />
@@ -240,12 +240,12 @@ const PlayerAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                   <div className="mail">
                     <div className="new_preview_flex">
                       <a href={object?.logo === null
-                        ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                        : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
+                        ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
                         <img
                           src={object?.logo === null
-                            ? "https://bmpcdn.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                            : `https://bmpcdn.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.logo}`}
+                            ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
+                            : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/player/${object?.id}/${object?.logo}`}
                           alt="pofile"
                           className="bmp-preview-image"
                         />

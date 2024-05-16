@@ -248,8 +248,8 @@ const NewAcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                     <div className="user-details-imgBox">
                         <img
                             src={editedItem?.logo === null
-                                ? "https://bmpcdn.s3.amazonaws.com/default/academy_default_logo.webp"
-                                : `https://bmpcdn.s3.amazonaws.com/academy_temp/${editedItem?.id}/${editedItem?.logo}`}
+                                ? "https://bmpcdn1.s3.amazonaws.com/default/academy_default_logo.webp"
+                                : `https://bmpcdn1.s3.amazonaws.com/academy_temp/${editedItem?.id}/${editedItem?.logo}`}
                             alt="logo"
                             className="bmp-preview-image logoRound"
                         />

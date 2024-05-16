@@ -453,7 +453,7 @@ const UpdateTournament = () => {
                             {!selectedFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileLogoName}`}
+                                        src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileLogoName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -518,7 +518,7 @@ const UpdateTournament = () => {
                             {!selectedBannerFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${fileBannerName}`}
+                                        src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileBannerName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -686,7 +686,7 @@ const UpdateTournament = () => {
                                 <div className="bmp-img-name">
                                     <div className="bmp-video">
                                         <img
-                                            src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
+                                            src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
                                             alt="Selected Preview"
                                         />
                                     </div>
@@ -708,7 +708,7 @@ const UpdateTournament = () => {
                                 </div>
                             </div>
                             <img
-                                src={`https://bmpcdn.s3.amazonaws.com/league/${id}/${photo}`}
+                                src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
                                 alt="Selected Preview"
                                 key={index}
                             />
