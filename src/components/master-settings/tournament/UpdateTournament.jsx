@@ -3,7 +3,7 @@ import S3FileUpload from 'react-s3';
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
-    config, getDecryptedToken, UPDATE_LEAGUE, GET_LEAGUE_BY_ID
+    cdnurl, config, getDecryptedToken, UPDATE_LEAGUE, GET_LEAGUE_BY_ID
 } from "../../utils/Constants";
 import { toast, ToastContainer } from "react-toastify";
 import LeftArrow from "../../../assets/image/arrow-left.svg";
@@ -453,7 +453,7 @@ const UpdateTournament = () => {
                             {!selectedFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileLogoName}`}
+                                        src={`${cdnurl}league/${id}/${fileLogoName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -518,7 +518,7 @@ const UpdateTournament = () => {
                             {!selectedBannerFile && (
                                 <div className="bmp-image-preview">
                                     <img
-                                        src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileBannerName}`}
+                                        src={`${cdnurl}league/${id}/${fileBannerName}`}
                                         alt="logo"
                                         className="bmp-preview-image"
                                     />
@@ -686,7 +686,7 @@ const UpdateTournament = () => {
                                 <div className="bmp-img-name">
                                     <div className="bmp-video">
                                         <img
-                                            src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
+                                            src={`${cdnurl}league/${id}/${photo}`}
                                             alt="Selected Preview"
                                         />
                                     </div>
@@ -708,7 +708,7 @@ const UpdateTournament = () => {
                                 </div>
                             </div>
                             <img
-                                src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
+                                src={`${cdnurl}league/${id}/${photo}`}
                                 alt="Selected Preview"
                                 key={index}
                             />

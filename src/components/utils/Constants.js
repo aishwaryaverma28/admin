@@ -42,6 +42,7 @@ export const handleLogout = () => {
   }
 };
 // =============================================================apis used
+export const cdnurl = "https://d2bdxhtfh3zsqc.cloudfront.net/";
 const start = "https://core.leadplaner.com/api/api";
 const bmpStart = "https://bmp.leadplaner.com/api/api";
 const userId = localStorage.getItem("id");

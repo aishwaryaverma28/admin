@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import {
+  cdnurl,
   GET_ACADEMY,
   SEARCH_ACADMEY_ID,
   ACADMEY_SEARCH_API,
@@ -199,12 +200,12 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
               <div className="mail">
                 <div className="new_preview_flex">
                   <a href={data?.logo === null
-                    ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                    : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
+                    ? `${cdnurl}default/academy_default_logo.webp`
+                    : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
                     <img
                       src={data?.logo === null
-                        ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy_temp/${data?.id}/${data?.logo}`}
+                        ? `${cdnurl}default/academy_default_logo.webp`
+                        : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`}
                       alt="pofile"
                       className="bmp-preview-image"
                     />
@@ -250,12 +251,12 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                 <div className="mail">
                   <div className="new_preview_flex">
                     <a href={object?.logo === null
-                      ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                      : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
+                      ? "${cdnurl}default/academy_default_logo.webp"
+                      : `${cdnurl}academy/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
                       <img
                         src={object?.logo === null
-                          ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                          : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                          ? "${cdnurl}default/academy_default_logo.webp"
+                          : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                         alt="pofile"
                         className="bmp-preview-image"
                       />

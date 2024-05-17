@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants';
+import { cdnurl,GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants';
 import { toast } from "react-toastify";
 import USER from "../../assets/image/user-img.png"
 const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
@@ -249,12 +249,12 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       <div className="user-details--heading">
         <div className="user-details-imgBox">
         <a href={editedItem?.logo === null
-              ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-              : `https://bmpcdn1.s3.amazonaws.com/player_temp/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
+              ? `${cdnurl}coach/14/logo1.jpg`
+              : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
               <img
                 src={editedItem?.logo === null
-                  ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                  : `https://bmpcdn1.s3.amazonaws.com/player_temp/${editedItem?.id}/${editedItem?.logo}`}
+                  ? `${cdnurl}coach/14/logo1.jpg`
+                  : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`}
                 alt="pofile"
                 className="bmp-preview-image logoRound"
               />

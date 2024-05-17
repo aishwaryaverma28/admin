@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import S3FileUpload from 'react-s3';
 import "../../styles/HelpModal.css";
-import { getDecryptedToken, config, UPDATE_LEAGUE } from "../../utils/Constants";
+import { cdnurl,getDecryptedToken, config, UPDATE_LEAGUE } from "../../utils/Constants";
 import axios from "axios";
 import Trash from "../../../assets/image/red-bin.svg";
 import { toast, ToastContainer } from "react-toastify";
@@ -298,7 +298,7 @@ const TournamentModal = ({ onClose, id }) => {
               {!selectedFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileLogoName}`}
+                    src={`${cdnurl}league/${id}/${fileLogoName}`}
                     alt="logo"
                     className="bmp-preview-image"
                   />
@@ -362,7 +362,7 @@ const TournamentModal = ({ onClose, id }) => {
               {!selectedBannerFile && (
                 <div className="bmp-image-preview">
                   <img
-                    src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${fileBannerName}`}
+                    src={`${cdnurl}league/${id}/${fileBannerName}`}
                     alt="logo"
                     className="bmp-preview-image"
                   />
@@ -429,7 +429,7 @@ const TournamentModal = ({ onClose, id }) => {
                     <div className="bmp-img-name">
                       <div className="bmp-video">
                         <img
-                          src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
+                          src={`${cdnurl}league/${id}/${photo}`}
                           alt="Selected Preview"
                         />
                       </div>
@@ -451,7 +451,7 @@ const TournamentModal = ({ onClose, id }) => {
                     </div>
                   </div>
                   <img
-                    src={`https://bmpcdn1.s3.amazonaws.com/league/${id}/${photo}`}
+                    src={`${cdnurl}league/${id}/${photo}`}
                     alt="Selected Preview"
                     key={index}
                   />

@@ -5,7 +5,9 @@ import CoachLead from "./CoachLead.jsx";
 import UserLead from "./UserLead.jsx";
 import NewUserLead from "../newuser/NewUserLead.jsx"
 import PlayerLead from "../player/PlayerLead.jsx";
-
+import {
+  cdnurl
+} from "./../utils/Constants";
 const LeadCards = ({
   object,
   onLeadAdded,
@@ -138,13 +140,13 @@ const LeadCards = ({
               <div className="mail">
                 <div className="bmp-image-preview2">
                   <a href={object?.profile_img === null
-                    ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                    : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                    ? `${cdnurl}coach/14/logo1.jpg`
+                    : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                     target="_blank" rel="noopener noreferrer">
                     <img
                       src={object?.profile_img === null
-                        ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${object?.id}/${object?.profile_img}`}
+                        ? `${cdnurl}coach/14/logo1.jpg`
+                        : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                       alt="pofile"
                       className="bmp-preview-image"
                     />
@@ -156,13 +158,13 @@ const LeadCards = ({
               <div className="mail">
                 <div className="bmp-image-preview2">
                   <a href={object?.logo === null
-                    ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                    : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                    ? `${cdnurl}default/academy_default_logo.webp`
+                    : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                     target="_blank" rel="noopener noreferrer">
                     <img
                       src={object?.logo === null
-                        ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/academy_default_logo.webp"
-                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/academy/${object?.id}/${object?.logo}`}
+                        ? `${cdnurl}default/academy_default_logo.webp`
+                        : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                       alt="pofile"
                       className="bmp-preview-image"
                     />

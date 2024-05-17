@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast } from "react-toastify";
-import { GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
+import { cdnurl,GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -54,10 +54,10 @@ const CoachImage = (id) => {
                     }
                     setBannerName(response?.data?.data[0]?.banner);
                     if (
-                        response?.data?.data[0]?.photo !== "" &&
-                        response?.data?.data[0]?.photo !== null
+                        response?.data?.data[0]?.photos !== "" &&
+                        response?.data?.data[0]?.photos !== null
                     ) {
-                        const files = response?.data?.data[0]?.photo?.split(",");
+                        const files = response?.data?.data[0]?.photos?.split(",");
                         const uniquePhotoUrls = new Set();
                         const uniqueVideoUrls = new Set();
                         files.forEach(file => {
@@ -209,7 +209,7 @@ const CoachImage = (id) => {
             sport: academyData?.sport,
             city: academyData?.city,
             profile_img: fileName,
-            photo: allUrls?.join(","),
+            photos: allUrls?.join(","),
         }
         axios
             .put(UPDATE_COACH + id?.id, updatedFormData
@@ -258,7 +258,7 @@ const CoachImage = (id) => {
                 UPDATE_COACH + academyData?.id,
                 {
                     type : "org",
-                    photo: combinedDataString,
+                    photos: combinedDataString,
                     name: academyData?.name,
                     sport: academyData?.sport,
                     city: academyData?.city,
@@ -290,7 +290,7 @@ const CoachImage = (id) => {
                 UPDATE_COACH + academyData?.id,
                 {
                     type : "org",
-                    photo: combinedDataString,
+                    photos: combinedDataString,
                     name: academyData?.name,
                     sport: academyData?.sport,
                     city: academyData?.city,
@@ -333,7 +333,7 @@ const CoachImage = (id) => {
             city: academyData?.city,
             profile_img: logoValue,
             banner: bannerValue,
-            photo: allUrls?.join(","),
+            photos: allUrls?.join(","),
         }
         axios
             .put(UPDATE_COACH + id?.id, updatedFormData
@@ -379,13 +379,13 @@ const CoachImage = (id) => {
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.profile_img === null
-                                ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                ? `${cdnurl}coach/14/logo1.jpg`
+                                : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.profile_img === null
-                                        ? "https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/14/logo1.jpg"
-                                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.profile_img}`}
+                                        ? `${cdnurl}coach/14/logo1.jpg`
+                                        : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                     alt="pofile"
                                     className="bmp-preview-image"
                                 />
@@ -408,12 +408,12 @@ const CoachImage = (id) => {
                     {!selectedBannerFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.banner === null
-                                ? `https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
-                                : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.banner}`} target="_blank" rel="noopener noreferrer">
+                                ? `${cdnurl}default/${academyData?.sport}_banner.webp`
+                                : `${cdnurl}coach/${academyData?.id}/${academyData?.banner}`} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.banner === null
-                                        ? `https://bmpcdn1.s3.ap-south-1.amazonaws.com/default/${academyData?.sport}_banner.webp`
-                                        : `https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${academyData?.banner}`}
+                                        ? `${cdnurl}default/${academyData?.sport}_banner.webp`
+                                        : `${cdnurl}coach/${academyData?.id}/${academyData?.banner}`}
                                     alt=""
                                     className="bmp-preview-image"
                                 />
@@ -490,9 +490,9 @@ const CoachImage = (id) => {
                                             onChange={() => handleCheckbox(photo, index)}
                                         />
                                         <div className="bmp-video">
-                                            <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                            <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img
-                                                    src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                                    src={`${cdnurl}coach/${academyData?.id}/${photo}`}
                                                     alt="Selected Preview"
                                                 />
                                             </a>
@@ -514,9 +514,9 @@ const CoachImage = (id) => {
                                         />
                                     </div>
                                 </div>
-                                <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${photo}`}
+                                        src={`${cdnurl}coach/${academyData?.id}/${photo}`}
                                         alt="Selected Preview"
                                         key={index}
                                     />
@@ -560,10 +560,10 @@ const CoachImage = (id) => {
                                     </div>
                                 </div>
                                 <div className="bmp-player-img">
-                                    <a href={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`${cdnurl}coach/${academyData?.id}/${video}`} target="_blank" rel="noopener noreferrer">
                                         <video width="270" height="140" controls>
                                             <source
-                                                src={`https://bmpcdn1.s3.ap-south-1.amazonaws.com/coach/${academyData?.id}/${video}`}
+                                                src={`${cdnurl}coach/${academyData?.id}/${video}`}
                                                 type="video/mp4"
                                             />
                                         </video>
