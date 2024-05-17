@@ -1362,6 +1362,13 @@
   padding: 0.1rem 0.3rem;
   background-color: #fe5c4d;
   border-radius: 5px;
+  color: white;
+}
+.labelData{
+  padding: 0.1rem 0.3rem;
+  background-color: #90e0ef;
+  border-radius: 5px;
+  color: white;
 }
 .yellowLogIn{
   min-width: 1.5rem;

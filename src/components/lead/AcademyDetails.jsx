@@ -109,6 +109,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
             rating:editedItem?.rating,
             reviews:editedItem?.reviews,
             friendly: trainingLocation.toString(),
+            // label:editedItem?.label,
         }
         axios
             .put(UPDATE_ACADEMY + id, updatedFormData
@@ -284,6 +285,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                 <p>Experience</p>
                                 <p>Reviews</p>
                                 <p>Rating</p>
+                                <p>Label</p>
                                 <p>Option</p>
                                 <p className="about-textarea">About</p>
                             </div>
@@ -572,6 +574,24 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                                                 name="rating"
                                                 value={editedItem?.rating}
                                                 onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                        </span>
+                                    )}
+                                </p>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="label"
+                                                // value={editedItem?.label}
+                                                // onChange={handleInputChange}
                                                 style={
                                                     isEditable ? editStylingInput : normalStylingInput
                                                 }

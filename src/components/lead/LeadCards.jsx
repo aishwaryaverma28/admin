@@ -172,6 +172,14 @@ const LeadCards = ({
                 </div>
               </div>
             )}
+            {itemName === "academy" && (
+              <div className="mail">
+                <div className="DealCard-rightBox">
+                <div className="labelData">Label</div>
+            {/* {object?.parent_tbl === 0 ? <> <div className="newData">New</div></> : <></>} */}
+          </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
