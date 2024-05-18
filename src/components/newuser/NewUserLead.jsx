@@ -9,6 +9,7 @@ import UserLogs from '../lead/UserLogs';
 import AssignAcademy from '../acadmey/AssignAcademy';
 import LeadImage from './LeadImage';
 import Confirmation from "../lead/Confirmation.jsx";
+import AddNotes from '../deal/AddNotes.jsx';
 const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
     const decryptedToken = getDecryptedToken();
     const [activeTab, setActiveTab] = useState("details");
@@ -113,6 +114,13 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             Tickets
                         </button>
+                        <button
+                            className={activeTab === "tickets" ? "active" : ""}
+                            onClick={() => handleTabClick("notes")}
+                        >
+                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                            Notes
+                        </button>
                     </div>
                     {/* ===================================================================tabination content */}
                     <div className="tab-content">
@@ -142,6 +150,14 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                         {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <BmpTickets selectedItem={selectedItem} />
+                            </div>
+                        )}
+                         {activeTab === "notes" && (
+                            <div className="notes-tab-content">
+                                <AddNotes
+                                    item={selectedItem}
+                                    type="newUser"
+                                />
                             </div>
                         )}
                     </div>

@@ -7,7 +7,6 @@ import {
   ACADMEY_NOTE_SOURCE,
   ACADMEY_NOTE_UPDATE,
   GETNOTEDEAL,
-  MOVENOTE_TO_TRASH,
   handleLogout,
   getDecryptedToken,
   GETNOTECOMPANY,
