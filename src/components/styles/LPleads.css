@@ -1279,6 +1279,31 @@
   align-items: center;
   /* gap: 1rem; */
 }
+.notes_flex{
+  align-items: end;
+  gap:0.5rem;
+}
+
+.notes_hover{
+  position: relative;
+}
+
+.message-box {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 15rem;
+  right:0;
+  z-index: 100;
+}
+
+.notes_hover:hover .message-box {
+  display: block;
+}
 
 .deal-sort {
   cursor: pointer;
