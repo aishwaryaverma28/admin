@@ -58,7 +58,7 @@ const DashboardCards = ({
       }
     }
     if (itemName === "player") {
-      if (object?.parent_tbl === 0) { 
+      if (object?.parent_tbl === 0) {
         setPlayerNewMenu(true);
         setSelectedObj(object);
       }
@@ -127,15 +127,15 @@ const DashboardCards = ({
               </div>
             </div>
           </div>
-          {/* <div className="DealCard-rightBox notes_flex">
+          <div className="DealCard-rightBox notes_flex">
             {object?.parent_tbl === 0 ? <> <div className="newData">New</div></> : <></>}
-            <div className="notes_hover">
-            <i class="fa fa-sticky-note-o"></i>
-            <div className="message-box">
-              <p>You have new notes to read.</p>
-            </div>
-            </div>
-          </div> */}
+            {/* <div className="notes_hover">
+              <i class="fa fa-sticky-note-o"></i>
+              <div className="message-box">
+                <p>You have new notes to read.</p>
+              </div>
+            </div> */}
+          </div>
         </div>
       </div>
       {modalVisible && (
@@ -170,7 +170,7 @@ const DashboardCards = ({
           closeModal={closePlayerModal}
         />
       )}
- {playerNewMenu && (
+      {playerNewMenu && (
         <NewPlayerLeads
           selectedItem={selectedObj}
           closeModal={closeNewPlayerModal}

@@ -114,10 +114,12 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
 
     const updatedFormData = {
-      type : "org",
+      type: "org",
       name: editedItem?.name,
       phone: editedItem?.phone,
       email: editedItem?.email,
+      email_verified: editedItem?.email_verified,
+      mobile_verified: editedItem?.mobile_verified,
       sport: editedItem?.sport,
       city: editedItem?.city,
       state: editedItem?.state,
@@ -333,8 +335,8 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               <div className="detailsLeftContainer">
                 <p>Name</p>
                 <p>Email</p>
-                <p>Sport</p>
                 <p>Phone</p>
+                <p>Sport</p>
                 <p>Gender</p>
                 <p>Fees</p>
                 <p>Package</p>
@@ -364,7 +366,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </span>
                   )}
                 </p>
-                <p>
+                {/* <p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
@@ -379,6 +381,66 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                         }
                         disabled={isDisabled}
                       />
+                    </span>
+                  )}
+                </p> */}
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span className='newEditableArea'>
+                      <input
+                        type="text"
+                        name="email"
+                        value={editedItem?.email}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                      <label className="radio-inline radio-space">
+                        <input
+                          type="checkbox"
+                          name="email_verified"
+                          value={editedItem?.email_verified}
+                          className="radio_disable check_input"
+                          disabled={isDisabled}
+                          onChange={handleInputChange}
+                          checked={editedItem?.email_verified === 1}
+                        /> Email Verified
+
+                      </label>
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span className='newEditableArea'>
+                      <input
+                        type="text"
+                        name="phone"
+                        value={editedItem?.phone}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                      <label className="radio-inline radio-space">
+                        <input
+                          type="checkbox"
+                          name="mobile_verified"
+                          value={editedItem?.mobile_verified}
+                          className="radio_disable check_input"
+                          disabled={isDisabled}
+                          onChange={handleInputChange}
+                          checked={editedItem?.mobile_verified === 1}
+                        /> Mobile Verified
+
+                      </label>
                     </span>
                   )}
                 </p>
@@ -435,7 +497,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </span>
                   )}
                 </p>
-                <p>
+                {/* <p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
@@ -452,7 +514,8 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                       />
                     </span>
                   )}
-                </p>
+                </p> */}
+
                 <p>
                   {isLoading ? (
                     <span>-</span>
