@@ -233,7 +233,9 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 3000);
             })
             .catch((error) => {
                 console.log(error);
@@ -357,7 +359,9 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 3000);
             })
             .catch((error) => {
                 console.log(error);

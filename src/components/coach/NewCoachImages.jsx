@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast } from "react-toastify";
-import { cdnurl,GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
+import { cdnurl, GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -21,12 +21,12 @@ const NewCoachImages = (id) => {
         "video/webm",
         "video/ogg",
     ];
-    
+
     const [photoBtn, setPhotoBtn] = useState(0);
     const [photoChoose, setPhotoChoose] = useState(null);
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
     const [bannerName, setBannerName] = useState(null);
-        const fileInputRef = useRef(null);
+    const fileInputRef = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
@@ -44,7 +44,7 @@ const NewCoachImages = (id) => {
         let body = {
             coachId: id?.id,
             type: "temp"
-          };
+        };
         axios
             .post(GET_COACH_ID, body, {
                 headers: {
@@ -101,14 +101,14 @@ const NewCoachImages = (id) => {
             return imageName.replace(/[^\w-]/g, "-");
         }
     };
-    
+
     //=================================================================================photo and video upload
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
         setAlertVideoShown(false);
         setAlertShown(false);
     };
-   
+
     const handleFileChange2 = (event) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
@@ -220,7 +220,7 @@ const NewCoachImages = (id) => {
             name: academyData?.name,
             sport: academyData?.sport,
             city: academyData?.city,
-            type : "temp",
+            type: "temp",
         }
         axios
             .put(UPDATE_COACH + id?.id, updatedFormData
@@ -242,7 +242,9 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 3000);
             })
             .catch((error) => {
                 console.log(error);
@@ -273,7 +275,7 @@ const NewCoachImages = (id) => {
                     name: academyData?.name,
                     sport: academyData?.sport,
                     city: academyData?.city,
-                    type : "temp",
+                    type: "temp",
                 },
                 {
                     headers: {
@@ -305,7 +307,7 @@ const NewCoachImages = (id) => {
                     name: academyData?.name,
                     sport: academyData?.sport,
                     city: academyData?.city,
-                    type : "temp",
+                    type: "temp",
                 },
                 {
                     headers: {
@@ -338,7 +340,7 @@ const NewCoachImages = (id) => {
         setPhotoBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
-            type : "temp",
+            type: "temp",
             name: academyData?.name,
             sport: academyData?.sport,
             city: academyData?.city,
@@ -366,7 +368,9 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 3000);
             })
             .catch((error) => {
                 console.log(error);
@@ -379,10 +383,10 @@ const NewCoachImages = (id) => {
                 setStateBtn(0);
             });
     }
-   
+
     return (
         <>
-        <section className='img_upload_newflex'>
+            <section className='img_upload_newflex'>
                 <p className="common-fonts">Upload Profile Pic : </p>
                 <span className="common-fonts">{fileName ? fileName : academyData?.profile_img}</span>
                 <div className="bmp-upload">
@@ -432,7 +436,7 @@ const NewCoachImages = (id) => {
                     )}
                 </div>
             </section>
-           
+
             {/* =========================================================multiple photo and video upload */}
             <section>
                 <p className="common-fonts">
@@ -494,7 +498,7 @@ const NewCoachImages = (id) => {
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
-                                    <input
+                                        <input
                                             type="checkbox"
                                             className="radio_disable check_input"
                                             checked={selectedPhoto === index}
@@ -511,7 +515,7 @@ const NewCoachImages = (id) => {
 
                                         <p className="common-fonts bmp-tour">
                                             {photo?.length > 20 ? (
-                                                <>{photo?.slice(0,20)}...</>
+                                                <>{photo?.slice(0, 20)}...</>
                                             ) : (
                                                 <>{photo}</>
                                             )}
@@ -585,7 +589,7 @@ const NewCoachImages = (id) => {
                     </div>
                 )}
             </>
-             <div className="bmp-bottom-btn">
+            <div className="bmp-bottom-btn">
                 <button
                     className="common-fonts common-white-button"
                     onClick={resetState}
