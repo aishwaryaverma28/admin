@@ -72,7 +72,7 @@ const CoachCard = ({
                   <p>{object.city}</p>
                 </div>
               )}
-              {itemName === "verified_acadmey" && (
+              {itemName === "verified_coach" && (
                 <>
                   {object.email_verified === 1 && (
                     <div className="mail">
@@ -99,7 +99,7 @@ const CoachCard = ({
                 )}
               </>
             )}
-            {itemName === "verified_acadmey" && (
+            {itemName === "verified_coach" && (
               <>
                 {(object.email_verified === 1 || object.mobile_verified === 1) && (
                   <div className="greenVerified"></div>

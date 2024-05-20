@@ -4,6 +4,7 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
   ALL_BMP_USER,
+  ACADMEY_VEREFIED,
   MOST_LEADS,
   GET_COACH,
   getDecryptedToken,
@@ -148,45 +149,45 @@ const Coach = () => {
 
   //=========================================================get all acadmey verifeid
   const getAllVerify = () => {
-    // const requestBodyBoth = {
-    //   "condition": "both",
-    //   "entity": "coach"
-    // };
+    const requestBodyBoth = {
+      "condition": "both",
+      "entity": "coach"
+    };
 
-    // const requestBodyAnyone = {
-    //   "condition": "anyone",
-    //    "entity": "coach"
-    // };
+    const requestBodyAnyone = {
+      "condition": "anyone",
+       "entity": "coach"
+    };
 
-    // Promise.all([
-    //   axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`
-    //     }
-    //   }),
-    //   axios.post(ACADMEY_VEREFIED, requestBodyAnyone, {
-    //     headers: {
-    //       Authorization: `Bearer ${decryptedToken}`
-    //     }
-    //   })
-    // ]).then(([bothResponse, anyoneResponse]) => {
-    //   const bothData = bothResponse?.data?.data || [];
-    // const anyoneData = anyoneResponse?.data?.data || [];
-    // const combinedData = [...bothData, ...anyoneData];
-    // const uniqueIds = new Set();
-    // const filteredData = combinedData.filter(item => {
-    //   if (uniqueIds.has(item.id)) {
-    //     return false;
-    //   } else {
-    //     uniqueIds.add(item.id);
-    //     return true;
-    //   }
-    // });
+    Promise.all([
+      axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }),
+      axios.post(ACADMEY_VEREFIED, requestBodyAnyone, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      })
+    ]).then(([bothResponse, anyoneResponse]) => {
+      const bothData = bothResponse?.data?.data || [];
+    const anyoneData = anyoneResponse?.data?.data || [];
+    const combinedData = [...bothData, ...anyoneData];
+    const uniqueIds = new Set();
+    const filteredData = combinedData.filter(item => {
+      if (uniqueIds.has(item.id)) {
+        return false;
+      } else {
+        uniqueIds.add(item.id);
+        return true;
+      }
+    });
 
-    // setVerified(filteredData);
-    // }).catch((error) => {
-    //   console.log(error);
-    // });
+    setVerified(filteredData);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   useEffect(() => {
@@ -446,8 +447,7 @@ const Coach = () => {
                             />
                           ));
                         } else {
-                          return
-                          // return <p>Loading...</p>;
+                          return <p>Loading...</p>;
                         };
                       default:
                         return null;

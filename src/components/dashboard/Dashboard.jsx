@@ -288,7 +288,7 @@ const Dashboard = () => {
                 </div>
               </span>
             </div>
-            <div className="dropdown-container" ref={actionOwnerRef}>
+            {/* <div className="dropdown-container" ref={actionOwnerRef}>
               <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
                 {display}
                 <i
@@ -310,7 +310,7 @@ const Dashboard = () => {
                   ))}
                 </ul>
               )}
-            </div>
+            </div> */}
 
           </div>
           <div className="right-side--btns">
