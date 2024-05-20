@@ -144,6 +144,7 @@ const CoachImage = (id) => {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -174,6 +175,7 @@ const CoachImage = (id) => {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -607,7 +609,7 @@ const CoachImage = (id) => {
                         </button>
                     </>
                 )}
-                {stateBtn === 0 ? (
+                {/* {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
                         Save
                     </button>
@@ -618,7 +620,7 @@ const CoachImage = (id) => {
                     >
                         Save
                     </button>
-                )}
+                )} */}
             </div>
         </>
     )

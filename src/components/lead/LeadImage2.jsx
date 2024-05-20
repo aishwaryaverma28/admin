@@ -90,7 +90,6 @@ const LeadImage2 = (id) => {
         }
     };
     const handleCheckbox = (photo, index) => {
-        console.log(photo)
         setPhotoChoose(photo);
         setSelectedPhoto(index);
         setPhotoBtn(1);
@@ -153,6 +152,7 @@ const LeadImage2 = (id) => {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -182,6 +182,7 @@ const LeadImage2 = (id) => {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -611,7 +612,7 @@ const LeadImage2 = (id) => {
                         </button>
                     </>
                 )}
-                {stateBtn === 0 ? (
+                {/* {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
                         Save
                     </button>
@@ -622,7 +623,7 @@ const LeadImage2 = (id) => {
                     >
                         Save
                     </button>
-                )}
+                )} */}
             </div>
         </>
     )

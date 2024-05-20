@@ -186,6 +186,7 @@ const submitImage2 = (file) => {
                     photoUrls?.push(imageUrl);
                     setPhotoUrls(photoUrls);
                     setStateBtn(1);
+                    handleSubmit2()
                 }
             })
             .catch((err) => {
@@ -216,6 +217,7 @@ const submitVideo2 = (file) => {
                     videoUrls.push(imageUrl);
                     setVideoUrls(videoUrls);
                     setStateBtn(1);
+                    handleSubmit2();
                 }
             })
             .catch((err) => {
@@ -636,7 +638,7 @@ return (
             >
                 Cancel
             </button>
-            {stateBtn === 0 ? (
+            {/* {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>
                     Save
                 </button>
@@ -647,7 +649,7 @@ return (
                 >
                     Save
                 </button>
-            )}
+            )} */}
         </div>
     </>
 )

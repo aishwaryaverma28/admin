@@ -158,6 +158,7 @@ const LeadImage = ({ id }) => {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -187,6 +188,7 @@ const LeadImage = ({ id }) => {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
                         setStateBtn(1);
+                        handleSubmit2();
                     }
                 })
                 .catch((err) => {
@@ -619,7 +621,7 @@ const LeadImage = ({ id }) => {
                         </button>
                     </>
                 )}
-                {stateBtn === 0 ? (
+                {/* {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
                         Save
                     </button>
@@ -630,7 +632,7 @@ const LeadImage = ({ id }) => {
                     >
                         Save
                     </button>
-                )}
+                )} */}
             </div>
         </>
     )
