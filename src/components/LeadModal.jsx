@@ -167,6 +167,7 @@ const LeadModal = ({ onClose, getData }) => {
   return (
     <>
       <div className="help-modal-container lead_modal_input">
+      <div className="leftCreateClose2" onClick={onClose}></div>
         <div className="help-modal-box">
           <div>
             <header className="headerEditor">

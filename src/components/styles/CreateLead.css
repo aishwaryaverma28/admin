@@ -30,6 +30,15 @@
   height: 100vh;
   width: 55%;
 }
+
+.leftCreateClose2{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 66%;
+}
+
 .close-icon {
   cursor: pointer;
   font-size: 20px;
