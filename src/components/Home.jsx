@@ -97,7 +97,7 @@ const Home = () => {
 
   return (
     <>
-      {role_name === "admin" && userName && userName[0] && userName[0][0]?.email === "vaneet.gupta@gmail.com" ? (
+      {role_name === "admin" || role_name ==="lead user" ? (
         <>
           {isLoading ? (
             <div style={{ padding: "1.5rem", textAlign: "center" }}>Loading...</div>
