@@ -22,7 +22,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     height: "",
     weight: "",
     join_date: "",
-    mobile: "",
+    phone: "",
     name: "",
     place_of_birth: "",
     position: "",
@@ -98,7 +98,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       type : "temp",
       name: editedItem?.name,
       email: editedItem?.email,
-      mobile: editedItem?.mobile,
+      phone: editedItem?.phone,
       sport: editedItem?.sport,
       city: editedItem?.city,
       state: editedItem?.state,
@@ -282,7 +282,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
             <div className="detailsLeftContainer">
               <p>Name</p>
               <p>Email</p>
-              <p>Mobile</p>
+              <p>Phone</p>
               <p>Sport</p>
               <p>Agent</p>
               <p>Awards</p>
@@ -346,8 +346,8 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>
                     <input
                       type="text"
-                      name="mobile"
-                      value={editedItem?.mobile}
+                      name="phone"
+                      value={editedItem?.phone}
                       onChange={handleInputChange}
                       style={
                         isEditable ? editStylingInput : normalStylingInput

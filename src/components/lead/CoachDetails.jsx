@@ -116,7 +116,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const updatedFormData = {
       type : "org",
       name: editedItem?.name,
-      mobile: editedItem?.mobile,
+      phone: editedItem?.phone,
       email: editedItem?.email,
       sport: editedItem?.sport,
       city: editedItem?.city,
@@ -334,7 +334,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Name</p>
                 <p>Email</p>
                 <p>Sport</p>
-                <p>Mobile</p>
+                <p>Phone</p>
                 <p>Gender</p>
                 <p>Fees</p>
                 <p>Package</p>
@@ -442,8 +442,8 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>
                       <input
                         type="text"
-                        name="mobile"
-                        value={editedItem?.mobile}
+                        name="phone"
+                        value={editedItem?.phone}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput

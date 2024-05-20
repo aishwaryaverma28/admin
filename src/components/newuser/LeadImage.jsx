@@ -244,7 +244,9 @@ const LeadImage = ({ id }) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 1000);
             })
             .catch((error) => {
                 console.log(error);
@@ -299,7 +301,9 @@ const LeadImage = ({ id }) => {
                         autoClose: 1000,
                     });
                 }
-                academyDetails();
+                setTimeout(() => {
+                    academyDetails();
+                }, 1000);
             })
             .catch((error) => {
                 console.log(error);
