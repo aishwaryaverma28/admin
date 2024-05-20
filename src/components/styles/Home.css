@@ -370,3 +370,33 @@
   color: red;
 }
 /* dashboard css ends */
+
+.lead_home{
+  margin-top: 1rem;
+}
+
+.lead_home table td:nth-child(4){
+  max-width:12rem;
+  word-wrap: break-word; /* Older browsers */
+  overflow-wrap: break-word;
+}
+.lead_home table td:nth-child(3){
+  max-width:8rem;
+  word-wrap: break-word; /* Older browsers */
+  overflow-wrap: break-word;
+}
+.lead_home table td:nth-child(6){
+  max-width:0.5rem;
+  word-wrap: break-word; /* Older browsers */
+  overflow-wrap: break-word;
+}
+.lead_home table td:nth-child(7){
+  max-width:5.5rem;
+  word-wrap: break-word; /* Older browsers */
+  overflow-wrap: break-word;
+}
+.lead_home table td:nth-child(8){
+  max-width:16rem;
+  word-wrap: break-word; /* Older browsers */
+  overflow-wrap: break-word;
+}
