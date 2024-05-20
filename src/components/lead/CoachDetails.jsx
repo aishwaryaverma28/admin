@@ -56,11 +56,17 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedItem({
-      ...editedItem,
-      [name]: value,
-    });
+    // const { name, value } = e.target;
+    // setEditedItem({
+    //   ...editedItem,
+    //   [name]: value,
+    // });
+    const { name, value, type, checked } = e.target;
+        const newValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
+        setEditedItem({
+            ...editedItem,
+            [name]: newValue,
+        });
     if (name === "sport") {
       const sport = value;
       if (skills[sport]) {
