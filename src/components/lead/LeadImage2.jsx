@@ -240,7 +240,7 @@ const LeadImage2 = (id) => {
                 }
                 setTimeout(() => {
                     academyDetails();
-                }, 3000);
+                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -297,7 +297,7 @@ const LeadImage2 = (id) => {
                 }
                 setTimeout(() => {
                     academyDetails();
-                }, 3000);
+                }, 5000);
             })
             .catch((error) => {
                 console.log(error);

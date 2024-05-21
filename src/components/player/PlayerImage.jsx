@@ -276,7 +276,7 @@ const PlayerImage = (id) => {
                 }
                 setTimeout(() => {
                     academyDetails();
-                }, 3000);
+                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -323,7 +323,7 @@ const PlayerImage = (id) => {
                 }
                 setTimeout(() => {
                     academyDetails();
-                }, 3000);
+                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
