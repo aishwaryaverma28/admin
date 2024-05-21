@@ -109,17 +109,9 @@ const LeadCards = ({
               <div className="mail sportCap">
                 <p>{itemName === "user" || itemName === "newuser" ? <span> {object.type} - {object.parent_id}</span> : object.sport}</p>
               </div>
-              {itemName === "academy" && (
                 <div className="mail">
                   <p>{object.phone}</p>
                 </div>
-              )}
-
-              {(itemName === "coach" || itemName === "player") && (
-                <div className="mail">
-                  <p>{object.mobile}</p>
-                </div>
-              )}
               {(itemName === "academy" || itemName === "coach") && (
                 <div className="mail sportCap">
                   <p>{object.city}, {object.state}</p>

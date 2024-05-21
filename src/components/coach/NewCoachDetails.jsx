@@ -62,19 +62,15 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   }, []);
 
   const handleInputChange = (e) => {
-    // const { name, value } = e.target;
-    // setEditedItem({
-    //   ...editedItem,
-    //   [name]: value,
-    // });
     const { name, value, type, checked } = e.target;
-        const newValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
-        setEditedItem({
-            ...editedItem,
-            [name]: newValue,
-        });
+    // const newValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
+    const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
+    setEditedItem({
+      ...editedItem,
+      [name]: newValue,
+    });
     if (name === "sport") {
-      const sport = value;
+      const sport = value?.toLowerCase();
       if (skills[sport]) {
         setUserSkills(skills[sport]);
       } else {
@@ -120,11 +116,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   };
   const handleUpdateClick = () => {
     setStateBtn(0);
-    const formattedName = editedItem.name.toLowerCase().replace(/ /g, '-');
-    const formattedCity = editedItem.city.toLowerCase().replace(/ /g, '-');
-    const formattedSport = editedItem.sport.toLowerCase().replace(/ /g, '-');
-    const url = `https://www.bookmyplayer.com/${formattedSport}/${formattedName}-${formattedCity}-trainer-chid-${id}`;
-
     const updatedFormData = {
       type: "temp",
       name: editedItem?.name,
@@ -460,42 +451,42 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                         }
                         disabled={isDisabled} />
                       <datalist id="sports">
-                        <option value="Archery"></option>
-                        <option value="Arts"></option>
-                        <option value="Athletics"></option>
-                        <option value="Aerobics"></option>
-                        <option value="Badminton"></option>
-                        <option value="Basketball"></option>
-                        <option value="Bodybuilding"></option>
-                        <option value="Billiards"></option>
-                        <option value="Boxing"></option>
-                        <option value="Chess"></option>
-                        <option value="Cricket"></option>
-                        <option value="Fencing"></option>
-                        <option value="Football"></option>
-                        <option value="Golf"></option>
-                        <option value="Gym"></option>
-                        <option value="Hockey"></option>
-                        <option value="Kabaddi"></option>
-                        <option value="Karate"></option>
-                        <option value="Kho-Kho"></option>
-                        <option value="MMA"></option>
-                        <option value="Motorsports"></option>
-                        <option value="Rugby"></option>
-                        <option value="Shooting"></option>
-                        <option value="Skating"></option>
-                        <option value="Sports"></option>
-                        <option value="Squash"></option>
-                        <option value="Swimming"></option>
-                        <option value="Table-Tennis"></option>
-                        <option value="Taekwondo"></option>
-                        <option value="Tennis"></option>
-                        <option value="Volleyball"></option>
-                        <option value="Wrestling"></option>
-                        <option value="Yoga"></option>
-                        <option value="Personal Gym Trainer"></option>
-                        <option value="Fitness Training"></option>
-                        <option value="Pilates"></option>
+                        <option value="archery"></option>
+                        <option value="arts"></option>
+                        <option value="athletics"></option>
+                        <option value="aerobics"></option>
+                        <option value="badminton"></option>
+                        <option value="basketball"></option>
+                        <option value="bodybuilding"></option>
+                        <option value="billiards"></option>
+                        <option value="boxing"></option>
+                        <option value="chess"></option>
+                        <option value="cricket"></option>
+                        <option value="fencing"></option>
+                        <option value="football"></option>
+                        <option value="golf"></option>
+                        <option value="gym"></option>
+                        <option value="hockey"></option>
+                        <option value="kabaddi"></option>
+                        <option value="karate"></option>
+                        <option value="kho-kho"></option>
+                        <option value="mma"></option>
+                        <option value="motorsports"></option>
+                        <option value="rugby"></option>
+                        <option value="shooting"></option>
+                        <option value="skating"></option>
+                        <option value="sports"></option>
+                        <option value="squash"></option>
+                        <option value="swimming"></option>
+                        <option value="table-tennis"></option>
+                        <option value="taekwondo"></option>
+                        <option value="tennis"></option>
+                        <option value="volleyball"></option>
+                        <option value="wrestling"></option>
+                        <option value="yoga"></option>
+                        <option value="personal gym trainer"></option>
+                        <option value="fitness training"></option>
+                        <option value="pilates"></option>
                       </datalist>
                     </span>
                   )}

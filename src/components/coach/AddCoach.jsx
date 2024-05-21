@@ -40,10 +40,11 @@ const AddCoach = ({ onClose }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        const newValue = (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
         setEditedItem({
             ...editedItem,
-            [name]: value,
-        });
+            [name]: newValue,
+          });
         if (name === "sport") {
             const sport = value.toLowerCase();
             if (skills[sport]) {
@@ -304,7 +305,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.name}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -316,7 +317,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.email}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -326,7 +327,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.sport}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                     />
+                                                />
                                                 <datalist id="sports">
                                                     <option value="archery"></option>
                                                     <option value="arts"></option>
@@ -361,9 +362,9 @@ const AddCoach = ({ onClose }) => {
                                                     <option value="volleyball"></option>
                                                     <option value="wrestling"></option>
                                                     <option value="yoga"></option>
-                                                    <option value="Personal Gym Trainer"></option>
-                                                    <option value="Fitness Training"></option>
-                                                    <option value="Pilates"></option>
+                                                    <option value="personal gym trainer"></option>
+                                                    <option value="fitness training"></option>
+                                                    <option value="pilates"></option>
                                                 </datalist>
                                             </span>
                                         </p>
@@ -375,7 +376,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.mobile}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -386,7 +387,7 @@ const AddCoach = ({ onClose }) => {
                                                     id="gender"
                                                     value={editedItem?.gender || ""}
                                                     onChange={handleInputChange}
-                                                    
+
                                                     style={editStylingSelect1}
                                                 >
                                                     <option value=""></option>
@@ -403,7 +404,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.fee}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -415,7 +416,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.package}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -425,7 +426,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.experience}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                     />
+                                                />
                                                 <datalist id="experience">
                                                     <option value="1"></option>
                                                     <option value="2"></option>
@@ -459,7 +460,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.education}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -471,7 +472,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.achievement}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -483,7 +484,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.heighlight}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -495,7 +496,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.certificate}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -508,7 +509,7 @@ const AddCoach = ({ onClose }) => {
                                                     rows="5"
                                                     id=""
                                                     style={editStylingTextarea}
-                                                    
+
                                                 ></textarea>
                                             </span>
                                         </p>
@@ -533,7 +534,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.city}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -545,7 +546,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.state}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -558,7 +559,7 @@ const AddCoach = ({ onClose }) => {
                                                             name="training_location"
                                                             value="1"
                                                             className="radio_disable check_input"
-                                                            
+
                                                             onChange={handleCheckboxChange}
                                                             checked={trainingLocation.includes("1")}
                                                         /> Online
@@ -569,7 +570,7 @@ const AddCoach = ({ onClose }) => {
                                                             name="training_location"
                                                             value="2"
                                                             className="radio_disable check_input"
-                                                            
+
                                                             onChange={handleCheckboxChange}
                                                             checked={trainingLocation.includes("2")}
                                                         /> Home
@@ -586,7 +587,7 @@ const AddCoach = ({ onClose }) => {
                                                     value={editedItem?.common_location}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
-                                                    
+
                                                 />
                                             </span>
                                         </p>
@@ -610,7 +611,7 @@ const AddCoach = ({ onClose }) => {
                                                                 name="userSkills"
                                                                 value={skill}
                                                                 className="radio_disable check_input"
-                                                                
+
                                                                 onChange={handleSkillChange}
                                                                 checked={addedSkils.includes(skill)}
                                                             />
