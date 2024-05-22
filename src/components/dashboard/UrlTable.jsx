@@ -26,7 +26,7 @@ const ViewLeadsTable = ({ onClose }) => {
     axios
       .post(
         SHOW_URL,
-        { page: "1", limit: "1000" }, // Fetching a large number of records at once
+        { page: "2", limit: "20" }, // Fetching a large number of records at once
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,

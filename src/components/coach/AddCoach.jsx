@@ -20,12 +20,12 @@ const AddCoach = ({ onClose }) => {
     const [addedSkils, setAddedSkills] = useState([]);
     const [editedItem, setEditedItem] = useState({
         name: "",
-        mobile: "",
+        phone: "",
         email: "",
         sport: "",
         city: "",
         state: "",
-        about_coach: "",
+        about: "",
         skill: "",
         heighlight: "",
         fee: "",
@@ -118,12 +118,12 @@ const AddCoach = ({ onClose }) => {
                     setTrainingLocation([]);
                     setEditedItem({
                         name: "",
-                        mobile: "",
+                        phone: "",
                         email: "",
                         sport: "",
                         city: "",
                         state: "",
-                        about_coach: "",
+                        about: "",
                         skill: "",
                         heighlight: "",
                         fee: "",
@@ -285,7 +285,7 @@ const AddCoach = ({ onClose }) => {
                                         <p>Name <span className="common-fonts redAlert"> *</span></p>
                                         <p>Email <span className="common-fonts redAlert"> *</span></p>
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
-                                        <p>Mobile <span className="common-fonts redAlert"> *</span></p>
+                                        <p>phone <span className="common-fonts redAlert"> *</span></p>
                                         <p>Gender</p>
                                         <p>Fees</p>
                                         <p>Package</p>
@@ -372,8 +372,8 @@ const AddCoach = ({ onClose }) => {
                                             <span>
                                                 <input
                                                     type="text"
-                                                    name="mobile"
-                                                    value={editedItem?.mobile}
+                                                    name="phone"
+                                                    value={editedItem?.phone}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
 
@@ -503,9 +503,9 @@ const AddCoach = ({ onClose }) => {
                                         <p>
                                             <span>
                                                 <textarea
-                                                    name="about_coach"
+                                                    name="about"
                                                     onChange={handleInputChange}
-                                                    value={editedItem?.about_coach}
+                                                    value={editedItem?.about}
                                                     rows="5"
                                                     id=""
                                                     style={editStylingTextarea}
