@@ -126,7 +126,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       sport: editedItem?.sport,
       city: editedItem?.city,
       state: editedItem?.state,
-      about_coach: editedItem?.about_coach,
+      about: editedItem?.about,
       skill: addedSkils.toString(),
       heighlight: editedItem?.heighlight,
       fee: editedItem?.fee,
@@ -667,9 +667,9 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   ) : (
                     <span>
                       <textarea
-                        name="about_coach"
+                        name="about"
                         onChange={handleInputChange}
-                        value={isLoading ? "-" : editedItem?.about_coach}
+                        value={isLoading ? "-" : editedItem?.about}
                         rows="5"
                         id=""
                         style={
