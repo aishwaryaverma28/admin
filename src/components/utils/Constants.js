@@ -272,3 +272,5 @@ export const ADD_PLAYER = bmpStart+"/bmp/player/add";
 export const DISTANCE_API = bmpStart+"/bmp/academy/getnearby";
 export const LEADS_CITY = bmpStart+"/bmp/leads/getbycity";
 export const ASSIGN_LEADS_USER = bmpStart+"/bmp/leads/assign";
+
+export const SHOW_URL = bmpStart+"/bmp/redirect/get";
