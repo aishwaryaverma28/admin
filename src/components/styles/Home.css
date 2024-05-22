@@ -400,3 +400,23 @@
   word-wrap: break-word; /* Older browsers */
   overflow-wrap: break-word;
 }
+
+.url_table{
+  margin-top: 1rem;
+}
+
+.url_box{
+  margin-top: 2rem;
+}
+.url_table th{
+  text-align: left;
+}
+.url_table th:nth-child(2){
+ width: 10rem;
+}
+.url_table th:nth-child(3){
+ width: 10rem;
+}
+.url_table th:nth-child(5){
+ width:10rem;
+}

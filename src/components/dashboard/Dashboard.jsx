@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LeadModal from "../LeadModal.jsx";
 import DashboardCards from "./DashboardCards.jsx";
+import UrlTable from "./UrlTable.jsx";
 
 const Dashboard = () => {
   const [stages, setStages] = useState([
@@ -32,6 +33,7 @@ const Dashboard = () => {
     },
   ]);
   const [openLead, setOpenLead] = useState(false);
+  const [openUrl, setOpenUrl] = useState(false);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
   const [display, setDisplay] = useState("Select Category")
@@ -53,6 +55,12 @@ const Dashboard = () => {
   }
   const addLeadClose = () => {
     setOpenLead(false)
+  }
+  const addUrlClick = () => {
+    setOpenUrl(true)
+  }
+  const addUrlClose = () => {
+    setOpenUrl(false)
   }
 
 
@@ -239,6 +247,9 @@ const Dashboard = () => {
   }, []);
 
   return (
+
+    openUrl ? 
+      <UrlTable onClose={addUrlClose}/> :
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -314,6 +325,9 @@ const Dashboard = () => {
 
           </div>
           <div className="right-side--btns">
+            <button type="button" className="secondary-btn" onClick={addUrlClick}>
+              Url Table
+            </button>            
             <button type="button" className="secondary-btn" onClick={addLeadClick}>
               Add Leads
             </button>            
