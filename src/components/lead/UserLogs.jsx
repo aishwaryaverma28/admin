@@ -35,6 +35,7 @@ const UserLogs = (id) => {
                                 <th className="common-fonts">ID</th>
                                 <th className="common-fonts">Attr1</th>
                                 <th className="common-fonts">Attr2</th>
+                                <th className="common-fonts">Attr3</th>
                                 <th className="common-fonts">Attr5</th>
                                 <th className="common-fonts">Attr6</th>
                                 <th className="common-fonts">Attr7</th>
@@ -47,6 +48,7 @@ const UserLogs = (id) => {
                                 <td className="common-fonts">{note.id}</td>
                                 <td className="common-fonts">{note?.attr1}</td>
                                 <td className="common-fonts">{note?.attr2}</td>
+                                <td className="common-fonts">{note?.attr3}</td>
                                 <td className="common-fonts">{note?.attr5}</td>
                                 <td className="common-fonts">{note?.attr6}</td>
                                 <td className="common-fonts">{note?.attr7}</td>

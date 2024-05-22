@@ -38,6 +38,7 @@ const AcademyLogs = (id) => {
                             <tr>
                                 <th className="common-fonts">ID</th>
                                 <th className="common-fonts">Attr2</th>
+                                <th className="common-fonts">Attr3</th>
                                 <th className="common-fonts">Attr4</th>
                                 <th className="common-fonts">Attr5</th>
                                 <th className="common-fonts">Attr6</th>
@@ -51,6 +52,7 @@ const AcademyLogs = (id) => {
                                 <td className="common-fonts">
                                     {note?.attr2}
                                 </td>
+                                <td className="common-fonts">{note?.attr3}</td>
                                 <td className="common-fonts">{note?.attr4}</td>
                                 <td className="common-fonts">{note?.attr5}</td>
                                 <td className="common-fonts">{note?.attr6}</td>
