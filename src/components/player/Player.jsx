@@ -4,7 +4,7 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
   ALL_BMP_USER,
-  MOST_LEADS,
+  ACADMEY_VEREFIED,
   GET_COACH,
   getDecryptedToken,
 } from "../utils/Constants.js";
@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LeadCards from "../lead/LeadCards.jsx";
 import AddPlayer from "./AddPlayer.jsx";
 import DashboardCards from "../dashboard/DashboardCards.jsx";
+import PlayerCard from "./PlayerCard.jsx";
 
 const Player = () => {
   const [stages, setStages] = useState([
@@ -26,6 +27,11 @@ const Player = () => {
       "stage": "new_player",
       "name": "New Player"
     },
+      {
+        "id": 2,
+        "stage": "verified_player",
+        "name": "Verified Player"
+      },
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [player, setPlayer] = useState([]);
@@ -38,6 +44,7 @@ const Player = () => {
   const decryptedToken = getDecryptedToken();
   const [statusCounts, setStatusCounts] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [verified, setVerified] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
@@ -77,18 +84,62 @@ const Player = () => {
     });
   }
 
+  const getAllVerify = () => {
+    const requestBodyBoth = {
+      "condition": "both",
+      "entity": "player"
+    };
+
+    const requestBodyAnyone = {
+      "condition": "anyone",
+       "entity": "player"
+    };
+
+    Promise.all([
+      axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      }),
+      axios.post(ACADMEY_VEREFIED, requestBodyAnyone, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`
+        }
+      })
+    ]).then(([bothResponse, anyoneResponse]) => {
+      const bothData = bothResponse?.data?.data || [];
+    const anyoneData = anyoneResponse?.data?.data || [];
+    const combinedData = [...bothData, ...anyoneData];
+    const uniqueIds = new Set();
+    const filteredData = combinedData.filter(item => {
+      if (uniqueIds.has(item.id)) {
+        return false;
+      } else {
+        uniqueIds.add(item.id);
+        return true;
+      }
+    });
+
+    setVerified(filteredData);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   useEffect(() => {
     getAllPlayers();
     getNewPlayers();
+    getAllVerify();
   }, []);
 
   useEffect(() => {
     const counts = {
       player: player?.length,
       new_player: newplayer?.length,
+      verified_player: verified?.length,
     };
     setStatusCounts(counts);
-  }, [player, newplayer]);
+  }, [player, newplayer, verified]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -125,6 +176,7 @@ const Player = () => {
   const resetData = () => {
     getAllPlayers();
     getNewPlayers();
+    getAllVerify();
   };
 
   //======================================================modal box
@@ -292,6 +344,14 @@ const Player = () => {
                             itemName="player"
                           />
                         ));
+                        case 'verified_player':
+                          return verified.map((obj) => (
+                            <PlayerCard
+                              key={obj?.id}
+                              object={obj}
+                              itemName={"verified_player"}
+                            />
+                          ));
                       default:
                         return null;
                     }

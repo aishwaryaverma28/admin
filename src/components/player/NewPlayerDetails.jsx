@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { cdnurl,GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants';
+import { cdnurl, GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants';
 import { toast } from "react-toastify";
 import USER from "../../assets/image/user-img.png"
-const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
+const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState({
@@ -12,7 +12,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     awards: "",
     career: "",
     city: "",
-    current_club:"",
+    current_club: "",
     description: "",
     dob: "",
     email: "",
@@ -31,7 +31,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     state: "",
     team_number: "",
     type: ""
-});
+  });
 
   const [stateBtn, setStateBtn] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
@@ -52,15 +52,15 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       .then((response) => {
         const apiData = response?.data?.data[0];
         for (const key in apiData) {
-            if (apiData.hasOwnProperty(key)) {
-                if (key === 'dob' || key === 'expiry_date' || key === 'join_date') {
-                    const dateTimeString = apiData[key];
-                    if (dateTimeString) {
-                        const dateOnly = dateTimeString.split('T')[0];
-                        apiData[key] = dateOnly;
-                    }
-                }
+          if (apiData.hasOwnProperty(key)) {
+            if (key === 'dob' || key === 'expiry_date' || key === 'join_date') {
+              const dateTimeString = apiData[key];
+              if (dateTimeString) {
+                const dateOnly = dateTimeString.split('T')[0];
+                apiData[key] = dateOnly;
+              }
             }
+          }
         }
         setEditedItem(apiData);
         setIsLoading(false);
@@ -75,10 +75,11 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
     setEditedItem({
       ...editedItem,
-      [name]: value,
+      [name]: newValue,
     });
     handleClick();
     setStateBtn(1);
@@ -95,10 +96,12 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
   };
   const handleUpdateClick = () => {
     const updatedFormData = {
-      type : "temp",
+      type: "temp",
       name: editedItem?.name,
-      email: editedItem?.email,
+      email: editedItem?.email, 
+      email_verified: editedItem?.email_verified,
       phone: editedItem?.phone,
+      mobile_verified: editedItem?.mobile_verified,
       sport: editedItem?.sport,
       city: editedItem?.city,
       state: editedItem?.state,
@@ -161,7 +164,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
   React.useImperativeHandle(ref, () => ({
     handleUpdateClick
   }));
-  
+
   //======================================================================css variable
 
   const normalStylingInput = {
@@ -248,17 +251,17 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
     <div className="user-details--left">
       <div className="user-details--heading">
         <div className="user-details-imgBox">
-        <a href={editedItem?.logo === null
-              ? `${cdnurl}coach/14/logo1.jpg`
-              : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
-              <img
-                src={editedItem?.logo === null
-                  ? `${cdnurl}coach/14/logo1.jpg`
-                  : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`}
-                alt="pofile"
-                className="bmp-preview-image logoRound"
-              />
-            </a>
+          <a href={editedItem?.logo === null
+            ? `${cdnurl}coach/14/logo1.jpg`
+            : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
+            <img
+              src={editedItem?.logo === null
+                ? `${cdnurl}coach/14/logo1.jpg`
+                : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`}
+              alt="pofile"
+              className="bmp-preview-image logoRound"
+            />
+          </a>
           <div>
             <p>
               {isLoading ? (
@@ -321,7 +324,7 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                   </span>
                 )}
               </p>
-              <p>
+              {/* <p>
                 {isLoading ? (
                   <span>-</span>
                 ) : (
@@ -338,8 +341,38 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                     />
                   </span>
                 )}
-              </p>
+              </p> */}
               <p>
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span className='newEditableArea'>
+                    <input
+                      type="text"
+                      name="email"
+                      value={editedItem?.email}
+                      onChange={handleInputChange}
+                      style={
+                        isEditable ? editStylingInput : normalStylingInput
+                      }
+                      disabled={isDisabled}
+                    />
+                    <label className="radio-inline radio-space">
+                      <input
+                        type="checkbox"
+                        name="email_verified"
+                        value={editedItem?.email_verified}
+                        className="radio_disable check_input"
+                        disabled={isDisabled}
+                        onChange={handleInputChange}
+                        checked={editedItem?.email_verified === 1}
+                      /> Email Verified
+
+                    </label>
+                  </span>
+                )}
+              </p>
+              {/* <p>
                 {isLoading ? (
                   <span>-</span>
                 ) : (
@@ -356,7 +389,37 @@ const NewPlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                     />
                   </span>
                 )}
-              </p>
+              </p> */}
+ <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span className='newEditableArea'>
+                                            <input
+                                                type="text"
+                                                name="phone"
+                                                value={editedItem?.phone}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                            <label className="radio-inline radio-space">
+                                                <input
+                                                    type="checkbox"
+                                                    name="mobile_verified"
+                                                    value={editedItem?.mobile_verified}
+                                                    className="radio_disable check_input"
+                                                    disabled={isDisabled}
+                                                    onChange={handleInputChange}
+                                                    checked={editedItem?.mobile_verified === 1}
+                                                /> Mobile Verified
+
+                                            </label>
+                                        </span>
+                                    )}
+                                </p>
               <p>
                 {isLoading ? (
                   <span>-</span>

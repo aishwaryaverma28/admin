@@ -75,10 +75,11 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
     setEditedItem({
-      ...editedItem,
-      [name]: value,
+        ...editedItem,
+        [name]: newValue,
     });
     handleClick();
     setStateBtn(1);
@@ -97,7 +98,9 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
       type : "org",
       name: editedItem?.name,
       email: editedItem?.email,
+      email_verified: editedItem?.email_verified,
       phone: editedItem?.phone,
+      mobile_verified: editedItem?.mobile_verified,
       sport: editedItem?.sport,
       city: editedItem?.city,
       state: editedItem?.state,
@@ -358,7 +361,7 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                   </span>
                 )}
               </p>
-              <p>
+              {/* <p>
                 {isLoading ? (
                   <span>-</span>
                 ) : (
@@ -375,8 +378,38 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                     />
                   </span>
                 )}
-              </p>
+              </p> */}
               <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span className='newEditableArea'>
+                                            <input
+                                                type="text"
+                                                name="email"
+                                                value={editedItem?.email}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                            <label className="radio-inline radio-space">
+                                                <input
+                                                    type="checkbox"
+                                                    name="email_verified"
+                                                    value={editedItem?.email_verified}
+                                                    className="radio_disable check_input"
+                                                    disabled={isDisabled}
+                                                    onChange={handleInputChange}
+                                                    checked={editedItem?.email_verified === 1}
+                                                /> Email Verified
+
+                                            </label>
+                                        </span>
+                                    )}
+                                </p>
+              {/* <p>
                 {isLoading ? (
                   <span>-</span>
                 ) : (
@@ -393,7 +426,37 @@ const PlayerDetails =  React.forwardRef(({ id, updateCheckState }, ref) => {
                     />
                   </span>
                 )}
-              </p>
+              </p> */}
+               <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span className='newEditableArea'>
+                                            <input
+                                                type="text"
+                                                name="phone"
+                                                value={editedItem?.phone}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled}
+                                            />
+                                            <label className="radio-inline radio-space">
+                                                <input
+                                                    type="checkbox"
+                                                    name="mobile_verified"
+                                                    value={editedItem?.mobile_verified}
+                                                    className="radio_disable check_input"
+                                                    disabled={isDisabled}
+                                                    onChange={handleInputChange}
+                                                    checked={editedItem?.mobile_verified === 1}
+                                                /> Mobile Verified
+
+                                            </label>
+                                        </span>
+                                    )}
+                                </p>
               <p>
                 {isLoading ? (
                   <span>-</span>

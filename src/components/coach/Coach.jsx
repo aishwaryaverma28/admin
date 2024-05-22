@@ -442,7 +442,7 @@ const Coach = () => {
                             <CoachCard
                               key={obj?.id}
                               object={obj}
-                              onLeadAdded={getAllLogs}
+                              onLeadAdded={getAllVerify}
                               itemName={"verified_coach"}
                             />
                           ));
