@@ -10,7 +10,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const [currentData, setCurrentData] = useState([]);
   const [openUrlModal, setOpenUrlModal] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const limit = 20; // Fixed limit to 20
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup = 5;
 
@@ -22,11 +22,11 @@ const ViewLeadsTable = ({ onClose }) => {
     setOpenUrlModal(false);
   };
 
-  const fetchData = () => {
+  const fetchData = (page, limit) => {
     axios
       .post(
         SHOW_URL,
-        { page: "2", limit: "20" }, // Fetching a large number of records at once
+        { page: page.toString(), limit: limit.toString() },
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -42,14 +42,14 @@ const ViewLeadsTable = ({ onClose }) => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(page, limit);
+  }, [page]);
 
   useEffect(() => {
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     setCurrentData(allData.slice(startIndex, endIndex));
-  }, [allData, page, limit]);
+  }, [allData, page]);
 
   const totalPages = Math.ceil(allData.length / limit);
 
