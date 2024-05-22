@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getDecryptedToken } from "../utils/Constants";
+import { toast } from "react-toastify";
 
 const UrlModal = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
@@ -27,6 +28,37 @@ const UrlModal = ({ onClose }) => {
       }
     } catch (error) {
       console.error("API Error:", error);
+    }
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      const response = await axios.post(
+        "https://bmp.leadplaner.com/api/api/bmp/redirect/add",
+        { old_url: oldUrl, new_url: newUrl },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      );
+      if (response.data.status === 1) {
+        toast.success("Details updated successfully", {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      } else {
+        toast.error(response?.data?.message, {
+          position: "top-center",
+          autoClose: 1000,
+        });
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("An error occurred while updating details", {
+        position: "top-center",
+        autoClose: 1000,
+      });
     }
   };
 
@@ -102,15 +134,12 @@ const UrlModal = ({ onClose }) => {
           <button className="common-fonts common-delete-button" onClick={onClose}>
             Cancel
           </button>
-          {stateBtn === 0 ? (
-            <button className="disabledBtn" disabled>
-              Save
-            </button>
-          ) : (
-            <button className="common-fonts common-save-button help-save">
-              Save
-            </button>
-          )}
+          <button
+            className="common-fonts common-save-button help-save"
+            onClick={handleSaveClick}
+          >
+            Save
+          </button>
         </div>
       </div>
       <div className="help-cross" onClick={onClose}>
