@@ -219,3 +219,10 @@ background: #F3F6FA;
   .assignText{
     color: #11ba5a;
   }
+  .check_url_box{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+  }
