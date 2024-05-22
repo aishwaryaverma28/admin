@@ -130,8 +130,8 @@ const CreateLead = ({ onClose }) => {
             reviews:"",
             rating:"",
           });
-        } else {
-          toast.error("Name, sport, address1, City, State and Zipcode are necessary fields", {
+        } else  {
+          toast.error(response?.data?.message, {
             position: "top-center",
             autoClose: 1000,
           });
