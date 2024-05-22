@@ -107,11 +107,11 @@ const AddPlayer = ({ onClose }) => {
                         type: ""
                     });
                 } else {
-                    toast.error("Name, sport and City are necessary fields", {
-                        position: "top-center",
-                        autoClose: 1000,
+                    toast.error(response?.data?.message, {
+                      position: "top-center",
+                      autoClose: 1000,
                     });
-                }
+                  }
                 setStateBtn(0);
             })
             .catch((error) => {
