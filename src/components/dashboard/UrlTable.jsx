@@ -12,7 +12,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const [page, setPage] = useState(1);
   const limit = 20; // Fixed limit to 20
   const [pageGroup, setPageGroup] = useState(1);
-  const pagesPerGroup = 5;
+  const pagesPerGroup =3;
 
   const addUrlModalClick = () => {
     setOpenUrlModal(true);
@@ -51,7 +51,7 @@ const ViewLeadsTable = ({ onClose }) => {
     setCurrentData(allData.slice(startIndex, endIndex));
   }, [allData, page]);
 
-  const totalPages = Math.ceil(allData.length / limit);
+  const totalPages = 100;
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -83,7 +83,7 @@ const ViewLeadsTable = ({ onClose }) => {
       pageNumbers.push(
         <button
           key={i}
-          className={`page-number ${i === page ? "active" : ""}`}
+          className={`page_number ${i === page ? "active" : ""}`}
           onClick={() => handlePageClick(i)}
         >
           {i}
@@ -122,7 +122,7 @@ const ViewLeadsTable = ({ onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {currentData?.map((item, index) => (
+            {allData?.map((item, index) => (
               <tr key={item?.id}>
                 <td className="common-fonts">{(page - 1) * limit + index + 1}</td>
                 <td className="common-fonts">{item?.id}</td>
@@ -136,7 +136,7 @@ const ViewLeadsTable = ({ onClose }) => {
           </tbody>
         </table>
       </div>
-      <div className="pagination">
+      <div className="table_pagination">
         <button onClick={handlePreviousPage} disabled={page === 1}>
           &lt;
         </button>

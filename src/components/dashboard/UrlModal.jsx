@@ -67,10 +67,10 @@ const UrlModal = ({ onClose }) => {
       <div className="url-data">
         {data.map((item) => (
           <div key={item.id} className="url-data-item">
-            <p>ID: {item.id}</p>
-            <p>Old URL: {item.old_url}</p>
-            <p>New URL: {item.new_url}</p>
-            <p>Total: {item.total}</p>
+            <p>ID: <span>{item.id}</span> </p>
+            <p className="url_text">Old URL: <span>{item.old_url}</span> </p>
+            <p className="url_text">New URL: <span>{item.new_url}</span> </p>
+            <p>Total: <span>{item.total}</span> </p>
           </div>
         ))}
       </div>
@@ -78,7 +78,7 @@ const UrlModal = ({ onClose }) => {
   };
 
   return (
-    <div className="help-modal-container lead_modal_input">
+    <div className="help-modal-container lead_modal_input url_new_modal">
       <div className="leftCreateClose2" onClick={onClose}></div>
       <div className="help-modal-box">
         <header className="headerEditor">
@@ -101,7 +101,7 @@ const UrlModal = ({ onClose }) => {
                 type="text"
                 placeholder="Enter Old Url"
                 name="old_url"
-                className="common-input"
+                className="common-input url_input"
                 value={oldUrl}
                 onChange={(e) => setOldUrl(e.target.value)}
               />
@@ -120,7 +120,7 @@ const UrlModal = ({ onClose }) => {
                 type="text"
                 placeholder="Enter New Url"
                 name="new_url"
-                className="common-input"
+                className="common-input url_input"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
