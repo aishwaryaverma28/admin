@@ -3,7 +3,7 @@ import axios from "axios";
 import { getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 
-const UrlModal = ({ onClose }) => {
+const UrlModal = ({ onClose, api }) => {
   const decryptedToken = getDecryptedToken();
   const [stateBtn, setStateBtn] = useState(0);
   const [oldUrl, setOldUrl] = useState("");
@@ -57,6 +57,7 @@ const UrlModal = ({ onClose }) => {
           position: "top-center",
           autoClose: 1000,
         });
+        api()
       } else {
         toast.error(response?.data?.message, {
           position: "top-center",

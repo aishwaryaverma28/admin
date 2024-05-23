@@ -41,6 +41,24 @@ const ViewLeadsTable = ({ onClose }) => {
       });
   };
 
+  const fetchDataCall = () => {
+    axios
+      .post(
+        SHOW_URL,
+        { page: "1", limit: "20" },
+        {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        setAllData(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
     fetchData(page, limit);
   }, [page]);
@@ -145,7 +163,7 @@ const ViewLeadsTable = ({ onClose }) => {
           &gt;
         </button>
       </div>
-      {openUrlModal && <UrlModal onClose={addUrlModalClose} />}
+      {openUrlModal && <UrlModal onClose={addUrlModalClose} api={fetchDataCall}/>}
     </>
   );
 };
