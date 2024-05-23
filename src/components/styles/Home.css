@@ -420,7 +420,13 @@
  width: 10rem;
 }
 .url_table th:nth-child(5){
- width:10rem;
+ width:6rem;
+}
+.url_table th:nth-child(6){
+ width:8rem;
+}
+.url_table th:nth-child(7){
+ width:8rem;
 }
 
 .table_pagination {
@@ -485,5 +491,16 @@
 
 .url_new_modal{
   overflow: auto;
+}
+
+.url_available{
+  color:#077838;
+}
+.url_unavailable{
+ color:#f66a6a;
+}
+
+.red_border{
+  border: 1px solid red;
 }
 

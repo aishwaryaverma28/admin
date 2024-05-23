@@ -101,7 +101,7 @@ const UrlModal = ({ onClose }) => {
                 type="text"
                 placeholder="Enter Old Url"
                 name="old_url"
-                className="common-input url_input"
+                className={`common-input url_input ${oldUrlData ? 'red_border' : ''}`}
                 value={oldUrl}
                 onChange={(e) => setOldUrl(e.target.value)}
               />
@@ -120,7 +120,7 @@ const UrlModal = ({ onClose }) => {
                 type="text"
                 placeholder="Enter New Url"
                 name="new_url"
-                className="common-input url_input"
+                className={`common-input url_input ${newUrlData ? 'red_border' : ''}`}
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
