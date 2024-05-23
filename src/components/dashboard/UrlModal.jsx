@@ -95,6 +95,7 @@ const UrlModal = ({ onClose, api }) => {
     <div className="help-modal-container lead_modal_input url_new_modal">
       <div className="leftCreateClose2" onClick={onClose}></div>
       <div className="help-modal-box">
+      <div className="url_modal_top">
         <header className="headerEditor">
           <p className="common-fonts add-new-blog">Academy Redirect Form</p>
         </header>
@@ -146,7 +147,8 @@ const UrlModal = ({ onClose, api }) => {
         <br />
         {renderUrlData(oldUrlData, oldUrlNotFound, "Old")}
         {renderUrlData(newUrlData, newUrlNotFound, "New")}
-        <div className="url_bottom_btn">
+      </div>
+      <div className="url_bottom_btn">
           <button className="common-fonts common-delete-button" onClick={onClose}>
             Cancel
           </button>
@@ -156,7 +158,7 @@ const UrlModal = ({ onClose, api }) => {
           >
             Save
           </button>
-        </div>
+       </div>
       </div>
       <div className="help-cross" onClick={onClose}>
         X

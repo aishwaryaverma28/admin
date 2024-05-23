@@ -94,7 +94,7 @@
   border-radius: 0;
 }
 
-.help-bottom-btn, .url_bottom_btn {
+.help-bottom-btn{
   width: 100%;
   display: flex;
   justify-content: flex-end; /* or justify-content: space-between; if you have multiple elements */
@@ -102,10 +102,6 @@
   padding: 1rem;
   z-index: -1;
   margin-top: 5rem;
-}
-
-.url_bottom_btn{
-  margin-top: 2rem;
 }
 
 .help-save {
