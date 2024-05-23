@@ -326,7 +326,7 @@ const Dashboard = () => {
           </div>
           <div className="right-side--btns">
             <button type="button" className="secondary-btn" onClick={addUrlClick}>
-              Url Table
+              Redirect
             </button>            
             <button type="button" className="secondary-btn" onClick={addLeadClick}>
               Add Leads

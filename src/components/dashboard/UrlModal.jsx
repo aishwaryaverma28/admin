@@ -96,7 +96,7 @@ const UrlModal = ({ onClose, api }) => {
       <div className="leftCreateClose2" onClick={onClose}></div>
       <div className="help-modal-box">
         <header className="headerEditor">
-          <p className="common-fonts add-new-blog">Add Url</p>
+          <p className="common-fonts add-new-blog">Academy Redirect Form</p>
         </header>
 
         <div className="helpContainer">
