@@ -129,8 +129,8 @@ const ViewLeadsTable = ({ onClose }) => {
                 <td className="common-fonts">{item?.old_url}</td>
                 <td className="common-fonts">{item?.new_url}</td>
                 <td className="common-fonts">Inserted</td>
-                <td className="common-fonts">{item?.old_url_id_exists === 1 ? <span>Available</span> : <span>Not Available</span>}</td>
-                <td className="common-fonts">{item?.new_url_id_exists === 1 ? <span>Available</span> : <span>Not Available</span>}</td>
+                <td className="common-fonts">{item?.old_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
+                <td className="common-fonts">{item?.new_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
               </tr>
             ))}
           </tbody>
