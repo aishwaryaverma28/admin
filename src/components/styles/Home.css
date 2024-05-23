@@ -489,7 +489,9 @@
   margin-bottom: 0.4rem;
 }
 
-.url_new_modal{
+
+.url_modal_top{
+  height: 90vh;
   overflow: auto;
 }
 
@@ -502,5 +504,15 @@
 
 .red_border{
   border: 1px solid red;
+}
+
+.url_bottom_btn{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  z-index: -1;
+  margin-top: 1rem;
+  margin-right: 1rem;
+
 }
 
