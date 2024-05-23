@@ -10,8 +10,15 @@ const UrlModal = ({ onClose }) => {
   const [newUrl, setNewUrl] = useState("");
   const [oldUrlData, setOldUrlData] = useState(null);
   const [newUrlData, setNewUrlData] = useState(null);
+  const [loadingOldUrl, setLoadingOldUrl] = useState(false);
+  const [loadingNewUrl, setLoadingNewUrl] = useState(false);
+  const [oldUrlNotFound, setOldUrlNotFound] = useState(false);
+  const [newUrlNotFound, setNewUrlNotFound] = useState(false);
 
-  const handleCheckClick = async (url, type, setData) => {
+  const handleCheckClick = async (url, type, setData, setLoading, setNotFound) => {
+    setLoading(true);
+    setNotFound(false);
+    setData(null);
     try {
       const response = await axios.post(
         "https://bmp.leadplaner.com/api/api/bmp/redirect/find",
@@ -22,11 +29,14 @@ const UrlModal = ({ onClose }) => {
           },
         }
       );
-      console.log(response?.data?.data);
-      if (response?.data?.status === 1) {
+      setLoading(false);
+      if (response?.data?.status === 1 && response?.data?.data?.length > 0) {
         setData(response?.data?.data);
+      } else {
+        setNotFound(true);
       }
     } catch (error) {
+      setLoading(false);
       console.error("API Error:", error);
     }
   };
@@ -62,10 +72,13 @@ const UrlModal = ({ onClose }) => {
     }
   };
 
-  const renderUrlData = (data) => {
+  const renderUrlData = (data, notFound, type) => {
+    if (notFound) {
+      return <><p className="url_text">{type} data not found</p><br/></>;
+    }
     return (
       <div className="url-data">
-        {data.map((item) => (
+        {data?.map((item) => (
           <div key={item.id} className="url-data-item">
             <p>ID: <span>{item.id}</span> </p>
             <p className="url_text">Old URL: <span>{item.old_url}</span> </p>
@@ -90,9 +103,10 @@ const UrlModal = ({ onClose }) => {
             <div>
               <div className="check_url_box">
                 <p className="helpTitle">Old Url</p>
+                {loadingOldUrl && <p>Loading...</p>}
                 <button
                   className="common-fonts common-save-button help-save"
-                  onClick={() => handleCheckClick(oldUrl, 1, setOldUrlData)}
+                  onClick={() => handleCheckClick(oldUrl, 1, setOldUrlData, setLoadingOldUrl, setOldUrlNotFound)}
                 >
                   Check
                 </button>
@@ -104,14 +118,15 @@ const UrlModal = ({ onClose }) => {
                 className={`common-input url_input ${oldUrlData ? 'red_border' : ''}`}
                 value={oldUrl}
                 onChange={(e) => setOldUrl(e.target.value)}
-              />
+              />              
             </div>
             <div>
               <div className="check_url_box">
-                <p className="helpTitle">New Url</p>
+                <p className="helpTitle">New Url</p>                
+              {loadingNewUrl && <p>Loading...</p>}
                 <button
                   className="common-fonts common-save-button help-save"
-                  onClick={() => handleCheckClick(newUrl, 2, setNewUrlData)}
+                  onClick={() => handleCheckClick(newUrl, 2, setNewUrlData, setLoadingNewUrl, setNewUrlNotFound)}
                 >
                   Check
                 </button>
@@ -128,8 +143,8 @@ const UrlModal = ({ onClose }) => {
           </div>
         </div>
         <br />
-        {oldUrlData && renderUrlData(oldUrlData)}
-        {newUrlData && renderUrlData(newUrlData)}
+        {renderUrlData(oldUrlData, oldUrlNotFound, "Old")}
+        {renderUrlData(newUrlData, newUrlNotFound, "New")}
         <div className="url_bottom_btn">
           <button className="common-fonts common-delete-button" onClick={onClose}>
             Cancel
