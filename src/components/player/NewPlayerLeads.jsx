@@ -6,7 +6,6 @@ import {
 } from "./../utils/Constants"
 import UserLogs from '../lead/UserLogs';
 import Confirmation from '../lead/Confirmation';
-import PlayerAssign from './PlayerAssign';
 import NewPlayerDetails from './NewPlayerDetails';
 import NewPlayerImage from './NewPlayerImage';
 
@@ -94,13 +93,6 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
                                 <i class="fa-sharp fa-regular fa-images"></i>
                                 Images
                             </button>
-                            <button
-                                className={activeTab === "assign" ? "active" : ""}
-                                onClick={() => handleTabClick("assign")}
-                            >
-                                <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                                Assign
-                            </button>
                         <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
@@ -119,12 +111,6 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
                         {activeTab === "images" && (
                             <div className="activity-tab-content">
                                 <NewPlayerImage id={selectedItem?.parent_id} />
-
-                            </div>
-                        )}
-                        {activeTab === "assign" && (
-                            <div className="activity-tab-content">
-                                <PlayerAssign id={selectedItem?.id} tempAcademyId={selectedItem?.parent_id} onLeadAdded={onLeadAdded} />
 
                             </div>
                         )}
