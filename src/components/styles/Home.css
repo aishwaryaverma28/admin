@@ -420,14 +420,12 @@
  width: 10rem;
 }
 .url_table th:nth-child(5){
- width:6rem;
+ width:8rem;
 }
 .url_table th:nth-child(6){
  width:8rem;
 }
-.url_table th:nth-child(7){
- width:8rem;
-}
+
 
 .table_pagination {
   display: flex;
