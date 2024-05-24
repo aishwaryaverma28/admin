@@ -10,9 +10,9 @@ const ViewLeadsTable = ({ onClose }) => {
   const [currentData, setCurrentData] = useState([]);
   const [openUrlModal, setOpenUrlModal] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 145; // Fixed limit to 20
+  const limit = 100;
   const [pageGroup, setPageGroup] = useState(1);
-  const pagesPerGroup =3;
+  const pagesPerGroup = 3;
 
   const addUrlModalClick = () => {
     setOpenUrlModal(true);
@@ -34,14 +34,14 @@ const ViewLeadsTable = ({ onClose }) => {
         }
       )
       .then((response) => {
-        const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
-        setAllData(filteredData);
+        // const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
+        setAllData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  
+
 
   const fetchDataCall = () => {
     axios
@@ -55,8 +55,8 @@ const ViewLeadsTable = ({ onClose }) => {
         }
       )
       .then((response) => {
-        const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
-        setAllData(filteredData);
+        // const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
+        setAllData(response?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -113,7 +113,9 @@ const ViewLeadsTable = ({ onClose }) => {
     }
     return pageNumbers;
   };
-
+  const resetData = () => {
+    fetchData(page, limit);
+  };
   return (
     <>
       <div className="performance_title2">
@@ -125,6 +127,14 @@ const ViewLeadsTable = ({ onClose }) => {
             onClick={addUrlModalClick}
           >
             Add Url
+          </button>
+          <button
+            type="button"
+            className="helpBtn genral-refresh-icon"
+            title="Refresh"
+            onClick={resetData}
+          >
+            <i class="fa-sharp fa-solid fa-rotate "></i>
           </button>
         </div>
       </div>
@@ -148,8 +158,29 @@ const ViewLeadsTable = ({ onClose }) => {
                 <td className="common-fonts">{item?.id}</td>
                 <td className="common-fonts">{item?.old_url}</td>
                 <td className="common-fonts">{item?.new_url}</td>
-                <td className="common-fonts">{item?.old_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
-                <td className="common-fonts">{item?.new_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
+                <td className="common-fonts">
+                  {item?.old_url_type === "aid" ? (
+                    item?.old_url_aid === 1 ? (
+                      <span className="url_available">Available</span>
+                    ) : (
+                      <span className="url_unavailable">Not Available</span>
+                    )
+                  ) : item?.old_url_type === "llid" ? (
+                    item?.old_url_llid === 1 ? (
+                      <span className="url_available">Available</span>
+                    ) : (
+                      <span className="url_unavailable">Not Available</span>
+                    )
+                  ) : item?.old_url_type === "sdid" ? (
+                    item?.old_url_sdid === 1 ? (
+                      <span className="url_available">Available</span>
+                    ) : (
+                      <span className="url_unavailable">Not Available</span>
+                    )
+                  ) : null}
+                </td>
+
+                <td className="common-fonts">{item?.new_url_aid === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
               </tr>
             ))}
           </tbody>
@@ -164,7 +195,7 @@ const ViewLeadsTable = ({ onClose }) => {
           &gt;
         </button>
       </div>
-      {openUrlModal && <UrlModal onClose={addUrlModalClose} api={fetchDataCall}/>}
+      {openUrlModal && <UrlModal onClose={addUrlModalClose} api={fetchDataCall} />}
     </>
   );
 };
