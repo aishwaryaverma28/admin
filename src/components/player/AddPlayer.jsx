@@ -11,28 +11,20 @@ const AddPlayer = ({ onClose }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [editedItem, setEditedItem] = useState({
         about: "",
-        agent: "",
         awards: "",
-        career: "",
         city: "",
-        current_club: "",
-        description: "",
+        address: "",
         dob: "",
         email: "",
-        expiry_date: "",
-        foot: "",
-        goals: "",
         height: "",
         weight: "",
-        join_date: "",
         mobile: "",
         name: "",
-        place_of_birth: "",
         position: "",
-        social_profile: "",
+        facebook: "",
+        instagram: "",
         sport: "",
         state: "",
-        team_number: "",
         type: ""
     });
     const [stateBtn, setStateBtn] = useState(0);
@@ -48,11 +40,11 @@ const AddPlayer = ({ onClose }) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setEditedItem({
-          ...editedItem,
-          [name]: value,
+            ...editedItem,
+            [name]: value,
         });
         setStateBtn(1);
-      };
+    };
 
     const handleUpdateClick = () => {
         setStateBtn(0);
@@ -82,36 +74,29 @@ const AddPlayer = ({ onClose }) => {
                     });
                     setEditedItem({
                         about: "",
-                        agent: "",
                         awards: "",
-                        career: "",
                         city: "",
-                        current_club: "",
-                        description: "",
+                        address: "",
                         dob: "",
                         email: "",
-                        expiry_date: "",
-                        foot: "",
-                        goals: "",
                         height: "",
-                        weight:"",
-                        join_date: "",
+                        weight: "",
                         mobile: "",
                         name: "",
-                        place_of_birth: "",
                         position: "",
-                        social_profile: "",
+                        facebook: "",
+                        instagram: "",
                         sport: "",
                         state: "",
-                        team_number: "",
+                        address: "",
                         type: ""
                     });
                 } else {
                     toast.error(response?.data?.message, {
-                      position: "top-center",
-                      autoClose: 1000,
+                        position: "top-center",
+                        autoClose: 1000,
                     });
-                  }
+                }
                 setStateBtn(0);
             })
             .catch((error) => {
@@ -196,22 +181,13 @@ const AddPlayer = ({ onClose }) => {
                                         <p>Email</p>
                                         <p>Mobile</p>
                                         <p>Sport</p>
-                                        <p>Agent</p>
                                         <p>Awards</p>
-                                        <p>Career</p>
-                                        <p>Current Club</p>
-                                        <p>Expire Date</p>
-                                        <p>Joining Date</p>
-                                        <p>Team Number</p>
-                                        <p>Goals</p>
                                         <p>Date of Birth</p>
-                                        <p>Place of Birth</p>
-                                        <p>Foot</p>
                                         <p>Height</p>
                                         <p>Weight</p>
                                         <p>Position</p>
-                                        <p>Social Link</p>
-                                        <p className="about-textarea">Description</p>
+                                        <p>Facebook</p>
+                                        <p>Instagram</p>
                                         <p className="about-textarea">About</p>
                                     </div>
                                     <div className="detailsRightContainer">
@@ -315,113 +291,8 @@ const AddPlayer = ({ onClose }) => {
                                             <span>
                                                 <input
                                                     type="text"
-                                                    name="agent"
-                                                    value={editedItem?.agent}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
                                                     name="awards"
                                                     value={editedItem?.awards}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="career"
-                                                    value={editedItem?.career}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="current_club"
-                                                    value={editedItem?.current_club}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="date"
-                                                    name="expiry_date"
-                                                    value={editedItem?.expiry_date || ''}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="date"
-                                                    name="join_date"
-                                                    value={editedItem?.join_date || ''}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="number"
-                                                    name="team_number"
-                                                    value={editedItem?.team_number}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="goals"
-                                                    value={editedItem?.goals}
                                                     onChange={handleInputChange}
                                                     style={
                                                         editStylingInput
@@ -437,36 +308,6 @@ const AddPlayer = ({ onClose }) => {
                                                     type="date"
                                                     name="dob"
                                                     value={editedItem?.dob || ''}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="place_of_birth"
-                                                    value={editedItem?.place_of_birth}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="foot"
-                                                    value={editedItem?.foot}
                                                     onChange={handleInputChange}
                                                     style={
                                                         editStylingInput
@@ -523,8 +364,8 @@ const AddPlayer = ({ onClose }) => {
                                             <span>
                                                 <input
                                                     type="text"
-                                                    name="social_profile"
-                                                    value={editedItem?.social_profile}
+                                                    name="facebook"
+                                                    value={editedItem?.facebook}
                                                     onChange={handleInputChange}
                                                     style={
                                                         editStylingInput
@@ -532,21 +373,19 @@ const AddPlayer = ({ onClose }) => {
 
                                                 />
                                             </span>
-                                        </p>
-                                        <p>
+                                        </p> <p>
 
                                             <span>
-                                                <textarea
-                                                    name="description"
+                                                <input
+                                                    type="text"
+                                                    name="instagram"
+                                                    value={editedItem?.instagram}
                                                     onChange={handleInputChange}
-                                                    value={editedItem?.description}
-                                                    rows="5"
-                                                    id=""
                                                     style={
-                                                        editStylingTextarea
+                                                        editStylingInput
                                                     }
 
-                                                ></textarea>
+                                                />
                                             </span>
                                         </p>
                                         <p>
@@ -572,10 +411,26 @@ const AddPlayer = ({ onClose }) => {
                                 <p className="detailHead">ADDRESS INFORMATION</p>
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer">
+                                        <p>Address</p>
                                         <p>City</p>
                                         <p>State</p>
                                     </div>
                                     <div className="detailsRightContainer">
+                                        <p>
+
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="address"
+                                                    value={editedItem?.address}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        editStylingInput
+                                                    }
+
+                                                />
+                                            </span>
+                                        </p>
                                         <p>
 
                                             <span>

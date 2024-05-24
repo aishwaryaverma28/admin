@@ -8,28 +8,20 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [isLoading, setIsLoading] = useState(true);
   const [editedItem, setEditedItem] = useState({
     about: "",
-    agent: "",
     awards: "",
-    career: "",
     city: "",
-    current_club: "",
-    description: "",
+    address: "",
     dob: "",
     email: "",
-    expiry_date: "",
-    foot: "",
-    goals: "",
     height: "",
     weight: "",
-    join_date: "",
     phone: "",
     name: "",
-    place_of_birth: "",
     position: "",
-    social_profile: "",
+    facebook: "",
+    instagram: "",
     sport: "",
     state: "",
-    team_number: "",
     type: ""
   });
 
@@ -53,7 +45,7 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         const apiData = response?.data?.data[0];
         for (const key in apiData) {
           if (apiData.hasOwnProperty(key)) {
-            if (key === 'dob' || key === 'expiry_date' || key === 'join_date') {
+            if (key === 'dob') {
               const dateTimeString = apiData[key];
               if (dateTimeString) {
                 const dateOnly = dateTimeString.split('T')[0];
@@ -98,30 +90,23 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const updatedFormData = {
       type: "temp",
       name: editedItem?.name,
-      email: editedItem?.email, 
+      email: editedItem?.email,
       email_verified: editedItem?.email_verified,
       phone: editedItem?.phone,
       mobile_verified: editedItem?.mobile_verified,
       sport: editedItem?.sport,
       city: editedItem?.city,
+      address: editedItem?.address,
       state: editedItem?.state,
       about: editedItem?.about,
-      current_club: editedItem?.current_club,
-      description: editedItem?.description,
-      agent: editedItem?.agent,
       awards: editedItem?.awards,
-      career: editedItem?.career,
       dob: editedItem?.dob,
-      expiry_date: editedItem?.expiry_date,
-      foot: editedItem?.foot,
-      goals: editedItem?.goals,
       height: editedItem?.height,
       weight: editedItem?.weight,
-      join_date: editedItem?.join_date,
-      place_of_birth: editedItem?.place_of_birth,
       position: editedItem?.position,
-      social_profile: editedItem?.social_profile,
-      team_number: editedItem?.team_number,
+      facebook: editedItem?.facebook,
+      instagram: editedItem?.instagram,
+
     }
     axios
       .put(UPDATE_PLAYER + id, updatedFormData
@@ -287,22 +272,13 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               <p>Email</p>
               <p>Phone</p>
               <p>Sport</p>
-              <p>Agent</p>
               <p>Awards</p>
-              <p>Career</p>
-              <p>Current Club</p>
-              <p>Expire Date</p>
-              <p>Joining Date</p>
-              <p>Team Number</p>
-              <p>Goals</p>
               <p>Date of Birth</p>
-              <p>Place of Birth</p>
-              <p>Foot</p>
               <p>Height</p>
               <p>Weight</p>
               <p>Position</p>
-              <p>Social Link</p>
-              <p className="about-textarea">Description</p>
+              <p>Facebook</p>
+              <p>Instagram</p>
               <p className="about-textarea">About</p>
             </div>
             <div className="detailsRightContainer">
@@ -390,36 +366,36 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   </span>
                 )}
               </p> */}
- <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span className='newEditableArea'>
-                                            <input
-                                                type="text"
-                                                name="phone"
-                                                value={editedItem?.phone}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                            <label className="radio-inline radio-space">
-                                                <input
-                                                    type="checkbox"
-                                                    name="mobile_verified"
-                                                    value={editedItem?.mobile_verified}
-                                                    className="radio_disable check_input"
-                                                    disabled={isDisabled}
-                                                    onChange={handleInputChange}
-                                                    checked={editedItem?.mobile_verified === 1}
-                                                /> Mobile Verified
+              <p>
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span className='newEditableArea'>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={editedItem?.phone}
+                      onChange={handleInputChange}
+                      style={
+                        isEditable ? editStylingInput : normalStylingInput
+                      }
+                      disabled={isDisabled}
+                    />
+                    <label className="radio-inline radio-space">
+                      <input
+                        type="checkbox"
+                        name="mobile_verified"
+                        value={editedItem?.mobile_verified}
+                        className="radio_disable check_input"
+                        disabled={isDisabled}
+                        onChange={handleInputChange}
+                        checked={editedItem?.mobile_verified === 1}
+                      /> Mobile Verified
 
-                                            </label>
-                                        </span>
-                                    )}
-                                </p>
+                    </label>
+                  </span>
+                )}
+              </p>
               <p>
                 {isLoading ? (
                   <span>-</span>
@@ -480,134 +456,8 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>
                     <input
                       type="text"
-                      name="agent"
-                      value={editedItem?.agent}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
                       name="awards"
                       value={editedItem?.awards}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="career"
-                      value={editedItem?.career}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="current_club"
-                      value={editedItem?.current_club}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="date"
-                      name="expiry_date"
-                      value={editedItem?.expiry_date || ''}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="date"
-                      name="join_date"
-                      value={editedItem?.join_date || ''}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="number"
-                      name="team_number"
-                      value={editedItem?.team_number}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="goals"
-                      value={editedItem?.goals}
                       onChange={handleInputChange}
                       style={
                         isEditable ? editStylingInput : normalStylingInput
@@ -626,42 +476,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                       type="date"
                       name="dob"
                       value={editedItem?.dob || ''}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="place_of_birth"
-                      value={editedItem?.place_of_birth}
-                      onChange={handleInputChange}
-                      style={
-                        isEditable ? editStylingInput : normalStylingInput
-                      }
-                      disabled={isDisabled}
-                    />
-                  </span>
-                )}
-              </p>
-              <p>
-                {isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                      type="text"
-                      name="foot"
-                      value={editedItem?.foot}
                       onChange={handleInputChange}
                       style={
                         isEditable ? editStylingInput : normalStylingInput
@@ -732,8 +546,8 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>
                     <input
                       type="text"
-                      name="social_profile"
-                      value={editedItem?.social_profile}
+                      name="facebook"
+                      value={editedItem?.facebook}
                       onChange={handleInputChange}
                       style={
                         isEditable ? editStylingInput : normalStylingInput
@@ -748,17 +562,16 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>-</span>
                 ) : (
                   <span>
-                    <textarea
-                      name="description"
+                    <input
+                      type="text"
+                      name="instagram"
+                      value={editedItem?.instagram}
                       onChange={handleInputChange}
-                      value={isLoading ? "-" : editedItem?.description}
-                      rows="5"
-                      id=""
                       style={
-                        isEditable ? editStylingTextarea : normalStylingTextarea
+                        isEditable ? editStylingInput : normalStylingInput
                       }
                       disabled={isDisabled}
-                    ></textarea>
+                    />
                   </span>
                 )}
               </p>
@@ -788,10 +601,29 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <p className="detailHead">ADDRESS INFORMATION</p>
           <div className="detailsContent">
             <div className="detailsLeftContainer">
+              <p>Address</p>
               <p>City</p>
               <p>State</p>
             </div>
             <div className="detailsRightContainer">
+              <p>
+                {isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <input
+                      type="text"
+                      name="address"
+                      value={editedItem?.address}
+                      onChange={handleInputChange}
+                      style={
+                        isEditable ? editStylingInput : normalStylingInput
+                      }
+                      disabled={isDisabled}
+                    />
+                  </span>
+                )}
+              </p>
               <p>
                 {isLoading ? (
                   <span>-</span>
