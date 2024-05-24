@@ -228,4 +228,6 @@ background: #F3F6FA;
   }
   .underline_status{
     text-decoration: underline;
+   text-underline-offset: 0.2rem;
+   text-decoration-color: red;
   }
