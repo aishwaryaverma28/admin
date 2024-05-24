@@ -144,7 +144,7 @@ const ViewLeadsTable = ({ onClose }) => {
           <tbody>
             {allData?.map((item, index) => (
               <tr key={item?.id}>
-                <td className="common-fonts">{(page - 1) * limit + index + 1}</td>
+                <td className="common-fonts">{(page - 1) * 100 + index + 1}</td>
                 <td className="common-fonts">{item?.id}</td>
                 <td className="common-fonts">{item?.old_url}</td>
                 <td className="common-fonts">{item?.new_url}</td>
