@@ -10,7 +10,7 @@ const ViewLeadsTable = ({ onClose }) => {
   const [currentData, setCurrentData] = useState([]);
   const [openUrlModal, setOpenUrlModal] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 20; // Fixed limit to 20
+  const limit = 145; // Fixed limit to 20
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup =3;
 
@@ -34,18 +34,20 @@ const ViewLeadsTable = ({ onClose }) => {
         }
       )
       .then((response) => {
-        setAllData(response.data.data);
+        const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
+        setAllData(filteredData);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  
 
   const fetchDataCall = () => {
     axios
       .post(
         SHOW_URL,
-        { page: "1", limit: "20" },
+        { page: "1", limit: "145" },
         {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
@@ -53,7 +55,8 @@ const ViewLeadsTable = ({ onClose }) => {
         }
       )
       .then((response) => {
-        setAllData(response.data.data);
+        const filteredData = response.data.data.filter(item => item.old_url.includes('-aid-'));
+        setAllData(filteredData);
       })
       .catch((error) => {
         console.log(error);
@@ -132,10 +135,9 @@ const ViewLeadsTable = ({ onClose }) => {
             <tr>
               <th className="common-fonts">S No</th>
               <th className="common-fonts">Id</th>
-              <th className="common-fonts">Old Url</th>
-              <th className="common-fonts">New Url</th>
-              <th className="common-fonts">Status</th>
-              <th className="common-fonts">Old Url Status</th>
+              <th className="common-fonts">Old Url (To Be Deleted)</th>
+              <th className="common-fonts">New Url (Correct Url)</th>
+              <th className="common-fonts underline_status">Old Url Status</th>
               <th className="common-fonts">New Url Status</th>
             </tr>
           </thead>
@@ -146,7 +148,6 @@ const ViewLeadsTable = ({ onClose }) => {
                 <td className="common-fonts">{item?.id}</td>
                 <td className="common-fonts">{item?.old_url}</td>
                 <td className="common-fonts">{item?.new_url}</td>
-                <td className="common-fonts">Inserted</td>
                 <td className="common-fonts">{item?.old_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
                 <td className="common-fonts">{item?.new_url_id_exists === 1 ? <span className="url_available">Available</span> : <span className="url_unavailable">Not Available</span>}</td>
               </tr>
