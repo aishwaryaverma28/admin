@@ -416,9 +416,6 @@
 .url_table th:nth-child(2){
  width: 2rem;
 }
-.url_table th:nth-child(3){
- width: 10rem;
-}
 .url_table th:nth-child(5){
  width:8rem;
 }
