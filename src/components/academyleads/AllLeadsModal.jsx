@@ -1,3 +1,4 @@
+// do we have to remove checkboxes if academies are unverified?
 import React, { useState, useEffect } from 'react'
 import {
     cdnurl,
@@ -8,7 +9,7 @@ import {
     getDecryptedToken,
     handleLogout
 } from "./../utils/Constants";
-import axios, { all } from 'axios';
+import axios from 'axios';
 import tick from "../../assets/image/star_tick.svg"
 import cross from "../../assets/image/unverified.svg"
 import { toast } from 'react-toastify';
@@ -40,11 +41,12 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 },
             })
             .then((response) => {
-                const filteredObjects = response?.data?.data.filter(obj => 
-                    (obj.email !== null || obj.verification_status === "Verified") && 
-                    obj.id !== object?.academy_id
-                );
-                setDistAcad(filteredObjects);
+                // const filteredObjects = response?.data?.data.filter(obj => 
+                //     (obj.email !== null || obj.verification_status === "Verified") && 
+                //     obj.id !== object?.academy_id
+                // );
+                // setDistAcad(filteredObjects);
+                setDistAcad(response?.data?.data);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -89,7 +91,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             .then((response) => {
                 if (response?.data?.status === 1) {
                     setAllData(response?.data?.data);
-                    const ids = response?.data?.data.map(item => item.id); // Extracting IDs
+                    const ids = response?.data?.data.map(item => item.id);
                     setLeads(ids);
                 }
             })
@@ -101,7 +103,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                 }
             });
     };
-    // console.log(allData)
+
     useEffect(() => {
         fetchLead(selectedDistance);
         academyDist();
@@ -113,13 +115,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
 
     const handleCheckboxChange = (event, id, email) => {
         const isChecked = event.target.checked;
-        // setSelectedData(prevIds => {
-        //     if (isChecked) {
-        //         return [...prevIds, { id, email }];
-        //     } else {
-        //         return prevIds.filter(selectedItem => selectedItem.id !== id);
-        //     }
-        // });
+
         setSelectedIds(prevIds => {
             if (isChecked) {
                 return [...prevIds, id];
@@ -128,8 +124,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             }
         });
     };
-    console.log(selectedIds)
-    // console.log(selectedData)
+
     const handleSubmit = () => {
         const today = new Date();
         const lastThirtyDaysStartDate = new Date(today);
@@ -142,8 +137,6 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
             leadIds: leads,
             object_ids: selectedIds,
             type: "academy",
-            // allLeads: allData,
-            // email_academy: selectedData
         };
         axios.post(ASSIGN_LEADS_USER, body, {
             headers: {
@@ -284,6 +277,9 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                             <div className="mail">
                                                                 <p>{item?.email}</p>
                                                             </div>
+                                                            <div className="mail sportCap">
+                                                            <p>{item?.city}, {item?.state}</p>
+                                                        </div>
                                                         </div>
                                                     </div>
                                                     <div className="DealCard-rightBox">
@@ -293,14 +289,16 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                             }
                                                         </div>
                                                         <div className="mail">
-                                                            <label className="radio-inline2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="radio_disable check_input_2"
-                                                                    onChange={(event) => handleCheckboxChange(event, item.id, item.email)}
-                                                                    checked={selectedIds.includes(item.id)}
-                                                                />
-                                                            </label>
+                                                            {item.verification_status === "Unverified" ?
+                                                                <></> : <label className="radio-inline2">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="radio_disable check_input_2"
+                                                                        onChange={(event) => handleCheckboxChange(event, item.id, item.email)}
+                                                                        checked={selectedIds.includes(item.id)}
+                                                                    />
+                                                                </label>
+                                                            }
                                                         </div>
 
                                                     </div>
@@ -330,7 +328,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                         )}
                         {activeTab === "leads" && (
                             <div className="activity-tab-content">
-                                 <AcadmeyLeadDetails
+                                <AcadmeyLeadDetails
                                     leadsDetails={allData}
                                 />
                             </div>
