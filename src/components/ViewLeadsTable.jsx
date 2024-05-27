@@ -67,7 +67,6 @@ const ViewLeadsTable = ({ onClose }) => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data);
           setLeadsCount(response?.data?.data);
         }
       })

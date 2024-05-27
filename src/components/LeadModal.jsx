@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ADD_BMP_LEADS, EMAIL_PHONE, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const LeadModal = ({ onClose, getData }) => {
@@ -18,33 +18,33 @@ const LeadModal = ({ onClose, getData }) => {
     description: "",
     sport: "",
     source: "whatsapp",
-  })
+  });
   const [sport, setSport] = useState(null);
   const [phoneRed, setPhoneRed] = useState(false);
   const [emailRed, setEmailRed] = useState(false);
+
   useEffect(() => {
-    if (formData.object_id) {
+    if (formData?.object_id) {
       axios
-        .post(GET_ACADEMY, { academy_id: formData.object_id }
-          , {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
+        .post(GET_ACADEMY, { academy_id: formData?.object_id }, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        })
         .then((response) => {
           setAcademyName(response?.data?.data[0]);
-          setSport(response?.data?.data[0]?.sport)
+          setSport(response?.data?.data[0]?.sport);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [formData.object_id]);
+  }, [formData?.object_id]);
 
   useEffect(() => {
-    if (formData.phone) {
+    if (formData?.phone) {
       axios
-        .post(EMAIL_PHONE, { field: formData.phone, type: 'mobile' }, {
+        .post(EMAIL_PHONE, { field: formData?.phone, type: "mobile" }, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
@@ -52,8 +52,7 @@ const LeadModal = ({ onClose, getData }) => {
         .then((response) => {
           if (response?.data?.status === 1) {
             setPhoneRed(true);
-          }
-          else {
+          } else {
             setPhoneRed(false);
           }
         })
@@ -61,42 +60,67 @@ const LeadModal = ({ onClose, getData }) => {
           console.log(error);
         });
     }
-  }, [formData.phone]);
+  }, [formData?.phone]);
 
   useEffect(() => {
-    if (formData.email) {
+    if (formData?.email) {
       axios
-        .post(EMAIL_PHONE, { field: formData.email, type: 'email' }, {
+        .post(EMAIL_PHONE, { field: formData?.email, type: "email" }, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,
           },
         })
         .then((response) => {
           if (response?.data?.status === 1) {
-            setEmailRed(true)
-          }
-          else {
-            setEmailRed(false)
+            setEmailRed(true);
+          } else {
+            setEmailRed(false);
           }
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [formData.email]);
+  }, [formData?.email]);
 
-  function handleChange(e) {
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => {
+  //     return { ...prev, [name]: value };
+  //   });
+  //   setStateBtn(1);
+  // };
+  const capitalizeFirstLetterOfEachWord = (string) => {
+    return string?.replace(/\b\w/g, char => char?.toUpperCase());
+  };
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
+    let updatedValue = value;
+
+    if (name === "name") {
+      updatedValue = capitalizeFirstLetterOfEachWord(updatedValue);
+    }else if (name === "email") {
+      updatedValue = updatedValue?.toLowerCase();
+    }
+
     setFormData((prev) => {
-      return { ...prev, [name]: value };
+      return { ...prev, [name]: updatedValue };
     });
     setStateBtn(1);
-  }
-
-  function handleSubmit(event) {
+  };
+ 
+  const handleSubmit = (event) => {
     event.preventDefault();
     const updatedFormData = {
-      ...formData,
+      object_type: "academy",
+      object_id: formData?.object_id?.trim(),
+      name: formData?.name?.trim(),
+      phone: formData?.phone?.trim(),
+      address: formData?.address?.trim(),
+      email: formData?.email?.trim(),
+      description: formData?.description?.trim(),
+      source: formData?.source,
       sport: sport,
     };
     console.log(updatedFormData);
@@ -114,7 +138,6 @@ const LeadModal = ({ onClose, getData }) => {
         },
       })
       .then((response) => {
-        console.log(response?.data);
         if (response?.data?.status !== false) {
           toast.success("Lead data added successfully", {
             position: "top-center",
@@ -135,7 +158,7 @@ const LeadModal = ({ onClose, getData }) => {
           setEmailRed(false);
           setPhoneRed(false);
           setSport(null);
-          setAcademyName("")
+          setAcademyName("");
           getData(startDate, formattedEndDate);
         } else {
           toast.error(response?.data?.message, {
@@ -147,9 +170,9 @@ const LeadModal = ({ onClose, getData }) => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
-  function handleCancel() {
+  const handleCancel = () => {
     setFormData({
       object_type: "academy",
       object_id: "",
@@ -159,15 +182,15 @@ const LeadModal = ({ onClose, getData }) => {
       email: "",
       sport: "",
       source: "whatsapp",
-      description: ""
+      description: "",
     });
     setStateBtn(0);
-  }
+  };
 
   return (
     <>
       <div className="help-modal-container lead_modal_input">
-      <div className="leftCreateClose2" onClick={onClose}></div>
+        <div className="leftCreateClose2" onClick={onClose}></div>
         <div className="help-modal-box">
           <div>
             <header className="headerEditor">
@@ -190,12 +213,12 @@ const LeadModal = ({ onClose, getData }) => {
                 <div>
                   <p className="helpTitle">Email</p>
                   <input
-                    type="text"
+                    type="email"
                     placeholder="Enter Lead Email"
                     name="email"
                     value={formData?.email}
                     onChange={handleChange}
-                    className={`common-input ${emailRed ? 'red-border' : ''}`}
+                    className={`common-input ${emailRed ? "red-border" : ""}`}
                   ></input>
                 </div>
                 <div>
@@ -205,7 +228,7 @@ const LeadModal = ({ onClose, getData }) => {
                     placeholder="Enter Lead Phone"
                     name="phone"
                     value={formData?.phone}
-                    className={`common-input ${phoneRed ? 'red-border' : ''}`}
+                    className={`common-input ${phoneRed ? "red-border" : ""}`}
                     onChange={handleChange}
                   ></input>
                 </div>
@@ -223,16 +246,19 @@ const LeadModal = ({ onClose, getData }) => {
                 </div>
                 <div>
                   <p className="helpTitle">Source</p>
-                  <select name="object_type" id="" className="common-select" onChange={handleChange} value={formData?.source}>
+                  <select
+                    name="object_type"
+                    id=""
+                    className="common-select"
+                    onChange={handleChange}
+                    value={formData?.source}
+                  >
                     <option value="whatsapp">WhatsApp</option>
                     <option value="website">Website</option>
                   </select>
                 </div>
                 <div className="lead_text_area">
-                  <p className="helpTitle">
-                    Description
-                    
-                  </p>
+                  <p className="helpTitle">Description</p>
                   <textarea
                     name="description"
                     type="textarea"
@@ -247,7 +273,13 @@ const LeadModal = ({ onClose, getData }) => {
                 <div className="lead-object-flex">
                   <div>
                     <p className="helpTitle">Object Type</p>
-                    <select name="object_type" id="" className="common-select reduce-width" onChange={handleChange} value={formData?.object_type}>
+                    <select
+                      name="object_type"
+                      id=""
+                      className="common-select reduce-width"
+                      onChange={handleChange}
+                      value={formData?.object_type}
+                    >
                       <option value="academy">Academy</option>
                       <option value="player">Player</option>
                       <option value="coach">Coach</option>
@@ -269,10 +301,15 @@ const LeadModal = ({ onClose, getData }) => {
               </div>
             </div>
             <br />
-            {academyName ? <div className="academy_new_box">
-              <p className="common-fonts academy_name_style">{academyName?.name}, {academyName?.city}, {academyName?.state}</p>
-            </div>
-              : <></>}
+            {academyName ? (
+              <div className="academy_new_box">
+                <p className="common-fonts academy_name_style">
+                  {academyName?.name}, {academyName?.city}, {academyName?.state}
+                </p>
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="help-bottom-btn">
               <button className="common-fonts common-delete-button" onClick={handleCancel}>
                 Cancel
