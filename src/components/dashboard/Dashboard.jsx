@@ -373,7 +373,7 @@ const Dashboard = () => {
               <div className="main-cards">
                 <div className="cards-new">
                   <p className="DealName">
-                    {item?.name}({statusCounts[item.stage]})
+                    {item?.name}({statusCounts[item?.stage]})
                   </p>
                 </div>
                 {(() => {

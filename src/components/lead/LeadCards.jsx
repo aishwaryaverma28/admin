@@ -95,26 +95,26 @@ const LeadCards = ({
 
   return (
     <>
-      <div key={object.id} className="user-card2">
+      <div key={object?.id} className="user-card2">
         <div className="card-container">
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-                {object.id} - {object.name}
+                {object?.id} - {object?.name}
               </p>
             </div>
             <div className="lead-value">
             </div>
             <div className="contact-details">
               <div className="mail sportCap">
-                <p>{itemName === "user" || itemName === "newuser" ? <span> {object.type} - {object.parent_id}</span> : object.sport}</p>
+                <p>{itemName === "user" || itemName === "newuser" ? <span> {object?.type} - {object?.parent_id}</span> : object?.sport}</p>
               </div>
                 <div className="mail">
-                  <p>{object.phone}</p>
+                  <p>{object?.phone}</p>
                 </div>
               {(itemName === "academy" || itemName === "coach") && (
                 <div className="mail sportCap">
-                  <p>{object.city}, {object.state}</p>
+                  <p>{object?.city}, {object?.state}</p>
                 </div>
               )}
               <div className="mail">

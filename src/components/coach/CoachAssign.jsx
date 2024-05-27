@@ -166,20 +166,20 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
               <div className="card-leftBox">
                 <div className="user-details">
                   <p className="heading">
-                    {data.id} - {data.name}
+                    {data?.id} - {data?.name}
                   </p>
                 </div>
                 <div className="lead-value">
                 </div>
                 <div className="contact-details">
                   <div className="mail sportCap">
-                    <p>{data.sport}</p>
+                    <p>{data?.sport}</p>
                   </div>
                   <div className="mail">
-                    <p>{data.mobile}</p>
+                    <p>{data?.mobile}</p>
                   </div>
                   <div className="mail sportCap">
-                    <p>{data.city}, {data.state}</p>
+                    <p>{data?.city}, {data?.state}</p>
                   </div>
                 </div>
               </div>
@@ -215,25 +215,25 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
         </>
         <>
           {academy.map((object) => (
-            <div key={object.id} className="academy-card">
+            <div key={object?.id} className="academy-card">
               <div className="card-container">
                 <div className="card-leftBox">
                   <div className="user-details">
                     <p className="heading">
-                      {object.id} - {object.name}
+                      {object?.id} - {object?.name}
                     </p>
                   </div>
                   <div className="lead-value">
                   </div>
                   <div className="contact-details">
                     <div className="mail sportCap">
-                      <p>{object.sport}</p>
+                      <p>{object?.sport}</p>
                     </div>
                     <div className="mail">
-                      <p>{object.mobile}</p>
+                      <p>{object?.mobile}</p>
                     </div>
                     <div className="mail sportCap">
-                      <p>{object.city}, {object.state}</p>
+                      <p>{object?.city}, {object?.state}</p>
                     </div>
                   </div>
                 </div>

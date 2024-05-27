@@ -113,15 +113,20 @@ const DashboardCards = ({
           <div className="card-leftBox">
             <div className="user-details">
               <p className="heading" onClick={() => openModal(object)}>
-                {object.id} - {object.name}
+                {object?.id} - {object?.name}
               </p>
             </div>
             <div className="lead-value">
             </div>
             <div className="contact-details">
               <div className="mail sportCap">
-                <p><span> {object.type} - {object.parent_id}</span></p>
+                <p><span> {object?.type} - {object?.parent_id}</span></p>
               </div>
+              {itemName === "academy" && (
+                <div className="mail sportCap">
+                <p><span> {object?.parent_tbl_entity_name}</span></p>
+              </div>
+              )}
               <div className="mail">
                 {formatDate(object?.creation_date)}
               </div>

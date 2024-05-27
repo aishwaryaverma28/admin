@@ -52,7 +52,7 @@ const UrlModal = ({ onClose, api }) => {
           },
         }
       );
-      if (response.data.status === 1) {
+      if (response?.data?.status === 1) {
         toast.success("Details updated successfully", {
           position: "top-center",
           autoClose: 1000,
@@ -80,11 +80,11 @@ const UrlModal = ({ onClose, api }) => {
     return (
       <div className="url-data">
         {data?.map((item) => (
-          <div key={item.id} className="url-data-item">
-            <p>ID: <span>{item.id}</span> </p>
-            <p className="url_text">Old URL: <span>{item.old_url}</span> </p>
-            <p className="url_text">New URL: <span>{item.new_url}</span> </p>
-            <p>Total: <span>{item.total}</span> </p>
+          <div key={item?.id} className="url-data-item">
+            <p>ID: <span>{item?.id}</span> </p>
+            <p className="url_text">Old URL: <span>{item?.old_url}</span> </p>
+            <p className="url_text">New URL: <span>{item?.new_url}</span> </p>
+            <p>Total: <span>{item?.total}</span> </p>
           </div>
         ))}
       </div>
