@@ -108,7 +108,7 @@ const capitalizeFirstLetterOfEachWord = (string) => {
 
     setEditedItem({
       ...editedItem,
-      [name]: newValue,
+      [name]: updatedValue,
     });
     
     if (name === "sport") {
@@ -369,7 +369,7 @@ const capitalizeFirstLetterOfEachWord = (string) => {
           <div className="detailsBox">
             <div className="detailsContent">
               <div className="detailsLeftContainer">
-                <p>Names</p>
+                <p>Name</p>
                 <p>Email</p>
                 <p>Phone</p>
                 <p>Sport</p>
