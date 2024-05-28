@@ -125,32 +125,29 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setStateBtn(0);
         const updatedFormData = {
             type: "temp",
-            name: editedItem?.name,
-            owner: editedItem?.owner,
-            website: editedItem?.website,
-            phone: editedItem?.phone,
+            name: editedItem?.name?.trim(),
+            owner: editedItem?.owner?.trim(),
+            website: editedItem?.website?.trim(),
+            phone: editedItem?.phone?.trim(),
             mobile_verified: editedItem?.mobile_verified,
-            about: editedItem?.about,
+            about: editedItem?.about?.trim(),
             sport: editedItem?.sport || "sports",
-            fee: editedItem?.fee,
+            fee: editedItem?.fee?.trim(),
             experience: editedItem?.experience,
-            facebook: editedItem?.facebook,
-            instagram: editedItem?.instagram,
-            website: editedItem?.website,
-            email: editedItem?.email,
+            facebook: editedItem?.facebook?.trim(),
+            instagram: editedItem?.instagram?.trim(),
+            email: editedItem?.email?.trim(),
             email_verified: editedItem?.email_verified,
-            timing: editedItem?.timing,
-            closed_on: editedItem?.closed_on,
-            address1: editedItem?.address1,
-            address2: editedItem?.address2,
+            timing: editedItem?.timing?.trim(),
+            closed_on: editedItem?.closed_on?.trim(),
+            address1: editedItem?.address1?.trim(),
+            address2: editedItem?.address2?.trim(),
             city: editedItem?.city || "select",
-            state: editedItem?.state,
-            postcode: editedItem?.postcode,
-            facebook: editedItem?.facebook,
-            instagram: editedItem?.instagram,
-            categories: editedItem?.categories,
-            rating: editedItem?.rating,
-            reviews: editedItem?.reviews,
+            state: editedItem?.state?.trim(),
+            postcode: editedItem?.postcode?.trim(),
+            categories: editedItem?.categories?.trim(),
+            rating: editedItem?.rating?.trim(),
+            reviews: editedItem?.reviews?.trim(),
             friendly: trainingLocation.toString(),
         }
 
@@ -404,7 +401,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                     ) : (
                                         <span className='newEditableArea'>
                                             <input
-                                                type="text"
+                                                type="email"
                                                 name="email"
                                                 value={editedItem?.email}
                                                 onChange={handleInputChange}
