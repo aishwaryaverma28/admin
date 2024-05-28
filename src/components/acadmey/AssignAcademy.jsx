@@ -88,6 +88,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
       academyId: object.id,
       tempAcademyId: tempAcademyId
     }
+    console.log(body);
     axios.post(ASSIGN_ACADEMY, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,

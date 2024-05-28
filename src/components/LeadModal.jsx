@@ -83,13 +83,6 @@ const LeadModal = ({ onClose, getData }) => {
     }
   }, [formData?.email]);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => {
-  //     return { ...prev, [name]: value };
-  //   });
-  //   setStateBtn(1);
-  // };
   const capitalizeFirstLetterOfEachWord = (string) => {
     return string?.replace(/\b\w/g, char => char?.toUpperCase());
   };
