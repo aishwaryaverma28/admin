@@ -384,11 +384,11 @@ const LeadImage2 = (id) => {
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
-                                ? `${cdnurl}default/academy_default_logo.webp`
+                                ? `${cdnurl}asset/images/logo.svg`
                                 : `${cdnurl}academy/${academyData?.id}/${academyData?.logo}`} target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.logo === null
-                                        ? `${cdnurl}default/academy_default_logo.webp`
+                                        ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}academy/${academyData?.id}/${academyData?.logo}`}
                                     alt=""
                                     className="bmp-preview-image"

@@ -466,12 +466,12 @@ const NewPlayerImage = (id) => {
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
-                                ? "${cdnurl}coach/14/logo1.jpg"
+                                ? `${cdnurl}asset/images/logo.svg`
                                 : `${cdnurl}player_temp/${academyData?.id}/${academyData?.logo}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.logo === null
-                                        ? "${cdnurl}coach/14/logo1.jpg"
+                                        ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}player_temp/${academyData?.id}/${academyData?.logo}`}
                                     alt="pofile"
                                     className="bmp-preview-image"

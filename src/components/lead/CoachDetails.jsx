@@ -340,11 +340,11 @@ const capitalizeFirstLetterOfEachWord = (string) => {
         <div className="user-details--heading">
           <div className="user-details-imgBox">
             <a href={editedItem?.profile_img === null
-              ? `${cdnurl}coach/14/logo1.jpg`
+              ? `${cdnurl}asset/images/logo.svg`
               : `${cdnurl}coach/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
               <img
                 src={editedItem?.profile_img === null
-                  ? `${cdnurl}coach/14/logo1.jpg`
+                  ? `${cdnurl}asset/images/logo.svg`
                   : `${cdnurl}coach/${editedItem?.id}/${editedItem?.profile_img}`}
                 alt="pofile"
                 className="bmp-preview-image logoRound"

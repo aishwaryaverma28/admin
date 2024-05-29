@@ -385,12 +385,12 @@ const CoachImage = (id) => {
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.profile_img === null
-                                ? `${cdnurl}coach/14/logo1.jpg`
+                                ? `${cdnurl}asset/images/logo.svg`
                                 : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
                                     src={academyData?.profile_img === null
-                                        ? `${cdnurl}coach/14/logo1.jpg`
+                                        ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                     alt="pofile"
                                     className="bmp-preview-image"
