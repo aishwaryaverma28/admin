@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LeadModal from "../LeadModal.jsx";
 import DashboardCards from "./DashboardCards.jsx";
 import UrlTable from "./UrlTable.jsx";
+import OtpTable from "./OtpTable.jsx";
 
 const Dashboard = () => {
   const [stages, setStages] = useState([
@@ -32,6 +33,7 @@ const Dashboard = () => {
   ]);
   const [openLead, setOpenLead] = useState(false);
   const [openUrl, setOpenUrl] = useState(false);
+  const [openOtp, setOpenOtp] = useState(false);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
   const [display, setDisplay] = useState("Select Category")
@@ -60,7 +62,12 @@ const Dashboard = () => {
   const addUrlClose = () => {
     setOpenUrl(false)
   }
-
+  const addOtpClick = () => {
+    setOpenOtp(true)
+  }
+  const addOtpClose = () => {
+    setOpenOtp(false)
+  }
 
   const getAllAcademy = () => {
     axios.post(ALL_BMP_USER, { type_id: 2 }, {
@@ -150,10 +157,10 @@ const Dashboard = () => {
       if (!toggleChecked && value?.length < 3) {
         return;
       }
-      let apiUrl = '';      
-        apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/id/${value}`
-          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/global/${value}`;
+      let apiUrl = '';
+      apiUrl = toggleChecked
+        ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/id/${value}`
+        : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
@@ -236,9 +243,10 @@ const Dashboard = () => {
   }, []);
 
   return (
-
     openUrl ? 
-      <UrlTable onClose={addUrlClose}/> :
+      <UrlTable onClose={addUrlClose} /> : 
+    openOtp ? 
+      <OtpTable onClose={addOtpClose} /> :
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -290,6 +298,9 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="right-side--btns">
+            <button type="button" className="secondary-btn" onClick={addOtpClick}>
+              OTP
+            </button> 
             <button type="button" className="secondary-btn" onClick={addUrlClick}>
               Redirect
             </button>            
@@ -326,7 +337,7 @@ const Dashboard = () => {
               title="Refresh"
               onClick={resetData}
             >
-              <i class="fa-sharp fa-solid fa-rotate "></i>
+              <i className="fa-sharp fa-solid fa-rotate"></i>
             </button>
           </div>
         </div>
@@ -387,6 +398,6 @@ const Dashboard = () => {
       }
     </div>
   );
-};
+}  
 
 export default Dashboard;
