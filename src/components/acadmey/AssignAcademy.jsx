@@ -201,11 +201,11 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
               <div className="mail">
                 <div className="new_preview_flex">
                   <a href={data?.logo === null
-                    ? `${cdnurl}default/academy_default_logo.webp`
+                    ? `${cdnurl}asset/images/logo.svg`
                     : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
                     <img
                       src={data?.logo === null
-                        ? `${cdnurl}default/academy_default_logo.webp`
+                        ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`}
                       alt="pofile"
                       className="bmp-preview-image"
@@ -252,11 +252,11 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                 <div className="mail">
                   <div className="new_preview_flex">
                     <a href={object?.logo === null
-                      ? "${cdnurl}default/academy_default_logo.webp"
+                      ? `${cdnurl}asset/images/logo.svg`
                       : `${cdnurl}academy/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
                       <img
                         src={object?.logo === null
-                          ? "${cdnurl}default/academy_default_logo.webp"
+                          ? `${cdnurl}asset/images/logo.svg`
                           : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                         alt="pofile"
                         className="bmp-preview-image"

@@ -224,11 +224,11 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                     <div className="mail">
                                                         <div className="new_preview_flex">
                                                             <a href={editedItem?.logo === null
-                                                                ? `${cdnurl}default/academy_default_logo.webp`
+                                                                ? `${cdnurl}asset/images/logo.svg`
                                                                 : `${cdnurl}academy/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
                                                                 <img
                                                                     src={editedItem?.logo === null
-                                                                        ? `${cdnurl}default/academy_default_logo.webp`
+                                                                        ? `${cdnurl}asset/images/logo.svg`
                                                                         : `${cdnurl}academy/${editedItem?.id}/${editedItem?.logo}`}
                                                                     alt="pofile"
                                                                     className="bmp-preview-image"

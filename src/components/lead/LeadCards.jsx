@@ -132,12 +132,12 @@ const LeadCards = ({
               <div className="mail">
                 <div className="bmp-image-preview2">
                   <a href={object?.profile_img === null
-                    ? `${cdnurl}coach/14/logo1.jpg`
+                    ? `${cdnurl}asset/images/logo.svg`
                     : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                     target="_blank" rel="noopener noreferrer">
                     <img
                       src={object?.profile_img === null
-                        ? `${cdnurl}coach/14/logo1.jpg`
+                        ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                       alt="pofile"
                       className="bmp-preview-image"
@@ -150,12 +150,12 @@ const LeadCards = ({
               <div className="mail">
                 <div className="bmp-image-preview2">
                   <a href={object?.logo === null
-                    ? `${cdnurl}default/academy_default_logo.webp`
+                    ? `${cdnurl}asset/images/logo.svg`
                     : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                     target="_blank" rel="noopener noreferrer">
                     <img
                       src={object?.logo === null
-                        ? `${cdnurl}default/academy_default_logo.webp`
+                        ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                       alt="pofile"
                       className="bmp-preview-image"

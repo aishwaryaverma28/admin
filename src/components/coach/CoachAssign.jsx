@@ -187,11 +187,11 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                 <div className="mail">
                   <div className="new_preview_flex">
                     <a href={data?.profile_img === null
-                      ? `${cdnurl}coach/14/logo1.jpg`
+                      ? `${cdnurl}asset/images/logo.svg`
                       : `${cdnurl}coach_temp/${data?.id}/${data?.profile_img}`} target="_blank" rel="noopener noreferrer">
                       <img
                         src={data?.profile_img === null
-                          ? `${cdnurl}coach/14/logo1.jpg`
+                          ? `${cdnurl}asset/images/logo.svg`
                           : `${cdnurl}coach_temp/${data?.id}/${data?.profile_img}`}
                         alt="pofile"
                         className="bmp-preview-image"
@@ -241,11 +241,11 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                   <div className="mail">
                     <div className="new_preview_flex">
                       <a href={object?.profile_img === null
-                        ? `${cdnurl}coach/14/logo1.jpg`
+                        ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}coach/${object?.id}/${object?.profile_img}`} target="_blank" rel="noopener noreferrer">
                         <img
                           src={object?.profile_img === null
-                            ? `${cdnurl}coach/14/logo1.jpg`
+                            ? `${cdnurl}asset/images/logo.svg`
                             : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                           alt="pofile"
                           className="bmp-preview-image"
