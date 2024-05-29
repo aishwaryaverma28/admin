@@ -276,7 +276,7 @@ const AcademyDetails = React.forwardRef(({id, updateCheckState}, ref ) => {
                     <div className="user-details-imgBox">
                         <img
                             src={editedItem?.logo === null
-                                ? `${cdnurl}default/academy_default_logo.webp`
+                                ? `https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/logo.svg`
                                 : `${cdnurl}academy/${editedItem?.id}/${editedItem?.logo}`}
                             alt="logo"
                             className="bmp-preview-image logoRound"
