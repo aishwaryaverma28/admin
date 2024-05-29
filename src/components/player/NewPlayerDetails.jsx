@@ -97,7 +97,6 @@ const capitalizeFirstLetterOfEachWord = (string) => {
             }
         });
     }
-
     if (redText) {
         alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
         e.target.style.color = "red";
