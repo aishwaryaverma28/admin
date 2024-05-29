@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
-import LeadCards from "../lead/LeadCards";
-import CreateLead from "../lead/CreateLead.jsx";
 import {
   ALL_BMP_USER,
   getDecryptedToken,
@@ -136,12 +134,6 @@ const Dashboard = () => {
     setStatusCounts(counts);
   }, [acadmey, coach, player]);
 
-  const handleEntityChange = (entity) => {
-    setDisplay(entity);
-    setSelectedEntity(entity);
-    setSearchQuery('');
-    setOwnerOpen(false);
-  };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -176,9 +168,6 @@ const Dashboard = () => {
     }
   };
 
-  const toggleOwnerDropdown = () => {
-    setOwnerOpen(!ownerOpen);
-  };
   const resetData = () => {
     getAllUsers(1);
     getAllUsers(2);
@@ -299,30 +288,6 @@ const Dashboard = () => {
                 </div>
               </span>
             </div>
-            {/* <div className="dropdown-container" ref={actionOwnerRef}>
-              <div className="dropdown-header2" onClick={toggleOwnerDropdown}>
-                {display}
-                <i
-                  className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                ></i>
-              </div>
-              {ownerOpen && (
-                <ul className="dropdown-menu owner-menu">
-                  {stages?.map((item) => (
-                    <li
-                      key={item?.id}
-                      value={item?.id}
-                      className="owner-val"
-                      onClick={() => handleEntityChange(item.stage)}
-                    >
-                      {item.stage}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div> */}
-
           </div>
           <div className="right-side--btns">
             <button type="button" className="secondary-btn" onClick={addUrlClick}>

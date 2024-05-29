@@ -9,9 +9,11 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllLeadsCards from "./AllLeadsCards.jsx";
+import UrlTable from "../dashboard/UrlTable.jsx";
 
 const AllLeads = () => {
   const [toggleChecked, setToggleChecked] = useState(false);
+  const [openUrl, setOpenUrl] = useState(false);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
@@ -149,6 +151,13 @@ const AllLeads = () => {
 
   };
 
+
+  const addUrlClick = () => {
+    setOpenUrl(true)
+  }
+  const addUrlClose = () => {
+    setOpenUrl(false)
+  }
   //======================================================modal box
   const toggleDropdown = () => {
     setLeadOpen(!leadopen);
@@ -195,6 +204,8 @@ const AllLeads = () => {
 
 
   return (
+    openUrl ? 
+      <UrlTable onClose={addUrlClose}/> :
     <>
       <div>
         <section className="lead-body">
@@ -264,6 +275,9 @@ const AllLeads = () => {
               </div>
             </div>
             <div className="right-side--btns">
+            <button type="button" className="secondary-btn" onClick={addUrlClick}>
+              Details
+            </button>
               <div className="select action-select">
                 <div className="dropdown-container" ref={actionDropDownRef}>
                   <div
