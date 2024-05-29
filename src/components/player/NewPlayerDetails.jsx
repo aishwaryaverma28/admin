@@ -136,7 +136,7 @@ const capitalizeFirstLetterOfEachWord = (string) => {
       state: editedItem?.state?.trim(),
       about: editedItem?.about?.trim(),
       awards: editedItem?.awards?.trim(),
-      dob: editedItem?.dob?.trim(),
+      dob: editedItem?.dob,
       height: editedItem?.height?.trim(),
       weight: editedItem?.weight?.trim(),
       position: editedItem?.position?.trim(),
@@ -273,11 +273,11 @@ const capitalizeFirstLetterOfEachWord = (string) => {
       <div className="user-details--heading">
         <div className="user-details-imgBox">
           <a href={editedItem?.logo === null
-            ? `${cdnurl}coach/14/logo1.jpg`
+            ? `${cdnurl}asset/images/logo.svg`
             : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
             <img
               src={editedItem?.logo === null
-                ? `${cdnurl}coach/14/logo1.jpg`
+                ? `${cdnurl}asset/images/logo.svg`
                 : `${cdnurl}player_temp/${editedItem?.id}/${editedItem?.logo}`}
               alt="pofile"
               className="bmp-preview-image logoRound"
@@ -304,7 +304,7 @@ const capitalizeFirstLetterOfEachWord = (string) => {
         <div className="detailsBox">
           <div className="detailsContent">
             <div className="detailsLeftContainer">
-              <p>Names</p>
+              <p>Name</p>
               <p>Email</p>
               <p>Phone</p>
               <p>Sport</p>
