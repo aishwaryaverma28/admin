@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Back from "../../assets/image/arrow-left.svg";
-import { GET_OTP, getDecryptedToken } from "../utils/Constants";
+import { LEADS_BY_CITY, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
 import InfoModal from "./InfoModal.jsx";
 
@@ -15,19 +15,6 @@ const InfoTable = ({ onClose }) => {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const formatDate = (isoDate) => {
-    const options = {
-      year: "2-digit",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    };
-    const date = new Date(isoDate);
-    return date.toLocaleDateString("en-US", options);
-  };
-
   const infoModalClick = () => {
     setOpenModal(true)
   }
@@ -38,7 +25,7 @@ const InfoTable = ({ onClose }) => {
   const fetchData = (page, limit) => {
     axios
       .post(
-        GET_OTP,
+        LEADS_BY_CITY,
         { page: page.toString(), limit: limit.toString() },
         {
           headers: {
@@ -104,26 +91,10 @@ const InfoTable = ({ onClose }) => {
     fetchData(page, limit);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const filteredData = allData.filter((item) =>
-    item.id.toString().includes(searchQuery) ||
-    (item.attr7 && item.attr7.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
   return (
     <>
       <div className="performance_title2">
         <img src={Back} alt="" onClick={onClose} />
-        <input
-          type="text"
-          className="recycle-search-input recycle-fonts"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
         <div className="leads_new_btn">
           <button
             type="button"
@@ -150,44 +121,17 @@ const InfoTable = ({ onClose }) => {
             </tr>
           </thead>
           <tbody>
-          <tr>
-                <td className="common-fonts">385</td>
-                <td className="common-fonts">football</td>
-                <td className="common-fonts">Banglore</td>
-                <td className="common-fonts" onClick={infoModalClick}>1</td>
-                <td className="common-fonts" onClick={infoModalClick}>2</td>
-                <td className="common-fonts" onClick={infoModalClick}>21</td>
-                <td className="common-fonts" onClick={infoModalClick}>3</td>
-              </tr>
-              <tr>
-                <td className="common-fonts">395</td>
-                <td className="common-fonts">football</td>
-                <td className="common-fonts">Kolkata</td>
-                <td className="common-fonts" onClick={infoModalClick}>1</td>
-                <td className="common-fonts" onClick={infoModalClick}>Null</td>
-                <td className="common-fonts" onClick={infoModalClick}>5</td>
-                <td className="common-fonts" onClick={infoModalClick}>2</td>
-              </tr>
-              <tr>
-                <td className="common-fonts">754</td>
-                <td className="common-fonts">table-tennis</td>
-                <td className="common-fonts">Banglore</td>
-                <td className="common-fonts" onClick={infoModalClick}>16</td>
-                <td className="common-fonts" onClick={infoModalClick}>2</td>
-                <td className="common-fonts" onClick={infoModalClick}>38</td>
-                <td className="common-fonts" onClick={infoModalClick}>3</td>
-              </tr>
-            {/* {filteredData.map((item) => (
+          {allData.map((item) => (
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
-                <td className="common-fonts">{item.attr7}</td>
-                <td className="common-fonts">{item.attr4}</td>
-                <td className="common-fonts">{item.attr8}</td>
-                <td className="common-fonts">
-                  {formatDate(item.creation_date)}
-                </td>
+                <td className="common-fonts">{item.sport}</td>
+                <td className="common-fonts">{item.city}</td>
+                <td className="common-fonts" onClick={infoModalClick}>{item.lead_generation !== null ? item.lead_generation : 0}</td>
+                <td className="common-fonts" onClick={infoModalClick}>{item.verified_academies !== null ? item.verified_academies : 0}</td>
+                <td className="common-fonts" onClick={infoModalClick}>{item.total_academies !== null ? item.total_academies : 0}</td>
+                <td className="common-fonts" onClick={infoModalClick}>{item.total_coaches !== null ? item.total_coaches : 0}</td>
               </tr>
-            ))} */}
+            ))}
           </tbody>
         </table>
       </div>
