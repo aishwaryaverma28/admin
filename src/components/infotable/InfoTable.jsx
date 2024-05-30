@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Back from "../../assets/image/arrow-left.svg";
 import { GET_OTP, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
+import InfoModal from "./InfoModal.jsx";
 
 const InfoTable = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
@@ -11,6 +12,8 @@ const InfoTable = ({ onClose }) => {
   const limit = 20;
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup = 3;
+
+  const [openModal, setOpenModal] = useState(false);
 
   const formatDate = (isoDate) => {
     const options = {
@@ -24,6 +27,13 @@ const InfoTable = ({ onClose }) => {
     const date = new Date(isoDate);
     return date.toLocaleDateString("en-US", options);
   };
+
+  const infoModalClick = () => {
+    setOpenModal(true)
+  }
+  const infoModalClose = () => {
+    setOpenModal(false)
+  }
 
   const fetchData = (page, limit) => {
     axios
@@ -144,28 +154,28 @@ const InfoTable = ({ onClose }) => {
                 <td className="common-fonts">385</td>
                 <td className="common-fonts">football</td>
                 <td className="common-fonts">Banglore</td>
-                <td className="common-fonts">1</td>
-                <td className="common-fonts">2</td>
-                <td className="common-fonts">21</td>
-                <td className="common-fonts">3</td>
+                <td className="common-fonts" onClick={infoModalClick}>1</td>
+                <td className="common-fonts" onClick={infoModalClick}>2</td>
+                <td className="common-fonts" onClick={infoModalClick}>21</td>
+                <td className="common-fonts" onClick={infoModalClick}>3</td>
               </tr>
               <tr>
                 <td className="common-fonts">395</td>
                 <td className="common-fonts">football</td>
                 <td className="common-fonts">Kolkata</td>
-                <td className="common-fonts">1</td>
-                <td className="common-fonts">Null</td>
-                <td className="common-fonts">5</td>
-                <td className="common-fonts">2</td>
+                <td className="common-fonts" onClick={infoModalClick}>1</td>
+                <td className="common-fonts" onClick={infoModalClick}>Null</td>
+                <td className="common-fonts" onClick={infoModalClick}>5</td>
+                <td className="common-fonts" onClick={infoModalClick}>2</td>
               </tr>
               <tr>
                 <td className="common-fonts">754</td>
                 <td className="common-fonts">table-tennis</td>
                 <td className="common-fonts">Banglore</td>
-                <td className="common-fonts">16</td>
-                <td className="common-fonts">2</td>
-                <td className="common-fonts">38</td>
-                <td className="common-fonts">3</td>
+                <td className="common-fonts" onClick={infoModalClick}>16</td>
+                <td className="common-fonts" onClick={infoModalClick}>2</td>
+                <td className="common-fonts" onClick={infoModalClick}>38</td>
+                <td className="common-fonts" onClick={infoModalClick}>3</td>
               </tr>
             {/* {filteredData.map((item) => (
               <tr key={item.id}>
@@ -190,6 +200,11 @@ const InfoTable = ({ onClose }) => {
           &gt;
         </button>
       </div>
+      {
+        openModal && (
+          <InfoModal onClose={infoModalClose} />
+        )
+      }
     </>
   );
 };
