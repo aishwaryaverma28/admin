@@ -107,7 +107,7 @@ const InfoTable = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="marketing-all-table url_table">
+      <div className="marketing-all-table info_table">
         <table>
           <thead>
             <tr>
