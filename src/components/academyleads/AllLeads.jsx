@@ -9,7 +9,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllLeadsCards from "./AllLeadsCards.jsx";
-import UrlTable from "../dashboard/UrlTable.jsx";
+import InfoTable from "../infotable/InfoTable.jsx";
 
 const AllLeads = () => {
   const [toggleChecked, setToggleChecked] = useState(false);
@@ -205,7 +205,7 @@ const AllLeads = () => {
 
   return (
     openUrl ? 
-      <UrlTable onClose={addUrlClose}/> :
+      <InfoTable onClose={addUrlClose}/> :
     <>
       <div>
         <section className="lead-body">
