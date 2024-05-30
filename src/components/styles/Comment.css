@@ -231,3 +231,28 @@ background: #F3F6FA;
    text-underline-offset: 0.2rem;
    text-decoration-color: red;
   }
+
+  .otp_table{
+    margin: 1rem;
+    height: 65vh;
+    overflow: auto;
+  }
+  
+  .otp_table th{
+    text-align: left;
+  }
+  .otp_table th:nth-child(1){
+    width: 5rem;
+   }
+  .otp_table th:nth-child(2){
+   width: 7rem;
+  }
+  .otp_table th:nth-child(3){
+    width: 10rem;
+   }
+  .otp_table th:nth-child(4){
+    width: 10rem;
+   }
+   .otp_table th:nth-child(5){
+    width: 90rem;
+   }

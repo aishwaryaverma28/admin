@@ -126,13 +126,13 @@ const OtpTable = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="marketing-all-table url_table">
+      <div className="marketing-all-table otp_table">
         <table>
           <thead>
             <tr>
               <th className="common-fonts">Id</th>
               <th className="common-fonts">Mobile</th>
-              <th className="common-fonts">Name</th>
+              <th className="common-fonts">Source</th>
               <th className="common-fonts">OTP</th>
               <th className="common-fonts">Date</th>
             </tr>
@@ -142,7 +142,7 @@ const OtpTable = ({ onClose }) => {
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">{item.attr7}</td>
-                <td className="common-fonts">{item.attr4}</td>
+                <td className="common-fonts"><div className="leads_desc">{item.attr4}</div></td>
                 <td className="common-fonts">{item.attr8}</td>
                 <td className="common-fonts">
                   {formatDate(item.creation_date)}
