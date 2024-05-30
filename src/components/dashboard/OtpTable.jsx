@@ -142,7 +142,7 @@ const OtpTable = ({ onClose }) => {
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">{item.attr7}</td>
-                <td className="common-fonts"><div className="leads_desc">{item.attr4}</div></td>
+                <td className="common-fonts"><div className="otp_desc">{item.attr4}</div></td>
                 <td className="common-fonts">{item.attr8}</td>
                 <td className="common-fonts">
                   {formatDate(item.creation_date)}

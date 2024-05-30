@@ -253,6 +253,12 @@ background: #F3F6FA;
   .otp_table th:nth-child(4){
     width: 10rem;
    }
-   .otp_table th:nth-child(5){
+   /* .otp_table th:nth-child(5){
     width: 90rem;
-   }
+   } */
+   .otp_desc {
+    height: 1.4rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 55rem;
+}
