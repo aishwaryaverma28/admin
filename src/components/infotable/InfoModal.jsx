@@ -11,7 +11,7 @@ const InfoModal = ({ onClose }) => {
       <div className="help-modal-container lead_modal_input">
         <div className="leftCreateClose2" onClick={onClose}></div>
         <div className="help-modal-box">
-         
+
         </div>
         <div className="help-cross" onClick={onClose}>
           X

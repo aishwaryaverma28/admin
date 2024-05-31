@@ -3,6 +3,7 @@ import Back from "../../assets/image/arrow-left.svg";
 import { LEADS_BY_CITY, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
 import InfoModal from "./InfoModal.jsx";
+import InfoAcademy from "./InfoAcademy.jsx";
 
 const InfoTable = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
@@ -12,7 +13,7 @@ const InfoTable = ({ onClose }) => {
   const limit = 20;
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup = 3;
-
+const [openAcademy,setOpenAcademy] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const infoModalClick = () => {
@@ -21,7 +22,12 @@ const InfoTable = ({ onClose }) => {
   const infoModalClose = () => {
     setOpenModal(false)
   }
-
+  const infoAcademyClick = () => {
+    setOpenAcademy(true)
+  }
+  const infoAcademyClose = () => {
+    setOpenAcademy(false)
+  }
   const fetchData = (page, limit) => {
     axios
       .post(
@@ -128,7 +134,7 @@ const InfoTable = ({ onClose }) => {
                 <td className="common-fonts">{item.city}</td>
                 <td className="common-fonts" onClick={infoModalClick}>{item.lead_generation !== null ? item.lead_generation : 0}</td>
                 <td className="common-fonts" onClick={infoModalClick}>{item.verified_academies !== null ? item.verified_academies : 0}</td>
-                <td className="common-fonts" onClick={infoModalClick}>{item.total_academies !== null ? item.total_academies : 0}</td>
+                <td className="common-fonts" onClick={infoAcademyClick}>{item.total_academies !== null ? item.total_academies : 0}</td>
                 <td className="common-fonts" onClick={infoModalClick}>{item.total_coaches !== null ? item.total_coaches : 0}</td>
               </tr>
             ))}
@@ -147,6 +153,11 @@ const InfoTable = ({ onClose }) => {
       {
         openModal && (
           <InfoModal onClose={infoModalClose} />
+        )
+      }
+      {
+        openAcademy && (
+          <InfoAcademy onClose={infoAcademyClose} />
         )
       }
     </>
