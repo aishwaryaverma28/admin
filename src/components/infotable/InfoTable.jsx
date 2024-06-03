@@ -2,27 +2,22 @@ import React, { useEffect, useState } from "react";
 import Back from "../../assets/image/arrow-left.svg";
 import { LEADS_BY_CITY, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
-import InfoModal from "./InfoModal.jsx";
 import InfoAcademy from "./InfoAcademy.jsx";
 
 const InfoTable = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
   const [allData, setAllData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const limit = 20;
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup = 3;
-const [openAcademy,setOpenAcademy] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openAcademy, setOpenAcademy] = useState(false);
+  const [data, setData] = useState();
+  const [entity, setEntity] = useState();
 
-  const infoModalClick = () => {
-    setOpenModal(true)
-  }
-  const infoModalClose = () => {
-    setOpenModal(false)
-  }
-  const infoAcademyClick = () => {
+  const infoAcademyClick = (data, entity) => {
+    setData(data);
+    setEntity(entity);
     setOpenAcademy(true)
   }
   const infoAcademyClose = () => {
@@ -127,15 +122,15 @@ const [openAcademy,setOpenAcademy] = useState(false);
             </tr>
           </thead>
           <tbody>
-          {allData.map((item) => (
+            {allData.map((item) => (
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">{item.sport}</td>
                 <td className="common-fonts">{item.city}</td>
-                <td className="common-fonts" onClick={infoModalClick}>{item.lead_generation !== null ? item.lead_generation : 0}</td>
-                <td className="common-fonts" onClick={infoModalClick}>{item.verified_academies !== null ? item.verified_academies : 0}</td>
-                <td className="common-fonts" onClick={infoAcademyClick}>{item.total_academies !== null ? item.total_academies : 0}</td>
-                <td className="common-fonts" onClick={infoModalClick}>{item.total_coaches !== null ? item.total_coaches : 0}</td>
+                <td className="common-fonts">{item.lead_generation !== null ? item.lead_generation : 0}</td>
+                <td className="common-fonts" onClick={item.verified_academies !== null ? () => infoAcademyClick(item, "verified_academy") : null}>{item.verified_academies !== null ? item.verified_academies : 0}</td>
+                <td className="common-fonts" onClick={item.total_academies !== null ? () => infoAcademyClick(item, "academy") : null}>{item.total_academies !== null ? item.total_academies : 0}</td>
+                <td className="common-fonts" onClick={item.total_coaches !== null ? () => infoAcademyClick(item, "coach") : null}>{item.total_coaches !== null ? item.total_coaches : 0}</td>
               </tr>
             ))}
           </tbody>
@@ -151,13 +146,8 @@ const [openAcademy,setOpenAcademy] = useState(false);
         </button>
       </div>
       {
-        openModal && (
-          <InfoModal onClose={infoModalClose} />
-        )
-      }
-      {
         openAcademy && (
-          <InfoAcademy onClose={infoAcademyClose} />
+          <InfoAcademy onClose={infoAcademyClose} page={page} limit={limit} data={data} entity={entity} />
         )
       }
     </>

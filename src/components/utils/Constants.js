@@ -276,3 +276,4 @@ export const ASSIGN_LEADS_USER = bmpStart+"/bmp/leads/assign";
 export const SHOW_URL = bmpStart+"/bmp/redirect/get";
 export const GET_OTP = bmpStart+"/bmp/log/getOtps";
 export const LEADS_BY_CITY = bmpStart+"/bmp/leads/getByCities";
+export const LEADS_BY_ENTITY = bmpStart+"/bmp/entity/getByCities";

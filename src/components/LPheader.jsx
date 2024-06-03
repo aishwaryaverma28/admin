@@ -35,7 +35,6 @@ const LPheader = () => {
   const decryptedToken = getDecryptedToken();
   const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
-console.log(decryptedToken)
   const [number, setNumber] = useState(null);
   let allowed = decryptedUserPath.split(",");
   // let allowed = [

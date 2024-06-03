@@ -3,36 +3,37 @@ import axios from 'axios';
 import {
   cdnurl,
   getDecryptedToken,
+  LEADS_BY_ENTITY
 } from "../utils/Constants.js"
-import { toast } from 'react-toastify';
-import AcadmeyLead from '../lead/AcadmeyLead.jsx';
-const InfoAcademy = ({ onClose }) => {
+const InfoAcademy = ({ onClose, page, limit, data, entity }) => {
   const decryptedToken = getDecryptedToken();
-  const [data, setData] = useState({})
+  const [newdata, setNewData] = useState([])
 
-  // const fetchLead = () => {
-  //   let body = {
-  //     academy_id: tempAcademyId,
-  //     type: "temp"
-  //   };
+  const fetchLead = () => {
+    let body = {
+      "entity": entity,
+      "city": data?.city,
+      "sport": data?.sport,
+      "page": page,
+      "limit": limit
+    };
 
-  //   axios
-  //     .post(GET_ACADEMY, body, {
-  //       headers: {
-  //         Authorization: `Bearer ${decryptedToken}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       setData(response?.data?.data[0]);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  // useEffect(() => {
-  //   fetchLead();
-  // }, []);
-
+    axios
+      .post(LEADS_BY_ENTITY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        setNewData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchLead();
+  }, []);
 
   return (
     <>
@@ -44,104 +45,46 @@ const InfoAcademy = ({ onClose }) => {
           </span>
           <div className="user-details--right">
             <div className="academy-card">
-              <div className="card-container">
-                <div className="card-leftBox">
-                  <div className="user-details">
-                    <p className="heading">
-                      Id- Academy Name
-                    </p>
-                  </div>
-                  <div className="lead-value">
-                  </div>
-                  <div className="contact-details">
-                    <div className="mail sportCap">
-                      <p>Academy Sport</p>
-                    </div>
-                    <div className="mail">
-                      <p>Phone Number</p>
-                    </div>
-                    <div className="mail">
-                      <p>Email</p>
-                    </div>
-                    <div className="mail sportCap">
-                      <p>City, State</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="DealCard-rightBox">
-                  <div className="mail">
-                    <div className="new_preview_flex">
-                      <img
-                        src={`${cdnurl}asset/images/logo.svg`}
-                        alt="pofile"
-                        className="bmp-preview-image"
-                      />
-                      {/* <a href={data?.logo === null
-                    ? `${cdnurl}asset/images/logo.svg`
-                    : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={data?.logo === null
-                        ? `${cdnurl}asset/images/logo.svg`
-                        : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`}
-                      alt="pofile"
-                      className="bmp-preview-image"
-                    />
-                  </a> */}
-                    </div>
-                  </div>
+              <>
+                {newdata?.map((object) => (
+                  <div key={object?.id} className="academy-card">
+                    <div className="card-container">
+                      <div className="card-leftBox">
+                        <div className="user-details">
+                          <p className="heading">
+                            {object?.id} - {object?.name}
+                          </p>
+                        </div>
+                        <div className="lead-value">
+                        </div>
+                        <div className="contact-details">
+                          <div className="mail sportCap">
+                            <p>{object?.sport}</p>
+                          </div>
+                          <div className="mail">
+                            <p>{object?.phone}</p>
+                          </div>
+                          <div className="mail sportCap">
+                            <p>{object?.city}, {object?.state}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="DealCard-rightBox">
+                        <div className="mail">
+                          <div className="new_preview_flex">
+                            <img
+                              src={`${cdnurl}asset/images/logo.svg`}
+                              alt="pofile"
+                              className="bmp-preview-image"
+                            />
+                          </div>
+                        </div>
 
-                </div>
-              </div>
-            </div>
-            <div className="academy-card">
-              <div className="card-container">
-                <div className="card-leftBox">
-                  <div className="user-details">
-                    <p className="heading">
-                      Id- Academy Name
-                    </p>
-                  </div>
-                  <div className="lead-value">
-                  </div>
-                  <div className="contact-details">
-                    <div className="mail sportCap">
-                      <p>Academy Sport</p>
-                    </div>
-                    <div className="mail">
-                      <p>Phone Number</p>
-                    </div>
-                    <div className="mail">
-                      <p>Email</p>
-                    </div>
-                    <div className="mail sportCap">
-                      <p>City, State</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="DealCard-rightBox">
-                  <div className="mail">
-                    <div className="new_preview_flex">
-                      <img
-                        src={`${cdnurl}asset/images/logo.svg`}
-                        alt="pofile"
-                        className="bmp-preview-image"
-                      />
-                      {/* <a href={data?.logo === null
-                    ? `${cdnurl}asset/images/logo.svg`
-                    : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={data?.logo === null
-                        ? `${cdnurl}asset/images/logo.svg`
-                        : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`}
-                      alt="pofile"
-                      className="bmp-preview-image"
-                    />
-                  </a> */}
-                    </div>
-                  </div>
-
-                </div>
-              </div>
+                ))}
+              </>
             </div>
           </div>
         </div>
