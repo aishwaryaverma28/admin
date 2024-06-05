@@ -368,6 +368,11 @@ const UserDetails = (selectedItem) => {
                         <option value="volleyball"></option>
                         <option value="wrestling"></option>
                         <option value="yoga"></option>
+                        <option value="baseball"></option>
+                        <option value="silambam"></option>
+                        <option value="snooker"></option>
+                        <option value="handball"></option>
+                        <option value="carrom"></option>
                       </datalist>
 
                     </span>
@@ -462,37 +467,37 @@ const UserDetails = (selectedItem) => {
               </div>
             </div>
           </div>
-          
+
 
         </div>
         {isEditable ? (
-                    <div className="modalLeftBtnBox">
-                        <button
-                            className="convertToDeal"
-                            onClick={() => handleViewSite(entity?.url)}
-                        >
-                            View Site
-                        </button>
-                        {stateBtn === 0 ? (
-                            <button disabled className="disabledBtn">
-                                Save
-                            </button>
-                        ) : (
-                            <button onClick={handleUpdateClick} className="convertToDeal">
-                                Save
-                            </button>
-                        )}
-                    </div>
-                ) : (
-                    <div className="modalLeftBtnBox">
-                        <span></span>
-                        <button
-                            className="convertToDeal"
-                            onClick={() => handleViewSite(entity?.url)}
-                        >View Site
-                        </button>
-                    </div>
-                )}
+          <div className="modalLeftBtnBox">
+            <button
+              className="convertToDeal"
+              onClick={() => handleViewSite(entity?.url)}
+            >
+              View Site
+            </button>
+            {stateBtn === 0 ? (
+              <button disabled className="disabledBtn">
+                Save
+              </button>
+            ) : (
+              <button onClick={handleUpdateClick} className="convertToDeal">
+                Save
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="modalLeftBtnBox">
+            <span></span>
+            <button
+              className="convertToDeal"
+              onClick={() => handleViewSite(entity?.url)}
+            >View Site
+            </button>
+          </div>
+        )}
       </div>
     </>
   )

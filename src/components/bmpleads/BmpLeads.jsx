@@ -25,7 +25,7 @@ const BmpLeads = () => {
       "id": 2,
       "stage": "verified_coaches",
       "name": "Verified Coaches"
-    }    
+    }
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [leadopen, setLeadOpen] = useState(false);
@@ -52,22 +52,22 @@ const BmpLeads = () => {
     setCityLead(event.target.value);
   };
 
- useEffect(() => {
+  useEffect(() => {
     getAllVerify();
   }, []);
 
   //=========================================================get all acadmey verifeid
-   const getAllVerify = () => {
+  const getAllVerify = () => {
     const requestBodyBoth = {
       "condition": "both",
       "entity": "academy"
     };
-  
+
     const requestBodyAnyone = {
       "condition": "anyone",
-       "entity": "academy"
+      "entity": "academy"
     };
-  
+
     Promise.all([
       axios.post(ACADMEY_VEREFIED, requestBodyBoth, {
         headers: {
@@ -81,19 +81,19 @@ const BmpLeads = () => {
       })
     ]).then(([bothResponse, anyoneResponse]) => {
       const bothData = bothResponse?.data?.data || [];
-    const anyoneData = anyoneResponse?.data?.data || [];
-    const combinedData = [...bothData, ...anyoneData];
-    const uniqueIds = new Set();
-    const filteredData = combinedData.filter(item => {
-      if (uniqueIds.has(item.id)) {
-        return false;
-      } else {
-        uniqueIds.add(item.id);
-        return true;
-      }
-    });
+      const anyoneData = anyoneResponse?.data?.data || [];
+      const combinedData = [...bothData, ...anyoneData];
+      const uniqueIds = new Set();
+      const filteredData = combinedData.filter(item => {
+        if (uniqueIds.has(item.id)) {
+          return false;
+        } else {
+          uniqueIds.add(item.id);
+          return true;
+        }
+      });
 
-    setVerified(filteredData);
+      setVerified(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -106,14 +106,14 @@ const BmpLeads = () => {
     setStatusCounts(counts);
   }, [verified]);
 
-  
+
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
   };
   const handleSearchChange = (event) => {
     const { value } = event.target;
-    setSearchQuery(value);    
+    setSearchQuery(value);
     if (value?.length === 0) {
       getAllVerify();
     } else {
@@ -121,23 +121,23 @@ const BmpLeads = () => {
         return;
       }
       let apiUrl = '';
-        apiUrl = toggleChecked
-          ? `${SEARCH_ACADMEY_ID}${value}`
-          : `${ACADMEY_SEARCH_API}${value}`;
+      apiUrl = toggleChecked
+        ? `${SEARCH_ACADMEY_ID}${value}`
+        : `${ACADMEY_SEARCH_API}${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
-      .then(response => {
-        setVerified(response?.data?.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+        .then(response => {
+          setVerified(response?.data?.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
   };
-  
+
   const resetData = () => {
     getAllVerify();
   };
@@ -187,7 +187,7 @@ const BmpLeads = () => {
     };
   }, []);
 
-  
+
   return (
     <>
       <div>
@@ -278,6 +278,11 @@ const BmpLeads = () => {
                   <option value="wrestling"></option>
                   <option value="yoga"></option>
                   <option value="bodybuilding"></option>
+                  <option value="baseball"></option>
+                  <option value="silambam"></option>
+                  <option value="snooker"></option>
+                  <option value="handball"></option>
+                  <option value="carrom"></option>
                 </datalist>
               </div>
               <div className="select action-select">
@@ -332,23 +337,23 @@ const BmpLeads = () => {
                     <p className="DealName">
                       {item?.name}({statusCounts[item.stage]})
                     </p>
-                 </div>
+                  </div>
                   {(() => {
                     switch (item?.stage) {
-                        case 'verified_acadmey':
-                          if (verified && verified.length > 0) {
-                            return verified.map((obj) => (
-                              <AcadmeyCard
-                                key={obj?.id}
-                                object={obj}
-                                onLeadAdded={getAllVerify
-                                }
-                                itemName={"verified_acadmey"}
-                              />
-                            ));
-                          } else {
-                            return <p>Loading...</p>;
-                          };
+                      case 'verified_acadmey':
+                        if (verified && verified.length > 0) {
+                          return verified.map((obj) => (
+                            <AcadmeyCard
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getAllVerify
+                              }
+                              itemName={"verified_acadmey"}
+                            />
+                          ));
+                        } else {
+                          return <p>Loading...</p>;
+                        };
                       default:
                         return null;
                     }

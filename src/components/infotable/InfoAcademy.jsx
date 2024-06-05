@@ -44,7 +44,7 @@ const InfoAcademy = ({ onClose, page, limit, data, entity }) => {
             <i className="fa-sharp fa-solid fa-xmark"></i>
           </span>
           <div className="user-details--right">
-            <div className="academy-card">
+            <div className="new-info-card">
               <>
                 {newdata?.map((object) => (
                   <div key={object?.id} className="academy-card">

@@ -356,9 +356,9 @@ const Acadmey = () => {
               </div>
             </div>
             <div className="right-side--btns">
-            <button type="button" className="secondary-btn" onClick={openModal}>
-              Add Academy
-            </button>
+              <button type="button" className="secondary-btn" onClick={openModal}>
+                Add Academy
+              </button>
               <div className="select action-select">
                 <input list="sports_leads" name="sports_lead" id="sports_lead" value={sportsLead}
                   placeholder="Sports"
@@ -396,6 +396,11 @@ const Acadmey = () => {
                   <option value="wrestling"></option>
                   <option value="yoga"></option>
                   <option value="bodybuilding"></option>
+                  <option value="baseball"></option>
+                  <option value="silambam"></option>
+                  <option value="snooker"></option>
+                  <option value="handball"></option>
+                  <option value="carrom"></option>
                 </datalist>
               </div>
               <div className="select action-select">
@@ -462,7 +467,7 @@ const Acadmey = () => {
                             itemName={"academy"}
                           />
                         ));
-                        case 'new_academy':
+                      case 'new_academy':
                         return newacadmey?.map((obj) => (
                           <DashboardCards
                             key={obj?.id}
@@ -521,11 +526,11 @@ const Acadmey = () => {
           ))}
         </section>
         {isModalOpen && (
-        <CreateLead
-          isOpen={isModalOpen}
-          onClose={closeModal}
-        />
-      )}
+          <CreateLead
+            isOpen={isModalOpen}
+            onClose={closeModal}
+          />
+        )}
         <ToastContainer />
       </div>
     </>

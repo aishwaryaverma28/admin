@@ -174,13 +174,13 @@ const BlogUpdate = () => {
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
     if (nameParts?.length > 1) {
-        const namePart = nameParts.slice(0, -1).join(".");
-        const processedName = namePart.replace(/[^\w-]/g, "-");
-        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+      const namePart = nameParts.slice(0, -1).join(".");
+      const processedName = namePart.replace(/[^\w-]/g, "-");
+      return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
-        return imageName.replace(/[^\w-]/g, "-");
+      return imageName.replace(/[^\w-]/g, "-");
     }
-};
+  };
 
   useEffect(() => {
     getBlogInfo();
@@ -445,17 +445,17 @@ const BlogUpdate = () => {
     const updatedSelectedTags = [...selectedTags];
     updatedSelectedTags.splice(index, 1);
     setSelectedTags(updatedSelectedTags);
-  
+
     const numbersArray = tagId?.split(",");
     numbersArray?.splice(index, 1);
     const updatedNumbersString = numbersArray?.join(",");
     setTagId(updatedNumbersString);
-  
+
     const updatedNames = [...tagNames];
     updatedNames.splice(index, 1);
     setTagNames(updatedNames);
   };
-  
+
   // ==========================================================================================================================================
   function handleSiteSelection(event) {
     setSelectSite(event.target.value);
@@ -661,8 +661,8 @@ const BlogUpdate = () => {
     const selectedImage = file;
     if (selectedImage) {
       const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+      const updatedConfig = {
         ...config,
         dirName: "blog",
       };
@@ -682,24 +682,24 @@ const BlogUpdate = () => {
   };
 
   const submitImage3 = (file) => {
-      const selectedImage = file;
-      if (selectedImage) {
-        const processedFileName = processImageName(selectedImage.name);
-        const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-       const updatedConfig = {
-          ...config,
-          dirName: "blog",
-        };
-        S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-          .then((data) => {
-            setBlogImg3(data?.location);
-            setBlogImgName2(modifiedFile.name);
-          })
-          .catch((err) => {
-            console.error(err);
-          })
-      }
-  }  
+    const selectedImage = file;
+    if (selectedImage) {
+      const processedFileName = processImageName(selectedImage.name);
+      const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+      const updatedConfig = {
+        ...config,
+        dirName: "blog",
+      };
+      S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+        .then((data) => {
+          setBlogImg3(data?.location);
+          setBlogImgName2(modifiedFile.name);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+    }
+  }
 
   const handleFileChange2 = (event) => {
     submitImage2(event.target.files[0]);
@@ -723,7 +723,7 @@ const BlogUpdate = () => {
     if (selectedImage) {
       const processedFileName = processImageName(selectedImage.name);
       const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-     const updatedConfig = {
+      const updatedConfig = {
         ...config,
         dirName: "blog",
       };
@@ -907,6 +907,11 @@ const BlogUpdate = () => {
                 <option value="volleyball"></option>
                 <option value="wrestling"></option>
                 <option value="yoga"></option>
+                <option value="baseball"></option>
+                <option value="silambam"></option>
+                <option value="snooker"></option>
+                <option value="handball"></option>
+                <option value="carrom"></option>
               </datalist>
             </div>
             <div className="form_group_blog">
@@ -1209,9 +1214,8 @@ const BlogUpdate = () => {
                     <div className="new_tag" onClick={toggleOwnerDropdown}>
                       {display}
                       <i
-                        className={`fa-sharp fa-solid ${
-                          ownerOpen ? "fa-angle-up" : "fa-angle-down"
-                        }`}
+                        className={`fa-sharp fa-solid ${ownerOpen ? "fa-angle-up" : "fa-angle-down"
+                          }`}
                       ></i>
                     </div>
                     {ownerOpen && (
@@ -1274,7 +1278,7 @@ const BlogUpdate = () => {
                     ))}
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="tag-box">
                 <h3 className="common-fonts">Publish</h3>
                 <div className="contentBox blog-add-date">
@@ -1301,7 +1305,7 @@ const BlogUpdate = () => {
                   </div>
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="tags">
                 <div className="tag-box tag-box-1">
                   <h3 className="common-fonts">Site</h3>

@@ -456,6 +456,11 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                                 <option value="volleyball"></option>
                                                 <option value="wrestling"></option>
                                                 <option value="yoga"></option>
+                                                <option value="baseball"></option>
+                                                <option value="silambam"></option>
+                                                <option value="snooker"></option>
+                                                <option value="handball"></option>
+                                                <option value="carrom"></option>
                                             </datalist>
 
                                         </span>

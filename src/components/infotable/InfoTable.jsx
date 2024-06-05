@@ -14,25 +14,23 @@ const InfoTable = ({ onClose }) => {
   const [openAcademy, setOpenAcademy] = useState(false);
   const [data, setData] = useState();
   const [entity, setEntity] = useState();
-
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortColumn, setSortColumn] = useState("lead_generation");
+  const totalPages = 100;
   const infoAcademyClick = (data, entity) => {
     setData(data);
     setEntity(entity);
-    setOpenAcademy(true)
-  }
+    setOpenAcademy(true);
+  };
   const infoAcademyClose = () => {
-    setOpenAcademy(false)
-  }
-  const fetchData = (page, limit) => {
+        setOpenAcademy(false);
+      };
+  const fetchData = (page, limit, column = sortColumn, order = sortOrder) => {
     axios
       .post(
         LEADS_BY_CITY,
-        { page: page.toString(), limit: limit.toString() },
-        {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
+        { page: page?.toString(), limit: limit?.toString(), order, ordercol: column },
+        { headers: { Authorization: `Bearer ${decryptedToken}` } }
       )
       .then((response) => {
         setAllData(response?.data?.data);
@@ -44,9 +42,12 @@ const InfoTable = ({ onClose }) => {
 
   useEffect(() => {
     fetchData(page, limit);
-  }, [page]);
+  }, [page, sortOrder, sortColumn]);
 
-  const totalPages = 100;
+  const handleSort = (column) => {
+    setSortColumn(column);
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  };
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -71,7 +72,7 @@ const InfoTable = ({ onClose }) => {
   };
 
   const renderPageNumbers = () => {
-    const startPage = (pageGroup - 1) * pagesPerGroup + 1;
+    const startPage = Math.max(1, (pageGroup - 1) * pagesPerGroup + 1);
     const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
     const pageNumbers = [];
     for (let i = startPage; i <= endPage; i++) {
@@ -92,6 +93,7 @@ const InfoTable = ({ onClose }) => {
     fetchData(page, limit);
   };
 
+ 
   return (
     <>
       <div className="performance_title2">
@@ -106,23 +108,37 @@ const InfoTable = ({ onClose }) => {
             <i className="fa-sharp fa-solid fa-rotate "></i>
           </button>
         </div>
-      </div>
+      </div> 
 
       <div className="marketing-all-table info_table">
         <table>
-          <thead>
-            <tr>
-              <th className="common-fonts">Id</th>
-              <th className="common-fonts">Sport</th>
-              <th className="common-fonts">City</th>
-              <th className="common-fonts">Leads</th>
-              <th className="common-fonts">Verified Academies</th>
-              <th className="common-fonts">Academies</th>
-              <th className="common-fonts">Coaches</th>
-            </tr>
-          </thead>
+        <thead>
+             <tr>
+              <th className="common-fonts" onClick={() => handleSort("id")}>
+                Id {sortColumn === "id" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+              </th>
+              <th className="common-fonts" onClick={() => handleSort("sport")}>
+                Sport {sortColumn === "sport" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+               <th className="common-fonts" onClick={() => handleSort("city")}>
+                 City {sortColumn === "city" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+               <th className="common-fonts" onClick={() => handleSort("lead_generation")}>
+                 Leads {sortColumn === "lead_generation" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+               <th className="common-fonts" onClick={() => handleSort("verified_academies")}>
+               Verified Academies {sortColumn === "verified_academies" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+               <th className="common-fonts" onClick={() => handleSort("total_academies")}>
+               Academies {sortColumn === "total_academies" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+               <th className="common-fonts" onClick={() => handleSort("total_coaches")}>
+               Coaches {sortColumn === "total_coaches" && <span>{sortOrder === "desc" ? "▼" : "▲"}</span>}
+               </th>
+             </tr>
+           </thead>
           <tbody>
-            {allData.map((item) => (
+          {allData?.map((item) => (
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
                 <td className="common-fonts">{item.sport}</td>

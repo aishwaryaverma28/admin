@@ -77,13 +77,13 @@ const BlogAdd = () => {
   const processImageName = (imageName) => {
     const nameParts = imageName.split(".");
     if (nameParts?.length > 1) {
-        const namePart = nameParts.slice(0, -1).join(".");
-        const processedName = namePart.replace(/[^\w-]/g, "-");
-        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+      const namePart = nameParts.slice(0, -1).join(".");
+      const processedName = namePart.replace(/[^\w-]/g, "-");
+      return `${processedName}.${nameParts[nameParts.length - 1]}`;
     } else {
-        return imageName.replace(/[^\w-]/g, "-");
+      return imageName.replace(/[^\w-]/g, "-");
     }
-};
+  };
   // ===================================================================functions for tags addition and removal
 
   const toggleOwnerDropdown = () => {
@@ -189,12 +189,12 @@ const BlogAdd = () => {
       });
   };
 
- const handleReplaceImage = (event, index) => {
+  const handleReplaceImage = (event, index) => {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
       const processedFileName = processImageName(selectedImage.name);
       const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-       const updatedConfig = {
+      const updatedConfig = {
         ...config,
         dirName: "blog",
       };
@@ -433,7 +433,7 @@ const BlogAdd = () => {
     if (selectedImage) {
       const processedFileName = processImageName(selectedImage.name);
       const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-       const updatedConfig = {
+      const updatedConfig = {
         ...config,
         dirName: "blog",
       };
@@ -593,6 +593,11 @@ const BlogAdd = () => {
                 <option value="volleyball"></option>
                 <option value="wrestling"></option>
                 <option value="yoga"></option>
+                <option value="baseball"></option>
+                <option value="silambam"></option>
+                <option value="snooker"></option>
+                <option value="handball"></option>
+                <option value="carrom"></option>
               </datalist>
             </div>
             <div className="form_group_blog">

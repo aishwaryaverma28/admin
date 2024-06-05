@@ -85,7 +85,7 @@ const Lead = () => {
   const addLeadClose = () => {
     setOpenLead(false)
   }
-  
+
 
   useEffect(() => {
     getAllAcademy();
@@ -109,7 +109,7 @@ const Lead = () => {
     setSelectedIds([]);
   };
 
-  
+
   //=========================================================get all acadmies
   const getAllAcademy = (sport, city) => {
     const hasSportOrCity = sport || city;
@@ -139,71 +139,71 @@ const Lead = () => {
       console.log(error);
     });
   }
-//=========================================================get all coaches
-const getAllCoaches = () => {
-  const requestBody = {
-    "entity": "bmp_coach_details",
-    "limit_from": "0",
-    "limit_to": "1000"
-};
-  axios.post(GET_COACH, requestBody, {
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`
+  //=========================================================get all coaches
+  const getAllCoaches = () => {
+    const requestBody = {
+      "entity": "bmp_coach_details",
+      "limit_from": "0",
+      "limit_to": "1000"
+    };
+    axios.post(GET_COACH, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
     }
+    ).then((response) => {
+      setCoach(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
-  ).then((response) => {
-    setCoach(response?.data?.data);
-  }).catch((error) => {
-    console.log(error);
-  });
-}
-//=========================================================get all players
-const getAllPlayers = () => {
-  const requestBody = {
-    "entity": "bmp_player_details",
-    "limit_from": "0",
-    "limit_to": "1000"
-};
-  axios.post(GET_COACH, requestBody, {
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`
+  //=========================================================get all players
+  const getAllPlayers = () => {
+    const requestBody = {
+      "entity": "bmp_player_details",
+      "limit_from": "0",
+      "limit_to": "1000"
+    };
+    axios.post(GET_COACH, requestBody, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
     }
+    ).then((response) => {
+      setPlayer(response?.data?.data);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
-  ).then((response) => {
-    setPlayer(response?.data?.data);
-  }).catch((error) => {
-    console.log(error);
-  });
-}
-//=========================================================get all users
-const getAllUsers = () => {
-  axios.post(ALL_BMP_USER, {}, {
-    headers: {
-      Authorization: `Bearer ${decryptedToken}`
+  //=========================================================get all users
+  const getAllUsers = () => {
+    axios.post(ALL_BMP_USER, {}, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
     }
+    ).then((response) => {
+      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== 0);
+      const filteredNewUser = response?.data?.data.filter(obj => obj.parent_tbl === 0);
+
+      setUser(filteredUser);
+      setNewUser(filteredNewUser);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
-  ).then((response) => {
-    const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== 0);
-    const filteredNewUser = response?.data?.data.filter(obj => obj.parent_tbl === 0);
-    
-    setUser(filteredUser);
-    setNewUser(filteredNewUser);
-  }).catch((error) => {
-    console.log(error);
-  });
-}
 
   useEffect(() => {
     const counts = {
       "academy": acadmey?.length,
       "coach": coach?.length,
-      'player':player?.length,
+      'player': player?.length,
       'user': user?.length,
       'new academy user': newUser?.length
     };
     setStatusCounts(counts);
-  }, [acadmey, coach,player,user, newUser]);
-  
+  }, [acadmey, coach, player, user, newUser]);
+
   const handleEntityChange = (entity) => {
     setDisplay(entity);
     setSelectedEntity(entity);
@@ -217,7 +217,7 @@ const getAllUsers = () => {
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
-    
+
     if (value?.length === 0) {
       if (selectedEntity === 'academy' || selectedEntity === '') {
         getAllAcademy();
@@ -225,7 +225,7 @@ const getAllUsers = () => {
         getAllCoaches();
       } else if (selectedEntity === 'user') {
         getAllUsers();
-      }else if (selectedEntity === 'player') {
+      } else if (selectedEntity === 'player') {
         getAllPlayers();
       }
     } else {
@@ -253,23 +253,23 @@ const getAllUsers = () => {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
-      .then(response => {
-        if (selectedEntity === 'academy' || selectedEntity === '') {
-          setAcademy(response?.data?.data);
-        } else if (selectedEntity === 'coach') {
-          setCoach(response?.data?.data);
-        }else if (selectedEntity === 'user') {
-          setUser(response?.data?.data);
-        }else if (selectedEntity === 'player') {
-          setPlayer(response?.data?.data);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
+        .then(response => {
+          if (selectedEntity === 'academy' || selectedEntity === '') {
+            setAcademy(response?.data?.data);
+          } else if (selectedEntity === 'coach') {
+            setCoach(response?.data?.data);
+          } else if (selectedEntity === 'user') {
+            setUser(response?.data?.data);
+          } else if (selectedEntity === 'player') {
+            setPlayer(response?.data?.data);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
   };
-    const toggleSortDropdown = () => {
+  const toggleSortDropdown = () => {
     setSortOpen(!sortOpen);
   };
   const toggleOwnerDropdown = () => {
@@ -372,7 +372,7 @@ const getAllUsers = () => {
     setPipeOpen(!pipeopen);
   };
   const toggleActionDropdown = () => {
-     setActionOpen(!actionopen);
+    setActionOpen(!actionopen);
   };
 
   useEffect(() => {
@@ -423,9 +423,9 @@ const getAllUsers = () => {
   }, []);
 
   const handleDeleteLead = () => {
-    };
+  };
 
-   return (
+  return (
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -501,11 +501,11 @@ const getAllUsers = () => {
 
           </div>
           <div className="right-side--btns">
-          <button type="button" className="secondary-btn" onClick={addLeadClick}>
-            Add Leads
+            <button type="button" className="secondary-btn" onClick={addLeadClick}>
+              Add Leads
             </button>
             <button type="button" className="secondary-btn" onClick={openModal}>
-            Add Academy
+              Add Academy
             </button>
             <div className="select action-select">
               {/* <label for="browserChoice">Sports:</label> */}
@@ -545,6 +545,11 @@ const getAllUsers = () => {
                 <option value="wrestling"></option>
                 <option value="yoga"></option>
                 <option value="bodybuilding"></option>
+                <option value="baseball"></option>
+                <option value="silambam"></option>
+                <option value="snooker"></option>
+                <option value="handball"></option>
+                <option value="carrom"></option>
               </datalist>
             </div>
             <div className="select action-select">
@@ -691,77 +696,77 @@ const getAllUsers = () => {
         </div>
       </section>
       <section className="cards-body">
-  {stages?.map((item, index) => (
-    <div className="card-column" key={index}>
-      <div className="card-details">
-        <div className="main-cards">
-          <div className="cards-new">
-            <p className="DealName">
-              {item?.stage}({statusCounts[item.stage]})
-            </p>
+        {stages?.map((item, index) => (
+          <div className="card-column" key={index}>
+            <div className="card-details">
+              <div className="main-cards">
+                <div className="cards-new">
+                  <p className="DealName">
+                    {item?.stage}({statusCounts[item.stage]})
+                  </p>
+                </div>
+                {(() => {
+                  switch (item?.stage) {
+                    case 'academy':
+                      return acadmey?.map((obj) => (
+                        <LeadCards
+                          key={obj?.id}
+                          object={obj}
+                          onLeadAdded={getAllAcademy}
+                          itemName={"academy"}
+                        />
+                      ));
+                    case 'player':
+                      return player?.map((obj) => (
+                        <LeadCards
+                          key={obj?.id}
+                          object={obj}
+                          onLeadAdded={getAllPlayers}
+                          itemName={"player"}
+                        />
+                      ));
+                    case 'coach':
+                      return coach?.map((obj) => (
+                        <LeadCards
+                          key={obj?.id}
+                          object={obj}
+                          onLeadAdded={getAllCoaches}
+                          itemName={"coach"}
+                        />
+                      ));
+                    case 'user':
+                      return user?.map((obj) => (
+                        <LeadCards
+                          key={obj?.id}
+                          object={obj}
+                          onLeadAdded={getAllUsers}
+                          itemName={"user"}
+                        />
+                      ));
+                    case 'new academy user':
+                      return newUser?.map((obj) => (
+                        <LeadCards
+                          key={obj?.id}
+                          object={obj}
+                          onLeadAdded={getAllUsers}
+                          itemName={"newuser"} />
+                      ));
+                    default:
+                      return null;
+                  }
+                })()}
+              </div>
+            </div>
           </div>
-          {(() => {
-            switch (item?.stage) {
-              case 'academy':
-                return acadmey?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllAcademy}
-                    itemName={"academy"}
-                  />
-                ));
-              case 'player':
-                return player?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllPlayers}
-                    itemName={"player"}
-                  />
-                ));
-              case 'coach':
-                return coach?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllCoaches}
-                    itemName={"coach"}
-                  />
-                ));
-              case 'user':
-                return user?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllUsers}
-                    itemName={"user"}
-                  />
-                ));
-                case 'new academy user':
-                return newUser?.map((obj) => (
-                  <LeadCards
-                    key={obj?.id}
-                    object={obj}
-                    onLeadAdded={getAllUsers}
-                    itemName={"newuser"}/>
-                ));
-              default:
-                return null;
-            }
-          })()}
-        </div>
-      </div>
-    </div>
-  ))}
-</section>
+        ))}
+      </section>
 
-{isModalOpen && (
-      <CreateLead
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      />
-    )}
+      {isModalOpen && (
+        <CreateLead
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
+      )}
       <ToastContainer />
       {isDelete && (
         <LeadDeletePopUp
@@ -782,7 +787,7 @@ const getAllUsers = () => {
       )}
       {
         openLead && (
-          <LeadModal onClose={addLeadClose}/>
+          <LeadModal onClose={addLeadClose} />
         )
       }
     </div>
