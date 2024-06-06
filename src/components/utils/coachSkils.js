@@ -1,5 +1,5 @@
 export const skills ={
-    21: ["coaching techniques", "exercise physiology", "time management"],
+    16: ["coaching techniques", "exercise physiology", "time management"],
     2: ["Head Coach", "Assistant Coach", "Associate Head Coach", "Shooting Coach", "Defensive Coach", "Offensive Coach", "Player Development Coach", "Strength and Conditioning Coach", "Video Coordinator", "Analytics Coordinator", "Skills Coach", "Team Manager Coach", "Graduate Assistant Coach", "Director of Basketball Operations", "Youth Basketball Coach", "High School Basketball Coach", "College Basketball Coach", "Professional Basketball Coach", "National Team Coach", "Scout Coach"],
     32: ["Ashtanga Yoga Teacher", "Vinyasa Yoga Instructor", "Iyengar Yoga Teacher", "Kundalini Yoga Instructor", "Bikram Yoga Teacher", "Yin Yoga Instructor", "Restorative Yoga Teacher", "Kids Yoga Teacher", "Therapeutic Yoga Instructor", "Power Yoga Instructor"],
     34: ["General Fitness Trainers", "Strength and Conditioning Coach", "Specialized Trainer", "Weight Loss Specialist", "Rehabilitation and Medical Exercise Specialist", "Bodybuilding and Physique Coach", "Senior Fitness Trainer", "Youth Trainer", "Pre/Postnatal Fitness Trainer", "Functional Fitness Trainer", "Online Personal Trainer"],
