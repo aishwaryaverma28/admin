@@ -223,7 +223,7 @@ const LeadImage = ({ id }) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport || "sports",
+            sport_id: academyData?.sport_id ?? 14,
             city: academyData?.city || "select",
         };
         axios
@@ -239,7 +239,7 @@ const LeadImage = ({ id }) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -278,7 +278,7 @@ const LeadImage = ({ id }) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport || "sports",
+            sport_id: academyData?.sport_id ?? 14,
             city: academyData?.city || "select",
         }
         axios
@@ -296,7 +296,7 @@ const LeadImage = ({ id }) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -332,7 +332,7 @@ const LeadImage = ({ id }) => {
                     type: "temp",
                     photos: updatedNameString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {
@@ -363,7 +363,7 @@ const LeadImage = ({ id }) => {
                     type: "temp",
                     videos: updatedNameString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {

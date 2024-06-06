@@ -218,7 +218,7 @@ const NewCoachImages = (id) => {
             profile_img: fileName,
             photos: allUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id ?? 14,
             city: academyData?.city,
             type: "temp",
         }
@@ -273,7 +273,7 @@ const NewCoachImages = (id) => {
                 {
                     photos: combinedDataString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id ?? 14,
                     city: academyData?.city,
                     type: "temp",
                 },
@@ -305,7 +305,7 @@ const NewCoachImages = (id) => {
                 {
                     photos: combinedDataString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id ?? 14,
                     city: academyData?.city,
                     type: "temp",
                 },
@@ -342,7 +342,7 @@ const NewCoachImages = (id) => {
         const updatedFormData = {
             type: "temp",
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id ?? 14,
             city: academyData?.city,
             profile_img: logoValue,
             banner: bannerValue,
@@ -363,7 +363,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });

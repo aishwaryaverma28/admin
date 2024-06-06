@@ -5,7 +5,9 @@ import {
     GET_ACADEMY,
     getDecryptedToken,
     UPDATE_ACADEMY,
+    ALL_SPORTS
 } from "./../utils/Constants";
+import {normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1} from "./../utils/variables";
 import { toast } from "react-toastify";
 import '../styles/Comment.css'
 const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
@@ -19,6 +21,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [isEditable, setIsEditable] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
     const [trainingLocation, setTrainingLocation] = useState([]);
+    const [sports, setSports] = useState([]);
     const [isHoverDisabled, setIsHoverDisabled] = useState(false);
     const fetchLead = () => {
         let body = {
@@ -45,8 +48,25 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setIsLoading(false);
             });
     };
+    const fetchSports = () => {
+        let body = {
+            sort: "name asc"
+        };
+        axios.post(ALL_SPORTS, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                setSports(response?.data?.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     useEffect(() => {
         fetchLead();
+        fetchSports();
     }, []);
 
     const capitalizeFirstLetterOfEachWord = (string) => {
@@ -125,7 +145,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             phone: editedItem?.phone?.trim(),
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about?.trim(),
-            sport: editedItem?.sport || "sports",
+            sport_id: editedItem?.sport_id ?? 14,
             fee: editedItem?.fee?.trim(),
             experience: editedItem?.experience,
             facebook: editedItem?.facebook?.trim(),
@@ -187,84 +207,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     }));
    
     //======================================================================css variable
-    const normalStylingInput = {
-        color: "#1e2224",
-        fontWeight: 400,
-        border: "1px solid #dcdcdc",
-        outline: "rgb(59, 59, 59)",
-        backgroundColor: "#ffffff",
-        fontSize: "0.8rem",
-        fontFamily: "Lexend Deca",
-        borderRadius: "0.3125rem",
-        padding: "0.3rem",
-        border: "1px solid transparent",
-        height: "2rem",
-        width: "100%"
-    };
-
-    const editStylingInput = {
-        color: "#1e2224",
-        fontWeight: 400,
-        border: "1px solid #dcdcdc",
-        outline: "rgb(59, 59, 59)",
-        backgroundColor: "#ffffff",
-        fontSize: "0.8rem",
-        fontFamily: "Lexend Deca",
-        borderRadius: "0.3125rem",
-        padding: "0.3rem",
-        border: "1px solid #dcdcdc",
-        height: "2rem",
-        width: "100%",
-
-        ":hover": {
-            backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-            transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-            cursor: isHoverDisabled ? "pointer" : "",
-        },
-        ":focus": {
-            border: "1px solid #E2E9F2",
-            boxShadow: "none",
-        },
-    };
-    const editStylingTextarea = {
-        color: "#1e2224",
-        fontWeight: 400,
-        border: "1px solid #dcdcdc",
-        outline: "rgb(59, 59, 59)",
-        backgroundColor: "#ffffff",
-        fontSize: "0.8rem",
-        fontFamily: "Lexend Deca",
-        borderRadius: "0.3125rem",
-        padding: "0.3rem",
-        border: "1px solid #dcdcdc",
-        height: "5rem",
-        width: "100%",
-
-        ":hover": {
-            backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-            transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-            cursor: isHoverDisabled ? "pointer" : "",
-        },
-        ":focus": {
-            border: "1px solid #E2E9F2",
-            boxShadow: "none",
-        },
-    };
-
-    const normalStylingTextarea = {
-        color: "#1e2224",
-        fontWeight: 400,
-        border: "1px solid #dcdcdc",
-        outline: "rgb(59, 59, 59)",
-        backgroundColor: "#ffffff",
-        fontSize: "0.8rem",
-        fontFamily: "Lexend Deca",
-        borderRadius: "0.3125rem",
-        padding: "0.3rem",
-        border: "1px solid transparent",
-        height: "5rem",
-        width: "100%"
-    };
+   
 
     return (
         <>
@@ -416,52 +359,25 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         <span>-</span>
                                     ) : (
                                         <span>
-                                            <input list="sports" name="sport"
-                                                value={editedItem?.sport}
+                                           <select
+                                                name="sport_id"
+                                                id="sport_id"
+                                                value={editedItem?.sport_id || 14}
                                                 onChange={handleInputChange}
+                                                disabled={isDisabled}
                                                 style={
-                                                    isEditable ? editStylingInput : normalStylingInput
+                                                    isEditable
+                                                        ? editStylingSelect1
+                                                        : normalStylingSelect1
                                                 }
-                                                disabled={isDisabled} />
-                                            <datalist id="sports">
-                                                <option value="archery"></option>
-                                                <option value="arts"></option>
-                                                <option value="athletics"></option>
-                                                <option value="badminton"></option>
-                                                <option value="basketball"></option>
-                                                <option value="bodybuilding"></option>
-                                                <option value="billiards"></option>
-                                                <option value="boxing"></option>
-                                                <option value="chess"></option>
-                                                <option value="cricket"></option>
-                                                <option value="fencing"></option>
-                                                <option value="football"></option>
-                                                <option value="golf"></option>
-                                                <option value="gym"></option>
-                                                <option value="hockey"></option>
-                                                <option value="kabaddi"></option>
-                                                <option value="karate"></option>
-                                                <option value="kho-kho"></option>
-                                                <option value="mma"></option>
-                                                <option value="motorsports"></option>
-                                                <option value="rugby"></option>
-                                                <option value="shooting"></option>
-                                                <option value="skating"></option>
-                                                <option value="sports"></option>
-                                                <option value="squash"></option>
-                                                <option value="swimming"></option>
-                                                <option value="table-Tennis"></option>
-                                                <option value="taekwondo"></option>
-                                                <option value="tennis"></option>
-                                                <option value="volleyball"></option>
-                                                <option value="wrestling"></option>
-                                                <option value="yoga"></option>
-                                                <option value="baseball"></option>
-                                                <option value="silambam"></option>
-                                                <option value="snooker"></option>
-                                                <option value="handball"></option>
-                                                <option value="carrom"></option>
-                                            </datalist>
+                                                className={isDisabled ? "disabled" : ""}
+                                            >
+                                                {sports?.map((item) => (
+                                                    <option key={item?.id} value={item?.id}>
+                                                        {item?.name}
+                                                    </option>
+                                                ))}
+                                            </select>
 
                                         </span>
                                     )}

@@ -11,7 +11,6 @@ const PlayerImage = (id) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
-    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const allowedFileTypes = [
         "image/jpeg",
         "image/png",
@@ -21,8 +20,6 @@ const PlayerImage = (id) => {
         "video/webm",
         "video/ogg",
     ];
-    const fileInputRef = useRef(null);
-    const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const fileInputRef2 = useRef(null);
@@ -94,48 +91,7 @@ const PlayerImage = (id) => {
             return imageName.replace(/[^\w-]/g, "-");
         }
     };
-    //================================================= for logo upload
-    const handleButtonClick = (event) => {
-        event.preventDefault();
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (event) => {
-        setStateBtn(1);
-        const selectedImage = event.target.files[0];
-        if (selectedImage) {
-            if (!allowedImageTypes.includes(selectedImage.type)) {
-                alert("Please choose a valid image file (JPEG, PNG, GIF).");
-                return;
-            }
-            submitImage(event.target.files[0]);
-        }
-    };
-
-    const submitImage = (file) => {
-        const selectedImage = file;
-        if (selectedImage) {
-            setIsUploading(true);
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "player/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setSelectedFile(selectedImage);
-                    setFileName(modifiedFile.name);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-                .finally(() => {
-                    setIsUploading(false);
-                });
-        }
-    };
-
+    
     //=================================================================================photo and video upload
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
@@ -185,7 +141,6 @@ const PlayerImage = (id) => {
                     if (data.location) {
                         photoUrls?.push(imageUrl);
                         setPhotoUrls(photoUrls);
-                        setStateBtn(1);
                         handleSubmit2()
                     }
                 })
@@ -216,7 +171,6 @@ const PlayerImage = (id) => {
                     if (data.location) {
                         videoUrls.push(imageUrl);
                         setVideoUrls(videoUrls);
-                        setStateBtn(1);
                         handleSubmit2();
                     }
                 })
@@ -230,26 +184,12 @@ const PlayerImage = (id) => {
     };
 
     //===============================================================================image submit
-    const initialPhotoUrls = [...photoUrls];
-    const initialVideoUrls = [...videoUrls];
-    const initialFileName = fileName;
-    const initialFileName2 = fileName2;
-    const initialSelectedFile = selectedFile;
-
-    const resetState = () => {
-        setPhotoUrls(initialPhotoUrls);
-        setVideoUrls(initialVideoUrls);
-        setFileName(initialFileName);
-        setFileName2(initialFileName2);
-        setSelectedFile(initialSelectedFile);
-    };
-    const handleSubmit2 = () => {
-        setStateBtn(0);
+      const handleSubmit2 = () => {
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
             type: "org",
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id,
             city: academyData?.city,
             logo: fileName,
             photos: allUrls?.join(","),
@@ -291,12 +231,11 @@ const PlayerImage = (id) => {
     }
 
     const handleSubmit = (file) => {
-        setStateBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
             type: "org",
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id,
             city: academyData?.city,
             logo: file,
             photos: allUrls?.join(","),
@@ -352,7 +291,7 @@ const PlayerImage = (id) => {
                     type: "org",
                     photos: combinedDataString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {
@@ -384,7 +323,7 @@ const PlayerImage = (id) => {
                     type: "org",
                     photos: combinedDataString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {
@@ -409,60 +348,10 @@ const PlayerImage = (id) => {
     return (
         <>
             {/* ================================================================================upload the logo */}
-            <section>
-                <p className="common-fonts">Upload Profile Pic</p>
+            <section className='img_upload_newflex'>
+                <p className="common-fonts">Upload Profile Pic : </p>
+                <span className="common-fonts">{fileName ? fileName : academyData?.logo}</span>
                 <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className={`common-fonts common-input contact-tab-input`}
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className="contact-browse-btn common-fonts"
-                                onClick={handleButtonClick}
-                            >
-                                Browse
-                            </button>
-
-                            <input
-                                type="file"
-                                style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
-                                }}
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                            />
-                            {isUploading ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    {fileName ? fileName : academyData?.logo}
-                                    { }
-                                </span>
-                            )}
-                        </span>
-                    </div>
-
-                    {selectedFile && (
-                        <div className="bmp-image-preview">
-                            <img
-                                src={URL.createObjectURL(selectedFile)}
-                                alt="Selected Preview"
-                                className="bmp-preview-image"
-                            />
-                        </div>
-                    )}
                     {!selectedFile && (
                         <div className="bmp-image-preview">
                             <a href={academyData?.logo === null
@@ -633,26 +522,7 @@ const PlayerImage = (id) => {
                     </div>
                 )}
             </>
-            <div className="bmp-bottom-btn">
-                <button
-                    className="common-fonts common-white-button"
-                    onClick={resetState}
-                >
-                    Cancel
-                </button>
-                {/* {stateBtn === 0 ? (
-                <button className="disabledBtn" disabled>
-                    Save
-                </button>
-            ) : (
-                <button
-                    className="common-fonts common-save-button"
-                    onClick={handleSubmit2}
-                >
-                    Save
-                </button>
-            )} */}
-            </div>
+            
         </>
     )
 }

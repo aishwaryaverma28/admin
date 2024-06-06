@@ -217,7 +217,7 @@ const LeadImage2 = (id) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id,
             city: academyData?.city,
         };
         axios
@@ -233,7 +233,7 @@ const LeadImage2 = (id) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -272,7 +272,7 @@ const LeadImage2 = (id) => {
             photos: photoUrls?.join(","),
             videos: videoUrls?.join(","),
             name: academyData?.name,
-            sport: academyData?.sport,
+            sport_id: academyData?.sport_id,
             city: academyData?.city,
         }
         axios
@@ -290,7 +290,7 @@ const LeadImage2 = (id) => {
                         autoClose: 1000,
                     });
                 } else {
-                    toast.error("Some Error Occurred", {
+                    toast.error(response?.data?.message, {
                         position: "top-center",
                         autoClose: 1000,
                     });
@@ -326,7 +326,7 @@ const LeadImage2 = (id) => {
                     type: "org",
                     photos: updatedNameString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {
@@ -357,7 +357,7 @@ const LeadImage2 = (id) => {
                     type: "org",
                     videos: updatedNameString,
                     name: academyData?.name,
-                    sport: academyData?.sport,
+                    sport_id: academyData?.sport_id,
                     city: academyData?.city,
                 },
                 {

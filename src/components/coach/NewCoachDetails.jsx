@@ -4,20 +4,21 @@ import {
   cdnurl,
   GET_COACH_ID,
   getDecryptedToken,
-  UPDATE_COACH
+  UPDATE_COACH,ALL_SPORTS,
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
+import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables"; 
 
 const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
+  const [sports, setSports] = useState([]);
   const [editedItem, setEditedItem] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [isEditable, setIsEditable] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [trainingLocation, setTrainingLocation] = useState([]);
-  const [isHoverDisabled, setIsHoverDisabled] = useState(false);
   const [userSkills, setUserSkills] = useState([]);
   const [addedSkils, setAddedSkills] = useState([]);
   const [keywords, setKeywords] = useState([
@@ -41,7 +42,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       })
       .then((response) => {
         console.log(response);
-        const sport = response?.data?.data[0]?.sport;
+        const sport = response?.data?.data[0]?.sport_id;
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
         if (response?.data?.data[0]?.training_location) {
@@ -64,13 +65,28 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       });
   };
 
+  const fetchSports = () => {
+    let body = {
+      sort: "name asc"
+    };
+    axios.post(ALL_SPORTS, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
+    })
+      .then((response) => {
+        setSports(response?.data?.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   useEffect(() => {
     fetchLead();
+    fetchSports();
   }, []);
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    // const newValue = type === 'checkbox' ? (checked ? 1 : 0) : value;
     const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
 
     let updatedValue = newValue;
@@ -107,8 +123,8 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       [name]: updatedValue,
     });
 
-    if (name === "sport") {
-      const sport = value?.toLowerCase();
+    if (name === "sport_id") {
+      const sport = value
       if (skills[sport]) {
         setUserSkills(skills[sport]);
       } else {
@@ -161,7 +177,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       email: editedItem?.email?.trim(),
       email_verified: editedItem?.email_verified,
       mobile_verified: editedItem?.mobile_verified,
-      sport: editedItem?.sport,
+      sport_id: editedItem?.sport_id ?? 14,
       city: editedItem?.city?.trim(),
       state: editedItem?.state?.trim(),
       about: editedItem?.about?.trim(),
@@ -219,115 +235,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     handleUpdateClick
   }));
 
-  //======================================================================css variable
 
-  const normalStylingSelect1 = {
-    color: "white !important",
-    fontSize: " 0.8rem",
-    fontFamily: '"Lexend Deca", sans-serif',
-    fontWeight: 400,
-    padding: "0.3rem",
-    borderRadius: "5px",
-    textTransform: "capitalize",
-    WebkitAppearance: "none",
-    MozAppearance: "none",
-    appearance: "none",
-    border: "1px solid transparent",
-    height: "2rem",
-    width: "fit-content",
-  };
-
-  const editStylingSelect1 = {
-    width: "100%",
-    color: " #1e2224",
-    fontWeight: 400,
-    border: "1px solid #dcdcdc",
-    outline: "rgb(59, 59, 59)",
-    backgroundColor: "#ffffff",
-    fontSize: "0.8rem",
-    fontFamily: "Lexend Deca",
-    borderRadius: "0.3125rem",
-    padding: "0.1rem",
-    height: "2rem",
-  };
-  const normalStylingInput = {
-    color: "#1e2224",
-    fontWeight: 400,
-    border: "1px solid #dcdcdc",
-    outline: "rgb(59, 59, 59)",
-    backgroundColor: "#ffffff",
-    fontSize: "0.8rem",
-    fontFamily: "Lexend Deca",
-    borderRadius: "0.3125rem",
-    padding: "0.3rem",
-    border: "1px solid transparent",
-    height: "2rem",
-    width: "100%"
-  };
-
-  const editStylingInput = {
-    color: "#1e2224",
-    fontWeight: 400,
-    border: "1px solid #dcdcdc",
-    outline: "rgb(59, 59, 59)",
-    backgroundColor: "#ffffff",
-    fontSize: "0.8rem",
-    fontFamily: "Lexend Deca",
-    borderRadius: "0.3125rem",
-    padding: "0.3rem",
-    border: "1px solid #dcdcdc",
-    height: "2rem",
-    width: "100%",
-
-    ":hover": {
-      backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-      transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-      cursor: isHoverDisabled ? "pointer" : "",
-    },
-    ":focus": {
-      border: "1px solid #E2E9F2",
-      boxShadow: "none",
-    },
-  };
-  const editStylingTextarea = {
-    color: "#1e2224",
-    fontWeight: 400,
-    border: "1px solid #dcdcdc",
-    outline: "rgb(59, 59, 59)",
-    backgroundColor: "#ffffff",
-    fontSize: "0.8rem",
-    fontFamily: "Lexend Deca",
-    borderRadius: "0.3125rem",
-    padding: "0.3rem",
-    border: "1px solid #dcdcdc",
-    height: "5rem",
-    width: "100%",
-
-    ":hover": {
-      backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-      transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-      cursor: isHoverDisabled ? "pointer" : "",
-    },
-    ":focus": {
-      border: "1px solid #E2E9F2",
-      boxShadow: "none",
-    },
-  };
-
-  const normalStylingTextarea = {
-    color: "#1e2224",
-    fontWeight: 400,
-    border: "1px solid #dcdcdc",
-    outline: "rgb(59, 59, 59)",
-    backgroundColor: "#ffffff",
-    fontSize: "0.8rem",
-    fontFamily: "Lexend Deca",
-    borderRadius: "0.3125rem",
-    padding: "0.3rem",
-    border: "1px solid transparent",
-    height: "5rem",
-    width: "100%"
-  };
   return (
     <>
       <div className="user-details--left">
@@ -398,24 +306,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </span>
                   )}
                 </p>
-                {/* <p>
-                      {isLoading ? (
-                        <span>-</span>
-                      ) : (
-                        <span>
-                          <input
-                            type="text"
-                            name="email"
-                            value={editedItem?.email}
-                            onChange={handleInputChange}
-                            style={
-                              isEditable ? editStylingInput : normalStylingInput
-                            }
-                            disabled={isDisabled}
-                          />
-                        </span>
-                      )}
-                    </p> */}
                 <p>
                   {isLoading ? (
                     <span>-</span>
@@ -481,56 +371,25 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      <input list="sports" name="sport"
-                        value={editedItem?.sport}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled} />
-                      <datalist id="sports">
-                        <option value="archery"></option>
-                        <option value="arts"></option>
-                        <option value="athletics"></option>
-                        <option value="aerobics"></option>
-                        <option value="badminton"></option>
-                        <option value="basketball"></option>
-                        <option value="bodybuilding"></option>
-                        <option value="billiards"></option>
-                        <option value="boxing"></option>
-                        <option value="chess"></option>
-                        <option value="cricket"></option>
-                        <option value="fencing"></option>
-                        <option value="football"></option>
-                        <option value="golf"></option>
-                        <option value="gym"></option>
-                        <option value="hockey"></option>
-                        <option value="kabaddi"></option>
-                        <option value="karate"></option>
-                        <option value="kho-kho"></option>
-                        <option value="mma"></option>
-                        <option value="motorsports"></option>
-                        <option value="rugby"></option>
-                        <option value="shooting"></option>
-                        <option value="skating"></option>
-                        <option value="sports"></option>
-                        <option value="squash"></option>
-                        <option value="swimming"></option>
-                        <option value="table-tennis"></option>
-                        <option value="taekwondo"></option>
-                        <option value="tennis"></option>
-                        <option value="volleyball"></option>
-                        <option value="wrestling"></option>
-                        <option value="yoga"></option>
-                        <option value="personal gym trainer"></option>
-                        <option value="fitness training"></option>
-                        <option value="pilates"></option>
-                        <option value="baseball"></option>
-                        <option value="silambam"></option>
-                        <option value="snooker"></option>
-                        <option value="handball"></option>
-                        <option value="carrom"></option>
-                      </datalist>
+                      <select
+                      name="sport_id"
+                      id="sport_id"
+                      value={editedItem?.sport_id || 14}
+                      onChange={handleInputChange}
+                      disabled={isDisabled}
+                      style={
+                        isEditable
+                          ? editStylingSelect1
+                          : normalStylingSelect1
+                      }
+                      className={isDisabled ? "disabled" : ""}
+                    >
+                      {sports?.map((item) => (
+                        <option key={item?.id} value={item?.id}>
+                          {item?.name}
+                        </option>
+                      ))}
+                    </select>
                     </span>
                   )}
                 </p>
