@@ -621,18 +621,6 @@ const NewCoachImages = (id) => {
                         </button>
                     </>
                 )}
-                {/* {stateBtn === 0 ? (
-                    <button className="disabledBtn" disabled>
-                        Save
-                    </button>
-                ) : (
-                    <button
-                        className="common-fonts common-save-button"
-                        onClick={handleSubmit2}
-                    >
-                        Save
-                    </button>
-                )} */}
             </div>
         </>
     )
