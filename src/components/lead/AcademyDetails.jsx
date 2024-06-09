@@ -23,6 +23,28 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [trainingLocation, setTrainingLocation] = useState([]);
     const [sports, setSports] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+  const [filteredSports, setFilteredSports] = useState([]);
+
+  const handleSportInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    const filtered = sports.filter((sport) =>
+      sport.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSports(filtered);
+  };
+
+  const handleSportSelect = (sportName) => {
+    setSearchTerm(sportName);
+    setFilteredSports([]);
+  };
+
+  const isExactMatch = sports.some(
+    (sport) => sport.name.toLowerCase() === searchTerm.toLowerCase()
+  );
+
     const fetchLead = () => {
         let body = {
             academy_id: id
@@ -382,6 +404,32 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </span>
                                     )}
                                 </p>
+                                <>
+      <div>
+        <input
+          id="sportInput"
+          value={searchTerm}
+          onChange={handleSportInputChange}
+          autoComplete="off"
+        />
+        <label htmlFor="sportInput" className="form-label">
+          Select Sport
+        </label>
+      </div>
+      <div>
+        {filteredSports.length > 0 ? (
+          <ul>
+            {filteredSports.map((sport) => (
+              <li key={sport.id} onClick={() => handleSportSelect(sport.name)}>
+                {sport.name}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          searchTerm && !isExactMatch && <div>No sport match</div>
+        )}
+      </div>
+    </>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>
