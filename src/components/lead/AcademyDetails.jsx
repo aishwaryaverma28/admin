@@ -85,6 +85,10 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setSearchTerm('');
             } else if (filteredSports.length > 0) {
                 setSearchTerm(filteredSports[0].name);
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    sport_id: filteredSports[0].id
+                }));
             }
             setIsDropdownVisible(false);
         }
@@ -416,33 +420,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </span>
                                     )}
                                 </p>
-                                {/* <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <select
-                                                name="sport_id"
-                                                id="sport_id"
-                                                value={editedItem?.sport_id || ""}
-                                                onChange={handleInputChange}
-                                                disabled={isDisabled}
-                                                style={
-                                                    isEditable
-                                                        ? editStylingSelect1
-                                                        : normalStylingSelect1
-                                                }
-                                                className={isDisabled ? "disabled" : ""}
-                                            >
-                                                {sports?.map((item) => (
-                                                    <option key={item?.id} value={item?.id}>
-                                                        {item?.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </span>
-                                    )}
-                                </p> */}
                                 <>
                                     <div>
                                         <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>

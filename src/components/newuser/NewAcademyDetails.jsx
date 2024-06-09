@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
     cdnurl,
@@ -22,7 +22,65 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [trainingLocation, setTrainingLocation] = useState([]);
     const [sports, setSports] = useState([]);
-    const [isHoverDisabled, setIsHoverDisabled] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredSports, setFilteredSports] = useState([]);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [noMatch, setNoMatch] = useState(false);
+    const inputRef = useRef(null);
+// ============================================================sports dropdown code
+const handleSportInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    if (value) {
+        const filtered = sports.filter((sport) =>
+            sport.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredSports(filtered);
+        setNoMatch(filtered.length === 0);
+        setIsDropdownVisible(true);
+    } else {
+        setFilteredSports([]);
+        setNoMatch(false);
+        setIsDropdownVisible(false);
+    }
+    setStateBtn(1);
+};
+
+const handleSportSelect = (sport) => {
+    setSearchTerm(sport.name);
+    setEditedItem(prevState => ({
+        ...prevState,
+        sport_id: sport.id
+    }));
+    setFilteredSports([]);
+    setIsDropdownVisible(false);
+};
+
+const handleClickOutside = (event) => {
+    if (inputRef.current && !inputRef.current.contains(event.target)) {
+        if (noMatch) {
+            setSearchTerm('');
+        } else if (filteredSports.length > 0) {
+            setSearchTerm(filteredSports[0].name);
+            setEditedItem(prevState => ({
+                ...prevState,
+                sport_id: filteredSports[0].id
+            }));
+        }
+        setIsDropdownVisible(false);
+    }
+};
+
+useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+        document.removeEventListener('click', handleClickOutside);
+    };
+}, [filteredSports, noMatch]);
+
+//===================================================sport dropdown code ends here
+
     const fetchLead = () => {
         let body = {
             academy_id: id,
@@ -40,6 +98,9 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 if (response?.data?.data[0]?.friendly) {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
                     setTrainingLocation(trainingLocationArray);
+                }
+                if (response?.data?.data[0]?.sport) {
+                    setSearchTerm(response?.data?.data[0]?.sport)
                 }
                 setIsLoading(false);
             })
@@ -354,34 +415,41 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </span>
                                     )}
                                 </p>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                           <select
-                                                name="sport_id"
-                                                id="sport_id"
-                                                value={editedItem?.sport_id || 14}
-                                                onChange={handleInputChange}
-                                                disabled={isDisabled}
-                                                style={
-                                                    isEditable
-                                                        ? editStylingSelect1
-                                                        : normalStylingSelect1
-                                                }
-                                                className={isDisabled ? "disabled" : ""}
-                                            >
-                                                {sports?.map((item) => (
-                                                    <option key={item?.id} value={item?.id}>
-                                                        {item?.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-
-                                        </span>
-                                    )}
-                                </p>
+                                <>
+                                    <div>
+                                        <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+                                            <div>
+                                                <input
+                                                    id=""
+                                                    name=""
+                                                    value={searchTerm}
+                                                    onChange={handleSportInputChange}
+                                                    autoComplete="off"
+                                                    className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                                                    style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                    disabled={isDisabled}
+                                                />
+                                            </div>
+                                            {isDropdownVisible && (
+                                                <div className='sport_box'>
+                                                    {noMatch ? (
+                                                        <div>No match found</div>
+                                                    ) : (
+                                                        filteredSports.map((sport) => (
+                                                            <div
+                                                                key={sport.id}
+                                                                onClick={() => handleSportSelect(sport)}
+                                                                style={{ padding: '5px', cursor: 'pointer' }}
+                                                            >
+                                                                {sport.name}
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>
