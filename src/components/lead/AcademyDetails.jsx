@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
     cdnurl,
@@ -24,22 +24,75 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [trainingLocation, setTrainingLocation] = useState([]);
     const [sports, setSports] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-  const [filteredSports, setFilteredSports] = useState([]);
+    const [filteredSports, setFilteredSports] = useState([]);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [noMatch, setNoMatch] = useState(false);
+    const inputRef = useRef(null);
 
-  const handleSportInputChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+    const fetchSports = () => {
+        let body = {
+            sort: "name asc"
+        };
+        axios.post(ALL_SPORTS, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+            .then((response) => {
+                setSports(response?.data?.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    useEffect(() => {
+        fetchLead();
+        fetchSports();
+    }, []);
 
-    const filtered = sports.filter((sport) =>
-      sport.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredSports(filtered);
-  };
+    const handleSportInputChange = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+    
+        if (value) {
+          const filtered = sports.filter((sport) =>
+            sport.name.toLowerCase().includes(value.toLowerCase())
+          );
+          setFilteredSports(filtered);
+          setNoMatch(filtered.length === 0);
+          setIsDropdownVisible(true);
+        } else {
+          setFilteredSports([]);
+          setNoMatch(false);
+          setIsDropdownVisible(false);
+        }
+        setStateBtn(1);
+      };
+    
+      const handleSportSelect = (sportName) => {
+        setSearchTerm(sportName);
+        setFilteredSports([]);
+        setIsDropdownVisible(false);
+      };
+    
+      const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+          if (noMatch) {
+            setSearchTerm('');
+          }  else if (filteredSports.length > 0) {
+            setSearchTerm(filteredSports[0].name);
+          }
+          setIsDropdownVisible(false);
+        }
+      };
+    
+      useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+          document.removeEventListener('click', handleClickOutside);
+        };
+      }, [filteredSports, noMatch]);
 
-  const handleSportSelect = (sportName) => {
-    setSearchTerm(sportName);
-    setFilteredSports([]);
-  };
 
   const isExactMatch = sports.some(
     (sport) => sport.name.toLowerCase() === searchTerm.toLowerCase()
@@ -69,26 +122,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             });
     };
 
-    const fetchSports = () => {
-        let body = {
-            sort: "name asc"
-        };
-        axios.post(ALL_SPORTS, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                setSports(response?.data?.data)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    useEffect(() => {
-        fetchLead();
-        fetchSports();
-    }, []);
+
     const capitalizeFirstLetterOfEachWord = (string) => {
         return string?.replace(/\b\w/g, char => char?.toUpperCase());
     };
@@ -270,6 +304,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 <p>Phone</p>
                                 <p>Email</p>
                                 <p>Sport</p>
+                                <p>Select Sport</p>
                                 <p>Categories</p>
                                 <p>Fees</p>
                                 <p>Timing</p>
@@ -404,31 +439,40 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </span>
                                     )}
                                 </p>
-                                <>
+    <>
+    <div>
+     <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
       <div>
         <input
-          id="sportInput"
+          id=""
+          name=""
           value={searchTerm}
           onChange={handleSportInputChange}
           autoComplete="off"
+          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+          disabled={isDisabled}
         />
-        <label htmlFor="sportInput" className="form-label">
-          Select Sport
-        </label>
       </div>
-      <div>
-        {filteredSports.length > 0 ? (
-          <ul>
-            {filteredSports.map((sport) => (
-              <li key={sport.id} onClick={() => handleSportSelect(sport.name)}>
+      {isDropdownVisible && (
+        <div className='sport_box'>
+          {noMatch ? (
+            <div>No match found</div>
+          ) : (
+            filteredSports.map((sport) => (
+              <div
+                key={sport.id}
+                onClick={() => handleSportSelect(sport.name)}
+                style={{ padding: '5px', cursor: 'pointer' }}
+              >
                 {sport.name}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          searchTerm && !isExactMatch && <div>No sport match</div>
-        )}
-      </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+    </div>
     </>
                                 <p>
                                     {isLoading ? (
