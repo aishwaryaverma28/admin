@@ -9,7 +9,7 @@ import {
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import '../styles/Comment.css'
-import {normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1} from "./../utils/variables";
+import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 
 const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const decryptedToken = getDecryptedToken();
@@ -49,54 +49,55 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         fetchLead();
         fetchSports();
     }, []);
-
+// ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
         setSearchTerm(value);
-    
+
         if (value) {
-          const filtered = sports.filter((sport) =>
-            sport.name.toLowerCase().includes(value.toLowerCase())
-          );
-          setFilteredSports(filtered);
-          setNoMatch(filtered.length === 0);
-          setIsDropdownVisible(true);
+            const filtered = sports.filter((sport) =>
+                sport.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredSports(filtered);
+            setNoMatch(filtered.length === 0);
+            setIsDropdownVisible(true);
         } else {
-          setFilteredSports([]);
-          setNoMatch(false);
-          setIsDropdownVisible(false);
+            setFilteredSports([]);
+            setNoMatch(false);
+            setIsDropdownVisible(false);
         }
         setStateBtn(1);
-      };
-    
-      const handleSportSelect = (sportName) => {
-        setSearchTerm(sportName);
+    };
+
+    const handleSportSelect = (sport) => {
+        setSearchTerm(sport.name);
+        setEditedItem(prevState => ({
+            ...prevState,
+            sport_id: sport.id
+        }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
-      };
-    
-      const handleClickOutside = (event) => {
+    };
+
+    const handleClickOutside = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
-          if (noMatch) {
-            setSearchTerm('');
-          }  else if (filteredSports.length > 0) {
-            setSearchTerm(filteredSports[0].name);
-          }
-          setIsDropdownVisible(false);
+            if (noMatch) {
+                setSearchTerm('');
+            } else if (filteredSports.length > 0) {
+                setSearchTerm(filteredSports[0].name);
+            }
+            setIsDropdownVisible(false);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         document.addEventListener('click', handleClickOutside);
         return () => {
-          document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
-      }, [filteredSports, noMatch]);
+    }, [filteredSports, noMatch]);
 
-
-  const isExactMatch = sports.some(
-    (sport) => sport.name.toLowerCase() === searchTerm.toLowerCase()
-  );
+    //===================================================sport dropdown code ends here
 
     const fetchLead = () => {
         let body = {
@@ -113,6 +114,9 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 if (response?.data?.data[0]?.friendly) {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
                     setTrainingLocation(trainingLocationArray);
+                }
+                if (response?.data?.data[0]?.sport) {
+                    setSearchTerm(response?.data?.data[0]?.sport)
                 }
                 setIsLoading(false);
             })
@@ -265,7 +269,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         }
     };
 
- 
+
     return (
         <>
             <div className="user-details--left">
@@ -303,7 +307,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 <p>Owner Name</p>
                                 <p>Phone</p>
                                 <p>Email</p>
-                                <p>Sport</p>
+                                {/* <p>Sport</p> */}
                                 <p>Select Sport</p>
                                 <p>Categories</p>
                                 <p>Fees</p>
@@ -412,7 +416,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </span>
                                     )}
                                 </p>
-                                <p>
+                                {/* <p>
                                     {isLoading ? (
                                         <span>-</span>
                                     ) : (
@@ -438,42 +442,42 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                             </select>
                                         </span>
                                     )}
-                                </p>
-    <>
-    <div>
-     <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
-      <div>
-        <input
-          id=""
-          name=""
-          value={searchTerm}
-          onChange={handleSportInputChange}
-          autoComplete="off"
-          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
-          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
-          disabled={isDisabled}
-        />
-      </div>
-      {isDropdownVisible && (
-        <div className='sport_box'>
-          {noMatch ? (
-            <div>No match found</div>
-          ) : (
-            filteredSports.map((sport) => (
-              <div
-                key={sport.id}
-                onClick={() => handleSportSelect(sport.name)}
-                style={{ padding: '5px', cursor: 'pointer' }}
-              >
-                {sport.name}
-              </div>
-            ))
-          )}
-        </div>
-      )}
-    </div>
-    </div>
-    </>
+                                </p> */}
+                                <>
+                                    <div>
+                                        <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+                                            <div>
+                                                <input
+                                                    id=""
+                                                    name=""
+                                                    value={searchTerm}
+                                                    onChange={handleSportInputChange}
+                                                    autoComplete="off"
+                                                    className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                                                    style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                    disabled={isDisabled}
+                                                />
+                                            </div>
+                                            {isDropdownVisible && (
+                                                <div className='sport_box'>
+                                                    {noMatch ? (
+                                                        <div>No match found</div>
+                                                    ) : (
+                                                        filteredSports.map((sport) => (
+                                                            <div
+                                                                key={sport.id}
+                                                                onClick={() => handleSportSelect(sport)}
+                                                                style={{ padding: '5px', cursor: 'pointer' }}
+                                                            >
+                                                                {sport.name}
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>
