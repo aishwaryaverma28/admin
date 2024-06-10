@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { normalStylingInput, editStylingInput } from './../utils/variables';
 
-const CoachSkills = ({ isEditable, isDisabled }) => {
-  const [faqs, setFaqs] = useState([]);
+const CoachSkills = ({ isEditable, isDisabled, faqs, addFaq, deleteFaq, updateFaq }) => {
   const [skills, setSkills] = useState('');
-  const [addBtn, setAddBtn] = useState(0)
- 
-  const addFaq = () => {
+
+  const handleAddFaq = () => {
     if (skills.trim() !== '') {
-      setFaqs([...faqs, skills]);
+      addFaq(skills);
       setSkills('');
     }
-  };
-
-  const deleteFaq = (index) => {
-    setFaqs(faqs.filter((_, i) => i !== index));
   };
 
   return (
@@ -30,7 +24,7 @@ const CoachSkills = ({ isEditable, isDisabled }) => {
           />
         </div>
         {isEditable ? (
-          <button type="button" className="convertToDeal" onClick={addFaq} disabled={!skills.trim()}>
+          <button type="button" className="convertToDeal" onClick={handleAddFaq} disabled={!skills.trim()}>
             <i className="fa-solid fa-plus"></i>
           </button>
         ) : (
@@ -46,7 +40,7 @@ const CoachSkills = ({ isEditable, isDisabled }) => {
             <input
               type="text"
               value={faq}
-              readOnly
+              onChange={(e) => updateFaq(index, e.target.value)}
               style={isEditable ? editStylingInput : normalStylingInput}
               disabled={isDisabled}
             />
