@@ -24,12 +24,6 @@ export const editStylingInput = {
     border: "1px solid #dcdcdc",
     height: "2rem",
     width: "100%",
-
-    // ":hover": {
-    //     backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-    //     transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-    //     cursor: isHoverDisabled ? "pointer" : "",
-    // },
     ":focus": {
         border: "1px solid #E2E9F2",
         boxShadow: "none",
@@ -47,12 +41,6 @@ export const editStylingTextarea = {
     border: "1px solid #dcdcdc",
     height: "5rem",
     width: "100%",
-
-    // ":hover": {
-    //     backgroundColor: isHoverDisabled ? "rgb(227, 225, 225)" : "",
-    //     transition: isHoverDisabled ? "all .5s ease-in-out" : "",
-    //     cursor: isHoverDisabled ? "pointer" : "",
-    // },
     ":focus": {
         border: "1px solid #E2E9F2",
         boxShadow: "none",
@@ -100,4 +88,33 @@ export const normalStylingSelect1 = {
     border: "1px solid transparent",
     height: "2rem",
     width: "fit-content",
+};
+export const editStylingTextarea2 = {
+    color: "#1e2224",
+    fontWeight: 400,
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.3rem",
+    border: "1px solid #dcdcdc",
+    width: "100%",
+    ":focus": {
+        border: "1px solid #E2E9F2",
+        boxShadow: "none",
+    },
+};
+
+export const normalStylingTextarea2 = {
+    color: "#1e2224",
+    fontWeight: 400,
+    outline: "rgb(59, 59, 59)",
+    backgroundColor: "#ffffff",
+    fontSize: "0.8rem",
+    fontFamily: "Lexend Deca",
+    borderRadius: "0.3125rem",
+    padding: "0.3rem",
+    border: "1px solid transparent",
+    width: "100%"
 };

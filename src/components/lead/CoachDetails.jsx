@@ -9,6 +9,8 @@ import {
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
 import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
+import CoachFaq from '../coach/CoachFaq';
+import CoachSkills from '../coach/CoachSkills';
 
 const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -785,12 +787,24 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                           </label>
                         ))}
                       </div>
+                      {/* <CoachSkills isEditable={isEditable} isDisabled={isDisabled}/> */}
                     </span>
                   )}
                 </p>
               </div>
             </div>
           </div>
+          {/* <div className="detailsBox">
+            <p className="detailHead">ADD FREQUENTLY ASKED QUESTIONS</p>
+            <div className="detailsContent">
+              <div className="detailsLeftContainer">
+                <p>FAQS</p>
+              </div>
+              <div className="detailsRightContainer">
+                <CoachFaq isEditable={isEditable} isDisabled={isDisabled}/>
+              </div>
+            </div>
+          </div> */}
 
         </div>
         {isEditable ? (

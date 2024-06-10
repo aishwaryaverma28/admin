@@ -278,3 +278,4 @@ export const GET_OTP = bmpStart+"/bmp/log/getOtps";
 export const LEADS_BY_CITY = bmpStart+"/bmp/leads/getByCities";
 export const LEADS_BY_ENTITY = bmpStart+"/bmp/entity/getByCities";
 export const ALL_SPORTS = bmpStart+ "/bmp/master/sport";
+export const GET_ALL_CITY = bmpStart+"/bmp/master/get-cities";

@@ -1,0 +1,30 @@
+.accordion-body{
+    height: 10rem;
+    overflow-y: scroll;
+    padding-bottom: 1rem;
+}
+.coachFaqs-flex{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+.coachFaqs-left{
+    width: 90%;
+}
+.deleteFaq{
+    padding: 7px 15px;
+    border-radius: 0.3125rem;
+    border: 2px solid #FB5D52;
+    background: #FFFFFF;
+    color: #FB5D52;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.02563rem;
+}
+.accordion-body2{
+    height: 5rem;
+    overflow-y: scroll;
+    padding-bottom: 1rem;
+}

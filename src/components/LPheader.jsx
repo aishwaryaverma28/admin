@@ -16,7 +16,8 @@ import NotificationModal from "./NotificationModal.jsx";
 import { useDispatch } from 'react-redux';
 import { addItem } from "./utils/userInfoSlice.js";
 import ResetPassword from "./settings/ResetPassword.jsx";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "./styles/Coach.css"
 const LPheader = () => {
   const [isResetPassowrd, setIsResetPassword] = useState(false);
   const [userId, setUserId] = useState(null);

@@ -311,7 +311,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 <p>Owner Name</p>
                                 <p>Phone</p>
                                 <p>Email</p>
-                                {/* <p>Sport</p> */}
                                 <p>Select Sport</p>
                                 <p>Categories</p>
                                 <p>Fees</p>

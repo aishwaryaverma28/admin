@@ -10,10 +10,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AllLeadsCards from "./AllLeadsCards.jsx";
 import InfoTable from "../infotable/InfoTable.jsx";
+import CityTable from "../infotable/CityTable.jsx";
 
 const AllLeads = () => {
   const [toggleChecked, setToggleChecked] = useState(false);
   const [openUrl, setOpenUrl] = useState(false);
+  const [openCity, setOpenCity] = useState(false);
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
@@ -151,7 +153,12 @@ const AllLeads = () => {
 
   };
 
-
+  const addCityClick = () => {
+    setOpenCity(true)
+  }
+  const addCityClose = () => {
+    setOpenCity(false)
+  }
   const addUrlClick = () => {
     setOpenUrl(true)
   }
@@ -204,125 +211,128 @@ const AllLeads = () => {
 
 
   return (
-    openUrl ? 
-      <InfoTable onClose={addUrlClose}/> :
-    <>
-      <div>
-        <section className="lead-body">
-          <div className="top-head">
-            <div className="left-side--btns">
-              <div className="dropdown-container" ref={leadDropDownRef}>
-                <div className="dropdown-header" onClick={toggleDropdown}>
-                  all Leads{" "}
-                  <i
-                    className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
-                      }`}
-                  ></i>
-                </div>
-                {leadopen && (
-                  <ul className="dropdown-menuLead">
-                    <li>Lead 1</li>
-                    <li>Lead 2</li>
-                    <li>Lead 3</li>
-                  </ul>
-                )}
-              </div>
-              <div className="view">
-                <a href="#" className="grid-view--btn active-btn">
-                  <img src={chart} alt="chart" />
-                </a>
-                <a href="#" className="list-view--btn">
-                  <i className="fas fa-list-ul"></i>
-                </a>
-              </div>
-              <div>
-                <select
-                  className="selectSec"
-                  onChange={handleSelectChange}
-                  value={selectedOption}
-                >
-                  <option value="today">Today</option>
-                  <option value="yesterday">Yesterday</option>
-                  <option value="this_week">This Week</option>
-                  <option value="last_week">Last Week</option>
-                  <option value="last_seven_days">Last 7 days</option>
-                  <option value="last_fourteen_days">Last 14 days</option>
-                  <option value="last_twenty_eight_days">Last 28 days</option>
-                  <option value="last_thirty_days">Last 30 days</option>
-                  <option value="last_sixty_days">Last 60 days</option>
-                </select>
-              </div>
-              <div className="recycle-search-box">
-                <input
-                  type="text"
-                  className="recycle-search-input recycle-fonts"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <span className="recycle-search-icon">
+    openUrl ?
+      <InfoTable onClose={addUrlClose} /> : openCity ? <CityTable onClose={addCityClose} /> :
+        <>
+          <div>
+            <section className="lead-body">
+              <div className="top-head">
+                <div className="left-side--btns">
+                  <div className="dropdown-container" ref={leadDropDownRef}>
+                    <div className="dropdown-header" onClick={toggleDropdown}>
+                      all Leads{" "}
+                      <i
+                        className={`fa-sharp fa-solid ${leadopen ? "fa-angle-up" : "fa-angle-down"
+                          }`}
+                      ></i>
+                    </div>
+                    {leadopen && (
+                      <ul className="dropdown-menuLead">
+                        <li>Lead 1</li>
+                        <li>Lead 2</li>
+                        <li>Lead 3</li>
+                      </ul>
+                    )}
+                  </div>
+                  <div className="view">
+                    <a href="#" className="grid-view--btn active-btn">
+                      <img src={chart} alt="chart" />
+                    </a>
+                    <a href="#" className="list-view--btn">
+                      <i className="fas fa-list-ul"></i>
+                    </a>
+                  </div>
                   <div>
-                    <label className="password-switch lead-switch">
-                      <input
-                        type="checkbox"
-                        checked={toggleChecked}
-                        onChange={handleToggleChange}
-                      />
-                      <span className="password-slider lead-slider password-round"></span>
-                    </label>
+                    <select
+                      className="selectSec"
+                      onChange={handleSelectChange}
+                      value={selectedOption}
+                    >
+                      <option value="today">Today</option>
+                      <option value="yesterday">Yesterday</option>
+                      <option value="this_week">This Week</option>
+                      <option value="last_week">Last Week</option>
+                      <option value="last_seven_days">Last 7 days</option>
+                      <option value="last_fourteen_days">Last 14 days</option>
+                      <option value="last_twenty_eight_days">Last 28 days</option>
+                      <option value="last_thirty_days">Last 30 days</option>
+                      <option value="last_sixty_days">Last 60 days</option>
+                    </select>
                   </div>
-                </span>
-              </div>
-            </div>
-            <div className="right-side--btns">
-            <button type="button" className="secondary-btn" onClick={addUrlClick}>
-              Details
-            </button>
-              <div className="select action-select">
-                <div className="dropdown-container" ref={actionDropDownRef}>
-                  <div
-                    className="dropdown-header2"
-                    onClick={toggleActionDropdown}
-                  >
-                    Actions{" "}
-                    <i
-                      className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
-                        }`}
-                    ></i>
+                  <div className="recycle-search-box">
+                    <input
+                      type="text"
+                      className="recycle-search-input recycle-fonts"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                    />
+                    <span className="recycle-search-icon">
+                      <div>
+                        <label className="password-switch lead-switch">
+                          <input
+                            type="checkbox"
+                            checked={toggleChecked}
+                            onChange={handleToggleChange}
+                          />
+                          <span className="password-slider lead-slider password-round"></span>
+                        </label>
+                      </div>
+                    </span>
                   </div>
-                  {actionopen && (
-                    <ul className="dropdown-menu">
-                      <li>Mass Delete</li>
-                      <li>Mass Update</li>
-                      <li>Import</li>
-                      <li>
-                        Export Leads
-                      </li>
-                    </ul>
-                  )}</div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="cards-body">
-          {acadmeyLeads?.map((item, index) => (
-            <div className="card-column" key={index}>
-              <div className="card-details">
-                <div className="main-cards">
-                  <div className="cards-new">
-                    <p className="DealName">
-                      {item?.sport}({statusCounts[item.sport] || 0})
-                    </p>
+                </div>
+                <div className="right-side--btns">
+                  <button type="button" className="secondary-btn" onClick={addCityClick}>
+                    City
+                  </button>
+                  <button type="button" className="secondary-btn" onClick={addUrlClick}>
+                    Details
+                  </button>
+                  <div className="select action-select">
+                    <div className="dropdown-container" ref={actionDropDownRef}>
+                      <div
+                        className="dropdown-header2"
+                        onClick={toggleActionDropdown}
+                      >
+                        Actions{" "}
+                        <i
+                          className={`fa-sharp fa-solid ${actionopen ? "fa-angle-up" : "fa-angle-down"
+                            }`}
+                        ></i>
+                      </div>
+                      {actionopen && (
+                        <ul className="dropdown-menu">
+                          <li>Mass Delete</li>
+                          <li>Mass Update</li>
+                          <li>Import</li>
+                          <li>
+                            Export Leads
+                          </li>
+                        </ul>
+                      )}</div>
                   </div>
-                  {item?.cities?.map((obj) => <AllLeadsCards obj={obj} sport={item?.sport} getAllLeads={getAllLeads}/>)}
                 </div>
               </div>
-            </div>
-          ))}
-        </section>
-        <ToastContainer />
-      </div>
-    </>
+            </section>
+            <section className="cards-body">
+              {acadmeyLeads?.map((item, index) => (
+                <div className="card-column" key={index}>
+                  <div className="card-details">
+                    <div className="main-cards">
+                      <div className="cards-new">
+                        <p className="DealName">
+                          {item?.sport}({statusCounts[item.sport] || 0})
+                        </p>
+                      </div>
+                      {item?.cities?.map((obj) => <AllLeadsCards obj={obj} sport={item?.sport} getAllLeads={getAllLeads} />)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </section>
+            <ToastContainer />
+          </div>
+        </>
   );
 };
 
