@@ -278,4 +278,7 @@ export const GET_OTP = bmpStart+"/bmp/log/getOtps";
 export const LEADS_BY_CITY = bmpStart+"/bmp/leads/getByCities";
 export const LEADS_BY_ENTITY = bmpStart+"/bmp/entity/getByCities";
 export const ALL_SPORTS = bmpStart+ "/bmp/master/sport";
+export const REDIRECT_FIND = bmpStart+"/bmp/redirect/find"
+export const ALL_REVIEWS = bmpStart+"/bmp/review/get-by-entity";
 export const GET_ALL_CITY = bmpStart+"/bmp/master/get-cities";
+export const UPDATE_REVIEW = bmpStart+"/bmp/review/update";

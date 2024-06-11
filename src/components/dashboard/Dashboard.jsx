@@ -12,6 +12,7 @@ import LeadModal from "../LeadModal.jsx";
 import DashboardCards from "./DashboardCards.jsx";
 import UrlTable from "./UrlTable.jsx";
 import OtpTable from "./OtpTable.jsx";
+import AllReviews from "../reviews/AllReviews.jsx";
 
 const Dashboard = () => {
   const [stages, setStages] = useState([
@@ -34,6 +35,7 @@ const Dashboard = () => {
   const [openLead, setOpenLead] = useState(false);
   const [openUrl, setOpenUrl] = useState(false);
   const [openOtp, setOpenOtp] = useState(false);
+  const [openReview, setOpenReview] = useState(false)
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
   const [display, setDisplay] = useState("Select Category")
@@ -67,6 +69,12 @@ const Dashboard = () => {
   }
   const addOtpClose = () => {
     setOpenOtp(false)
+  }
+  const addReviewClick = () => {
+    setOpenReview(true)
+  }
+  const addReviewClose = () => {
+    setOpenReview(false)
   }
 
   const getAllAcademy = () => {
@@ -243,10 +251,12 @@ const Dashboard = () => {
   }, []);
 
   return (
-    openUrl ? 
-      <UrlTable onClose={addUrlClose} /> : 
-    openOtp ? 
-      <OtpTable onClose={addOtpClose} /> :
+    openUrl ?
+      <UrlTable onClose={addUrlClose} /> :
+      openOtp ?
+        <OtpTable onClose={addOtpClose} /> :
+        openReview ?
+      <AllReviews onClose = {addReviewClose}/> :
     <div>
       <section className="lead-body">
         <div className="top-head">
@@ -303,7 +313,10 @@ const Dashboard = () => {
             </button> 
             <button type="button" className="secondary-btn" onClick={addUrlClick}>
               Redirect
-            </button>            
+            </button>  
+            <button type="button" className="secondary-btn" onClick={addReviewClick}>
+              Reviews
+            </button>           
             <button type="button" className="secondary-btn" onClick={addLeadClick}>
               Add Leads
             </button>            
@@ -398,6 +411,6 @@ const Dashboard = () => {
       }
     </div>
   );
-}  
+}
 
 export default Dashboard;

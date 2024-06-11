@@ -140,13 +140,13 @@ const InfoTable = ({ onClose }) => {
           <tbody>
           {allData?.map((item) => (
               <tr key={item.id}>
-                <td className="common-fonts">{item.id}</td>
-                <td className="common-fonts">{item.sport}</td>
-                <td className="common-fonts">{item.city}</td>
-                <td className="common-fonts">{item.lead_generation !== null ? item.lead_generation : 0}</td>
-                <td className="common-fonts" onClick={item.verified_academies !== null ? () => infoAcademyClick(item, "verified_academy") : null}>{item.verified_academies !== null ? item.verified_academies : 0}</td>
-                <td className="common-fonts" onClick={item.total_academies !== null ? () => infoAcademyClick(item, "academy") : null}>{item.total_academies !== null ? item.total_academies : 0}</td>
-                <td className="common-fonts" onClick={item.total_coaches !== null ? () => infoAcademyClick(item, "coach") : null}>{item.total_coaches !== null ? item.total_coaches : 0}</td>
+                <td className="common-fonts">{item?.id}</td>
+                <td className="common-fonts">{item?.sport}</td>
+                <td className="common-fonts">{item?.city}</td>
+                <td className="common-fonts">{item?.lead_generation !== null ? item?.lead_generation : 0}</td>
+                <td className="common-fonts" onClick={item?.verified_academies !== null ? () => infoAcademyClick(item, "verified_academy") : null}>{item?.verified_academies !== null ? item.verified_academies : 0}</td>
+                <td className="common-fonts" onClick={item?.total_academies !== null ? () => infoAcademyClick(item, "academy") : null}>{item?.total_academies !== null ? item?.total_academies : 0}</td>
+                <td className="common-fonts" onClick={item?.total_coaches !== null ? () => infoAcademyClick(item, "coach") : null}>{item?.total_coaches !== null ? item?.total_coaches : 0}</td>
               </tr>
             ))}
           </tbody>

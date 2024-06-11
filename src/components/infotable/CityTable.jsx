@@ -91,7 +91,14 @@ const CityTable = ({ onClose }) => {
   return (
     <>
       <div className="performance_title2">
-        <img src={Back} alt="" onClick={onClose} />
+        
+        <input
+          type="text"
+          className="recycle-search-input recycle-fonts"
+          placeholder="Search..."
+          // value={searchQuery}
+          // onChange={handleSearchChange}
+        />
          <div className="leads_new_btn">
           <button
             type="button"

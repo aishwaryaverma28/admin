@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getDecryptedToken } from "../utils/Constants";
+import { REDIRECT_FIND,getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 
 const UrlModal = ({ onClose, api }) => {
@@ -21,7 +21,7 @@ const UrlModal = ({ onClose, api }) => {
     setData(null);
     try {
       const response = await axios.post(
-        "https://bmp.leadplaner.com/api/api/bmp/redirect/find",
+        REDIRECT_FIND,
         { type, url },
         {
           headers: {
