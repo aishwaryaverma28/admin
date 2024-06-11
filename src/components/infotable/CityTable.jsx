@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Back from "../../assets/image/arrow-left.svg";
+
 import { GET_ALL_CITY, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
 
-const CityTable = ({ onClose }) => {
+const CityTable = () => {
   const decryptedToken = getDecryptedToken();
   const [allData, setAllData] = useState([]);
   const [page, setPage] = useState(1);
@@ -83,15 +83,9 @@ const CityTable = ({ onClose }) => {
     fetchData(page, limit);
   };
 
-  // const filteredData = allData.filter((item) =>
-  //   item.id.toString().includes(searchQuery) ||
-  //   (item.attr7 && item.attr7.toLowerCase().includes(searchQuery.toLowerCase()))
-  // );
-
   return (
     <>
-      <div className="performance_title2">
-        
+      <div className="performance_title2">        
         <input
           type="text"
           className="recycle-search-input recycle-fonts"
@@ -112,30 +106,30 @@ const CityTable = ({ onClose }) => {
       </div>
 
       <div className="marketing-all-table otp_table">
-        {/* <table>
+        <table>
           <thead>
             <tr>
               <th className="common-fonts">Id</th>
-              <th className="common-fonts">Mobile</th>
-              <th className="common-fonts">Source</th>
-              <th className="common-fonts">OTP</th>
-              <th className="common-fonts">Date</th>
+              <th className="common-fonts">City</th>
+              <th className="common-fonts">State</th>
+              <th className="common-fonts">Url</th>
+              <th className="common-fonts">Latitude</th>
+              <th className="common-fonts">Longitude</th>
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item) => (
+            {allData.map((item) => (
               <tr key={item.id}>
                 <td className="common-fonts">{item.id}</td>
-                <td className="common-fonts">{item.attr7}</td>
-                <td className="common-fonts"><div className="otp_desc">{item.attr4}</div></td>
-                <td className="common-fonts">{item.attr8}</td>
-                <td className="common-fonts">
-                  {formatDate(item.creation_date)}
-                </td>
+                <td className="common-fonts">{item.city}</td>
+                <td className="common-fonts">{item.state}</td>
+                <td className="common-fonts"><div className="otp_desc">{item.url}</div></td>
+                <td className="common-fonts">{item.lat}</td>
+                <td className="common-fonts">{item.lng}</td>
               </tr>
             ))}
           </tbody>
-        </table> */}
+        </table>
       </div>
       <div className="table_pagination">
         <button onClick={handlePreviousPage} disabled={page === 1}>

@@ -1,7 +1,9 @@
 .aaa {
   margin-top: 1rem;
 }
-
+.contant-to-ragne{
+  padding: 5px 20px;
+ }
 .contacts-top-flex {
   display: flex;
   justify-content: space-between;
