@@ -47,7 +47,6 @@ const Lead = () => {
   const [toggleChecked, setToggleChecked] = useState(false);
   const [selectedEntity, setSelectedEntity] = useState('academy');
   const [display, setDisplay] = useState("Select Category")
-  const orgId = localStorage.getItem('org_id');
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [pipeopen, setPipeOpen] = useState(false);

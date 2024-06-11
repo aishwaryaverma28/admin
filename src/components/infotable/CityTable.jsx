@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { GET_ALL_CITY, getDecryptedToken } from "../utils/Constants";
+import { SEARCH_CITY, GET_ALL_CITY, getDecryptedToken } from "../utils/Constants";
 import axios from "axios";
 
 const CityTable = () => {
@@ -8,6 +8,7 @@ const CityTable = () => {
   const [allData, setAllData] = useState([]);
   const [page, setPage] = useState(1);
   const limit = 20;
+  const [searchQuery, setSearchQuery] = useState("");
   const [pageGroup, setPageGroup] = useState(1);
   const pagesPerGroup = 3;
 
@@ -36,6 +37,30 @@ const CityTable = () => {
   useEffect(() => {
     fetchData(page, limit);
   }, [page]);
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setSearchQuery(value);
+    const body = {
+      tbl: "adm_location_master",
+      term: value
+    }
+    if (value?.length <= 0) {
+      fetchData(page, limit);
+    } else {
+      axios.post(SEARCH_CITY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+        .then(response => {
+          setAllData(response?.data?.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }
 
   const totalPages = 100;
 
@@ -85,15 +110,15 @@ const CityTable = () => {
 
   return (
     <>
-      <div className="performance_title2">        
+      <div className="performance_title2">
         <input
           type="text"
           className="recycle-search-input recycle-fonts"
           placeholder="Search..."
-          // value={searchQuery}
-          // onChange={handleSearchChange}
+          value={searchQuery}
+          onChange={handleSearchChange}
         />
-         <div className="leads_new_btn">
+        <div className="leads_new_btn">
           <button
             type="button"
             className="helpBtn genral-refresh-icon"
