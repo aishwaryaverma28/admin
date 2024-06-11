@@ -11,9 +11,9 @@ const City = ({ onClose }) => {
     return (
         <>
             <div className='contant-to-ragne'>
+                <div className="city-top-flex ">
                 <img src={Back} alt="" onClick={onClose} />
-                <div className="contacts-top-flex ">
-                    <div className="genral-setting-btn genral-setting-fonts aaa">
+                    <div className="genral-setting-btn genral-setting-fonts city-top-tab">
                         <button
                             className={`genral-btn  ${activeTab === "people" ? "genral-active" : ""
                                 }`}
