@@ -9,6 +9,17 @@
   justify-content: space-between;
   align-items: center;
 }
+.city-top-flex {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap:0.5rem;
+  cursor: pointer;
+}
+
+.city-top-tab{
+  margin-bottom: 0;
+}
 
 .contact-top-right {
   display: flex;
