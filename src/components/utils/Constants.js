@@ -283,3 +283,5 @@ export const ALL_REVIEWS = bmpStart+"/bmp/review/get-by-entity";
 export const GET_ALL_CITY = bmpStart+"/bmp/master/get-cities";
 export const UPDATE_REVIEW = bmpStart+"/bmp/review/update";
 export const SEARCH_CITY = bmpStart+"/bmp/master/search-city";
+export const ADD_CITY = bmpStart+"/bmp/master/insert/city";
+export const APPROVE_CITY =bmpStart+"/bmp/master/city/mark-correct";

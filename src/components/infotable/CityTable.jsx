@@ -143,14 +143,14 @@ const CityTable = () => {
             </tr>
           </thead>
           <tbody>
-            {allData.map((item) => (
+            {allData?.map((item) => (
               <tr key={item.id}>
-                <td className="common-fonts">{item.id}</td>
-                <td className="common-fonts">{item.city}</td>
-                <td className="common-fonts">{item.state}</td>
-                <td className="common-fonts"><div className="otp_desc">{item.url}</div></td>
-                <td className="common-fonts">{item.lat}</td>
-                <td className="common-fonts">{item.lng}</td>
+                <td className="common-fonts">{item?.id}</td>
+                <td className="common-fonts">{item?.city}</td>
+                <td className="common-fonts">{item?.state}</td>
+                <td className="common-fonts"><div className="otp_desc">{item?.url}</div></td>
+                <td className="common-fonts">{item?.lat}</td>
+                <td className="common-fonts">{item?.lng}</td>
               </tr>
             ))}
           </tbody>

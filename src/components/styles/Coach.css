@@ -49,3 +49,13 @@
   .review_table th:nth-child(4){
     width: 10rem;
    }
+   
+.city-bottom-btn{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* or justify-content: space-between; if you have multiple elements */
+  align-items: center;
+  padding: 1rem;
+  z-index: -1;
+  margin-top: 2rem;
+}
