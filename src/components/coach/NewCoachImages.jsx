@@ -219,7 +219,7 @@ const NewCoachImages = (id) => {
             photos: allUrls?.join(","),
             name: academyData?.name,
             sport_id: academyData?.sport_id ?? 14,
-            city: academyData?.city,
+            loc_id: academyData?.loc_id,
             type: "temp",
         }
         axios
@@ -274,7 +274,7 @@ const NewCoachImages = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id ?? 14,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                     type: "temp",
                 },
                 {
@@ -306,7 +306,7 @@ const NewCoachImages = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id ?? 14,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                     type: "temp",
                 },
                 {
@@ -343,7 +343,7 @@ const NewCoachImages = (id) => {
             type: "temp",
             name: academyData?.name,
             sport_id: academyData?.sport_id ?? 14,
-            city: academyData?.city,
+            loc_id: academyData?.loc_id,
             profile_img: logoValue,
             banner: bannerValue,
             photos: allUrls?.join(","),

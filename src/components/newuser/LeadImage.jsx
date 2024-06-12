@@ -224,7 +224,7 @@ const LeadImage = ({ id }) => {
             videos: videoUrls?.join(","),
             name: academyData?.name,
             sport_id: academyData?.sport_id ?? 14,
-            city: academyData?.city || "select",
+             loc_id: academyData?.loc_id,
         };
         axios
             .put(UPDATE_ACADEMY + id, updatedFormData, {
@@ -279,7 +279,7 @@ const LeadImage = ({ id }) => {
             videos: videoUrls?.join(","),
             name: academyData?.name,
             sport_id: academyData?.sport_id ?? 14,
-            city: academyData?.city || "select",
+             loc_id: academyData?.loc_id,
         }
         axios
             .put(UPDATE_ACADEMY + id, updatedFormData
@@ -333,7 +333,7 @@ const LeadImage = ({ id }) => {
                     photos: updatedNameString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -364,7 +364,7 @@ const LeadImage = ({ id }) => {
                     videos: updatedNameString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {

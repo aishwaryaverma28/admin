@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
-    cdnurl,
+    cdnurl,SEARCH_CITY,
     GET_ACADEMY,
     getDecryptedToken,
     UPDATE_ACADEMY,
     ALL_SPORTS
 } from "./../utils/Constants";
-import {normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1} from "./../utils/variables";
+import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 import { toast } from "react-toastify";
 import '../styles/Comment.css'
 const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
@@ -27,59 +27,130 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [noMatch, setNoMatch] = useState(false);
     const inputRef = useRef(null);
-// ============================================================sports dropdown code
-const handleSportInputChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+     // city dropdown useStates
+  const [searchCity, setSearchCity] = useState("");
+  const [filteredCity, setFilteredCity] = useState([]);
+  const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
+  const [noMatchCity, setNoMatchCity] = useState(false);
+  const inputCityRef = useRef(null);
+    // ============================================================sports dropdown code
+    const handleSportInputChange = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
 
-    if (value) {
-        const filtered = sports.filter((sport) =>
-            sport.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredSports(filtered);
-        setNoMatch(filtered.length === 0);
-        setIsDropdownVisible(true);
-    } else {
+        if (value) {
+            const filtered = sports.filter((sport) =>
+                sport.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredSports(filtered);
+            setNoMatch(filtered.length === 0);
+            setIsDropdownVisible(true);
+        } else {
+            setFilteredSports([]);
+            setNoMatch(false);
+            setIsDropdownVisible(false);
+        }
+        setStateBtn(1);
+    };
+
+    const handleSportSelect = (sport) => {
+        setSearchTerm(sport.name);
+        setEditedItem(prevState => ({
+            ...prevState,
+            sport_id: sport.id
+        }));
         setFilteredSports([]);
-        setNoMatch(false);
         setIsDropdownVisible(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+            if (noMatch) {
+                setSearchTerm('');
+            } else if (filteredSports.length > 0) {
+                setSearchTerm(filteredSports[0].name);
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    sport_id: filteredSports[0].id
+                }));
+            }
+            setIsDropdownVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [filteredSports, noMatch]);
+
+    //===================================================sport dropdown code ends here
+  // ============================================================city dropdown code
+  const handleCityInputChange = (event) => {
+    const value = event.target.value;
+    setSearchCity(value);
+    const body = {
+      tbl: "adm_location_master",
+      term: value
+    }
+    if (value) {
+      axios.post(SEARCH_CITY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+        .then(response => {
+          setFilteredCity(response?.data?.data);
+          setNoMatchCity(response?.data?.data?.length === 0);
+          setIsCityDropdownVisible(true);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+         
+    } else {
+      setFilteredCity([]);
+      setNoMatchCity(false);
+      setIsCityDropdownVisible(false);
     }
     setStateBtn(1);
-};
+  };
 
-const handleSportSelect = (sport) => {
-    setSearchTerm(sport.name);
+  const handleCitySelect = (sport) => {
+    setSearchCity(sport.city);
     setEditedItem(prevState => ({
-        ...prevState,
-        sport_id: sport.id
+      ...prevState,
+      loc_id: sport.id,
+      state: sport.state
     }));
-    setFilteredSports([]);
-    setIsDropdownVisible(false);
-};
+    setFilteredCity([]);
+    setIsCityDropdownVisible(false);
+  };
 
-const handleClickOutside = (event) => {
-    if (inputRef.current && !inputRef.current.contains(event.target)) {
-        if (noMatch) {
-            setSearchTerm('');
-        } else if (filteredSports.length > 0) {
-            setSearchTerm(filteredSports[0].name);
-            setEditedItem(prevState => ({
-                ...prevState,
-                sport_id: filteredSports[0].id
-            }));
-        }
-        setIsDropdownVisible(false);
+  const handleClickCityOutside = (event) => {
+    if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
+      if (noMatchCity) {
+        setSearchCity('');
+      } else if (filteredCity.length > 0) {
+        setSearchCity(filteredCity[0].name);
+        setEditedItem(prevState => ({
+          ...prevState,
+          loc_id: filteredCity[0].id
+        }));
+      }
+      setIsCityDropdownVisible(false);
     }
-};
+  };
 
-useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
+  useEffect(() => {
+    document.addEventListener('click', handleClickCityOutside);
     return () => {
-        document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('click', handleClickCityOutside);
     };
-}, [filteredSports, noMatch]);
+  }, [filteredCity, noMatchCity]);
 
-//===================================================sport dropdown code ends here
+  //===================================================city dropdown code ends here
 
     const fetchLead = () => {
         let body = {
@@ -102,6 +173,9 @@ useEffect(() => {
                 if (response?.data?.data[0]?.sport) {
                     setSearchTerm(response?.data?.data[0]?.sport)
                 }
+                if (response?.data?.data[0]?.city) {
+                    setSearchCity(response?.data?.data[0]?.city)
+                  }
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -138,16 +212,16 @@ useEffect(() => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
         let updatedValue = newValue;
-    
+
         if (name === "name") {
             updatedValue = capitalizeFirstLetterOfEachWord(updatedValue);
         } else if (name === "email") {
             updatedValue = updatedValue?.toLowerCase();
         }
-    
+
         let redText = false;
         let textRestrict = "";
-    
+
         if (value) {
             const words = value.split(" ");
             words.forEach((word) => {
@@ -157,14 +231,14 @@ useEffect(() => {
                     setStateBtn(0);
                 }
             });
-       }    
+        }
         if (redText) {
             alert(`Warning: The word "${textRestrict}" is a restricted keyword.`);
             e.target.style.color = "red";
         } else {
             e.target.style.color = "";
         }
-    
+
         setEditedItem({
             ...editedItem,
             [name]: updatedValue,
@@ -172,7 +246,7 @@ useEffect(() => {
         handleClick();
         setStateBtn(1);
     };
-    
+
 
     const handleClick = () => {
         updateCheckState(true);
@@ -217,8 +291,7 @@ useEffect(() => {
             closed_on: editedItem?.closed_on?.trim(),
             address1: editedItem?.address1?.trim(),
             address2: editedItem?.address2?.trim(),
-            city: editedItem?.city || "select",
-            state: editedItem?.state?.trim(),
+            loc_id: editedItem?.loc_id,
             postcode: editedItem?.postcode?.trim(),
             categories: editedItem?.categories?.trim(),
             rating: editedItem?.rating?.trim(),
@@ -266,9 +339,9 @@ useEffect(() => {
     React.useImperativeHandle(ref, () => ({
         handleUpdateClick
     }));
-   
+
     //======================================================================css variable
-   
+
 
     return (
         <>
@@ -796,24 +869,41 @@ useEffect(() => {
                                         </span>
                                     )}
                                 </p>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                value={editedItem?.city}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
+                                <>
+                                    <div>
+                                        <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                                            <div>
+                                                <input
+                                                    id=""
+                                                    name=""
+                                                    value={searchCity}
+                                                    onChange={handleCityInputChange}
+                                                    autoComplete="off"
+                                                    className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                                                    style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                    disabled={isDisabled}
+                                                />
+                                            </div>
+                                            {isCityDropdownVisible && (
+                                                <div className='sport_box'>
+                                                    {noMatchCity ? (
+                                                        <div>No match found</div>
+                                                    ) : (
+                                                        filteredCity.map((city) => (
+                                                            <div
+                                                                key={city.id}
+                                                                onClick={() => handleCitySelect(city)}
+                                                                style={{ padding: '5px', cursor: 'pointer' }}
+                                                            >
+                                                                {city.locality_name}
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>

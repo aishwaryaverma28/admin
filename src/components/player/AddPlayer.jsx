@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { ADD_PLAYER, ALL_SPORTS, getDecryptedToken } from "../utils/Constants";
+import { ADD_PLAYER, ALL_SPORTS, SEARCH_CITY, getDecryptedToken } from "../utils/Constants";
 import { editStylingInput, editStylingTextarea, editStylingSelect1, } from "./../utils/variables";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,7 +13,7 @@ const AddPlayer = ({ onClose }) => {
     const [editedItem, setEditedItem] = useState({
         about: "",
         awards: "",
-        city: "",
+        loc_id: "",
         address: "",
         dob: "",
         email: "",
@@ -25,7 +25,6 @@ const AddPlayer = ({ onClose }) => {
         facebook: "",
         instagram: "",
         sport_id: 14,
-        state: "",
         type: ""
     });
     const [stateBtn, setStateBtn] = useState(0);
@@ -38,59 +37,66 @@ const AddPlayer = ({ onClose }) => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [noMatch, setNoMatch] = useState(false);
     const inputRef = useRef(null);
-// ============================================================sports dropdown code
-const handleSportInputChange = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
+    // city dropdown useStates
+    const [searchCity, setSearchCity] = useState("");
+    const [filteredCity, setFilteredCity] = useState([]);
+    const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
+    const [noMatchCity, setNoMatchCity] = useState(false);
+    const inputCityRef = useRef(null);
 
-    if (value) {
-        const filtered = sports.filter((sport) =>
-            sport.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredSports(filtered);
-        setNoMatch(filtered.length === 0);
-        setIsDropdownVisible(true);
-    } else {
-        setFilteredSports([]);
-        setNoMatch(false);
-        setIsDropdownVisible(false);
-    }
-    setStateBtn(1);
-};
+    // ============================================================sports dropdown code
+    const handleSportInputChange = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
 
-const handleSportSelect = (sport) => {
-    setSearchTerm(sport.name);
-    setEditedItem(prevState => ({
-        ...prevState,
-        sport_id: sport.id
-    }));
-    setFilteredSports([]);
-    setIsDropdownVisible(false);
-};
-
-const handleClickOutside = (event) => {
-    if (inputRef.current && !inputRef.current.contains(event.target)) {
-        if (noMatch) {
-            setSearchTerm('');
-        } else if (filteredSports.length > 0) {
-            setSearchTerm(filteredSports[0].name);
-            setEditedItem(prevState => ({
-                ...prevState,
-                sport_id: filteredSports[0].id
-            }));
+        if (value) {
+            const filtered = sports.filter((sport) =>
+                sport.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredSports(filtered);
+            setNoMatch(filtered.length === 0);
+            setIsDropdownVisible(true);
+        } else {
+            setFilteredSports([]);
+            setNoMatch(false);
+            setIsDropdownVisible(false);
         }
-        setIsDropdownVisible(false);
-    }
-};
-
-useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-        document.removeEventListener('click', handleClickOutside);
+        setStateBtn(1);
     };
-}, [filteredSports, noMatch]);
 
-//===================================================sport dropdown code ends here
+    const handleSportSelect = (sport) => {
+        setSearchTerm(sport.name);
+        setEditedItem(prevState => ({
+            ...prevState,
+            sport_id: sport.id
+        }));
+        setFilteredSports([]);
+        setIsDropdownVisible(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+            if (noMatch) {
+                setSearchTerm('');
+            } else if (filteredSports.length > 0) {
+                setSearchTerm(filteredSports[0].name);
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    sport_id: filteredSports[0].id
+                }));
+            }
+            setIsDropdownVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [filteredSports, noMatch]);
+
+    //===================================================sport dropdown code ends here
 
     const fetchSports = () => {
         let body = {
@@ -111,6 +117,73 @@ useEffect(() => {
     useEffect(() => {
         fetchSports();
     }, []);
+
+    // ============================================================city dropdown code
+    const handleCityInputChange = (event) => {
+        const value = event.target.value;
+        setSearchCity(value);
+        const body = {
+            tbl: "adm_location_master",
+            term: value
+        }
+        if (value) {
+            axios.post(SEARCH_CITY, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+                .then(response => {
+                    setFilteredCity(response?.data?.data);
+                    setNoMatchCity(response?.data?.data?.length === 0);
+                    setIsCityDropdownVisible(true);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+
+        } else {
+            setFilteredCity([]);
+            setNoMatchCity(false);
+            setIsCityDropdownVisible(false);
+        }
+        setStateBtn(1);
+    };
+
+    const handleCitySelect = (sport) => {
+        setSearchCity(sport.city);
+        setEditedItem(prevState => ({
+            ...prevState,
+            loc_id: sport.id,
+            state: sport.state
+        }));
+        setFilteredCity([]);
+        setIsCityDropdownVisible(false);
+    };
+
+    const handleClickCityOutside = (event) => {
+        if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
+            if (noMatchCity) {
+                setSearchCity('');
+            } else if (filteredCity.length > 0) {
+                setSearchCity(filteredCity[0].name);
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    loc_id: filteredCity[0].id
+                }));
+            }
+            setIsCityDropdownVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickCityOutside);
+        return () => {
+            document.removeEventListener('click', handleClickCityOutside);
+        };
+    }, [filteredCity, noMatchCity]);
+
+    //===================================================city dropdown code ends here
+
     const capitalizeFirstLetterOfEachWord = (string) => {
         return string?.replace(/\b\w/g, char => char?.toUpperCase());
     };
@@ -191,9 +264,9 @@ useEffect(() => {
                     setEditedItem({
                         about: "",
                         awards: "",
-                        city: "",
                         address: "",
                         dob: "",
+                        loc_id: "",
                         email: "",
                         height: "",
                         weight: "",
@@ -203,7 +276,6 @@ useEffect(() => {
                         facebook: "",
                         instagram: "",
                         sport_id: 14,
-                        state: "",
                         type: ""
                     });
                 } else {
@@ -301,41 +373,41 @@ useEffect(() => {
                                                 />
                                             </span>
                                         </p>
-                                        
-                                <>
-                                    <div>
-                                        <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+
+                                        <>
                                             <div>
-                                                <input
-                                                    id=""
-                                                    name=""
-                                                    value={searchTerm}
-                                                    onChange={handleSportInputChange}
-                                                    autoComplete="off"
-                                                    className={"disabled sport_new_input"}
-                                                    style={editStylingSelect1}
-                                                />
-                                            </div>
-                                            {isDropdownVisible && (
-                                                <div className='sport_box'>
-                                                    {noMatch ? (
-                                                        <div>No match found</div>
-                                                    ) : (
-                                                        filteredSports.map((sport) => (
-                                                            <div
-                                                                key={sport.id}
-                                                                onClick={() => handleSportSelect(sport)}
-                                                                style={{ padding: '5px', cursor: 'pointer' }}
-                                                            >
-                                                                {sport.name}
-                                                            </div>
-                                                        ))
+                                                <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+                                                    <div>
+                                                        <input
+                                                            id=""
+                                                            name=""
+                                                            value={searchTerm}
+                                                            onChange={handleSportInputChange}
+                                                            autoComplete="off"
+                                                            className={"disabled sport_new_input"}
+                                                            style={editStylingSelect1}
+                                                        />
+                                                    </div>
+                                                    {isDropdownVisible && (
+                                                        <div className='sport_box'>
+                                                            {noMatch ? (
+                                                                <div>No match found</div>
+                                                            ) : (
+                                                                filteredSports.map((sport) => (
+                                                                    <div
+                                                                        key={sport.id}
+                                                                        onClick={() => handleSportSelect(sport)}
+                                                                        style={{ padding: '5px', cursor: 'pointer' }}
+                                                                    >
+                                                                        {sport.name}
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
                                                     )}
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </>
+                                            </div>
+                                        </>
                                         <p>
 
                                             <span>
@@ -481,21 +553,40 @@ useEffect(() => {
                                                 />
                                             </span>
                                         </p>
-                                        <p>
-
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="city"
-                                                    value={editedItem?.city}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
-                                                />
-                                            </span>
-                                        </p>
+                                        <>
+                                            <div>
+                                                <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                                                    <div>
+                                                        <input
+                                                            id=""
+                                                            name=""
+                                                            value={searchCity}
+                                                            onChange={handleCityInputChange}
+                                                            autoComplete="off"
+                                                            className="disabled sport_new_input"
+                                                            style={editStylingSelect1}
+                                                        />
+                                                    </div>
+                                                    {isCityDropdownVisible && (
+                                                        <div className='sport_box'>
+                                                            {noMatchCity ? (
+                                                                <div>No match found</div>
+                                                            ) : (
+                                                                filteredCity.map((city) => (
+                                                                    <div
+                                                                        key={city.id}
+                                                                        onClick={() => handleCitySelect(city)}
+                                                                        style={{ padding: '5px', cursor: 'pointer' }}
+                                                                    >
+                                                                        {city.locality_name}
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </>
                                         <p>
 
                                             <span>
@@ -503,7 +594,7 @@ useEffect(() => {
                                                     type="text"
                                                     name="state"
                                                     value={editedItem?.state}
-                                                    onChange={handleInputChange}
+                                                    disabled
                                                     style={
                                                         editStylingInput
                                                     }

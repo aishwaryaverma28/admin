@@ -209,7 +209,7 @@ const CoachImage = (id) => {
             type : "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-            city: academyData?.city,
+            loc_id: academyData?.loc_id,
             profile_img: fileName,
             photos: allUrls?.join(","),
         }
@@ -265,7 +265,7 @@ const CoachImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -297,7 +297,7 @@ const CoachImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -334,7 +334,7 @@ const CoachImage = (id) => {
             type : "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-            city: academyData?.city,
+            loc_id: academyData?.loc_id,
             profile_img: logoValue,
             banner: bannerValue,
             photos: allUrls?.join(","),

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { ADD_NEW_ACADMEY, ALL_SPORTS, getDecryptedToken } from "../utils/Constants";
+import { ADD_NEW_ACADMEY,SEARCH_CITY, ALL_SPORTS, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyLead from "./AcadmeyLead";
@@ -33,8 +33,7 @@ const CreateLead = ({ onClose }) => {
     closed_on: "",
     address1: "",
     address2: "",
-    city: "",
-    state: "",
+    loc_id: "",
     postcode: "",
     categories: "",
     friendly: "",
@@ -48,6 +47,13 @@ const CreateLead = ({ onClose }) => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [noMatch, setNoMatch] = useState(false);
     const inputRef = useRef(null);
+    // city dropdown useStates
+  const [searchCity, setSearchCity] = useState("");
+  const [filteredCity, setFilteredCity] = useState([]);
+  const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
+  const [noMatchCity, setNoMatchCity] = useState(false);
+  const inputCityRef = useRef(null);
+
 // ============================================================sports dropdown code
 const handleSportInputChange = (event) => {
     const value = event.target.value;
@@ -122,6 +128,73 @@ useEffect(() => {
   useEffect(() => {
     fetchSports();
   }, []);
+  // ============================================================city dropdown code
+   const handleCityInputChange = (event) => {
+    const value = event.target.value;
+    setSearchCity(value);
+    const body = {
+      tbl: "adm_location_master",
+      term: value
+    }
+    if (value) {
+      axios.post(SEARCH_CITY, body, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+        .then(response => {
+          setFilteredCity(response?.data?.data);
+          setNoMatchCity(response?.data?.data?.length === 0);
+          setIsCityDropdownVisible(true);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+         
+    } else {
+      setFilteredCity([]);
+      setNoMatchCity(false);
+      setIsCityDropdownVisible(false);
+    }
+    setStateBtn(1);
+  };
+
+  const handleCitySelect = (sport) => {
+    setSearchCity(sport.city);
+    setEditedItem(prevState => ({
+      ...prevState,
+      loc_id: sport.id,
+      state: sport.state
+    }));
+    setFilteredCity([]);
+    setIsCityDropdownVisible(false);
+  };
+
+  const handleClickCityOutside = (event) => {
+    if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
+      if (noMatchCity) {
+        setSearchCity('');
+      } else if (filteredCity.length > 0) {
+        setSearchCity(filteredCity[0].name);
+        setEditedItem(prevState => ({
+          ...prevState,
+          loc_id: filteredCity[0].id
+        }));
+      }
+      setIsCityDropdownVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickCityOutside);
+    return () => {
+      document.removeEventListener('click', handleClickCityOutside);
+    };
+  }, [filteredCity, noMatchCity]);
+
+  //===================================================city dropdown code ends here
+
+
   const openModal = (object) => {
     setModalVisible(true);
     setSelectedObj(object);
@@ -231,8 +304,7 @@ useEffect(() => {
             closed_on: "",
             address1: "",
             address2: "",
-            city: "",
-            state: "",
+            loc_id: "",
             postcode: "",
             categories: "",
             friendly: "",
@@ -610,24 +682,47 @@ useEffect(() => {
                         />
                       </span>
                     </p>
-                    <p>
-                      <span>
+                    <>
+                  <div>
+                    <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                      <div>
                         <input
-                          type="text"
-                          name="city"
-                          value={editedItem?.city}
-                          onChange={handleInputChange}
-                          style={editStylingInput}
+                          id=""
+                          name=""
+                          value={searchCity}
+                          onChange={handleCityInputChange}
+                          autoComplete="off"
+                          className="disabled sport_new_input"
+                          style={editStylingSelect1}
                         />
-                      </span>
-                    </p>
+                      </div>
+                      {isCityDropdownVisible && (
+                        <div className='sport_box'>
+                          {noMatchCity ? (
+                            <div>No match found</div>
+                          ) : (
+                            filteredCity.map((city) => (
+                              <div
+                                key={city.id}
+                                onClick={() => handleCitySelect(city)}
+                                style={{ padding: '5px', cursor: 'pointer' }}
+                              >
+                                {city.locality_name}
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
                     <p>
                       <span>
                         <input
                           type="text"
                           name="state"
                           value={editedItem?.state}
-                          onChange={handleInputChange}
+                          disabled
                           style={editStylingInput}
                         />
                       </span>

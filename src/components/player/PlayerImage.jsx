@@ -190,7 +190,7 @@ const PlayerImage = (id) => {
             type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-            city: academyData?.city,
+             loc_id: academyData?.loc_id,
             logo: fileName,
             photos: allUrls?.join(","),
         }
@@ -236,7 +236,7 @@ const PlayerImage = (id) => {
             type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-            city: academyData?.city,
+             loc_id: academyData?.loc_id,
             logo: file,
             photos: allUrls?.join(","),
         }
@@ -292,7 +292,7 @@ const PlayerImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                     loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -324,7 +324,7 @@ const PlayerImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                    city: academyData?.city,
+                     loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
