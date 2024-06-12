@@ -16,6 +16,7 @@ const AddCity = ({ onClose }) => {
     lng: "",
     type: "",
     country: "",
+    postcode: "",
   });
 
   const handleChange = (e) => {
@@ -29,42 +30,55 @@ const AddCity = ({ onClose }) => {
   const handleCancel = () => {
 
   }
-const handleSubmit = () => {
-  const updatedFormData = {
-    locality_name: formData?.locality_name,
-    locality: formData?.locality,
-    city: formData?.city,
-    state: formData?.state,
-    city_id: formData?.city_id,
-    lat: parseFloat(formData?.lat),
-    lng: parseFloat(formData?.lng),
-    type: formData?.type,
-    country: formData?.country,
-}
-axios
-    .post(ADD_CITY, updatedFormData, {
+  const handleSubmit = () => {
+    const updatedFormData = {
+      locality_name: formData?.locality_name?.trim(),
+      locality: formData?.locality?.trim(),
+      city: formData?.city?.trim(),
+      state: formData?.state?.trim(),
+      city_id: formData?.city_id?.trim(),
+      lat: parseFloat(formData?.lat?.trim()),
+      lng: parseFloat(formData?.lng?.trim()),
+      type: formData?.type?.trim(),
+      country: formData?.country?.trim(),
+      postcode: formData?.postcode?.trim(),
+    }
+    axios
+      .post(ADD_CITY, updatedFormData, {
         headers: {
-            Authorization: `Bearer ${decryptedToken}`,
+          Authorization: `Bearer ${decryptedToken}`,
         },
-    })
-    .then((response) => {
+      })
+      .then((response) => {
         console.log(response)
         if (response?.data?.status === 1) {
-            toast.success("City added successfully", {
-                position: "top-center",
-                autoClose: 2000,
-            });
+          toast.success("City added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          setFormData({
+            locality_name: "",
+            locality: "",
+            city: "",
+            state: "",
+            city_id: "",
+            lat: "",
+            lng: "",
+            type: "",
+            country: "",
+            postcode: "",
+          })
         } else {
-            toast.error(response?.data?.message, {
-                position: "top-center",
-                autoClose: 2000,
-            });
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
-    });
-}
+      });
+  }
   return (
     <>
       <div className="help-modal-container lead_modal_input">
@@ -123,7 +137,7 @@ axios
                 <div>
                   <p className="helpTitle">City Id <span className="common-fonts redAlert"> *</span> </p>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Enter City Id"
                     name="city_id"
                     value={formData?.city_id}
@@ -171,6 +185,17 @@ axios
                     placeholder="Enter country"
                     name="country"
                     value={formData?.country}
+                    onChange={handleChange}
+                    className="common-input"
+                  ></input>
+                </div>
+                <div>
+                  <p className="helpTitle">PostCode <span className="common-fonts redAlert"> *</span></p>
+                  <input
+                    type="number"
+                    placeholder="Enter postcode"
+                    name="postcode"
+                    value={formData?.postcode}
                     onChange={handleChange}
                     className="common-input"
                   ></input>

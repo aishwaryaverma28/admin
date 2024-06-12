@@ -6,7 +6,7 @@ import { APPROVE_CITY, getDecryptedToken } from "../utils/Constants";
 
 const MarkCity = ({ onClose, rowData }) => {
     const decryptedToken = getDecryptedToken();
-    
+
     const handleSubmit = () => {
         axios
             .post(APPROVE_CITY, {
@@ -52,7 +52,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter Locality Name"
                                         name="locality_name"
                                         value={rowData?.locality_name}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -63,7 +63,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter Locality"
                                         name="locality"
                                         value={rowData?.locality}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -74,7 +74,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter City"
                                         name="city"
                                         value={rowData?.city}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -85,7 +85,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter State"
                                         name="state"
                                         value={rowData?.state}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -96,7 +96,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter City Id"
                                         name="city_id"
                                         value={rowData?.city_id}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -107,7 +107,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter Latitude"
                                         name="lat"
                                         value={rowData?.lat}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -118,7 +118,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter Longitude"
                                         name="lng"
                                         value={rowData?.lng}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -129,7 +129,7 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter Type"
                                         name="type"
                                         value={rowData?.type}
-                                       disabled
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
@@ -140,7 +140,18 @@ const MarkCity = ({ onClose, rowData }) => {
                                         placeholder="Enter country"
                                         name="country"
                                         value={rowData?.country}
-                                       disabled
+                                        disabled
+                                        className="common-input"
+                                    ></input>
+                                </div>
+                                <div>
+                                    <p className="helpTitle">PostCode <span className="common-fonts redAlert"> *</span></p>
+                                    <input
+                                        type="number"
+                                        placeholder="Enter postcode"
+                                        name="postcode"
+                                        value={rowData?.postcode}
+                                        disabled
                                         className="common-input"
                                     ></input>
                                 </div>
