@@ -3,6 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
+  SEARCH_API,
   ALL_BMP_USER,
   getDecryptedToken,
 } from "../utils/Constants";
@@ -37,8 +38,6 @@ const Dashboard = () => {
   const [openOtp, setOpenOtp] = useState(false);
   const [openReview, setOpenReview] = useState(false)
   const [toggleChecked, setToggleChecked] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState('academy');
-  const [display, setDisplay] = useState("Select Category")
   const [leadopen, setLeadOpen] = useState(false);
   const leadDropDownRef = useRef(null);
   const [actionopen, setActionOpen] = useState(false);
@@ -167,8 +166,8 @@ const Dashboard = () => {
       }
       let apiUrl = '';
       apiUrl = toggleChecked
-        ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/id/${value}`
-        : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_user/global/${value}`;
+        ? `${SEARCH_API}bmp_user/id/${value}`
+        : `${SEARCH_API}bmp_user/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,

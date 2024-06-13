@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ADD_BMP_LEADS, EMAIL_PHONE, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
+import { ADD_BMP_LEADS, EMAIL_PHONE,SEARCH_API, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,21 +25,51 @@ const LeadModal = ({ onClose, getData }) => {
 
   useEffect(() => {
     if (formData?.object_id) {
-      axios
-        .post(GET_ACADEMY, { academy_id: formData?.object_id }, {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        })
-        .then((response) => {
-          setAcademyName(response?.data?.data[0]);
-          setSport(response?.data?.data[0]?.sport);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (formData.object_type === "academy") {
+        axios
+          .post(GET_ACADEMY, { academy_id: formData?.object_id }, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            setAcademyName(response?.data?.data[0]);
+            setSport(response?.data?.data[0]?.sport);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else if (formData.object_type === "coach") {
+        axios
+          .get(`${SEARCH_API}bmp_coach_details/id/${formData?.object_id}`, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            setAcademyName(response?.data?.data[0]);
+            setSport(response?.data?.data[0]?.sport);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }else if (formData.object_type === "player") {
+        axios
+          .get(`${SEARCH_API}bmp_player_details/id/${formData?.object_id}`, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            setAcademyName(response?.data?.data[0]);
+            setSport(response?.data?.data[0]?.sport);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
-  }, [formData?.object_id]);
+  }, [formData?.object_id, formData?.object_type]);
 
   useEffect(() => {
     if (formData?.phone) {
@@ -93,7 +123,7 @@ const LeadModal = ({ onClose, getData }) => {
 
     if (name === "name") {
       updatedValue = capitalizeFirstLetterOfEachWord(updatedValue);
-    }else if (name === "email") {
+    } else if (name === "email") {
       updatedValue = updatedValue?.toLowerCase();
     }
 
@@ -102,11 +132,11 @@ const LeadModal = ({ onClose, getData }) => {
     });
     setStateBtn(1);
   };
- 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const updatedFormData = {
-      object_type: "academy",
+      object_type: formData?.object_type,
       object_id: formData?.object_id?.trim(),
       name: formData?.name?.trim(),
       phone: formData?.phone?.trim(),
@@ -280,7 +310,7 @@ const LeadModal = ({ onClose, getData }) => {
                     </select>
                   </div>
                   <div>
-                    <p className="helpTitle">Academy Id</p>
+                    <p className="helpTitle">Academy/Coach Id</p>
                     <input
                       type="text"
                       placeholder="Enter Academy Id"

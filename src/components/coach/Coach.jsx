@@ -6,6 +6,7 @@ import {
   ALL_BMP_USER,
   ACADMEY_VEREFIED,
   MOST_LEADS,
+  SEARCH_API,
   GET_COACH,
   getDecryptedToken,
 } from "../utils/Constants.js";
@@ -217,8 +218,8 @@ const Coach = () => {
       }
       let apiUrl = '';
       apiUrl = toggleChecked
-        ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/id/${value}`
-        : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/${value}`;
+        ? `${SEARCH_API}bmp_coach_details/id/${value}`
+        : `${SEARCH_API}bmp_coach_details/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,

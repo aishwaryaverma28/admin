@@ -5,7 +5,7 @@ import axios from "axios";
 import {
   ALL_BMP_USER,
   ACADMEY_VEREFIED,
-  GET_COACH,
+  GET_COACH,SEARCH_API,
   getDecryptedToken,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
@@ -157,8 +157,8 @@ const Player = () => {
       }
       let apiUrl = '';
       apiUrl = toggleChecked
-        ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_player_details/id/${value}`
-        : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_player_details/global/${value}`;
+        ? `${SEARCH_API}bmp_player_details/id/${value}`
+        : `${SEARCH_API}bmp_player_details/global/${value}`;
       axios.get(apiUrl, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,

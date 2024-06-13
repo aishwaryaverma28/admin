@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import {
   cdnurl,
-    GET_COACH_ID,
+    GET_COACH_ID,SEARCH_API,
   ASSIGN_ACADEMY,
   ASSIGN_NEW_COACH,
   getDecryptedToken,
@@ -54,8 +54,8 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
         }
         let apiUrl = '';
         apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/id/${value}`
-          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/${value}`;
+          ? `${SEARCH_API}bmp_coach_details/id/${value}`
+          : `${SEARCH_API}bmp_coach_details/global/${value}`;
          axios.get(apiUrl, {
           headers: {
             Authorization: `Bearer ${decryptedToken}`,

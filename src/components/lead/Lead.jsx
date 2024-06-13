@@ -13,7 +13,7 @@ import {
   getDecryptedToken,
   ACADMEY_SEARCH,
   SEARCH_ACADMEY_ID,
-  ACADMEY_SEARCH_API
+  ACADMEY_SEARCH_API,SEARCH_API
 } from "../utils/Constants";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -244,8 +244,8 @@ const Lead = () => {
         };
         const entity = entityMap[selectedEntity] || selectedEntity;
         apiUrl = toggleChecked
-          ? `https://bmp.leadplaner.com/api/api/bmp/searchEntity/${entity}/id/${value}`
-          : `https://bmp.leadplaner.com/api/api/bmp/searchEntity/${entity}/global/${value}`;
+          ? `${SEARCH_API}${entity}/id/${value}`
+          : `${SEARCH_API}${entity}/global/${value}`;
       }
       axios.get(apiUrl, {
         headers: {
