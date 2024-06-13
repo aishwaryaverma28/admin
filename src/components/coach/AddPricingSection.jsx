@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { normalStylingInput, editStylingInput } from './../utils/variables';
 
-const AddPricingSection = ({ isEditable, isDisabled, onPackagesUpdate }) => {
-    const [packages, setPackages] = useState([]);
+const AddPricingSection = ({ isEditable, isDisabled, pack, onPackagesUpdate }) => {
+    const [packages, setPackages] = useState(pack || []);
+    const prevPackagesRef = useRef(pack || []);
     const [packageName, setPackageName] = useState('');
     const [packageAmount, setPackageAmount] = useState('');
     const [packageType, setPackageType] = useState('Personal');
-
+console.log(packages);
     useEffect(() => {
-        onPackagesUpdate(packages);
+        if (prevPackagesRef.current !== packages) {
+            onPackagesUpdate(packages);
+            prevPackagesRef.current = packages;
+        }
     }, [packages, onPackagesUpdate]);
 
     const handleAddPackage = () => {
         if (packageName && packageAmount) {
-            const newPackage = `${packageName} for ${packageType} - ₹ ${packageAmount}`;
+            const newPackage = `${packageName} for ${packageType} - Rs ${packageAmount}`;
             setPackages([newPackage, ...packages]);
             setPackageName('');
             setPackageAmount('');
@@ -29,28 +33,29 @@ const AddPricingSection = ({ isEditable, isDisabled, onPackagesUpdate }) => {
         setPackages(updatedPackages);
     };
 
+
     return (
         <>
             <div className="coachFaqs-flex">
                 <div className="coachFaqs-leftPack">
-                        <input
-                            type="text"
-                            className="package-input"
-                            style={isEditable ? editStylingInput : normalStylingInput}
-                            disabled={isDisabled}
-                            placeholder="Enter Monthly Package Name"
-                            value={packageName}
-                            onChange={(e) => setPackageName(e.target.value)}
-                        />
-                        <input
-                            type="number"
-                            style={isEditable ? editStylingInput : normalStylingInput}
-                            disabled={isDisabled}
-                            className="package-input"
-                            placeholder="Enter Amount"
-                            value={packageAmount}
-                            onChange={(e) => setPackageAmount(e.target.value)}
-                        />
+                    <input
+                        type="text"
+                        className="package-input"
+                        style={isEditable ? editStylingInput : normalStylingInput}
+                        disabled={isDisabled}
+                        placeholder="Enter Monthly Package Name"
+                        value={packageName}
+                        onChange={(e) => setPackageName(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        style={isEditable ? editStylingInput : normalStylingInput}
+                        disabled={isDisabled}
+                        className="package-input"
+                        placeholder="Enter Amount"
+                        value={packageAmount}
+                        onChange={(e) => setPackageAmount(e.target.value)}
+                    />
                     <div>
                         <div>
                             <input
@@ -88,7 +93,7 @@ const AddPricingSection = ({ isEditable, isDisabled, onPackagesUpdate }) => {
             </div>
 
             <div className="package-box">
-                {packages.map((pkg, index) => (
+                {packages?.map((pkg, index) => (
                     <div key={index} className="coachFaqs-flex">
                         <div className="coachFaqs-left">
                             <input

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import axios from "axios";
 import {
   cdnurl, SEARCH_CITY,
@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
 import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 import CoachFaq from './CoachFaq';
+import CoachSkills from './CoachSkills';
+import AddPricingSection from './AddPricingSection';
 
 const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -25,6 +27,10 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [keywords, setKeywords] = useState([
     "4r5e", "5h1t", "5hit", "a55", "anal", "anus", "ar5e", "arrse", "arse", "ass", "ass-fucker", "asses", "assfucker", "assfukka", "asshole", "assholes", "asswhole", "a_s_s", "b!tch", "b00bs", "b17ch", "b1tch", "ballbag", "balls", "ballsack", "bastard", "beastial", "beastiality", "bellend", "bestial", "bestiality", "bi+ch", "biatch", "bitch", "bitcher", "bitchers", "bitches", "bitchin", "bitching", "bloody", "blow job", "blowjob", "blowjobs", "boiolas", "bollock", "bollok", "boner", "boob", "boobs", "booobs", "boooobs", "booooobs", "booooooobs", "breasts", "buceta", "bugger", "bum", "bunny fucker", "butt", "butthole", "buttmuch", "buttplug", "c0ck", "c0cksucker", "carpet muncher", "cawk", "chink", "cipa", "cl1t", "clit", "clitoris", "clits", "cnut", "cock", "cock-sucker", "cockface", "cockhead", "cockmunch", "cockmuncher", "cocks", "cocksuck", "cocksucked", "cocksucker", "cocksucking", "cocksucks", "cocksuka", "cocksukka", "cok", "cokmuncher", "coksucka", "coon", "cox", "crap", "cum", "cummer", "cumming", "cums", "cumshot", "cunilingus", "cunillingus", "cunnilingus", "cunt", "cuntlick", "cuntlicker", "cuntlicking", "cunts", "cyalis", "cyberfuc", "cyberfuck", "cyberfucked", "cyberfucker", "cyberfuckers", "cyberfucking", "d1ck", "damn", "dick", "dickhead", "dildo", "dildos", "dink", "dinks", "dirsa", "dlck", "dog-fucker", "doggin", "dogging", "donkeyribber", "doosh", "duche", "dyke", "ejaculate", "ejaculated", "ejaculates", "ejaculating", "ejaculatings", "ejaculation", "ejakulate", "f u c k", "f u c k e r", "f4nny", "fag", "fagging", "faggitt", "faggot", "faggs", "fagot", "fagots", "fags", "fanny", "fannyflaps", "fannyfucker", "fanyy", "fatass", "fcuk", "fcuker", "fcuking", "feck", "fecker", "felching", "fellate", "fellatio", "fingerfuck", "fingerfucked", "fingerfucker", "fingerfuckers", "fingerfucking", "fingerfucks", "fistfuck", "fistfucked", "fistfucker", "fistfuckers", "fistfucking", "fistfuckings", "fistfucks", "flange", "fook", "fooker", "fuck", "fucka", "fucked", "fucker", "fuckers", "fuckhead", "fuckheads", "fuckin", "fucking", "fuckings", "fuckingshitmotherfucker", "fuckme", "fucks", "fuckwhit", "fuckwit", "fudge packer", "fudgepacker", "fuk", "fuker", "fukker", "fukkin", "fuks", "fukwhit", "fukwit", "fux", "fux0r", "f_u_c_k", "gangbang", "gangbanged", "gangbangs", "gaylord", "gaysex", "goatse", "God", "god-dam", "god-damned", "goddamn", "goddamned", "hardcoresex", "hell", "heshe", "hoar", "hoare", "hoer", "homo", "hore", "horniest", "horny", "hotsex", "jack-off", "jackoff", "jap", "jerk-off", "jism", "jiz", "jizm", "jizz", "kawk", "knob", "knobead", "knobed", "knobend", "knobhead", "knobjocky", "knobjokey", "kock", "kondum", "kondums", "kum", "kummer", "kumming", "kums", "kunilingus", "l3i+ch", "l3itch", "labia", "lust", "lusting", "m0f0", "m0fo", "m45terbate", "ma5terb8", "ma5terbate", "masochist", "master-bate", "masterb8", "masterbat*", "masterbat3", "masterbate", "masterbation", "masterbations", "masturbate", "mo-fo", "mof0", "mofo", "mothafuck", "mothafucka", "mothafuckas", "mothafuckaz", "mothafucked", "mothafucker", "mothafuckers", "mothafuckin", "mothafucking", "mothafuckings", "mothafucks", "mother fucker", "motherfuck", "motherfucked", "motherfucker", "motherfuckers", "motherfuckin", "motherfucking", "motherfuckings", "motherfuckka", "motherfucks", "muff", "mutha", "muthafecker", "muthafuckker", "muther", "mutherfucker", "n1gga", "n1gger", "nazi", "nigg3r", "nigg4h", "nigga", "niggah", "niggas", "niggaz", "nigger", "niggers", "nob", "nob jokey", "nobhead", "nobjocky", "nobjokey", "numbnuts", "nutsack", "orgasim", "orgasims", "orgasm", "orgasms", "p0rn", "pawn", "pecker", "penis", "penisfucker", "phonesex", "phuck", "phuk", "phuked", "phuking", "phukked", "phukking", "phuks", "phuq", "pigfucker", "pimpis", "piss", "pissed", "pisser", "pissers", "pisses", "pissflaps", "pissin", "pissing", "pissoff", "poop", "porn", "porno", "pornography", "pornos", "prick", "pricks", "pron", "pube", "pusse", "pussi", "pussies", "pussy", "pussys", "rectum", "retard", "rimjaw", "rimming", "s hit", "s.o.b.", "sadist", "schlong", "screwing", "scroat", "scrote", "scrotum", "semen", "sex", "sh!+", "sh!t", "sh1t", "shag", "shagger", "shaggin", "shagging", "shemale", "shi+", "shit", "shitdick", "shite", "shited", "shitey", "shitfuck", "shitfull", "shithead", "shiting", "shitings", "shits", "shitted", "shitter", "shitters", "shitting", "shittings", "shitty", "skank", "slut", "sluts", "smegma", "smut", "snatch", "son-of-a-bitch", "spac", "spunk", "s_h_i_t", "t1tt1e5", "t1tties", "teets", "teez", "testical", "testicle", "tit", "titfuck", "tits", "titt", "tittie5", "tittiefucker", "titties", "tittyfuck", "tittywank", "titwank", "tosser", "turd", "tw4t", "twat", "twathead", "twatty", "twunt", "twunter", "v14gra", "v1gra", "vagina", "viagra", "vulva", "w00se", "wang", "wank", "wanker", "wanky", "whoar", "whore", "willies", "willy", "xrated", "xxx"
   ]);
+  // coach skills component useState
+  const [newSkills, setNewSkills] = useState([]);
+  //coach package useState
+  const [packages, setPackages] = useState([]);
   // sports dropdown useStates
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredSports, setFilteredSports] = useState([]);
@@ -158,6 +164,33 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   }, [filteredCity, noMatchCity]);
 
   //===================================================city dropdown code ends here
+  // coach package component code
+  const handlePackagesUpdate = useCallback((updatedPackages) => {
+    setPackages(updatedPackages);
+    setStateBtn(1);
+    handleClick();
+  }, []);
+  // coach package component code
+  // coach skills component code
+  const addSkills = (skill) => {
+    setNewSkills([...newSkills, skill]);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const deleteSkills = (index) => {
+    setNewSkills(newSkills.filter((_, i) => i !== index));
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const updateSkills = (index, newValue) => {
+    const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
+    setNewSkills(updatedFaqs);
+    setStateBtn(1);
+    handleClick();
+  };
+  // coach skills component code ended
 
   const capitalizeFirstLetterOfEachWord = (string) => {
     return string?.replace(/\b\w/g, char => char?.toUpperCase());
@@ -190,14 +223,22 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           setSearchCity(response?.data?.data[0]?.city)
         }
         if (response?.data?.data[0]?.skill) {
-          const oldSkill = response?.data?.data[0]?.skill?.split(',');
-          setAddedSkills(oldSkill);
+          const skillArray = response?.data?.data[0]?.skill?.split(', ');
+          setNewSkills(skillArray);
         }
-        if (sport && skills[sport]) {
-          setUserSkills(skills[sport]);
-        } else {
-          setUserSkills([]);
+        if (response?.data?.data[0]?.package) {
+          const pack = response?.data?.data[0]?.package?.split(', ');
+          setPackages(pack);
         }
+        // if (response?.data?.data[0]?.skill) {
+        //   const oldSkill = response?.data?.data[0]?.skill?.split(',');
+        //   setAddedSkills(oldSkill);
+        // }
+        // if (sport && skills[sport]) {
+        //   setUserSkills(skills[sport]);
+        // } else {
+        //   setUserSkills([]);
+        // }
       })
       .catch((error) => {
         console.log(error);
@@ -308,6 +349,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setStateBtn(1);
     handleClick();
   };
+
   const handleUpdateClick = () => {
     setStateBtn(0);
     const updatedFormData = {
@@ -320,10 +362,10 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       sport_id: editedItem?.sport_id ?? 14,
       loc_id: editedItem?.loc_id,
       about: editedItem?.about?.trim(),
-      skill: addedSkils.toString(),
+      skill: newSkills?.join(", "),
       heighlight: editedItem?.heighlight?.trim(),
       fee: editedItem?.fee?.trim(),
-      package: editedItem?.package?.trim(),
+      package: packages?.join(", "),
       gender: editedItem?.gender,
       training_location: trainingLocation.toString(),
       common_location: editedItem?.common_location?.trim(),
@@ -374,7 +416,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     handleUpdateClick
   }));
 
-
   return (
     <>
       <div className="user-details--left">
@@ -418,7 +459,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Sport</p>
                 <p>Gender</p>
                 <p>Fees</p>
-                <p>Package</p>
+                {/* <p>Package</p> */}
                 <p>Experience</p>
                 <p>Education</p>
                 <p>Achievement</p>
@@ -582,7 +623,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </span>
                   )}
                 </p>
-                <p>
+                {/* <p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
@@ -599,7 +640,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                       />
                     </span>
                   )}
-                </p>
+                </p> */}
                 <p>
                   {isLoading ? (
                     <span>-</span>
@@ -849,18 +890,40 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
-              <div className="detailsLeftContainer">
-              {/* <div className="detailsLeftContainer2"> */}
-                <p>Skills</p>
+              {/* <div className="detailsLeftContainer"> */}
+              <div className="detailsLeftContainer2">
                 <p>Packages</p>
+                <p>Skills</p>
               </div>
               <div className="detailsRightContainer">
+                <p>{isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    {/* <input
+                        type="text"
+                        name="package"
+                        value={editedItem?.package}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      /> */}
+                    <AddPricingSection
+                      isEditable={isEditable}
+                      isDisabled={isDisabled}
+                      pack={packages}
+                      onPackagesUpdate={handlePackagesUpdate}
+                    />
+                  </span>
+                )}</p>
                 <p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
                     <span>
-                      <div className="form-group-radio">
+                      {/* <div className="form-group-radio">
                         {userSkills.map((skill, index) => (
                           <label className="radio-inline" key={index}>
                             <input
@@ -875,39 +938,19 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                             {skill}
                           </label>
                         ))}
-                      </div>
-                      {/* <CoachSkills
+                      </div> */}
+                      <CoachSkills
                         isEditable={isEditable}
                         isDisabled={isDisabled}
                         faqs={newSkills}
                         addSkills={addSkills}
                         deleteSkills={deleteSkills}
                         updateSkills={updateSkills}
-                      /> */}
+                      />
                     </span>
                   )}
                 </p>
-                <p>{isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                        type="text"
-                        name="package"
-                        value={editedItem?.package}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    {/* <AddPricingSection
-                      isEditable={isEditable}
-                      isDisabled={isDisabled}
-                      onPackagesUpdate={handlePackagesUpdate}
-                    /> */}
-                  </span>
-                )}</p>
+
               </div>
             </div>
           </div>
@@ -925,12 +968,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         </div>
         {isEditable ? (
           <div className="modalLeftBtnBox">
-            {/* <button
-                  className="convertToDeal"
-                  onClick={() => handleViewSite(editedItem?.url)}
-                >
-                  View Site
-                </button> */}
             <span></span>
             {stateBtn === 0 ? (
               <button disabled className="disabledBtn">
@@ -943,14 +980,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             )}
           </div>
         ) : (
-          <div className="modalLeftBtnBox">
-            {/* <span></span>
-                <button
-                  className="convertToDeal"
-                  onClick={() => handleViewSite(editedItem?.url)}
-                >View Site
-                </button> */}
-          </div>
+          null
         )}
       </div>
     </>

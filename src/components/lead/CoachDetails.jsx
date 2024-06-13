@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import axios from "axios";
 import {
   cdnurl, SEARCH_CITY,
@@ -165,22 +165,30 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
 
   //===================================================city dropdown code ends here
   // coach package component code
-  const handlePackagesUpdate = (updatedPackages) => {
+  const handlePackagesUpdate = useCallback((updatedPackages) => {
     setPackages(updatedPackages);
-  };
+    setStateBtn(1);
+    handleClick();
+  }, []);
   // coach package component code
   // coach skills component code
   const addSkills = (skill) => {
     setNewSkills([...newSkills, skill]);
+    setStateBtn(1);
+    handleClick();
   };
 
   const deleteSkills = (index) => {
     setNewSkills(newSkills.filter((_, i) => i !== index));
+    setStateBtn(1);
+    handleClick();
   };
 
   const updateSkills = (index, newValue) => {
     const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
     setNewSkills(updatedFaqs);
+    setStateBtn(1);
+    handleClick();
   };
   // coach skills component code ended
 
@@ -196,7 +204,6 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         },
       })
       .then((response) => {
-        const sport = response?.data?.data[0]?.sport_id;
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
         if (response?.data?.data[0]?.training_location) {
@@ -210,13 +217,13 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           setSearchCity(response?.data?.data[0]?.city)
         }
         if (response?.data?.data[0]?.skill) {
-          const oldSkill = response?.data?.data[0]?.skill?.split(',');
-          setAddedSkills(oldSkill);
+          const skillArray = response?.data?.data[0]?.skill?.split(', ');
+          setNewSkills(skillArray);
         }
-        if (sport && skills[sport]) {
-          setUserSkills(skills[sport]);
-        } else {
-          setUserSkills([]);
+        if (response?.data?.data[0]?.package !== "" &&
+          response?.data?.data[0]?.package !== null) {
+          const skillArray = response?.data?.data[0]?.package?.split(', ');
+          setPackages(skillArray);
         }
       })
       .catch((error) => {
@@ -224,6 +231,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setIsLoading(false);
       });
   };
+  console.log(packages)
   const fetchSports = () => {
     let body = {
       sort: "name asc"
@@ -342,7 +350,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       skill: addedSkils.toString(),
       heighlight: editedItem?.heighlight?.trim(),
       fee: editedItem?.fee?.trim(),
-      package: editedItem?.package?.trim(),
+      package: packages?.join(", "),
       gender: editedItem?.gender,
       training_location: trainingLocation.toString(),
       common_location: editedItem?.common_location?.trim(),
@@ -857,18 +865,39 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
-              <div className="detailsLeftContainer">
-              {/* <div className="detailsLeftContainer2"> */}
-                <p>Skills</p>
-                <p>Packages</p>
+              {/* <div className="detailsLeftContainer"> */}
+              <div className="detailsLeftContainer2">
+              <p>Packages</p>
+                <p>Skills</p>                
               </div>
               <div className="detailsRightContainer">
+              <p>{isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    {/* <input
+                        type="text"
+                        name="package"
+                        value={editedItem?.package}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      /> */}
+                    <AddPricingSection
+                      isEditable={isEditable}
+                      isDisabled={isDisabled}
+                      onPackagesUpdate={handlePackagesUpdate}
+                    />
+                  </span>
+                )}</p>
                 <p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
                     <span>
-                      <div className="form-group-radio">
+                      {/* <div className="form-group-radio">
                         {userSkills.map((skill, index) => (
                           <label className="radio-inline" key={index}>
                             <input
@@ -883,39 +912,19 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                             {skill}
                           </label>
                         ))}
-                      </div>
-                      {/* <CoachSkills
+                      </div> */}
+                      <CoachSkills
                         isEditable={isEditable}
                         isDisabled={isDisabled}
                         faqs={newSkills}
                         addSkills={addSkills}
                         deleteSkills={deleteSkills}
                         updateSkills={updateSkills}
-                      /> */}
+                      />
                     </span>
                   )}
                 </p>
-                <p>{isLoading ? (
-                  <span>-</span>
-                ) : (
-                  <span>
-                    <input
-                        type="text"
-                        name="package"
-                        value={editedItem?.package}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    {/* <AddPricingSection
-                      isEditable={isEditable}
-                      isDisabled={isDisabled}
-                      onPackagesUpdate={handlePackagesUpdate}
-                    /> */}
-                  </span>
-                )}</p>
+                
               </div>
             </div>
           </div>

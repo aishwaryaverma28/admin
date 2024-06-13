@@ -8,7 +8,6 @@ import NewCoachImages from "./NewCoachImages.jsx";
 import NewCoachDetails from "./NewCoachDetails.jsx";
 
 const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
-  console.log(selectedItem);
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("details");
   const [userLog, setUserLog] = useState(0);
@@ -27,7 +26,7 @@ const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const updateCheckState = (value) => {
     setCheck(value);
   };
-
+console.log(check)
   const callChildFunction = () => {
     if (childRef.current) {
       childRef.current.handleUpdateClick();

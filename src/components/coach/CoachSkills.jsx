@@ -35,7 +35,7 @@ const CoachSkills = ({ isEditable, isDisabled, faqs, addSkills, deleteSkills, up
         )}
       </div>
 
-      {faqs.map((faq, index) => (
+      {faqs?.map((faq, index) => (
         <div key={index} className='coachFaqs-flex'>
           <div className="coachFaqs-left">
             <input
