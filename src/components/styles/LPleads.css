@@ -1460,3 +1460,10 @@
   width: 3rem;
   height: 3rem;
 }
+
+.archive_flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap:1rem;
+}
