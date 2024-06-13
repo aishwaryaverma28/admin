@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
-  cdnurl,SEARCH_CITY,
+  cdnurl, SEARCH_CITY,
   GET_COACH_ID,
   getDecryptedToken,
-  UPDATE_COACH,ALL_SPORTS,
+  UPDATE_COACH, ALL_SPORTS,
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { skills } from '../utils/coachSkils';
-import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables"; 
+import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
+import CoachFaq from './CoachFaq';
 
 const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -37,63 +38,63 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
   const [noMatchCity, setNoMatchCity] = useState(false);
   const inputCityRef = useRef(null);
-  
-// ============================================================sports dropdown code
-const handleSportInputChange = (event) => {
-  const value = event.target.value;
-  setSearchTerm(value);
 
-  if (value) {
+  // ============================================================sports dropdown code
+  const handleSportInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    if (value) {
       const filtered = sports.filter((sport) =>
-          sport.name.toLowerCase().includes(value.toLowerCase())
+        sport.name.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredSports(filtered);
       setNoMatch(filtered.length === 0);
       setIsDropdownVisible(true);
-  } else {
+    } else {
       setFilteredSports([]);
       setNoMatch(false);
       setIsDropdownVisible(false);
-  }
-  setStateBtn(1);
-};
+    }
+    setStateBtn(1);
+  };
 
-const handleSportSelect = (sport) => {
-  setSearchTerm(sport.name);
-  setEditedItem(prevState => ({
+  const handleSportSelect = (sport) => {
+    setSearchTerm(sport.name);
+    setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id
-  }));
-  setFilteredSports([]);
-  setIsDropdownVisible(false);
-};
+    }));
+    setFilteredSports([]);
+    setIsDropdownVisible(false);
+  };
 
-const handleClickOutside = (event) => {
-  if (inputRef.current && !inputRef.current.contains(event.target)) {
+  const handleClickOutside = (event) => {
+    if (inputRef.current && !inputRef.current.contains(event.target)) {
       if (noMatch) {
-          setSearchTerm('');
+        setSearchTerm('');
       } else if (filteredSports.length > 0) {
-          setSearchTerm(filteredSports[0].name);
-          setEditedItem(prevState => ({
-              ...prevState,
-              sport_id: filteredSports[0].id
-          }));
+        setSearchTerm(filteredSports[0].name);
+        setEditedItem(prevState => ({
+          ...prevState,
+          sport_id: filteredSports[0].id
+        }));
       }
       setIsDropdownVisible(false);
-  }
-};
-
-useEffect(() => {
-  document.addEventListener('click', handleClickOutside);
-  return () => {
-      document.removeEventListener('click', handleClickOutside);
+    }
   };
-}, [filteredSports, noMatch]);
 
-//===================================================sport dropdown code ends here
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [filteredSports, noMatch]);
 
-   // ============================================================city dropdown code
-   const handleCityInputChange = (event) => {
+  //===================================================sport dropdown code ends here
+
+  // ============================================================city dropdown code
+  const handleCityInputChange = (event) => {
     const value = event.target.value;
     setSearchCity(value);
     const body = {
@@ -114,7 +115,7 @@ useEffect(() => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-         
+
     } else {
       setFilteredCity([]);
       setNoMatchCity(false);
@@ -505,40 +506,40 @@ useEffect(() => {
                   )}
                 </p>
                 <>
-                                    <div>
-                                        <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
-                                            <div>
-                                                <input
-                                                    id=""
-                                                    name=""
-                                                    value={searchTerm}
-                                                    onChange={handleSportInputChange}
-                                                    autoComplete="off"
-                                                    className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
-                                                    style={isEditable ? editStylingSelect1 : normalStylingSelect1}
-                                                    disabled={isDisabled}
-                                                />
-                                            </div>
-                                            {isDropdownVisible && (
-                                                <div className='sport_box'>
-                                                    {noMatch ? (
-                                                        <div>No match found</div>
-                                                    ) : (
-                                                        filteredSports.map((sport) => (
-                                                            <div
-                                                                key={sport.id}
-                                                                onClick={() => handleSportSelect(sport)}
-                                                                style={{ padding: '5px', cursor: 'pointer' }}
-                                                            >
-                                                                {sport.name}
-                                                            </div>
-                                                        ))
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </>
+                  <div>
+                    <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+                      <div>
+                        <input
+                          id=""
+                          name=""
+                          value={searchTerm}
+                          onChange={handleSportInputChange}
+                          autoComplete="off"
+                          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                          disabled={isDisabled}
+                        />
+                      </div>
+                      {isDropdownVisible && (
+                        <div className='sport_box'>
+                          {noMatch ? (
+                            <div>No match found</div>
+                          ) : (
+                            filteredSports.map((sport) => (
+                              <div
+                                key={sport.id}
+                                onClick={() => handleSportSelect(sport)}
+                                style={{ padding: '5px', cursor: 'pointer' }}
+                              >
+                                {sport.name}
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
                 <p>
                   {isLoading ? (
                     <span>-</span>
@@ -741,7 +742,7 @@ useEffect(() => {
                 <p>Common Location</p>
               </div>
               <div className="detailsRightContainer">
-              <>
+                <>
                   <div>
                     <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
                       <div>
@@ -849,7 +850,9 @@ useEffect(() => {
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
               <div className="detailsLeftContainer">
+              {/* <div className="detailsLeftContainer2"> */}
                 <p>Skills</p>
+                <p>Packages</p>
               </div>
               <div className="detailsRightContainer">
                 <p>
@@ -873,13 +876,52 @@ useEffect(() => {
                           </label>
                         ))}
                       </div>
+                      {/* <CoachSkills
+                        isEditable={isEditable}
+                        isDisabled={isDisabled}
+                        faqs={newSkills}
+                        addSkills={addSkills}
+                        deleteSkills={deleteSkills}
+                        updateSkills={updateSkills}
+                      /> */}
                     </span>
                   )}
                 </p>
+                <p>{isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <input
+                        type="text"
+                        name="package"
+                        value={editedItem?.package}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    {/* <AddPricingSection
+                      isEditable={isEditable}
+                      isDisabled={isDisabled}
+                      onPackagesUpdate={handlePackagesUpdate}
+                    /> */}
+                  </span>
+                )}</p>
               </div>
             </div>
           </div>
-
+          <div className="detailsBox">
+            <p className="detailHead">ADD FREQUENTLY ASKED QUESTIONS</p>
+            <div className="detailsContent">
+              <div className="detailsLeftContainer">
+                <p>FAQS</p>
+              </div>
+              <div className="detailsRightContainer">
+                <CoachFaq isEditable={isEditable} isDisabled={isDisabled} />
+              </div>
+            </div>
+          </div>
         </div>
         {isEditable ? (
           <div className="modalLeftBtnBox">
