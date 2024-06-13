@@ -857,7 +857,8 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
-              <div className="detailsLeftContainer2">
+              <div className="detailsLeftContainer">
+              {/* <div className="detailsLeftContainer2"> */}
                 <p>Skills</p>
                 <p>Packages</p>
               </div>
@@ -867,7 +868,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      {/* <div className="form-group-radio">
+                      <div className="form-group-radio">
                         {userSkills.map((skill, index) => (
                           <label className="radio-inline" key={index}>
                             <input
@@ -882,15 +883,15 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                             {skill}
                           </label>
                         ))}
-                      </div> */}
-                      <CoachSkills
+                      </div>
+                      {/* <CoachSkills
                         isEditable={isEditable}
                         isDisabled={isDisabled}
                         faqs={newSkills}
                         addSkills={addSkills}
                         deleteSkills={deleteSkills}
                         updateSkills={updateSkills}
-                      />
+                      /> */}
                     </span>
                   )}
                 </p>
@@ -898,11 +899,21 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>-</span>
                 ) : (
                   <span>
-                    <AddPricingSection
+                    <input
+                        type="text"
+                        name="package"
+                        value={editedItem?.package}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    {/* <AddPricingSection
                       isEditable={isEditable}
                       isDisabled={isDisabled}
                       onPackagesUpdate={handlePackagesUpdate}
-                    />
+                    /> */}
                   </span>
                 )}</p>
               </div>
