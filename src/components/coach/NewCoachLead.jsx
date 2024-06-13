@@ -107,6 +107,7 @@ const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
                             User Logs ({userLog?.length})
                         </button>
+                        <button className='recycle-delete'>Archive</button>
                     </div>
                     {/* ===================================================================tabination content */}
                     <div className="tab-content">

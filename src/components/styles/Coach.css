@@ -4,6 +4,7 @@
     padding-bottom: 1rem;
 }
 .coachFaqs-flex{
+
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -12,6 +13,12 @@
 }
 .coachFaqs-left{
     width: 90%;
+}
+.coachFaqs-leftPack{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .deleteFaq{
     padding: 7px 15px;
@@ -53,9 +60,16 @@
 .city-bottom-btn{
   width: 100%;
   display: flex;
-  justify-content: flex-end; /* or justify-content: space-between; if you have multiple elements */
+  justify-content: flex-end;
   align-items: center;
   padding: 1rem;
   z-index: -1;
   margin-top: 2rem;
+}
+.package-input{
+  width: 15rem !important;
+}
+.package-box{
+  height: 3rem;
+  overflow-y: scroll;
 }

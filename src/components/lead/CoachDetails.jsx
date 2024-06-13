@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
-  cdnurl,SEARCH_CITY,
+  cdnurl, SEARCH_CITY,
   GET_COACH_ID,
   getDecryptedToken,
   UPDATE_COACH, ALL_SPORTS,
@@ -11,6 +11,7 @@ import { skills } from '../utils/coachSkils';
 import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 import CoachFaq from '../coach/CoachFaq';
 import CoachSkills from '../coach/CoachSkills';
+import AddPricingSection from '../coach/AddPricingSection';
 
 const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -28,7 +29,9 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   ]);
   // coach skills component useState
   const [newSkills, setNewSkills] = useState([]);
-// sport dropdown useStates
+  //coach package useState
+  const [packages, setPackages] = useState([]);
+  // sport dropdown useStates
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredSports, setFilteredSports] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -41,7 +44,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
   const [noMatchCity, setNoMatchCity] = useState(false);
   const inputCityRef = useRef(null);
-  
+
   // ============================================================sports dropdown code
   const handleSportInputChange = (event) => {
     const value = event.target.value;
@@ -96,8 +99,8 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
 
   //===================================================sport dropdown code ends here
 
-   // ============================================================city dropdown code
-   const handleCityInputChange = (event) => {
+  // ============================================================city dropdown code
+  const handleCityInputChange = (event) => {
     const value = event.target.value;
     setSearchCity(value);
     const body = {
@@ -118,7 +121,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-         
+
     } else {
       setFilteredCity([]);
       setNoMatchCity(false);
@@ -161,6 +164,11 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   }, [filteredCity, noMatchCity]);
 
   //===================================================city dropdown code ends here
+  // coach package component code
+  const handlePackagesUpdate = (updatedPackages) => {
+    setPackages(updatedPackages);
+  };
+  // coach package component code
   // coach skills component code
   const addSkills = (skill) => {
     setNewSkills([...newSkills, skill]);
@@ -174,7 +182,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
     setNewSkills(updatedFaqs);
   };
-   // coach skills component code ended
+  // coach skills component code ended
 
   const capitalizeFirstLetterOfEachWord = (string) => {
     return string?.replace(/\b\w/g, char => char?.toUpperCase());
@@ -437,7 +445,6 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Sport</p>
                 <p>Gender</p>
                 <p>Fees</p>
-                <p>Package</p>
                 <p>Experience</p>
                 <p>Education</p>
                 <p>Achievement</p>
@@ -592,24 +599,6 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                         type="text"
                         name="fee"
                         value={editedItem?.fee}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="package"
-                        value={editedItem?.package}
                         onChange={handleInputChange}
                         style={
                           isEditable ? editStylingInput : normalStylingInput
@@ -868,8 +857,9 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
-              <div className="detailsLeftContainer">
+              <div className="detailsLeftContainer2">
                 <p>Skills</p>
+                <p>Packages</p>
               </div>
               <div className="detailsRightContainer">
                 <p>
@@ -877,7 +867,7 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      <div className="form-group-radio">
+                      {/* <div className="form-group-radio">
                         {userSkills.map((skill, index) => (
                           <label className="radio-inline" key={index}>
                             <input
@@ -892,33 +882,43 @@ const CoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                             {skill}
                           </label>
                         ))}
-                      </div>
-                      {/* <CoachSkills
+                      </div> */}
+                      <CoachSkills
                         isEditable={isEditable}
                         isDisabled={isDisabled}
                         faqs={newSkills}
-                        addFaq={addSkills}
-                        deleteFaq={deleteSkills}
-                        updateFaq={updateSkills}
-                      /> */}
+                        addSkills={addSkills}
+                        deleteSkills={deleteSkills}
+                        updateSkills={updateSkills}
+                      />
                     </span>
                   )}
                 </p>
+                <p>{isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <AddPricingSection
+                      isEditable={isEditable}
+                      isDisabled={isDisabled}
+                      onPackagesUpdate={handlePackagesUpdate}
+                    />
+                  </span>
+                )}</p>
               </div>
             </div>
           </div>
-          {/* <div className="detailsBox">
+          <div className="detailsBox">
             <p className="detailHead">ADD FREQUENTLY ASKED QUESTIONS</p>
             <div className="detailsContent">
               <div className="detailsLeftContainer">
                 <p>FAQS</p>
               </div>
               <div className="detailsRightContainer">
-                <CoachFaq isEditable={isEditable} isDisabled={isDisabled}/>
+                <CoachFaq isEditable={isEditable} isDisabled={isDisabled} />
               </div>
             </div>
-          </div> */}
-
+          </div>
         </div>
         {isEditable ? (
           <div className="modalLeftBtnBox">
