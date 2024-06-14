@@ -7,7 +7,6 @@ const AddPricingSection = ({ isEditable, isDisabled, pack, onPackagesUpdate }) =
     const [packageName, setPackageName] = useState('');
     const [packageAmount, setPackageAmount] = useState('');
     const [packageType, setPackageType] = useState('Personal');
-console.log(packages);
     useEffect(() => {
         if (prevPackagesRef.current !== packages) {
             onPackagesUpdate(packages);

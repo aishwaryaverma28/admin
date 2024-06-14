@@ -36,11 +36,16 @@ const Coach = () => {
     },
     {
       "id": 3,
+      "stage": "archive",
+      "name": "Archive Coach"
+    },
+    {
+      "id": 4,
       "stage": "coach_logs",
       "name": "Coach Logs"
     },
     {
-      "id": 4,
+      "id": 5,
       "stage": "coach_with_leads",
       "name": "Coach with Leads"
     }

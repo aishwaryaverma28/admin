@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ADD_BMP_LEADS, EMAIL_PHONE,SEARCH_API, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
+import { ADD_BMP_LEADS, EMAIL_PHONE, SEARCH_API, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,53 +16,46 @@ const LeadModal = ({ onClose, getData }) => {
     name: "",
     phone: "",
     description: "",
-    sport: "",
     source: "whatsapp",
+    loc_id: null,
+    sport_id: null,
   });
-  const [sport, setSport] = useState(null);
   const [phoneRed, setPhoneRed] = useState(false);
   const [emailRed, setEmailRed] = useState(false);
 
   useEffect(() => {
     if (formData?.object_id) {
+      let apiCall;
       if (formData.object_type === "academy") {
-        axios
-          .post(GET_ACADEMY, { academy_id: formData?.object_id }, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-          .then((response) => {
-            setAcademyName(response?.data?.data[0]);
-            setSport(response?.data?.data[0]?.sport);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        apiCall = axios.post(GET_ACADEMY, { academy_id: formData?.object_id }, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
       } else if (formData.object_type === "coach") {
-        axios
-          .get(`${SEARCH_API}bmp_coach_details/id/${formData?.object_id}`, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
+        apiCall = axios.get(`${SEARCH_API}bmp_coach_details/id/${formData?.object_id}`, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
+      } else if (formData.object_type === "player") {
+        apiCall = axios.get(`${SEARCH_API}bmp_player_details/id/${formData?.object_id}`, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
+      }
+
+      if (apiCall) {
+        apiCall
           .then((response) => {
-            setAcademyName(response?.data?.data[0]);
-            setSport(response?.data?.data[0]?.sport);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }else if (formData.object_type === "player") {
-        axios
-          .get(`${SEARCH_API}bmp_player_details/id/${formData?.object_id}`, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-          .then((response) => {
-            setAcademyName(response?.data?.data[0]);
-            setSport(response?.data?.data[0]?.sport);
+            const data = response?.data?.data[0];
+            setAcademyName(data);
+            setFormData(prevState => ({
+              ...prevState,
+              loc_id: data?.loc_id,
+              sport_id: data?.sport_id,
+            }));
           })
           .catch((error) => {
             console.log(error);
@@ -70,7 +63,7 @@ const LeadModal = ({ onClose, getData }) => {
       }
     }
   }, [formData?.object_id, formData?.object_type]);
-
+  
   useEffect(() => {
     if (formData?.phone) {
       axios
@@ -144,7 +137,8 @@ const LeadModal = ({ onClose, getData }) => {
       email: formData?.email?.trim(),
       description: formData?.description?.trim(),
       source: formData?.source,
-      sport: sport,
+      sport_id: formData?.sport_id,
+      loc_id: formData?.loc_id,
     };
     console.log(updatedFormData);
     const today = new Date();
@@ -174,13 +168,13 @@ const LeadModal = ({ onClose, getData }) => {
             address: "",
             email: "",
             description: "",
-            sport: "",
             source: "whatsapp",
+            loc_id: null,
+            sport_id: null,
           });
           setStateBtn(0);
           setEmailRed(false);
           setPhoneRed(false);
-          setSport(null);
           setAcademyName("");
           getData(startDate, formattedEndDate);
         } else {
@@ -203,8 +197,9 @@ const LeadModal = ({ onClose, getData }) => {
       phone: "",
       address: "",
       email: "",
-      sport: "",
       source: "whatsapp",
+      loc_id: null,
+      sport_id: null,
       description: "",
     });
     setStateBtn(0);

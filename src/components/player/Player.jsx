@@ -32,6 +32,11 @@ const Player = () => {
         "stage": "verified_player",
         "name": "Verified Player"
       },
+      {
+        "id": 3,
+        "stage": "archive",
+        "name": "Archive Player"
+      },
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [player, setPlayer] = useState([]);

@@ -38,11 +38,16 @@ const Acadmey = () => {
     },
     {
       "id": 3,
+      "stage": "archive",
+      "name": "Archive Player"
+    },
+    {
+      "id": 4,
       "stage": "acadmey_logs",
       "name": "Academy Logs"
     },
     {
-      "id": 4,
+      "id": 5,
       "stage": "acadmey_with_leads",
       "name": "Academy with Leads"
     }

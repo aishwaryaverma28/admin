@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { UPDATE_LEADS,EMAIL_PHONE, GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
+import { UPDATE_LEADS,EMAIL_PHONE, SEARCH_API,GET_ACADEMY, getDecryptedToken } from "./utils/Constants";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,34 +12,58 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
   const [phoneRed, setPhoneRed] = useState(false);
   const [emailRed, setEmailRed] = useState(false);
   const [formData, setFormData] = useState({
-    object_type: selectedLead.object_type,
-    address: selectedLead.address,
-    email: selectedLead.email,
-    object_id: selectedLead.object_id,
-    name: selectedLead.name,
-    phone: selectedLead.phone,
-    description: selectedLead.description,
-    sport: selectedLead.sport,
-    source: selectedLead.source === null ? 'whatsapp' : selectedLead.source,
+    object_type: selectedLead?.object_type,
+    address: selectedLead?.address,
+    email: selectedLead?.email,
+    object_id: selectedLead?.object_id,
+    name: selectedLead?.name,
+    phone: selectedLead?.phone,
+    description: selectedLead?.description,
+    sport_id: selectedLead?.sport_id,
+    loc_id: selectedLead?.loc_id,
+    source: selectedLead?.source === null ? 'whatsapp' : selectedLead?.source,
   })
   useEffect(() => {
-    if (formData.object_id) {
-      axios
-        .post(GET_ACADEMY, { academy_id: formData.object_id }
-          , {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-        .then((response) => {
-          setAcademyName(response?.data?.data[0]);
-          setSport(response?.data?.data[0]?.sport)
-        })
-        .catch((error) => {
-          console.log(error);
+    if (formData?.object_id) {
+      let apiCall;
+      if (formData.object_type === "academy") {
+        apiCall = axios.post(GET_ACADEMY, { academy_id: formData?.object_id }, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
         });
+      } else if (formData.object_type === "coach") {
+        apiCall = axios.get(`${SEARCH_API}bmp_coach_details/id/${formData?.object_id}`, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
+      } else if (formData.object_type === "player") {
+        apiCall = axios.get(`${SEARCH_API}bmp_player_details/id/${formData?.object_id}`, {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        });
+      }
+
+      if (apiCall) {
+        apiCall
+          .then((response) => {
+            const data = response?.data?.data[0];
+            setAcademyName(data);
+            setFormData(prevState => ({
+              ...prevState,
+              loc_id: data?.loc_id,
+              sport_id: data?.sport_id,
+            }));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
-  }, [formData.object_id]);
+  }, [formData?.object_id, formData?.object_type]);
+
   useEffect(() => {
     if (formData.phone) {
       axios
@@ -60,7 +84,7 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
           console.log(error);
         });
     }
-  }, [formData.phone]);
+  }, [formData?.phone]);
 
   useEffect(() => {
     if (formData.email) {
@@ -83,7 +107,7 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
           console.log(error);
         });
     }
-  }, [formData.email]);
+  }, [formData?.email]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -292,16 +316,23 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
                   ></textarea>
                 </div>
                 <div className="lead-object-flex">
-                  <div>
+                <div>
                     <p className="helpTitle">Object Type</p>
-                    <select name="object_type" id="" className="common-select reduce-width" onChange={handleChange} value={formData?.object_type}>
+                    <select
+                      name="object_type"
+                      id=""
+                      className="common-select reduce-width"
+                      onChange={handleChange}
+                      value={formData?.object_type}
+                    >
                       <option value="academy">Academy</option>
                       <option value="player">Player</option>
                       <option value="coach">Coach</option>
+                      <option value="whatsapp">WhatsApp</option>
                     </select>
                   </div>
                   <div>
-                    <p className="helpTitle">Academy Id</p>
+                    <p className="helpTitle">Academy/Coach Id</p>
                     <input
                       type="text"
                       placeholder="Enter Academy Id"
