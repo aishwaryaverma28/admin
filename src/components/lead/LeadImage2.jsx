@@ -150,8 +150,9 @@ const LeadImage2 = (id) => {
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
-                        setPhotoUrls(photoUrls);
-                        setStateBtn(1);
+                        setTimeout(() => {
+                            setPhotoUrls(photoUrls);
+                        }, 2000);
                         handleSubmit2();
                     }
                 })
@@ -180,8 +181,9 @@ const LeadImage2 = (id) => {
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
-                        setVideoUrls(videoUrls);
-                        setStateBtn(1);
+                        setTimeout(() => {
+                            setVideoUrls(videoUrls);
+                        }, 2000); 
                         handleSubmit2();
                     }
                 })
@@ -238,9 +240,7 @@ const LeadImage2 = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -295,9 +295,7 @@ const LeadImage2 = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);

@@ -19,6 +19,8 @@ const LeadModal = ({ onClose, getData }) => {
     source: "whatsapp",
     loc_id: null,
     sport_id: null,
+    lat: "",
+    lng: "",
   });
   const [phoneRed, setPhoneRed] = useState(false);
   const [emailRed, setEmailRed] = useState(false);
@@ -55,6 +57,8 @@ const LeadModal = ({ onClose, getData }) => {
               ...prevState,
               loc_id: data?.loc_id,
               sport_id: data?.sport_id,
+              lat: data?.lat,
+              lng: data?.lng,
             }));
           })
           .catch((error) => {
@@ -63,7 +67,7 @@ const LeadModal = ({ onClose, getData }) => {
       }
     }
   }, [formData?.object_id, formData?.object_type]);
-  
+
   useEffect(() => {
     if (formData?.phone) {
       axios
@@ -139,6 +143,8 @@ const LeadModal = ({ onClose, getData }) => {
       source: formData?.source,
       sport_id: formData?.sport_id,
       loc_id: formData?.loc_id,
+      lat: formData?.lat,
+      lng: formData?.lng,
     };
     console.log(updatedFormData);
     const today = new Date();
@@ -171,6 +177,8 @@ const LeadModal = ({ onClose, getData }) => {
             source: "whatsapp",
             loc_id: null,
             sport_id: null,
+            lat: "",
+            lng: "",
           });
           setStateBtn(0);
           setEmailRed(false);
@@ -201,6 +209,8 @@ const LeadModal = ({ onClose, getData }) => {
       loc_id: null,
       sport_id: null,
       description: "",
+      lat: "",
+      lng: "",
     });
     setStateBtn(0);
   };

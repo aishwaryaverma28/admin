@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
   cdnurl, SEARCH_CITY,
@@ -165,11 +165,24 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
 
   //===================================================city dropdown code ends here
   // coach package component code
-  const handlePackagesUpdate = useCallback((updatedPackages) => {
+  const handleAddPackage = (newPackage) => {
+    setPackages([newPackage, ...packages]);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleRemovePackage = (index) => {
+    setPackages(packages.filter((_, i) => i !== index));
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleUpdatePackage = (index, newValue) => {
+    const updatedPackages = packages.map((pkg, i) => (i === index ? newValue : pkg));
     setPackages(updatedPackages);
     setStateBtn(1);
     handleClick();
-  }, []);
+  };
   // coach package component code
   // coach skills component code
   const addSkills = (skill) => {
@@ -208,8 +221,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         },
       })
       .then((response) => {
-        console.log(response);
-        const sport = response?.data?.data[0]?.sport_id;
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
         if (response?.data?.data[0]?.training_location) {
@@ -223,11 +234,11 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           setSearchCity(response?.data?.data[0]?.city)
         }
         if (response?.data?.data[0]?.skill) {
-          const skillArray = response?.data?.data[0]?.skill?.split(', ');
+          const skillArray = response?.data?.data[0]?.skill?.split(',');
           setNewSkills(skillArray);
         }
         if (response?.data?.data[0]?.package) {
-          const pack = response?.data?.data[0]?.package?.split(', ');
+          const pack = response?.data?.data[0]?.package?.split(',');
           setPackages(pack);
         }
         // if (response?.data?.data[0]?.skill) {
@@ -362,10 +373,10 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       sport_id: editedItem?.sport_id ?? 14,
       loc_id: editedItem?.loc_id,
       about: editedItem?.about?.trim(),
-      skill: newSkills?.join(", "),
+      skill: newSkills?.join(","),
       heighlight: editedItem?.heighlight?.trim(),
       fee: editedItem?.fee?.trim(),
-      package: packages?.join(", "),
+      package: packages?.join(","),
       gender: editedItem?.gender,
       training_location: trainingLocation.toString(),
       common_location: editedItem?.common_location?.trim(),
@@ -913,8 +924,10 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <AddPricingSection
                       isEditable={isEditable}
                       isDisabled={isDisabled}
-                      pack={packages}
-                      onPackagesUpdate={handlePackagesUpdate}
+                      packages={packages}
+                      onAddPackage={handleAddPackage}
+                      onRemovePackage={handleRemovePackage}
+                      onUpdatePackage={handleUpdatePackage}
                     />
                   </span>
                 )}</p>

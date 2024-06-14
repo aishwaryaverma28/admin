@@ -50,7 +50,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
         }
     };
 
-
     const getLogs = () => {
         const body = {
             entity: "Coach",

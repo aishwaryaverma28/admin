@@ -142,7 +142,9 @@ const CoachImage = (id) => {
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
-                        setPhotoUrls(photoUrls);
+                        setTimeout(() => {
+                            setPhotoUrls(photoUrls);
+                        }, 2000); 
                         setStateBtn(1);
                         handleSubmit2();
                     }
@@ -173,7 +175,9 @@ const CoachImage = (id) => {
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
-                        setVideoUrls(videoUrls);
+                        setTimeout(() => {
+                            setVideoUrls(videoUrls);
+                        }, 2000); 
                         setStateBtn(1);
                         handleSubmit2();
                     }
@@ -233,9 +237,7 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -359,9 +361,7 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);

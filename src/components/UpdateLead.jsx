@@ -21,6 +21,8 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
     description: selectedLead?.description,
     sport_id: selectedLead?.sport_id,
     loc_id: selectedLead?.loc_id,
+    lat: selectedLead?.lat,
+    lng: selectedLead?.lng,
     source: selectedLead?.source === null ? 'whatsapp' : selectedLead?.source,
   })
   useEffect(() => {
@@ -55,6 +57,8 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
               ...prevState,
               loc_id: data?.loc_id,
               sport_id: data?.sport_id,
+              lat: data?.lat,
+              lng: data?.lng,
             }));
           })
           .catch((error) => {
@@ -352,11 +356,11 @@ const UpdateLead = ({ onClose, selectedLead, getData }) => {
               : <></>}
 
             <div className="help-bottom-btn">
-              {selectedLead.is_deleted === 1 ? <button className="common-fonts common-save-button" onClick={handleRevoke}>
+              {/* {selectedLead.is_deleted === 1 ? <button className="common-fonts common-save-button" onClick={handleRevoke}>
                 Revoke
               </button> : <button className="common-fonts common-delete-button" onClick={handleDelete}>
                 Delete
-              </button>}
+              </button>} */}
 
               {stateBtn === 0 ? (
                 <button className="disabledBtn" disabled>

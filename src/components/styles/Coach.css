@@ -4,7 +4,6 @@
     padding-bottom: 1rem;
 }
 .coachFaqs-flex{
-
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -31,7 +30,7 @@
     letter-spacing: -0.02563rem;
 }
 .accordion-body2{
-    height: 6rem;
+    height: 9rem;
     overflow-y: scroll;
     padding-bottom: 1rem;
 }
@@ -70,6 +69,6 @@
   width: 15rem !important;
 }
 .package-box{
-  height: 3rem;
+  height: 5rem;
   overflow-y: scroll;
 }

@@ -51,7 +51,6 @@ const Home = () => {
       )
       .then((response) => {
         if (response?.data?.status === 1) {
-          console.log(response?.data?.data[0])
           setIsLoading(false);
           setLeadsCount(response?.data?.data[0]?.leads);
           setAcademyCount(response?.data?.data[0]?.AcademyUserStats);
@@ -80,7 +79,6 @@ const Home = () => {
         },
       })
       .then((response) => {
-        // console.log(response?.data?.data)
         if (response?.data?.status === 1) {
           setTableData(response?.data?.data);
         }

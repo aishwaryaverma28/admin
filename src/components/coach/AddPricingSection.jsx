@@ -1,37 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { normalStylingInput, editStylingInput } from './../utils/variables';
 
-const AddPricingSection = ({ isEditable, isDisabled, pack, onPackagesUpdate }) => {
-    const [packages, setPackages] = useState(pack || []);
-    const prevPackagesRef = useRef(pack || []);
+const AddPricingSection = ({ isEditable, isDisabled, packages, onAddPackage, onRemovePackage, onUpdatePackage }) => {
     const [packageName, setPackageName] = useState('');
     const [packageAmount, setPackageAmount] = useState('');
     const [packageType, setPackageType] = useState('Personal');
-    useEffect(() => {
-        if (prevPackagesRef.current !== packages) {
-            onPackagesUpdate(packages);
-            prevPackagesRef.current = packages;
-        }
-    }, [packages, onPackagesUpdate]);
 
     const handleAddPackage = () => {
         if (packageName && packageAmount) {
             const newPackage = `${packageName} for ${packageType} - Rs ${packageAmount}`;
-            setPackages([newPackage, ...packages]);
+            onAddPackage(newPackage);
             setPackageName('');
             setPackageAmount('');
         }
     };
-
-    const handleRemovePackage = (index) => {
-        setPackages(packages.filter((_, i) => i !== index));
-    };
-
-    const handleUpdatePackage = (index, newValue) => {
-        const updatedPackages = packages.map((pkg, i) => (i === index ? newValue : pkg));
-        setPackages(updatedPackages);
-    };
-
 
     return (
         <>
@@ -98,13 +80,13 @@ const AddPricingSection = ({ isEditable, isDisabled, pack, onPackagesUpdate }) =
                             <input
                                 type="text"
                                 value={pkg}
-                                onChange={(e) => handleUpdatePackage(index, e.target.value)}
+                                onChange={(e) => onUpdatePackage(index, e.target.value)}
                                 style={isEditable ? editStylingInput : normalStylingInput}
                                 disabled={isDisabled}
                             />
                         </div>
                         {isEditable && (
-                            <button type="button" className="deleteFaq" onClick={() => handleRemovePackage(index)}>
+                            <button type="button" className="deleteFaq" onClick={() => onRemovePackage(index)}>
                                 <i className="fa-solid fa-minus"></i>
                             </button>
                         )}

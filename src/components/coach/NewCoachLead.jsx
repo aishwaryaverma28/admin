@@ -26,7 +26,6 @@ const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const updateCheckState = (value) => {
     setCheck(value);
   };
-console.log(check)
   const callChildFunction = () => {
     if (childRef.current) {
       childRef.current.handleUpdateClick();

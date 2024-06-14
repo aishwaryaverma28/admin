@@ -7,11 +7,9 @@ import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
 const NewCoachImages = (id) => {
-    console.log(id?.id);
     window.Buffer = window.Buffer || require("buffer").Buffer;
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
-    const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
     const allowedFileTypes = [
         "image/jpeg",
         "image/png",
@@ -26,8 +24,6 @@ const NewCoachImages = (id) => {
     const [photoChoose, setPhotoChoose] = useState(null);
     const [selectedBannerFile, setSelectedBannerFile] = useState(null);
     const [bannerName, setBannerName] = useState(null);
-    const fileInputRef = useRef(null);
-    const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -39,7 +35,9 @@ const NewCoachImages = (id) => {
     const [videoUrls, setVideoUrls] = useState([]);
     const [fileName2, setFileName2] = useState("");
     const [academyData, setAcademyData] = useState({});
-
+    const fileInputRef = useRef(null);
+    const [certificates, setCertificates] = useState([]);
+    const [certificateName,setCertificateName] = useState("");
     const academyDetails = () => {
         let body = {
             coachId: id?.id,
@@ -146,12 +144,13 @@ const NewCoachImages = (id) => {
             };
             S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                 .then((data) => {
-                    console.log(data);
                     setFileName2(modifiedFile.name);
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         photoUrls?.push(imageUrl);
-                        setPhotoUrls(photoUrls);
+                        setTimeout(() => {
+                            setPhotoUrls(photoUrls);
+                        }, 2000);
                         setStateBtn(1);
                         handleSubmit2();
                     }
@@ -182,7 +181,9 @@ const NewCoachImages = (id) => {
                     const imageUrl = modifiedFile.name;
                     if (data.location) {
                         videoUrls.push(imageUrl);
-                        setVideoUrls(videoUrls);
+                        setTimeout(() => {
+                            setVideoUrls(videoUrls);
+                        }, 2000);                        
                         setStateBtn(1);
                         handleSubmit2();
                     }
@@ -242,9 +243,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -368,9 +367,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                setTimeout(() => {
                     academyDetails();
-                }, 5000);
             })
             .catch((error) => {
                 console.log(error);
@@ -383,7 +380,68 @@ const NewCoachImages = (id) => {
                 setStateBtn(0);
             });
     }
+//===========================================================multiple certificate upload
+const handleButtonClick = () => {
+    fileInputRef.current.click();    
+    setAlertShown(false);
+};
 
+const handleFileChange = (event) => {
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!allowedFileTypes.includes(file.type)) {
+            if (!alertShown) {
+                alert("Please choose a valid video file.");
+                setAlertShown(true);
+            }
+            return;
+        } else if (!allowedFileTypes.includes(file.type)) {
+            if (!alertShown) {
+                alert("Please choose a valid image file.");
+                setAlertShown(true);
+            }
+            return;
+        }
+        if (file.type.startsWith("image/")) {
+            submitImage(file);
+        }
+    }
+};
+
+const submitImage = (file) => {
+    setIsUploadingMulti(true);
+    const selectedImage = file;
+    if (selectedImage) {
+        const processedFileName = processImageName(selectedImage.name);
+        const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+        const updatedConfig = {
+            ...config,
+            dirName: "coach_temp/" + id?.id,
+        };
+        console.log(updatedConfig)
+        S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+            .then((data) => {
+                console.log(data);
+                setCertificateName(modifiedFile.name);
+                const imageUrl = modifiedFile.name;
+                if (data.location) {
+                    certificates?.push(imageUrl);
+                    setTimeout(() => {
+                        setCertificates(certificates);
+                    }, 2000);                     
+                    // handleSubmit2();
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => {
+                setIsUploadingMulti(false);
+            });
+    }
+};
+console.log(certificates);
     return (
         <>
             <section className='img_upload_newflex'>
@@ -588,6 +646,57 @@ const NewCoachImages = (id) => {
                         ))}
                     </div>
                 )}
+            </>
+            <>
+              {/* =========================================================multiple photo and video upload */}
+              {/* <section>
+                <p className="common-fonts">
+                    Upload Certificates
+                </p>
+                <div className="bmp-upload">
+                    <div className="contact-browse deal-doc-file">
+                        <span
+                            className="common-fonts common-input contact-tab-input"
+                            style={{
+                                position: "relative",
+                                marginRight: "10px",
+                            }}
+                        >
+                            <button
+                                className={`common-fonts contact-browse-btn `}
+                                onClick={handleButtonClick}>
+                                Browse
+                            </button>
+                            <input
+                                type="file"
+                                style={{
+                                    display: "none",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    right: 0,
+                                    width: "100%",
+                                }}
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            {isUploadingMulti ? (
+                                <span className="common-fonts upload-file-name">
+                                    Uploading...
+                                </span>
+                            ) : (
+                                <span className="common-fonts upload-file-name">
+                                    <p className="common-fonts light-color">
+                                        You can upload multiple images{" "}
+                                    </p>
+                                </span>
+                            )}
+                        </span>
+                    </div>
+                </div>
+            </section> */}
             </>
             <div className="bmp-bottom-btn">
                 <button
