@@ -37,7 +37,6 @@ const NewCoachImages = (id) => {
     const [academyData, setAcademyData] = useState({});
     const fileInputRef = useRef(null);
     const [certificates, setCertificates] = useState([]);
-    const [certificateName,setCertificateName] = useState("");
     const academyDetails = () => {
         let body = {
             coachId: id?.id,
@@ -58,6 +57,12 @@ const NewCoachImages = (id) => {
                         response?.data?.data[0]?.profile_img !== null
                     ) {
                         setFileName(response?.data?.data[0]?.profile_img);
+                    }
+                    if (
+                        response?.data?.data[0]?.certificate !== "" &&
+                        response?.data?.data[0]?.certificate !== null
+                    ) {
+                        setCertificates(response?.data?.data[0]?.certificate?.split(","));
                     }
                     setBannerName(response?.data?.data[0]?.banner);
                     if (
@@ -88,7 +93,7 @@ const NewCoachImages = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
-
+    console.log(certificates)
     const processImageName = (imageName) => {
         const nameParts = imageName.split(".");
         if (nameParts?.length > 1) {
@@ -183,7 +188,7 @@ const NewCoachImages = (id) => {
                         videoUrls.push(imageUrl);
                         setTimeout(() => {
                             setVideoUrls(videoUrls);
-                        }, 2000);                        
+                        }, 2000);
                         setStateBtn(1);
                         handleSubmit2();
                     }
@@ -218,6 +223,7 @@ const NewCoachImages = (id) => {
         const updatedFormData = {
             profile_img: fileName,
             photos: allUrls?.join(","),
+            certificate: certificates?.join(","),
             name: academyData?.name,
             sport_id: academyData?.sport_id ?? 14,
             loc_id: academyData?.loc_id,
@@ -243,7 +249,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -367,7 +373,7 @@ const NewCoachImages = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -380,68 +386,80 @@ const NewCoachImages = (id) => {
                 setStateBtn(0);
             });
     }
-//===========================================================multiple certificate upload
-const handleButtonClick = () => {
-    fileInputRef.current.click();    
-    setAlertShown(false);
-};
+    //===========================================================multiple certificate upload
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+        setAlertShown(false);
+    };
 
-const handleFileChange = (event) => {
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!allowedFileTypes.includes(file.type)) {
-            if (!alertShown) {
-                alert("Please choose a valid video file.");
-                setAlertShown(true);
-            }
-            return;
-        } else if (!allowedFileTypes.includes(file.type)) {
-            if (!alertShown) {
-                alert("Please choose a valid image file.");
-                setAlertShown(true);
-            }
-            return;
-        }
-        if (file.type.startsWith("image/")) {
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             submitImage(file);
         }
-    }
-};
+    };
 
-const submitImage = (file) => {
-    setIsUploadingMulti(true);
-    const selectedImage = file;
-    if (selectedImage) {
-        const processedFileName = processImageName(selectedImage.name);
-        const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-        const updatedConfig = {
-            ...config,
-            dirName: "coach_temp/" + id?.id,
-        };
-        console.log(updatedConfig)
-        S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-            .then((data) => {
-                console.log(data);
-                setCertificateName(modifiedFile.name);
-                const imageUrl = modifiedFile.name;
-                if (data.location) {
-                    certificates?.push(imageUrl);
-                    setTimeout(() => {
-                        setCertificates(certificates);
-                    }, 2000);                     
-                    // handleSubmit2();
+    const submitImage = (file) => {
+        setIsUploadingMulti(true);
+        const selectedImage = file;
+        if (selectedImage) {
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+            const updatedConfig = {
+                ...config,
+                dirName: "coach_temp/" + id?.id,
+            };
+            console.log(updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                .then((data) => {
+                    console.log(data);
+                    const imageUrl = modifiedFile.name;
+                    if (data.location) {
+                        certificates?.push(imageUrl);
+                        setTimeout(() => {
+                            setCertificates(certificates);
+                        }, 3000);
+                        handleSubmit2();
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+                .finally(() => {
+                    setIsUploadingMulti(false);
+                });
+        }
+    };
+    const deleteCertificate = (photoToDelete) => {
+        const updatedNameOfStrategy = certificates.filter(photo => photo !== photoToDelete);
+        setCertificates(updatedNameOfStrategy);
+        updateCertificate(updatedNameOfStrategy);
+    };
+    const updateCertificate = (updatedNameArray) => {
+        axios
+            .put(
+                UPDATE_COACH + academyData?.id,
+                {
+                    certificate: updatedNameArray?.join(","),
+                    name: academyData?.name,
+                    sport_id: academyData?.sport_id ?? 14,
+                    loc_id: academyData?.loc_id,
+                    type: "temp",
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
                 }
+            )
+            .then((response) => {
+                academyDetails();
             })
-            .catch((err) => {
-                console.error(err);
-            })
-            .finally(() => {
-                setIsUploadingMulti(false);
+            .catch((error) => {
+                console.error("API call failed:", error);
             });
-    }
-};
-console.log(certificates);
+    };
     return (
         <>
             <section className='img_upload_newflex'>
@@ -648,56 +666,104 @@ console.log(certificates);
                 )}
             </>
             <>
-              {/* =========================================================multiple photo and video upload */}
-              {/* <section>
-                <p className="common-fonts">
-                    Upload Certificates
-                </p>
-                <div className="bmp-upload">
-                    <div className="contact-browse deal-doc-file">
-                        <span
-                            className="common-fonts common-input contact-tab-input"
-                            style={{
-                                position: "relative",
-                                marginRight: "10px",
-                            }}
-                        >
-                            <button
-                                className={`common-fonts contact-browse-btn `}
-                                onClick={handleButtonClick}>
-                                Browse
-                            </button>
-                            <input
-                                type="file"
+                {/* =========================================================multiple certificate */}
+                <section>
+                    <p className="common-fonts">
+                        Upload Certificates
+                    </p>
+                    <div className="bmp-upload">
+                        <div className="contact-browse deal-doc-file">
+                            <span
+                                className="common-fonts common-input contact-tab-input"
                                 style={{
-                                    display: "none",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    right: 0,
-                                    width: "100%",
+                                    position: "relative",
+                                    marginRight: "10px",
                                 }}
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                multiple
-                            />
-                            {isUploadingMulti ? (
-                                <span className="common-fonts upload-file-name">
-                                    Uploading...
-                                </span>
-                            ) : (
-                                <span className="common-fonts upload-file-name">
-                                    <p className="common-fonts light-color">
-                                        You can upload multiple images{" "}
-                                    </p>
-                                </span>
-                            )}
-                        </span>
+                            >
+                                <button
+                                    className={`common-fonts contact-browse-btn `}
+                                    onClick={handleButtonClick}>
+                                    Browse
+                                </button>
+                                <input
+                                    type="file"
+                                    style={{
+                                        display: "none",
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        right: 0,
+                                        width: "100%",
+                                    }}
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    multiple
+                                />
+                                {isUploadingMulti ? (
+                                    <span className="common-fonts upload-file-name">
+                                        Uploading...
+                                    </span>
+                                ) : (
+                                    <span className="common-fonts upload-file-name">
+                                        <p className="common-fonts light-color">
+                                            You can upload multiple images{" "}
+                                        </p>
+                                    </span>
+                                )}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </section> */}
+                </section>
             </>
+            <>
+                {certificates?.length === 0 ? (
+                    <div className={`support-no-ticket-found`}>
+                        <p className="common-fonts">No photos added</p>
+                    </div>
+                ) : (
+                    <div className={`outerBox divWidth`}>
+                        {certificates?.map((photo, index) => (
+                            <div className="bmp-new-img">
+                                <div className="bmp-img-top-icon">
+                                    <div className="bmp-img-name">
+                                        <div className="bmp-video">
+                                            <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                    alt="Selected Preview"
+                                                />
+                                            </a>
+                                        </div>
+                                        <p className="common-fonts bmp-tour">
+                                            {photo?.length > 20 ? (
+                                                <>{photo?.slice(0, 20)}...</>
+                                            ) : (
+                                                <>{photo}</>
+                                            )}
+                                        </p>
+                                    </div>
+                                    <div className="bmp-trash">
+                                        <img
+                                            src={Trash}
+                                            alt=""
+                                            onClick={() => deleteCertificate(photo)}
+                                        />
+                                    </div>
+                                </div>
+                                <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                    <img
+                                        src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                        alt="Selected Preview"
+                                        key={index}
+                                    />
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </>
+
             <div className="bmp-bottom-btn">
                 <button
                     className="common-fonts common-white-button"

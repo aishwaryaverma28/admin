@@ -39,7 +39,7 @@ const Acadmey = () => {
     {
       "id": 3,
       "stage": "archive",
-      "name": "Archive Player"
+      "name": "Archive Academy"
     },
     {
       "id": 4,

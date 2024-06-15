@@ -34,6 +34,8 @@ const CoachImage = (id) => {
     const [videoUrls, setVideoUrls] = useState([]);
     const [fileName2, setFileName2] = useState("");
     const [academyData, setAcademyData] = useState({});
+    const fileInputRef = useRef(null);
+    const [certificates, setCertificates] = useState([]);
 
     const academyDetails = () => {
         axios
@@ -374,7 +376,80 @@ const CoachImage = (id) => {
                 setStateBtn(0);
             });
     }
-   
+    //===========================================================multiple certificate upload
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+        setAlertShown(false);
+    };
+
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            submitImage(file);
+        }
+    };
+
+    const submitImage = (file) => {
+        setIsUploadingMulti(true);
+        const selectedImage = file;
+        if (selectedImage) {
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+            const updatedConfig = {
+                ...config,
+                dirName: "coach_temp/" + id?.id,
+            };
+            console.log(updatedConfig)
+            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                .then((data) => {
+                    console.log(data);
+                    const imageUrl = modifiedFile.name;
+                    if (data.location) {
+                        certificates?.push(imageUrl);
+                        setTimeout(() => {
+                            setCertificates(certificates);
+                        }, 3000);
+                        handleSubmit2();
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+                .finally(() => {
+                    setIsUploadingMulti(false);
+                });
+        }
+    };
+    const deleteCertificate = (photoToDelete) => {
+        const updatedNameOfStrategy = certificates.filter(photo => photo !== photoToDelete);
+        setCertificates(updatedNameOfStrategy);
+        updateCertificate(updatedNameOfStrategy);
+    };
+    const updateCertificate = (updatedNameArray) => {
+        axios
+            .put(
+                UPDATE_COACH + academyData?.id,
+                {
+                    certificate: updatedNameArray?.join(","),
+                    name: academyData?.name,
+                    sport_id: academyData?.sport_id ?? 14,
+                    loc_id: academyData?.loc_id,
+                    type: "temp",
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                academyDetails();
+            })
+            .catch((error) => {
+                console.error("API call failed:", error);
+            });
+    }; 
     return (
         <>
             {/* ================================================================================upload the logo */}
@@ -580,7 +655,105 @@ const CoachImage = (id) => {
                     </div>
                 )}
             </>
-            
+            <>
+                {/* =========================================================multiple certificate upload */}
+                <section>
+                    <p className="common-fonts">
+                        Upload Certificates
+                    </p>
+                    <div className="bmp-upload">
+                        <div className="contact-browse deal-doc-file">
+                            <span
+                                className="common-fonts common-input contact-tab-input"
+                                style={{
+                                    position: "relative",
+                                    marginRight: "10px",
+                                }}
+                            >
+                                <button
+                                    className={`common-fonts contact-browse-btn `}
+                                    onClick={handleButtonClick}>
+                                    Browse
+                                </button>
+                                <input
+                                    type="file"
+                                    style={{
+                                        display: "none",
+                                        position: "absolute",
+                                        top: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        right: 0,
+                                        width: "100%",
+                                    }}
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    multiple
+                                />
+                                {isUploadingMulti ? (
+                                    <span className="common-fonts upload-file-name">
+                                        Uploading...
+                                    </span>
+                                ) : (
+                                    <span className="common-fonts upload-file-name">
+                                        <p className="common-fonts light-color">
+                                            You can upload multiple images{" "}
+                                        </p>
+                                    </span>
+                                )}
+                            </span>
+                        </div>
+                    </div>
+                </section>
+            </>
+            <>
+                {certificates?.length === 0 ? (
+                    <div className={`support-no-ticket-found`}>
+                        <p className="common-fonts">No photos added</p>
+                    </div>
+                ) : (
+                    <div className={`outerBox divWidth`}>
+                        {certificates?.map((photo, index) => (
+                            <div className="bmp-new-img">
+                                <div className="bmp-img-top-icon">
+                                    <div className="bmp-img-name">
+                                        <div className="bmp-video">
+                                            <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                    alt="Selected Preview"
+                                                />
+                                            </a>
+                                        </div>
+                                        <p className="common-fonts bmp-tour">
+                                            {photo?.length > 20 ? (
+                                                <>{photo?.slice(0, 20)}...</>
+                                            ) : (
+                                                <>{photo}</>
+                                            )}
+                                        </p>
+                                    </div>
+                                    <div className="bmp-trash">
+                                        <img
+                                            src={Trash}
+                                            alt=""
+                                            onClick={() => deleteCertificate(photo)}
+                                        />
+                                    </div>
+                                </div>
+                                <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                    <img
+                                        src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                        alt="Selected Preview"
+                                        key={index}
+                                    />
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </>
+
             <div className="bmp-bottom-btn">
                 <button
                     className="common-fonts common-white-button"
