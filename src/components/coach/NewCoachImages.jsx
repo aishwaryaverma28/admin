@@ -93,7 +93,7 @@ const NewCoachImages = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
-    console.log(certificates)
+    
     const processImageName = (imageName) => {
         const nameParts = imageName.split(".");
         if (nameParts?.length > 1) {

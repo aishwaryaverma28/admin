@@ -1,15 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { editStylingTextarea2, normalStylingTextarea2 } from "./../utils/variables";
+import {
+    getDecryptedToken, ADD_FAQ,GET_FAQS,UPDATE_FAQS,DELETE_FAQS
+} from "./../utils/Constants";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const CoachFaq = ({ isEditable, isDisabled }) => {
+const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
+    const decryptedToken = getDecryptedToken();
     const [faqs, setFaqs] = useState([]);
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
-const [updateBtn, setUpdateBtn] = useState(0);
+    const [updateBtn, setUpdateBtn] = useState(0);
+
+    useEffect(() => {
+        getAllFaqs();
+    }, [decryptedToken]);
+
+    const getAllFaqs = () => {
+        axios
+            .get(GET_FAQS + user_id, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                }
+            })
+            .then((response) => {
+                setFaqs(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     const addFaq = () => {
-        setFaqs([...faqs, { question, answer }]);
-        setQuestion('');
-        setAnswer('');
+        const body = {
+            question: question,
+            answer: answer,
+            user_id: user_id
+        }
+        axios
+            .post(ADD_FAQ, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Faq added successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                    getAllFaqs();
+                    setQuestion('');
+                    setAnswer('');
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+
     };
 
     const updateFaq = (index, field, value) => {
@@ -21,8 +79,36 @@ const [updateBtn, setUpdateBtn] = useState(0);
     };
 
     const deleteFaq = (index) => {
-        setFaqs(faqs.filter((_, i) => i !== index));
+        const faq = faqs[index];
+        axios
+            .delete(DELETE_FAQS + faq.id, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.status === 0) {
+                    toast.success("Faq deleted successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                    getAllFaqs();
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while deleting FAQ", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
     };
+
 
     return (
         <section className="accordion-body">
@@ -61,8 +147,8 @@ const [updateBtn, setUpdateBtn] = useState(0);
                     </button>
                 )}
             </div>
-            
-            {faqs.map((faq, index) => (
+
+            {faqs?.map((faq, index) => (
                 <div key={index} className='coachFaqs-flex'>
                     <div className="coachFaqs-left">
                         <textarea
@@ -93,7 +179,7 @@ const [updateBtn, setUpdateBtn] = useState(0);
                     )}
                 </div>
             ))}
-             <div className='coachFaqs-flex'>
+            <div className='coachFaqs-flex'>
                 <span></span>
                 {updateBtn ? (
                     <button type="button" className="convertToDeal">
@@ -104,7 +190,7 @@ const [updateBtn, setUpdateBtn] = useState(0);
                         Update
                     </button>
                 )}
-             </div>
+            </div>
         </section>
     );
 };

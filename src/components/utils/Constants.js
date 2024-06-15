@@ -286,3 +286,8 @@ export const SEARCH_CITY = bmpStart+"/bmp/master/search-city";
 export const ADD_CITY = bmpStart+"/bmp/master/insert/city";
 export const APPROVE_CITY =bmpStart+"/bmp/master/city/mark-correct";
 export const SEARCH_API = bmpStart+"/bmp/searchEntity/";
+
+export const ADD_FAQ = bmpStart+"/bmp/coach/addfaq";
+export const GET_FAQS = bmpStart+"/bmp/coach/getfaqs/";
+export const DELETE_FAQS = bmpStart+"/bmp/coach/deletefaqs/";
+export const UPDATE_FAQS =bmpStart+"/bmp/coach/updatefaq/";

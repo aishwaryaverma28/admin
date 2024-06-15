@@ -188,7 +188,7 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                      <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <CoachDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
+                                <CoachDetails user_id={userId} id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
                         {activeTab === "gallery" && (

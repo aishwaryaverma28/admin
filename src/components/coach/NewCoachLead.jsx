@@ -119,6 +119,7 @@ const NewCoachLead = ({ selectedItem, closeModal, onLeadAdded }) => {
             {activeTab === "details" && (
               <div className="notes-tab-content">
                 <NewCoachDetails
+                user_id = {selectedItem?.id}
                   id={selectedItem?.parent_id}
                   updateCheckState={updateCheckState}
                   ref={childRef}

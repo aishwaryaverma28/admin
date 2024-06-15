@@ -13,7 +13,7 @@ import CoachFaq from './CoachFaq';
 import CoachSkills from './CoachSkills';
 import AddPricingSection from './AddPricingSection';
 
-const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
+const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [sports, setSports] = useState([]);
@@ -829,7 +829,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
             <div className="detailsContent">
-              {/* <div className="detailsLeftContainer"> */}
               <div className="detailsLeftContainer2">
                 <p>Packages</p>
                 <p>Skills</p>
@@ -839,16 +838,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>-</span>
                 ) : (
                   <span>
-                    {/* <input
-                        type="text"
-                        name="package"
-                        value={editedItem?.package}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      /> */}
                     <AddPricingSection
                       isEditable={isEditable}
                       isDisabled={isDisabled}
@@ -864,22 +853,6 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      {/* <div className="form-group-radio">
-                        {userSkills.map((skill, index) => (
-                          <label className="radio-inline" key={index}>
-                            <input
-                              type="checkbox"
-                              name="userSkills"
-                              value={skill}
-                              className="radio_disable check_input"
-                              disabled={isDisabled}
-                              onChange={handleSkillChange}
-                              checked={addedSkils.includes(skill)}
-                            />
-                            {skill}
-                          </label>
-                        ))}
-                      </div> */}
                       <CoachSkills
                         isEditable={isEditable}
                         isDisabled={isDisabled}
@@ -902,7 +875,7 @@ const NewCoachDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>FAQS</p>
               </div>
               <div className="detailsRightContainer">
-                <CoachFaq isEditable={isEditable} isDisabled={isDisabled} />
+                <CoachFaq isEditable={isEditable} isDisabled={isDisabled} user_id={user_id}/>
               </div>
             </div>
           </div>
