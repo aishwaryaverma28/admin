@@ -299,7 +299,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             address2: editedItem?.address2?.trim(),
             loc_id: editedItem?.loc_id,
             state: editedItem?.state,
-            cit: editedItem?.city,
+            city: editedItem?.city,
             postcode: editedItem?.postcode?.trim(),
             categories: editedItem?.categories?.trim(),
             rating: editedItem?.rating?.trim(),

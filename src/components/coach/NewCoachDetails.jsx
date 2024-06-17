@@ -346,7 +346,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
       state: editedItem?.state,
-      cit: editedItem?.city,
+      city: editedItem?.city,
       about: editedItem?.about?.trim(),
       skill: newSkills?.join(","),
       heighlight: editedItem?.heighlight?.trim(),

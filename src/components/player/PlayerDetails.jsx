@@ -292,7 +292,7 @@ useEffect(() => {
       sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
       state: editedItem?.state,
-      cit: editedItem?.city,
+      city: editedItem?.city,
       address: editedItem?.address?.trim(),
       about: editedItem?.about?.trim(),
       awards: editedItem?.awards?.trim(),
