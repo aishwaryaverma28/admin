@@ -165,8 +165,9 @@ useEffect(() => {
     setSearchCity(sport.city);
     setEditedItem(prevState => ({
       ...prevState,
-      loc_id: sport.id,
-      state: sport.state
+      loc_id: sport?.id,
+      state: sport?.state,
+      city: sport?.city,
     }));
     setFilteredCity([]);
     setIsCityDropdownVisible(false);
@@ -177,10 +178,12 @@ useEffect(() => {
       if (noMatchCity) {
         setSearchCity('');
       } else if (filteredCity.length > 0) {
-        setSearchCity(filteredCity[0].name);
+        setSearchCity(filteredCity[0]?.city);
         setEditedItem(prevState => ({
           ...prevState,
-          loc_id: filteredCity[0].id
+          loc_id: filteredCity[0]?.id,
+          state: filteredCity[0]?.state,
+          city: filteredCity[0]?.city,
         }));
       }
       setIsCityDropdownVisible(false);

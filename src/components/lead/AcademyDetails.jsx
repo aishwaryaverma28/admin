@@ -145,8 +145,9 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setSearchCity(sport.city);
         setEditedItem(prevState => ({
             ...prevState,
-            loc_id: sport.id,
-            state: sport.state
+            loc_id: sport?.id,
+            state: sport?.state,
+            city: sport?.city,
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
@@ -157,10 +158,12 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             if (noMatchCity) {
                 setSearchCity('');
             } else if (filteredCity.length > 0) {
-                setSearchCity(filteredCity[0].name);
+                setSearchCity(filteredCity[0]?.city);
                 setEditedItem(prevState => ({
                     ...prevState,
-                    loc_id: filteredCity[0].id
+                    loc_id: filteredCity[0]?.id,
+                    state: filteredCity[0]?.state,
+                    city: filteredCity[0]?.city,
                 }));
             }
             setIsCityDropdownVisible(false);
@@ -295,6 +298,8 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             address1: editedItem?.address1?.trim(),
             address2: editedItem?.address2?.trim(),
             loc_id: editedItem?.loc_id,
+            state: editedItem?.state,
+            cit: editedItem?.city,
             postcode: editedItem?.postcode?.trim(),
             categories: editedItem?.categories?.trim(),
             rating: editedItem?.rating?.trim(),

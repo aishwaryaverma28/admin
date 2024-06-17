@@ -155,7 +155,8 @@ const AddPlayer = ({ onClose }) => {
         setSearchCity(sport.city);
         setEditedItem(prevState => ({
             ...prevState,
-            loc_id: sport.id,
+            loc_id: sport?.id,
+            city: sport?.city,
             state: sport.state
         }));
         setFilteredCity([]);
@@ -167,10 +168,12 @@ const AddPlayer = ({ onClose }) => {
             if (noMatchCity) {
                 setSearchCity('');
             } else if (filteredCity.length > 0) {
-                setSearchCity(filteredCity[0].name);
+                setSearchCity(filteredCity[0]?.city);
                 setEditedItem(prevState => ({
                     ...prevState,
-                    loc_id: filteredCity[0].id
+                    loc_id: filteredCity[0]?.id,
+                    state: filteredCity[0]?.state,
+                    city: filteredCity[0]?.city,
                 }));
             }
             setIsCityDropdownVisible(false);
