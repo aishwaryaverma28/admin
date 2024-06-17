@@ -93,7 +93,7 @@ const NewCoachImages = (id) => {
     useEffect(() => {
         academyDetails();
     }, []);
-    
+
     const processImageName = (imageName) => {
         const nameParts = imageName.split(".");
         if (nameParts?.length > 1) {
@@ -718,51 +718,77 @@ const NewCoachImages = (id) => {
             </>
             <>
                 {certificates?.length === 0 ? (
-                    <div className={`support-no-ticket-found`}>
+                    <div className="support-no-ticket-found">
                         <p className="common-fonts">No photos added</p>
                     </div>
                 ) : (
-                    <div className={`outerBox divWidth`}>
-                        {certificates?.map((photo, index) => (
-                            <div className="bmp-new-img">
-                                <div className="bmp-img-top-icon">
-                                    <div className="bmp-img-name">
-                                        <div className="bmp-video">
-                                            <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
-                                                <img
-                                                    src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
-                                                    alt="Selected Preview"
-                                                />
-                                            </a>
-                                        </div>
-                                        <p className="common-fonts bmp-tour">
-                                            {photo?.length > 20 ? (
-                                                <>{photo?.slice(0, 20)}...</>
-                                            ) : (
-                                                <>{photo}</>
+                    <div className="outerBox divWidth">
+                        {certificates?.map((photo, index) => {
+                            const isImage = photo.endsWith('.jpg') || photo.endsWith('.jpeg') || photo.endsWith('.png') || photo.endsWith('.gif');
+                            const isPDF = photo.endsWith('.pdf');
+                            const isDoc = photo.endsWith('.doc') || photo.endsWith('.docx');
+
+                            return (
+                                <div className="bmp-new-img" key={index}>
+                                    <div className="bmp-img-top-icon">
+                                        <div className="bmp-img-name">
+                                            {isImage && (
+                                                <div className="bmp-video">
+                                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                        <img
+                                                            src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                            alt="Selected Preview"
+                                                        />
+                                                    </a>
+                                                </div>
                                             )}
-                                        </p>
+                                            {(isPDF || isDoc) && (
+                                                <div className="bmp-video">
+                                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                        <img
+                                                            src="https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/logo.svg"
+                                                            alt="Document Preview"
+                                                        />
+                                                    </a>
+                                                </div>
+                                            )}
+                                            <p className="common-fonts bmp-tour">
+                                                {photo?.length > 20 ? (
+                                                    <>{photo?.slice(0, 20)}...</>
+                                                ) : (
+                                                    <>{photo}</>
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div className="bmp-trash">
+                                            <img
+                                                src={Trash}
+                                                alt=""
+                                                onClick={() => deleteCertificate(photo)}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="bmp-trash">
-                                        <img
-                                            src={Trash}
-                                            alt=""
-                                            onClick={() => deleteCertificate(photo)}
-                                        />
-                                    </div>
+                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                        {isImage && (
+                                            <img
+                                                src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                alt="Selected Preview"
+                                            />
+                                        )}
+                                        {(isPDF || isDoc) && (
+                                            <img
+                                                src="https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/logo.svg"
+                                                alt="Document Preview"
+                                            />
+                                        )}
+                                    </a>
                                 </div>
-                                <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
-                                        alt="Selected Preview"
-                                        key={index}
-                                    />
-                                </a>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </>
+
 
             <div className="bmp-bottom-btn">
                 <button
