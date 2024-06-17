@@ -79,12 +79,12 @@ const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
 
     const update = (index) => {
         const faq = faqs[index];
-        const body={
+        const body = {
             question: faq?.question,
-            answer:faq?.answer,
+            answer: faq?.answer,
         }
         axios
-            .put(UPDATE_FAQS + faq.id, body, {
+            .put(UPDATE_FAQS + faq?.id, body, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -114,7 +114,7 @@ const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
     const deleteFaq = (index) => {
         const faq = faqs[index];
         axios
-            .delete(DELETE_FAQS + faq.id, {
+            .delete(DELETE_FAQS + faq?.id, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
