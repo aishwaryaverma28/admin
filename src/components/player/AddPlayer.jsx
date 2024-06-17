@@ -68,7 +68,8 @@ const AddPlayer = ({ onClose }) => {
         setSearchTerm(sport.name);
         setEditedItem(prevState => ({
             ...prevState,
-            sport_id: sport.id
+            sport_id: sport.id,
+            sport: sport?.name
         }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
@@ -82,7 +83,8 @@ const AddPlayer = ({ onClose }) => {
                 setSearchTerm(filteredSports[0].name);
                 setEditedItem(prevState => ({
                     ...prevState,
-                    sport_id: filteredSports[0].id
+                    sport_id: filteredSports[0].id,
+                    sport: filteredSports[0]?.name
                 }));
             }
             setIsDropdownVisible(false);

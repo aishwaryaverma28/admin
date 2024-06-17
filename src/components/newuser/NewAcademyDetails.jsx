@@ -57,7 +57,8 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setSearchTerm(sport.name);
         setEditedItem(prevState => ({
             ...prevState,
-            sport_id: sport.id
+            sport_id: sport.id,
+            sport: sport?.name
         }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
@@ -71,7 +72,8 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setSearchTerm(filteredSports[0].name);
                 setEditedItem(prevState => ({
                     ...prevState,
-                    sport_id: filteredSports[0].id
+                    sport_id: filteredSports[0].id,
+                    sport: filteredSports[0]?.name
                 }));
             }
             setIsDropdownVisible(false);
@@ -281,6 +283,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about?.trim(),
             sport_id: editedItem?.sport_id ?? 14,
+            sport: editedItem?.sport,
             fee: editedItem?.fee?.trim(),
             experience: editedItem?.experience,
             facebook: editedItem?.facebook?.trim(),

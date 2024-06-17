@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { skills } from '../utils/coachSkils';
 import CoachLead from "../lead/CoachLead";
 import { editStylingInput, editStylingTextarea, editStylingSelect1 } from "./../utils/variables";
+import AddPricingSection from "./AddPricingSection";
+import CoachSkills from "./CoachSkills";
 
 const AddCoach = ({ onClose }) => {
     const decryptedToken = getDecryptedToken();
@@ -49,6 +51,10 @@ const AddCoach = ({ onClose }) => {
     const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
     const [noMatchCity, setNoMatchCity] = useState(false);
     const inputCityRef = useRef(null);
+    // coach skills component useState
+  const [newSkills, setNewSkills] = useState([]);
+  //coach package useState
+  const [packages, setPackages] = useState([]);
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -73,7 +79,8 @@ const AddCoach = ({ onClose }) => {
         setSearchTerm(sport.name);
         setEditedItem(prevState => ({
             ...prevState,
-            sport_id: sport.id
+            sport_id: sport.id,
+            sport: sport?.name
         }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
@@ -87,7 +94,8 @@ const AddCoach = ({ onClose }) => {
                 setSearchTerm(filteredSports[0].name);
                 setEditedItem(prevState => ({
                     ...prevState,
-                    sport_id: filteredSports[0].id
+                    sport_id: filteredSports[0].id,
+                    sport: filteredSports[0]?.name
                 }));
             }
             setIsDropdownVisible(false);
@@ -188,6 +196,47 @@ const AddCoach = ({ onClose }) => {
     }, [filteredCity, noMatchCity]);
 
     //===================================================city dropdown code ends here
+     // coach package component code
+  const handleAddPackage = (newPackage) => {
+    setPackages([newPackage, ...packages]);
+    setStateBtn(1);
+    
+  };
+
+  const handleRemovePackage = (index) => {
+    setPackages(packages.filter((_, i) => i !== index));
+    setStateBtn(1);
+    
+  };
+
+  const handleUpdatePackage = (index, newValue) => {
+    const updatedPackages = packages.map((pkg, i) => (i === index ? newValue : pkg));
+    setPackages(updatedPackages);
+    setStateBtn(1);
+    
+  };
+  // coach package component code
+  // coach skills component code
+  const addSkills = (skill) => {
+    setNewSkills([...newSkills, skill]);
+    setStateBtn(1);
+    
+  };
+
+  const deleteSkills = (index) => {
+    setNewSkills(newSkills.filter((_, i) => i !== index));
+    setStateBtn(1);
+    
+  };
+
+  const updateSkills = (index, newValue) => {
+    const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
+    setNewSkills(updatedFaqs);
+    setStateBtn(1);
+    
+  };
+  // coach skills component code ended
+
 
     const capitalizeFirstLetterOfEachWord = (string) => {
         return string?.replace(/\b\w/g, char => char?.toUpperCase());
@@ -284,7 +333,8 @@ const AddCoach = ({ onClose }) => {
         const updatedFormData = {
             ...updatedFields,
             training_location: trainingLocation.toString(),
-            skill: addedSkils.toString(),
+            skill: newSkills?.join(","),
+            package: packages?.join(","),
         };
 
         axios
@@ -364,7 +414,6 @@ const AddCoach = ({ onClose }) => {
                                         <p>phone <span className="common-fonts redAlert"> *</span></p>
                                         <p>Gender</p>
                                         <p>Fees</p>
-                                        <p>Package</p>
                                         <p>Experience</p>
                                         <p>Education</p>
                                         <p>Achievement</p>
@@ -465,18 +514,6 @@ const AddCoach = ({ onClose }) => {
                                                     type="text"
                                                     name="fee"
                                                     value={editedItem?.fee}
-                                                    onChange={handleInputChange}
-                                                    style={editStylingInput}
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="package"
-                                                    value={editedItem?.package}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
 
@@ -681,30 +718,35 @@ const AddCoach = ({ onClose }) => {
                             <div className="detailsBox">
                                 <p className="detailHead">ADDITIONAL INFORMATION</p>
                                 <div className="detailsContent">
-                                    <div className="detailsLeftContainer">
+                                    <div className="detailsLeftContainer2">
+                                        <p>Packages</p>
                                         <p>Skills</p>
                                     </div>
                                     <div className="detailsRightContainer">
                                         <p>
                                             <span>
-                                                <div className="form-group-radio">
-                                                    {userSkills.map((skill, index) => (
-                                                        <label className="radio-inline" key={index}>
-                                                            <input
-                                                                type="checkbox"
-                                                                name="userSkills"
-                                                                value={skill}
-                                                                className="radio_disable check_input"
-
-                                                                onChange={handleSkillChange}
-                                                                checked={addedSkils.includes(skill)}
-                                                            />
-                                                            {skill}
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            </span>
+                                                <AddPricingSection
+                                                    isEditable = {true}
+                                                    isDisabled={false}
+                                                    packages={packages}
+                                                    onAddPackage={handleAddPackage}
+                                                    onRemovePackage={handleRemovePackage}
+                                                    onUpdatePackage={handleUpdatePackage}
+                                                />
+                                            </span></p>
+                                        <p>
+                                                <span>
+                                                    <CoachSkills
+                                                       isEditable = {true}
+                                                       isDisabled={false}
+                                                        faqs={newSkills}
+                                                        addSkills={addSkills}
+                                                        deleteSkills={deleteSkills}
+                                                        updateSkills={updateSkills}
+                                                    />
+                                                </span>
                                         </p>
+
                                     </div>
                                 </div>
                             </div>

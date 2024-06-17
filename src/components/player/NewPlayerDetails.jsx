@@ -67,7 +67,8 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setSearchTerm(sport.name);
     setEditedItem(prevState => ({
       ...prevState,
-      sport_id: sport.id
+      sport_id: sport.id,
+      sport: sport?.name
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
@@ -81,7 +82,8 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setSearchTerm(filteredSports[0].name);
         setEditedItem(prevState => ({
           ...prevState,
-          sport_id: filteredSports[0].id
+          sport_id: filteredSports[0].id,
+          sport: filteredSports[0]?.name
         }));
       }
       setIsDropdownVisible(false);
@@ -281,6 +283,7 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       phone: editedItem?.phone?.trim(),
       mobile_verified: editedItem?.mobile_verified,
       sport_id: editedItem?.sport_id ?? 14,
+      sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
       address: editedItem?.address?.trim(),
       about: editedItem?.about?.trim(),
