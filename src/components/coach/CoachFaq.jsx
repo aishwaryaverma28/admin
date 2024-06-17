@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { editStylingTextarea2, normalStylingTextarea2 } from "./../utils/variables";
 import {
-    getDecryptedToken, ADD_FAQ,GET_FAQS,UPDATE_FAQS,DELETE_FAQS
+    getDecryptedToken, ADD_FAQ, GET_FAQS, UPDATE_FAQS, DELETE_FAQS
 } from "./../utils/Constants";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -69,7 +69,6 @@ const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
             })
 
     };
-
     const updateFaq = (index, field, value) => {
         const updatedFaqs = faqs.map((faq, i) =>
             i === index ? { ...faq, [field]: value } : faq
@@ -78,6 +77,40 @@ const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
         setUpdateBtn(1);
     };
 
+    const update = (index) => {
+        const faq = faqs[index];
+        const body={
+            question: faq?.question,
+            answer:faq?.answer,
+        }
+        axios
+            .put(UPDATE_FAQS + faq.id, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.status === 0) {
+                    toast.success("Faq deleted successfully", {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                    getAllFaqs();
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 1000,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while deleting FAQ", {
+                    position: "top-center",
+                    autoClose: 1000,
+                });
+            })
+    };
     const deleteFaq = (index) => {
         const faq = faqs[index];
         axios
@@ -173,24 +206,17 @@ const CoachFaq = ({ isEditable, isDisabled, user_id }) => {
                         ></textarea>
                     </div>
                     {isEditable && (
-                        <button type="button" className="deleteFaq" onClick={() => deleteFaq(index)}>
-                            <i className="fa-solid fa-minus"></i>
-                        </button>
+                        <div className='coachBtns'>
+                            <button type="button" className="deleteFaq" onClick={() => deleteFaq(index)}>
+                                <i className="fa-solid fa-minus"></i>
+                            </button>
+                            <button type="button" className="updateFaq" onClick={() => update(index)}>
+                                <i className="fa-solid fa-check"></i>
+                            </button>
+                        </div>
                     )}
                 </div>
             ))}
-            <div className='coachFaqs-flex'>
-                <span></span>
-                {updateBtn ? (
-                    <button type="button" className="convertToDeal">
-                        Update
-                    </button>
-                ) : (
-                    <button disabled className="disabledBtn">
-                        Update
-                    </button>
-                )}
-            </div>
         </section>
     );
 };
