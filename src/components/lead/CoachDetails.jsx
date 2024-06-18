@@ -741,7 +741,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                           value={searchCity}
                           onChange={handleCityInputChange}
                           autoComplete="off"
-                          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                          className={isDisabled ? "disabled disabled_width sport_new_input" : "sport_new_input"}
                           style={isEditable ? editStylingSelect1 : normalStylingSelect1}
                           disabled={isDisabled}
                         />
