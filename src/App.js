@@ -7,7 +7,6 @@ import {
 import Leadplaner from "./components/Leadplaner";
 import EmployeeProfile from "./components/master-settings/EmployeeProfile";
 import Editor from "./components/Editor";
-import BmpDashboard from "./components/bookmyplayer/BmpDashboard.jsx";
 import BlogAdd from "./components/master-settings/BlogAdd.jsx";
 import BlogView from "./components/master-settings/BlogView";
 import SitePagesAdd from "./components/master-settings/SitePagesAdd";

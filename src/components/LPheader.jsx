@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { LPContext } from "./LPContext";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import "./styles/LPheader.css";
+import "./styles/LPSetting.css";
+import "./styles/bmp.css";
 import line from "../assets/image/Line.png";
 import user from "../assets/image/user-img.png";
 import logo from "../assets/image/logo.svg";
