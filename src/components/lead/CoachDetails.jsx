@@ -131,11 +131,11 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
   };
 
   const handleCitySelect = (sport) => {
-    setSearchCity(sport.city);
+    setSearchCity(sport?.city+", "+sport?.state+" ("+sport?.type+")");
     setEditedItem(prevState => ({
       ...prevState,
       loc_id: sport?.id,
-      city: sport?.city,
+      city: sport?.city+", "+sport?.state+" ("+sport?.type+")",
     }));
     setFilteredCity([]);
     setIsCityDropdownVisible(false);
@@ -146,16 +146,17 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       if (noMatchCity) {
         setSearchCity('');
       } else if (filteredCity.length > 0) {
-        setSearchCity(filteredCity[0]?.city);
+        setSearchCity(filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")");
         setEditedItem(prevState => ({
           ...prevState,
           loc_id: filteredCity[0]?.id,
-          city: filteredCity[0]?.city,
+          city: filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")",
         }));
       }
       setIsCityDropdownVisible(false);
     }
   };
+
 
   useEffect(() => {
     document.addEventListener('click', handleClickCityOutside);

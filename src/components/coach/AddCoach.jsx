@@ -162,32 +162,31 @@ const AddCoach = ({ onClose }) => {
     };
 
     const handleCitySelect = (sport) => {
-        setSearchCity(sport.city);
+        setSearchCity(sport?.city+", "+sport?.state+" ("+sport?.type+")");
         setEditedItem(prevState => ({
-            ...prevState,
-            loc_id: sport?.id,
-            city: sport?.city,
+          ...prevState,
+          loc_id: sport?.id,
+          city: sport?.city+", "+sport?.state+" ("+sport?.type+")",
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
-    };
-
-    const handleClickCityOutside = (event) => {
+      };
+    
+      const handleClickCityOutside = (event) => {
         if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
-            if (noMatchCity) {
-                setSearchCity('');
-            } else if (filteredCity.length > 0) {
-                setSearchCity(filteredCity[0]?.cty);
-                setEditedItem(prevState => ({
-                    ...prevState,
-                    loc_id: filteredCity[0]?.id,
-                    city: filteredCity[0]?.city,
-                }));
-            }
-            setIsCityDropdownVisible(false);
+          if (noMatchCity) {
+            setSearchCity('');
+          } else if (filteredCity.length > 0) {
+            setSearchCity(filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")");
+            setEditedItem(prevState => ({
+              ...prevState,
+              loc_id: filteredCity[0]?.id,
+              city: filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")",
+            }));
+          }
+          setIsCityDropdownVisible(false);
         }
-    };
-
+      };
     useEffect(() => {
         document.addEventListener('click', handleClickCityOutside);
         return () => {
