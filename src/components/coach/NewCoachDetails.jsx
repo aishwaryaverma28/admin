@@ -131,17 +131,16 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
   };
 
   const handleCitySelect = (sport) => {
-    setSearchCity(sport.city);
+    setSearchCity(sport?.locality_name+" ("+sport?.type+")");
     setEditedItem(prevState => ({
       ...prevState,
       loc_id: sport?.id,
-      state: sport?.state,
-      city: sport?.city,
+      city: sport?.locality_name+"("+sport?.type+")",
     }));
     setFilteredCity([]);
     setIsCityDropdownVisible(false);
   };
-
+console.log(editedItem?.city)
   const handleClickCityOutside = (event) => {
     if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
       if (noMatchCity) {
@@ -151,7 +150,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
         setEditedItem(prevState => ({
           ...prevState,
           loc_id: filteredCity[0]?.id,
-          state: filteredCity[0]?.state,
           city: filteredCity[0]?.city,
         }));
       }
@@ -345,7 +343,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       sport_id: editedItem?.sport_id ?? 14,
       sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
-      state: editedItem?.state,
       city: editedItem?.city,
       about: editedItem?.about?.trim(),
       skill: newSkills?.join(","),
@@ -354,7 +351,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       package: packages?.join(","),
       gender: editedItem?.gender,
       // training_location: trainingLocation.toString(),
-      common_location: editedItem?.common_location?.trim(),
       experience: editedItem?.experience?.trim(),
       education: editedItem?.education?.trim(),
       achievement: editedItem?.achievement?.trim(),
@@ -423,7 +419,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}, {editedItem?.state}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}
                   </>
                 )}
               </p>
@@ -725,9 +721,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
             <div className="detailsContent">
               <div className="detailsLeftContainer">
                 <p>City</p>
-                <p>State</p>
                 {/* <p>Training Location</p> */}
-                <p>Common Location</p>
               </div>
               <div className="detailsRightContainer">
                 <>
@@ -765,21 +759,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                     </div>
                   </div>
                 </>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="state"
-                        value={editedItem?.state}
-                        style={normalStylingInput}
-                        disabled
-                      />
-                    </span>
-                  )}
-                </p>
                 {/* ?<p>
                   {isLoading ? (
                     <span>-</span>
@@ -812,25 +791,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                     </span>
                   )}
                 </p> */}
-                <br />
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="common_location"
-                        value={editedItem?.common_location}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
               </div>
             </div>
           </div>

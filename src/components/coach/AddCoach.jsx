@@ -32,7 +32,6 @@ const AddCoach = ({ onClose }) => {
         package: "",
         gender: "",
         training_location: "",
-        common_location: "",
         experience: "",
         education: "",
         achievement: "",
@@ -167,7 +166,6 @@ const AddCoach = ({ onClose }) => {
         setEditedItem(prevState => ({
             ...prevState,
             loc_id: sport?.id,
-            state: sport?.state,
             city: sport?.city,
         }));
         setFilteredCity([]);
@@ -183,7 +181,6 @@ const AddCoach = ({ onClose }) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
-                    state: filteredCity[0]?.state,
                     city: filteredCity[0]?.city,
                 }));
             }
@@ -362,7 +359,6 @@ const AddCoach = ({ onClose }) => {
                         email: "",
                         sport_id: 14,
                         city: "",
-                        state: "",
                         about: "",
                         skill: "",
                         heighlight: "",
@@ -370,7 +366,6 @@ const AddCoach = ({ onClose }) => {
                         package: "",
                         gender: "",
                         training_location: "",
-                        common_location: "",
                         experience: "",
                         education: "",
                         achievement: "",
@@ -624,9 +619,7 @@ const AddCoach = ({ onClose }) => {
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer">
                                         <p>City <span className="common-fonts redAlert"> *</span></p>
-                                        <p>State</p>
                                         <p>Training Location</p>
-                                        <p>Common Location</p>
                                     </div>
                                     <div className="detailsRightContainer">
                                         <>
@@ -665,17 +658,6 @@ const AddCoach = ({ onClose }) => {
                                         </>
                                         <p>
                                             <span>
-                                                <input
-                                                    type="text"
-                                                    name="state"
-                                                    value={editedItem?.state}
-                                                    style={editStylingInput}
-                                                    disabled
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-                                            <span>
                                                 <div className="form-group-radio">
                                                     <label className="radio-inline">
                                                         <input
@@ -700,19 +682,6 @@ const AddCoach = ({ onClose }) => {
                                                         /> Home
                                                     </label>
                                                 </div>
-                                            </span>
-                                        </p>
-                                        <br />
-                                        <p>
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="common_location"
-                                                    value={editedItem?.common_location}
-                                                    onChange={handleInputChange}
-                                                    style={editStylingInput}
-
-                                                />
                                             </span>
                                         </p>
                                     </div>
