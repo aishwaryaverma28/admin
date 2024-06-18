@@ -736,7 +736,7 @@ const CoachImage = (id) => {
                                                 <div className="bmp-video">
                                                     <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                         <img
-                                                            src="https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/logo.svg"
+                                                            src="https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/pdf_img.png"
                                                             alt="Document Preview"
                                                         />
                                                     </a>
