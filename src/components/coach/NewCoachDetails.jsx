@@ -226,10 +226,10 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       .then((response) => {
         setEditedItem(response?.data?.data[0]);
         setIsLoading(false);
-        if (response?.data?.data[0]?.training_location) {
-          const trainingLocationArray = response?.data?.data[0]?.training_location?.split(',');
-          setTrainingLocation(trainingLocationArray);
-        }
+        // if (response?.data?.data[0]?.training_location) {
+        //   const trainingLocationArray = response?.data?.data[0]?.training_location?.split(',');
+        //   setTrainingLocation(trainingLocationArray);
+        // }
         if (response?.data?.data[0]?.sport) {
           setSearchTerm(response?.data?.data[0]?.sport)
         }
@@ -353,7 +353,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       fee: editedItem?.fee?.trim(),
       package: packages?.join(","),
       gender: editedItem?.gender,
-      training_location: trainingLocation.toString(),
+      // training_location: trainingLocation.toString(),
       common_location: editedItem?.common_location?.trim(),
       experience: editedItem?.experience?.trim(),
       education: editedItem?.education?.trim(),
@@ -726,7 +726,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
               <div className="detailsLeftContainer">
                 <p>City</p>
                 <p>State</p>
-                <p>Training Location</p>
+                {/* <p>Training Location</p> */}
                 <p>Common Location</p>
               </div>
               <div className="detailsRightContainer">
@@ -780,7 +780,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                     </span>
                   )}
                 </p>
-                <p>
+                {/* ?<p>
                   {isLoading ? (
                     <span>-</span>
                   ) : (
@@ -811,7 +811,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                       </div>
                     </span>
                   )}
-                </p>
+                </p> */}
                 <br />
                 <p>
                   {isLoading ? (
