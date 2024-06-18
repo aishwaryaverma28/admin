@@ -17,6 +17,7 @@ const AddCoach = ({ onClose }) => {
     const [sports, setSports] = useState([]);
     const [stateBtn, setStateBtn] = useState(0);
     const [trainingLocation, setTrainingLocation] = useState([]);
+    const [trainInput, setTrainInput] = useState("");
     const [userSkills, setUserSkills] = useState([]);
     const [addedSkils, setAddedSkills] = useState([]);
     const [editedItem, setEditedItem] = useState({
@@ -51,9 +52,9 @@ const AddCoach = ({ onClose }) => {
     const [noMatchCity, setNoMatchCity] = useState(false);
     const inputCityRef = useRef(null);
     // coach skills component useState
-  const [newSkills, setNewSkills] = useState([]);
-  //coach package useState
-  const [packages, setPackages] = useState([]);
+    const [newSkills, setNewSkills] = useState([]);
+    //coach package useState
+    const [packages, setPackages] = useState([]);
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -162,31 +163,31 @@ const AddCoach = ({ onClose }) => {
     };
 
     const handleCitySelect = (sport) => {
-        setSearchCity(sport?.city+", "+sport?.state+" ("+sport?.type+")");
+        setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
         setEditedItem(prevState => ({
-          ...prevState,
-          loc_id: sport?.id,
-          city: sport?.city+", "+sport?.state+" ("+sport?.type+")",
+            ...prevState,
+            loc_id: sport?.id,
+            city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
-      };
-    
-      const handleClickCityOutside = (event) => {
+    };
+
+    const handleClickCityOutside = (event) => {
         if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
-          if (noMatchCity) {
-            setSearchCity('');
-          } else if (filteredCity.length > 0) {
-            setSearchCity(filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")");
-            setEditedItem(prevState => ({
-              ...prevState,
-              loc_id: filteredCity[0]?.id,
-              city: filteredCity[0]?.city+", "+filteredCity[0]?.state+" ("+filteredCity[0]?.type+")",
-            }));
-          }
-          setIsCityDropdownVisible(false);
+            if (noMatchCity) {
+                setSearchCity('');
+            } else if (filteredCity.length > 0) {
+                setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    loc_id: filteredCity[0]?.id,
+                    city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
+                }));
+            }
+            setIsCityDropdownVisible(false);
         }
-      };
+    };
     useEffect(() => {
         document.addEventListener('click', handleClickCityOutside);
         return () => {
@@ -195,46 +196,46 @@ const AddCoach = ({ onClose }) => {
     }, [filteredCity, noMatchCity]);
 
     //===================================================city dropdown code ends here
-     // coach package component code
-  const handleAddPackage = (newPackage) => {
-    setPackages([newPackage, ...packages]);
-    setStateBtn(1);
-    
-  };
+    // coach package component code
+    const handleAddPackage = (newPackage) => {
+        setPackages([newPackage, ...packages]);
+        setStateBtn(1);
 
-  const handleRemovePackage = (index) => {
-    setPackages(packages.filter((_, i) => i !== index));
-    setStateBtn(1);
-    
-  };
+    };
 
-  const handleUpdatePackage = (index, newValue) => {
-    const updatedPackages = packages.map((pkg, i) => (i === index ? newValue : pkg));
-    setPackages(updatedPackages);
-    setStateBtn(1);
-    
-  };
-  // coach package component code
-  // coach skills component code
-  const addSkills = (skill) => {
-    setNewSkills([...newSkills, skill]);
-    setStateBtn(1);
-    
-  };
+    const handleRemovePackage = (index) => {
+        setPackages(packages.filter((_, i) => i !== index));
+        setStateBtn(1);
 
-  const deleteSkills = (index) => {
-    setNewSkills(newSkills.filter((_, i) => i !== index));
-    setStateBtn(1);
-    
-  };
+    };
 
-  const updateSkills = (index, newValue) => {
-    const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
-    setNewSkills(updatedFaqs);
-    setStateBtn(1);
-    
-  };
-  // coach skills component code ended
+    const handleUpdatePackage = (index, newValue) => {
+        const updatedPackages = packages.map((pkg, i) => (i === index ? newValue : pkg));
+        setPackages(updatedPackages);
+        setStateBtn(1);
+
+    };
+    // coach package component code
+    // coach skills component code
+    const addSkills = (skill) => {
+        setNewSkills([...newSkills, skill]);
+        setStateBtn(1);
+
+    };
+
+    const deleteSkills = (index) => {
+        setNewSkills(newSkills.filter((_, i) => i !== index));
+        setStateBtn(1);
+
+    };
+
+    const updateSkills = (index, newValue) => {
+        const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
+        setNewSkills(updatedFaqs);
+        setStateBtn(1);
+
+    };
+    // coach skills component code ended
 
 
     const capitalizeFirstLetterOfEachWord = (string) => {
@@ -300,17 +301,12 @@ const AddCoach = ({ onClose }) => {
         }
         setStateBtn(1);
     };
-    const handleSkillChange = (event) => {
+    const handleChange = (event) => {
         const value = event.target.value;
-        if (event.target.checked) {
-            setAddedSkills(prevLocations => [...prevLocations, value]);
-        } else {
-            setAddedSkills(prevLocations =>
-                prevLocations.filter(location => location !== value)
-            );
-        }
+        setTrainInput(value)
         setStateBtn(1);
-    };
+      };
+    
     const openModal = (object) => {
         setModalVisible(true);
         setSelectedObj(object);
@@ -321,6 +317,7 @@ const AddCoach = ({ onClose }) => {
     };
     const handleUpdateClick = () => {
         setStateBtn(0);
+        let gather = trainingLocation.toString() + "||" + trainInput;
         const updatedFields = {};
         for (const key in editedItem) {
             if (editedItem.hasOwnProperty(key)) {
@@ -331,7 +328,7 @@ const AddCoach = ({ onClose }) => {
         }
         const updatedFormData = {
             ...updatedFields,
-            training_location: trainingLocation.toString(),
+            location: gather,
             skill: newSkills?.join(","),
             package: packages?.join(","),
         };
@@ -352,6 +349,7 @@ const AddCoach = ({ onClose }) => {
                         autoClose: 1000,
                     });
                     setTrainingLocation([]);
+                    setTrainInput("");
                     setEditedItem({
                         name: "",
                         phone: "",
@@ -364,7 +362,7 @@ const AddCoach = ({ onClose }) => {
                         fee: "",
                         package: "",
                         gender: "",
-                        training_location: "",
+                        location: "",
                         experience: "",
                         education: "",
                         achievement: "",
@@ -662,24 +660,44 @@ const AddCoach = ({ onClose }) => {
                                                         <input
                                                             type="checkbox"
                                                             name="training_location"
-                                                            value="1"
+                                                            value="online"
                                                             className="radio_disable check_input"
 
                                                             onChange={handleCheckboxChange}
-                                                            checked={trainingLocation.includes("1")}
+                                                            checked={trainingLocation.includes("online")}
                                                         /> Online
                                                     </label>
                                                     <label className="radio-inline">
                                                         <input
                                                             type="checkbox"
                                                             name="training_location"
-                                                            value="2"
+                                                            value="home"
                                                             className="radio_disable check_input"
 
                                                             onChange={handleCheckboxChange}
-                                                            checked={trainingLocation.includes("2")}
+                                                            checked={trainingLocation.includes("home")}
                                                         /> Home
                                                     </label>
+                                                    <label className="radio-inline">
+                                                        <input
+                                                            type="checkbox"
+                                                            name="training_location"
+                                                            value="other"
+                                                            className="radio_disable check_input"
+
+                                                            onChange={handleCheckboxChange}
+                                                            checked={trainingLocation.includes("other")}
+                                                        /> Other
+                                                    </label>
+                                                    <span>
+                                                        <input
+                                                            type="text"
+                                                            name=""
+                                                            value={trainInput}
+                                                            onChange={handleChange}
+                                                            style={editStylingInput}
+                                                        />
+                                                    </span>
                                                 </div>
                                             </span>
                                         </p>
@@ -697,7 +715,7 @@ const AddCoach = ({ onClose }) => {
                                         <p>
                                             <span>
                                                 <AddPricingSection
-                                                    isEditable = {true}
+                                                    isEditable={true}
                                                     isDisabled={false}
                                                     packages={packages}
                                                     onAddPackage={handleAddPackage}
@@ -706,16 +724,16 @@ const AddCoach = ({ onClose }) => {
                                                 />
                                             </span></p>
                                         <p>
-                                                <span>
-                                                    <CoachSkills
-                                                       isEditable = {true}
-                                                       isDisabled={false}
-                                                        faqs={newSkills}
-                                                        addSkills={addSkills}
-                                                        deleteSkills={deleteSkills}
-                                                        updateSkills={updateSkills}
-                                                    />
-                                                </span>
+                                            <span>
+                                                <CoachSkills
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    faqs={newSkills}
+                                                    addSkills={addSkills}
+                                                    deleteSkills={deleteSkills}
+                                                    updateSkills={updateSkills}
+                                                />
+                                            </span>
                                         </p>
 
                                     </div>
