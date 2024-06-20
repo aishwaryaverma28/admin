@@ -167,13 +167,6 @@ const getLogs = () => {
                             Images
                         </button>
                         <button
-                            className={activeTab === "logs" ? "active" : ""}
-                            onClick={() => handleTabClick("logs")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            Logs ({logs?.length})
-                        </button>
-                        <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
                         >
@@ -198,11 +191,6 @@ const getLogs = () => {
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
                                 <PlayerImage id={selectedItem} />
-                            </div>
-                        )}
-                        {activeTab === "logs" && (
-                            <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem} type={"Player"} />
                             </div>
                         )}
                         {activeTab === "user" && (

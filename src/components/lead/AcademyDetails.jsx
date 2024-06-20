@@ -379,6 +379,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 )}
                             </p>
                             <p style={normalStylingInput}>{editedItem?.url}</p>
+                            <p className='viewsCount'>Views: {editedItem?.views}</p>
                         </div>
                     </div>
                     <a href="#" className="edit-details" onClick={toggleEditable}>

@@ -298,13 +298,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             Images
                         </button>
                         <button
-                            className={activeTab === "logs" ? "active" : ""}
-                            onClick={() => handleTabClick("logs")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            Logs ({logs?.length})
-                        </button>
-                        <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
                         >
@@ -318,13 +311,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length})
                         </button>
-                        {/* <button
-                            className={activeTab === "activity" ? "active" : ""}
-                            onClick={() => handleTabClick("activity")}
-                        >
-                            <i class="fa-solid fa-sharp fa-regular fa-calendar-days"></i>
-                            Activity ({activityCount})
-                        </button> */}
                         <button
                             className={activeTab === "notes" ? "active" : ""}
                             onClick={() => handleTabClick("notes")}
@@ -332,13 +318,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
                             Notes ({notes})
                         </button>
-                        {/* <button
-                            className={activeTab === "email" ? "active" : ""}
-                            onClick={() => handleTabClick("email")}
-                        >
-                            <i className="fa-sharp fa-regular fa-envelope-open"></i>
-                            Email ({allEmails.length})
-                        </button> */}
                     </div>
                     {/* ===================================================================tabination content */}
 
@@ -351,11 +330,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
                                 <LeadImage2 id={selectedItem} />
-                            </div>
-                        )}
-                        {activeTab === "logs" && (
-                            <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem} type={"Academy"} />
                             </div>
                         )}
                         {activeTab === "user" && (

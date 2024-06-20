@@ -163,13 +163,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                             Images
                         </button>
                         <button
-                            className={activeTab === "logs" ? "active" : ""}
-                            onClick={() => handleTabClick("logs")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            Logs ({logs?.length})
-                        </button>
-                        <button
                             className={activeTab === "user" ? "active" : ""}
                             onClick={() => handleTabClick("user")}
                         >
@@ -194,11 +187,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
                         {activeTab === "gallery" && (
                             <div className="activity-tab-content">
                                 <CoachImage id={selectedItem} />
-                            </div>
-                        )}
-                        {activeTab === "logs" && (
-                            <div className="activity-tab-content">
-                                <AcademyLogs id={selectedItem} type={"Coach"}/>
                             </div>
                         )}
                          {activeTab === "user" && (

@@ -87,3 +87,7 @@
   height: 5rem;
   overflow-y: scroll;
 }
+.viewsCount{
+  font-size: 0.9rem !important;
+  color: #2b74da !important;
+}

@@ -368,7 +368,8 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       about: editedItem?.about?.trim(),
       skill: newSkills?.join(","),
       heighlight: editedItem?.heighlight?.trim(),
-      package: packages?.join(","),
+      package: packages?.join(","),      
+      gender: editedItem?.gender,
       location: gather,
     }
     axios
@@ -454,6 +455,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                 <p>Email</p>
                 <p>Phone</p>
                 <p>Sport</p>
+                <p>Gender</p>
                 <p>Profile Heading</p>
                 <p className="about-textarea">About</p>
               </div>
@@ -571,6 +573,30 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                     </div>
                   </div>
                 </>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <select
+                        name="gender"
+                        id="gender"
+                        value={editedItem?.gender || ""}
+                        onChange={handleInputChange}
+                        disabled={isDisabled}
+                        style={
+                          isEditable
+                            ? editStylingSelect1
+                            : normalStylingSelect1
+                        }
+                      >
+                        <option value=""></option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                      </select>
+                    </span>
+                  )}
+                </p>
                 <p>
                   {isLoading ? (
                     <span>-</span>

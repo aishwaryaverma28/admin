@@ -30,6 +30,7 @@ const AddCoach = ({ onClose }) => {
         skill: "",
         heighlight: "",
         package: "",
+        gender: "",
         training_location: "",
     });
     const [keywords, setKeywords] = useState([
@@ -300,8 +301,8 @@ const AddCoach = ({ onClose }) => {
         const value = event.target.value;
         setTrainInput(value)
         setStateBtn(1);
-      };
-    
+    };
+
     const openModal = (object) => {
         setModalVisible(true);
         setSelectedObj(object);
@@ -355,6 +356,7 @@ const AddCoach = ({ onClose }) => {
                         skill: "",
                         heighlight: "",
                         package: "",
+                        gender: "",
                         location: "",
                     });
                 } else {
@@ -398,7 +400,7 @@ const AddCoach = ({ onClose }) => {
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
                                         <p>phone <span className="common-fonts redAlert"> *</span></p>
                                         <p>Profile Heading</p>
-                                        <p>Certification</p>
+                                        <p>Gender</p>
                                         <p className="about-textarea">About</p>
                                     </div>
                                     <div className="detailsRightContainer">
@@ -483,17 +485,22 @@ const AddCoach = ({ onClose }) => {
 
                                                 />
                                             </span>
-                                        </p>
+                                        </p>                                        
                                         <p>
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="certificate"
-                                                    value={editedItem?.certificate}
-                                                    onChange={handleInputChange}
-                                                    style={editStylingInput}
 
-                                                />
+                                            <span>
+                                                <select
+                                                    name="gender"
+                                                    id="gender"
+                                                    value={editedItem?.gender || ""}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingSelect1
+                                                    }
+                                                >
+                                                    <option value=""></option>
+                                                    <option value="female">Female</option>
+                                                    <option value="male">Male</option>
+                                                </select>
                                             </span>
                                         </p>
                                         <p>
