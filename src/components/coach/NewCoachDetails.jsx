@@ -230,9 +230,16 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
           setTrainingLocation(trainCheckBox);
           setTrainInput(trainingLocationArray[1]);
         }
-        if (response?.data?.data[0]?.sport) {
-          setSearchTerm(response?.data?.data[0]?.sport)
+        const sportId = response?.data?.data[0]?.sport_id;
+        if (sportId) {
+          const matchedSport = sports.find(sport => sport.id === sportId);
+          if (matchedSport) {
+            setSearchTerm(matchedSport?.name)
+          } else {
+            console.log('No matching sport found.');
+          }
         }
+  
         if (response?.data?.data[0]?.city) {
           setSearchCity(response?.data?.data[0]?.city)
         }
@@ -262,15 +269,20 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
     })
       .then((response) => {
         setSports(response?.data?.data)
+        fetchLead();
       })
       .catch((error) => {
         console.log(error);
-      });
+      });      
   }
-  useEffect(() => {
-    fetchLead();
+
+  useEffect(() => {    
     fetchSports();
   }, []);
+  useEffect(() => {    
+    fetchLead();
+  }, [sports]);
+  
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
