@@ -400,6 +400,7 @@ const AddCoach = ({ onClose }) => {
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
                                         <p>phone <span className="common-fonts redAlert"> *</span></p>
                                         <p>Profile Heading</p>
+                                        
                                         <p>Gender</p>
                                         <p className="about-textarea">About</p>
                                     </div>
