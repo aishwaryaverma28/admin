@@ -136,7 +136,6 @@ const NewCoachImages = (id) => {
             }
         }
     };
-
     // const submitImage2 = (file) => {
     //     setIsUploadingMulti(true);
     //     const selectedImage = file;
@@ -150,6 +149,7 @@ const NewCoachImages = (id) => {
 
     //         S3FileUpload.uploadFile(modifiedFile, updatedConfig)
     //             .then((data) => {
+    //                 console.log(data);
     //                 setFileName2(modifiedFile.name);
     //                 const imageUrl = modifiedFile.name;
     //                 if (data.location) {
@@ -656,7 +656,7 @@ const NewCoachImages = (id) => {
                                 : `${cdnurl}coach_temp/${academyData?.id}/${academyData?.profile_img}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
-                                    src={academyData?.profile_img === null
+                                    src={academyData?.profile_img === null || academyData?.profile_img === ""
                                         ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}coach_temp/${academyData?.id}/${academyData?.profile_img}`}
                                     alt="pofile"

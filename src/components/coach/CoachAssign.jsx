@@ -193,7 +193,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                     ? `${cdnurl}asset/images/logo.svg`
                     : `${cdnurl}coach_temp/${data?.id}/${data?.profile_img}`} target="_blank" rel="noopener noreferrer">
                     <img
-                      src={data?.profile_img === null
+                      src={data?.profile_img === null || data?.profile_img === ""
                         ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}coach_temp/${data?.id}/${data?.profile_img}`}
                       alt="pofile"
@@ -250,7 +250,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                       ? `${cdnurl}asset/images/logo.svg`
                       : `${cdnurl}coach/${object?.id}/${object?.profile_img}`} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={object?.profile_img === null
+                        src={object?.profile_img === null || object?.profile_img === ""
                           ? `${cdnurl}asset/images/logo.svg`
                           : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                         alt="pofile"

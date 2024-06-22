@@ -58,7 +58,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setEditedItem(prevState => ({
             ...prevState,
             sport_id: sport.id,
-            sport: sport?.name
+            sport: sport?.sport
         }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
@@ -73,7 +73,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     sport_id: filteredSports[0].id,
-                    sport: filteredSports[0]?.name
+                    sport: filteredSports[0]?.sport
                 }));
             }
             setIsDropdownVisible(false);
@@ -366,7 +366,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <div className="user-details--heading">
                     <div className="user-details-imgBox">
                         <img
-                            src={editedItem?.logo === null
+                             src={editedItem?.logo === null || editedItem?.logo === ""
                                 ? `${cdnurl}asset/images/logo.svg`
                                 : `${cdnurl}academy_temp/${editedItem?.id}/${editedItem?.logo}`}
                             alt="logo"

@@ -444,7 +444,7 @@ const LeadImage2 = (id) => {
                                 ? `${cdnurl}asset/images/logo.svg`
                                 : `${cdnurl}academy/${academyData?.id}/${academyData?.logo}`} target="_blank" rel="noopener noreferrer">
                                 <img
-                                    src={academyData?.logo === null
+                                    src={academyData?.logo === null || academyData?.logo === ""
                                         ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}academy/${academyData?.id}/${academyData?.logo}`}
                                     alt=""

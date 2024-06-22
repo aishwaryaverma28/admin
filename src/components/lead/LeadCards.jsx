@@ -136,7 +136,7 @@ const LeadCards = ({
                     : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                     target="_blank" rel="noopener noreferrer">
                     <img
-                      src={object?.profile_img === null
+                      src={object?.profile_img === null || object?.profile_img === ""
                         ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}coach/${object?.id}/${object?.profile_img}`}
                       alt="pofile"

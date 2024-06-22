@@ -69,7 +69,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
     setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id,
-      sport: sport?.name
+      sport: sport?.sport
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
@@ -84,7 +84,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
         setEditedItem(prevState => ({
           ...prevState,
           sport_id: filteredSports[0].id,
-          sport: filteredSports[0]?.name
+          sport: filteredSports[0]?.sport
         }));
       }
       setIsDropdownVisible(false);
@@ -423,7 +423,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
               ? `${cdnurl}asset/images/logo.svg`
               : `${cdnurl}coach_temp/${editedItem?.id}/${editedItem?.profile_img}`} target="_blank" rel="noopener noreferrer">
               <img
-                src={editedItem?.profile_img === null
+                src={editedItem?.profile_img === null || editedItem?.profile_img === ""
                   ? `${cdnurl}asset/images/logo.svg`
                   : `${cdnurl}coach_temp/${editedItem?.id}/${editedItem?.profile_img}`}
                 alt="pofile"
@@ -454,8 +454,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                 <p>Name</p>
                 <p>Email</p>
                 <p>Phone</p>
-                <p>Sport</p>
-                
+                <p>Sport</p>                
                 <p>Gender</p>
                 <p>Profile Heading</p>
                 <p className="about-textarea">About</p>

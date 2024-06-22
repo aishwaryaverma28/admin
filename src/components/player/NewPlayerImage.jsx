@@ -419,7 +419,7 @@ const NewPlayerImage = (id) => {
                                 : `${cdnurl}player_temp/${academyData?.id}/${academyData?.logo}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
-                                    src={academyData?.logo === null
+                                    src={academyData?.logo === null || academyData?.logo === ""
                                         ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}player_temp/${academyData?.id}/${academyData?.logo}`}
                                     alt="pofile"

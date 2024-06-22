@@ -550,7 +550,7 @@ const CoachImage = (id) => {
                                 : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                 target="_blank" rel="noopener noreferrer">
                                 <img
-                                    src={academyData?.profile_img === null
+                                    src={academyData?.profile_img === null || academyData?.profile_img === ""
                                         ? `${cdnurl}asset/images/logo.svg`
                                         : `${cdnurl}coach/${academyData?.id}/${academyData?.profile_img}`}
                                     alt="pofile"

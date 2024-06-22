@@ -227,7 +227,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
                                                                 ? `${cdnurl}asset/images/logo.svg`
                                                                 : `${cdnurl}academy/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
                                                                 <img
-                                                                    src={editedItem?.logo === null
+                                                                   src={editedItem?.logo === null || editedItem?.logo === ""
                                                                         ? `${cdnurl}asset/images/logo.svg`
                                                                         : `${cdnurl}academy/${editedItem?.id}/${editedItem?.logo}`}
                                                                     alt="pofile"

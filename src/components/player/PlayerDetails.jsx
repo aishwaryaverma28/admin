@@ -69,7 +69,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id,
-      sport: sport?.name
+      sport: sport?.sport
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
@@ -84,7 +84,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setEditedItem(prevState => ({
           ...prevState,
           sport_id: filteredSports[0].id,
-          sport: filteredSports[0]?.name
+          sport: filteredSports[0]?.sport
         }));
       }
       setIsDropdownVisible(false);
@@ -372,7 +372,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               ? `${cdnurl}asset/images/logo.svg`
               : `${cdnurl}player/${editedItem?.id}/${editedItem?.logo}`} target="_blank" rel="noopener noreferrer">
               <img
-                src={editedItem?.logo === null
+                src={editedItem?.logo === null || editedItem?.logo === ""
                   ? `${cdnurl}asset/images/logo.svg`
                   : `${cdnurl}player/${editedItem?.id}/${editedItem?.logo}`}
                 alt="pofile"

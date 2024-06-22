@@ -204,7 +204,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                     ? `${cdnurl}asset/images/logo.svg`
                     : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`} target="_blank" rel="noopener noreferrer">
                     <img
-                      src={data?.logo === null
+                      src={data?.logo === null || data?.logo === ""
                         ? `${cdnurl}asset/images/logo.svg`
                         : `${cdnurl}academy_temp/${data?.id}/${data?.logo}`}
                       alt="pofile"
@@ -255,7 +255,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                       ? `${cdnurl}asset/images/logo.svg`
                       : `${cdnurl}academy/${object?.id}/${object?.logo}`} target="_blank" rel="noopener noreferrer">
                       <img
-                        src={object?.logo === null
+                        src={object?.logo === null || object?.logo === ""
                           ? `${cdnurl}asset/images/logo.svg`
                           : `${cdnurl}academy/${object?.id}/${object?.logo}`}
                         alt="pofile"
