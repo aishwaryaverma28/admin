@@ -461,8 +461,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                 <p>Name</p>
                 <p>Email</p>
                 <p>Phone</p>
-                <p>Sport</p>
-                
+                <p>Sport</p>                
                 <p>Gender</p>
                 <p>Profile Heading</p>
                 <p className="about-textarea">About</p>

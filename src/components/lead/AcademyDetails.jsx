@@ -45,16 +45,20 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             },
         })
             .then((response) => {
-                setSports(response?.data?.data)
+                setSports(response?.data?.data);
+                fetchLead();
             })
             .catch((error) => {
                 console.log(error);
             });
     }
-    useEffect(() => {
-        fetchLead();
+    useEffect(() => {    
         fetchSports();
-    }, []);
+      }, []);
+      useEffect(() => {    
+        fetchLead();
+      }, [sports]);
+      
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -196,9 +200,16 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
                     setTrainingLocation(trainingLocationArray);
                 }
-                if (response?.data?.data[0]?.sport) {
-                    setSearchTerm(response?.data?.data[0]?.sport)
+                const sportId = response?.data?.data[0]?.sport_id;
+                if (sportId) {
+                  const matchedSport = sports.find(sport => sport.id === sportId);
+                  if (matchedSport) {
+                    setSearchTerm(matchedSport?.name)
+                  } else {
+                    console.log('No matching sport found.');
+                  }
                 }
+          
                 if (response?.data?.data[0]?.city) {
                     setSearchCity(response?.data?.data[0]?.city)
                 }

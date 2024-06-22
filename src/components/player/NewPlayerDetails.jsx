@@ -196,9 +196,16 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           }
         }
         setEditedItem(apiData);
-        if (response?.data?.data[0]?.sport) {
-          setSearchTerm(response?.data?.data[0]?.sport)
+        const sportId = response?.data?.data[0]?.sport_id;
+        if (sportId) {
+          const matchedSport = sports.find(sport => sport.id === sportId);
+          if (matchedSport) {
+            setSearchTerm(matchedSport?.name)
+          } else {
+            console.log('No matching sport found.');
+          }
         }
+  
         if (response?.data?.data[0]?.city) {
           setSearchCity(response?.data?.data[0]?.city)
         }
@@ -219,16 +226,19 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     })
       .then((response) => {
         setSports(response?.data?.data)
+        getAllPlayers();
       })
       .catch((error) => {
         console.log(error);
       });
   }
-  useEffect(() => {
-    getAllPlayers();
+  useEffect(() => {    
     fetchSports();
   }, []);
-
+  useEffect(() => {    
+    getAllPlayers();
+  }, [sports]);
+  
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);

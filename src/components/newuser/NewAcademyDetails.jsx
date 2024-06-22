@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import {
-    cdnurl,SEARCH_CITY,
+    cdnurl, SEARCH_CITY,
     GET_ACADEMY,
     getDecryptedToken,
     UPDATE_ACADEMY,
@@ -27,12 +27,12 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [noMatch, setNoMatch] = useState(false);
     const inputRef = useRef(null);
-     // city dropdown useStates
-  const [searchCity, setSearchCity] = useState("");
-  const [filteredCity, setFilteredCity] = useState([]);
-  const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
-  const [noMatchCity, setNoMatchCity] = useState(false);
-  const inputCityRef = useRef(null);
+    // city dropdown useStates
+    const [searchCity, setSearchCity] = useState("");
+    const [filteredCity, setFilteredCity] = useState([]);
+    const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
+    const [noMatchCity, setNoMatchCity] = useState(false);
+    const inputCityRef = useRef(null);
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -88,74 +88,74 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     }, [filteredSports, noMatch]);
 
     //===================================================sport dropdown code ends here
-  // ============================================================city dropdown code
-  const handleCityInputChange = (event) => {
-    const value = event.target.value;
-    setSearchCity(value);
-    const body = {
-      tbl: "adm_location_master",
-      term: value
-    }
-    if (value) {
-      axios.post(SEARCH_CITY, body, {
-        headers: {
-          Authorization: `Bearer ${decryptedToken}`,
-        },
-      })
-        .then(response => {
-          setFilteredCity(response?.data?.data);
-          setNoMatchCity(response?.data?.data?.length === 0);
-          setIsCityDropdownVisible(true);
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-         
-    } else {
-      setFilteredCity([]);
-      setNoMatchCity(false);
-      setIsCityDropdownVisible(false);
-    }
-    setStateBtn(1);
-  };
+    // ============================================================city dropdown code
+    const handleCityInputChange = (event) => {
+        const value = event.target.value;
+        setSearchCity(value);
+        const body = {
+            tbl: "adm_location_master",
+            term: value
+        }
+        if (value) {
+            axios.post(SEARCH_CITY, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+                .then(response => {
+                    setFilteredCity(response?.data?.data);
+                    setNoMatchCity(response?.data?.data?.length === 0);
+                    setIsCityDropdownVisible(true);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
 
-  const handleCitySelect = (sport) => {
-    setSearchCity(sport.city);
-    setEditedItem(prevState => ({
-      ...prevState,
-      loc_id: sport?.id,
-      state: sport?.state,
-      city: sport?.city,
-    }));
-    setFilteredCity([]);
-    setIsCityDropdownVisible(false);
-  };
-
-  const handleClickCityOutside = (event) => {
-    if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
-      if (noMatchCity) {
-        setSearchCity('');
-      } else if (filteredCity.length > 0) {
-        setSearchCity(filteredCity[0]?.city);
-        setEditedItem(prevState => ({
-          ...prevState,
-          loc_id: filteredCity[0]?.id,
-          state: filteredCity[0]?.state,
-          city: filteredCity[0]?.city,
-        }));
-      }
-      setIsCityDropdownVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickCityOutside);
-    return () => {
-      document.removeEventListener('click', handleClickCityOutside);
+        } else {
+            setFilteredCity([]);
+            setNoMatchCity(false);
+            setIsCityDropdownVisible(false);
+        }
+        setStateBtn(1);
     };
-  }, [filteredCity, noMatchCity]);
 
-  //===================================================city dropdown code ends here
+    const handleCitySelect = (sport) => {
+        setSearchCity(sport.city);
+        setEditedItem(prevState => ({
+            ...prevState,
+            loc_id: sport?.id,
+            state: sport?.state,
+            city: sport?.city,
+        }));
+        setFilteredCity([]);
+        setIsCityDropdownVisible(false);
+    };
+
+    const handleClickCityOutside = (event) => {
+        if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
+            if (noMatchCity) {
+                setSearchCity('');
+            } else if (filteredCity.length > 0) {
+                setSearchCity(filteredCity[0]?.city);
+                setEditedItem(prevState => ({
+                    ...prevState,
+                    loc_id: filteredCity[0]?.id,
+                    state: filteredCity[0]?.state,
+                    city: filteredCity[0]?.city,
+                }));
+            }
+            setIsCityDropdownVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickCityOutside);
+        return () => {
+            document.removeEventListener('click', handleClickCityOutside);
+        };
+    }, [filteredCity, noMatchCity]);
+
+    //===================================================city dropdown code ends here
 
     const fetchLead = () => {
         let body = {
@@ -175,12 +175,18 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
                     setTrainingLocation(trainingLocationArray);
                 }
-                if (response?.data?.data[0]?.sport) {
-                    setSearchTerm(response?.data?.data[0]?.sport)
+                const sportId = response?.data?.data[0]?.sport_id;
+                if (sportId) {
+                    const matchedSport = sports.find(sport => sport.id === sportId);
+                    if (matchedSport) {
+                        setSearchTerm(matchedSport?.name)
+                    } else {
+                        console.log('No matching sport found.');
+                    }
                 }
                 if (response?.data?.data[0]?.city) {
                     setSearchCity(response?.data?.data[0]?.city)
-                  }
+                }
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -198,17 +204,20 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             },
         })
             .then((response) => {
-                setSports(response?.data?.data)
+                setSports(response?.data?.data);
+                fetchLead();
             })
             .catch((error) => {
                 console.log(error);
             });
     }
-    useEffect(() => {
-        fetchLead();
+    useEffect(() => {    
         fetchSports();
-    }, []);
-
+      }, []);
+      useEffect(() => {    
+        fetchLead();
+      }, [sports]);
+      
     const capitalizeFirstLetterOfEachWord = (string) => {
         return string?.replace(/\b\w/g, char => char?.toUpperCase());
     };
