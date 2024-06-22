@@ -172,16 +172,16 @@ const NewCoachImages = (id) => {
     const submitImage2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
-    
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-    
+
             const configsWithDirNames = [
                 { ...config, dirName: "coach_temp/" + (id?.id || "") },
                 { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
             ];
-    
+
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
                 return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                     .then((data) => {
@@ -192,13 +192,13 @@ const NewCoachImages = (id) => {
                         }
                     })
                     .catch((err) => {
-                        console.error("Error uploading image:", err);
+                        console.log(updatedConfig?.bucketName + " :", err);
                         return { success: false, error: err, updatedConfig };
                     });
             });
-    
+
             let successfulUploadCount = 0;
-    
+
             Promise.all(uploadPromises)
                 .then((results) => {
                     results.forEach((result) => {
@@ -214,7 +214,7 @@ const NewCoachImages = (id) => {
                             console.error("Failed to upload:", result.error);
                         }
                     });
-    
+
                     if (successfulUploadCount === 2) {
                         setPhotoUrls([...photoUrls]);
                         handleSubmit2();
@@ -230,41 +230,100 @@ const NewCoachImages = (id) => {
                 });
         }
     };
-    
+    // const submitVideo2 = (file) => {
+    //     setIsUploadingMulti(true);
+    //     const selectedImage = file;
+    //     if (selectedImage) {
+    //         const processedFileName = processImageName(selectedImage.name);
+    //         const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+    //         const updatedConfig = {
+    //             ...config,
+    //             dirName: "coach_temp/" + id?.id,
+    //         };
+    //         S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+    //             .then((data) => {
+    //                 console.log(data);
+    //                 setFileName2(modifiedFile.name);
+    //                 const imageUrl = modifiedFile.name;
+    //                 if (data.location) {
+    //                     videoUrls.push(imageUrl);
+    //                     setTimeout(() => {
+    //                         setVideoUrls(videoUrls);
+    //                     }, 2000);
+    //                     setStateBtn(1);
+    //                     handleSubmit2();
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err);
+    //             })
+    //             .finally(() => {
+    //                 setIsUploadingMulti(false);
+    //             });
+    //     }
+    // };
 
     const submitVideo2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "coach_temp/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    setFileName2(modifiedFile.name);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        videoUrls.push(imageUrl);
-                        setTimeout(() => {
-                            setVideoUrls(videoUrls);
-                        }, 2000);
-                        setStateBtn(1);
+
+            const configsWithDirNames = [
+                { ...config, dirName: "coach_temp/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                videoUrls.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setVideoUrls(videoUrls);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
                 });
         }
     };
-
     //===============================================================================image submit
     const initialPhotoUrls = [...photoUrls];
     const initialVideoUrls = [...videoUrls];
@@ -463,31 +522,92 @@ const NewCoachImages = (id) => {
         }
     };
 
+    // const submitImage = (file) => {
+    //     setIsUploadingMulti(true);
+    //     const selectedImage = file;
+    //     if (selectedImage) {
+    //         const processedFileName = processImageName(selectedImage.name);
+    //         const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+    //         const updatedConfig = {
+    //             ...config,
+    //             dirName: "coach_temp/" + id?.id,
+    //         };
+    //         console.log(updatedConfig)
+    //         S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+    //             .then((data) => {
+    //                 console.log(data);
+    //                 const imageUrl = modifiedFile.name;
+    //                 if (data.location) {
+    //                     certificates?.push(imageUrl);
+    //                     setTimeout(() => {
+    //                         setCertificates(certificates);
+    //                     }, 3000);
+    //                     handleSubmit2();
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err);
+    //             })
+    //             .finally(() => {
+    //                 setIsUploadingMulti(false);
+    //             });
+    //     }
+    // };
     const submitImage = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "coach_temp/" + id?.id,
-            };
-            console.log(updatedConfig)
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        certificates?.push(imageUrl);
-                        setTimeout(() => {
-                            setCertificates(certificates);
-                        }, 3000);
+
+            const configsWithDirNames = [
+                { ...config, dirName: "coach_temp/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                certificates?.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setCertificates(certificates);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);

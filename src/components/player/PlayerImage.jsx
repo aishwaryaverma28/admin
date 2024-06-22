@@ -91,7 +91,7 @@ const PlayerImage = (id) => {
             return imageName.replace(/[^\w-]/g, "-");
         }
     };
-    
+
     //=================================================================================photo and video upload
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
@@ -127,59 +127,119 @@ const PlayerImage = (id) => {
     const submitImage2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "player/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    setFileName2(modifiedFile.name);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        photoUrls?.push(imageUrl);
-                        setTimeout(() => {
-                            setPhotoUrls(photoUrls);
-                        }, 2000);
-                        handleSubmit2()
+
+            const configsWithDirNames = [
+                { ...config, dirName: "player/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "player/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                photoUrls.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setPhotoUrls(photoUrls);
+                        handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
                 });
         }
     };
-
     const submitVideo2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "player/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    setFileName2(modifiedFile.name);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        videoUrls.push(imageUrl);
-                        setTimeout(() => {
-                            setVideoUrls(videoUrls);
-                        }, 2000);                        
+
+            const configsWithDirNames = [
+                { ...config, dirName: "player/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "player/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                videoUrls.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setVideoUrls(videoUrls);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
@@ -188,13 +248,13 @@ const PlayerImage = (id) => {
     };
 
     //===============================================================================image submit
-      const handleSubmit2 = () => {
+    const handleSubmit2 = () => {
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
             type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-             loc_id: academyData?.loc_id,
+            loc_id: academyData?.loc_id,
             logo: fileName,
             photos: allUrls?.join(","),
         }
@@ -218,7 +278,7 @@ const PlayerImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -238,7 +298,7 @@ const PlayerImage = (id) => {
             type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
-             loc_id: academyData?.loc_id,
+            loc_id: academyData?.loc_id,
             logo: file,
             photos: allUrls?.join(","),
         }
@@ -262,7 +322,7 @@ const PlayerImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -292,7 +352,7 @@ const PlayerImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                     loc_id: academyData?.loc_id,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -324,7 +384,7 @@ const PlayerImage = (id) => {
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
-                     loc_id: academyData?.loc_id,
+                    loc_id: academyData?.loc_id,
                 },
                 {
                     headers: {
@@ -522,7 +582,7 @@ const PlayerImage = (id) => {
                     </div>
                 )}
             </>
-            
+
         </>
     )
 }

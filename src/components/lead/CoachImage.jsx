@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast } from "react-toastify";
-import { cdnurl,GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
+import { cdnurl, GET_COACH_ID, UPDATE_COACH, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
 
@@ -94,7 +94,7 @@ const CoachImage = (id) => {
             return imageName.replace(/[^\w-]/g, "-");
         }
     };
-    
+
     //=================================================================================photo and video upload
     const handleButtonClick2 = () => {
         fileInputRef2.current.click();
@@ -130,69 +130,125 @@ const CoachImage = (id) => {
     const submitImage2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "coach/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    setFileName2(modifiedFile.name);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        photoUrls?.push(imageUrl);
-                        setTimeout(() => {
-                            setPhotoUrls(photoUrls);
-                        }, 2000); 
-                        setStateBtn(1);
+
+            const configsWithDirNames = [
+                { ...config, dirName: "coach/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "coach/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                photoUrls.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setPhotoUrls([...photoUrls]);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
                 });
         }
     };
-
     const submitVideo2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "coach/" + id?.id,
-            };
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    setFileName2(modifiedFile.name);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        videoUrls.push(imageUrl);
-                        setTimeout(() => {
-                            setVideoUrls(videoUrls);
-                        }, 2000); 
-                        setStateBtn(1);
+
+            const configsWithDirNames = [
+                { ...config, dirName: "coach/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "coach/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                videoUrls.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setVideoUrls(videoUrls);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
                 });
         }
     };
-
     //===============================================================================image submit
     const initialPhotoUrls = [...photoUrls];
     const initialVideoUrls = [...videoUrls];
@@ -212,7 +268,7 @@ const CoachImage = (id) => {
         setStateBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
-            type : "org",
+            type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
             loc_id: academyData?.loc_id,
@@ -239,7 +295,7 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -265,7 +321,7 @@ const CoachImage = (id) => {
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
-                    type : "org",
+                    type: "org",
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
@@ -297,7 +353,7 @@ const CoachImage = (id) => {
             .put(
                 UPDATE_COACH + academyData?.id,
                 {
-                    type : "org",
+                    type: "org",
                     photos: combinedDataString,
                     name: academyData?.name,
                     sport_id: academyData?.sport_id,
@@ -335,7 +391,7 @@ const CoachImage = (id) => {
         setPhotoBtn(0);
         const allUrls = [...photoUrls, ...videoUrls];
         const updatedFormData = {
-            type : "org",
+            type: "org",
             name: academyData?.name,
             sport_id: academyData?.sport_id,
             loc_id: academyData?.loc_id,
@@ -363,7 +419,7 @@ const CoachImage = (id) => {
                         autoClose: 1000,
                     });
                 }
-                    academyDetails();
+                academyDetails();
             })
             .catch((error) => {
                 console.log(error);
@@ -393,28 +449,58 @@ const CoachImage = (id) => {
     const submitImage = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
+
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-            const updatedConfig = {
-                ...config,
-                dirName: "coach_temp/" + id?.id,
-            };
-            console.log(updatedConfig)
-            S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                .then((data) => {
-                    console.log(data);
-                    const imageUrl = modifiedFile.name;
-                    if (data.location) {
-                        certificates?.push(imageUrl);
-                        setTimeout(() => {
-                            setCertificates(certificates);
-                        }, 3000);
+
+            const configsWithDirNames = [
+                { ...config, dirName: "coach/" + (id?.id || "") },
+                { ...config, bucketName: "cdn90", dirName: "coach/" + (id?.id || "") }
+            ];
+
+            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
+                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+                    .then((data) => {
+                        const imageUrl = modifiedFile.name;
+                        console.log(data);
+                        if (data.location) {
+                            return { success: true, imageUrl, updatedConfig };
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(updatedConfig?.bucketName + " :", err);
+                        return { success: false, error: err, updatedConfig };
+                    });
+            });
+
+            let successfulUploadCount = 0;
+
+            Promise.all(uploadPromises)
+                .then((results) => {
+                    results.forEach((result) => {
+                        if (result.success) {
+                            const { imageUrl, updatedConfig } = result;
+                            if (updatedConfig.bucketName === config.bucketName) {
+                                successfulUploadCount++;
+                                certificates?.push(imageUrl);
+                            } else if (updatedConfig.bucketName === 'cdn90') {
+                                successfulUploadCount++;
+                            }
+                        } else {
+                            console.error("Failed to upload:", result.error);
+                        }
+                    });
+
+                    if (successfulUploadCount === 2) {
+                        setCertificates(certificates);
                         handleSubmit2();
+                    } else {
+                        console.error("Uploads to both buckets were not successful.");
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error("Error uploading to multiple buckets:", err);
                 })
                 .finally(() => {
                     setIsUploadingMulti(false);
@@ -449,7 +535,7 @@ const CoachImage = (id) => {
             .catch((error) => {
                 console.error("API call failed:", error);
             });
-    }; 
+    };
     return (
         <>
             {/* ================================================================================upload the logo */}
@@ -564,7 +650,7 @@ const CoachImage = (id) => {
                             <div className="bmp-new-img">
                                 <div className="bmp-img-top-icon">
                                     <div className="bmp-img-name">
-                                    <input
+                                        <input
                                             type="checkbox"
                                             className="radio_disable check_input"
                                             checked={selectedPhoto === index}
@@ -581,7 +667,7 @@ const CoachImage = (id) => {
 
                                         <p className="common-fonts bmp-tour">
                                             {photo?.length > 20 ? (
-                                                <>{photo?.slice(0,20)}...</>
+                                                <>{photo?.slice(0, 20)}...</>
                                             ) : (
                                                 <>{photo}</>
                                             )}
@@ -724,9 +810,9 @@ const CoachImage = (id) => {
                                         <div className="bmp-img-name">
                                             {isImage && (
                                                 <div className="bmp-video">
-                                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                    <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                         <img
-                                                            src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                            src={`${cdnurl}coach/${academyData?.id}/${photo}`}
                                                             alt="Selected Preview"
                                                         />
                                                     </a>
@@ -734,7 +820,7 @@ const CoachImage = (id) => {
                                             )}
                                             {(isPDF || isDoc) && (
                                                 <div className="bmp-video">
-                                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                                    <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                         <img
                                                             src="https://d2bdxhtfh3zsqc.cloudfront.net/asset/images/pdf_img.png"
                                                             alt="Document Preview"
@@ -758,10 +844,10 @@ const CoachImage = (id) => {
                                             />
                                         </div>
                                     </div>
-                                    <a href={`${cdnurl}coach_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                         {isImage && (
                                             <img
-                                                src={`${cdnurl}coach_temp/${academyData?.id}/${photo}`}
+                                                src={`${cdnurl}coach/${academyData?.id}/${photo}`}
                                                 alt="Selected Preview"
                                             />
                                         )}
