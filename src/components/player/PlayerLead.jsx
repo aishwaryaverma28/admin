@@ -3,13 +3,11 @@ import axios from "axios";
 import {
     USER_LOG,
     GET_BMPUSER_ID,
-    ACADEMY_LOGS,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
     handleLogout
 } from "./../utils/Constants"
 import PlayerDetails from "./PlayerDetails"
-import AcademyLogs from '../lead/AcademyLogs';
 import AcadmeyLeadDetails from '../lead/AcadmeyLeadDetails';
 import UserLogs from '../lead/UserLogs';
 import Confirmation from '../lead/Confirmation';
@@ -52,25 +50,6 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
             console.error("Child component reference is not initialized yet");
         }
     };
-const getLogs = () => {
-        const body = {
-            entity: "Player",
-            object_id: selectedItem
-        }
-        axios.post(ACADEMY_LOGS, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                if (response?.data?.status === 1) {
-                    setLogs(response?.data?.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
     const fetchLeads = () => {
         const body = {
             object_id: selectedItem, object_type: "player",
@@ -137,7 +116,6 @@ const getLogs = () => {
     };
 
     useEffect(() => {
-        getLogs();
         fetchLeads();
         getUserId();
     }, [])

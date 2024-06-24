@@ -553,7 +553,7 @@ const LeadImage2 = (id) => {
                                         <div className="bmp-video">
                                             <img
                                                 src={`${cdnurl}academy/${academyData?.id}/${photo}`}
-                                                alt="Selected Preview"
+                                                alt=""
                                             />
                                         </div>
 
@@ -576,7 +576,7 @@ const LeadImage2 = (id) => {
                                 <a href={`${cdnurl}academy/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                     <img
                                         src={`${cdnurl}academy/${academyData?.id}/${photo}`}
-                                        alt="Selected Preview"
+                                        alt=""
                                         key={index}
                                     />
                                 </a>

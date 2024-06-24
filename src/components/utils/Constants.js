@@ -247,7 +247,6 @@ export const ASSIGN_ACADEMY = bmpStart+"/bmp/user/assignacademy";
 export const ASSIGN_NEW_ACADEMY= bmpStart+"/bmp/user/assignnewacademy";
 export const BACKLIST_DATA = bmpStart+"/blog/backlink/getstats";
 export const ACADMEY_LEADS_DETAILS = bmpStart + "/bmp/leads/get";
-export const ACADEMY_LOGS = bmpStart +"/bmp/log/byentity";
 export const ADD_COACH= bmpStart+"/bmp/coach/add"
 export const GET_COACH = bmpStart + "/bmp/getEntities";
 export const GET_COACH_ID = bmpStart+"/bmp/coach/get";
@@ -268,7 +267,7 @@ export const REPLY_TICKET = bmpStart+"/bmp/tickets/addreply";
 
 export const GET_PLAYER_ID = bmpStart+"/bmp/player/getById";
 export const ADD_PLAYER = bmpStart+"/bmp/player/add";
-
+// academy leads apis need to be deleted with folder 
 export const DISTANCE_API = bmpStart+"/bmp/academy/getnearby";
 export const LEADS_CITY = bmpStart+"/bmp/leads/getbycity";
 export const ASSIGN_LEADS_USER = bmpStart+"/bmp/leads/assign";

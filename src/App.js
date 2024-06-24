@@ -59,7 +59,6 @@ import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 import Support from "./components/tickets/Support.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Player from "./components/player/Player.jsx";
-import AllLeads from "./components/academyleads/AllLeads.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -100,10 +99,6 @@ const router = createBrowserRouter([
       {
         path: "/lp/player",
         element: <Player/>,
-      },
-      {
-        path: "/lp/academyLeads",
-        element: <AllLeads/>,
       },
       {
         path: "/lp/home",

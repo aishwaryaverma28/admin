@@ -501,7 +501,7 @@ const NewPlayerImage = (id) => {
                                             <a href={`${cdnurl}player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img
                                                     src={`${cdnurl}player_temp/${academyData?.id}/${photo}`}
-                                                    alt="Selected Preview"
+                                                    alt=""
                                                 />
                                             </a>
                                         </div>
@@ -525,7 +525,7 @@ const NewPlayerImage = (id) => {
                                 <a href={`${cdnurl}player_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                     <img
                                         src={`${cdnurl}player_temp/${academyData?.id}/${photo}`}
-                                        alt="Selected Preview"
+                                        alt=""
                                         key={index}
                                     />
                                 </a>

@@ -660,7 +660,7 @@ const CoachImage = (id) => {
                                             <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img
                                                     src={`${cdnurl}coach/${academyData?.id}/${photo}`}
-                                                    alt="Selected Preview"
+                                                    alt=""
                                                 />
                                             </a>
                                         </div>
@@ -684,7 +684,7 @@ const CoachImage = (id) => {
                                 <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                     <img
                                         src={`${cdnurl}coach/${academyData?.id}/${photo}`}
-                                        alt="Selected Preview"
+                                        alt=""
                                         key={index}
                                     />
                                 </a>
@@ -813,7 +813,7 @@ const CoachImage = (id) => {
                                                     <a href={`${cdnurl}coach/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                         <img
                                                             src={`${cdnurl}coach/${academyData?.id}/${photo}`}
-                                                            alt="Selected Preview"
+                                                            alt=""
                                                         />
                                                     </a>
                                                 </div>
@@ -848,7 +848,7 @@ const CoachImage = (id) => {
                                         {isImage && (
                                             <img
                                                 src={`${cdnurl}coach/${academyData?.id}/${photo}`}
-                                                alt="Selected Preview"
+                                                alt=""
                                             />
                                         )}
                                         {(isPDF || isDoc) && (

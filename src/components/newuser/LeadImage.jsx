@@ -562,7 +562,7 @@ const LeadImage = ({ id }) => {
                                             <a href={`${cdnurl}academy_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                                 <img
                                                     src={`${cdnurl}academy_temp/${academyData?.id}/${photo}`}
-                                                    alt="Selected Preview"
+                                                    alt=""
                                                 />
                                             </a>
                                         </div>
@@ -586,7 +586,7 @@ const LeadImage = ({ id }) => {
                                 <a href={`${cdnurl}academy_temp/${academyData?.id}/${photo}`} target="_blank" rel="noopener noreferrer">
                                     <img
                                         src={`${cdnurl}academy_temp/${academyData?.id}/${photo}`}
-                                        alt="Selected Preview"
+                                        alt=""
                                         key={index}
                                     />
                                 </a>

@@ -23,7 +23,6 @@ import "./styles/Coach.css"
 const LPheader = () => {
   const [isResetPassowrd, setIsResetPassword] = useState(false);
   const [userId, setUserId] = useState(null);
-  const { name } = useContext(LPContext);
   const landingUrl = localStorage.getItem("landingUrl");
   const [pageTitle, setPageTitle] = useState("Lead");
   const dispatch = useDispatch();
@@ -36,7 +35,6 @@ const LPheader = () => {
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [pathAddress, setPathAddress] = useState(null);
   const decryptedToken = getDecryptedToken();
-  const location = useLocation();
   const decryptedUserPath = getDecryptedUserPath();
   const [number, setNumber] = useState(null);
   let allowed = decryptedUserPath.split(",");
@@ -368,7 +366,7 @@ const LPheader = () => {
               </li>
             )}
             {isPathAllowed("/lp/lead") && (
-              <li onClick={() => handleNavigationClick("Lead")}>
+              <li onClick={() => handleNavigationClick("Dashboard")}>
                 <NavLink exact to="/lp/lead" activeClassName="activeNav">
                   Dashboard
                 </NavLink>
@@ -393,13 +391,8 @@ const LPheader = () => {
                   Player
                 </NavLink>
               </li>
-              <li onClick={() => handleNavigationClick("Acadmey Leads")}>
-                <NavLink exact to="/lp/academyLeads" activeClassName="activeNav">
-                  Leads Assign
-                </NavLink>
-              </li>
             {isPathAllowed("/lp/deals") && (
-              <li onClick={() => handleNavigationClick("Deal")}>
+              <li onClick={() => handleNavigationClick("Leads")}>
                 <NavLink exact to="/lp/deals" activeClassName="activeNav">
                   Leads
                 </NavLink>

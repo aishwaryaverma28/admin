@@ -1,10 +1,8 @@
 import React,{ useState,useEffect, useRef } from 'react'
 import CoachDetails from './CoachDetails';
 import CoachImage from './CoachImage';
-import AcademyLogs from './AcademyLogs';
 import axios from "axios";
 import {
-    ACADEMY_LOGS,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
     handleLogout, USER_LOG, GET_BMPUSER_ID
@@ -50,25 +48,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
         }
     };
 
-    const getLogs = () => {
-        const body = {
-            entity: "Coach",
-            object_id: selectedItem
-        }
-        axios.post(ACADEMY_LOGS, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                if (response?.data?.status === 1) {
-                    setLogs(response?.data?.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
     const getUserId = () => {
         const body = {
             object_id: selectedItem, object_type: 1,
@@ -133,7 +112,6 @@ const CoachLead = ({ selectedItem, closeModal }) => {
     };
 
     useEffect(() => {
-        getLogs();
         fetchLeads();
         getUserId();
     }, [])

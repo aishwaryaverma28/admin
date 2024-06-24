@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "./../styles/LPleads.css";
 import axios from "axios";
 import {
-    ACADEMY_LOGS,
     ACADMEY_NOTE_SOURCE,
     GET_ACADEMY,
     handleLogout,
@@ -14,10 +13,8 @@ import {
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
-import DealActivity from "../deal/DealActivity";
 import AcadmeyLeadDetails from "./AcadmeyLeadDetails.jsx";
 import AcademyDetails from "./AcademyDetails.jsx";
-import AcademyLogs from "./AcademyLogs.jsx";
 import UserLogs from "./UserLogs.jsx";
 import Confirmation from "./Confirmation.jsx";
 import LeadImage2 from "./LeadImage2.jsx";
@@ -168,7 +165,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
         fetchNotes();
         fetchCall();
         fetchLeads();
-        getLogs();
     }, []);
 
     //==================================================================notes count
@@ -196,25 +192,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
-    const getLogs = () => {
-        const body = {
-            entity: "Academy",
-            object_id: selectedItem
-        }
-        axios.post(ACADEMY_LOGS, body, {
-            headers: {
-                Authorization: `Bearer ${decryptedToken}`,
-            },
-        })
-            .then((response) => {
-                if (response?.data?.status === 1) {
-                    setLogs(response?.data?.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+    
     const fetchLeads = () => {
         const body = {
             object_id: selectedItem, object_type: "academy",
