@@ -14,20 +14,6 @@ const EditRequest = ({ onClose, ticket }) => {
     ticketId: ticket?.id,
     reply:""
   });
-
-
-// parent_id
-// : 
-// 1
-// query
-// : 
-// null
-// status
-// : 
-// null
-// user_id
-// : 
-// null
   const handleBrowseClick = () => {
     fileInputRef.current.click();
   };
@@ -76,6 +62,7 @@ console.log(error)
   };
   return (
     <div className="popup-wrapper">
+      <div className="leftCreateClose2" onClick={onClose}></div>
       <div className="product-popup-container">
         <div className="product-popup-box edit-service-box">
           <div>

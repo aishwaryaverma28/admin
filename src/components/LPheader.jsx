@@ -405,6 +405,11 @@ const LPheader = () => {
                 </NavLink>
               </li>
             )}
+            <li onClick={() => handleNavigationClick("Tickets")}>
+                <NavLink exact to="/lp/tickets" activeClassName="activeNav">
+                  Tickets
+                </NavLink>
+              </li>
           </ul>
           <span></span>
         </div>

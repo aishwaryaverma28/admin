@@ -290,13 +290,23 @@ export const ADD_FAQ = bmpStart+"/bmp/coach/addfaq";
 export const GET_FAQS = bmpStart+"/bmp/coach/getfaqs/";
 export const DELETE_FAQS = bmpStart+"/bmp/coach/deletefaqs/";
 export const UPDATE_FAQS =bmpStart+"/bmp/coach/updatefaq/";
-
-
-
-// - https://bmp.leadplaner.com/api/api/bmp/getEntities
-// - https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/Asha
-// - https://bmp.leadplaner.com/api/api/bmp/coach/get
-// "location_locality": null,
-// "location_city": null,
-// "location_state": null,
-// "sport_name": "football"
+// academy tickets
+export const  ACADEMY_TICKETS = bmpStart+"/bmp/tickets/get-all";
+export const REPLY_TO_TICKET = bmpStart+"/bmp/ticket/update/";
+// {
+//   "id": 203,
+//   "title": "coach admin support",
+//   "description": "test 3",
+//   "phone": "7987803489",
+//   "email": "stardom.taher@gmail.com",
+//   "category": "coach admin support",
+//   "priority": null,
+//   "status": "0",
+//   "query": null,
+//   "assigned_to": null,
+//   "parent_id": null,
+//   "created_at": "2024-06-23T03:44:48.000Z",
+//   "updated_at": "2024-06-23T03:44:48.000Z",
+//   "user_id": 1664,
+//   "attachment": null
+// },

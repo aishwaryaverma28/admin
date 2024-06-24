@@ -82,7 +82,7 @@ const Support = () => {
         ) : (
           <>
           <div className='service-req-top'>
-            <p className="common-fonts ss-heading ticket-head-left">Tickets</p>
+            <p className="common-fonts ss-heading ticket-head-left">Support</p>
             <div className="select action-select">
             <select value={selectedOption} onChange={handleOptionChange} id="sports_lead">
               <option value="0">Open</option>
