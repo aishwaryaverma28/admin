@@ -62,16 +62,6 @@ const AcadmeyCard = ({
                   <p>Count: {object?.visit_count}</p>
                 </div>
               )}
-              {itemName === "academyLogs" && (
-                <div className="mail">
-                  <p>{object?.sport}</p>
-                </div>
-              )}
-              {itemName === "academyLogs" && (
-                <div className="mail">
-                  <p>{object?.city}</p>
-                </div>
-              )}
               {itemName === "verified_acadmey" && (
                 <>
                   {object?.email_verified === 1 && (

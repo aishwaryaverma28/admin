@@ -69,7 +69,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
     setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id,
-      sport: sport?.sport
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
@@ -84,7 +83,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
         setEditedItem(prevState => ({
           ...prevState,
           sport_id: filteredSports[0].id,
-          sport: filteredSports[0]?.sport
         }));
       }
       setIsDropdownVisible(false);
@@ -230,16 +228,10 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
           setTrainingLocation(trainCheckBox);
           setTrainInput(trainingLocationArray[1]);
         }
-        const sportId = response?.data?.data[0]?.sport_id;
-        if (sportId) {
-          const matchedSport = sports.find(sport => sport.id === sportId);
-          if (matchedSport) {
-            setSearchTerm(matchedSport?.name)
-          } else {
-            console.log('No matching sport found.');
-          }
+        if (response?.data?.data[0]?.sport_id) {
+          setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-  
+       
         if (response?.data?.data[0]?.city) {
           setSearchCity(response?.data?.data[0]?.city)
         }
@@ -362,7 +354,6 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       email_verified: editedItem?.email_verified,
       mobile_verified: editedItem?.mobile_verified,
       sport_id: editedItem?.sport_id ?? 14,
-      sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
       city: editedItem?.city,
       about: editedItem?.about?.trim(),

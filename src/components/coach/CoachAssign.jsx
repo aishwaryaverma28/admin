@@ -173,7 +173,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
               </div>
               <div className="contact-details">
                 <div className="mail sportCap">
-                  <p>{data?.sport}</p>
+                  <p>{data?.sport_name}</p>
                 </div>
                 <div className="mail">
                   <p>{data?.phone}</p>
@@ -182,7 +182,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                   <p>{data?.email}</p>
                 </div>
                 <div className="mail sportCap">
-                  <p>{data?.city}</p>
+                  <p>{data?.location_city}, {data?.location_state}</p>
                 </div>
               </div>
             </div>
@@ -230,7 +230,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                 </div>
                 <div className="contact-details">
                   <div className="mail sportCap">
-                    <p>{object?.sport}</p>
+                    <p>{object?.sport_name}</p>
                   </div>
                   <div className="mail">
                     <p>{object?.phone}</p>
@@ -239,7 +239,7 @@ const CoachAssign = ({ id, tempAcademyId, onLeadAdded }) => {
                     <p>{data?.email}</p>
                   </div>
                   <div className="mail sportCap">
-                    <p>{object?.city}</p>
+                  <p>{object?.location_city}, {object?.location_state}</p>
                   </div>
                 </div>
               </div>

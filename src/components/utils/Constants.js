@@ -291,3 +291,13 @@ export const ADD_FAQ = bmpStart+"/bmp/coach/addfaq";
 export const GET_FAQS = bmpStart+"/bmp/coach/getfaqs/";
 export const DELETE_FAQS = bmpStart+"/bmp/coach/deletefaqs/";
 export const UPDATE_FAQS =bmpStart+"/bmp/coach/updatefaq/";
+
+
+
+// - https://bmp.leadplaner.com/api/api/bmp/getEntities
+// - https://bmp.leadplaner.com/api/api/bmp/searchEntity/bmp_coach_details/global/Asha
+// - https://bmp.leadplaner.com/api/api/bmp/coach/get
+// "location_locality": null,
+// "location_city": null,
+// "location_state": null,
+// "sport_name": "football"

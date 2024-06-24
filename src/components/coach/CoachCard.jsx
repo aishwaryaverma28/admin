@@ -62,16 +62,6 @@ const CoachCard = ({
                   <p>Count: {object?.visit_count}</p>
                 </div>
               )}
-              {itemName === "coach_logs" && (
-                <div className="mail">
-                  <p>{object?.sport}</p>
-                </div>
-              )}
-              {itemName === "coach_logs" && (
-                <div className="mail">
-                  <p>{object?.city}</p>
-                </div>
-              )}
               {itemName === "verified_coach" && (
                 <>
                   {object?.email_verified === 1 && (

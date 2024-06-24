@@ -69,7 +69,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id,
-      sport: sport?.sport
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
@@ -84,7 +83,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setEditedItem(prevState => ({
           ...prevState,
           sport_id: filteredSports[0].id,
-          sport: filteredSports[0]?.sport
         }));
       }
       setIsDropdownVisible(false);
@@ -199,16 +197,9 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           }
         }
         setEditedItem(apiData);
-        const sportId = response?.data?.data[0]?.sport_id;
-        if (sportId) {
-          const matchedSport = sports.find(sport => sport.id === sportId);
-          if (matchedSport) {
-            setSearchTerm(matchedSport?.name)
-          } else {
-            console.log('No matching sport found.');
-          }
+        if (response?.data?.data[0]?.sport_id) {
+          setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-
         if (response?.data?.data[0]?.city) {
           setSearchCity(response?.data?.data[0]?.city)
         }
@@ -298,7 +289,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       phone: editedItem?.phone?.trim(),
       mobile_verified: editedItem?.mobile_verified,
       sport_id: editedItem?.sport_id,
-      sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
       state: editedItem?.state,
       city: editedItem?.city,

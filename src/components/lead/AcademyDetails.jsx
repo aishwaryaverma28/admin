@@ -85,7 +85,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setEditedItem(prevState => ({
             ...prevState,
             sport_id: sport.id,
-            sport: sport?.sport
         }));
         setFilteredSports([]);
         setIsDropdownVisible(false);
@@ -100,7 +99,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     sport_id: filteredSports[0].id,
-                    sport: filteredSports[0]?.sport
                 }));
             }
             setIsDropdownVisible(false);
@@ -201,16 +199,9 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     const trainingLocationArray = response?.data?.data[0]?.friendly?.split(',');
                     setTrainingLocation(trainingLocationArray);
                 }
-                const sportId = response?.data?.data[0]?.sport_id;
-                if (sportId) {
-                  const matchedSport = sports.find(sport => sport.id === sportId);
-                  if (matchedSport) {
-                    setSearchTerm(matchedSport?.name)
-                  } else {
-                    console.log('No matching sport found.');
-                  }
-                }
-          
+                if (response?.data?.data[0]?.sport_id) {
+                  setSearchTerm(response?.data?.data[0]?.sport_name)
+                }          
                 if (response?.data?.data[0]?.city) {
                     setSearchCity(response?.data?.data[0]?.city)
                 }
@@ -298,7 +289,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             mobile_verified: editedItem?.mobile_verified,
             about: editedItem?.about?.trim(),
             sport_id: editedItem?.sport_id ?? 14,
-            sport: editedItem?.sport,
             fee: editedItem?.fee?.trim(),
             experience: editedItem?.experience,
             facebook: editedItem?.facebook?.trim(),

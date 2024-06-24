@@ -86,6 +86,7 @@ const Coach = () => {
       }
     }
     ).then((response) => {
+      console.log(response?.data?.data)
       setCoach(response?.data?.data);
     }).catch((error) => {
       console.log(error);

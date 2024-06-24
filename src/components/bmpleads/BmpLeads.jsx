@@ -4,7 +4,6 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import { cities } from "../utils/cities.js";
 import {
-  MOST_LEADS,
   ACADMEY_VEREFIED,
   SEARCH_ACADMEY_ID,
   ACADMEY_SEARCH_API,
