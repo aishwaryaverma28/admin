@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { USER_LOG, getDecryptedToken } from "./../utils/Constants";
+import { USER_LOG, UPDATE_PLAYER, GET_PLAYER_ID, getDecryptedToken } from "./../utils/Constants";
 import UserLogs from "../lead/UserLogs";
 import Confirmation from "../lead/Confirmation";
 import NewPlayerDetails from "./NewPlayerDetails";
 import NewPlayerImage from "./NewPlayerImage";
-
+import { toast } from "react-toastify";
 const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("details");
@@ -13,7 +13,7 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [check, setCheck] = useState(false);
   const childRef = useRef(null);
   const [isDelete, setIsDelete] = useState(false);
-
+  const [editedItem, setEditedItem] = useState({})
   const handleDeletePopUpOpen = () => {
     setIsDelete(true);
   };
@@ -43,6 +43,26 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
       handleDeletePopUpOpen();
     }
   };
+  const getAllPlayers = () => {
+    const requestBody = {
+      playerId: selectedItem?.parent_id,
+      type: "temp"
+    };
+    axios
+      .post(GET_PLAYER_ID, requestBody, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        const apiData = response?.data?.data[0];
+        setEditedItem(apiData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const fetchUserLog = () => {
     axios
       .post(
@@ -67,8 +87,46 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     fetchUserLog();
+    getAllPlayers();
   }, []);
-
+  function UserArchive() {
+    const updatedFormData = {
+      type: "temp",
+      is_deleted: 1,
+      name: editedItem?.name?.trim(),
+      sport_id: editedItem?.sport_id ?? 14,
+      loc_id: editedItem?.loc_id ?? 1,
+    }
+    axios
+      .put(UPDATE_PLAYER + selectedItem?.parent_id, updatedFormData
+        , {
+          headers: {
+            Authorization: `Bearer ${decryptedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.status === 1) {
+          toast.success("User deleted successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          onLeadAdded();
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while updating details", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      })
+  }
   return (
     <div className="modal">
       <div className="leftClose" onClick={closeModal}></div>
@@ -103,9 +161,11 @@ const NewPlayerLeads = ({ selectedItem, closeModal, onLeadAdded }) => {
                 User Logs ({userLog?.length})
               </button>
             </div>
-            <div>
-              <button className="recycle-delete">Archive</button>
-            </div>
+            {editedItem && editedItem?.is_deleted !== 1 ? <div>
+              <button className="recycle-delete" onClick={UserArchive}>Archive</button>
+            </div> : <></>
+            }
+
           </div>
 
           {/* ===================================================================tabination content */}

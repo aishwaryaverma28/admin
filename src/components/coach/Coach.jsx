@@ -65,6 +65,7 @@ const Coach = () => {
   const [verified, setVerified] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newcoach, setNewCoach] = useState([]);
+  const [deleted, setDeleted] = useState([]);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -100,8 +101,11 @@ const Coach = () => {
       }
     }
     ).then((response) => {
-      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      setNewCoach(filteredData);
+      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
+      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
+      setNewCoach(newUser);
+      setDeleted(deleteUser);
     }).catch((error) => {
       console.log(error);
     });
@@ -201,6 +205,7 @@ const Coach = () => {
     const counts = {
       coach: coach?.length,
       new_coach: newcoach?.length,
+      archive: deleted?.length,
       coach_logs: academyLogs?.length,
       coach_with_leads: acadmeyLeads?.length,
       verified_coach: verified?.length,
@@ -417,6 +422,15 @@ const Coach = () => {
                         } else {
                           return <p>Loading...</p>;
                         };
+                        case 'archive':
+                          return deleted?.map((obj) => (
+                            <DashboardCards
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getNewCoaches}
+                              itemName="coach"
+                            />
+                          ));
                       case 'coach_logs':
                         if (academyLogs && academyLogs.length > 0) {
                           return academyLogs.map((obj) => (

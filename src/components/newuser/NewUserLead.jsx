@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { getDecryptedToken, USER_LOG } from "./../utils/Constants";
+import { getDecryptedToken, USER_LOG,GET_ACADEMY, UPDATE_ACADEMY } from "./../utils/Constants";
 import BmpTickets from "../lead/BmpTickets";
 import NewAcademyDetails from "./NewAcademyDetails";
 import UserLogs from "../lead/UserLogs";
@@ -8,6 +8,7 @@ import AssignAcademy from "../acadmey/AssignAcademy";
 import LeadImage from "./LeadImage";
 import Confirmation from "../lead/Confirmation.jsx";
 import AddNotes from "../deal/AddNotes.jsx";
+import { toast } from "react-toastify";
 const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("details");
@@ -15,7 +16,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const [check, setCheck] = useState(false);
   const childRef = useRef(null);
   const [isDelete, setIsDelete] = useState(false);
-
+  const [editedItem, setEditedItem] = useState({});
   const handleDeletePopUpOpen = () => {
     setIsDelete(true);
   };
@@ -69,7 +70,66 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
 
   useEffect(() => {
     fetchUserLog();
+    fetchLead();
   }, []);
+  const fetchLead = () => {
+    let body = {
+        academy_id: selectedItem?.parent_id,
+        type: "temp"
+    };
+
+    axios
+        .post(GET_ACADEMY, body, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+        .then((response) => {
+            setEditedItem(response?.data?.data[0]);
+          })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+  function UserArchive() {
+    const updatedFormData = {
+      type: "temp",
+      is_deleted: 1,
+      name: editedItem?.name?.trim(),
+      sport_id: editedItem?.sport_id ?? 14,
+      loc_id: editedItem?.loc_id ?? 1,
+    }
+    axios
+    .put(UPDATE_ACADEMY + selectedItem?.parent_id, updatedFormData
+      , {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      if (response.data.status === 1) {
+        toast.success("User deleted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        onLeadAdded();
+      } else {
+        toast.error(response?.data?.message, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while updating details", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    })
+  }
   return (
     <div className="modal">
       <div className="leftClose" onClick={closeModal}></div>
@@ -125,9 +185,10 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 Notes
               </button>
             </div>
-            <div>
-              <button className="recycle-delete">Archive</button>
-            </div>
+            {editedItem && editedItem?.is_deleted !== 1 ? <div>
+              <button className="recycle-delete" onClick={UserArchive}>Archive</button>
+            </div> : <></>
+            }
           </div>
           {/* ===================================================================tabination content */}
           <div className="tab-content">

@@ -51,6 +51,7 @@ const Player = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [verified, setVerified] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleted, setDeleted] = useState([]);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -65,8 +66,11 @@ const Player = () => {
         Authorization: `Bearer ${decryptedToken}`
       }
     }).then((response) => {
-      const filteredData = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      setNewPlayer(filteredData);
+      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
+      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
+      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
+      setNewPlayer(newUser);
+      setDeleted(deleteUser);
     }).catch((error) => {
       console.log(error);
     });
@@ -141,6 +145,7 @@ const Player = () => {
     const counts = {
       player: player?.length,
       new_player: newplayer?.length,
+      archive: deleted?.length,
       verified_player: verified?.length,
     };
     setStatusCounts(counts);
@@ -349,6 +354,15 @@ const Player = () => {
                             itemName="player"
                           />
                         ));
+                        case 'archive':
+                          return deleted?.map((obj) => (
+                            <DashboardCards
+                              key={obj?.id}
+                              object={obj}
+                              onLeadAdded={getNewPlayers}
+                              itemName="player"
+                            />
+                          ));
                         case 'verified_player':
                           return verified.map((obj) => (
                             <PlayerCard

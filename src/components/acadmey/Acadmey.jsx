@@ -67,6 +67,7 @@ const Acadmey = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openUrl, setOpenUrl] = useState(false);
   const [openCity, setOpenCity] = useState(false);
+  const [deleted, setDeleted] = useState([]);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -96,7 +97,10 @@ const Acadmey = () => {
     }
     ).then((response) => {
       const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      setNewAcademy(filteredUser);
+      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
+      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
+      setNewAcademy(newUser);
+      setDeleted(deleteUser);
     }).catch((error) => {
       console.log(error);
     });
@@ -221,12 +225,13 @@ const Acadmey = () => {
     const counts = {
       academy: academy?.length,
       new_academy: newacadmey?.length,
+      archive: deleted?.length,
       acadmey_logs: academyLogs?.length,
       acadmey_with_leads: acadmeyLeads?.length,
       verified_acadmey: verified?.length,
     };
     setStatusCounts(counts);
-  }, [academy, acadmeyLeads, academyLogs, verified]);
+  }, [academy, acadmeyLeads, academyLogs, verified, newacadmey]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -263,6 +268,8 @@ const Acadmey = () => {
     getAllLeads();
     getAllLogs();
     getAllVerify();
+    getAllAcademy();
+    getNewAcademy();
   };
 
   //======================================================modal box
@@ -383,6 +390,15 @@ const Acadmey = () => {
                             ));
                           case 'new_academy':
                             return newacadmey?.map((obj) => (
+                              <DashboardCards
+                                key={obj?.id}
+                                object={obj}
+                                onLeadAdded={getNewAcademy}
+                                itemName="academy"
+                              />
+                            ));
+                            case 'archive':
+                            return deleted?.map((obj) => (
                               <DashboardCards
                                 key={obj?.id}
                                 object={obj}
