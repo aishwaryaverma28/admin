@@ -428,7 +428,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.location_city}, {editedItem?.location_state}
                   </>
                 )}
               </p>

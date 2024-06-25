@@ -372,7 +372,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.location_city}, {editedItem?.location_state}
                   </>
                 )}
               </p>
