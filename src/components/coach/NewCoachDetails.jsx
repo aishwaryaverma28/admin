@@ -231,9 +231,8 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
         if (response?.data?.data[0]?.sport_id) {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-       
-        if (response?.data?.data[0]?.city) {
-          setSearchCity(response?.data?.data[0]?.city)
+        if (response?.data?.data[0]?.location_city) {
+          setSearchCity(response?.data?.data[0]?.location_city)
         }
         if (response?.data?.data[0]?.skill) {
           const skillArray = response?.data?.data[0]?.skill?.split(',');

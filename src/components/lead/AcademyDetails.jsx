@@ -52,13 +52,13 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 console.log(error);
             });
     }
-    useEffect(() => {    
+    useEffect(() => {
         fetchSports();
-      }, []);
-      useEffect(() => {    
+    }, []);
+    useEffect(() => {
         fetchLead();
-      }, [sports]);
-      
+    }, [sports]);
+
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -145,12 +145,11 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     };
 
     const handleCitySelect = (sport) => {
-        setSearchCity(sport.city);
+        setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
         setEditedItem(prevState => ({
             ...prevState,
             loc_id: sport?.id,
-            state: sport?.state,
-            city: sport?.city,
+            city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
@@ -161,12 +160,11 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             if (noMatchCity) {
                 setSearchCity('');
             } else if (filteredCity.length > 0) {
-                setSearchCity(filteredCity[0]?.city);
+                setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
                 setEditedItem(prevState => ({
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
-                    state: filteredCity[0]?.state,
-                    city: filteredCity[0]?.city,
+                    city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
             setIsCityDropdownVisible(false);
@@ -200,8 +198,8 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     setTrainingLocation(trainingLocationArray);
                 }
                 if (response?.data?.data[0]?.sport_id) {
-                  setSearchTerm(response?.data?.data[0]?.sport_name)
-                }          
+                    setSearchTerm(response?.data?.data[0]?.sport_name)
+                }
                 if (response?.data?.data[0]?.city) {
                     setSearchCity(response?.data?.data[0]?.city)
                 }
@@ -300,7 +298,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             address1: editedItem?.address1?.trim(),
             address2: editedItem?.address2?.trim(),
             loc_id: editedItem?.loc_id,
-            state: editedItem?.state,
             city: editedItem?.city,
             postcode: editedItem?.postcode?.trim(),
             categories: editedItem?.categories?.trim(),
@@ -845,7 +842,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 <p>Address 1</p>
                                 <p>Address 2</p>
                                 <p>City</p>
-                                <p>State</p>
                                 <p>Zipcode</p>
                             </div>
                             <div className="detailsRightContainer">
@@ -920,24 +916,6 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </div>
                                     </div>
                                 </>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="state"
-                                                value={editedItem?.state}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>

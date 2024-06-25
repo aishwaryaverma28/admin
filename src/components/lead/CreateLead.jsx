@@ -162,13 +162,13 @@ useEffect(() => {
   };
 
   const handleCitySelect = (sport) => {
-    setSearchCity(sport.city);
-    setEditedItem(prevState => ({
-      ...prevState,
-      loc_id: sport?.id,
-      state: sport?.state,
-      city: sport?.city,
-    }));
+    setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
+        setEditedItem(prevState => ({
+            ...prevState,
+            loc_id: sport?.id,
+            state:sport?.state,
+            city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
+        }));
     setFilteredCity([]);
     setIsCityDropdownVisible(false);
   };
@@ -177,14 +177,14 @@ useEffect(() => {
     if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
       if (noMatchCity) {
         setSearchCity('');
-      } else if (filteredCity.length > 0) {
-        setSearchCity(filteredCity[0]?.city);
-        setEditedItem(prevState => ({
-          ...prevState,
-          loc_id: filteredCity[0]?.id,
-          state: filteredCity[0]?.state,
-          city: filteredCity[0]?.city,
-        }));
+      }else if (filteredCity.length > 0) {
+          setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
+          setEditedItem(prevState => ({
+              ...prevState,
+              loc_id: filteredCity[0]?.id,
+              state: filteredCity[0]?.state,
+              city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
+          }));
       }
       setIsCityDropdownVisible(false);
     }
@@ -661,7 +661,6 @@ useEffect(() => {
                     <p>Address 1<span className="common-fonts redAlert"> *</span></p>
                     <p>Address 2</p>
                     <p>City<span className="common-fonts redAlert"> *</span></p>
-                    <p>State<span className="common-fonts redAlert"> *</span></p>
                     <p>Zipcode<span className="common-fonts redAlert"> *</span></p>
                   </div>
                   <div className="detailsRightContainer">
@@ -721,17 +720,6 @@ useEffect(() => {
                     </div>
                   </div>
                 </>
-                    <p>
-                      <span>
-                        <input
-                          type="text"
-                          name="state"
-                          value={editedItem?.state}
-                          disabled
-                          style={editStylingInput}
-                        />
-                      </span>
-                    </p>
                     <p>
                       <span>
                         <input

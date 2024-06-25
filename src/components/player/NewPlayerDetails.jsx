@@ -196,8 +196,8 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
   
-        if (response?.data?.data[0]?.city) {
-          setSearchCity(response?.data?.data[0]?.city)
+        if (response?.data?.data[0]?.location_city) {
+          setSearchCity(response?.data?.data[0]?.location_city)
         }
         setIsLoading(false);
       })
