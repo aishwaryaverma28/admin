@@ -12,7 +12,7 @@ const handleCancel = () => {
 
 const handleApprove = () => {
  axios
-    .post(REPLY_TO_TICKET, {
+    .post(REPLY_TO_TICKET+rowData?.id, {
       "status": 3
   }, {
         headers: {

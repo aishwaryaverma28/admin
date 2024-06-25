@@ -12,7 +12,6 @@ const AcademyTickets = () => {
   const [ticket, setTicket] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [isServiceTabOpen, setIsServiceTabOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('status=0');
   const [page, setPage] = useState(1);
@@ -34,7 +33,6 @@ const AcademyTickets = () => {
         },
       })
       .then((response) => {
-        console.log(response?.data?.data)
         setTicket(response?.data?.data);
         setLoading(false);
       })
