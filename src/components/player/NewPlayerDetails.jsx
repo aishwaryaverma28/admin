@@ -128,12 +128,11 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     };
   
     const handleCitySelect = (sport) => {
-      setSearchCity(sport?.city);
+      setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
       setEditedItem(prevState => ({
         ...prevState,
         loc_id: sport?.id,
-        state: sport?.state,
-        city: sport?.city,
+        city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
       }));
       setFilteredCity([]);
       setIsCityDropdownVisible(false);
@@ -144,12 +143,11 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         if (noMatchCity) {
           setSearchCity('');
         } else if (filteredCity.length > 0) {
-          setSearchCity(filteredCity[0]?.city);
+          setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
           setEditedItem(prevState => ({
             ...prevState,
             loc_id: filteredCity[0]?.id,
-          state: filteredCity[0]?.state,
-          city: filteredCity[0]?.city,
+            city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
           }));
         }
         setIsCityDropdownVisible(false);
@@ -289,7 +287,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       mobile_verified: editedItem?.mobile_verified,
       sport_id: editedItem?.sport_id ?? 14,
       loc_id: editedItem?.loc_id,
-      state: editedItem?.state,
       city: editedItem?.city,
       address: editedItem?.address?.trim(),
       about: editedItem?.about?.trim(),
@@ -366,7 +363,7 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}, {editedItem?.state}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.city}
                   </>
                 )}
               </p>
@@ -663,7 +660,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               <div className="detailsLeftContainer">
                 <p>Address</p>
                 <p>City</p>
-                <p>State</p>
               </div>
               <div className="detailsRightContainer">
                 <p>
@@ -719,24 +715,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </div>
                   </div>
                 </>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="state"
-                        value={editedItem?.state}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled
-                      />
-                    </span>
-                  )}
-                </p>
               </div>
             </div>
           </div>
@@ -745,12 +723,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         {isEditable ? (
           <div className="modalLeftBtnBox">
             <span></span>
-            {/* <button
-            className="convertToDeal"
-            onClick={() => handleViewSite(editedItem?.url)}
-          >
-            View Site
-          </button> */}
             {stateBtn === 0 ? (
               <button disabled className="disabledBtn">
                 Save
@@ -764,11 +736,6 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         ) : (
           <div className="modalLeftBtnBox">
             <span></span>
-            {/* <button
-            className="convertToDeal"
-            onClick={() => handleViewSite(editedItem?.url)}
-          >View Site
-          </button> */}
           </div>
         )}
       </div>

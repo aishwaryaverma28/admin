@@ -29,6 +29,7 @@ const AddCoach = ({ onClose }) => {
         about: "",
         skill: "",
         heighlight: "",
+        fee:"",
         package: "",
         gender: "",
         training_location: "",
@@ -354,6 +355,7 @@ const AddCoach = ({ onClose }) => {
                         city: "",
                         about: "",
                         skill: "",
+                        fee:"",
                         heighlight: "",
                         package: "",
                         gender: "",
@@ -398,9 +400,9 @@ const AddCoach = ({ onClose }) => {
                                         <p>Name <span className="common-fonts redAlert"> *</span></p>
                                         <p>Email <span className="common-fonts redAlert"> *</span></p>
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
-                                        <p>phone <span className="common-fonts redAlert"> *</span></p>
-                                        <p>Profile Heading</p>
-                                        
+                                        <p>Phone <span className="common-fonts redAlert"> *</span></p>
+                                        <p>Fee</p>
+                                        <p>Profile Heading</p>                                        
                                         <p>Gender</p>
                                         <p className="about-textarea">About</p>
                                     </div>
@@ -469,6 +471,18 @@ const AddCoach = ({ onClose }) => {
                                                     type="text"
                                                     name="phone"
                                                     value={editedItem?.phone}
+                                                    onChange={handleInputChange}
+                                                    style={editStylingInput}
+
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="fee"
+                                                    value={editedItem?.fee}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
 

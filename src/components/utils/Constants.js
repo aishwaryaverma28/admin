@@ -293,20 +293,3 @@ export const UPDATE_FAQS =bmpStart+"/bmp/coach/updatefaq/";
 // academy tickets
 export const  ACADEMY_TICKETS = bmpStart+"/bmp/tickets/get-all";
 export const REPLY_TO_TICKET = bmpStart+"/bmp/ticket/update/";
-// {
-//   "id": 203,
-//   "title": "coach admin support",
-//   "description": "test 3",
-//   "phone": "7987803489",
-//   "email": "stardom.taher@gmail.com",
-//   "category": "coach admin support",
-//   "priority": null,
-//   "status": "0",
-//   "query": null,
-//   "assigned_to": null,
-//   "parent_id": null,
-//   "created_at": "2024-06-23T03:44:48.000Z",
-//   "updated_at": "2024-06-23T03:44:48.000Z",
-//   "user_id": 1664,
-//   "attachment": null
-// },

@@ -356,6 +356,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       about: editedItem?.about?.trim(),
       skill: newSkills?.join(","),
       heighlight: editedItem?.heighlight?.trim(),
+      fee: editedItem?.fee?.trim(),
       package: packages?.join(","),      
       gender: editedItem?.gender,
       location: gather,
@@ -454,6 +455,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                 <p>Phone</p>
                 <p>Sport</p>                
                 <p>Gender</p>
+                <p>Fees</p>
                 <p>Profile Heading</p>
                 <p className="about-textarea">About</p>
               </div>
@@ -592,6 +594,24 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                         <option value="female">Female</option>
                         <option value="male">Male</option>
                       </select>
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="fee"
+                        value={editedItem?.fee}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
                     </span>
                   )}
                 </p>

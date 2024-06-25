@@ -168,7 +168,7 @@ const AcademyTickets = () => {
                         {formatDate(item?.created_at)}
                       </td>
                     </tr>
-                  ))}
+                  ))} 
                 </tbody>
               </table>
             </div>
@@ -184,7 +184,7 @@ const AcademyTickets = () => {
         </div>
       </>
       {
-        isEditOpen && <EditRequest onClose={handleEditClose} ticket={selectedTicket} />
+        isEditOpen && <EditRequest onClose={handleEditClose} rowData={selectedTicket} />
       }
     </div>
   );
