@@ -128,7 +128,7 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     };
   
     const handleCitySelect = (sport) => {
-      setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
+      setSearchCity(sport?.city);
       setEditedItem(prevState => ({
         ...prevState,
         loc_id: sport?.id,
@@ -143,7 +143,7 @@ const NewPlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         if (noMatchCity) {
           setSearchCity('');
         } else if (filteredCity.length > 0) {
-          setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
+          setSearchCity(filteredCity[0]?.city);
           setEditedItem(prevState => ({
             ...prevState,
             loc_id: filteredCity[0]?.id,
