@@ -73,6 +73,12 @@ const CoachImage = (id) => {
                         setPhotoUrls(Array.from(uniquePhotoUrls));
                         setVideoUrls(Array.from(uniqueVideoUrls));
                     }
+                    if (
+                        response?.data?.data[0].certificate !== "" &&
+                        response?.data?.data[0].certificate !== null
+                    ) {
+                        setCertificates(response?.data?.data[0]?.certificate?.split(","));
+                    }
                 }
             })
             .catch((error) => {

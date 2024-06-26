@@ -359,6 +359,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
       skill: newSkills?.join(","),
       heighlight: editedItem?.heighlight?.trim(),
       fee: editedItem?.fee?.trim(),
+      experience: editedItem?.experience,
       package: packages?.join(","),      
       gender: editedItem?.gender,
       location: gather,
@@ -448,6 +449,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                 <p>Sport</p>                
                 <p>Gender</p>
                 <p>Fees</p>
+                <p>Experience</p>
                 <p>Profile Heading</p>
                 <p className="about-textarea">About</p>
               </div>
@@ -607,6 +609,44 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
                     </span>
                   )}
                 </p>
+                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input list="experience" name="experience"
+                                                value={editedItem?.experience}
+                                                onChange={handleInputChange}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled={isDisabled} />
+                                            <datalist id="experience">
+                                                <option value="1"></option>
+                                                <option value="2"></option>
+                                                <option value="3"></option>
+                                                <option value="4"></option>
+                                                <option value="5"></option>
+                                                <option value="6"></option>
+                                                <option value="7"></option>
+                                                <option value="8"></option>
+                                                <option value="9"></option>
+                                                <option value="10"></option>
+                                                <option value="11"></option>
+                                                <option value="12"></option>
+                                                <option value="13"></option>
+                                                <option value="14"></option>
+                                                <option value="15"></option>
+                                                <option value="16"></option>
+                                                <option value="17"></option>
+                                                <option value="18"></option>
+                                                <option value="19"></option>
+                                                <option value="20"></option>
+                                                <option value="20+"></option>
+                                            </datalist>
+                                        </span>
+                                    )}
+                                </p>
                 <p>
                   {isLoading ? (
                     <span>-</span>
