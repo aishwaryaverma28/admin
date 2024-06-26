@@ -345,10 +345,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         handleUpdateClick
     }));
 
-    //======================================================================css variable
-
-console.log(trainingLocation);
-    return (
+   return (
         <>
             <div className="user-details--left">
                 <div className="user-details--heading">
@@ -695,11 +692,11 @@ console.log(trainingLocation);
                                                     <input
                                                         type="checkbox"
                                                         name="friendly"
-                                                        value="Coaches"
+                                                        value="Coaching"
                                                         className="radio_disable check_input"
                                                         disabled={isDisabled}
                                                         onChange={handleCheckboxChange}
-                                                        checked={trainingLocation?.includes("Coaches")}
+                                                        checked={trainingLocation?.includes("Coaching")}
                                                     /> Coaching
                                                 </label>
                                                 <label className="radio-inline">

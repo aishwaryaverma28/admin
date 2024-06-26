@@ -584,10 +584,10 @@ const CreateLead = ({ onClose }) => {
                             <input
                               type="checkbox"
                               name="friendly"
-                              value="Coaches"
+                              value="Coaching"
                               className="radio_disable check_input"
                               onChange={handleCheckboxChange}
-                              checked={trainingLocation?.includes("Coaches")}
+                              checked={trainingLocation?.includes("Coaching")}
                             /> Coaching
                           </label>
                           <label className="radio-inline">
