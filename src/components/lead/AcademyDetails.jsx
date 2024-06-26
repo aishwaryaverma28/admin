@@ -692,22 +692,22 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                                     <input
                                                         type="checkbox"
                                                         name="friendly"
-                                                        value="Free Trail"
+                                                        value="Free Trial"
                                                         className="radio_disable check_input"
                                                         disabled={isDisabled}
                                                         onChange={handleCheckboxChange}
-                                                        checked={trainingLocation?.includes("Free Trail")}
+                                                        checked={trainingLocation?.includes("Free Trial")}
                                                     /> Free Trial
                                                 </label>
                                                 <label className="radio-inline">
                                                     <input
                                                         type="checkbox"
                                                         name="friendly"
-                                                        value="Coaching"
+                                                        value="Coaches"
                                                         className="radio_disable check_input"
                                                         disabled={isDisabled}
                                                         onChange={handleCheckboxChange}
-                                                        checked={trainingLocation?.includes("Coaching")}
+                                                        checked={trainingLocation?.includes("Coaches")}
                                                     /> Coaching
                                                 </label>
                                                 <label className="radio-inline">

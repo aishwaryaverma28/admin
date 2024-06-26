@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/CreateLead.css";
 import axios from "axios";
-import { ADD_NEW_ACADMEY,SEARCH_CITY, ALL_SPORTS, getDecryptedToken } from "../utils/Constants";
+import { ADD_NEW_ACADMEY, SEARCH_CITY, ALL_SPORTS, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyLead from "./AcadmeyLead";
@@ -43,72 +43,72 @@ const CreateLead = ({ onClose }) => {
   const [stateBtn, setStateBtn] = useState(0);
   const [trainingLocation, setTrainingLocation] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-    const [filteredSports, setFilteredSports] = useState([]);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [noMatch, setNoMatch] = useState(false);
-    const inputRef = useRef(null);
-    // city dropdown useStates
+  const [filteredSports, setFilteredSports] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [noMatch, setNoMatch] = useState(false);
+  const inputRef = useRef(null);
+  // city dropdown useStates
   const [searchCity, setSearchCity] = useState("");
   const [filteredCity, setFilteredCity] = useState([]);
   const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
   const [noMatchCity, setNoMatchCity] = useState(false);
   const inputCityRef = useRef(null);
 
-// ============================================================sports dropdown code
-const handleSportInputChange = (event) => {
+  // ============================================================sports dropdown code
+  const handleSportInputChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
 
     if (value) {
-        const filtered = sports.filter((sport) =>
-            sport.name.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredSports(filtered);
-        setNoMatch(filtered.length === 0);
-        setIsDropdownVisible(true);
+      const filtered = sports.filter((sport) =>
+        sport.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSports(filtered);
+      setNoMatch(filtered.length === 0);
+      setIsDropdownVisible(true);
     } else {
-        setFilteredSports([]);
-        setNoMatch(false);
-        setIsDropdownVisible(false);
+      setFilteredSports([]);
+      setNoMatch(false);
+      setIsDropdownVisible(false);
     }
     setStateBtn(1);
-};
+  };
 
-const handleSportSelect = (sport) => {
+  const handleSportSelect = (sport) => {
     setSearchTerm(sport.name);
     setEditedItem(prevState => ({
-        ...prevState,
-        sport_id: sport.id,
-        sport: sport?.name
+      ...prevState,
+      sport_id: sport.id,
+      sport: sport?.name
     }));
     setFilteredSports([]);
     setIsDropdownVisible(false);
-};
+  };
 
-const handleClickOutside = (event) => {
+  const handleClickOutside = (event) => {
     if (inputRef.current && !inputRef.current.contains(event.target)) {
-        if (noMatch) {
-            setSearchTerm('');
-        } else if (filteredSports.length > 0) {
-            setSearchTerm(filteredSports[0].name);
-            setEditedItem(prevState => ({
-                ...prevState,
-                sport_id: filteredSports[0].id,
-                sport: filteredSports[0]?.name
-            }));
-        }
-        setIsDropdownVisible(false);
+      if (noMatch) {
+        setSearchTerm('');
+      } else if (filteredSports.length > 0) {
+        setSearchTerm(filteredSports[0].name);
+        setEditedItem(prevState => ({
+          ...prevState,
+          sport_id: filteredSports[0].id,
+          sport: filteredSports[0]?.name
+        }));
+      }
+      setIsDropdownVisible(false);
     }
-};
+  };
 
-useEffect(() => {
+  useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
-        document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
-}, [filteredSports, noMatch]);
+  }, [filteredSports, noMatch]);
 
-//===================================================sport dropdown code ends here
+  //===================================================sport dropdown code ends here
 
 
   const fetchSports = () => {
@@ -131,7 +131,7 @@ useEffect(() => {
     fetchSports();
   }, []);
   // ============================================================city dropdown code
-   const handleCityInputChange = (event) => {
+  const handleCityInputChange = (event) => {
     const value = event.target.value;
     setSearchCity(value);
     const body = {
@@ -152,7 +152,7 @@ useEffect(() => {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-         
+
     } else {
       setFilteredCity([]);
       setNoMatchCity(false);
@@ -163,12 +163,12 @@ useEffect(() => {
 
   const handleCitySelect = (sport) => {
     setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
-        setEditedItem(prevState => ({
-            ...prevState,
-            loc_id: sport?.id,
-            state:sport?.state,
-            city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
-        }));
+    setEditedItem(prevState => ({
+      ...prevState,
+      loc_id: sport?.id,
+      state: sport?.state,
+      city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
+    }));
     setFilteredCity([]);
     setIsCityDropdownVisible(false);
   };
@@ -177,14 +177,14 @@ useEffect(() => {
     if (inputCityRef.current && !inputCityRef.current.contains(event.target)) {
       if (noMatchCity) {
         setSearchCity('');
-      }else if (filteredCity.length > 0) {
-          setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
-          setEditedItem(prevState => ({
-              ...prevState,
-              loc_id: filteredCity[0]?.id,
-              state: filteredCity[0]?.state,
-              city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
-          }));
+      } else if (filteredCity.length > 0) {
+        setSearchCity(filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")");
+        setEditedItem(prevState => ({
+          ...prevState,
+          loc_id: filteredCity[0]?.id,
+          state: filteredCity[0]?.state,
+          city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
+        }));
       }
       setIsCityDropdownVisible(false);
     }
@@ -366,7 +366,8 @@ useEffect(() => {
                     <p>Reviews</p>
                     <p>Rating</p>
                     <p>Experience</p>
-                    <p>Enviornment</p>
+                    <p>Option</p>
+                    <br/><br/>
                     <p className="about-textarea">About</p>
                   </div>
                   <div className="detailsRightContainer">
@@ -573,6 +574,36 @@ useEffect(() => {
                             <input
                               type="checkbox"
                               name="friendly"
+                              value="Free Trial"
+                              className="radio_disable check_input"
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation?.includes("Free Trial")}
+                            /> Free Trial
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="friendly"
+                              value="Coaches"
+                              className="radio_disable check_input"
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation?.includes("Coaches")}
+                            /> Coaching
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="friendly"
+                              value="Admission Open"
+                              className="radio_disable check_input"
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation?.includes("Admission Open")}
+                            /> Admission Open
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="friendly"
                               value="Women Friendly"
                               className="radio_disable check_input"
 
@@ -687,39 +718,39 @@ useEffect(() => {
                       </span>
                     </p>
                     <>
-                  <div>
-                    <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
                       <div>
-                        <input
-                          id=""
-                          name=""
-                          value={searchCity}
-                          onChange={handleCityInputChange}
-                          autoComplete="off"
-                          className="disabled sport_new_input"
-                          style={editStylingSelect1}
-                        />
-                      </div>
-                      {isCityDropdownVisible && (
-                        <div className='sport_box'>
-                          {noMatchCity ? (
-                            <div>No match found</div>
-                          ) : (
-                            filteredCity.map((city) => (
-                              <div
-                                key={city.id}
-                                onClick={() => handleCitySelect(city)}
-                                style={{ padding: '5px', cursor: 'pointer' }}
-                              >
-                                {city.locality_name}
-                              </div>
-                            ))
+                        <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                          <div>
+                            <input
+                              id=""
+                              name=""
+                              value={searchCity}
+                              onChange={handleCityInputChange}
+                              autoComplete="off"
+                              className="disabled sport_new_input"
+                              style={editStylingSelect1}
+                            />
+                          </div>
+                          {isCityDropdownVisible && (
+                            <div className='sport_box'>
+                              {noMatchCity ? (
+                                <div>No match found</div>
+                              ) : (
+                                filteredCity.map((city) => (
+                                  <div
+                                    key={city.id}
+                                    onClick={() => handleCitySelect(city)}
+                                    style={{ padding: '5px', cursor: 'pointer' }}
+                                  >
+                                    {city.locality_name}
+                                  </div>
+                                ))
+                              )}
+                            </div>
                           )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </>
+                      </div>
+                    </>
                     <p>
                       <span>
                         <input
