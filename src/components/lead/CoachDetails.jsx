@@ -338,7 +338,6 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
     setStateBtn(1);
     handleClick();
   };
-console.log(packages);
   const handleUpdateClick = () => {
     setStateBtn(0);
     let gather = trainingLocation.toString() + "||" + trainInput;

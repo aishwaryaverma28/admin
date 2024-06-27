@@ -4,6 +4,7 @@ import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
   ALL_BMP_USER,
+  GET_ARCHIVED,
   ACADMEY_VEREFIED,
   MOST_LEADS,
   SEARCH_API,
@@ -66,6 +67,11 @@ const Coach = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newcoach, setNewCoach] = useState([]);
   const [deleted, setDeleted] = useState([]);
+  const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const limit = 30;
+  const [archCount, setArchCount] = useState(null);
+  const [unArchCount, setUnArchCount] = useState(null);
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -87,30 +93,52 @@ const Coach = () => {
       }
     }
     ).then((response) => {
-      console.log(response?.data?.data)
       setCoach(response?.data?.data);
     }).catch((error) => {
       console.log(error);
     });
   }
-
-  const getNewCoaches = () => {
-    axios.post(ALL_BMP_USER, { type_id: 1 }, {
+  const getNewAcademy = (page, limit) => {
+    const body = {
+      page: page,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted is null",
+      tbl: "bmp_coach_details"
+    }
+    axios.post(GET_ARCHIVED, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
     }
     ).then((response) => {
-      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
-      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
-      setNewCoach(newUser);
-      setDeleted(deleteUser);
+      setNewCoach(response?.data?.data?.result)
+      setUnArchCount(response?.data?.data?.count_result[0]?.unarchive);
     }).catch((error) => {
       console.log(error);
     });
   }
- 
+
+  const getDeletedAcademy = (page2, limit) => {
+    const body = {
+      page: page2,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted =1",
+      tbl: "bmp_coach_details"
+    }
+    axios.post(GET_ARCHIVED, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setDeleted(response?.data?.data?.result);
+      setArchCount(response?.data?.data?.count_result[0]?.archive);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
   //=========================================================get all acadmey leads
   const getAllLeads = () => {
     const requestBody = {
@@ -133,7 +161,8 @@ const Coach = () => {
 
   useEffect(() => {
     getAllCoaches();
-    getNewCoaches();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -167,7 +196,7 @@ const Coach = () => {
 
     const requestBodyAnyone = {
       "condition": "anyone",
-       "entity": "coach"
+      "entity": "coach"
     };
 
     Promise.all([
@@ -183,19 +212,19 @@ const Coach = () => {
       })
     ]).then(([bothResponse, anyoneResponse]) => {
       const bothData = bothResponse?.data?.data || [];
-    const anyoneData = anyoneResponse?.data?.data || [];
-    const combinedData = [...bothData, ...anyoneData];
-    const uniqueIds = new Set();
-    const filteredData = combinedData.filter(item => {
-      if (uniqueIds.has(item.id)) {
-        return false;
-      } else {
-        uniqueIds.add(item.id);
-        return true;
-      }
-    });
+      const anyoneData = anyoneResponse?.data?.data || [];
+      const combinedData = [...bothData, ...anyoneData];
+      const uniqueIds = new Set();
+      const filteredData = combinedData.filter(item => {
+        if (uniqueIds.has(item.id)) {
+          return false;
+        } else {
+          uniqueIds.add(item.id);
+          return true;
+        }
+      });
 
-    setVerified(filteredData);
+      setVerified(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -204,14 +233,14 @@ const Coach = () => {
   useEffect(() => {
     const counts = {
       coach: coach?.length,
-      new_coach: newcoach?.length,
-      archive: deleted?.length,
+      new_coach: unArchCount,
+      archive: archCount,
       coach_logs: academyLogs?.length,
       coach_with_leads: acadmeyLeads?.length,
       verified_coach: verified?.length,
     };
     setStatusCounts(counts);
-  }, [coach, acadmeyLeads, newcoach,academyLogs]);
+  }, [coach, acadmeyLeads, newcoach, academyLogs]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -247,7 +276,8 @@ const Coach = () => {
 
   const resetData = () => {
     getAllCoaches();
-    getNewCoaches();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -297,7 +327,37 @@ const Coach = () => {
     };
   }, []);
 
-  
+  const addPage = (name) => {
+    let num = page
+    let num2 = page2
+    if (name === "new_coach") {
+      num = num + 1;
+      setPage(num);
+      getNewAcademy(num, limit);
+    } else if (name === "archive") {
+      num2 = num2 + 1;
+      setPage2(num2);
+      getDeletedAcademy(num2, limit);
+    }
+  }
+  const subPage = (name) => {
+    let num = page;
+    let num2 = page2;
+    if (name === "new_coach") {
+      if (num > 1) {
+        num = num - 1;
+        setPage(num);
+        getNewAcademy(num, limit);
+      }
+    }
+    if (name === "archive") {
+      if (num2 > 1) {
+        num2 = num2 - 1;
+        setPage2(num2);
+        getDeletedAcademy(num2, limit);
+      }
+    }
+  };
   return (
     <>
       <div>
@@ -409,28 +469,32 @@ const Coach = () => {
                             itemName={"coach"}
                           />
                         ));
-                        case 'new_coach':
+                      case 'new_coach':
                         if (newcoach && newcoach.length > 0) {
                           return newcoach.map((obj) => (
                             <DashboardCards
                               key={obj?.id}
                               object={obj}
-                              onLeadAdded={getNewCoaches}
-                              itemName="coach"
+                              onLeadAdded={getNewAcademy}
+                              page={page}
+                              limit={limit}
+                              itemName="unarcCoach"
                             />
                           ));
                         } else {
                           return <p>Loading...</p>;
                         };
-                        case 'archive':
-                          return deleted?.map((obj) => (
-                            <DashboardCards
-                              key={obj?.id}
-                              object={obj}
-                              onLeadAdded={getNewCoaches}
-                              itemName="coach"
-                            />
-                          ));
+                      case 'archive':
+                        return deleted?.map((obj) => (
+                          <DashboardCards
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getDeletedAcademy}
+                            page={page2}
+                            limit={limit}
+                            itemName="unarcCoach"
+                          />
+                        ));
                       case 'coach_logs':
                         if (academyLogs && academyLogs.length > 0) {
                           return academyLogs.map((obj) => (
@@ -476,6 +540,12 @@ const Coach = () => {
                   })()}
 
                 </div>
+                {(item?.stage === 'new_coach' || item?.stage === 'archive') ?
+                  <div className="bottom-fixed flexBox" >
+                    <p onClick={() => subPage(item?.stage)}>Prev Page</p><p onClick={() => addPage(item?.stage)}>Next Page</p>
+                  </div>
+                  : <></>
+                }
               </div>
             </div>
           ))}

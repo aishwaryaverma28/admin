@@ -4,17 +4,17 @@ import {
     USER_LOG,
     GET_BMPUSER_ID,
     getDecryptedToken,
-    ACADMEY_LEADS_DETAILS,
+    ACADMEY_LEADS_DETAILS, UPDATE_PLAYER, GET_PLAYER_ID,
     handleLogout
 } from "./../utils/Constants"
+import { toast } from 'react-toastify';
 import PlayerDetails from "./PlayerDetails"
 import AcadmeyLeadDetails from '../lead/AcadmeyLeadDetails';
 import UserLogs from '../lead/UserLogs';
 import Confirmation from '../lead/Confirmation';
 import PlayerImage from './PlayerImage';
-const PlayerLead = ({ selectedItem, closeModal }) => {
+const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
     const decryptedToken = getDecryptedToken();
-    const [logs, setLogs] = useState(0);
     const [leads, setLeads] = useState(0);
     const [userLog, setUserLog] = useState(0);
     const [userId, setUserId] = useState(0);
@@ -22,14 +22,14 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
     const [isDelete, setIsDelete] = useState(false);
-   
+    const [editedItem, setEditedItem] = useState({})
     const handleDeletePopUpOpen = () => {
         setIsDelete(true);
-      };
-      const handleMassDeletePopUpClose = () => {
+    };
+    const handleMassDeletePopUpClose = () => {
         setIsDelete(false);
         setCheck(false);
-      };
+    };
     const updateCheckState = (value) => {
         setCheck(value);
     };
@@ -118,7 +118,67 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
     useEffect(() => {
         fetchLeads();
         getUserId();
+        getAllPlayers();
     }, [])
+    const getAllPlayers = () => {
+        const requestBody = {
+            playerId: selectedItem,
+            type: "org"
+        };
+        axios
+            .post(GET_PLAYER_ID, requestBody, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                const apiData = response?.data?.data[0];
+                setEditedItem(apiData);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    function UserArchive() {
+        const updatedFormData = {
+            type: "org",
+            is_deleted: 1,
+            name: editedItem?.name?.trim(),
+            sport_id: editedItem?.sport_id ?? 14,
+            loc_id: editedItem?.loc_id ?? 1,
+        }
+        axios
+            .put(UPDATE_PLAYER + selectedItem, updatedFormData
+                , {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("User deleted successfully", {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                    if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
+                        onLeadAdded(page, limit);
+                      }
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 2000,
+                });
+            })
+    }
     return (
         <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
@@ -128,36 +188,43 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                 </span>
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
-                    <div className="tab-navigation">
-                        {/* ===================================================================tabination buttons */}
-                        <button
-                            className={activeTab === "details" ? "active" : ""}
-                            onClick={() => handleTabClick("details")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-newspaper-o"></i>
-                            Player Details
-                        </button>
-                        <button
-                            className={activeTab === "gallery" ? "active" : ""}
-                            onClick={() => handleTabClick("gallery")}
-                        >
-                            <i class="fa-sharp fa-regular fa-images"></i>
-                            Images
-                        </button>
-                        <button
-                            className={activeTab === "user" ? "active" : ""}
-                            onClick={() => handleTabClick("user")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            User Logs ({userLog?.length})
-                        </button>
-                        <button
-                            className={activeTab === "leads" ? "active" : ""}
-                            onClick={() => handleTabClick("leads")}
-                        >
-                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads ({leads?.length})
-                        </button>
+                    <div className="archive_flex">
+                        <div className="tab-navigation">
+                            {/* ===================================================================tabination buttons */}
+                            <button
+                                className={activeTab === "details" ? "active" : ""}
+                                onClick={() => handleTabClick("details")}
+                            >
+                                <i class="fa-sharp fa-regular fa fa-newspaper-o"></i>
+                                Player Details
+                            </button>
+                            <button
+                                className={activeTab === "gallery" ? "active" : ""}
+                                onClick={() => handleTabClick("gallery")}
+                            >
+                                <i class="fa-sharp fa-regular fa-images"></i>
+                                Images
+                            </button>
+                            <button
+                                className={activeTab === "user" ? "active" : ""}
+                                onClick={() => handleTabClick("user")}
+                            >
+                                <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                                User Logs ({userLog?.length})
+                            </button>
+                            <button
+                                className={activeTab === "leads" ? "active" : ""}
+                                onClick={() => handleTabClick("leads")}
+                            >
+                                <i className="fa-sharp fa-regular fa-handshake-o"></i>
+                                Leads ({leads?.length})
+                            </button>
+                        </div>
+                        {editedItem && editedItem?.is_deleted !== 1 ? <div>
+                            <button className="recycle-delete" onClick={UserArchive}>Archive</button>
+                        </div> : <></>
+                        }
+
                     </div>
                     {/* ===================================================================tabination content */}
                     <div className="tab-content">
@@ -187,11 +254,11 @@ const PlayerLead = ({ selectedItem, closeModal }) => {
                 </div>
             </div>
             {isDelete && (
-        <Confirmation
-          onClose={handleMassDeletePopUpClose}
-          onDeleteConfirmed={callChildFunction}
-        />
-      )}
+                <Confirmation
+                    onClose={handleMassDeletePopUpClose}
+                    onDeleteConfirmed={callChildFunction}
+                />
+            )}
         </div>
     )
 }

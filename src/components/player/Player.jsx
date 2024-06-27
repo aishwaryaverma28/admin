@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  ALL_BMP_USER,
+  ALL_BMP_USER,GET_ARCHIVED,
   ACADMEY_VEREFIED,
   GET_COACH,SEARCH_API,
   getDecryptedToken,
@@ -52,6 +52,11 @@ const Player = () => {
   const [verified, setVerified] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleted, setDeleted] = useState([]);
+  const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const limit = 30;
+  const [archCount, setArchCount] = useState(null);
+  const [unArchCount, setUnArchCount] = useState(null);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -60,17 +65,43 @@ const Player = () => {
     setIsModalOpen(false);
   };
   //=========================================================get all players
-  const getNewPlayers = () => {
-    axios.post(ALL_BMP_USER, { type_id: 3 }, {
+  const getNewAcademy = (page, limit) => {
+    const body = {
+      page: page,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted is null",
+      tbl: "bmp_player_details"
+    }
+    axios.post(GET_ARCHIVED, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
-    }).then((response) => {
-      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
-      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
-      setNewPlayer(newUser);
-      setDeleted(deleteUser);
+    }
+    ).then((response) => {
+      setNewPlayer(response?.data?.data?.result)
+      setUnArchCount(response?.data?.data?.count_result[0]?.unarchive);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const getDeletedAcademy = (page2, limit) => {
+    const body = {
+      page: page2,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted =1",
+      tbl: "bmp_player_details"
+    }
+    axios.post(GET_ARCHIVED, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setDeleted(response?.data?.data?.result);
+      setArchCount(response?.data?.data?.count_result[0]?.archive);
     }).catch((error) => {
       console.log(error);
     });
@@ -137,15 +168,16 @@ const Player = () => {
 
   useEffect(() => {
     getAllPlayers();
-    getNewPlayers();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
     getAllVerify();
   }, []);
 
   useEffect(() => {
     const counts = {
       player: player?.length,
-      new_player: newplayer?.length,
-      archive: deleted?.length,
+      new_player: unArchCount,
+      archive: archCount,
       verified_player: verified?.length,
     };
     setStatusCounts(counts);
@@ -185,7 +217,8 @@ const Player = () => {
 
   const resetData = () => {
     getAllPlayers();
-    getNewPlayers();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
     getAllVerify();
   };
 
@@ -233,6 +266,37 @@ const Player = () => {
     };
   }, []);
 
+  const addPage = (name) => {
+    let num = page
+    let num2 = page2
+    if (name === "new_player") {
+      num = num + 1;
+      setPage(num);
+      getNewAcademy(num, limit);
+    } else if (name === "archive") {
+      num2 = num2 + 1;
+      setPage2(num2);
+      getDeletedAcademy(num2, limit);
+    }
+  }
+  const subPage = (name) => {
+    let num = page;
+    let num2 = page2;
+    if (name === "new_player") {
+      if (num > 1) {
+        num = num - 1;
+        setPage(num);
+        getNewAcademy(num, limit);
+      }
+    }
+    if (name === "archive") {
+      if (num2 > 1) {
+        num2 = num2 - 1;
+        setPage2(num2);
+        getDeletedAcademy(num2, limit);
+      }
+    }
+  };
 
   return (
     <>
@@ -350,8 +414,10 @@ const Player = () => {
                           <DashboardCards
                             key={obj?.id}
                             object={obj}
-                            onLeadAdded={getNewPlayers}
-                            itemName="player"
+                            onLeadAdded={getNewAcademy}
+                              page={page}
+                              limit={limit}
+                              itemName="unarcPlayer"
                           />
                         ));
                         case 'archive':
@@ -359,8 +425,10 @@ const Player = () => {
                             <DashboardCards
                               key={obj?.id}
                               object={obj}
-                              onLeadAdded={getNewPlayers}
-                              itemName="player"
+                              onLeadAdded={getDeletedAcademy}
+                              page={page2}
+                              limit={limit}
+                              itemName="unarcPlayer"
                             />
                           ));
                         case 'verified_player':
@@ -377,6 +445,12 @@ const Player = () => {
                   })()}
 
                 </div>
+                {(item?.stage === 'new_player' || item?.stage === 'archive') ?
+                  <div className="bottom-fixed flexBox" >
+                    <p onClick={() => subPage(item?.stage)}>Prev Page</p><p onClick={() => addPage(item?.stage)}>Next Page</p>
+                  </div>
+                  : <></>
+                }
               </div>
             </div>
           ))}

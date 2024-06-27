@@ -12,14 +12,14 @@ const DashboardCards = ({
   object,
   onLeadAdded,
   itemName,
-  page,limit
+  page, limit
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [academyOpen, setAcademyOpen] = useState(false);
   const [coachMenu, setCoachMenu] = useState(false);
-  const [coachNewMenu, setCoachNewMenu] = useState(false);
+  const [openCoachMenu, setOpenCoachMenu] = useState(false);
   const [playerMenu, setPlayerMenu] = useState(false);
-  const [playerNewMenu, setPlayerNewMenu] = useState(false);
+  const [openPlayerMenu, setOpenPlayerMenu] = useState(false);
   const menuButtonRef = useRef(null);
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -52,28 +52,24 @@ const DashboardCards = ({
       }
     }
     if (itemName === "coach") {
-      if (object?.parent_tbl === 0) {
-        setCoachNewMenu(true);
-        setSelectedObj(object);
-      }
-      else if (object?.parent_tbl === 1) {
-        setCoachMenu(true);
-        setSelectedObj(object?.parent_id);
-      }
+      setCoachMenu(true);
+      setSelectedObj(object?.parent_id);
     }
     if (itemName === "player") {
-      if (object?.parent_tbl === 0) {
-        setPlayerNewMenu(true);
-        setSelectedObj(object);
-      }
-      else if (object?.parent_tbl === 1) {
-        setPlayerMenu(true);
-        setSelectedObj(object?.parent_id);
-      }
+      setPlayerMenu(true);
+      setSelectedObj(object?.parent_id);
     }
     if (itemName === "unarcAcademy") {
       setOpenVisible(true);
       setSelectedId(object?.id);
+    }
+    if (itemName === "unarcCoach") {
+      setOpenCoachMenu(true);
+      setSelectedObj(object?.id);
+    }
+    if (itemName === "unarcPlayer") {
+      setOpenPlayerMenu(true);
+      setSelectedObj(object?.id);
     }
   };
   const closeArcAcad = () => {
@@ -88,14 +84,14 @@ const DashboardCards = ({
   const closeCoachModal = () => {
     setCoachMenu(false);
   };
-  const closeNewCoachModal = () => {
-    setCoachNewMenu(false);
-  };
   const closePlayerModal = () => {
     setPlayerMenu(false);
   };
-  const closeNewPlayerModal = () => {
-    setPlayerNewMenu(false);
+  const closePlayerModalBox = () => {
+    setOpenPlayerMenu(false);
+  };
+  const closeCoachModalBox = () => {
+    setOpenCoachMenu(false);
   };
   useEffect(() => {
     const handleDocumentClick = (event) => {
@@ -168,28 +164,28 @@ const DashboardCards = ({
           closeModal={closeCoachModal}
         />
       )}
-      {coachNewMenu && (
-        <NewCoachLead
-          selectedItem={selectedObj}
-          closeModal={closeNewCoachModal}
-          onLeadAdded={onLeadAdded}
-        />
-      )}
       {playerMenu && (
         <PlayerLead
           selectedItem={selectedObj}
           closeModal={closePlayerModal}
         />
       )}
-      {playerNewMenu && (
-        <NewPlayerLeads
+      {openVisible && (
+        <ArcAcademy selectedItem={selectedId} closeModal={closeArcAcad} onLeadAdded={onLeadAdded} page={page} limit={limit} />
+      )}
+      {openCoachMenu && (
+        <CoachLead
           selectedItem={selectedObj}
-          closeModal={closeNewPlayerModal}
-          onLeadAdded={onLeadAdded}
+          closeModal={closeCoachModalBox}
+          onLeadAdded={onLeadAdded} page={page} limit={limit}
         />
       )}
-      {openVisible && (
-        <ArcAcademy selectedItem={selectedId} closeModal={closeArcAcad} onLeadAdded={onLeadAdded} page={page} limit={limit}/>
+       {openPlayerMenu && (
+        <PlayerLead
+          selectedItem={selectedObj}
+          closeModal={closePlayerModalBox}
+          onLeadAdded={onLeadAdded} page={page} limit={limit}
+        />
       )}
     </>
   );
