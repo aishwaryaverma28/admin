@@ -8,7 +8,7 @@ const AddPricingSection = ({ isEditable, isDisabled, packages, onAddPackage, onR
 
     const handleAddPackage = () => {
         if (packageName && packageAmount) {
-            const newPackage = `${packageName} - ${packageType}, ${packageAmount}`;
+            const newPackage = `${packageAmount},${packageName}-${packageType}`;
             onAddPackage(newPackage);
             setPackageName('');
             setPackageAmount('');
