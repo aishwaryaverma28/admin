@@ -24,7 +24,7 @@ const AddPricingSection = ({ isEditable, isDisabled, packages, onAddPackage, onR
                         className="package-input"
                         style={isEditable ? editStylingInput : normalStylingInput}
                         disabled={isDisabled}
-                        placeholder="Enter Monthly Package Name"
+                        placeholder="Enter Package Name"
                         value={packageName}
                         onChange={(e) => setPackageName(e.target.value)}
                     />
@@ -33,7 +33,7 @@ const AddPricingSection = ({ isEditable, isDisabled, packages, onAddPackage, onR
                         style={isEditable ? editStylingInput : normalStylingInput}
                         disabled={isDisabled}
                         className="package-input"
-                        placeholder="Enter Amount"
+                        placeholder="Enter Amount Only"
                         value={packageAmount}
                         onChange={(e) => setPackageAmount(e.target.value)}
                     />

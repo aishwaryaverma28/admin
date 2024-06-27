@@ -112,14 +112,9 @@ const LeadCards = ({
                 <div className="mail">
                   <p>{object?.phone}</p>
                 </div>
-              {(itemName === "academy" || itemName === "coach") && (
+              {(itemName === "academy" || itemName === "coach" || itemName === "player") && (
                 <div className="mail sportCap">
                   <p>{object?.location_city}, {object?.location_state}</p>
-                </div>
-              )}
-              {(itemName === "player") && (
-                <div className="mail sportCap">
-                  <p>{object?.city}, {object?.state}</p>
                 </div>
               )}
               <div className="mail">
