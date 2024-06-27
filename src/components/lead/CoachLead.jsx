@@ -216,7 +216,6 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                             Leads ({leads?.length})
                         </button>
                     </div>
-                    <button className="recycle-delete" onClick={UserArchive}>Archive</button>
                     {editedItem && editedItem?.is_deleted !== 1 ? <div>
               <button className="recycle-delete" onClick={UserArchive}>Archive</button>
             </div> : <></>
