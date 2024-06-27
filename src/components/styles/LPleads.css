@@ -605,7 +605,11 @@
   justify-content: start;
   align-items: center;
 }
-
+.flexBox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .bottom-fixed p {
   font-size: 1rem;

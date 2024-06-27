@@ -6,11 +6,13 @@ import AcadmeyLead from "../lead/AcadmeyLead.jsx";
 import PlayerLead from "../player/PlayerLead.jsx";
 import NewCoachLead from "../coach/NewCoachLead.jsx";
 import NewPlayerLeads from "../player/NewPlayerLeads.jsx";
+import { ArcAcademy } from "../newuser/ArcAcademy.jsx";
 
 const DashboardCards = ({
   object,
   onLeadAdded,
   itemName,
+  page,limit
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [academyOpen, setAcademyOpen] = useState(false);
@@ -22,6 +24,8 @@ const DashboardCards = ({
   const menuRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedObj, setSelectedObj] = useState({});
+  const [openVisible, setOpenVisible] = useState(false);
+  const [selectedId, setSelectedId] = useState({});
 
   const formatDate = (isoDate) => {
     const options = {
@@ -67,8 +71,14 @@ const DashboardCards = ({
         setSelectedObj(object?.parent_id);
       }
     }
+    if (itemName === "unarcAcademy") {
+      setOpenVisible(true);
+      setSelectedId(object?.id);
+    }
   };
-
+  const closeArcAcad = () => {
+    setOpenVisible(false);
+  };
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -119,13 +129,15 @@ const DashboardCards = ({
             <div className="lead-value">
             </div>
             <div className="contact-details">
-              <div className="mail sportCap">
-                <p><span> {object?.type} - {object?.parent_id}</span></p>
-              </div>
+              {(itemName === "academy" || itemName === "coach" || itemName === "player") && (
+                <div className="mail sportCap">
+                  <p><span> {object?.type} - {object?.parent_id}</span></p>
+                </div>
+              )}
               {itemName === "academy" && (
                 <div className="mail sportCap">
-                <p><span> {object?.parent_tbl_entity_name}</span></p>
-              </div>
+                  <p><span> {object?.parent_tbl_entity_name}</span></p>
+                </div>
               )}
               <div className="mail">
                 {formatDate(object?.creation_date)}
@@ -175,6 +187,9 @@ const DashboardCards = ({
           closeModal={closeNewPlayerModal}
           onLeadAdded={onLeadAdded}
         />
+      )}
+      {openVisible && (
+        <ArcAcademy selectedItem={selectedId} closeModal={closeArcAcad} onLeadAdded={onLeadAdded} page={page} limit={limit}/>
       )}
     </>
   );

@@ -20,6 +20,7 @@ import Confirmation from "./Confirmation.jsx";
 import LeadImage2 from "./LeadImage2.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
+    console.log(selectedItem)
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
     const [editedItem, setEditedItem] = useState("");

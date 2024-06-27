@@ -328,7 +328,7 @@ const AddCoach = ({ onClose }) => {
             ...updatedFields,
             location: gather,
             skill: newSkills?.join(","),
-            package: packages?.join(","),
+            package: packages?.join(";"),
         };
 
         axios

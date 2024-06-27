@@ -238,7 +238,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         }
         if (response?.data?.data[0]?.package !== "" &&
           response?.data?.data[0]?.package !== null) {
-          const skillArray = response?.data?.data[0]?.package?.split(',');
+          const skillArray = response?.data?.data[0]?.package?.split(';');
           setPackages(skillArray);
         }
       })
@@ -338,7 +338,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
     setStateBtn(1);
     handleClick();
   };
-
+console.log(packages);
   const handleUpdateClick = () => {
     setStateBtn(0);
     let gather = trainingLocation.toString() + "||" + trainInput;
@@ -358,7 +358,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       heighlight: editedItem?.heighlight?.trim(),
       fee: editedItem?.fee?.trim(),
       experience: editedItem?.experience,
-      package: packages?.join(","),
+      package: packages?.join(";"),
       gender: editedItem?.gender,
       location: gather,
     }

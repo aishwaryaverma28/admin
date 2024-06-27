@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  ALL_BMP_USER,
+  GET_ARCHIVED,
   ACADMEY_SEARCH,
   MOST_LEADS,
   ACADMEY_VEREFIED,
@@ -68,6 +68,11 @@ const Acadmey = () => {
   const [openUrl, setOpenUrl] = useState(false);
   const [openCity, setOpenCity] = useState(false);
   const [deleted, setDeleted] = useState([]);
+  const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(1);
+  const limit = 30;
+  const [archCount, setArchCount] = useState(null);
+  const [unArchCount, setUnArchCount] = useState(null);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -89,18 +94,43 @@ const Acadmey = () => {
     setOpenUrl(false)
   }
   //=========================================================get all acadmies
-  const getNewAcademy = () => {
-    axios.post(ALL_BMP_USER, { type_id: 2 }, {
+  const getNewAcademy = (page, limit) => {
+    const body = {
+      page: page,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted is null",
+      tbl: "bmp_academy_details_temp"
+    }
+    axios.post(GET_ARCHIVED, body, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       }
     }
     ).then((response) => {
-      const filteredUser = response?.data?.data.filter(obj => obj.parent_tbl !== null);
-      const newUser = filteredUser?.filter(obj => obj?.is_deleted !== 1);
-      const deleteUser = filteredUser?.filter(obj => obj?.is_deleted === 1);
-      setNewAcademy(newUser);
-      setDeleted(deleteUser);
+      setNewAcademy(response?.data?.data?.result)
+      setUnArchCount(response?.data?.data?.count_result[0]?.unarchive);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const getDeletedAcademy = (page2, limit) => {
+    const body = {
+      page: page2,
+      limit: limit,
+      sort: "id desc",
+      cond: "is_deleted =1",
+      tbl: "bmp_academy_details_temp"
+    }
+    axios.post(GET_ARCHIVED, body, {
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`
+      }
+    }
+    ).then((response) => {
+      setDeleted(response?.data?.data?.result);
+      setArchCount(response?.data?.data?.count_result[0]?.archive);
     }).catch((error) => {
       console.log(error);
     });
@@ -153,7 +183,8 @@ const Acadmey = () => {
 
   useEffect(() => {
     getAllAcademy();
-    getNewAcademy();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
     getAllVerify();
@@ -214,7 +245,6 @@ const Acadmey = () => {
           return true;
         }
       });
-
       setVerified(filteredData);
     }).catch((error) => {
       console.log(error);
@@ -224,8 +254,8 @@ const Acadmey = () => {
   useEffect(() => {
     const counts = {
       academy: academy?.length,
-      new_academy: newacadmey?.length,
-      archive: deleted?.length,
+      new_academy: unArchCount,
+      archive: archCount,
       acadmey_logs: academyLogs?.length,
       acadmey_with_leads: acadmeyLeads?.length,
       verified_acadmey: verified?.length,
@@ -269,7 +299,8 @@ const Acadmey = () => {
     getAllLogs();
     getAllVerify();
     getAllAcademy();
-    getNewAcademy();
+    getNewAcademy(page, limit);
+    getDeletedAcademy(page2, limit);
   };
 
   //======================================================modal box
@@ -291,6 +322,39 @@ const Acadmey = () => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
+const addPage = (name) => {
+let num = page
+let num2 = page2
+if(name === "new_academy")
+  {
+    num = num+1;
+    setPage(num);
+    getNewAcademy(num, limit);
+  }else if(name === "archive")
+    {
+      num2 = num2+1;
+      setPage2(num2);
+      getDeletedAcademy(num2, limit);
+    }
+}
+const subPage = (name) => {
+  let num = page;
+  let num2 = page2;
+  if (name === "new_academy") {
+    if (num > 1) {
+      num = num - 1;
+      setPage(num);
+      getNewAcademy(num, limit);
+    }
+  } 
+  if (name === "archive") {
+    if (num2 > 1) {
+      num2 = num2 - 1;
+      setPage2(num2);
+      getDeletedAcademy(num2, limit);
+    }
+  }
+};
 
   return (
     openUrl ?
@@ -390,20 +454,26 @@ const Acadmey = () => {
                             ));
                           case 'new_academy':
                             return newacadmey?.map((obj) => (
-                              <DashboardCards
-                                key={obj?.id}
-                                object={obj}
-                                onLeadAdded={getNewAcademy}
-                                itemName="academy"
-                              />
+                              <>
+                                <DashboardCards
+                                  key={obj?.id}
+                                  object={obj}
+                                  onLeadAdded={getNewAcademy}
+                                  page={page}
+                                  limit={limit}
+                                  itemName="unarcAcademy"
+                                />
+                              </>
                             ));
-                            case 'archive':
+                          case 'archive':
                             return deleted?.map((obj) => (
                               <DashboardCards
                                 key={obj?.id}
                                 object={obj}
-                                onLeadAdded={getNewAcademy}
-                                itemName="academy"
+                                onLeadAdded={getDeletedAcademy}
+                                page={page2}
+                                  limit={limit}
+                                itemName="unarcAcademy"
                               />
                             ));
                           case 'acadmey_logs':
@@ -451,6 +521,12 @@ const Acadmey = () => {
                       })()}
 
                     </div>
+                    {(item?.stage === 'new_academy' ||item?.stage === 'archive')?
+                      <div className="bottom-fixed flexBox" >
+                        <p onClick={()=> subPage(item?.stage)}>Prev Page</p><p onClick={()=> addPage(item?.stage)}>Next Page</p>
+                      </div>
+                      : <></>
+                    }
                   </div>
                 </div>
               ))}

@@ -46,6 +46,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
       handleDeletePopUpOpen();
     }
   };
+  
   const fetchUserLog = () => {
     axios
       .post(

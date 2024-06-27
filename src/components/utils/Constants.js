@@ -293,3 +293,5 @@ export const UPDATE_FAQS =bmpStart+"/bmp/coach/updatefaq/";
 // academy tickets
 export const  ACADEMY_TICKETS = bmpStart+"/bmp/tickets/get-all";
 export const REPLY_TO_TICKET = bmpStart+"/bmp/ticket/update/";
+// archive table
+export const GET_ARCHIVED = bmpStart+"/bmp/entities/getbyarchivestatus";
