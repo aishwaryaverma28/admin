@@ -239,7 +239,7 @@ const NewCoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref
           setNewSkills(skillArray);
         }
         if (response?.data?.data[0]?.package) {
-          const pack = response?.data?.data[0]?.package?.split(',');
+          const pack = response?.data?.data[0]?.package?.split(';');
           setPackages(pack);
         }
       })
