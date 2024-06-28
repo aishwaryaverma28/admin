@@ -72,7 +72,7 @@ export const ArcAcademy = ({ selectedItem, closeModal, onLeadAdded, page, limit 
           loc_id: editedItem?.loc_id ?? 1,
         }
         axios
-        .put(UPDATE_ACADEMY + selectedItem?.parent_id, updatedFormData
+        .put(UPDATE_ACADEMY + selectedItem, updatedFormData
           , {
             headers: {
               Authorization: `Bearer ${decryptedToken}`,

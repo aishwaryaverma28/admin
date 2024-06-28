@@ -523,7 +523,9 @@ const subPage = (name) => {
                     </div>
                     {(item?.stage === 'new_academy' ||item?.stage === 'archive')?
                       <div className="bottom-fixed flexBox" >
-                        <p onClick={()=> subPage(item?.stage)}>Prev Page</p><p onClick={()=> addPage(item?.stage)}>Next Page</p>
+                        <p onClick={()=> subPage(item?.stage)}>Prev Page</p>
+                        {item?.stage === 'new_academy' ? <p>{page}</p> : <p>{page2}</p>}
+                        <p onClick={()=> addPage(item?.stage)}>Next Page</p>
                       </div>
                       : <></>
                     }
