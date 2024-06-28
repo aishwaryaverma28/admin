@@ -148,8 +148,8 @@ const LeadImage = ({ id }) => {
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
 
             const configsWithDirNames = [
-                { ...config, dirName: "academy_temp/" + (id?.id || "") },
-                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id?.id || "") }
+                { ...config, dirName: "academy_temp/" + (id || "") },
+                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -200,6 +200,40 @@ const LeadImage = ({ id }) => {
                 });
         }
     };
+
+//  const submitImage2 = (file) => {
+//         setIsUploadingMulti(true);
+//         const selectedImage = file;
+//         if (selectedImage) {
+//             const processedFileName = processImageName(selectedImage.name);
+//             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+//             const updatedConfig = {
+//                 ...config,
+//                 dirName: "academy_temp/" + id,
+//             };
+
+//             S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+//                 .then((data) => {
+//                     console.log(data);
+//                     setFileName2(modifiedFile.name);
+//                     const imageUrl = modifiedFile.name;
+//                     if (data.location) {
+//                         photoUrls?.push(imageUrl);
+//                         setTimeout(() => {
+//                             setPhotoUrls(photoUrls);
+//                         }, 2000);
+//                         setStateBtn(1);
+//                         handleSubmit2();
+//                     }
+//                 })
+//                 .catch((err) => {
+//                     console.error(err);
+//                 })
+//                 .finally(() => {
+//                     setIsUploadingMulti(false);
+//                 });
+//         }
+//     };
     const submitVideo2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
@@ -209,8 +243,8 @@ const LeadImage = ({ id }) => {
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
 
             const configsWithDirNames = [
-                { ...config, dirName: "academy_temp/" + (id?.id || "") },
-                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id?.id || "") }
+                { ...config, dirName: "academy_temp/" + (id || "") },
+                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
