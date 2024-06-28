@@ -114,7 +114,7 @@ const LeadCards = ({
                 </div>
               {(itemName === "academy" || itemName === "coach" || itemName === "player") && (
                 <div className="mail sportCap">
-                  <p>{object?.location_city}, {object?.location_state}</p>
+                  <p>{object?.location_locality}</p>
                 </div>
               )}
               <div className="mail">

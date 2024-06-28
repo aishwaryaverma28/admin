@@ -229,8 +229,8 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         if (response?.data?.data[0]?.sport_id) {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-        if (response?.data?.data[0]?.location_city) {
-          setSearchCity(response?.data?.data[0]?.location_city)
+        if (response?.data?.data[0]?.location_locality) {
+          setSearchCity(response?.data?.data[0]?.location_locality)
         }
         if (response?.data?.data[0]?.skill) {
           const skillArray = response?.data?.data[0]?.skill?.split(',');
@@ -434,7 +434,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                   <span>-</span>
                 ) : (
                   <>
-                    {editedItem?.id}: {editedItem?.name}, {editedItem?.location_city}, {editedItem?.location_state}
+                    {editedItem?.id}: {editedItem?.name}, {editedItem?.location_locality}
                   </>
                 )}
               </p>

@@ -193,7 +193,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                   <p>{data?.phone}</p>
                 </div>
                 <div className="mail sportCap">
-                  <p>{data?.city}, {data?.state}</p>
+                  <p>{data?.location_locality}</p>
                 </div>
               </div>
             </div>
@@ -244,7 +244,7 @@ const AssignAcademy = ({ id, tempAcademyId, onLeadAdded }) => {
                     <p>{object?.phone}</p>
                   </div>
                   <div className="mail sportCap">
-                    <p>{object?.city}, {object?.state}</p>
+                    <p>{object?.location_locality}</p>
                   </div>
                 </div>
               </div>
