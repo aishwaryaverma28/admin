@@ -174,8 +174,8 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 if (response?.data?.data[0]?.sport_id) {
                   setSearchTerm(response?.data?.data[0]?.sport_name)
                 }
-                if (response?.data?.data[0]?.location_city) {
-                    setSearchCity(response?.data?.data[0]?.location_city)
+                if (response?.data?.data[0]?.location_locality) {
+                    setSearchCity(response?.data?.data[0]?.location_locality)
                 }
                 setIsLoading(false);
             })
@@ -363,7 +363,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                     <span>-</span>
                                 ) : (
                                     <>
-                                        {editedItem?.name}, {editedItem?.location_city}, {editedItem?.location_state}
+                                        {editedItem?.name}, {editedItem?.location_locality}
                                     </>
                                 )}
                             </p>
