@@ -775,7 +775,26 @@
   width: 6.2rem;
   gap: 6rem;
 }
+.detailsLeftContainer3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 6.2rem;
+  gap: 7rem;
+}
 .detailsLeftContainer2 p {
+  color: #4b5054;
+  font-family: "Lexend Deca";
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02563rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.detailsLeftContainer3 p {
   color: #4b5054;
   font-family: "Lexend Deca";
   font-size: 0.8rem;

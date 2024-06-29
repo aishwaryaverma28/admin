@@ -286,3 +286,13 @@ background: #F3F6FA;
  .info_table th:nth-child(5){
   width: 18rem;
  }
+ .heightFields{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+ }
+ .playerHeight{
+  margin-right: 1rem;
+  margin-left: 1rem;
+ }
