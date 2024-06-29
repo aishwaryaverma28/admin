@@ -220,6 +220,10 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         if (response?.data?.data[0]?.awards) {
           setNewAwards(response?.data?.data[0]?.awards?.split(","))
         }
+        if (response?.data?.data[0]?.skill) {
+          const skillArray = response?.data?.data[0]?.skill?.split(',');
+          setNewSkills(skillArray);
+        }
         if (apiData?.education) {
           const educationArray = apiData.education.split(',').map(item => {
             const [degree, college] = item.split(';');
