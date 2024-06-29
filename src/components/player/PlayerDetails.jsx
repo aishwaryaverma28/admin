@@ -19,6 +19,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     address: "",
     dob: "",
     email: "",
+    heighlight:"",
     height: "",
     weight: "",
     phone: "",
@@ -429,6 +430,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       about: editedItem?.about?.trim(),
       dob: editedItem?.dob,
       skill: newSkills?.join(","),
+      heighlight: editedItem?.heighlight?.trim(),
       education: edu,
       experience: exp,
       height: height?.join(";"),
@@ -530,6 +532,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Email</p>
                 <p>Phone</p>
                 <p>Sport</p>
+                <p>Heighlight</p>
                 <p>Date of Birth</p>
                 <p>Height</p>
                 <p>Weight</p>
@@ -563,7 +566,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   ) : (
                     <span className='newEditableArea'>
                       <input
-                        type="text"
+                        type="email"
                         name="email"
                         value={editedItem?.email}
                         onChange={handleInputChange}
@@ -650,7 +653,25 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                       )}
                     </div>
                   </div>
-                </>
+                </>                
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="heighlight"
+                        value={editedItem?.heighlight}
+                        onChange={handleInputChange}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled={isDisabled}
+                      />
+                    </span>
+                  )}
+                </p>
                 <p>
                   {isLoading ? (
                     <span>-</span>
