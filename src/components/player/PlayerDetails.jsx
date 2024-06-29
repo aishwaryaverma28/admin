@@ -3,6 +3,10 @@ import axios from 'axios';
 import { cdnurl, ALL_SPORTS, SEARCH_CITY, GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken } from './../utils/Constants';
 import { toast } from "react-toastify";
 import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
+import CoachSkills from '../coach/CoachSkills';
+import PlayerAwards from './PlayerAwards';
+import PlayerEdu from './PlayerEdu';
+import PlayerExp from './PlayerExp';
 
 const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -43,7 +47,16 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
   const [noMatchCity, setNoMatchCity] = useState(false);
   const inputCityRef = useRef(null);
-
+  // player skills component useState
+  const [newSkills, setNewSkills] = useState([]);
+  // player awards component useState
+  const [newAwards, setNewAwards] = useState([]);
+  // player education component useState
+  const [eduData, setEduData] = useState([]);
+  //player height state
+  const [height, setHeight] = useState([]);
+  //player experience
+  const [expData, setExpData] = useState([]);
   // ============================================================sports dropdown code
   const handleSportInputChange = (event) => {
     const value = event.target.value;
@@ -129,7 +142,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setStateBtn(1);
   };
 
- 
+
   const handleCitySelect = (sport) => {
     setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
     setEditedItem(prevState => ({
@@ -200,6 +213,26 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         }
         if (response?.data?.data[0]?.location_city) {
           setSearchCity(response?.data?.data[0]?.location_city)
+        }
+        if (response?.data?.data[0]?.height) {
+          setHeight(response?.data?.data[0]?.height?.split(";"))
+        }
+        if (response?.data?.data[0]?.awards) {
+          setNewAwards(response?.data?.data[0]?.awards?.split(","))
+        }
+        if (apiData?.education) {
+          const educationArray = apiData.education.split(',').map(item => {
+            const [degree, college] = item.split(';');
+            return { degree, college };
+          });
+          setEduData(educationArray);
+        }
+        if (apiData?.experience) {
+          const expArray = apiData.experience.split(',').map(item => {
+            const [playedFor, date, description] = item.split(';');
+            return { playedFor, date, description };
+          });
+          setExpData(expArray);
         }
         setIsLoading(false);
       })
@@ -278,7 +311,106 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     setIsEditable(!isEditable);
     setIsDisabled(!isDisabled);
   };
+
+  // player skills component code
+  const addSkills = (skill) => {
+    setNewSkills([...newSkills, skill]);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const deleteSkills = (index) => {
+    setNewSkills(newSkills.filter((_, i) => i !== index));
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const updateSkills = (index, newValue) => {
+    const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
+    setNewSkills(updatedFaqs);
+    setStateBtn(1);
+    handleClick();
+  };
+  // player skills component code ended
+
+  // player Awards component code
+  const addAwards = (skill) => {
+    setNewAwards([...newAwards, skill]);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const deleteAwards = (index) => {
+    setNewAwards(newAwards.filter((_, i) => i !== index));
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const updateAwards = (index, newValue) => {
+    const updatedFaqs = newAwards.map((faq, i) => (i === index ? newValue : faq));
+    setNewAwards(updatedFaqs);
+    setStateBtn(1);
+    handleClick();
+  };
+  // player Awards component code ended
+  /// player education component code start
+  const handleAdd = (newEdu) => {
+    const updatedEdus = [...eduData, newEdu];
+    setEduData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleUpdate = (index, field, value) => {
+    const updatedEdus = eduData.map((edu, i) =>
+      i === index ? { ...edu, [field]: value } : edu
+    );
+    setEduData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleDelete = (index) => {
+    const updatedEdus = eduData.filter((edu, i) => i !== index);
+    setEduData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+  // player education component code ended
+  const handleChangeHeight = (index, event) => {
+    const newHeight = [...height];
+    newHeight[index] = event.target.value;
+    setHeight(newHeight);
+    setStateBtn(1);
+    handleClick();
+  };
+  //player experience code begins
+  const handleAddExp = (newEdu) => {
+    const updatedEdus = [...expData, newEdu];
+    setExpData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleUpdateExp = (index, field, value) => {
+    const updatedEdus = expData.map((edu, i) =>
+      i === index ? { ...edu, [field]: value } : edu
+    );
+    setExpData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+
+  const handleDeleteExp = (index) => {
+    const updatedEdus = expData.filter((edu, i) => i !== index);
+    setExpData(updatedEdus);
+    setStateBtn(1);
+    handleClick();
+  };
+  //player experience code ends here
   const handleUpdateClick = () => {
+    let edu = eduData.map(edu => `${edu.degree};${edu.college}`).join(',')
+    let exp = expData.map(edu => `${edu.playedFor};${edu.date};${edu.description}`).join(',')
     const updatedFormData = {
       type: "org",
       name: editedItem?.name?.trim(),
@@ -291,9 +423,12 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       city: editedItem?.city,
       address: editedItem?.address?.trim(),
       about: editedItem?.about?.trim(),
-      awards: editedItem?.awards?.trim(),
       dob: editedItem?.dob,
-      height: editedItem?.height?.trim(),
+      skill: newSkills?.join(","),
+      education: edu,
+      experience: exp,
+      height: height?.join(";"),
+      awards: newAwards?.join(','),
       weight: editedItem?.weight?.trim(),
       position: editedItem?.position?.trim(),
       facebook: editedItem?.facebook?.trim(),
@@ -308,7 +443,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         }
       )
       .then((response) => {
-        console.log(response?.data?.message)
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
             position: "top-center",
@@ -392,7 +526,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Email</p>
                 <p>Phone</p>
                 <p>Sport</p>
-                <p>Awards</p>
                 <p>Date of Birth</p>
                 <p>Height</p>
                 <p>Weight</p>
@@ -520,24 +653,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   ) : (
                     <span>
                       <input
-                        type="text"
-                        name="awards"
-                        value={editedItem?.awards}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
                         type="date"
                         name="dob"
                         value={editedItem?.dob || ''}
@@ -554,18 +669,24 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                   {isLoading ? (
                     <span>-</span>
                   ) : (
-                    <span>
+                    <div className='heightFields'>
                       <input
-                        type="text"
-                        name="height"
-                        value={editedItem?.height}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
+                        type="number"
+                        value={height[0] || ''}
+                        onChange={(e) => handleChangeHeight(0, e)}
+                        style={isEditable ? editStylingInput : normalStylingInput}
                         disabled={isDisabled}
                       />
-                    </span>
+                      <p className='playerHeight'>ft</p>
+                      <input
+                        type="number"
+                        value={height[1] || ''}
+                        onChange={(e) => handleChangeHeight(1, e)}
+                        style={isEditable ? editStylingInput : normalStylingInput}
+                        disabled={isDisabled}
+                      />
+                      <p className='playerHeight'>inch</p>
+                    </div>
                   )}
                 </p>
                 <p>
@@ -726,6 +847,82 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               </div>
             </div>
           </div>
+          <div className="detailsBox">
+            <p className="detailHead">ADDITIONAL INFORMATION</p>
+            <div className="detailsContent">
+              <div className="detailsLeftContainer3">
+                <p>Awards</p>
+                <p>Skills</p>
+                <p>Education</p>
+                <p>Experience</p>
+              </div>
+              <div className="detailsRightContainer">
+                <p>{isLoading ? (
+                  <span>-</span>
+                ) : (
+                  <span>
+                    <PlayerAwards
+                      isEditable={isEditable}
+                      isDisabled={isDisabled}
+                      faqs={newAwards}
+                      addSkills={addAwards}
+                      deleteSkills={deleteAwards}
+                      updateSkills={updateAwards}
+                    />
+                  </span>
+                )}</p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <CoachSkills
+                        isEditable={isEditable}
+                        isDisabled={isDisabled}
+                        faqs={newSkills}
+                        addSkills={addSkills}
+                        deleteSkills={deleteSkills}
+                        updateSkills={updateSkills}
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <PlayerEdu
+                        isEditable={isEditable}
+                        isDisabled={isDisabled}
+                        eduData={eduData}
+                        onAdd={handleAdd}
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
+                      />
+                    </span>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <PlayerExp
+                        isEditable={isEditable}
+                        isDisabled={isDisabled}
+                        expData={expData}
+                        onAdd={handleAddExp}
+                        onUpdate={handleUpdateExp}
+                        onDelete={handleDeleteExp}
+                      />
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+
 
         </div>
         {isEditable ? (

@@ -4,10 +4,22 @@ import { normalStylingInput, editStylingInput } from './../utils/variables';
 const PlayerAwards = ({ isEditable, isDisabled, faqs, addSkills, deleteSkills, updateSkills }) => {
   const [skills, setSkills] = useState('');
 
+  const isValidInput = (input) => !/[;,]/.test(input);
+
   const handleAddSkills = () => {
-    if (skills.trim() !== '') {
+    if (skills.trim() !== '' && isValidInput(skills)) {
       addSkills(skills);
       setSkills('');
+    } else {
+      alert('Input cannot contain commas (,) or semicolons (;).');
+    }
+  };
+
+  const handleUpdateSkills = (index, value) => {
+    if (isValidInput(value)) {
+      updateSkills(index, value);
+    } else {
+      alert('Input cannot contain commas (,) or semicolons (;).');
     }
   };
 
@@ -41,7 +53,7 @@ const PlayerAwards = ({ isEditable, isDisabled, faqs, addSkills, deleteSkills, u
             <input
               type="text"
               value={faq}
-              onChange={(e) => updateSkills(index, e.target.value)}
+              onChange={(e) => handleUpdateSkills(index, e.target.value)}
               style={isEditable ? editStylingInput : normalStylingInput}
               disabled={isDisabled}
             />

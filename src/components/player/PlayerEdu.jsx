@@ -5,17 +5,24 @@ const PlayerEdu = ({ isEditable, isDisabled, eduData, onAdd, onUpdate, onDelete 
   const [degree, setDegree] = useState('');
   const [college, setCollege] = useState('');
 
+  const isValidInput = (input) => !/[;,]/.test(input);
+
   const addEdu = () => {
-    if (degree && college) {
+    if (degree && college && isValidInput(degree) && isValidInput(college)) {
       const newEdu = { degree, college };
       onAdd(newEdu);
       setDegree('');
       setCollege('');
+    } else {
+      alert('Input cannot contain commas (,) or semicolons (;).');
     }
   };
-
   const handleUpdate = (index, field, value) => {
-    onUpdate(index, field, value);
+    if (isValidInput(value)) {
+      onUpdate(index, field, value);
+    } else {
+      alert('Input cannot contain commas (,) or semicolons (;).');
+    }
   };
 
   const handleDelete = (index) => {
@@ -23,7 +30,7 @@ const PlayerEdu = ({ isEditable, isDisabled, eduData, onAdd, onUpdate, onDelete 
   };
 
   return (
-    <section className="accordion-body">
+    <section className="accordion-body-next">
       <div className='coachFaqs-flex'>
         <div className="coachFaqs-left">
           <textarea

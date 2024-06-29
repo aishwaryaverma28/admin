@@ -611,7 +611,9 @@
   align-items: center;
   cursor: pointer;
 }
-
+.extraFlex{
+  margin-bottom: 0.2rem;
+}
 .bottom-fixed p {
   font-size: 1rem;
   color: #1e2224;
@@ -780,7 +782,7 @@
   flex-direction: column;
   justify-content: start;
   width: 6.2rem;
-  gap: 7rem;
+  gap: 7.5rem;
 }
 .detailsLeftContainer2 p {
   color: #4b5054;

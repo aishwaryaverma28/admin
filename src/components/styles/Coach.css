@@ -3,6 +3,12 @@
     overflow-y: scroll;
     padding-bottom: 1rem;
 }
+.accordion-body-next{
+  height: 10rem;
+  overflow-y: scroll;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
 .coachFaqs-flex{
     width: 100%;
     display: flex;
