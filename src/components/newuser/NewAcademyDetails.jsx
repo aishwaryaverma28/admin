@@ -363,7 +363,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                     <span>-</span>
                                 ) : (
                                     <>
-                                        {editedItem?.name}, {editedItem?.location_locality}
+                                       {editedItem?.id}: {editedItem?.name}, {editedItem?.location_locality}
                                     </>
                                 )}
                             </p>
