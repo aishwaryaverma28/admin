@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js";
 const secretKey = "mySecretKey123";
+const secretKey2 = "IzumiMiyamura";
 const getDecryptedToken = () => {
   const encryptedToken = localStorage.getItem("jwtToken");
   if (encryptedToken) {
@@ -25,13 +26,26 @@ const getDecryptedUserPath = () => {
 };
 export { getDecryptedUserPath };
 //=============================================================config
+const encryptedId = process.env.REACT_APP_AWS_ACCESS_KEY_ID;
+let decryptedId = "";
+if (encryptedId) {
+  decryptedId = CryptoJS.AES.decrypt(encryptedId, secretKey2).toString(CryptoJS.enc.Utf8);
+}
+
+const encryptedKey = process.env.REACT_APP_AWS_SECRET_ACCESS_KEY;
+let decryptedKey = "";
+if (encryptedKey) {
+  decryptedKey = CryptoJS.AES.decrypt(encryptedKey, secretKey2).toString(CryptoJS.enc.Utf8);
+}
+
 export const config = {
   bucketName: "bmpcdn1",
   region: "ap-south-1",
   dirName: "test/17",
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+  accessKeyId: decryptedId,
+  secretAccessKey: decryptedKey,
 };
+
 //=============================================================logout function
 export const handleLogout = () => {
   if (localStorage.length === 0) {
