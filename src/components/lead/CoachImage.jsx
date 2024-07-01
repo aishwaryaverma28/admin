@@ -150,13 +150,11 @@ const CoachImage = (id) => {
                 return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                     .then((data) => {
                         const imageUrl = modifiedFile.name;
-                        console.log(data);
                         if (data.location) {
                             return { success: true, imageUrl, updatedConfig };
                         }
                     })
                     .catch((err) => {
-                        console.log(updatedConfig?.bucketName + " :", err);
                         return { success: false, error: err, updatedConfig };
                     });
             });
@@ -211,13 +209,11 @@ const CoachImage = (id) => {
                 return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                     .then((data) => {
                         const imageUrl = modifiedFile.name;
-                        console.log(data);
                         if (data.location) {
                             return { success: true, imageUrl, updatedConfig };
                         }
                     })
                     .catch((err) => {
-                        console.log(updatedConfig?.bucketName + " :", err);
                         return { success: false, error: err, updatedConfig };
                     });
             });
@@ -348,7 +344,6 @@ const CoachImage = (id) => {
     };
 
     const deleteVideo = (videoToDelete) => {
-        console.log(videoToDelete);
         const updatedNameOfStrategy = videoUrls.filter(photo => photo !== videoToDelete);
         setVideoUrls(updatedNameOfStrategy);
         updateData(updatedNameOfStrategy);
@@ -380,7 +375,6 @@ const CoachImage = (id) => {
     };
 
     const handleCheckbox = (photo, index) => {
-        console.log(photo)
         setPhotoChoose(photo);
         setSelectedPhoto(index);
         setPhotoBtn(1);
@@ -469,13 +463,11 @@ const CoachImage = (id) => {
                 return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
                     .then((data) => {
                         const imageUrl = modifiedFile.name;
-                        console.log(data);
                         if (data.location) {
                             return { success: true, imageUrl, updatedConfig };
                         }
                     })
                     .catch((err) => {
-                        console.log(updatedConfig?.bucketName + " :", err);
                         return { success: false, error: err, updatedConfig };
                     });
             });
