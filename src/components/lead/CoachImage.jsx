@@ -21,6 +21,7 @@ const CoachImage = (id) => {
         "video/webm",
         "video/ogg",
     ];
+    console.log(config)
     const [selectedFile, setSelectedFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const fileInputRef2 = useRef(null);
