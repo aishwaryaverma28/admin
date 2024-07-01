@@ -305,7 +305,7 @@ const AddPlayer = ({ onClose }) => {
     return (
         <div className="modal-overlay">
             <div className="leftCreateClose" onClick={onClose}></div>
-            <div className="modal-content">
+            <div className="modal-content modal-width">
                 <div class="create-lead-top">
                     <p>Add Player</p>
                     <p className="close-icon" onClick={onClose}>
