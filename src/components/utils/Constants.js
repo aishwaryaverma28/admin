@@ -26,32 +26,32 @@ const getDecryptedUserPath = () => {
 };
 export { getDecryptedUserPath };
 //=============================================================config
-// const encryptedId = process.env.REACT_APP_AWS_ACCESS_KEY_ID;
-// let decryptedId = "";
-// if (encryptedId) {
-//   decryptedId = CryptoJS.AES.decrypt(encryptedId, secretKey2).toString(CryptoJS.enc.Utf8);
-// }
+const encryptedId = process.env.REACT_APP_AWS_ACCESS_KEY_ID;
+let decryptedId = "";
+if (encryptedId) {
+  decryptedId = CryptoJS.AES.decrypt(encryptedId, secretKey2).toString(CryptoJS.enc.Utf8);
+}
 
-// const encryptedKey = process.env.REACT_APP_AWS_SECRET_ACCESS_KEY;
-// let decryptedKey = "";
-// if (encryptedKey) {
-//   decryptedKey = CryptoJS.AES.decrypt(encryptedKey, secretKey2).toString(CryptoJS.enc.Utf8);
-// }
+const encryptedKey = process.env.REACT_APP_AWS_SECRET_ACCESS_KEY;
+let decryptedKey = "";
+if (encryptedKey) {
+  decryptedKey = CryptoJS.AES.decrypt(encryptedKey, secretKey2).toString(CryptoJS.enc.Utf8);
+}
 
-// export const config = {
-//   bucketName: "bmpcdn1",
-//   region: "ap-south-1",
-//   dirName: "test/17",
-//   accessKeyId: decryptedId,
-//   secretAccessKey: decryptedKey,
-// };
 export const config = {
-    bucketName: "bmpcdn1",
-    region: "ap-south-1",
-    dirName: "test/17",
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  };
+  bucketName: "bmpcdn1",
+  region: "ap-south-1",
+  dirName: "test/17",
+  accessKeyId: decryptedId,
+  secretAccessKey: decryptedKey,
+};
+// export const config = {
+//     bucketName: "bmpcdn1",
+//     region: "ap-south-1",
+//     dirName: "test/17",
+//     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+//   };
 //=============================================================logout function
 export const handleLogout = () => {
   if (localStorage.length === 0) {
