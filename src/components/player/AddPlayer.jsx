@@ -6,6 +6,10 @@ import { editStylingInput, editStylingTextarea, editStylingSelect1, } from "./..
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PlayerLead from "./PlayerLead"
+import PlayerExp from "./PlayerExp";
+import PlayerEdu from "./PlayerEdu";
+import CoachSkills from "../coach/CoachSkills";
+import PlayerAwards from "./PlayerAwards";
 const AddPlayer = ({ onClose }) => {
     const decryptedToken = getDecryptedToken();
     const [selectedObj, setSelectedObj] = useState();
@@ -25,7 +29,8 @@ const AddPlayer = ({ onClose }) => {
         facebook: "",
         instagram: "",
         sport_id: 14,
-        type: ""
+        type: "",
+        heighlight: ""
     });
     const [stateBtn, setStateBtn] = useState(0);
     const [sports, setSports] = useState([]);
@@ -43,7 +48,16 @@ const AddPlayer = ({ onClose }) => {
     const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
     const [noMatchCity, setNoMatchCity] = useState(false);
     const inputCityRef = useRef(null);
-
+    // player skills component useState
+    const [newSkills, setNewSkills] = useState([]);
+    // player awards component useState
+    const [newAwards, setNewAwards] = useState([]);
+    // player education component useState
+    const [eduData, setEduData] = useState([]);
+    //player height state
+    const [height, setHeight] = useState([]);
+    //player experience
+    const [expData, setExpData] = useState([]);
     // ============================================================sports dropdown code
     const handleSportInputChange = (event) => {
         const value = event.target.value;
@@ -238,10 +252,95 @@ const AddPlayer = ({ onClose }) => {
         });
         setStateBtn(1);
     };
+    // player skills component code
+    const addSkills = (skill) => {
+        setNewSkills([...newSkills, skill]);
+        setStateBtn(1);
+    };
 
+    const deleteSkills = (index) => {
+        setNewSkills(newSkills.filter((_, i) => i !== index));
+        setStateBtn(1);
+    };
+
+    const updateSkills = (index, newValue) => {
+        const updatedFaqs = newSkills.map((faq, i) => (i === index ? newValue : faq));
+        setNewSkills(updatedFaqs);
+        setStateBtn(1);
+    };
+    // player skills component code ended
+
+    // player Awards component code
+    const addAwards = (skill) => {
+        setNewAwards([...newAwards, skill]);
+        setStateBtn(1);
+    };
+
+    const deleteAwards = (index) => {
+        setNewAwards(newAwards.filter((_, i) => i !== index));
+        setStateBtn(1);
+    };
+
+    const updateAwards = (index, newValue) => {
+        const updatedFaqs = newAwards.map((faq, i) => (i === index ? newValue : faq));
+        setNewAwards(updatedFaqs);
+        setStateBtn(1);
+    };
+    // player Awards component code ended
+    /// player education component code start
+    const handleAdd = (newEdu) => {
+        const updatedEdus = [...eduData, newEdu];
+        setEduData(updatedEdus);
+        setStateBtn(1);
+    };
+
+    const handleUpdate = (index, field, value) => {
+        const updatedEdus = eduData.map((edu, i) =>
+            i === index ? { ...edu, [field]: value } : edu
+        );
+        setEduData(updatedEdus);
+        setStateBtn(1);
+    };
+
+    const handleDelete = (index) => {
+        const updatedEdus = eduData.filter((edu, i) => i !== index);
+        setEduData(updatedEdus);
+        setStateBtn(1);
+    };
+    // player education component code ended
+    const handleChangeHeight = (index, event) => {
+        const newHeight = [...height];
+        newHeight[index] = event.target.value;
+        setHeight(newHeight);
+        setStateBtn(1);
+    };
+    //player experience code begins
+    const handleAddExp = (newEdu) => {
+        const updatedEdus = [...expData, newEdu];
+        setExpData(updatedEdus);
+        setStateBtn(1);
+    };
+
+    const handleUpdateExp = (index, field, value) => {
+        const updatedEdus = expData.map((edu, i) =>
+            i === index ? { ...edu, [field]: value } : edu
+        );
+        setExpData(updatedEdus);
+        setStateBtn(1);
+    };
+
+    const handleDeleteExp = (index) => {
+        const updatedEdus = expData.filter((edu, i) => i !== index);
+        setExpData(updatedEdus);
+        setStateBtn(1);
+    };
+    //player experience code ends here
     const handleUpdateClick = () => {
         setStateBtn(0);
-        const updatedFields = {};
+        let edu = eduData.map(edu => `${edu.degree};${edu.college}`).join(',')
+        let exp = expData.map(edu => `${edu.playedFor};${edu.date};${edu.description}`).join(',')
+
+        let updatedFields = {};
         for (const key in editedItem) {
             if (editedItem.hasOwnProperty(key)) {
                 if (editedItem[key] !== "") {
@@ -249,7 +348,14 @@ const AddPlayer = ({ onClose }) => {
                 }
             }
         }
-
+        updatedFields = {
+            ...updatedFields,
+            education: edu,
+            experience: exp,
+            skill: newSkills?.join(","),
+            height: height?.join(";"),
+            awards: newAwards?.join(','),
+        }
         axios
             .post(ADD_PLAYER, updatedFields
                 , {
@@ -280,7 +386,8 @@ const AddPlayer = ({ onClose }) => {
                         facebook: "",
                         instagram: "",
                         sport_id: 14,
-                        type: ""
+                        type: "",
+                        heighlight: ""
                     });
                 } else {
                     toast.error(response?.data?.message, {
@@ -322,7 +429,7 @@ const AddPlayer = ({ onClose }) => {
                                         <p>Email</p>
                                         <p>Mobile</p>
                                         <p>Sport</p>
-                                        <p>Awards</p>
+                                        <p>Heighlight</p>
                                         <p>Date of Birth</p>
                                         <p>Height</p>
                                         <p>Weight</p>
@@ -413,17 +520,13 @@ const AddPlayer = ({ onClose }) => {
                                             </div>
                                         </>
                                         <p>
-
                                             <span>
                                                 <input
                                                     type="text"
-                                                    name="awards"
-                                                    value={editedItem?.awards}
+                                                    name="heighlight"
+                                                    value={editedItem?.heighlight}
                                                     onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
+                                                    style={editStylingInput}
                                                 />
                                             </span>
                                         </p>
@@ -443,18 +546,22 @@ const AddPlayer = ({ onClose }) => {
                                             </span>
                                         </p>
                                         <p>
-                                            <span>
+                                            <div className='heightFields'>
                                                 <input
-                                                    type="text"
-                                                    name="height"
-                                                    value={editedItem?.height}
-                                                    onChange={handleInputChange}
-                                                    style={
-                                                        editStylingInput
-                                                    }
-
+                                                    type="number"
+                                                    value={height[0] || ''}
+                                                    onChange={(e) => handleChangeHeight(0, e)}
+                                                    style={editStylingInput}
                                                 />
-                                            </span>
+                                                <p className='playerHeight'>ft</p>
+                                                <input
+                                                    type="number"
+                                                    value={height[1] || ''}
+                                                    onChange={(e) => handleChangeHeight(1, e)}
+                                                    style={editStylingInput}
+                                                />
+                                                <p className='playerHeight'>inch</p>
+                                            </div>
                                         </p>
                                         <p>
                                             <span>
@@ -593,7 +700,67 @@ const AddPlayer = ({ onClose }) => {
                                     </div>
                                 </div>
                             </div>
-
+                            <div className="detailsBox">
+                                <p className="detailHead">ADDITIONAL INFORMATION</p>
+                                <div className="detailsContent">
+                                    <div className="detailsLeftContainer3">
+                                        <p>Awards</p>
+                                        <p>Skills</p>
+                                        <p>Education</p>
+                                        <p>Experience</p>
+                                    </div>
+                                    <div className="detailsRightContainer">
+                                        <p>
+                                            <span>
+                                                <PlayerAwards
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    faqs={newAwards}
+                                                    addSkills={addAwards}
+                                                    deleteSkills={deleteAwards}
+                                                    updateSkills={updateAwards}
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <CoachSkills
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    faqs={newSkills}
+                                                    addSkills={addSkills}
+                                                    deleteSkills={deleteSkills}
+                                                    updateSkills={updateSkills}
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <PlayerEdu
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    eduData={eduData}
+                                                    onAdd={handleAdd}
+                                                    onUpdate={handleUpdate}
+                                                    onDelete={handleDelete}
+                                                />
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span>
+                                                <PlayerExp
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    expData={expData}
+                                                    onAdd={handleAddExp}
+                                                    onUpdate={handleUpdateExp}
+                                                    onDelete={handleDeleteExp}
+                                                />
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="modalLeftBtnBox">
                             <span></span>
