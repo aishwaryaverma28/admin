@@ -532,7 +532,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Email</p>
                 <p>Phone</p>
                 <p>Sport</p>
-                <p>Heighlight</p>
+                <p>Highlights</p>
                 <p>Date of Birth</p>
                 <p>Height</p>
                 <p>Weight</p>

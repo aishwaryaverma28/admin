@@ -429,7 +429,7 @@ const AddPlayer = ({ onClose }) => {
                                         <p>Email</p>
                                         <p>Mobile</p>
                                         <p>Sport</p>
-                                        <p>Heighlight</p>
+                                        <p>Highlights</p>
                                         <p>Date of Birth</p>
                                         <p>Height</p>
                                         <p>Weight</p>
