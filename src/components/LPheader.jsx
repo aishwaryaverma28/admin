@@ -398,13 +398,6 @@ const LPheader = () => {
                 </NavLink>
               </li>
             )}
-            {isPathAllowed("/lp/contacts") && (
-              <li onClick={() => handleNavigationClick("Contacts")}>
-                <NavLink exact to="/lp/contacts" activeClassName="activeNav">
-                  Support
-                </NavLink>
-              </li>
-            )}
             <li onClick={() => handleNavigationClick("Tickets")}>
                 <NavLink exact to="/lp/tickets" activeClassName="activeNav">
                   Tickets

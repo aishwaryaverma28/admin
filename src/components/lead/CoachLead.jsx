@@ -206,14 +206,14 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                             onClick={() => handleTabClick("user")}
                         >
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            User Logs ({userLog?.length})
+                            User Logs ({userLog?.length ?? 0})
                         </button>
                         <button
                             className={activeTab === "leads" ? "active" : ""}
                             onClick={() => handleTabClick("leads")}
                         >
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads ({leads?.length})
+                            Leads ({leads?.length ?? 0})
                         </button>
                     </div>
                     {editedItem && editedItem?.is_deleted !== 1 ? <div>

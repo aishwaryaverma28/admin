@@ -26,7 +26,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [activeTab, setActiveTab] = useState("details");
     const [isDelete, setIsDelete] = useState(false);
     const [notes, setNotes] = useState(0);
-    const [logs, setLogs] = useState(0);
     const [userId, setUserId] = useState(0);
     const [userLog, setUserLog] = useState(0);
     const [activityCount, setActivityCount] = useState(0);
@@ -280,14 +279,14 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             onClick={() => handleTabClick("user")}
                         >
                             <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            User Logs ({userLog?.length})
+                            User Logs ({userLog?.length ?? 0})
                         </button>
                         <button
                             className={activeTab === "leads" ? "active" : ""}
                             onClick={() => handleTabClick("leads")}
                         >
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads ({leads?.length})
+                            Leads ({leads?.length ?? 0})
                         </button>
                         <button
                             className={activeTab === "notes" ? "active" : ""}

@@ -526,50 +526,6 @@ const LPSettingSidebar = () => {
               )}
             </div>
           )}
-
-          {(isPathAllowed("/lp/settings/userManagement/add") ||
-            isPathAllowed("/lp/settings/userManagement/update")) && (
-              <div
-                className="master-arrow"
-                onClick={() => toggleMasterSubMenu("user")}
-              >
-                <p className="company-options master-settings-options setting-font-style">
-                  User Management
-                </p>
-                <img
-                  src={masterSubMenu === "user" ? GreaterUp : GreaterDown}
-                  alt=""
-                />
-              </div>
-            )}
-
-          {masterSubMenu === "user" && (
-            <div className="sub-sub-menu">
-              {isPathAllowed("/lp/settings/userManagement/add") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/userManagement/add"
-                    activeClassName="activeLink"
-                  >
-                    Add
-                  </NavLink>
-                </p>
-              )}
-              {isPathAllowed("/lp/settings/userManagement/update") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/userManagement/update"
-                    activeClassName="activeLink"
-                  >
-                    Update
-                  </NavLink>
-                </p>
-              )}
-            </div>
-          )}
-
           {(isPathAllowed("/lp/settings/employee/add") ||
             isPathAllowed("/lp/settings/employee/view")) && (
               <div
@@ -610,84 +566,7 @@ const LPSettingSidebar = () => {
                 </p>
               )}
             </div>
-          )}
-          {isPathAllowed("/lp/settings/accessManagement") && (
-            <p className="prefrence-options setting-font-style">
-              <NavLink exact to="/lp/settings/accessManagement">
-                Access Management
-              </NavLink>
-            </p>
-          )}
-          {isPathAllowed("/lp/settings/reportsAndAnalytics") && (
-            <p className="prefrence-options setting-font-style">
-              <NavLink exact to="/lp/settings/reportsAndAnalytics">
-                Report Anad Analytics
-              </NavLink>
-            </p>
-          )}
-
-          {isPathAllowed("/lp/settings/masterSettings/City") && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("master-setting")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                Master Settings
-              </p>
-              <img
-                src={
-                  masterSubMenu === "master-setting" ? GreaterUp : GreaterDown
-                }
-                alt=""
-              />
-            </div>
-          )}
-
-          {masterSubMenu === "master-setting" && (
-            <div className="sub-sub-menu">
-              {isPathAllowed("/lp/settings/masterSettings/City") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/masterSettings/City"
-                    activeClassName="activeLink"
-                  >
-                    City
-                  </NavLink>
-                </p>
-              )}
-            </div>
-          )}
-
-          {isPathAllowed("/lp/settings/system/state") && (
-            <div
-              className="master-arrow"
-              onClick={() => toggleMasterSubMenu("system")}
-            >
-              <p className="company-options master-settings-options setting-font-style">
-                System
-              </p>
-              <img
-                src={masterSubMenu === "system" ? GreaterUp : GreaterDown}
-                alt=""
-              />
-            </div>
-          )}
-          {masterSubMenu === "system" && (
-            <div className="sub-sub-menu">
-              {isPathAllowed("/lp/settings/system/state") && (
-                <p className="company-options setting-font-style">
-                  <NavLink
-                    exact
-                    to="/lp/settings/system/state"
-                    activeClassName="activeLink"
-                  >
-                    State
-                  </NavLink>
-                </p>
-              )}
-            </div>
-          )}
+          )}     
         </>
       )}
     </section>

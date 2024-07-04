@@ -169,7 +169,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 onClick={() => handleTabClick("user")}
               >
                 <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                User Logs ({userLog?.length})
+                User Logs ({userLog?.length ?? 0})
               </button>
               <button
                 className={activeTab === "tickets" ? "active" : ""}

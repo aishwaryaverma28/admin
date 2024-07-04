@@ -12,14 +12,8 @@ import BlogView from "./components/master-settings/BlogView";
 import SitePagesAdd from "./components/master-settings/SitePagesAdd";
 import HelpAdd from "./components/master-settings/HelpAdd";
 import HelpUpdate from "./components/master-settings/HelpUpdate";
-import UserMangAdd from "./components/master-settings/UserMangAdd";
-import UserMangUpdate from "./components/master-settings/UserMangUpdate";
 import EmployeeAdd from "./components/master-settings/EmployeeAdd";
 import EmployeeView from "./components/EmployeeView";
-import AccessManagement from "./components/master-settings/AccessManagement";
-import ReportsandAnalytics from "./components/master-settings/ReportsandAnalytics";
-import City from "./components/master-settings/City";
-import State from "./components/master-settings/State";
 import EmployeeUpdate from "./components/master-settings/EmployeeUpdate";
 import BlogUpdate from "./components/master-settings/BlogUpdate";
 import SitePagesView from "./components/master-settings/SitePagesView";
@@ -56,7 +50,6 @@ import BacklistTable from "./components/master-settings/backlist/BacklistTable.j
 import Acadmey from "./components/acadmey/Acadmey.jsx";
 import Coach from "./components/coach/Coach.jsx";
 import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
-import Support from "./components/tickets/Support.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Player from "./components/player/Player.jsx";
 import AcademyTickets from "./components/academytickets/AcademyTickets.jsx";
@@ -83,12 +76,10 @@ const router = createBrowserRouter([
         path: "/lp",
         element: <Navigate to="/lp/home" replace />,
       },
-      // path: "/lp/dashboard",
       {
         path: "/lp/lead",
         element: <SecureRoutes Component={Dashboard} />,
       },
-      // path: "/lp/acadmey",
       {
         path: "/lp/bmp",
         element: <SecureRoutes Component={Acadmey} />,
@@ -109,7 +100,6 @@ const router = createBrowserRouter([
         path: "/lp/admin",
         element: <SecureRoutes Component={Editor} />,
       },
-      // path: "/lp/lead",
       {
         path: "/lp/deals",
         element: <SecureRoutes Component={BmpLeads} />,
@@ -121,10 +111,6 @@ const router = createBrowserRouter([
       {
         path: "/lp/tickets",
         element: <AcademyTickets/>,
-      },
-      {
-        path: "/lp/contacts",
-        element: <SecureRoutes Component={Support} />,
       },
       {
         path: "/lp/settings",
@@ -257,14 +243,6 @@ const router = createBrowserRouter([
             element: <HelpUpdate />,
           },
           {
-            path: "/lp/settings/userManagement/add",
-            element: <SecureRoutes Component={UserMangAdd} />,
-          },
-          {
-            path: "/lp/settings/userManagement/update",
-            element: <SecureRoutes Component={UserMangUpdate} />,
-          },
-          {
             path: "/lp/settings/employee/add",
             element: <SecureRoutes Component={EmployeeAdd} />,
           },
@@ -276,22 +254,6 @@ const router = createBrowserRouter([
             path: "/lp/settings/employee/view/:id",
             element: <EmployeeUpdate />,
           },
-          {
-            path: "/lp/settings/accessManagement",
-            element: <SecureRoutes Component={AccessManagement} />,
-          },
-          {
-            path: "/lp/settings/reportsAndAnalytics",
-            element: <SecureRoutes Component={ReportsandAnalytics} />,
-          },
-          {
-            path: "/lp/settings/masterSettings/City",
-            element: <SecureRoutes Component={City} />,
-          },
-          {
-            path: "/lp/settings/system/state",
-            element: <SecureRoutes Component={State} />,
-          }
         ],
       },
     ],

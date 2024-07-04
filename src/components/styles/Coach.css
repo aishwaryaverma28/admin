@@ -108,20 +108,26 @@
   text-align: left;
 }
 .ticket_tbl th:nth-child(1){
-  width: 5rem;
+  width: 3rem;
  }
 .ticket_tbl th:nth-child(2){
- width: 15rem;
+ width: 11rem;
 }
 .ticket_tbl th:nth-child(3){
-  width: 10rem;
+  width: 7rem;
  }
 .ticket_tbl th:nth-child(4){
   width: 10rem;
  }
+ .ticket_tbl th:nth-child(6){
+   width: 11rem;
+  }
+  .ticket_tbl th:nth-child(7){
+    width: 11rem;
+   }
  .ticket_des {
   height: 1.4rem;
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 20rem;
+  width: 100%;
 }
