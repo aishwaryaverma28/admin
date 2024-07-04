@@ -179,7 +179,7 @@ const NewCoachImages = (id) => {
 
             const configsWithDirNames = [
                 { ...config, dirName: "coach_temp/" + (id?.id || "") },
-                { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
+                { ...config, bucketName: "destcdn90", dirName: "coach_temp/" + (id?.id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -207,7 +207,7 @@ const NewCoachImages = (id) => {
                             if (updatedConfig.bucketName === config.bucketName) {
                                 successfulUploadCount++;
                                 photoUrls.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'cdn90') {
+                            } else if (updatedConfig.bucketName === 'destcdn90') {
                                 successfulUploadCount++;
                             }
                         } else {
@@ -273,7 +273,7 @@ const NewCoachImages = (id) => {
 
             const configsWithDirNames = [
                 { ...config, dirName: "coach_temp/" + (id?.id || "") },
-                { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
+                { ...config, bucketName: "destcdn90", dirName: "coach_temp/" + (id?.id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -301,7 +301,7 @@ const NewCoachImages = (id) => {
                             if (updatedConfig.bucketName === config.bucketName) {
                                 successfulUploadCount++;
                                 videoUrls.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'cdn90') {
+                            } else if (updatedConfig.bucketName === 'destcdn90') {
                                 successfulUploadCount++;
                             }
                         } else {
@@ -563,7 +563,7 @@ const NewCoachImages = (id) => {
 
             const configsWithDirNames = [
                 { ...config, dirName: "coach_temp/" + (id?.id || "") },
-                { ...config, bucketName: "cdn90", dirName: "coach_temp/" + (id?.id || "") }
+                { ...config, bucketName: "destcdn90", dirName: "coach_temp/" + (id?.id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -591,7 +591,7 @@ const NewCoachImages = (id) => {
                             if (updatedConfig.bucketName === config.bucketName) {
                                 successfulUploadCount++;
                                 certificates?.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'cdn90') {
+                            } else if (updatedConfig.bucketName === 'destcdn90') {
                                 successfulUploadCount++;
                             }
                         } else {

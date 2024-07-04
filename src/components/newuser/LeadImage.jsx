@@ -149,7 +149,7 @@ const LeadImage = ({ id }) => {
 
             const configsWithDirNames = [
                 { ...config, dirName: "academy_temp/" + (id || "") },
-                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id || "") }
+                { ...config, bucketName: "destcdn90", dirName: "academy_temp/" + (id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -177,7 +177,7 @@ const LeadImage = ({ id }) => {
                             if (updatedConfig.bucketName === config.bucketName) {
                                 successfulUploadCount++;
                                 photoUrls.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'cdn90') {
+                            } else if (updatedConfig.bucketName === 'destcdn90') {
                                 successfulUploadCount++;
                             }
                         } else {
@@ -244,7 +244,7 @@ const LeadImage = ({ id }) => {
 
             const configsWithDirNames = [
                 { ...config, dirName: "academy_temp/" + (id || "") },
-                { ...config, bucketName: "cdn90", dirName: "academy_temp/" + (id || "") }
+                { ...config, bucketName: "destcdn90", dirName: "academy_temp/" + (id || "") }
             ];
 
             const uploadPromises = configsWithDirNames.map((updatedConfig) => {
@@ -272,7 +272,7 @@ const LeadImage = ({ id }) => {
                             if (updatedConfig.bucketName === config.bucketName) {
                                 successfulUploadCount++;
                                 videoUrls.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'cdn90') {
+                            } else if (updatedConfig.bucketName === 'destcdn90') {
                                 successfulUploadCount++;
                             }
                         } else {

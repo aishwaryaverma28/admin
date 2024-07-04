@@ -39,14 +39,14 @@ if (encryptedKey) {
 }
 
 export const config = {
-  bucketName: "bmpcdn1",
+  bucketName: "bmp1",
   region: "ap-south-1",
   dirName: "test/17",
   accessKeyId: decryptedId,
   secretAccessKey: decryptedKey,
 };
 // export const config = {
-//     bucketName: "bmpcdn1",
+//     bucketName: "bmp1",
 //     region: "ap-south-1",
 //     dirName: "test/17",
 //     accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -62,7 +62,8 @@ export const handleLogout = () => {
   }
 };
 // =============================================================apis used
-export const cdnurl = "https://d2bdxhtfh3zsqc.cloudfront.net/";
+// export const cdnurl = "https://d2bdxhtfh3zsqc.cloudfront.net/";
+export const cdnurl = "https://d146zb2foqhwdd.cloudfront.net/";
 const start = "https://core.leadplaner.com/api/api";
 const bmpStart = "https://bmp.leadplaner.com/api/api";
 const userId = localStorage.getItem("id");
