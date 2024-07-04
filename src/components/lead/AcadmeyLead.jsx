@@ -18,6 +18,7 @@ import AcademyDetails from "./AcademyDetails.jsx";
 import UserLogs from "./UserLogs.jsx";
 import Confirmation from "./Confirmation.jsx";
 import LeadImage2 from "./LeadImage2.jsx";
+import TicketModal from "../academytickets/TicketModal.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
@@ -289,6 +290,13 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             Leads ({leads?.length ?? 0})
                         </button>
                         <button
+                            className={activeTab === "tickets" ? "active" : ""}
+                            onClick={() => handleTabClick("tickets")}
+                        >
+                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            Tickets ({})
+                        </button>
+                        <button
                             className={activeTab === "notes" ? "active" : ""}
                             onClick={() => handleTabClick("notes")}
                         >
@@ -333,6 +341,14 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )} */}
+                        {activeTab === "tickets" && (
+                            <div className="notes-tab-content">
+                                <TicketModal
+                                    item={selectedItem}
+                                    data={editedItem}
+                                />
+                            </div>
+                        )}
                         {activeTab === "notes" && (
                             <div className="notes-tab-content">
                                 <AddNotes

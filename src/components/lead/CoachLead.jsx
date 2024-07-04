@@ -11,6 +11,7 @@ import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
 import Confirmation from './Confirmation';
 import { toast } from 'react-toastify';
+import TicketModal from '../academytickets/TicketModal';
 const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
     const decryptedToken = getDecryptedToken();
     const [check, setCheck] = useState(false);
@@ -215,6 +216,13 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                             <i className="fa-sharp fa-regular fa-handshake-o"></i>
                             Leads ({leads?.length ?? 0})
                         </button>
+                        <button
+                            className={activeTab === "tickets" ? "active" : ""}
+                            onClick={() => handleTabClick("tickets")}
+                        >
+                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            Tickets ({})
+                        </button>
                     </div>
                     {editedItem && editedItem?.is_deleted !== 1 ? <div>
               <button className="recycle-delete" onClick={UserArchive}>Archive</button>
@@ -242,6 +250,14 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
                                     leadsDetails={leads}
+                                />
+                            </div>
+                        )}
+                         {activeTab === "tickets" && (
+                            <div className="notes-tab-content">
+                                <TicketModal
+                                    item={selectedItem}
+                                    data={editedItem}
                                 />
                             </div>
                         )}

@@ -28,7 +28,7 @@ const HeadPhone = () => {
     try {
       const response = await axios.get(USER_INFO, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       });
       const data = response?.data?.data;
@@ -58,7 +58,7 @@ const HeadPhone = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+            Authorization: `Bearer ${decryptedToken}`,
           },
         }
       );
@@ -93,7 +93,6 @@ const HeadPhone = () => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
-      // You can upload the file to the server here using APIs, if needed.
     }
   };
 
@@ -114,7 +113,7 @@ const HeadPhone = () => {
     axios
       .post(ADD_TICKET, details, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {

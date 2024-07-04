@@ -13,6 +13,7 @@ import AcadmeyLeadDetails from '../lead/AcadmeyLeadDetails';
 import UserLogs from '../lead/UserLogs';
 import Confirmation from '../lead/Confirmation';
 import PlayerImage from './PlayerImage';
+import TicketModal from '../academytickets/TicketModal';
 const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
     const decryptedToken = getDecryptedToken();
     const [leads, setLeads] = useState(0);
@@ -219,6 +220,13 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                                 <i className="fa-sharp fa-regular fa-handshake-o"></i>
                                 Leads ({leads?.length ?? 0})
                             </button>
+                            <button
+                            className={activeTab === "tickets" ? "active" : ""}
+                            onClick={() => handleTabClick("tickets")}
+                        >
+                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            Tickets ({})
+                        </button>
                         </div>
                         {editedItem && editedItem?.is_deleted !== 1 ? <div>
                             <button className="recycle-delete" onClick={UserArchive}>Archive</button>
@@ -247,6 +255,14 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                             <div className="attachment-tab-content">
                                 <AcadmeyLeadDetails
                                     leadsDetails={leads}
+                                />
+                            </div>
+                        )}
+                         {activeTab === "tickets" && (
+                            <div className="notes-tab-content">
+                                <TicketModal
+                                    item={selectedItem}
+                                    data={editedItem}
                                 />
                             </div>
                         )}
