@@ -4,8 +4,6 @@ import CoachLead from "../lead/CoachLead.jsx";
 import NewUserLead from "../newuser/NewUserLead.jsx";
 import AcadmeyLead from "../lead/AcadmeyLead.jsx";
 import PlayerLead from "../player/PlayerLead.jsx";
-import NewCoachLead from "../coach/NewCoachLead.jsx";
-import NewPlayerLeads from "../player/NewPlayerLeads.jsx";
 import { ArcAcademy } from "../newuser/ArcAcademy.jsx";
 
 const DashboardCards = ({
