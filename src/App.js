@@ -52,7 +52,7 @@ import Coach from "./components/coach/Coach.jsx";
 import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Player from "./components/player/Player.jsx";
-import AcademyTickets from "./components/academytickets/AcademyTickets.jsx";
+import TicketTabs from "./components/academytickets/TicketTabs.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -110,7 +110,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/lp/tickets",
-        element: <AcademyTickets/>,
+        element: <TicketTabs/>,
       },
       {
         path: "/lp/settings",
