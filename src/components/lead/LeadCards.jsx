@@ -109,14 +109,15 @@ const LeadCards = ({
               <div className="mail sportCap">
                 <p>{itemName === "user" || itemName === "newuser" ? <span> {object?.type} - {object?.parent_id}</span> : object?.sport_name}</p>
               </div>
-                <div className="mail">
-                  <p>{object?.phone}</p>
-                </div>
+              <div className="mail">
+                <p>{object?.phone}</p>
+              </div>
               {(itemName === "academy" || itemName === "coach" || itemName === "player") && (
                 <div className="mail sportCap">
-                  <p>{object?.location_locality}</p>
+                  <p>{object?.location_locality || object?.location_city}</p>
                 </div>
               )}
+
               <div className="mail">
                 {formatDate(object?.creation_date)}
               </div>
@@ -159,7 +160,7 @@ const LeadCards = ({
                 </div>
               </div>
             )}
-            
+
           </div>
         </div>
       </div>
