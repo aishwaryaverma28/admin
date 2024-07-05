@@ -41,7 +41,8 @@ const AcademyTickets = () => {
         },
       })
       .then((response) => {
-        setTicket(response?.data?.data);
+        const filteredData = response?.data?.data.filter(obj => obj?.category !== "bmp_admin");
+        setTicket(filteredData);
         setLoading(false);
       })
       .catch((error) => {
