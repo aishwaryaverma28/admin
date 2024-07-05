@@ -109,7 +109,7 @@ const router = createBrowserRouter([
         element: <DealUpdate />,
       },
       {
-        path: "/lp/tickets",
+        path: "/lp/support",
         element: <TicketTabs/>,
       },
       {

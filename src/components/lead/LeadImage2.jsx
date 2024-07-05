@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
-import S3FileUpload from 'react-s3';
 import axios from 'axios'
 import { toast } from "react-toastify";
 import { cdnurl,GET_ACADEMY, UPDATE_ACADEMY, config, getDecryptedToken, } from "../utils/Constants";
 import Video from "../../assets/image/video.svg";
 import Trash from "../../assets/image/red-bin.svg";
+import AWS from 'aws-sdk';
 
 const LeadImage2 = (id) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -133,6 +133,7 @@ const LeadImage2 = (id) => {
             }
         }
     };
+   
     const submitImage2 = (file) => {
         setIsUploadingMulti(true);
         const selectedImage = file;
@@ -140,23 +141,32 @@ const LeadImage2 = (id) => {
         if (selectedImage) {
             const processedFileName = processImageName(selectedImage.name);
             const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+            AWS.config.update({
+                accessKeyId: config.accessKeyId,
+                secretAccessKey: config.secretAccessKey,
+                region: config.region
+            });
 
-            const configsWithDirNames = [
-                { ...config, dirName: "academy/" + (id?.id || "") },
-                { ...config, bucketName: "destcdn90", dirName: "academy/" + (id?.id || "") }
-            ];
+            const s3 = new AWS.S3();
 
-            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
-                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
+            const uploadPromises = [
+                { bucketName: config.bucketName, dirName: "academy/" + (id?.id || "") },
+                { bucketName: 'destcdn90', dirName: "academy/" + (id?.id || "") }
+            ].map((updatedConfig) => {
+                const params = {
+                    Bucket: updatedConfig.bucketName,
+                    Key: updatedConfig.dirName + '/' + modifiedFile.name,
+                    Body: modifiedFile
+                };
+
+                return s3.upload(params).promise()
                     .then((data) => {
                         const imageUrl = modifiedFile.name;
-                        console.log(data);
-                        if (data.location) {
+                        if (data.Location) {
                             return { success: true, imageUrl, updatedConfig };
                         }
                     })
                     .catch((err) => {
-                        console.log(updatedConfig?.bucketName + " :", err);
                         return { success: false, error: err, updatedConfig };
                     });
             });
@@ -180,7 +190,7 @@ const LeadImage2 = (id) => {
                     });
 
                     if (successfulUploadCount === 2) {
-                        setPhotoUrls(photoUrls);
+                        setPhotoUrls([...photoUrls]);
                         handleSubmit2();
                     } else {
                         console.error("Uploads to both buckets were not successful.");
@@ -194,67 +204,77 @@ const LeadImage2 = (id) => {
                 });
         }
     };
+ 
     const submitVideo2 = (file) => {
         setIsUploadingMulti(true);
-        const selectedImage = file;
-
-        if (selectedImage) {
-            const processedFileName = processImageName(selectedImage.name);
-            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-
-            const configsWithDirNames = [
-                { ...config, dirName: "academy/" + (id?.id || "") },
-                { ...config, bucketName: "destcdn90", dirName: "academy/" + (id?.id || "") }
-            ];
-
-            const uploadPromises = configsWithDirNames.map((updatedConfig) => {
-                return S3FileUpload.uploadFile(modifiedFile, updatedConfig)
-                    .then((data) => {
-                        const imageUrl = modifiedFile.name;
-                        console.log(data);
-                        if (data.location) {
-                            return { success: true, imageUrl, updatedConfig };
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(updatedConfig?.bucketName + " :", err);
-                        return { success: false, error: err, updatedConfig };
-                    });
+        const selectedVideo = file;
+      
+        if (selectedVideo) {
+          const processedFileName = processImageName(selectedVideo.name);
+          const modifiedFile = new File([selectedVideo], processedFileName, { type: selectedVideo.type });
+          AWS.config.update({
+            accessKeyId: config.accessKeyId,
+            secretAccessKey: config.secretAccessKey,
+            region: config.region
+          });
+      
+          const s3 = new AWS.S3();
+      
+          const uploadPromises = [
+            { bucketName: config.bucketName, dirName: "academy/" + (id?.id || "") },
+            { bucketName: 'destcdn90', dirName: "academy/" + (id?.id || "") }
+          ].map((updatedConfig) => {
+            const params = {
+              Bucket: updatedConfig.bucketName,
+              Key: updatedConfig.dirName + '/' + modifiedFile.name,
+              Body: modifiedFile
+            };
+      
+            return s3.upload(params).promise()
+              .then((data) => {
+                const videoUrl = modifiedFile.name;
+                if (data.Location) {
+                  return { success: true, videoUrl, updatedConfig };
+                }
+              })
+              .catch((err) => {
+                return { success: false, error: err, updatedConfig };
+              });
+          });
+      
+          let successfulUploadCount = 0;
+      
+          Promise.all(uploadPromises)
+            .then((results) => {
+              results.forEach((result) => {
+                if (result.success) {
+                  const { videoUrl, updatedConfig } = result;
+                  if (updatedConfig.bucketName === config.bucketName) {
+                    successfulUploadCount++;
+                    videoUrls.push(videoUrl);
+                  } else if (updatedConfig.bucketName === 'destcdn90') {
+                    successfulUploadCount++;
+                  }
+                } else {
+                  console.error("Failed to upload:", result.error);
+                }
+              });
+      
+              if (successfulUploadCount === 2) {
+                setVideoUrls([...videoUrls]);
+                handleSubmit2();
+              } else {
+                console.error("Uploads to both buckets were not successful.");
+              }
+            })
+            .catch((err) => {
+              console.error("Error uploading to multiple buckets:", err);
+            })
+            .finally(() => {
+                setIsUploadingMulti(false);
             });
-
-            let successfulUploadCount = 0;
-
-            Promise.all(uploadPromises)
-                .then((results) => {
-                    results.forEach((result) => {
-                        if (result.success) {
-                            const { imageUrl, updatedConfig } = result;
-                            if (updatedConfig.bucketName === config.bucketName) {
-                                successfulUploadCount++;
-                                videoUrls.push(imageUrl);
-                            } else if (updatedConfig.bucketName === 'destcdn90') {
-                                successfulUploadCount++;
-                            }
-                        } else {
-                            console.error("Failed to upload:", result.error);
-                        }
-                    });
-
-                    if (successfulUploadCount === 2) {
-                        setVideoUrls(videoUrls);
-                        handleSubmit2();
-                    } else {
-                        console.error("Uploads to both buckets were not successful.");
-                    }
-                })
-                .catch((err) => {
-                    console.error("Error uploading to multiple buckets:", err);
-                })
-                .finally(() => {
-                    setIsUploadingMulti(false);
-                });
-        }
-    };
+    }
+};
     //===============================================================================image submit
     const initialPhotoUrls = [...photoUrls];
     const initialVideoUrls = [...videoUrls];
