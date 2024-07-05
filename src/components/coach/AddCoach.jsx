@@ -29,7 +29,6 @@ const AddCoach = ({ onClose }) => {
         about: "",
         skill: "",
         heighlight: "",
-        fee: "",
         package: "",
         gender: "",
         training_location: "",
@@ -356,7 +355,6 @@ const AddCoach = ({ onClose }) => {
                         city: "",
                         about: "",
                         skill: "",
-                        fee: "",
                         experience: "",
                         heighlight: "",
                         package: "",
@@ -403,7 +401,6 @@ const AddCoach = ({ onClose }) => {
                                         <p>Email <span className="common-fonts redAlert"> *</span></p>
                                         <p>Sport <span className="common-fonts redAlert"> *</span></p>
                                         <p>Phone <span className="common-fonts redAlert"> *</span></p>
-                                        <p>Fee</p>
                                         <p>Profile Heading</p>
                                         <p>Experience</p>
                                         <p>Gender</p>
@@ -474,18 +471,6 @@ const AddCoach = ({ onClose }) => {
                                                     type="text"
                                                     name="phone"
                                                     value={editedItem?.phone}
-                                                    onChange={handleInputChange}
-                                                    style={editStylingInput}
-
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-                                            <span>
-                                                <input
-                                                    type="text"
-                                                    name="fee"
-                                                    value={editedItem?.fee}
                                                     onChange={handleInputChange}
                                                     style={editStylingInput}
 

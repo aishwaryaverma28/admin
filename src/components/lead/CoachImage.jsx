@@ -198,7 +198,8 @@ const CoachImage = (id) => {
     //     if (selectedImage) {
     //         const processedFileName = processImageName(selectedImage.name);
     //         const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
-    //         const updatedConfig =  { ...config, bucketName: "destcdn90", dirName: "coach/" + (id?.id || "") };
+    //         // const updatedConfig =  { ...config, bucketName: "destcdn90", dirName: "coach/" + (id?.id || "") };
+    //         const updatedConfig = { ...config, dirName: "coach/" + (id?.id || "") };
     //         console.log(updatedConfig)
     //         S3FileUpload.uploadFile(modifiedFile, updatedConfig)
     //             .then((data) => {
