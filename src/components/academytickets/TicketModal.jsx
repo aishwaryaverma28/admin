@@ -1,25 +1,89 @@
-import React, { useState, useRef } from 'react'
-import { getDecryptedToken } from "../utils/Constants";
-const TicketModal = ({ item, data }) => {
+import React, { useState, useRef, useEffect } from 'react'
+import { config, getDecryptedToken, ADD_NEW_TICKET,SEARCH_API } from "../utils/Constants";
+import AWS from 'aws-sdk';
+import axios from "axios";
+import { toast } from "react-toastify";
+const TicketModal = ({ data }) => {
+    console.log(data);
+    window.Buffer = window.Buffer || require("buffer").Buffer;
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState("");
     const decryptedToken = getDecryptedToken();
     const [stateBtn, setStateBtn] = useState(0);
     const [openEditor, setOpenEditor] = useState(false);
+    const [user, setUser] = useState({});
     const [details, setDetails] = useState({
-        name: data?.name,
-        email: data?.email,
-        phone: data?.phone,
+        status: "waiting for support",
+        title: "academy admin support",
+        user_id: data,
         description: "",
         attachment: "",
     });
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setFileName(file.name);
+    const handleOptionChange = () => {
+        axios
+          .get(SEARCH_API + "/bmp_user/id/" + data, {
+            headers: {
+              Authorization: `Bearer ${decryptedToken}`,
+            },
+          })
+          .then((response) => {
+            setUser(response?.data?.data[0]);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      useEffect(()=> {
+        handleOptionChange()
+      },[])
+    const processImageName = (imageName) => {
+        const nameParts = imageName.split(".");
+        if (nameParts?.length > 1) {
+            const namePart = nameParts.slice(0, -1).join(".");
+            const processedName = namePart.replace(/[^\w-]/g, "-");
+            return `${processedName}.${nameParts[nameParts.length - 1]}`;
+        } else {
+            return imageName.replace(/[^\w-]/g, "-");
         }
     };
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            submitImage(file);
+        }
+    };
+    const submitImage = (file) => {
+        const selectedImage = file;
+
+        if (selectedImage) {
+            const processedFileName = processImageName(selectedImage.name);
+            const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+            AWS.config.update({
+                accessKeyId: config.accessKeyId,
+                secretAccessKey: config.secretAccessKey,
+                region: config.region,
+            });
+
+            const s3 = new AWS.S3();
+            const params = {
+                Bucket: 'destcdn90',
+                Key: `attachments/tickets/${data || ""}/${modifiedFile.name}`,
+                Body: modifiedFile
+            };
+            s3.upload(params, (err, data) => {
+                if (err) {
+                    console.error('Error uploading file:', err);
+                } else {
+                    setFileName(modifiedFile.name);
+                    setDetails((prevDetails) => ({
+                        ...prevDetails,
+                        attachment: modifiedFile.name,
+                    }));
+                }
+            });
+        }
+    };
     const handleBrowseClick = () => {
         fileInputRef.current.click();
     };
@@ -31,37 +95,69 @@ const TicketModal = ({ item, data }) => {
         });
         setStateBtn(1);
     }
-
     function handleSubmit(event) {
         event.preventDefault();
-        // axios
-        //   .post(ADD_TICKET, details, {
-        //     headers: {
-        //       Authorization: `Bearer ${decryptedToken}`,
-        //     },
-        //   })
-        //   .then((response) => {
-        //     if(response.data.status===1){
-        //       toast.success("Ticket Added Successfully", {
-        //         position: "top-center",
-        //         autoClose: 2000,
-        //       });
-        //     }else{
-        //       toast.error(response.data.message, {
-        //         position: "top-center",
-        //         autoClose: 2000,
-        //       });
-        //     }
+        let updatedFormData;
 
-        //     setDetails({
-        //       description: "",
-        // attachment:"",
-        //     });
-        //     setStateBtn(0);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        if (user?.type_id === 1) {
+            updatedFormData = {
+                title: "coach admin support",
+                description: details?.description,
+                phone: user?.phone,
+                category: "coach admin support",
+                status: "waiting for support",
+                attachment: fileName,
+                user_id: data
+            };
+        } else if (user?.type_id === 2) {
+            updatedFormData = {
+                title: "academy admin support",
+                description: details?.description,
+                phone: user?.phone,
+                category: "academy admin support",
+                status: "waiting for support",
+                attachment: fileName,
+                user_id: data
+            };
+        } else if (user?.type_id === 3) {
+            updatedFormData = {
+                title: "player admin support",
+                description: details?.description,
+                phone: user?.phone,
+                category: "player admin support",
+                status: "waiting for support",
+                attachment: fileName,
+                user_id: data
+            };
+        }
+        axios
+            .post(ADD_NEW_TICKET, updatedFormData, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("Ticket Added Successfully", {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                } else {
+                    toast.error(response.data.message, {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                }
+                setDetails({
+                    description: "",
+                    attachment: "",
+                });
+                setFileName("")
+                setStateBtn(0);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     const handleCancelBtn = (e) => {
@@ -71,8 +167,8 @@ const TicketModal = ({ item, data }) => {
     };
     const expandEditor = () => {
         setOpenEditor(true);
-      };
-        
+    };
+
     return (
         <>
             {!openEditor ? (
@@ -93,8 +189,7 @@ const TicketModal = ({ item, data }) => {
                                     <input
                                         type="text"
                                         name="name"
-                                        onChange={handleChange}
-                                        value={details?.name}
+                                        value={user?.name}
                                         className="common-fonts common-input contact-tab-input"
                                     />
                                 </div>
@@ -105,9 +200,8 @@ const TicketModal = ({ item, data }) => {
                                     <div>
                                         <input
                                             type="text" name="phone"
-                                            onChange={handleChange}
                                             className="common-input contact-tab-input"
-                                            value={details?.phone}
+                                            value={user?.phone}
                                         />
                                     </div>
                                 </div>
@@ -117,9 +211,8 @@ const TicketModal = ({ item, data }) => {
                                     </label>
                                     <input
                                         type="email" name="email"
-                                        onChange={handleChange}
                                         className="common-fonts common-input email-case contact-tab-input"
-                                        value={details?.email}
+                                        value={user?.email}
                                     />
                                 </div>
                                 <div className="contact-tab-fields">

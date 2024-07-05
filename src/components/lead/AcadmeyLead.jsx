@@ -7,8 +7,6 @@ import {
     handleLogout,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
-    ACADMEY_ACTIVITY_SOURCE,
-    POST_EMAIL,
     USER_LOG, GET_BMPUSER_ID
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
@@ -29,38 +27,11 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [notes, setNotes] = useState(0);
     const [userId, setUserId] = useState(0);
     const [userLog, setUserLog] = useState(0);
-    const [activityCount, setActivityCount] = useState(0);
     const [leads, setLeads] = useState(0);
     const decryptedToken = getDecryptedToken();
-    const [userData, setUserData] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [allEmails, setAllEmails] = useState([]);
-    const [leadName, setLeadName] = useState("");
     const idOfOwner = parseInt(localStorage.getItem("id"));
     const [ownerId, setOwnerId] = useState(0);
-    const [ownerName, setOwnerName] = useState("");
-    const handleGetEmail = () => {
-        const updatedFormData = {
-            source: "lead",
-            source_id: selectedItem,
-        };
-        axios
-            .post(POST_EMAIL, updatedFormData, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`,
-                },
-            })
-            .then((response) => {
-                if (response?.data?.status === 1) {
-                    setAllEmails(response?.data?.data);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-
+ 
     const fetchLead = () => {
         axios
             .post(GET_ACADEMY, { academy_id: selectedItem }, {
@@ -69,7 +40,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 },
             })
             .then((response) => {
-                setLeadName(response?.data?.data[0]?.name);
                 setOwnerId(response.data.data[0]?.owner);
                 setEditedItem(response?.data?.data[0]);
             })
@@ -122,48 +92,8 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
 
     useEffect(() => {
         getUserId();
-        handleGetEmail();
-    }, []);
-
-    const fetchCall = () => {
-        const body = {
-            source_id: selectedItem,
-            source_type: "academy"
-        }
-        axios
-            .post(ACADMEY_ACTIVITY_SOURCE, body, {
-                headers: {
-                    Authorization: `Bearer ${decryptedToken}`,
-                },
-            })
-            .then((response) => {
-                const filteredNotes = response?.data?.data?.filter((note) => note.is_deleted !== 1);
-                setActivityCount(filteredNotes?.length);
-            })
-
-            .catch((error) => {
-                console.log(error);
-                if (error?.response?.data?.message === "Invalid or expired token.") {
-                    alert(error?.response?.data?.message);
-                    handleLogout();
-                }
-            });
-    };
-
-    useEffect(() => {
-        if (userData?.length > 0) {
-            setSelectedUser({
-                email: userData[0]?.email,
-                phone: userData[0]?.phone,
-                id: userData[0]?.id,
-            });
-        }
-    }, [userData]);
-
-    useEffect(() => {
         fetchLead();
         fetchNotes();
-        fetchCall();
         fetchLeads();
     }, []);
 
@@ -245,10 +175,6 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
         }
     };
 
-
-    useEffect(() => {
-        setOwnerName(userData?.find((item) => item.id === ownerId));
-    }, []);
     return (
         <div className="modal modal-zindex">
             <div className="leftClose" onClick={closeModal}></div>
@@ -329,23 +255,10 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                                 />
                             </div>
                         )}
-                        {/* {activeTab === "activity" && (
-                            <div className="activity-tab-content">
-                                <DealActivity
-                                    item={selectedItem}
-                                    type={"lead"}
-                                    count={fetchCall}
-                                    userData={userData}
-                                    ownerId={ownerId}
-                                    idOfOwner={idOfOwner}
-                                />
-                            </div>
-                        )} */}
                         {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <TicketModal
-                                    item={selectedItem}
-                                    data={editedItem}
+                                    data={userId?.id}
                                 />
                             </div>
                         )}

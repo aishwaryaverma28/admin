@@ -256,8 +256,7 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                          {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <TicketModal
-                                    item={selectedItem}
-                                    data={editedItem}
+                                    data={userId?.id}
                                 />
                             </div>
                         )}

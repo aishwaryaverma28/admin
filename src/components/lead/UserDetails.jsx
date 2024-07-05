@@ -37,7 +37,6 @@ const UserDetails = (selectedItem) => {
   };
 
   useEffect(() => {
-    // fetchLead();
     fetchLeadData();
   }, []);
 

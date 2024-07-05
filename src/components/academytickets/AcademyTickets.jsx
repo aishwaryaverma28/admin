@@ -2,18 +2,25 @@ import React, { useEffect, useState } from 'react';
 import '../styles/CPGenral.css';
 import axios from 'axios';
 import {
+  SEARCH_API,
   ACADEMY_TICKETS,
   getDecryptedToken,
 } from '../utils/Constants';
-import EditRequest from './EditRequest';
+import NewUserLead from '../newuser/NewUserLead';
+import AcadmeyLead from '../lead/AcadmeyLead';
+import CoachLead from '../lead/CoachLead';
+import PlayerLead from '../player/PlayerLead';
 
 const AcademyTickets = () => {
   const decryptedToken = getDecryptedToken();
   const [ticket, setTicket] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('status=0');
+  const [selectedOption, setSelectedOption] = useState('2');
+  const [coachMenu, setCoachMenu] = useState(false);
+  const [playerMenu, setPlayerMenu] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [academyOpen, setAcademyOpen] = useState(false);
+  const [selectedObj, setSelectedObj] = useState({});
   const [page, setPage] = useState(1);
   const limit = 10;
   const [pageGroup, setPageGroup] = useState(1);
@@ -24,7 +31,8 @@ const AcademyTickets = () => {
       sort: "id desc",
       page: page,
       limit: limit,
-      cond: selectedOption
+      cond: "t.status = 0",
+      type_id: parseInt(selectedOption)
     }
     axios
       .post(ACADEMY_TICKETS, body, {
@@ -107,13 +115,48 @@ const AcademyTickets = () => {
     setSelectedOption(event.target.value);
   };
   const openContactTab = (item) => {
-    setSelectedTicket(item);
-    setIsEditOpen(true);
+    axios
+      .get(SEARCH_API + "/bmp_user/id/" + item?.user_id, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
+      .then((response) => {
+        if (response?.data?.data[0]?.type_id === 2) {
+          if (response?.data?.data[0]?.parent_tbl === 0) {
+            setModalVisible(true);
+            setSelectedObj(response?.data?.data[0]);
+          }
+          else if (response?.data?.data[0]?.parent_tbl === 1) {
+            setAcademyOpen(true);
+            setSelectedObj(response?.data?.data[0]?.parent_id);
+          }
+        }
+        if (response?.data?.data[0]?.type_id === 1) {
+          setCoachMenu(true);
+          setSelectedObj(response?.data?.data[0]?.parent_id);
+        }
+        if (response?.data?.data[0]?.type_id === 3) {
+          setPlayerMenu(true);
+          setSelectedObj(response?.data?.data[0]?.parent_id);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-  const handleEditClose = () => {
-    setIsEditOpen(false);
-  }
-
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+  const closeAcademyModal = () => {
+    setAcademyOpen(false);
+  };
+  const closeCoachModal = () => {
+    setCoachMenu(false);
+  };
+  const closePlayerModal = () => {
+    setPlayerMenu(false);
+  };
   return (
     <div>
       <>
@@ -121,9 +164,9 @@ const AcademyTickets = () => {
           <p className="common-fonts ss-heading ticket-head-left">Tickets</p>
           <div className="select action-select">
             <select value={selectedOption} onChange={handleOptionChange} id="sports_lead">
-              <option value="status=0">Open</option>
-              <option value="status=1">Answered</option>
-              <option value="status=2">Closed</option>
+              <option value="2">Academy</option>
+              <option value="1">Coach</option>
+              <option value="3">Player</option>
             </select>
           </div>
           <button type="button" className="helpBtn genral-refresh-icon label-refresh-icon" title="Refresh" onClick={resetData}>
@@ -166,7 +209,7 @@ const AcademyTickets = () => {
                         {formatDate(item?.created_at)}
                       </td>
                     </tr>
-                  ))} 
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -181,9 +224,29 @@ const AcademyTickets = () => {
           </button>
         </div>
       </>
-      {
-        isEditOpen && <EditRequest onClose={handleEditClose} rowData={selectedTicket} />
-      }
+      {modalVisible && (
+        <NewUserLead
+          selectedItem={selectedObj}
+          closeModal={closeModal}
+        />
+      )}
+      {academyOpen && (
+        <AcadmeyLead
+          selectedItem={selectedObj}
+          closeModal={closeAcademyModal} />
+      )}
+      {coachMenu && (
+        <CoachLead
+          selectedItem={selectedObj}
+          closeModal={closeCoachModal}
+        />
+      )}
+      {playerMenu && (
+        <PlayerLead
+          selectedItem={selectedObj}
+          closeModal={closePlayerModal}
+        />
+      )}
     </div>
   );
 

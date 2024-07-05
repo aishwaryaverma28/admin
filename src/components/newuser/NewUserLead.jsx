@@ -9,6 +9,7 @@ import LeadImage from "./LeadImage";
 import Confirmation from "../lead/Confirmation.jsx";
 import AddNotes from "../deal/AddNotes.jsx";
 import { toast } from "react-toastify";
+import TicketModal from "../academytickets/TicketModal.jsx";
 const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const decryptedToken = getDecryptedToken();
   const [activeTab, setActiveTab] = useState("details");
@@ -179,7 +180,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 Tickets
               </button>
               <button
-                className={activeTab === "tickets" ? "active" : ""}
+                className={activeTab === "notes" ? "active" : ""}
                 onClick={() => handleTabClick("notes")}
               >
                 <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
@@ -223,10 +224,9 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 <UserLogs id={selectedItem?.id} type={selectedItem?.type_id} />
               </div>
             )}
-
             {activeTab === "tickets" && (
               <div className="notes-tab-content">
-                <BmpTickets selectedItem={selectedItem} />
+                <TicketModal data={selectedItem?.id}/>
               </div>
             )}
             {activeTab === "notes" && (

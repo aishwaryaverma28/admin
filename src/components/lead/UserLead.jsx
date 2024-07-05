@@ -3,7 +3,6 @@ import axios from "axios";
 import {
     getDecryptedToken, USER_LOG
 } from "./../utils/Constants";
-import UserDetails from './UserDetails';
 import BmpTickets from './BmpTickets';
 import CoachImage from './CoachImage';
 import CoachDetails from './CoachDetails';
