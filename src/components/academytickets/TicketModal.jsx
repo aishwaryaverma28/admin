@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import axios from "axios";
 import { toast } from "react-toastify";
 import AddTicket from './AddTicket';
+import StaticTickets from './StaticTickets';
 const TicketModal = ({ data }) => {
     console.log(data);
     window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -33,8 +34,9 @@ const TicketModal = ({ data }) => {
     
     return (
         <>
-        <AddTicket data={data}/>            
-        <></>
+        <AddTicket data={data}/>
+        <br/>
+        <StaticTickets/>
         </>
     )
 }

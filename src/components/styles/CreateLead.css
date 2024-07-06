@@ -148,6 +148,19 @@
 .lead-input:focus {
   border: 1px solid rgb(127, 126, 126);
 }
+.lead-input2 {
+  width: 17rem;
+  height: 2.25rem;
+  font-weight: 400;
+}
+.lead-input2:hover {
+  background-color: rgb(227, 225, 225);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+.lead-input2:focus {
+  border: 1px solid rgb(127, 126, 126);
+}
 .lead-priority{
   color: #1e2224;
   width: 17rem;
