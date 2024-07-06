@@ -145,10 +145,12 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     };
 
     const handleCitySelect = (sport) => {
+        console.log(sport);
         setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
         setEditedItem(prevState => ({
             ...prevState,
             loc_id: sport?.id,
+            city_id: sport?.city_id,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
         }));
         setFilteredCity([]);
@@ -164,6 +166,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
+                    city_id: filteredCity[0]?.city_id,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
@@ -298,6 +301,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             address1: editedItem?.address1?.trim(),
             address2: editedItem?.address2?.trim(),
             loc_id: editedItem?.loc_id,
+            city_id: editedItem?.city_id,
             city: editedItem?.city,
             postcode: editedItem?.postcode?.trim(),
             categories: editedItem?.categories?.trim(),
@@ -373,7 +377,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                     <span>-</span>
                                 ) : (
                                     <>
-                                       {editedItem?.id}: {editedItem?.name}, {editedItem?.location_locality}
+                                        {editedItem?.id}: {editedItem?.name}, {editedItem?.location_locality}
                                     </>
                                 )}
                             </p>

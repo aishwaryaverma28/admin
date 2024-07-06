@@ -18,6 +18,7 @@ const AddPlayer = ({ onClose }) => {
         about: "",
         awards: "",
         loc_id: "",
+        city_id:"",
         address: "",
         dob: "",
         email: "",
@@ -171,7 +172,8 @@ const AddPlayer = ({ onClose }) => {
             ...prevState,
             loc_id: sport?.id,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
-            state: sport.state
+            state: sport.state,
+            city_id: sport?.city_id,
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
@@ -186,6 +188,7 @@ const AddPlayer = ({ onClose }) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
+                    city_id: filteredCity[0]?.city_id,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
@@ -377,6 +380,7 @@ const AddPlayer = ({ onClose }) => {
                         address: "",
                         dob: "",
                         loc_id: "",
+                        city_id:"",
                         email: "",
                         height: "",
                         weight: "",

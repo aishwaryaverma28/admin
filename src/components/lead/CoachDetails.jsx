@@ -130,10 +130,12 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
   };
 
   const handleCitySelect = (sport) => {
+    console.log(sport);
     setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
     setEditedItem(prevState => ({
       ...prevState,
       loc_id: sport?.id,
+      city_id: sport?.city_id,
       city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
     }));
     setFilteredCity([]);
@@ -149,6 +151,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         setEditedItem(prevState => ({
           ...prevState,
           loc_id: filteredCity[0]?.id,
+          city_id: filteredCity[0]?.city_id,
           city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
         }));
       }
@@ -351,6 +354,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       sport_id: editedItem?.sport_id ?? 14,
       sport: editedItem?.sport,
       loc_id: editedItem?.loc_id,
+      city_id: editedItem?.city_id,
       city: editedItem?.city,
       about: editedItem?.about?.trim(),
       skill: newSkills?.join(","),

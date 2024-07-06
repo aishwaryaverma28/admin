@@ -34,6 +34,7 @@ const CreateLead = ({ onClose }) => {
     address1: "",
     address2: "",
     loc_id: "",
+    city_id:"",
     postcode: "",
     categories: "",
     friendly: "",
@@ -167,6 +168,7 @@ const CreateLead = ({ onClose }) => {
       ...prevState,
       loc_id: sport?.id,
       state: sport?.state,
+      city_id: sport?.city_id,
       city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
     }));
     setFilteredCity([]);
@@ -183,6 +185,7 @@ const CreateLead = ({ onClose }) => {
           ...prevState,
           loc_id: filteredCity[0]?.id,
           state: filteredCity[0]?.state,
+          city_id: filteredCity[0]?.city_id,
           city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
         }));
       }
@@ -310,6 +313,7 @@ const CreateLead = ({ onClose }) => {
             address1: "",
             address2: "",
             loc_id: "",
+            city_id:"",
             postcode: "",
             categories: "",
             friendly: "",
