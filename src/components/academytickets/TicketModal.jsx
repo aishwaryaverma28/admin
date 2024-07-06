@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { config, getDecryptedToken, ADD_NEW_TICKET,SEARCH_API } from "../utils/Constants";
+import { config, getDecryptedToken, ADD_NEW_TICKET, SEARCH_API, GET_USER_TICKETS } from "../utils/Constants";
 import AWS from 'aws-sdk';
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -21,21 +21,43 @@ const TicketModal = ({ data }) => {
     });
     const handleOptionChange = () => {
         axios
-          .get(SEARCH_API + "/bmp_user/id/" + data, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-          .then((response) => {
-            setUser(response?.data?.data[0]);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      useEffect(()=> {
+            .get(SEARCH_API + "/bmp_user/id/" + data, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setUser(response?.data?.data[0]);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    useEffect(() => {
         handleOptionChange()
-      },[])
+    }, [])
+    const getTickets = () => {
+        axios
+            .post(GET_USER_TICKETS + data,{
+                sort: "id desc",
+                page: 1,
+                limit: 10,
+                cond: `t.user_id = ${data}`
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                console.log(response?.data?.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    useEffect(() => {
+        getTickets()
+    }, [])
     const processImageName = (imageName) => {
         const nameParts = imageName.split(".");
         if (nameParts?.length > 1) {

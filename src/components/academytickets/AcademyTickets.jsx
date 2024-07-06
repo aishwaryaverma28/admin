@@ -193,7 +193,7 @@ const AcademyTickets = () => {
                     <th className="common-fonts">Mobile</th>
                     <th className="common-fonts">Email</th>
                     <th className="common-fonts">Description</th>
-                    <th className="common-fonts">Category</th>
+                    <th className="common-fonts">Status</th>
                     <th className="common-fonts">Date</th>
                   </tr>
                 </thead>
@@ -205,7 +205,7 @@ const AcademyTickets = () => {
                       <td className="common-fonts">{item?.phone}</td>
                       <td className="common-fonts">{item?.email}</td>
                       <td className="common-fonts"><div className="ticket_des">{item?.description}</div></td>
-                      <td className="common-fonts url_available">{item?.category}</td>
+                      <td className="common-fonts url_available">{item?.status}</td>
                       <td className="common-fonts">
                         {formatDate(item?.created_at)}
                       </td>
