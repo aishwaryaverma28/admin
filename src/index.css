@@ -184,7 +184,15 @@ textarea{
   width: 28rem;
   height: 2rem;
 }
-
+.common-input2 {
+  border-radius: 0.3125rem;
+  border: 1px solid #dcdcdc;
+  background: #f3f6fa;
+  padding: 0.7rem;
+  cursor: pointer;
+  width: 20rem;
+  height: 2rem;
+}
 .common-select{
   padding:0;
 }

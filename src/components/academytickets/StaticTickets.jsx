@@ -238,7 +238,7 @@ const StaticTickets = ({ data, tickets }) => {
                                                 <label htmlFor="fileInput" className="common-fonts contact-tab-label">Attachment</label>
                                                 <div className="contact-browse">
                                                     <span
-                                                        className="common-fonts common-input contact-tab-input"
+                                                        className="common-fonts common-input2 contact-tab-input"
                                                         style={{ position: "relative", marginRight: "10px", cursor: "pointer" }}
                                                     >
                                                         <button onClick={handleBrowseClick} className="contact-browse-btn common-fonts">Browse</button>
@@ -251,30 +251,34 @@ const StaticTickets = ({ data, tickets }) => {
                                                         />
                                                         {fileName && (
                                                             <span className="common-fonts upload-file-name">
-                                                                Selected File: {fileName}
+                                                                {fileName?.length > 20 ? (
+                                                                    <>{fileName?.slice(0, 20)}...</>
+                                                                ) : (
+                                                                    <>{fileName}</>
+                                                                )}
                                                             </span>
                                                         )}
                                                     </span>
                                                 </div>
-                                                
+
                                             </div>
                                             <div className="bmp-upload">
-                                                    {fileName && (
-                                                        <div className="bmp-image-preview">
-                                                            <a href={fileName === null
-                                                                ? `${cdnurl}attachments/tickets/${fileName}`
-                                                                : `${cdnurl}attachments/tickets/${fileName}`} target="_blank" rel="noopener noreferrer">
-                                                                <img
-                                                                    src={fileName === null
-                                                                        ? `${cdnurl}attachments/tickets/${fileName}`
-                                                                        : `${cdnurl}attachments/tickets/${fileName}`}
-                                                                    alt=""
-                                                                    className="bmp-preview-image"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                {fileName && (
+                                                    <div className="bmp-image-preview">
+                                                        <a href={fileName === null
+                                                            ? `${cdnurl}attachments/tickets/${fileName}`
+                                                            : `${cdnurl}attachments/tickets/${fileName}`} target="_blank" rel="noopener noreferrer">
+                                                            <img
+                                                                src={fileName === null
+                                                                    ? `${cdnurl}attachments/tickets/${fileName}`
+                                                                    : `${cdnurl}attachments/tickets/${fileName}`}
+                                                                alt=""
+                                                                className="bmp-preview-image"
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="bmp-add-fields">
