@@ -31,7 +31,7 @@ const TicketModal = ({ data }) => {
 
     return (
         <>
-            <AddTicket data={data} />
+            <AddTicket data={data} getTickets={getTickets}/>
             <br />
             <StaticTickets data={data} tickets={allTickets} />
         </>

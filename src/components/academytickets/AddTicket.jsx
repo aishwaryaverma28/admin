@@ -4,7 +4,7 @@ import AWS from 'aws-sdk';
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const AddTicket = ({ data }) => {
+const AddTicket = ({ data, getTickets }) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState("");
@@ -161,6 +161,7 @@ const AddTicket = ({ data }) => {
                 setFileName("")
                 setOpenEditor(false);
                 setStateBtn(0);
+                getTickets();
             })
             .catch((error) => {
                 console.log(error);
