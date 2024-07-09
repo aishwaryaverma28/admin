@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { getDecryptedToken, USER_LOG,GET_ACADEMY, UPDATE_ACADEMY } from "./../utils/Constants";
+import { getDecryptedToken, USER_LOG,GET_ACADEMY, UPDATE_ACADEMY,ACADEMY_TICKETS } from "./../utils/Constants";
 import BmpTickets from "../lead/BmpTickets";
 import NewAcademyDetails from "./NewAcademyDetails";
 import UserLogs from "../lead/UserLogs";
@@ -18,6 +18,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   const childRef = useRef(null);
   const [isDelete, setIsDelete] = useState(false);
   const [editedItem, setEditedItem] = useState({});
+  const [allTickets, setAllTickets] = useState([]);
   const handleDeletePopUpOpen = () => {
     setIsDelete(true);
   };
@@ -55,6 +56,9 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
         {
           object_type: selectedItem?.type_id,
           object_id: selectedItem?.id,
+          page: 1,
+            limit: 10,
+            order: "id desc"
         },
         {
           headers: {
@@ -73,7 +77,27 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
   useEffect(() => {
     fetchUserLog();
     fetchLead();
+    getTickets();
   }, []);
+  const getTickets = () => {
+    axios
+        .post(ACADEMY_TICKETS, {
+            sort: "id desc",
+            page: 1,
+            limit: 10,
+            cond: `t.user_id = ${selectedItem?.id}`
+        }, {
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+            },
+        })
+        .then((response) => {
+            setAllTickets(response?.data?.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
   const fetchLead = () => {
     let body = {
         academy_id: selectedItem?.parent_id,
@@ -177,7 +201,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
                 onClick={() => handleTabClick("tickets")}
               >
                 <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                Tickets
+                Tickets ({allTickets?.length ?? 0})
               </button>
               <button
                 className={activeTab === "notes" ? "active" : ""}

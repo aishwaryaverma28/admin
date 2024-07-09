@@ -1,18 +1,18 @@
-import React,{ useState,useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import CoachDetails from './CoachDetails';
 import CoachImage from './CoachImage';
 import axios from "axios";
 import {
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
-    handleLogout, USER_LOG, GET_BMPUSER_ID,UPDATE_COACH,GET_COACH_ID
+    handleLogout, USER_LOG, GET_BMPUSER_ID, UPDATE_COACH, GET_COACH_ID,ACADEMY_TICKETS
 } from "./../utils/Constants";
 import AcadmeyLeadDetails from './AcadmeyLeadDetails';
 import UserLogs from './UserLogs';
 import Confirmation from './Confirmation';
 import { toast } from 'react-toastify';
 import TicketModal from '../academytickets/TicketModal';
-const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
+const CoachLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
     const decryptedToken = getDecryptedToken();
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
@@ -22,13 +22,14 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
     const [leads, setLeads] = useState(0);
     const [activeTab, setActiveTab] = useState("details");
     const [editedItem, setEditedItem] = useState({})
+    const [allTickets, setAllTickets] = useState([]);
     const handleDeletePopUpOpen = () => {
         setIsDelete(true);
-      };
-      const handleMassDeletePopUpClose = () => {
+    };
+    const handleMassDeletePopUpClose = () => {
         setIsDelete(false);
         setCheck(false);
-      };
+    };
     const updateCheckState = (value) => {
         setCheck(value);
     };
@@ -99,8 +100,13 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
     };
     const fetchUserLog = (id) => {
         axios
-            .post(USER_LOG, { object_type: 1,
-            object_id: id?.id }, {
+            .post(USER_LOG, {
+                object_type: 1,
+                object_id: id?.id,
+                page: 1,
+                limit: 10,
+                order: "id desc"
+            }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
                 },
@@ -118,64 +124,86 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
         getUserId();
         fetchCoach();
     }, [])
+    useEffect(() => {
+        getTickets();
+    },[userId])
     const fetchCoach = () => {
         let body = {
-          coachId: selectedItem,
-          type: "org"
+            coachId: selectedItem,
+            type: "org"
         };
         axios
-          .post(GET_COACH_ID, body, {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          })
-          .then((response) => {
-            setEditedItem(response?.data?.data[0]);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      };
-      function UserArchive() {
+            .post(GET_COACH_ID, body, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setEditedItem(response?.data?.data[0]);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    function UserArchive() {
         const updatedFormData = {
-          type: "org",
-          is_deleted: 1,
-          name: editedItem?.name?.trim(),
-          sport_id: editedItem?.sport_id ?? 14,
-          loc_id: editedItem?.loc_id ?? 1,
+            type: "org",
+            is_deleted: 1,
+            name: editedItem?.name?.trim(),
+            sport_id: editedItem?.sport_id ?? 14,
+            loc_id: editedItem?.loc_id ?? 1,
         }
         axios
-        .put(UPDATE_COACH + selectedItem, updatedFormData
-          , {
-            headers: {
-              Authorization: `Bearer ${decryptedToken}`,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.data.status === 1) {
-            toast.success("User deleted successfully", {
-              position: "top-center",
-              autoClose: 2000,
+            .put(UPDATE_COACH + selectedItem, updatedFormData
+                , {
+                    headers: {
+                        Authorization: `Bearer ${decryptedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                if (response.data.status === 1) {
+                    toast.success("User deleted successfully", {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                    if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
+                        onLeadAdded(page, limit);
+                    }
+                } else {
+                    toast.error(response?.data?.message, {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error("An error occurred while updating details", {
+                    position: "top-center",
+                    autoClose: 2000,
+                });
+            })
+    }
+    const getTickets = () => {
+        axios
+            .post(ACADEMY_TICKETS, {
+                sort: "id desc",
+                page: 1,
+                limit: 10,
+                cond: `t.user_id = ${userId}`
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setAllTickets(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
             });
-            if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
-                onLeadAdded(page, limit);
-              }
-          } else {
-            toast.error(response?.data?.message, {
-              position: "top-center",
-              autoClose: 2000,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("An error occurred while updating details", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-        })
-      }
+    }
     return (
         <div className="modal">
             <div className="leftClose" onClick={closeModal}></div>
@@ -185,52 +213,52 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                 </span>
                 {/* left side of modal ends here */}
                 <div className="user-details--right">
-                <div className="archive_flex">
-                    <div className="tab-navigation">
-                         {/* ===================================================================tabination buttons */}
-                         <button
-                            className={activeTab === "details" ? "active" : ""}
-                            onClick={() => handleTabClick("details")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-newspaper-o"></i>
-                            Coach Details
-                        </button>
-                        <button
-                            className={activeTab === "gallery" ? "active" : ""}
-                            onClick={() => handleTabClick("gallery")}
-                        >
-                            <i class="fa-sharp fa-regular fa-images"></i>
-                            Images
-                        </button>
-                        <button
-                            className={activeTab === "user" ? "active" : ""}
-                            onClick={() => handleTabClick("user")}
-                        >
-                            <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
-                            User Logs ({userLog?.length ?? 0})
-                        </button>
-                        <button
-                            className={activeTab === "leads" ? "active" : ""}
-                            onClick={() => handleTabClick("leads")}
-                        >
-                            <i className="fa-sharp fa-regular fa-handshake-o"></i>
-                            Leads ({leads?.length ?? 0})
-                        </button>
-                        <button
-                            className={activeTab === "tickets" ? "active" : ""}
-                            onClick={() => handleTabClick("tickets")}
-                        >
-                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
-                            Tickets ({})
-                        </button>
+                    <div className="archive_flex">
+                        <div className="tab-navigation">
+                            {/* ===================================================================tabination buttons */}
+                            <button
+                                className={activeTab === "details" ? "active" : ""}
+                                onClick={() => handleTabClick("details")}
+                            >
+                                <i class="fa-sharp fa-regular fa fa-newspaper-o"></i>
+                                Coach Details
+                            </button>
+                            <button
+                                className={activeTab === "gallery" ? "active" : ""}
+                                onClick={() => handleTabClick("gallery")}
+                            >
+                                <i class="fa-sharp fa-regular fa-images"></i>
+                                Images
+                            </button>
+                            <button
+                                className={activeTab === "user" ? "active" : ""}
+                                onClick={() => handleTabClick("user")}
+                            >
+                                <i class="fa-sharp fa-regular fa fa-file-text-o"></i>
+                                User Logs ({userLog?.length ?? 0})
+                            </button>
+                            <button
+                                className={activeTab === "leads" ? "active" : ""}
+                                onClick={() => handleTabClick("leads")}
+                            >
+                                <i className="fa-sharp fa-regular fa-handshake-o"></i>
+                                Leads ({leads?.length ?? 0})
+                            </button>
+                            <button
+                                className={activeTab === "tickets" ? "active" : ""}
+                                onClick={() => handleTabClick("tickets")}
+                            >
+                                <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                                Tickets ({allTickets?.length ?? 0})
+                            </button>
+                        </div>
+                        {editedItem && editedItem?.is_deleted !== 1 ? <div>
+                            <button className="recycle-delete" onClick={UserArchive}>Archive</button>
+                        </div> : <></>
+                        }
                     </div>
-                    {editedItem && editedItem?.is_deleted !== 1 ? <div>
-              <button className="recycle-delete" onClick={UserArchive}>Archive</button>
-            </div> : <></>
-            }
-          </div>
-                     {/* ===================================================================tabination content */}
-                     <div className="tab-content">
+                    {/* ===================================================================tabination content */}
+                    <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
                                 <CoachDetails user_id={userId} id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
@@ -241,9 +269,9 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                                 <CoachImage id={selectedItem} />
                             </div>
                         )}
-                         {activeTab === "user" && (
+                        {activeTab === "user" && (
                             <div className="activity-tab-content">
-                                <UserLogs id={userId?.id} type={1}/>
+                                <UserLogs id={userId?.id} type={1} />
                             </div>
                         )}
                         {activeTab === "leads" && (
@@ -253,22 +281,22 @@ const CoachLead = ({ selectedItem, closeModal,onLeadAdded,page,limit }) => {
                                 />
                             </div>
                         )}
-                         {activeTab === "tickets" && (
+                        {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <TicketModal
                                     data={userId?.id}
                                 />
                             </div>
                         )}
-                        </div>
+                    </div>
                 </div>
             </div>
             {isDelete && (
-        <Confirmation
-          onClose={handleMassDeletePopUpClose}
-          onDeleteConfirmed={callChildFunction}
-        />
-      )}
+                <Confirmation
+                    onClose={handleMassDeletePopUpClose}
+                    onDeleteConfirmed={callChildFunction}
+                />
+            )}
         </div>
     )
 }

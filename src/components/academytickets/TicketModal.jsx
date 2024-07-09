@@ -1,17 +1,14 @@
-import React, { useState,useEffect } from 'react'
-import { config, getDecryptedToken,GET_USER_TICKETS } from "../utils/Constants";
-import AWS from 'aws-sdk';
+import React, { useState, useEffect } from 'react'
+import { getDecryptedToken, ACADEMY_TICKETS } from "../utils/Constants";
 import axios from "axios";
-import { toast } from "react-toastify";
 import AddTicket from './AddTicket';
 import StaticTickets from './StaticTickets';
 const TicketModal = ({ data }) => {
-    console.log(data);
-    window.Buffer = window.Buffer || require("buffer").Buffer;
     const decryptedToken = getDecryptedToken();
-        const getTickets = () => {
+    const [allTickets, setAllTickets] = useState([])
+    const getTickets = () => {
         axios
-            .post(GET_USER_TICKETS + data,{
+            .post(ACADEMY_TICKETS, {
                 sort: "id desc",
                 page: 1,
                 limit: 10,
@@ -22,7 +19,7 @@ const TicketModal = ({ data }) => {
                 },
             })
             .then((response) => {
-                console.log(response?.data?.data)
+                setAllTickets(response?.data?.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -31,12 +28,12 @@ const TicketModal = ({ data }) => {
     useEffect(() => {
         getTickets()
     }, [])
-    
+
     return (
         <>
-        <AddTicket data={data}/>
-        <br/>
-        <StaticTickets/>
+            <AddTicket data={data} />
+            <br />
+            <StaticTickets data={data} tickets={allTickets} />
         </>
     )
 }

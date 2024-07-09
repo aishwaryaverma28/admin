@@ -4,7 +4,7 @@ import {
     USER_LOG,
     GET_BMPUSER_ID,
     getDecryptedToken,
-    ACADMEY_LEADS_DETAILS, UPDATE_PLAYER, GET_PLAYER_ID,
+    ACADMEY_LEADS_DETAILS, UPDATE_PLAYER, GET_PLAYER_ID,ACADEMY_TICKETS,
     handleLogout
 } from "./../utils/Constants"
 import { toast } from 'react-toastify';
@@ -23,7 +23,8 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
     const [isDelete, setIsDelete] = useState(false);
-    const [editedItem, setEditedItem] = useState({})
+    const [editedItem, setEditedItem] = useState({});
+    const [allTickets, setAllTickets] = useState([]);
     const handleDeletePopUpOpen = () => {
         setIsDelete(true);
     };
@@ -102,7 +103,10 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
         axios
             .post(USER_LOG, {
                 object_type: 3,
-                object_id: id?.id
+                object_id: id?.id,
+                page: 1,
+                limit: 10,
+                order: "id desc"
             }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
@@ -121,6 +125,9 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
         getUserId();
         getAllPlayers();
     }, [])
+    useEffect(() => {
+        getTickets();
+    },[userId])
     const getAllPlayers = () => {
         const requestBody = {
             playerId: selectedItem,
@@ -164,7 +171,7 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                     });
                     if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
                         onLeadAdded(page, limit);
-                      }
+                    }
                 } else {
                     toast.error(response?.data?.message, {
                         position: "top-center",
@@ -179,6 +186,25 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                     autoClose: 2000,
                 });
             })
+    }
+    const getTickets = () => {
+        axios
+            .post(ACADEMY_TICKETS, {
+                sort: "id desc",
+                page: 1,
+                limit: 10,
+                cond: `t.user_id = ${userId}`
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setAllTickets(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
     return (
         <div className="modal">
@@ -221,12 +247,12 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                                 Leads ({leads?.length ?? 0})
                             </button>
                             <button
-                            className={activeTab === "tickets" ? "active" : ""}
-                            onClick={() => handleTabClick("tickets")}
-                        >
-                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
-                            Tickets ({})
-                        </button>
+                                className={activeTab === "tickets" ? "active" : ""}
+                                onClick={() => handleTabClick("tickets")}
+                            >
+                                <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                                Tickets ({allTickets?.length ?? 0})
+                            </button>
                         </div>
                         {editedItem && editedItem?.is_deleted !== 1 ? <div>
                             <button className="recycle-delete" onClick={UserArchive}>Archive</button>
@@ -258,7 +284,7 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                                 />
                             </div>
                         )}
-                         {activeTab === "tickets" && (
+                        {activeTab === "tickets" && (
                             <div className="notes-tab-content">
                                 <TicketModal
                                     data={userId?.id}

@@ -7,7 +7,7 @@ import {
     handleLogout,
     getDecryptedToken,
     ACADMEY_LEADS_DETAILS,
-    USER_LOG, GET_BMPUSER_ID
+    USER_LOG, GET_BMPUSER_ID,ACADEMY_TICKETS
 } from "./../utils/Constants";
 import AddNotes from "../deal/AddNotes";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,7 +31,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const decryptedToken = getDecryptedToken();
     const idOfOwner = parseInt(localStorage.getItem("id"));
     const [ownerId, setOwnerId] = useState(0);
- 
+ const [allTickets, setAllTickets] = useState([]);
     const fetchLead = () => {
         axios
             .post(GET_ACADEMY, { academy_id: selectedItem }, {
@@ -76,7 +76,10 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
         axios
             .post(USER_LOG, {
                 object_type: 2,
-                object_id: id?.id
+                object_id: id?.id,
+                page: 1,
+            limit: 10,
+            order: "id desc"
             }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,
@@ -96,7 +99,9 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
         fetchNotes();
         fetchLeads();
     }, []);
-
+useEffect(() => {
+    getTickets();
+},[userId])
     //==================================================================notes count
     const fetchNotes = () => {
         const body = {
@@ -146,6 +151,25 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                 }
             });
     };
+    const getTickets = () => {
+        axios
+            .post(ACADEMY_TICKETS, {
+                sort: "id desc",
+                page: 1,
+                limit: 10,
+                cond: `t.user_id = ${userId}`
+            }, {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`,
+                },
+            })
+            .then((response) => {
+                setAllTickets(response?.data?.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     //===========================================================new code
     const handleDeletePopUpOpen = () => {
         setIsDelete(true);
@@ -220,7 +244,7 @@ const AcadmeyLead = ({ selectedItem, closeModal }) => {
                             onClick={() => handleTabClick("tickets")}
                         >
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
-                            Tickets ({})
+                            Tickets ({allTickets?.length ?? 0})
                         </button>
                         <button
                             className={activeTab === "notes" ? "active" : ""}

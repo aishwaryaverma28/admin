@@ -68,7 +68,7 @@ const AddTicket = ({ data }) => {
             const s3 = new AWS.S3();
             const params = {
                 Bucket: 'destcdn90',
-                Key: `attachments/tickets/${data || ""}/${modifiedFile.name}`,
+                Key: `attachments/tickets/${modifiedFile.name}`,
                 Body: modifiedFile
             };
             s3.upload(params, (err, data) => {
