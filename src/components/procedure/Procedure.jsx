@@ -32,6 +32,7 @@ const Procedure = () => {
         { id: 1, title: 'Insert unique coach listings', procedure: 'insert_unique_coach_listings', successMessage: 'Coach Procedure Successful' },
         { id: 2, title: 'Insert Verified Academies Coaches', procedure: 'Insert_Verified_Academies_Coaches', successMessage: 'Academy Procedure Successful' },
         { id: 3, title: 'Insert nearby unique coach listings', procedure: 'insert_nearby_unique_coach_listings', successMessage: 'Coach Listings Procedure Successful' },
+        { id: 4, title: 'Refresh Sitemap', procedure: 'refresh_Sitemap', successMessage: 'Refresh Sitemap Procedure Successful' },
     ];
 
     return (
