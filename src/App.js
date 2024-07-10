@@ -53,6 +53,7 @@ import BmpLeads from "./components/bmpleads/BmpLeads.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Player from "./components/player/Player.jsx";
 import TicketTabs from "./components/academytickets/TicketTabs.jsx";
+import Procedure from "./components/procedure/Procedure.jsx";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -111,6 +112,10 @@ const router = createBrowserRouter([
       {
         path: "/lp/support",
         element: <TicketTabs/>,
+      },
+      {
+        path: "/lp/procedure",
+        element: <Procedure/>,
       },
       {
         path: "/lp/settings",

@@ -320,3 +320,4 @@ export const GET_ARCHIVED = bmpStart+"/bmp/entities/getbyarchivestatus";
 export const ADD_NEW_TICKET =bmpStart+"/bmp/ticket/add";
 export const ADD_TICKET_REPLY = bmpStart+"/bmp/ticket/add-reply";
 export const GET_USER_TICKETS = bmpStart+"/bmp/ticket/get/";
+export const EXECUTE_PROCEDURE = bmpStart+"/bmp/exicute-procedure";

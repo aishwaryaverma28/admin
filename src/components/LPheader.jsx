@@ -403,6 +403,11 @@ const LPheader = () => {
                   Support
                 </NavLink>
               </li>
+              <li onClick={() => handleNavigationClick("Procedure")}>
+                <NavLink exact to="/lp/procedure" activeClassName="activeNav">
+                  Procedure
+                </NavLink>
+              </li>
           </ul>
           <span></span>
         </div>
