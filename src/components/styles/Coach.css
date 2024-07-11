@@ -131,3 +131,7 @@
   overflow-x: hidden;
   width: 100%;
 }
+.bigReplies{
+  height: 15vh;
+  overflow-y: scroll;
+}
