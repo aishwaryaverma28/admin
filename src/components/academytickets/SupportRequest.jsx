@@ -1,33 +1,33 @@
 import React, { useRef, useState } from "react";
 import "../styles/CPGenral.css";
 import axios from "axios";
-import { REPLY_TICKET, getDecryptedToken } from "../utils/Constants";
+import { cdnurl,ADD_TICKET_REPLY, getDecryptedToken, config } from "../utils/Constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const SupportRequest = ({ onClose, ticket }) => {
+import AWS from 'aws-sdk';
+const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
+  window.Buffer = window.Buffer || require("buffer").Buffer;
   const decryptedToken = getDecryptedToken();
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
   const [details, setDetails] = useState({
-    ticketId: ticket?.id,
-    reply:""
+    status: "",
+    description: "",
+    attachment: "",
+    parent_id: ticket?.id,
   });
+  const processImageName = (imageName) => {
+    const nameParts = imageName.split(".");
+    if (nameParts?.length > 1) {
+        const namePart = nameParts.slice(0, -1).join(".");
+        const processedName = namePart.replace(/[^\w-]/g, "-");
+        return `${processedName}.${nameParts[nameParts.length - 1]}`;
+    } else {
+        return imageName.replace(/[^\w-]/g, "-");
+    }
+};
 
-
-// parent_id
-// : 
-// 1
-// query
-// : 
-// null
-// status
-// : 
-// null
-// user_id
-// : 
-// null
   const handleBrowseClick = () => {
     fileInputRef.current.click();
   };
@@ -39,44 +39,76 @@ const SupportRequest = ({ onClose, ticket }) => {
     });
     setStateBtn(1);
   }
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setFileName(file.name);
+      submitImage(file);
     }
   };
+  const submitImage = (file) => {
+    const selectedImage = file;
 
+    if (selectedImage) {
+        const processedFileName = processImageName(selectedImage.name);
+        const modifiedFile = new File([selectedImage], processedFileName, { type: selectedImage.type });
+
+        AWS.config.update({
+            accessKeyId: config.accessKeyId,
+            secretAccessKey: config.secretAccessKey,
+            region: config.region,
+        });
+
+        const s3 = new AWS.S3();
+        const params = {
+            Bucket: 'destcdn90',
+            Body: modifiedFile,
+            Key: `attachments/tickets/${modifiedFile.name}`,
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.error('Error uploading file:', err);
+            } else {
+                setFileName(modifiedFile.name);
+                setDetails((prevDetails) => ({
+                    ...prevDetails,
+                    attachment: modifiedFile.name,
+                }));
+            }
+        });
+    }
+};
   const handleUpdate = (event) => {
     event.preventDefault();
     console.log(details);
     axios
-      .post(REPLY_TICKET, details, {
+      .post(ADD_TICKET_REPLY, details, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },
       })
       .then((response) => {
-        console.log(response);
-        if (response?.data?.status === 1){
-        toast.success("Reply is added successfully", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      }else{
-        toast.error(response?.data?.message, {
-          position: "top-center",
-          autoClose: 1000,
-        });
-      }
+        if (response?.data?.status === 1) {
+          toast.success("Reply is added successfully", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+          });
+        }
+        getTicket(page);
       })
       .catch((error) => {
-console.log(error)
+        console.log(error)
       })
   };
   return (
     <div className="popup-wrapper">
       <div className="product-popup-container">
+      <div className="leftCreateClose" onClick={onClose}></div>
         <div className="product-popup-box edit-service-box">
           <div>
             <p className="common-fonts contact-support-heading">Edit Service</p>
@@ -84,14 +116,14 @@ console.log(error)
               <form>
                 <div className="contact-tab-fields">
                   <label htmlFor="" className="common-fonts contact-tab-label">
-                    Title
+                    Name
                   </label>
                   <input
                     type="text"
-                    name="title"
+                    name="name"
                     onChange={handleChange}
                     className="common-fonts common-input contact-tab-input"
-                    value={ticket?.title}
+                    value={ticket?.name}
                     disabled
                   />
                 </div>
@@ -117,10 +149,10 @@ console.log(error)
                   <div>
                     <input
                       type="text"
-                      name="mobile"
+                      name="phone"
                       onChange={handleChange}
                       className="common-input contact-tab-input"
-                      value={ticket?.mobile}
+                      value={ticket?.phone}
                       disabled
                     />
                   </div>
@@ -142,34 +174,20 @@ console.log(error)
 
                 <div className="contact-tab-fields">
                   <label htmlFor="" className="common-fonts contact-tab-label">
-                    Type of issue
+                    Status
                   </label>
                   <select
-                    name="category"
-                    onChange={handleChange}
                     className="common-input contact-type-of-issue"
-                    value={ticket?.category}
-                    disabled
-                  >
-                    <option value="technical">Technical</option>
-                    <option value="Non Technical">Non Technical</option>
-                  </select>
-                </div>
-
-                <div className="contact-tab-fields">
-                  <label htmlFor="" className="common-fonts contact-tab-label">
-                    Priority
-                  </label>
-                  <select
-                    name="priority"
+                    value={ticket?.status}
                     onChange={handleChange}
-                    className="common-input contact-type-of-issue"
-                    value={ticket?.priority}
-                    disabled
+                    name="status"
                   >
-                    <option value="Low">Low</option>
-                    <option value="Average">Average</option>
-                    <option value="High">High</option>
+                    <option value=""></option>
+                    <option value="waiting for support">waiting for support</option>
+                    <option value="in progress">in progress</option>
+                    <option value="canceled">canceled</option>
+                    <option value="resolved">resolved</option>
+                    <option value="closed">closed</option>
                   </select>
                 </div>
 
@@ -178,14 +196,14 @@ console.log(error)
                     Reply
                   </label>
                   <textarea
-                    name="reply"
+                    name="description"
                     onChange={handleChange}
                     className="common-fonts common-input contact-tab-input contact-tab-textarea"
                     placeholder="Reply to the issue raised"
-                    value={details?.reply}
+                    value={details?.description}
                   ></textarea>
                 </div>
-                {/* <div className="contact-tab-fields">
+                <div className="contact-tab-fields">
                   <label
                     htmlFor="fileInput"
                     className="common-fonts contact-tab-label"
@@ -230,7 +248,7 @@ console.log(error)
                       )}
                     </span>
                   </div>
-                </div> */}
+                </div>
                 <div className="contact-support-button">
                   {stateBtn === 0 ? (
                     <button className="disabledBtn" disabled>
