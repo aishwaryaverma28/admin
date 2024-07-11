@@ -178,7 +178,9 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 }
                 if (response?.data?.data[0]?.location_locality) {
                     setSearchCity(response?.data?.data[0]?.location_locality)
-                }
+                }else if (response?.data?.data[0]?.location_city) {
+                    setSearchCity(response?.data?.data[0]?.location_city)
+                  }
                 setIsLoading(false);
             })
             .catch((error) => {

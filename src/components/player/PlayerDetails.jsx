@@ -16,11 +16,11 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     about: "",
     awards: "",
     loc_id: "",
-    city_id:"",
+    city_id: "",
     address: "",
     dob: "",
     email: "",
-    heighlight:"",
+    heighlight: "",
     height: "",
     weight: "",
     phone: "",
@@ -216,6 +216,8 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
         if (response?.data?.data[0]?.location_city) {
+          setSearchCity(response?.data?.data[0]?.location_city)
+        } else if (response?.data?.data[0]?.location_city) {
           setSearchCity(response?.data?.data[0]?.location_city)
         }
         if (response?.data?.data[0]?.height) {
@@ -657,7 +659,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                       )}
                     </div>
                   </div>
-                </>                
+                </>
                 <p>
                   {isLoading ? (
                     <span>-</span>
