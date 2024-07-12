@@ -105,15 +105,13 @@ const PlayerImage = (id) => {
             const file = files[i];
             if (!allowedFileTypes.includes(file.type)) {
                 if (!alertShown) {
-                    alert("Please choose a valid video file.");
+                    alert("Please choose a valid video or image file.");
                     setAlertShown(true);
                 }
                 return;
-            } else if (!allowedFileTypes.includes(file.type)) {
-                if (!alertShown) {
-                    alert("Please choose a valid image file.");
-                    setAlertShown(true);
-                }
+            }
+            if (file.type.startsWith("video/") && file.size > 9.8 * 1024 * 1024) {
+                alert("Video file size should be less than 10MB.");
                 return;
             }
             if (file.type.startsWith("image/")) {
