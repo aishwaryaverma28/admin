@@ -78,8 +78,7 @@ const AllLeadsModal = ({ closeModal, object, sport, getAllLeads }) => {
 
     const fetchLeads = () => {
         const body = {
-            object_id: object?.academy_id,
-            object_type: "academy",
+            cond: `ala.academy_id = ${object?.academy_id}`
         };
 
         axios

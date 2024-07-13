@@ -77,7 +77,7 @@ const CoachLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
     }
     const fetchLeads = () => {
         const body = {
-            object_id: selectedItem, object_type: "coach",
+              cond: `ala.coach_id = ${selectedItem}`
         }
         axios
             .post(ACADMEY_LEADS_DETAILS, body, {

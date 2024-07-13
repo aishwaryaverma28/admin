@@ -130,7 +130,7 @@ useEffect(() => {
     
     const fetchLeads = () => {
         const body = {
-            object_id: selectedItem, object_type: "academy",
+            cond: `ala.academy_id = ${selectedItem}`
         }
         axios
             .post(ACADMEY_LEADS_DETAILS, body, {
