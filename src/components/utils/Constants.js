@@ -66,7 +66,7 @@ export const handleLogout = () => {
 export const cdnurl = "https://d146zb2foqhwdd.cloudfront.net/";
 const start = "https://core.leadplaner.com/api/api";
 // const bmpStart = "https://bmp.leadplaner.com/api/api";
-const bmpStart="http://admin.lotusx.shop/api/api";
+const bmpStart="http://crm.leadplaner.com/api/api";
 const userId = localStorage.getItem("id");
 export const USER_INFO = start + "/user/getuserinfo";
 export const BMP_USER = start + "/bmp/getUser";
