@@ -44,7 +44,7 @@ const UrlModal = ({ onClose, api }) => {
   const handleSaveClick = async () => {
     try {
       const response = await axios.post(
-        "https://bmp.leadplaner.com/api/api/bmp/redirect/add",
+        "http://crm.leadplaner.com/api/api/bmp/redirect/add",
         { old_url: oldUrl, new_url: newUrl },
         {
           headers: {
