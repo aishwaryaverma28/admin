@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { REDIRECT_FIND,getDecryptedToken } from "../utils/Constants";
+import { REDIRECT_FIND,REDIRECT_ADD, getDecryptedToken } from "../utils/Constants";
 import { toast } from "react-toastify";
 
 const UrlModal = ({ onClose, api }) => {
@@ -44,7 +44,7 @@ const UrlModal = ({ onClose, api }) => {
   const handleSaveClick = async () => {
     try {
       const response = await axios.post(
-        "http://crm.leadplaner.com/api/api/bmp/redirect/add",
+        REDIRECT_ADD,
         { old_url: oldUrl, new_url: newUrl },
         {
           headers: {

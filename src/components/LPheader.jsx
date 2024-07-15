@@ -202,10 +202,10 @@ const LPheader = () => {
 //================================================================sign out
   const handleLogout = () => {
     if (localStorage.length === 0) {
-      window.location.href = "http://crm.leadplaner.com/login";
+      window.location.href = "https://crm.leadplaner.com/login";
     } else {
       localStorage.clear();
-      window.location.href = "http://crm.leadplaner.com/login";
+      window.location.href = "https://crm.leadplaner.com/login";
     }
   };
   return (

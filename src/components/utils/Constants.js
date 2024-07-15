@@ -55,18 +55,16 @@ export const config = {
 //=============================================================logout function
 export const handleLogout = () => {
   if (localStorage.length === 0) {
-    window.location.href = "http://crm.leadplaner.com/login";
+    window.location.href = "https://crm.leadplaner.com/login";
   } else {
     localStorage.clear();
-    window.location.href = "http://crm.leadplaner.com/login";
+    window.location.href = "https://crm.leadplaner.com/login";
   }
 };
 // =============================================================apis used
-// export const cdnurl = "https://d2bdxhtfh3zsqc.cloudfront.net/";
 export const cdnurl = "https://d146zb2foqhwdd.cloudfront.net/";
 const start = "https://core.leadplaner.com/api/api";
-// const bmpStart = "https://bmp.leadplaner.com/api/api";
-const bmpStart="http://crm.leadplaner.com/api/api";
+const bmpStart="https://crm.leadplaner.com/api/api";
 const userId = localStorage.getItem("id");
 export const USER_INFO = start + "/user/getuserinfo";
 export const BMP_USER = start + "/bmp/getUser";
@@ -299,7 +297,8 @@ export const GET_OTP = bmpStart+"/bmp/log/getOtps";
 export const LEADS_BY_CITY = bmpStart+"/bmp/leads/getByCities";
 export const LEADS_BY_ENTITY = bmpStart+"/bmp/entity/getByCities";
 export const ALL_SPORTS = bmpStart+ "/bmp/master/sport";
-export const REDIRECT_FIND = bmpStart+"/bmp/redirect/find"
+export const REDIRECT_FIND = bmpStart+"/bmp/redirect/find";
+export const REDIRECT_ADD = bmpStart+"/bmp/redirect/add"
 export const ALL_REVIEWS = bmpStart+"/bmp/review/get-by-entity";
 export const GET_ALL_CITY = bmpStart+"/bmp/master/get-cities";
 export const UPDATE_REVIEW = bmpStart+"/bmp/review/update";

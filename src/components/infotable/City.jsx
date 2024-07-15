@@ -4,7 +4,7 @@ import "../styles/Contacts.css";
 import Back from "../../assets/image/arrow-left.svg";
 import TempCityTable from './TempCityTable';
 const City = ({ onClose }) => {
-    const [activeTab, setActiveTab] = useState("company");
+    const [activeTab, setActiveTab] = useState("people");
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
