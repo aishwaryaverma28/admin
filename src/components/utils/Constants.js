@@ -73,7 +73,7 @@ export const USER_UPDATE = start + "/user/update";
 export const COUNTRIES = start + "/user/getcountries";
 export const ELIGIBLE_LOANS = start + "/user/geteligibilitycriteria";
 //===============================================================login apis
-export const LOGIN = start + "/user/login";
+export const LOGIN = bmpStart + "/bmp/user/login";
 export const CREATE_ACC = start + "/user/createaccount";
 export const OTP = start + "/user/send-otp";
 export const MAIN_PASS = start + "/user/forgot-password";
