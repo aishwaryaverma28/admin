@@ -864,9 +864,9 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                               <div
                                 key={city.id}
                                 onClick={() => handleCitySelect(city)}
-                                style={{ padding: '5px', cursor: 'pointer' }}
+                                style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
                               >
-                                {city.locality_name}
+                                {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
                               </div>
                             ))
                           )}
