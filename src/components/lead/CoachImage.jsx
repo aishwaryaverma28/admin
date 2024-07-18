@@ -119,8 +119,8 @@ const CoachImage = (id) => {
                 }
                 return;
             }
-            if (file.type.startsWith("video/") && file.size > 9.8 * 1024 * 1024) {
-                alert("Video file size should be less than 10MB.");
+            if (file.type.startsWith("video/") && file.size > 19.8 * 1024 * 1024) {
+                alert("Video file size should be less than 20MB.");
                 return;
             }
             if (file.type.startsWith("image/")) {
@@ -272,6 +272,44 @@ const CoachImage = (id) => {
             });
     }
 };
+// const submitVideo2 = (file) => {
+//     setIsUploadingMulti(true);
+//     const selectedVideo = file;
+
+//     if (selectedVideo) {
+//         const processedFileName = processImageName(selectedVideo.name);
+//         const modifiedFile = new File([selectedVideo], processedFileName, { type: selectedVideo.type });
+//         AWS.config.update({
+//             accessKeyId: config.accessKeyId,
+//             secretAccessKey: config.secretAccessKey,
+//             region: config.region
+//         });
+
+//         const s3 = new AWS.S3();
+//         const params = {
+//             Bucket: 'bmp1',
+//             Key: `coach/${id?.id || ""}/${modifiedFile.name}`,
+//             Body: modifiedFile
+//         };
+
+//         s3.upload(params).promise()
+//             .then((data) => {
+//                 if (data.Location) {
+//                     const videoUrl = modifiedFile.name;
+//                     videoUrls.push(videoUrl);
+//                     setVideoUrls([...videoUrls]);
+//                     handleSubmit2();
+//                 }
+//             })
+//             .catch((err) => {
+//                 console.error("Failed to upload:", err);
+//             })
+//             .finally(() => {
+//                 setIsUploadingMulti(false);
+//             });
+//     }
+// };
+
     //===============================================================================image submit
     const initialPhotoUrls = [...photoUrls];
     const initialVideoUrls = [...videoUrls];
