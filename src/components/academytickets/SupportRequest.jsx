@@ -126,10 +126,10 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
   };
   return (
     <div className="popup-wrapper">
-      <div className="product-popup-container">
-        <div className="leftCreateClose" onClick={onClose}></div>
-        <div className="product-popup-box edit-service-box">
-          <div>
+      <div className="modal modal-zindex">
+      <div className="leftClose" onClick={onClose}></div>
+      <div className="customization_popup_container">
+          <div className="user-details--right2">
             <p className="common-fonts contact-support-heading">Edit Service</p>
             <div>
               <form>
@@ -141,7 +141,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                     type="text"
                     name="name"
                     onChange={handleChange}
-                    className="common-fonts common-input contact-tab-input"
+                    className="common-fonts common-input common-input2 contact-tab-input"
                     value={ticket?.name}
                     disabled
                   />
@@ -154,7 +154,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                   <textarea
                     name="description"
                     onChange={handleChange}
-                    className="common-fonts common-input contact-tab-input contact-tab-textarea"
+                    className="common-fonts common-input contact-tab-textarea2"
                     placeholder="Describe your issue in detail"
                     value={ticket?.description}
                     disabled
@@ -165,16 +165,14 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                   <label htmlFor="" className="common-fonts contact-tab-label">
                     Moblie No.
                   </label>
-                  <div>
                     <input
                       type="text"
                       name="phone"
                       onChange={handleChange}
-                      className="common-input contact-tab-input"
+                      className="common-input2 contact-tab-input"
                       value={ticket?.phone}
                       disabled
                     />
-                  </div>
                 </div>
 
                 <div className="contact-tab-fields">
@@ -185,7 +183,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                     type="email"
                     name="email"
                     onChange={handleChange}
-                    className="common-fonts common-input contact-tab-input email-case"
+                    className="common-fonts common-input2 contact-tab-input email-case"
                     value={ticket?.email}
                     disabled
                   />
@@ -224,7 +222,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                     Status
                   </label>
                   <select
-                    className="common-input contact-type-of-issue"
+                    className="common-input2 contact-type-of-issue"
                     value={ticket?.status}
                     onChange={handleChange}
                     name="status"
@@ -245,7 +243,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                   <textarea
                     name="description"
                     onChange={handleChange}
-                    className="common-fonts common-input contact-tab-input contact-tab-textarea"
+                    className="common-fonts common-input contact-tab-textarea2"
                     placeholder="Reply to the issue raised"
                     value={details?.description}
                   ></textarea>
