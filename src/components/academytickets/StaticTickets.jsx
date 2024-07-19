@@ -238,7 +238,7 @@ const StaticTickets = ({ data, tickets }) => {
                                                 <label htmlFor="fileInput" className="common-fonts contact-tab-label">Attachment</label>
                                                 <div className="contact-browse">
                                                     <span
-                                                        className="common-fonts common-input2 contact-tab-input"
+                                                        className="common-fonts common-input contact-tab-input"
                                                         style={{ position: "relative", marginRight: "10px", cursor: "pointer" }}
                                                     >
                                                         <button onClick={handleBrowseClick} className="contact-browse-btn common-fonts">Browse</button>
@@ -286,7 +286,7 @@ const StaticTickets = ({ data, tickets }) => {
                                             name="description"
                                             id="description"
                                             rows="3"
-                                            className="common-fonts bmp-strategy-input bmp-modal-input"
+                                            className="common-fonts bmp-strategy-input contact-tab-textarea2"
                                             placeholder='Type your response here *'
                                             value={details.description}
                                             onChange={handleDescriptionChange}
