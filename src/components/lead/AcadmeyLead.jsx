@@ -17,6 +17,7 @@ import UserLogs from "./UserLogs.jsx";
 import Confirmation from "./Confirmation.jsx";
 import LeadImage2 from "./LeadImage2.jsx";
 import TicketModal from "../academytickets/TicketModal.jsx";
+import Mailer from "../acadmey/Mailer.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
@@ -253,6 +254,13 @@ useEffect(() => {
                             <i className="fa-sharp fa-regular fa-note-sticky"></i>
                             Notes ({notes})
                         </button>
+                        <button
+                            className={activeTab === "mailer" ? "active" : ""}
+                            onClick={() => handleTabClick("mailer")}
+                        >
+                            <i className="fa-sharp fa-regular fa-note-sticky"></i>
+                            Mailer
+                        </button>
                     </div>
                     {/* ===================================================================tabination content */}
 
@@ -294,6 +302,12 @@ useEffect(() => {
                                     type="lead"
                                     ownerId={ownerId}
                                     idOfOwner={idOfOwner}
+                                />
+                            </div>
+                        )}
+                         {activeTab === "mailer" && (
+                            <div className="notes-tab-content">
+                                <Mailer
                                 />
                             </div>
                         )}
