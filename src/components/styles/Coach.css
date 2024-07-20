@@ -153,3 +153,35 @@
   width: 100%;
   margin-bottom: 0.2rem;
 }
+.new-height{
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  padding: 15px;
+  position: relative;
+  height: 50vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  
+}
+.editInput {
+  color: #1e2224;
+  font-weight: 400;
+  outline: rgb(59, 59, 59);
+  background-color: #ffffff;
+  font-size: 0.8rem;
+  font-family: "Lexend Deca", sans-serif;
+  border-radius: 0.3125rem;
+  padding: 0.3rem;
+  border: 1px solid #dcdcdc;
+  height: 2rem;
+  width: 100%;
+}
+.box1>p{
+  display: flex;
+  justify-content: center;
+
+}
+.mailer-conatiner{
+  margin-bottom: 0.5rem;
+}

@@ -17,7 +17,7 @@ import UserLogs from "./UserLogs.jsx";
 import Confirmation from "./Confirmation.jsx";
 import LeadImage2 from "./LeadImage2.jsx";
 import TicketModal from "../academytickets/TicketModal.jsx";
-import Mailer from "../acadmey/Mailer.jsx";
+import MailerTab from "../acadmey/MailerTab.jsx";
 
 const AcadmeyLead = ({ selectedItem, closeModal }) => {
     const [check, setCheck] = useState(false);
@@ -307,7 +307,7 @@ useEffect(() => {
                         )}
                          {activeTab === "mailer" && (
                             <div className="notes-tab-content">
-                                <Mailer
+                                <MailerTab
                                 />
                             </div>
                         )}
