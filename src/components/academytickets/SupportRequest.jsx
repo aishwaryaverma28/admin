@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AWS from 'aws-sdk';
 import { useEffect } from "react";
+import '../styles/Coach.css';
 const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
   window.Buffer = window.Buffer || require("buffer").Buffer;
   const decryptedToken = getDecryptedToken();
@@ -127,96 +128,57 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
   return (
     <div className="popup-wrapper">
       <div className="modal modal-zindex">
-      <div className="leftClose" onClick={onClose}></div>
-      <div className="customization_popup_container">
+        <div className="leftClose" onClick={onClose}></div>
+        <div className="customization_popup_container">
           <div className="user-details--right2">
             <p className="common-fonts contact-support-heading">Edit Service</p>
             <div>
               <form>
-                <div className="contact-tab-fields">
-                  <label htmlFor="" className="common-fonts contact-tab-label">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    onChange={handleChange}
-                    className="common-fonts common-input common-input2 contact-tab-input"
-                    value={ticket?.name}
-                    disabled
-                  />
+                <div className="contact-tab-fields mailer-conatiner2">
+                  <p className="common-fonts"><span className="reply-head">Name:</span> {ticket?.name}</p>
                 </div>
-
-                <div className="contact-tab-fields">
-                  <label htmlFor="" className="common-fonts contact-tab-label">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    onChange={handleChange}
-                    className="common-fonts common-input contact-tab-textarea2"
-                    placeholder="Describe your issue in detail"
-                    value={ticket?.description}
-                    disabled
-                  ></textarea>
+                <div className="contact-tab-fields mailer-conatiner2">
+                  <p className="common-fonts"><span className="reply-head">Mobile:</span> {ticket?.phone}</p>
                 </div>
-
-                <div className="contact-tab-fields">
-                  <label htmlFor="" className="common-fonts contact-tab-label">
-                    Moblie No.
-                  </label>
-                    <input
-                      type="text"
-                      name="phone"
-                      onChange={handleChange}
-                      className="common-input2 contact-tab-input"
-                      value={ticket?.phone}
-                      disabled
-                    />
+                <div className="contact-tab-fields mailer-conatiner2">
+                  <p className="common-fonts"><span className="reply-head">Email:</span> {ticket?.email}</p>
                 </div>
-
-                <div className="contact-tab-fields">
-                  <label htmlFor="" className="common-fonts contact-tab-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    onChange={handleChange}
-                    className="common-fonts common-input2 contact-tab-input email-case"
-                    value={ticket?.email}
-                    disabled
-                  />
+                <div className="contact-tab-fields mailer-conatiner2">
+                  <p className="common-fonts"><span className="reply-head">Description:</span> </p>
+                  <br />
+                  <div className='overflowBind shift-left'>
+                    <pre className="common-fonts">{ticket?.description}</pre>
+                  </div>
                 </div>
                 <div className=" bigReplies">
-                <p className="common-fonts reply-head">Replies: </p>
-                {replies?.map((item) => (
-                  <div className='replyName'>
-                    <div className='review-top-flex'>
-                      <p className="common-fonts reply-head">{item?.description}</p>
-                    </div>
-                    <div className='flexBox'>
-                      <p className="common-fonts selected-comment">Status: {item?.status}</p>
-                      <div className="bmp-upload">
-                        {item?.attachment && (
-                          <div className="bmp-image-preview">
-                            <a href={item?.attachment === null
-                              ? `${cdnurl}attachments/tickets/${item?.attachment}`
-                              : `${cdnurl}attachments/tickets/${item?.attachment}`} target="_blank" rel="noopener noreferrer">
-                              <img
-                                src={item?.attachment === null
-                                  ? `${cdnurl}attachments/tickets/${item?.attachment}`
-                                  : `${cdnurl}attachments/tickets/${item?.attachment}`}
-                                alt=""
-                                className="bmp-preview-image"
-                              />
-                            </a>
-                          </div>
-                        )}
+                  <p className="common-fonts reply-head">Replies: </p>
+                  {replies?.map((item) => (
+                    <div className='replyName'>
+                      <div className='review-top-flex overflowBind'>
+                        <pre className="common-fonts reply-head">{item?.description}</pre>
+                      </div>
+                      <div className='flexBox'>
+                        <p className="common-fonts selected-comment">Status: {item?.status}</p>
+                        <div className="bmp-upload">
+                          {item?.attachment && (
+                            <div className="bmp-image-preview">
+                              <a href={item?.attachment === null
+                                ? `${cdnurl}attachments/tickets/${item?.attachment}`
+                                : `${cdnurl}attachments/tickets/${item?.attachment}`} target="_blank" rel="noopener noreferrer">
+                                <img
+                                  src={item?.attachment === null
+                                    ? `${cdnurl}attachments/tickets/${item?.attachment}`
+                                    : `${cdnurl}attachments/tickets/${item?.attachment}`}
+                                  alt=""
+                                  className="bmp-preview-image"
+                                />
+                              </a>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}</div>
+                  ))}</div>
                 <div className="contact-tab-fields">
                   <label htmlFor="" className="common-fonts contact-tab-label">
                     Status

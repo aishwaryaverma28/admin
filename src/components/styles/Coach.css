@@ -185,6 +185,9 @@
 .mailer-conatiner{
   margin-bottom: 0.5rem;
 }
+.mailer-conatiner2{
+  margin-bottom: 1rem;
+}
 .reply-wrap{
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
@@ -195,4 +198,7 @@ width: 15rem;
 .overflowBind{
   max-width: 90%;
   overflow-x: scroll;
+}
+.shift-left{
+  padding-left: 1rem;
 }
