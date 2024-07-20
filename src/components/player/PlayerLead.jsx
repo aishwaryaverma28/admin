@@ -193,7 +193,7 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                 sort: "id desc",
                 page: 1,
                 limit: 10,
-                cond: `t.user_id = ${userId}`
+                cond: `t.user_id = ${userId?.id}`
             }, {
                 headers: {
                     Authorization: `Bearer ${decryptedToken}`,

@@ -118,7 +118,6 @@ const StaticTickets = ({ data, tickets }) => {
 
     const handleSubmit = (id) => {
         if (details.status && details.description) {
-            console.log("Form details:", details);
             axios
                 .post(ADD_TICKET_REPLY, details, {
                     headers: {
@@ -167,7 +166,7 @@ const StaticTickets = ({ data, tickets }) => {
                                 <div className='flexBox'>
                                     <div>
                                         <p className="common-fonts reply-head">Description about the tickets: </p>
-                                        <p className="common-fonts selected-comment">
+                                        <p className="common-fonts">
                                             {item?.description}
                                         </p>
                                     </div>
@@ -192,8 +191,8 @@ const StaticTickets = ({ data, tickets }) => {
                                 </div>
                                 {replies?.map((item) => (
                                     <div className='replyName'>
-                                        <div className='review-top-flex'>
-                                            <p className="common-fonts reply-head">{item?.description}</p>
+                                        <div className='review-top-flex overflowBind'>
+                                            <pre className="common-fonts reply-head">{item?.description}</pre>
                                         </div>
                                         <div className='flexBox'>
                                             <p className="common-fonts selected-comment">Status: {item?.status}</p>
@@ -218,7 +217,7 @@ const StaticTickets = ({ data, tickets }) => {
                                     </div>
                                 ))}
                                 <div>
-                                    <div className='flexBox'>
+                                    <div className='flexBox reply-wrap'>
                                         <div className="contact-tab-fields">
                                             <label className="common-fonts contact-tab-label">Status</label>
                                             <select
@@ -238,14 +237,14 @@ const StaticTickets = ({ data, tickets }) => {
                                                 <label htmlFor="fileInput" className="common-fonts contact-tab-label">Attachment</label>
                                                 <div className="contact-browse">
                                                     <span
-                                                        className="common-fonts common-input contact-tab-input"
+                                                        className="common-fonts common-input attach-inp"
                                                         style={{ position: "relative", marginRight: "10px", cursor: "pointer" }}
                                                     >
                                                         <button onClick={handleBrowseClick} className="contact-browse-btn common-fonts">Browse</button>
                                                         <input
                                                             type="file"
                                                             id="fileInput"
-                                                            style={{ opacity: 0, position: "absolute", top: 0, left: 0, bottom: 0, right: 0, width: "100%", cursor: "pointer" }}
+                                                            style={{ opacity: 0, position: "absolute", top: 0, left: 0, bottom: 0, right: 0, cursor: "pointer" }}
                                                             ref={fileInputRef}
                                                             onChange={handleFileChange}
                                                         />
