@@ -34,7 +34,7 @@ const MailerControl = () => {
             </div>
             <div className='flexBox mailer-conatiner'>
                 <div className='box3 flexBox'>
-                    <p className='common-fonts'>Frequency : </p>
+                    <p className='common-fonts f-width'>Frequency : </p>
                     <span className='newEditableArea'>
                         <select
                             name="frequency"

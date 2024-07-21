@@ -36,11 +36,11 @@ const Mailer = () => {
                 <div className='review-top-flex mailerHead' onClick={() => toggleAccordion("2")} style={{ cursor: 'pointer' }}>
                     <p className="common-fonts reply-head">BMP Advertise </p>
                     <p className="common-fonts reply-head">
-                        <label className="password-switch">
+                        <label className="password-switch lead-switch">
                             <input
                                 type="checkbox"
                             />
-                            <span className="password-slider password-round"></span>
+                            <span className="password-slider lead-slider password-round"></span>
                         </label> </p>
                     <p className="common-fonts reply-head">
                         <select className="selectSec">
@@ -65,11 +65,11 @@ const Mailer = () => {
                 <div className='review-top-flex mailerHead' onClick={() => toggleAccordion("3")} style={{ cursor: 'pointer' }}>
                     <p className="common-fonts reply-head">Product Info </p>
                     <p className="common-fonts reply-head">
-                        <label className="password-switch">
+                        <label className="password-switch lead-switch">
                             <input
                                 type="checkbox"
                             />
-                            <span className="password-slider password-round"></span>
+                            <span className="password-slider lead-slider password-round"></span>
                         </label> </p>
                     <p className="common-fonts reply-head">
                         <select className="selectSec">
