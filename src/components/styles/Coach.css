@@ -177,13 +177,31 @@
   height: 2rem;
   width: 100%;
 }
-.box1>p{
-  display: flex;
-  justify-content: center;
-
+.mailer-sec{
+  padding: 0.5rem;
+  border-radius: 0.3125rem;
+  background: #f4f5f9;
+}
+.box1{
+  width: 15%;
+}
+.box2{
+  width: 35%;
+}
+.box3{
+  width: 50%;
+}
+.p-width{
+  width: 40%;
 }
 .mailer-conatiner{
   margin-bottom: 0.5rem;
+  padding: 0;
+  margin-right: 0.5rem;
+}
+.new-disable{
+  background-color: #ccc !important;
+  color: grey !important;
 }
 .mailer-conatiner2{
   margin-bottom: 1rem;
