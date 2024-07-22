@@ -134,6 +134,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
           status: "",
           description: "",
           attachment: "",
+          parent_id: ticket?.id,
         });
         setDataFromChild("");
         setEditorKey(prevKey => prevKey + 1);
