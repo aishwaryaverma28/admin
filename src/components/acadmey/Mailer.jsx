@@ -32,7 +32,7 @@ const Mailer = () => {
                     </>
                 )}
             </div>
-            <div className='box-border' key="2">
+            {/* <div className='box-border' key="2">
                 <div className='review-top-flex mailerHead' onClick={() => toggleAccordion("2")} style={{ cursor: 'pointer' }}>
                     <p className="common-fonts reply-head">BMP Advertise </p>
                     <p className="common-fonts reply-head">
@@ -89,7 +89,7 @@ const Mailer = () => {
                         </div>
                     </>
                 )}
-            </div>
+            </div> */}
         </>
     )
 }
