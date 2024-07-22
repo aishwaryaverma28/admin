@@ -4,6 +4,7 @@ import { cdnurl, getDecryptedToken, ADD_TICKET_REPLY, GET_USER_TICKETS } from ".
 import { toast } from 'react-toastify';
 import AWS from 'aws-sdk';
 import axios from 'axios';
+import CRMeditor from '../CRMeditor';
 const StaticTickets = ({ data, tickets }) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
     const decryptedToken = getDecryptedToken();
@@ -12,6 +13,8 @@ const StaticTickets = ({ data, tickets }) => {
     const [openAccordionId, setOpenAccordionId] = useState(null);
     const [replies, setReplies] = useState([]);
     const [stateBtn, setStateBtn] = useState(0);
+    const [dataFromChild, setDataFromChild] = useState("");
+    const [editorKey, setEditorKey] = useState(0);
     const [details, setDetails] = useState({
         status: "",
         description: "",
@@ -20,6 +23,7 @@ const StaticTickets = ({ data, tickets }) => {
     });
     const toggleAccordion = (id) => {
         setOpenAccordionId(openAccordionId === id ? null : id);
+        setDataFromChild("");
         setDetails({
             status: "",
             description: "",
@@ -107,7 +111,15 @@ const StaticTickets = ({ data, tickets }) => {
         });
         setStateBtn(1);
     };
-
+    const handleDataTransfer = (data) => {
+        setDataFromChild(data);
+        setDetails({
+            ...details,
+            description: data,
+        });
+        setStateBtn(1);
+    };
+    console.log(details);
     const handleDescriptionChange = (event) => {
         setDetails({
             ...details,
@@ -143,8 +155,10 @@ const StaticTickets = ({ data, tickets }) => {
                         parent_id: id,
                     });
                     setFileName("");
+                    setDataFromChild("");
                     getReplies(id);
                     setStateBtn(0);
+                    setEditorKey(prevKey => prevKey + 1);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -163,15 +177,17 @@ const StaticTickets = ({ data, tickets }) => {
                         </div>
                         {openAccordionId === item.id && (
                             <>
-                                <div className='flexBox'>
+                                <div >
                                     <div>
                                         <p className="common-fonts reply-head">Description about the tickets: </p>
-                                        <p className="common-fonts">
+                                        {/* <p className="common-fonts">
                                             {item?.description}
-                                        </p>
+                                        </p> */}
+                                        <div className="notesEditor">
+                                            <CRMeditor initialContent={item?.description} readOnly={true} />
+                                        </div>
                                     </div>
                                     <div className="bmp-upload">
-
                                         {item?.attachment && (
                                             <div className="bmp-image-preview">
                                                 <a href={item?.attachment === null
@@ -189,13 +205,17 @@ const StaticTickets = ({ data, tickets }) => {
                                         )}
                                     </div>
                                 </div>
+                                <p className="common-fonts reply-head">Ticket replies : </p>
                                 {replies?.map((item) => (
                                     <div className='replyName'>
-                                        <div className='review-top-flex overflowBind'>
+                                        {/* <div className='review-top-flex overflowBind'>
                                             <pre className="common-fonts reply-head">{item?.description}</pre>
+                                        </div> */}
+                                        <div className="notesEditor">
+                                            <CRMeditor initialContent={item?.description} readOnly={true} />
                                         </div>
                                         <div className='flexBox'>
-                                            <p className="common-fonts selected-comment">Status: {item?.status}</p>
+                                            <p className="common-fonts selected-comment">New Status: {item?.status}</p>
                                             <div className="bmp-upload">
                                                 {item?.attachment && (
                                                     <div className="bmp-image-preview">
@@ -281,7 +301,7 @@ const StaticTickets = ({ data, tickets }) => {
                                         </div>
                                     </div>
                                     <div className="bmp-add-fields">
-                                        <textarea
+                                        {/* <textarea
                                             name="description"
                                             id="description"
                                             rows="3"
@@ -289,7 +309,10 @@ const StaticTickets = ({ data, tickets }) => {
                                             placeholder='Type your response here *'
                                             value={details.description}
                                             onChange={handleDescriptionChange}
-                                        ></textarea>
+                                        ></textarea> */}
+                                        <div className="notesEditor">
+                                            <CRMeditor onDataTransfer={handleDataTransfer} key={editorKey} />
+                                        </div>
                                         <div className="review-popup-btn">
                                             {stateBtn === 0 ? (
                                                 <button className="common-inactive-button review-inactive">Save</button>

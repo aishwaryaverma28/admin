@@ -132,8 +132,11 @@
   width: 100%;
 }
 .bigReplies{
-  height: 15vh;
+  height: 30vh;
   overflow-y: scroll;
+}
+.full-width{
+  width: 100%;
 }
 .mailerHead{
   align-items: center;

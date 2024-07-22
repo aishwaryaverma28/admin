@@ -3,9 +3,11 @@ import { config, getDecryptedToken, ADD_NEW_TICKET, SEARCH_API } from "../utils/
 import AWS from 'aws-sdk';
 import axios from "axios";
 import { toast } from "react-toastify";
+import CRMeditor from '../CRMeditor';
 
 const AddTicket = ({ data, getTickets }) => {
     window.Buffer = window.Buffer || require("buffer").Buffer;
+    const [dataFromChild, setDataFromChild] = useState("");
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState("");
     const decryptedToken = getDecryptedToken();
@@ -19,6 +21,10 @@ const AddTicket = ({ data, getTickets }) => {
         description: "",
         attachment: "",
     });
+    const handleDataTransfer = (data) => {
+        setDataFromChild(data);
+        setStateBtn(1);
+    };
     const handleOptionChange = () => {
         axios
             .get(SEARCH_API + "/bmp_user/id/" + data, {
@@ -102,7 +108,7 @@ const AddTicket = ({ data, getTickets }) => {
         if (user?.type_id === 1) {
             updatedFormData = {
                 title: "coach admin support",
-                description: details?.description,
+                description: dataFromChild,
                 phone: user?.phone,
                 email: user?.email,
                 category: "coach admin support",
@@ -113,7 +119,7 @@ const AddTicket = ({ data, getTickets }) => {
         } else if (user?.type_id === 2) {
             updatedFormData = {
                 title: "academy admin support",
-                description: details?.description,
+                description: dataFromChild,
                 phone: user?.phone,
                 email: user?.email,
                 category: "academy admin support",
@@ -124,7 +130,7 @@ const AddTicket = ({ data, getTickets }) => {
         } else if (user?.type_id === 3) {
             updatedFormData = {
                 title: "player admin support",
-                description: details?.description,
+                description: dataFromChild,
                 phone: user?.phone,
                 email: user?.email,
                 category: "player admin support",
@@ -176,9 +182,9 @@ const AddTicket = ({ data, getTickets }) => {
     const expandEditor = () => {
         setOpenEditor(true);
     };
-  return (
-    <>
-    {!openEditor ? (
+    return (
+        <>
+            {!openEditor ? (
                 <div className="colapedEditor" onClick={expandEditor}>
                     <p>Click here to add a ticket</p>
                 </div>
@@ -221,17 +227,6 @@ const AddTicket = ({ data, getTickets }) => {
                                         className="common-fonts common-input email-case contact-tab-input"
                                         value={user?.email}
                                     />
-                                </div>
-                                <div className="contact-tab-fields">
-                                    <label htmlFor="" className="common-fonts contact-tab-label">
-                                        Description <span className="common-fonts redAlert"> *</span>
-                                    </label>
-                                    <textarea
-                                        name="description"
-                                        onChange={handleChange}
-                                        className="common-fonts common-input contact-tab-input contact-tab-textarea"
-                                        placeholder="Describe your issue in detail"
-                                    ></textarea>
                                 </div>
                                 <div className="contact-tab-fields">
                                     <label
@@ -279,6 +274,21 @@ const AddTicket = ({ data, getTickets }) => {
                                         </span>
                                     </div>
                                 </div>
+                                {/* <div className="contact-tab-fields">
+                                    <label htmlFor="" className="common-fonts contact-tab-label">
+                                        Description <span className="common-fonts redAlert"> *</span>
+                                    </label>
+                                    <textarea
+                                        name="description"
+                                        onChange={handleChange}
+                                        className="common-fonts common-input contact-tab-input contact-tab-textarea"
+                                        placeholder="Describe your issue in detail"
+                                    ></textarea>
+                                </div> */}
+                                <div className="notesEditor">
+                                    <CRMeditor onDataTransfer={handleDataTransfer} />
+                                </div>
+
 
                                 <div className="contact-support-button headphone-btn">
                                     <button className="common-white-button" onClick={handleCancelBtn}>Cancel</button>
@@ -301,8 +311,8 @@ const AddTicket = ({ data, getTickets }) => {
                 </>
 
             )}
-    </>
-  )
+        </>
+    )
 }
 
 export default AddTicket

@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e1d3c180.css",
-    "main.js": "/static/js/main.51d1d5a8.js",
+    "main.css": "/static/css/main.2accb4cc.css",
+    "main.js": "/static/js/main.178490c9.js",
     "static/js/703.69c34890.chunk.js": "/static/js/703.69c34890.chunk.js",
     "static/js/598.34531c71.chunk.js": "/static/js/598.34531c71.chunk.js",
     "static/media/404.jpg": "/static/media/404.848d7a9bea70cb1616e0.jpg",
@@ -45,7 +45,6 @@
     "static/media/deal-icon.svg": "/static/media/deal-icon.1aa4b318b1284c7f629e786e90c27fe3.svg",
     "static/media/performence.svg": "/static/media/performence.044bf29f63be43165266058fc581aa2e.svg",
     "static/media/career.svg": "/static/media/career.dea9e72298614e484d1a369bc65a9597.svg",
-    "static/media/three-dots.svg": "/static/media/three-dots.82076e4e14570f19ab1d5db268d7abde.svg",
     "static/media/pin.svg": "/static/media/pin.136520e26c67c4870a3f9b6f9feccd81.svg",
     "static/media/health.svg": "/static/media/health.2eb777364c2e911b107b677a6e368900.svg",
     "static/media/forms.svg": "/static/media/forms.0c42131b2513d4d4c79aaefa6d452647.svg",
@@ -73,13 +72,13 @@
     "static/media/greater-arrow.svg": "/static/media/greater-arrow.c22fdd72da9beca5e3f40a18bb66fdb7.svg",
     "static/media/greater-up.svg": "/static/media/greater-up.a8eef9ef909059b38a5aaebf46db2763.svg",
     "static/media/bluedot.svg": "/static/media/bluedot.8d480cafc752076cfa9b3ffc75b9a1c2.svg",
-    "main.e1d3c180.css.map": "/static/css/main.e1d3c180.css.map",
-    "main.51d1d5a8.js.map": "/static/js/main.51d1d5a8.js.map",
+    "main.2accb4cc.css.map": "/static/css/main.2accb4cc.css.map",
+    "main.178490c9.js.map": "/static/js/main.178490c9.js.map",
     "703.69c34890.chunk.js.map": "/static/js/703.69c34890.chunk.js.map",
     "598.34531c71.chunk.js.map": "/static/js/598.34531c71.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1d3c180.css",
-    "static/js/main.51d1d5a8.js"
+    "static/css/main.2accb4cc.css",
+    "static/js/main.178490c9.js"
   ]
 }

@@ -7,12 +7,15 @@ import "react-toastify/dist/ReactToastify.css";
 import AWS from 'aws-sdk';
 import { useEffect } from "react";
 import '../styles/Coach.css';
+import CRMeditor from "../CRMeditor";
 const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
   window.Buffer = window.Buffer || require("buffer").Buffer;
   const decryptedToken = getDecryptedToken();
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [stateBtn, setStateBtn] = useState(0);
+  const [editorKey, setEditorKey] = useState(0);
+  const [dataFromChild, setDataFromChild] = useState("");
   const [replies, setReplies] = useState([]);
   const [details, setDetails] = useState({
     status: "",
@@ -59,6 +62,7 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
     });
     setStateBtn(1);
   }
+  console.log(details)
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -98,9 +102,16 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
       });
     }
   };
+  const handleDataTransfer = (data) => {
+    setDataFromChild(data);
+    setDetails({
+      ...details,
+      description: data,
+    });
+    setStateBtn(1);
+  };
   const handleUpdate = (event) => {
     event.preventDefault();
-    console.log(details);
     axios
       .post(ADD_TICKET_REPLY, details, {
         headers: {
@@ -119,6 +130,14 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
             autoClose: 1000,
           });
         }
+        setDetails({
+          status: "",
+          description: "",
+          attachment: "",
+        });
+        setDataFromChild("");
+        setEditorKey(prevKey => prevKey + 1);
+        getReplies();
         getTicket(page);
       })
       .catch((error) => {
@@ -146,46 +165,57 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                 <div className="contact-tab-fields mailer-conatiner2">
                   <p className="common-fonts"><span className="reply-head">Description:</span> </p>
                   <br />
-                  <div className='overflowBind shift-left'>
+                  {/* <div className='overflowBind shift-left'>
                     <pre className="common-fonts">{ticket?.description}</pre>
+                  </div> */}
+                  <div className="notesEditor full-width">
+                    <CRMeditor initialContent={ticket?.description} readOnly={true} />
                   </div>
                 </div>
-                <div className=" bigReplies">
-                  <p className="common-fonts reply-head">Replies: </p>
-                  {replies?.map((item) => (
-                    <div className='replyName'>
-                      <div className='review-top-flex overflowBind'>
-                        <pre className="common-fonts reply-head">{item?.description}</pre>
-                      </div>
-                      <div className='flexBox'>
-                        <p className="common-fonts selected-comment">Status: {item?.status}</p>
-                        <div className="bmp-upload">
-                          {item?.attachment && (
-                            <div className="bmp-image-preview">
-                              <a href={item?.attachment === null
-                                ? `${cdnurl}attachments/tickets/${item?.attachment}`
-                                : `${cdnurl}attachments/tickets/${item?.attachment}`} target="_blank" rel="noopener noreferrer">
-                                <img
-                                  src={item?.attachment === null
-                                    ? `${cdnurl}attachments/tickets/${item?.attachment}`
-                                    : `${cdnurl}attachments/tickets/${item?.attachment}`}
-                                  alt=""
-                                  className="bmp-preview-image"
-                                />
-                              </a>
-                            </div>
-                          )}
+                {replies && replies.length > 0 && (
+                  <div className="bigReplies">
+                    <p className="common-fonts reply-head">Replies: </p>
+                    {replies.map((item) => (
+                      <div className='replyName'>
+                        {/* <div className='review-top-flex overflowBind'>
+                          <pre className="common-fonts reply-head">{item?.description}</pre>
+                        </div> */}
+                        <div className="notesEditor">
+                          <CRMeditor initialContent={item?.description} readOnly={true} />
+                        </div>
+                        <div className='flexBox'>
+                          <p className="common-fonts selected-comment">Status: {item?.status}</p>
+                          <div className="bmp-upload">
+                            {item?.attachment && (
+                              <div className="bmp-image-preview">
+                                <a href={item?.attachment === null
+                                  ? `${cdnurl}attachments/tickets/${item?.attachment}`
+                                  : `${cdnurl}attachments/tickets/${item?.attachment}`} target="_blank" rel="noopener noreferrer">
+                                  <img
+                                    src={item?.attachment === null
+                                      ? `${cdnurl}attachments/tickets/${item?.attachment}`
+                                      : `${cdnurl}attachments/tickets/${item?.attachment}`}
+                                    alt=""
+                                    className="bmp-preview-image"
+                                  />
+                                </a>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}</div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="contact-tab-fields">
+                  <p className="common-fonts reply-head">Add a reply : </p>
                   <label htmlFor="" className="common-fonts contact-tab-label">
                     Status
                   </label>
                   <select
                     className="common-input2 contact-type-of-issue"
-                    value={ticket?.status}
+                    value={details?.status}
                     onChange={handleChange}
                     name="status"
                   >
@@ -198,18 +228,22 @@ const SupportRequest = ({ onClose, ticket, getTicket, page }) => {
                   </select>
                 </div>
 
-                <div className="contact-tab-fields">
+                <div className="contact-tab-fields full-width">
                   <label htmlFor="" className="common-fonts contact-tab-label">
                     Reply
                   </label>
-                  <textarea
+                  {/* <textarea
                     name="description"
                     onChange={handleChange}
                     className="common-fonts common-input contact-tab-textarea2"
                     placeholder="Reply to the issue raised"
                     value={details?.description}
-                  ></textarea>
+                  ></textarea>*/}
+                  <div className="notesEditor full-width">
+                    <CRMeditor onDataTransfer={handleDataTransfer} key={editorKey} />
+                  </div>
                 </div>
+
                 <div className="contact-tab-fields">
                   <label
                     htmlFor="fileInput"

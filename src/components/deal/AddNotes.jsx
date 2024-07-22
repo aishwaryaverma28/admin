@@ -12,7 +12,6 @@ import {
   GETNOTECOMPANY,
   GETNOTEPEOPLE,
 } from "../utils/Constants";
-import ThreeDots from "../../assets/image/three-dots.svg";
 import bin from "../../assets/image/TrashFill.svg";
 import unpin from "../../assets/image/unpin.svg";
 import pin from "../../assets/image/pin.svg";
@@ -95,8 +94,6 @@ const AddNotes = ({ onNotesNum, type, item }) => {
 
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
-          // setNotes(response?.data?.data);
-          // setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -127,8 +124,6 @@ const AddNotes = ({ onNotesNum, type, item }) => {
 
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
-          // setNotes(response?.data?.data);
-          // setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
@@ -159,8 +154,6 @@ const AddNotes = ({ onNotesNum, type, item }) => {
 
           setNotes(sortedNotes);
           setOriginalContents(sortedNotes);
-          // setNotes(response?.data?.data);
-          // setOriginalContents(response?.data?.data);
         })
         .catch((error) => {
           console.log(error);
