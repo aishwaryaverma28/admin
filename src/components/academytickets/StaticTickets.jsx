@@ -119,7 +119,6 @@ const StaticTickets = ({ data, tickets }) => {
         });
         setStateBtn(1);
     };
-    console.log(details);
     const handleDescriptionChange = (event) => {
         setDetails({
             ...details,

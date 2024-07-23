@@ -30,7 +30,7 @@ const Acadmey = () => {
     {
       "id": 1,
       "stage": "new_academy",
-      "name": "New Academy"
+      "name": "New Academy (Temp Table)"
     },
     {
       "id": 2,

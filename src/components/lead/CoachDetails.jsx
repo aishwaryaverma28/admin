@@ -12,6 +12,7 @@ import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylin
 import CoachFaq from '../coach/CoachFaq';
 import CoachSkills from '../coach/CoachSkills';
 import AddPricingSection from '../coach/AddPricingSection';
+import QuillEditor from '../QuillEditor';
 
 const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -234,7 +235,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         }
         if (response?.data?.data[0]?.location_locality) {
           setSearchCity(response?.data?.data[0]?.location_locality)
-        }else if (response?.data?.data[0]?.location_city) {
+        } else if (response?.data?.data[0]?.location_city) {
           setSearchCity(response?.data?.data[0]?.location_city)
         }
         if (response?.data?.data[0]?.skill) {
@@ -342,6 +343,16 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
     }
     setStateBtn(1);
     handleClick();
+  };
+
+  const handleDataTransfer = (data) => {
+    if (!isDisabled) {
+      setEditedItem({
+        ...editedItem,
+        about: data,
+      });
+    }
+    setStateBtn(1);
   };
   const handleUpdateClick = () => {
     setStateBtn(0);
@@ -663,17 +674,13 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                     <span>-</span>
                   ) : (
                     <span>
-                      <textarea
-                        name="about"
-                        onChange={handleInputChange}
-                        value={isLoading ? "-" : editedItem?.about}
-                        rows="5"
-                        id=""
-                        style={
-                          isEditable ? editStylingTextarea : normalStylingTextarea
-                        }
-                        disabled={isDisabled}
-                      ></textarea>
+                      <div className={`notesEditor ${isEditable ? 'details' : 'editDetails'}`}>
+                        <QuillEditor
+                          onDataTransfer={handleDataTransfer}
+                          initialContent={editedItem?.about}
+                          readOnly={isDisabled}
+                        />
+                      </div>
                     </span>
                   )}
                 </p>
