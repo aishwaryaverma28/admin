@@ -14,7 +14,7 @@ import UserLogs from '../lead/UserLogs';
 import Confirmation from '../lead/Confirmation';
 import PlayerImage from './PlayerImage';
 import TicketModal from '../academytickets/TicketModal';
-const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
+const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit, coachFilter }) => {
     const decryptedToken = getDecryptedToken();
     const [leads, setLeads] = useState(0);
     const [userLog, setUserLog] = useState(0);
@@ -170,7 +170,7 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                         autoClose: 2000,
                     });
                     if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
-                        onLeadAdded(page, limit);
+                        onLeadAdded(page, limit, coachFilter);
                     }
                 } else {
                     toast.error(response?.data?.message, {

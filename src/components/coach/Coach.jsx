@@ -3,7 +3,6 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  ALL_BMP_USER,
   GET_ARCHIVED,
   ACADMEY_VEREFIED,
   MOST_LEADS,
@@ -72,6 +71,7 @@ const Coach = () => {
   const limit = 30;
   const [archCount, setArchCount] = useState(null);
   const [unArchCount, setUnArchCount] = useState(null);
+  const [coachFilter, setCoachFilter] = useState("is_deleted is null");
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -98,12 +98,12 @@ const Coach = () => {
       console.log(error);
     });
   }
-  const getNewAcademy = (page, limit) => {
+  const getNewAcademy = (page, limit, cond) => {
     const body = {
       page: page,
       limit: limit,
       sort: "id desc",
-      cond: "is_deleted is null",
+      cond: cond,
       tbl: "bmp_coach_details"
     }
     axios.post(GET_ARCHIVED, body, {
@@ -161,12 +161,15 @@ const Coach = () => {
 
   useEffect(() => {
     getAllCoaches();
-    getNewAcademy(page, limit);
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
     getAllVerify();
   }, []);
+  useEffect(() => {
+    getNewAcademy(page, limit, coachFilter);
+  }, [coachFilter])
   //=========================================================get all acadmey logs
   const getAllLogs = () => {
     const requestBody = {
@@ -240,8 +243,12 @@ const Coach = () => {
       verified_coach: verified?.length,
     };
     setStatusCounts(counts);
-  }, [coach, acadmeyLeads, newcoach, academyLogs]);
+  }, [coach, acadmeyLeads, newcoach, academyLogs, coachFilter]);
 
+  const handleOptionChange = (event) => {
+    setCoachFilter(event.target.value);
+    setPage(1);
+  };
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
     setSearchQuery("");
@@ -276,7 +283,7 @@ const Coach = () => {
 
   const resetData = () => {
     getAllCoaches();
-    getNewAcademy(page, limit);
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
@@ -333,7 +340,7 @@ const Coach = () => {
     if (name === "new_coach") {
       num = num + 1;
       setPage(num);
-      getNewAcademy(num, limit);
+      getNewAcademy(num, limit, coachFilter);
     } else if (name === "archive") {
       num2 = num2 + 1;
       setPage2(num2);
@@ -347,7 +354,7 @@ const Coach = () => {
       if (num > 1) {
         num = num - 1;
         setPage(num);
-        getNewAcademy(num, limit);
+        getNewAcademy(num, limit, coachFilter);
       }
     }
     if (name === "archive") {
@@ -396,6 +403,7 @@ const Coach = () => {
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
+
                 <span className="recycle-search-icon">
                   <div>
                     <label className="password-switch lead-switch">
@@ -408,6 +416,14 @@ const Coach = () => {
                     </label>
                   </div>
                 </span>
+              </div>
+              <div className="select action-select">
+                <select value={coachFilter} onChange={handleOptionChange} id="coach_filter">
+                  <option value="is_deleted is null">Not Deleted</option>
+                  <option value="email_verified is null">Email not verified</option>
+                  <option value="mobile_verified is null">Phone Not Verified</option>
+
+                </select>
               </div>
             </div>
             <div className="right-side--btns">
@@ -470,20 +486,17 @@ const Coach = () => {
                           />
                         ));
                       case 'new_coach':
-                        if (newcoach && newcoach.length > 0) {
-                          return newcoach.map((obj) => (
-                            <DashboardCards
-                              key={obj?.id}
-                              object={obj}
-                              onLeadAdded={getNewAcademy}
-                              page={page}
-                              limit={limit}
-                              itemName="unarcCoach"
-                            />
-                          ));
-                        } else {
-                          return <p>Loading...</p>;
-                        };
+                        return newcoach.map((obj) => (
+                          <DashboardCards
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getNewAcademy}
+                            page={page}
+                            limit={limit}
+                            coachFilter={coachFilter}
+                            itemName="unarcCoach"
+                          />
+                        ));
                       case 'archive':
                         return deleted?.map((obj) => (
                           <DashboardCards
@@ -540,11 +553,24 @@ const Coach = () => {
                   })()}
 
                 </div>
-                {(item?.stage === 'new_coach' || item?.stage === 'archive') ?
+                {(item?.stage === 'new_coach') ?
                   <div className="bottom-fixed flexBox" >
-                    <p onClick={() => subPage(item?.stage)}>Prev Page</p>
-                    {item?.stage === 'new_coach' ? <p>{page}</p> : <p>{page2}</p>}
-                    <p onClick={() => addPage(item?.stage)}>Next Page</p>
+                    {page > 1 ? <p onClick={() => subPage(item?.stage)}>Prev Page</p> : <p></p>}
+                    {/* <p onClick={() => subPage(item?.stage)}>Prev Page</p> */}
+                    <p>{page}</p>
+                    {newcoach?.length >= 30 ? <p onClick={() => addPage(item?.stage)}>Next Page</p> : <p></p>}
+                    {/* <p onClick={() => addPage(item?.stage)}>Next Page</p> */}
+                  </div>
+                  : <></>
+                }
+
+                {(item?.stage === 'archive') ?
+                  <div className="bottom-fixed flexBox" >
+                    {page2 > 1 ? <p onClick={() => subPage(item?.stage)}>Prev Page</p> : <p></p>}
+                    {/* <p onClick={() => subPage(item?.stage)}>Prev Page</p> */}
+                    <p>{page2}</p>
+                    {deleted?.length >= 30 ? <p onClick={() => addPage(item?.stage)}>Next Page</p> : <p></p>}
+                    {/* <p onClick={() => addPage(item?.stage)}>Next Page</p> */}
                   </div>
                   : <></>
                 }

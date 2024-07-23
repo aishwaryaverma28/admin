@@ -7,13 +7,11 @@ import {
   UPDATE_COACH, ALL_SPORTS,
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
-import { skills } from '../utils/coachSkils';
-import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
+import { normalStylingInput, editStylingInput, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 import CoachFaq from '../coach/CoachFaq';
 import CoachSkills from '../coach/CoachSkills';
 import AddPricingSection from '../coach/AddPricingSection';
 import QuillEditor from '../QuillEditor';
-
 const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [sports, setSports] = useState([]);

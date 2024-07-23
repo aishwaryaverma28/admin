@@ -10,7 +10,7 @@ const DashboardCards = ({
   object,
   onLeadAdded,
   itemName,
-  page, limit
+  page, limit, coachFilter
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [academyOpen, setAcademyOpen] = useState(false);
@@ -175,14 +175,14 @@ const DashboardCards = ({
         <CoachLead
           selectedItem={selectedObj}
           closeModal={closeCoachModalBox}
-          onLeadAdded={onLeadAdded} page={page} limit={limit}
+          onLeadAdded={onLeadAdded} page={page} limit={limit} coachFilter={coachFilter}
         />
       )}
        {openPlayerMenu && (
         <PlayerLead
           selectedItem={selectedObj}
           closeModal={closePlayerModalBox}
-          onLeadAdded={onLeadAdded} page={page} limit={limit}
+          onLeadAdded={onLeadAdded} page={page} limit={limit} coachFilter={coachFilter}
         />
       )}
     </>

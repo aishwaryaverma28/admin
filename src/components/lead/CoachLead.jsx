@@ -12,7 +12,7 @@ import UserLogs from './UserLogs';
 import Confirmation from './Confirmation';
 import { toast } from 'react-toastify';
 import TicketModal from '../academytickets/TicketModal';
-const CoachLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
+const CoachLead = ({ selectedItem, closeModal, onLeadAdded, page, limit, coachFilter }) => {
     const decryptedToken = getDecryptedToken();
     const [check, setCheck] = useState(false);
     const childRef = useRef(null);
@@ -168,7 +168,7 @@ const CoachLead = ({ selectedItem, closeModal, onLeadAdded, page, limit }) => {
                         autoClose: 2000,
                     });
                     if (typeof page !== 'undefined' && typeof limit !== 'undefined') {
-                        onLeadAdded(page, limit);
+                        onLeadAdded(page, limit, coachFilter);
                     }
                 } else {
                     toast.error(response?.data?.message, {

@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { skills } from '../utils/coachSkils';
 import CoachLead from "../lead/CoachLead";
-import { editStylingInput, editStylingTextarea, editStylingSelect1 } from "./../utils/variables";
+import { editStylingInput, editStylingSelect1 } from "./../utils/variables";
 import AddPricingSection from "./AddPricingSection";
 import CoachSkills from "./CoachSkills";
-
+import QuillEditor from "../QuillEditor";
 const AddCoach = ({ onClose }) => {
     const decryptedToken = getDecryptedToken();
     const [selectedObj, setSelectedObj] = useState();
@@ -26,7 +26,7 @@ const AddCoach = ({ onClose }) => {
         email: "",
         sport_id: 14,
         loc_id: "",
-        city_id:"",
+        city_id: "",
         about: "",
         skill: "",
         heighlight: "",
@@ -306,7 +306,13 @@ const AddCoach = ({ onClose }) => {
         setTrainInput(value)
         setStateBtn(1);
     };
-
+    const handleDataTransfer = (data) => {
+        setEditedItem({
+            ...editedItem,
+            about: data,
+        });
+        setStateBtn(1);
+    };
     const openModal = (object) => {
         setModalVisible(true);
         setSelectedObj(object);
@@ -541,15 +547,13 @@ const AddCoach = ({ onClose }) => {
                                         </p>
                                         <p>
                                             <span>
-                                                <textarea
-                                                    name="about"
-                                                    onChange={handleInputChange}
-                                                    value={editedItem?.about}
-                                                    rows="5"
-                                                    id=""
-                                                    style={editStylingTextarea}
-
-                                                ></textarea>
+                                                <div className='notesEditor details'>
+                                                    <QuillEditor
+                                                        onDataTransfer={handleDataTransfer}
+                                                        initialContent={editedItem?.about}
+                                                        readOnly={false}
+                                                    />
+                                                </div>
                                             </span>
                                         </p>
                                     </div>

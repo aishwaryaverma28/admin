@@ -3,9 +3,9 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  ALL_BMP_USER,GET_ARCHIVED,
+  ALL_BMP_USER, GET_ARCHIVED,
   ACADMEY_VEREFIED,
-  GET_COACH,SEARCH_API,
+  GET_COACH, SEARCH_API,
   getDecryptedToken,
 } from "../utils/Constants.js";
 import { ToastContainer } from "react-toastify";
@@ -27,16 +27,16 @@ const Player = () => {
       "stage": "new_player",
       "name": "New Player"
     },
-      {
-        "id": 2,
-        "stage": "verified_player",
-        "name": "Verified Player"
-      },
-      {
-        "id": 3,
-        "stage": "archive",
-        "name": "Archive Player"
-      },
+    {
+      "id": 2,
+      "stage": "verified_player",
+      "name": "Verified Player"
+    },
+    {
+      "id": 3,
+      "stage": "archive",
+      "name": "Archive Player"
+    },
   ]);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [player, setPlayer] = useState([]);
@@ -57,6 +57,7 @@ const Player = () => {
   const limit = 30;
   const [archCount, setArchCount] = useState(null);
   const [unArchCount, setUnArchCount] = useState(null);
+  const [coachFilter, setCoachFilter] = useState("is_deleted is null");
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -65,12 +66,12 @@ const Player = () => {
     setIsModalOpen(false);
   };
   //=========================================================get all players
-  const getNewAcademy = (page, limit) => {
+  const getNewAcademy = (page, limit, cond) => {
     const body = {
       page: page,
       limit: limit,
       sort: "id desc",
-      cond: "is_deleted is null",
+      cond: cond,
       tbl: "bmp_player_details"
     }
     axios.post(GET_ARCHIVED, body, {
@@ -132,7 +133,7 @@ const Player = () => {
 
     const requestBodyAnyone = {
       "condition": "anyone",
-       "entity": "player"
+      "entity": "player"
     };
 
     Promise.all([
@@ -148,19 +149,19 @@ const Player = () => {
       })
     ]).then(([bothResponse, anyoneResponse]) => {
       const bothData = bothResponse?.data?.data || [];
-    const anyoneData = anyoneResponse?.data?.data || [];
-    const combinedData = [...bothData, ...anyoneData];
-    const uniqueIds = new Set();
-    const filteredData = combinedData.filter(item => {
-      if (uniqueIds.has(item.id)) {
-        return false;
-      } else {
-        uniqueIds.add(item.id);
-        return true;
-      }
-    });
+      const anyoneData = anyoneResponse?.data?.data || [];
+      const combinedData = [...bothData, ...anyoneData];
+      const uniqueIds = new Set();
+      const filteredData = combinedData.filter(item => {
+        if (uniqueIds.has(item.id)) {
+          return false;
+        } else {
+          uniqueIds.add(item.id);
+          return true;
+        }
+      });
 
-    setVerified(filteredData);
+      setVerified(filteredData);
     }).catch((error) => {
       console.log(error);
     });
@@ -168,10 +169,13 @@ const Player = () => {
 
   useEffect(() => {
     getAllPlayers();
-    getNewAcademy(page, limit);
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllVerify();
   }, []);
+  useEffect(() => {
+    getNewAcademy(page, limit, coachFilter);
+  }, [coachFilter])
 
   useEffect(() => {
     const counts = {
@@ -181,7 +185,7 @@ const Player = () => {
       verified_player: verified?.length,
     };
     setStatusCounts(counts);
-  }, [player, newplayer, verified]);
+  }, [player, newplayer, verified, coachFilter]);
 
   const handleToggleChange = () => {
     setToggleChecked(!toggleChecked);
@@ -214,10 +218,14 @@ const Player = () => {
         });
     }
   };
+  const handleOptionChange = (event) => {
+    setCoachFilter(event.target.value);
+    setPage(1);
+  };
 
   const resetData = () => {
     getAllPlayers();
-    getNewAcademy(page, limit);
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllVerify();
   };
@@ -272,7 +280,7 @@ const Player = () => {
     if (name === "new_player") {
       num = num + 1;
       setPage(num);
-      getNewAcademy(num, limit);
+      getNewAcademy(num, limit, coachFilter);
     } else if (name === "archive") {
       num2 = num2 + 1;
       setPage2(num2);
@@ -286,7 +294,7 @@ const Player = () => {
       if (num > 1) {
         num = num - 1;
         setPage(num);
-        getNewAcademy(num, limit);
+        getNewAcademy(num, limit, coachFilter);
       }
     }
     if (name === "archive") {
@@ -348,6 +356,14 @@ const Player = () => {
                     </label>
                   </div>
                 </span>
+              </div>
+              <div className="select action-select">
+                <select value={coachFilter} onChange={handleOptionChange} id="coach_filter">
+                  <option value="is_deleted is null">Not Deleted</option>
+                  <option value="email_verified is null">Not email verified</option>
+                  <option value="mobile_verified is null">Not Phone Verified</option>
+
+                </select>
               </div>
             </div>
             <div className="right-side--btns">
@@ -415,41 +431,52 @@ const Player = () => {
                             key={obj?.id}
                             object={obj}
                             onLeadAdded={getNewAcademy}
-                              page={page}
-                              limit={limit}
-                              itemName="unarcPlayer"
+                            page={page}
+                            limit={limit}
+                            coachFilter={coachFilter}
+                            itemName="unarcPlayer"
                           />
                         ));
-                        case 'archive':
-                          return deleted?.map((obj) => (
-                            <DashboardCards
-                              key={obj?.id}
-                              object={obj}
-                              onLeadAdded={getDeletedAcademy}
-                              page={page2}
-                              limit={limit}
-                              itemName="unarcPlayer"
-                            />
-                          ));
-                        case 'verified_player':
-                          return verified.map((obj) => (
-                            <PlayerCard
-                              key={obj?.id}
-                              object={obj}
-                              itemName={"verified_player"}
-                            />
-                          ));
+                      case 'archive':
+                        return deleted?.map((obj) => (
+                          <DashboardCards
+                            key={obj?.id}
+                            object={obj}
+                            onLeadAdded={getDeletedAcademy}
+                            page={page2}
+                            limit={limit}
+                            itemName="unarcPlayer"
+                          />
+                        ));
+                      case 'verified_player':
+                        return verified.map((obj) => (
+                          <PlayerCard
+                            key={obj?.id}
+                            object={obj}
+                            itemName={"verified_player"}
+                          />
+                        ));
                       default:
                         return null;
                     }
                   })()}
 
                 </div>
-                {(item?.stage === 'new_player' || item?.stage === 'archive') ?
+                {(item?.stage === 'new_player') ?
                   <div className="bottom-fixed flexBox" >
-                    <p onClick={() => subPage(item?.stage)}>Prev Page</p>
-                    {item?.stage === 'new_player' ? <p>{page}</p> : <p>{page2}</p>}
-                    <p onClick={() => addPage(item?.stage)}>Next Page</p>
+                    {page > 1 ? <p onClick={() => subPage(item?.stage)}>Prev Page</p> : <p></p>}
+                    <p>{page}</p>
+                    {newplayer?.length >= 30 ? <p onClick={() => addPage(item?.stage)}>Next Page</p> : <p></p>}
+                  </div>
+                  : <></>
+                }
+                {(item?.stage === 'archive') ?
+                  <div className="bottom-fixed flexBox" >
+                    {page2 > 1 ? <p onClick={() => subPage(item?.stage)}>Prev Page</p> : <p></p>}
+                    {/* <p onClick={() => subPage(item?.stage)}>Prev Page</p> */}
+                    <p>{page2}</p>
+                    {deleted?.length >= 30 ? <p onClick={() => addPage(item?.stage)}>Next Page</p> : <p></p>}
+                    {/* <p onClick={() => addPage(item?.stage)}>Next Page</p> */}
                   </div>
                   : <></>
                 }
