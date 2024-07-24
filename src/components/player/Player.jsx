@@ -81,7 +81,7 @@ const Player = () => {
     }
     ).then((response) => {
       setNewPlayer(response?.data?.data?.result)
-      setUnArchCount(response?.data?.data?.count_result[0]?.unarchive);
+      setUnArchCount(response?.data?.data?.count_result[0]?.dynamic_count);
     }).catch((error) => {
       console.log(error);
     });
@@ -169,7 +169,7 @@ const Player = () => {
 
   useEffect(() => {
     getAllPlayers();
-    getNewAcademy(page, limit, "is_deleted is null");
+    getNewAcademy(page, limit, "email_verified is null and mobile_verified is null and is_deleted is null");
     getDeletedAcademy(page2, limit);
     getAllVerify();
   }, []);
