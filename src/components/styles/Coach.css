@@ -261,6 +261,33 @@ width: 15rem;
   color: rgb(30, 34, 36);
   font-weight: 500;
   border: 1px solid #dcdcdc;
-  /* width: 6rem; */
   margin-left: 0.3rem;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: lightgrey;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltip .tooltiptext {
+  width: 120px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
 }

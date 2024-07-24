@@ -57,7 +57,7 @@ const Player = () => {
   const limit = 30;
   const [archCount, setArchCount] = useState(null);
   const [unArchCount, setUnArchCount] = useState(null);
-  const [coachFilter, setCoachFilter] = useState("is_deleted is null");
+  const [coachFilter, setCoachFilter] = useState("");
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -169,7 +169,7 @@ const Player = () => {
 
   useEffect(() => {
     getAllPlayers();
-    getNewAcademy(page, limit, coachFilter);
+    getNewAcademy(page, limit, "is_deleted is null");
     getDeletedAcademy(page2, limit);
     getAllVerify();
   }, []);
@@ -357,11 +357,14 @@ const Player = () => {
                   </div>
                 </span>
               </div>
-              <div className="select action-select">
+              <div className="select action-select tooltip">
+              <span class="tooltiptext">New Player Filter</span>
                 <select value={coachFilter} onChange={handleOptionChange} id="coach_filter">
+                <option value="">New Player Filter</option>
                   <option value="is_deleted is null">Not Deleted</option>
                   <option value="email_verified is null">Not email verified</option>
                   <option value="mobile_verified is null">Not Phone Verified</option>
+                  <option value="email_verified is null and mobile_verified is null and is_deleted is null">Both</option>
 
                 </select>
               </div>

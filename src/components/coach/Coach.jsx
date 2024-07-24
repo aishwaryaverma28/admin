@@ -71,7 +71,7 @@ const Coach = () => {
   const limit = 30;
   const [archCount, setArchCount] = useState(null);
   const [unArchCount, setUnArchCount] = useState(null);
-  const [coachFilter, setCoachFilter] = useState("is_deleted is null");
+  const [coachFilter, setCoachFilter] = useState("");
   //======================================================modal box
   const openModal = () => {
     setIsModalOpen(true);
@@ -161,7 +161,7 @@ const Coach = () => {
 
   useEffect(() => {
     getAllCoaches();
-    getNewAcademy(page, limit, coachFilter);
+    getNewAcademy(page, limit, "is_deleted is null");
     getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
@@ -417,12 +417,14 @@ const Coach = () => {
                   </div>
                 </span>
               </div>
-              <div className="select action-select">
+              <div className="select action-select tooltip">
+              <span class="tooltiptext">New Coach Filter</span>
                 <select value={coachFilter} onChange={handleOptionChange} id="coach_filter">
+                <option value="">New Coach Filter</option>
                   <option value="is_deleted is null">Not Deleted</option>
                   <option value="email_verified is null">Email not verified</option>
                   <option value="mobile_verified is null">Phone Not Verified</option>
-
+                  <option value="email_verified is null and mobile_verified is null and is_deleted is null">Both</option>
                 </select>
               </div>
             </div>
