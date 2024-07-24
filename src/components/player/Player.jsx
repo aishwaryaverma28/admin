@@ -3,7 +3,7 @@ import "../styles/LPleads.css";
 import chart from "../../assets/image/chart.svg";
 import axios from "axios";
 import {
-  ALL_BMP_USER, GET_ARCHIVED,
+  GET_ARCHIVED,
   ACADMEY_VEREFIED,
   GET_COACH, SEARCH_API,
   getDecryptedToken,
