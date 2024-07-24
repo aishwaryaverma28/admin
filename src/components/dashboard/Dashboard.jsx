@@ -76,7 +76,7 @@ const Dashboard = () => {
     setOpenReview(false)
   }
   const generateReport = () => {
-    axios.get("https://crm.leadplaner.com/api/api/bmp/generate-report/bedword", {
+    axios.get("https://crm.leadplaner.com/api/api/bmp/generate-report/badword", {
       headers: {
         Authorization: `Bearer ${decryptedToken}`
       },
