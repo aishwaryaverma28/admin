@@ -10,6 +10,7 @@ import PlayerExp from "./PlayerExp";
 import PlayerEdu from "./PlayerEdu";
 import CoachSkills from "../coach/CoachSkills";
 import PlayerAwards from "./PlayerAwards";
+import QuillEditor from "../QuillEditor";
 const AddPlayer = ({ onClose }) => {
     const decryptedToken = getDecryptedToken();
     const [selectedObj, setSelectedObj] = useState();
@@ -216,7 +217,14 @@ const AddPlayer = ({ onClose }) => {
     const closeModal = () => {
         setModalVisible(false);
     };
-
+    const handleDataTransfer = (data) => {
+        setEditedItem({
+            ...editedItem,
+            about: data,
+        });
+        setStateBtn(1);
+    };
+    
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
@@ -626,19 +634,14 @@ const AddPlayer = ({ onClose }) => {
                                             </span>
                                         </p>
                                         <p>
-
                                             <span>
-                                                <textarea
-                                                    name="about"
-                                                    onChange={handleInputChange}
-                                                    value={editedItem?.about}
-                                                    rows="5"
-                                                    id=""
-                                                    style={
-                                                        editStylingTextarea
-                                                    }
-
-                                                ></textarea>
+                                                <div className='notesEditor details'>
+                                                    <QuillEditor
+                                                        onDataTransfer={handleDataTransfer}
+                                                        initialContent={editedItem?.about}
+                                                        readOnly={false}
+                                                    />
+                                                </div>
                                             </span>
                                         </p>
                                     </div>

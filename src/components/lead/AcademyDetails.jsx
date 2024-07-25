@@ -10,6 +10,7 @@ import {
 import { toast } from "react-toastify";
 import '../styles/Comment.css'
 import { normalStylingInput, editStylingInput, editStylingTextarea, normalStylingTextarea, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
+import QuillEditor from '../QuillEditor';
 
 const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     const decryptedToken = getDecryptedToken();
@@ -268,6 +269,15 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setIsEditable(!isEditable);
         setIsDisabled(!isDisabled);
     };
+    const handleDataTransfer = (data) => {
+        if (!isDisabled) {
+          setEditedItem({
+            ...editedItem,
+            about: data,
+          });
+        }
+        setStateBtn(1);
+      };
 
     const handleCheckboxChange = (event) => {
         const value = event.target.value;
@@ -758,18 +768,14 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         <span>-</span>
                                     ) : (
                                         <span>
-                                            <textarea
-                                                name="about"
-                                                onChange={handleInputChange}
-                                                value={isLoading ? "-" : editedItem?.about}
-                                                rows="5"
-                                                id=""
-                                                style={
-                                                    isEditable ? editStylingTextarea : normalStylingTextarea
-                                                }
-                                                disabled={isDisabled}
-                                            ></textarea>
-                                        </span>
+                                        <div className={`notesEditor ${isEditable ? 'details' : 'editDetails'}`}>
+                                          <QuillEditor
+                                            onDataTransfer={handleDataTransfer}
+                                            initialContent={editedItem?.about}
+                                            readOnly={isDisabled}
+                                          />
+                                        </div>
+                                      </span>
                                     )}
                                 </p>
                             </div>

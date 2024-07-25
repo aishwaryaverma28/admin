@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AcadmeyLead from "./AcadmeyLead";
 import { editStylingInput, editStylingTextarea, editStylingSelect1 } from "./../utils/variables";
+import QuillEditor from "../QuillEditor";
 
 const CreateLead = ({ onClose }) => {
   const decryptedToken = getDecryptedToken();
@@ -252,7 +253,13 @@ const CreateLead = ({ onClose }) => {
     });
     setStateBtn(1);
   };
-
+  const handleDataTransfer = (data) => {
+    setEditedItem({
+        ...editedItem,
+        about: data,
+    });
+    setStateBtn(1);
+};
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     if (event.target.checked) {
@@ -630,17 +637,16 @@ const CreateLead = ({ onClose }) => {
                       </span>
                     </p>
                     <p>
-                      <span>
-                        <textarea
-                          name="about"
-                          onChange={handleInputChange}
-                          value={editedItem?.about}
-                          rows="5"
-                          id=""
-                          style={editStylingTextarea}
-                        ></textarea>
-                      </span>
-                    </p>
+                                            <span>
+                                                <div className='notesEditor details'>
+                                                    <QuillEditor
+                                                        onDataTransfer={handleDataTransfer}
+                                                        initialContent={editedItem?.about}
+                                                        readOnly={false}
+                                                    />
+                                                </div>
+                                            </span>
+                                        </p>
                   </div>
                 </div>
               </div>

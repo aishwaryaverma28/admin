@@ -74,7 +74,7 @@ const Player = () => {
         limit: limit,
         sort: "id desc",
         cond: "email_verified is null and mobile_verified is null and is_deleted is null",
-        tbl: "bmp_coach_details"
+        tbl: "bmp_player_details"
       }
     } else {
       body = {
@@ -82,7 +82,7 @@ const Player = () => {
         limit: limit,
         sort: "id desc",
         cond: cond,
-        tbl: "bmp_coach_details"
+        tbl: "bmp_player_details"
       }
     }
     axios.post(GET_ARCHIVED, body, {

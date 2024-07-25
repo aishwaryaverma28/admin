@@ -7,6 +7,7 @@ import CoachSkills from '../coach/CoachSkills';
 import PlayerAwards from './PlayerAwards';
 import PlayerEdu from './PlayerEdu';
 import PlayerExp from './PlayerExp';
+import QuillEditor from '../QuillEditor';
 
 const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
@@ -310,6 +311,15 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       [name]: updatedValue,
     });
     handleClick();
+    setStateBtn(1);
+  };
+  const handleDataTransfer = (data) => {
+    if (!isDisabled) {
+      setEditedItem({
+        ...editedItem,
+        about: data,
+      });
+    }
     setStateBtn(1);
   };
   const handleClick = () => {
@@ -797,17 +807,13 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     <span>-</span>
                   ) : (
                     <span>
-                      <textarea
-                        name="about"
-                        onChange={handleInputChange}
-                        value={isLoading ? "-" : editedItem?.about}
-                        rows="5"
-                        id=""
-                        style={
-                          isEditable ? editStylingTextarea : normalStylingTextarea
-                        }
-                        disabled={isDisabled}
-                      ></textarea>
+                      <div className={`notesEditor ${isEditable ? 'details' : 'editDetails'}`}>
+                        <QuillEditor
+                          onDataTransfer={handleDataTransfer}
+                          initialContent={editedItem?.about}
+                          readOnly={isDisabled}
+                        />
+                      </div>
                     </span>
                   )}
                 </p>
