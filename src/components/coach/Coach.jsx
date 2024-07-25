@@ -99,12 +99,23 @@ const Coach = () => {
     });
   }
   const getNewAcademy = (page, limit, cond) => {
-    const body = {
-      page: page,
-      limit: limit,
-      sort: "id desc",
-      cond: cond,
-      tbl: "bmp_coach_details"
+    let body = {}
+    if (cond === "") {
+      body = {
+        page: page,
+        limit: limit,
+        sort: "id desc",
+        cond: "email_verified is null and mobile_verified is null and is_deleted is null",
+        tbl: "bmp_coach_details"
+      }
+    } else {
+      body = {
+        page: page,
+        limit: limit,
+        sort: "id desc",
+        cond: cond,
+        tbl: "bmp_coach_details"
+      }
     }
     axios.post(GET_ARCHIVED, body, {
       headers: {
@@ -161,7 +172,7 @@ const Coach = () => {
 
   useEffect(() => {
     getAllCoaches();
-    getNewAcademy(page, limit, "email_verified is null and mobile_verified is null and is_deleted is null");
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllLeads();
     getAllLogs();
@@ -418,9 +429,9 @@ const Coach = () => {
                 </span>
               </div>
               <div className="select action-select tooltip">
-              <span class="tooltiptext">New Coach Filter</span>
+                <span class="tooltiptext">New Coach Filter</span>
                 <select value={coachFilter} onChange={handleOptionChange} id="coach_filter">
-                <option value="">New Coach Filter</option>
+                  <option value="">New Coach Filter</option>
                   <option value="is_deleted is null">Not Deleted</option>
                   <option value="email_verified is null">Email not verified</option>
                   <option value="mobile_verified is null">Phone Not Verified</option>

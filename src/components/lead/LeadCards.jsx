@@ -25,7 +25,7 @@ const LeadCards = ({
 
   const formatDate = (isoDate) => {
     const options = {
-      year: "2-digit",
+      // year: "2-digit",
       month: "short",
       day: "2-digit",
       hour: "2-digit",

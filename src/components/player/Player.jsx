@@ -67,12 +67,23 @@ const Player = () => {
   };
   //=========================================================get all players
   const getNewAcademy = (page, limit, cond) => {
-    const body = {
-      page: page,
-      limit: limit,
-      sort: "id desc",
-      cond: cond,
-      tbl: "bmp_player_details"
+    let body = {}
+    if (cond === "") {
+      body = {
+        page: page,
+        limit: limit,
+        sort: "id desc",
+        cond: "email_verified is null and mobile_verified is null and is_deleted is null",
+        tbl: "bmp_coach_details"
+      }
+    } else {
+      body = {
+        page: page,
+        limit: limit,
+        sort: "id desc",
+        cond: cond,
+        tbl: "bmp_coach_details"
+      }
     }
     axios.post(GET_ARCHIVED, body, {
       headers: {
@@ -169,7 +180,7 @@ const Player = () => {
 
   useEffect(() => {
     getAllPlayers();
-    getNewAcademy(page, limit, "email_verified is null and mobile_verified is null and is_deleted is null");
+    getNewAcademy(page, limit, coachFilter);
     getDeletedAcademy(page2, limit);
     getAllVerify();
   }, []);

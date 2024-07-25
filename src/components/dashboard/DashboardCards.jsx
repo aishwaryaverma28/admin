@@ -25,9 +25,20 @@ const DashboardCards = ({
   const [openVisible, setOpenVisible] = useState(false);
   const [selectedId, setSelectedId] = useState({});
 
+  // const formatDate = (isoDate) => {
+  //   const options = {
+  //     year: "2-digit",
+  //     month: "short",
+  //     day: "2-digit",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     second: "2-digit",
+  //   };
+  //   const date = new Date(isoDate);
+  //   return date.toLocaleDateString("en-US", options);
+  // };
   const formatDate = (isoDate) => {
     const options = {
-      year: "2-digit",
       month: "short",
       day: "2-digit",
       hour: "2-digit",
@@ -37,7 +48,7 @@ const DashboardCards = ({
     const date = new Date(isoDate);
     return date.toLocaleDateString("en-US", options);
   };
-
+  
   const openModal = (object) => {
     if (itemName === "academy") {
       if (object?.parent_tbl === 0) {
