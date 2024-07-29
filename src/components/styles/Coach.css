@@ -291,3 +291,11 @@ width: 15rem;
   left: 50%;
   margin-left: -60px;
 }
+#subCatdown{
+  margin-top:1rem;
+  margin-bottom: 1rem;
+}
+#sportOptions {
+  /* border: 2px solid red; */
+  padding: 0.5rem 0.8rem;
+}
