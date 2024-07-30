@@ -19,7 +19,7 @@ const AddPlayer = ({ onClose }) => {
         about: "",
         awards: "",
         loc_id: "",
-        city_id:"",
+        city_id: "",
         address: "",
         dob: "",
         email: "",
@@ -85,8 +85,10 @@ const AddPlayer = ({ onClose }) => {
         setEditedItem(prevState => ({
             ...prevState,
             sport_id: sport.id,
-            sport: sport?.name
+            sport: sport?.name,
+            skill:"",
         }));
+        setNewSkills([]);
         setFilteredSports([]);
         setIsDropdownVisible(false);
     };
@@ -100,8 +102,10 @@ const AddPlayer = ({ onClose }) => {
                 setEditedItem(prevState => ({
                     ...prevState,
                     sport_id: filteredSports[0].id,
-                    sport: filteredSports[0]?.name
+                    sport: filteredSports[0]?.name,
+                    skill:"",
                 }));
+                setNewSkills([]);
             }
             setIsDropdownVisible(false);
         }
@@ -224,7 +228,7 @@ const AddPlayer = ({ onClose }) => {
         });
         setStateBtn(1);
     };
-    
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? (checked ? 1 : 0) : (name === 'sport' || name === 'city' ? value?.toLowerCase() : value);
@@ -388,7 +392,7 @@ const AddPlayer = ({ onClose }) => {
                         address: "",
                         dob: "",
                         loc_id: "",
-                        city_id:"",
+                        city_id: "",
                         email: "",
                         height: "",
                         weight: "",
@@ -496,41 +500,6 @@ const AddPlayer = ({ onClose }) => {
                                                 />
                                             </span>
                                         </p>
-
-                                        <>
-                                            <div>
-                                                <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
-                                                    <div>
-                                                        <input
-                                                            id=""
-                                                            name=""
-                                                            value={searchTerm}
-                                                            onChange={handleSportInputChange}
-                                                            autoComplete="off"
-                                                            className={"disabled sport_new_input"}
-                                                            style={editStylingSelect1}
-                                                        />
-                                                    </div>
-                                                    {isDropdownVisible && (
-                                                        <div className='sport_box'>
-                                                            {noMatch ? (
-                                                                <div>No match found</div>
-                                                            ) : (
-                                                                filteredSports.map((sport) => (
-                                                                    <div
-                                                                        key={sport.id}
-                                                                        onClick={() => handleSportSelect(sport)}
-                                                                        style={{ padding: '5px', cursor: 'pointer' }}
-                                                                    >
-                                                                        {sport.name}
-                                                                    </div>
-                                                                ))
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </>
                                         <p>
                                             <span>
                                                 <input
@@ -648,6 +617,66 @@ const AddPlayer = ({ onClose }) => {
                                 </div>
                             </div>
                             <div className="detailsBox">
+                                <p className="detailHead">CHANGE SPORT AND SUBCATEGORIES</p>
+                                <div className="detailsContent">
+                                    <div className="detailsLeftContainer">
+                                        <p>Sport</p>
+                                        <p>Sub category</p>
+                                    </div>
+                                    <div className="detailsRightContainer">
+
+
+                                        <>
+                                            <div>
+                                                <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
+                                                    <div>
+                                                        <input
+                                                            id=""
+                                                            name=""
+                                                            value={searchTerm}
+                                                            onChange={handleSportInputChange}
+                                                            autoComplete="off"
+                                                            className={"disabled sport_new_input"}
+                                                            style={editStylingSelect1}
+                                                        />
+                                                    </div>
+                                                    {isDropdownVisible && (
+                                                        <div className='sport_box'>
+                                                            {noMatch ? (
+                                                                <div>No match found</div>
+                                                            ) : (
+                                                                filteredSports.map((sport) => (
+                                                                    <div
+                                                                        key={sport.id}
+                                                                        onClick={() => handleSportSelect(sport)}
+                                                                        style={{ padding: '5px', cursor: 'pointer' }}
+                                                                    >
+                                                                        {sport.name}
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </>
+
+                                        <p>
+                                            <span>
+                                                <CoachSkills
+                                                    isEditable={true}
+                                                    isDisabled={false}
+                                                    faqs={newSkills}
+                                                    addSkills={addSkills}
+                                                    deleteSkills={deleteSkills}
+                                                    updateSkills={updateSkills}
+                                                />
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="detailsBox">
                                 <p className="detailHead">ADDRESS INFORMATION</p>
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer">
@@ -712,7 +741,6 @@ const AddPlayer = ({ onClose }) => {
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer3">
                                         <p>Awards</p>
-                                        <p>Skills</p>
                                         <p>Education</p>
                                         <p>Experience</p>
                                     </div>
@@ -726,18 +754,6 @@ const AddPlayer = ({ onClose }) => {
                                                     addSkills={addAwards}
                                                     deleteSkills={deleteAwards}
                                                     updateSkills={updateAwards}
-                                                />
-                                            </span>
-                                        </p>
-                                        <p>
-                                            <span>
-                                                <CoachSkills
-                                                    isEditable={true}
-                                                    isDisabled={false}
-                                                    faqs={newSkills}
-                                                    addSkills={addSkills}
-                                                    deleteSkills={deleteSkills}
-                                                    updateSkills={updateSkills}
                                                 />
                                             </span>
                                         </p>

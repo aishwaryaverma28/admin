@@ -31,11 +31,11 @@ const categories = {
   20: ['Pool Players', 'Snooker Players', 'Carom Billiards Players', 'Trick Shot Artists'], //billiard
   21: ['Table Tennis Offensive Players', 'Table Tennis Defensive Players', 'Table Tennis All Rounder'], //table-tennis
   22: ['Chasers', 'Defenders'], //khokho
-  23: ['Offensive Players', 'Defensive Players','All-Round Squash Player','Shot Specialists', 'Positional Players'], //squash
+  23: ['Offensive Players', 'Defensive Players', 'All-Round Squash Player', 'Shot Specialists', 'Positional Players'], //squash
   24: ['Epee', 'Foil', 'Sabre', 'Fencing-All-Rounder'], //fencing
   25: ['Figure Skating', 'Speed Skating', 'Inline Skating', 'Roller Derby'], //skating
   26: ['Sprinters', 'Middle Distance Runners', 'Long Distance Runners', 'Hurdlers', 'Jumpers', 'Throwers', 'Combined Events'], //athletics
-  27: ['Setters', 'Outside Hitters','Middle Blockers', 'Libero'], //volleyball
+  27: ['Setters', 'Outside Hitters', 'Middle Blockers', 'Libero'], //volleyball
   28: ['Sparring', 'Forms', 'Breaking'], //teakwando* 
   29: ['Recurve Archery', 'Compound Archery', 'Barebow Archery', 'Flight Archery', 'Bowhunting'], //archery
   30: ['Forwards', 'Backs'], //rugby
@@ -52,38 +52,36 @@ const categories = {
 
 
 const subCategories = {
-
-
   // 1.Football
   'Football Goalkeeper': ['Traditional Goalkeeper', 'Sweeper Keeper'],
   'Football Defenders': ['Center Backs', 'Full Backs', 'Wing Backs', 'Sweepers'],
   'Midfielders': ['Central Midfielders', 'Defensive Midfielders', 'Attacking Midfielders', 'Wide Midfielders'],
   'Football Forwards': ['Strikers', 'Wingers', 'Centre Forwards', 'Second Strikers'],
 
-    // 2.Basketball
-    'Guards': ['Point Guard', 'Shooting Guard'],
-    'Basketball Forwards': ['Small Forward', 'Power Forward'],
-    'Centers': ['Center'],
+  // 2.Basketball
+  'Guards': ['Point Guard', 'Shooting Guard'],
+  'Basketball Forwards': ['Small Forward', 'Power Forward'],
+  'Centers': ['Center'],
 
-      // 3.Cricket
+  // 3.Cricket
   'Batsman': ['Opening Batsman', 'Top-Order Batsman', 'Middle-Order Batsman', 'Lower-Order Batsman'],
   'Bowlers': ['Fast Bowlers', 'Medium-Pace Bowlers', 'Spin Bowlers'],
   'Wicketkeepers': ['Specialist Wicketkeeper', 'Batsman-Wicketkeeper'],
   'All Rounder': ['Batting All-Rounder', 'Bowling All-Rounder'],
 
-    // 4.Karate
-    'Kumite Fighters': ['Offensive Fighter', 'Defensive Fighter'],
-    'Kata Competitors': ['Individual Kata', 'Team Kata'],
-    'Special Technique': ['Breaking Techniques', 'Demonstration Techniques'],
+  // 4.Karate
+  'Kumite Fighters': ['Offensive Fighter', 'Defensive Fighter'],
+  'Kata Competitors': ['Individual Kata', 'Team Kata'],
+  'Special Technique': ['Breaking Techniques', 'Demonstration Techniques'],
 
-      //5. Swimming
+  //5. Swimming
   'Styles': ['Freestyle Swimmer', 'Backstroke Swimmer', 'Breaststroke Swimmer', 'Butterfly Swimmer', 'Individual Medley Swimmer', 'Distance Swimmer', 'Sprint Swimmer', 'Relay Swimmer', 'Open Water Swimmer'],
 
-    //6. Badminton
-    'Singles': ['Men\'s Singles', 'Women\'s Singles'],
-    'Doubles': ['Men\'s Doubles', 'Women\'s Doubles', 'Mixed Doubles'],
+  //6. Badminton
+  'Singles': ['Men\'s Singles', 'Women\'s Singles'],
+  'Doubles': ['Men\'s Doubles', 'Women\'s Doubles', 'Mixed Doubles'],
 
-      //7. Golf
+  //7. Golf
   'Tee Shot': ['Driver Specialist'],
   'Fairway': ['Fairway Specialist'],
   'Approach Shot': ['Iron Specialist'],
@@ -91,99 +89,99 @@ const subCategories = {
   'Putting': ['Putter Specialist'],
   'Golf-All-Rounder': ['Versatile Player'],
 
-    //8. Shooting
-    'Rifle': ['Air Rifle', 'Prone Rifle'],
-    'Pistol': ['Air Pistol', 'Rapid Fire Pistol'],
-    'Shotgun': ['Trap', 'Skeet'],
-    'Running Target Shooters': ['Moving Target'],
-    'Shooting-All-Rounder': ['Versatile Shooter'],
+  //8. Shooting
+  'Rifle': ['Air Rifle', 'Prone Rifle'],
+  'Pistol': ['Air Pistol', 'Rapid Fire Pistol'],
+  'Shotgun': ['Trap', 'Skeet'],
+  'Running Target Shooters': ['Moving Target'],
+  'Shooting-All-Rounder': ['Versatile Shooter'],
 
-      //9. MMA
+  //9. MMA
   'MMA Strikers': ['Boxer', 'Muay Thai Fighter'],
   'Grapplers': ['Wrestler', 'Brazilian Jiu-Jitsu'],
   'MMA-All-Rounder': ['Mixed Martial Artist'],
   'MMA Specialists': ['Submission Specialist', 'Ground-and-Pound Fighter'],
   'MMA Defenders': ['Counter Striker'],
 
-    //10. Kabbadi
-    'Raiders': ['Lead Raider', 'Secondary Raider'],
-    'Kabaddi Defenders': ['Cover Defender', 'Corner Defender'],
-    'Kabaddi-All-Rounder': ['Lead All-Rounder', 'Support All-Rounder'],
+  //10. Kabbadi
+  'Raiders': ['Lead Raider', 'Secondary Raider'],
+  'Kabaddi Defenders': ['Cover Defender', 'Corner Defender'],
+  'Kabaddi-All-Rounder': ['Lead All-Rounder', 'Support All-Rounder'],
 
-      //11. Gymnastics
+  //11. Gymnastics
   'Artistic Gymnast': ['Floor Specialist', 'Uneven Bars Specialist', 'Balance Beam Specialist', 'Vault Specialist'],
   'Rhythmic Gymnast': ['Hoop Specialist', 'Ball Specialist', 'Ribbon Specialist'],
   'Trampoline Gymnast': ['Trampoline Specialist'],
 
-    //12. Arts
-    'Dance': ['Ballet Dancer', 'Contemporary Dancer', 'Hip-Hop Dancer'],
-    'Painting': ['Abstract', 'Acrylic', 'Watercolor'],
+  //12. Arts
+  'Dance': ['Ballet Dancer', 'Contemporary Dancer', 'Hip-Hop Dancer'],
+  'Painting': ['Abstract', 'Acrylic', 'Watercolor'],
 
-      //13. Chess
+  //13. Chess
   'Opening Players': ['Opening Specialist'],
   'Midgame Players': ['Tactician', 'Strategist'],
   'Endgame Players': ['Endgame Specialist'],
   'Chess Defensive Players': ['Defender'],
   'Aggressive Players': ['Attacker'],
 
-    //15. Hockey
-    'Hockey Forwards': ['Left Wing', 'Right Wing', 'Center'],
-    'Defensemen': ['Left Defense', 'Right Defense'],
-    'Goal keeper': ['Goalkeeper'],
-    'Specialists': ['Power Play Specialist', 'Penalty Kill Specialist'],
+  //15. Hockey
+  'Hockey Forwards': ['Left Wing', 'Right Wing', 'Center'],
+  'Defensemen': ['Left Defense', 'Right Defense'],
+  'Goal keeper': ['Goalkeeper'],
+  'Specialists': ['Power Play Specialist', 'Penalty Kill Specialist'],
 
-      //16. Tennis
+  //16. Tennis
   'Singles Players': ['Baseline Player', 'Serve-and-Volley Player', 'All-Court Player'],
   'Doubles Players': ['Net Player', 'Baseline Doubles Player'],
   'Tennis-All-Rounder': ['Versatile Doubles Player'],
 
-    //17. Wrestling
-    'Wrestler Styles': ['Freestyle Wrestlers', 'Greco-Roman Wrestlers', 'Submission Wrestlers'],
+  //17. Wrestling
+  'Wrestler Styles': ['Freestyle Wrestlers', 'Greco-Roman Wrestlers', 'Submission Wrestlers'],
 
-      //18. Boxing
+  //18. Boxing
   'Weight Classes': ['Flyweight', 'Bantamweight', 'Featherweight', 'Lightweight', 'Welterweight', 'Middleweight', 'Heavyweight'],
   'Fighting Styles': ['Out-Boxer', 'Swarmer', 'Counterpunch', 'Slugger'],
 
-    //19. Motorsports
-    'Drivers': ['Formula 1 Driver', 'Rally Driver', 'Endurance Driver', 'NASCAR Driver', 'MotoGP Rider'],
-    'Pit Crew Members': ['Chief Mechanic','Tire Specialist', 'Fuel Specialist'],
-    'Engineers': ['Race Engineer', 'Data Analyst'],
+  //19. Motorsports
+  'Drivers': ['Formula 1 Driver', 'Rally Driver', 'Endurance Driver', 'NASCAR Driver', 'MotoGP Rider'],
+  'Pit Crew Members': ['Chief Mechanic', 'Tire Specialist', 'Fuel Specialist'],
+  'Engineers': ['Race Engineer', 'Data Analyst'],
 
-      //20. Billiards
+  //20. Billiards
   'Pool Players': ['8-Ball Player', '9-Ball Player', 'Straight Pool Player'],
   'Snooker Players': ['Break Builder', 'Safety Player'],
   'Carom Billiards Players': ['3-Cushion Specialist', 'Artistic Billiards Player'],
   'Trick Shot Artists': ['Trick Shot Specialist'],
 
-    //21. Table tennis
-    'Table Tennis Offensive Players': ['Attacker', 'Loop Driver'],
-    'Table Tennis Defensive Players': ['Chopper', 'Blocker'],
-    'Table Tennis All Rounder': ['All-Round Attacker', 'Counter Driver'],
+  //21. Table tennis
+  'Table Tennis Offensive Players': ['Attacker', 'Loop Driver'],
+  'Table Tennis Defensive Players': ['Chopper', 'Blocker'],
+  'Table Tennis All Rounder': ['All-Round Attacker', 'Counter Driver'],
 
-    //22. Kho-Kho
+  //22. Kho-Kho
   'Chasers': ['Attacker', 'Pole Diver', 'Chain Chaser'],
   'Defenders': ['Dodger', 'Pole Dodger', 'Chain Dodger'],
 
   //23. Squash
-  'Offensive Players':['Attacker'],
-  'Defensive Players':['Retriever'],
-  'All-Round Squash Player':['All-Court Player'],
-  'Shot Specialists':['Drop Shot Specialist', 'Lob Specialist'],
-  'Positional Players':['Front Court Player', 'Back Court Player'],
+  'Offensive Players': ['Attacker'],
+  'Defensive Players': ['Retriever'],
+  'All-Round Squash Player': ['All-Court Player'],
+  'Shot Specialists': ['Drop Shot Specialist', 'Lob Specialist'],
+  'Positional Players': ['Front Court Player', 'Back Court Player'],
 
-    //24. Fencing
-    'Epee': ['Offensive Epeeist', 'Defensive Epeeist'],
-    'Foil': ['Offensive Foilist', 'Defensive Foilist'],
-    'Sabre': ['Offensive Sabreur', 'Defensive Sabreur'],
-    'Fencing-All-Rounder': ['Versatile Fencer'],
+  //24. Fencing
+  'Epee': ['Offensive Epeeist', 'Defensive Epeeist'],
+  'Foil': ['Offensive Foilist', 'Defensive Foilist'],
+  'Sabre': ['Offensive Sabreur', 'Defensive Sabreur'],
+  'Fencing-All-Rounder': ['Versatile Fencer'],
 
-    //25. Skating
-    'Figure Skating': ['Singles Skater', 'Pairs Skater', 'Ice Dancers'],
-    'Speed Skating': ['Short Track Skater', 'Long Track Skater'],
-    'Inline Skating': ['Freestyle Skater', 'Speed Skater'],
-    'Roller Derby': ['Jammer','Blocker'],
+  //25. Skating
+  'Figure Skating': ['Singles Skater', 'Pairs Skater', 'Ice Dancers'],
+  'Speed Skating': ['Short Track Skater', 'Long Track Skater'],
+  'Inline Skating': ['Freestyle Skater', 'Speed Skater'],
+  'Roller Derby': ['Jammer', 'Blocker'],
 
-      //26. Athletics
+  //26. Athletics
   'Sprinters': ['100m Sprinter', '200m Sprinter'],
   'Middle Distance Runners': ['800m Runner', '1500m Runner'],
   'Long Distance Runners': ['5000m Runner', '10000m Runner'],
@@ -192,17 +190,17 @@ const subCategories = {
   'Throwers': ['Shot Putter', 'Discus Thrower', 'Javelin Thrower', 'Hammer Thrower'],
   'Combined Events': ['Decathlete', 'Heptathlete'],
 
-    //27. Volleyball
-    'Setters': ['Main Setter', 'Secondary Setter'],
-    'Outside Hitters': ['Left-side Hitter', 'Right-side Hitter'],
-    'Middle Blockers': ['Quick Middle', 'Strong Middle'],
-    'Libero': ['Defensive Libero', 'Serving Libero'],
+  //27. Volleyball
+  'Setters': ['Main Setter', 'Secondary Setter'],
+  'Outside Hitters': ['Left-side Hitter', 'Right-side Hitter'],
+  'Middle Blockers': ['Quick Middle', 'Strong Middle'],
+  'Libero': ['Defensive Libero', 'Serving Libero'],
 
 
-    //28. Teakwando
-    'Sparring': ['Offensive Fighter', 'Defensive Fighter', 'Counter Attacker'],
-    'Forms': ['Individual Poomsae', 'Team Poomsae'],
-    'Breaking': ['Power Breaking', 'Technical Breaking'],
+  //28. Teakwando
+  'Sparring': ['Offensive Fighter', 'Defensive Fighter', 'Counter Attacker'],
+  'Forms': ['Individual Poomsae', 'Team Poomsae'],
+  'Breaking': ['Power Breaking', 'Technical Breaking'],
 
 
   //29. Archery
@@ -212,7 +210,7 @@ const subCategories = {
   'Flight Archery': ['Distance Shooter'],
   'Bowhunting': ['Bowhunter'],
 
-    
+
   //30. Rugby
   'Forwards': ['Prop', 'Hooker', 'Lock', 'Flanker', 'Number 8'],
   'Backs': ['Scrum-Half', 'Fly-Half', 'Center', 'Wing', 'Full-Back'],
@@ -223,14 +221,14 @@ const subCategories = {
   'Functional Training': ['CrossFit Athlete', 'HIIT Trainer'],
   'Group Fitness': ['Aerobics Instructor', 'Yoga Instructor'],
 
-      //32. Yoga
-      'Hatha Yoga': ['Beginner Instructor', 'Advanced Instructor'],
-      'Vinyasa Yoga': ['Flow Instructor'],
-      'Ashtanga Yoga': ['Primary Series Instructor', 'Advanced Series Instructor'],
-      'Yin Yoga': ['Yin Instructor'],
-      'Restorative Yoga': ['Restorative Instructor'],
-      'Prenatal Yoga': ['Prenatal Instructor'],
-      'Kids Yoga': ['Kids Instructor'],
+  //32. Yoga
+  'Hatha Yoga': ['Beginner Instructor', 'Advanced Instructor'],
+  'Vinyasa Yoga': ['Flow Instructor'],
+  'Ashtanga Yoga': ['Primary Series Instructor', 'Advanced Series Instructor'],
+  'Yin Yoga': ['Yin Instructor'],
+  'Restorative Yoga': ['Restorative Instructor'],
+  'Prenatal Yoga': ['Prenatal Instructor'],
+  'Kids Yoga': ['Kids Instructor'],
 
   //34. persnol trainer
   'Strength Training': ['Weightlifting Coach', 'Powerlifting Coach', 'Bodybuilding Coach'],
@@ -240,25 +238,25 @@ const subCategories = {
   'Nutrition Coaching': ['Nutritionist'],
   'Specialized Training': ['Rehabilitation Trainer', 'Sports Performance Coach'],
 
-      //35. Silambam
-'Silambam Weapon Techniques': ['Single Stick Fighter', 'Double Stick Fighter', 'Long Stick Fighter', 'Short Stick Fighter', 'Knife Fighter'],
+  //35. Silambam
+  'Silambam Weapon Techniques': ['Single Stick Fighter', 'Double Stick Fighter', 'Long Stick Fighter', 'Short Stick Fighter', 'Knife Fighter'],
   'Silambam Empty Hand Techniques': ['Striker', 'Grappler'],
   'Silambam Form Demonstrations': ['Performer', 'Choreographer'],
-  
+
   //36. Baseball
   'Infielders': ['First Baseman', 'Second Baseman', 'Shortstop', 'Third Baseman'],
   'Outfielders': ['Left Fielder', 'Center Fielder', 'Right Fielder'],
   'Pitchers': ['Starting Pitcher', 'Relief Pitcher', 'Closer'],
   'Catchers': ['Catcher'],
 
-    //37. Snooker
-'Snooker Offensive Players': ['Break Builder', 'Potting Specialist'],
-'Snooker Defensive Players': ['Safety Player', 'Snooker Specialist'],
-'Snooker All-Round Players': ['Versatile Player'],
-'Cue Ball Control': ['Positioning Expert'],
-'Break-Off Specialist': ['Break-Off Expert'],
+  //37. Snooker
+  'Snooker Offensive Players': ['Break Builder', 'Potting Specialist'],
+  'Snooker Defensive Players': ['Safety Player', 'Snooker Specialist'],
+  'Snooker All-Round Players': ['Versatile Player'],
+  'Cue Ball Control': ['Positioning Expert'],
+  'Break-Off Specialist': ['Break-Off Expert'],
 
-  
+
   //38. Carrom
   'Carrom Strikers': ['Offensive Striker', 'Defensive Striker'],
   'Queen Specialists': ['Queen Hunter'],
@@ -266,13 +264,13 @@ const subCategories = {
   'Break Specialists': ['Break Expert'],
   'Carrom-All-Rounder': ['All-Round Player'],
 
-    //39. Handball
-    'Goalkeepers': ['Primary Goalkeeper', 'Reserve Goalkeeper'],
-    'Backcourt Players': ['Left Back', 'Right Back', 'Center Back'],
-    'Wing Players': ['Left Wing', 'Right Wing'],
-    'Pivot Players': ['Pivot'],
-    'Defense Specialists': ['Defense Specialist'],
-    
+  //39. Handball
+  'Goalkeepers': ['Primary Goalkeeper', 'Reserve Goalkeeper'],
+  'Backcourt Players': ['Left Back', 'Right Back', 'Center Back'],
+  'Wing Players': ['Left Wing', 'Right Wing'],
+  'Pivot Players': ['Pivot'],
+  'Defense Specialists': ['Defense Specialist'],
+
 
   //40. Kalaripayattu
   'Weapon Techniques': ['Long Stick Fighter', 'Short Stick Fighter', 'Dagger Fighter', 'Sword and Shield Fighter', 'Flexible Sword Fighter'],
@@ -316,10 +314,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [noMatch, setNoMatch] = useState(false);
   const inputRef = useRef(null);
-  const [sport, setSport] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
-  const [subSubCategories, setSubSubCategories] = useState({});
+
   // city dropdown useStates
   const [searchCity, setSearchCity] = useState("");
   const [filteredCity, setFilteredCity] = useState([]);
@@ -358,11 +353,12 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
 
   const handleSportSelect = (sport) => {
     setSearchTerm(sport.name);
-    setSport(sport.id);
     setEditedItem(prevState => ({
       ...prevState,
       sport_id: sport.id,
+      skill:"",
     }));
+    setNewSkills([]);
     setFilteredSports([]);
     setIsDropdownVisible(false);
   };
@@ -373,11 +369,12 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         setSearchTerm('');
       } else if (filteredSports.length > 0) {
         setSearchTerm(filteredSports[0].name);
-        setSport(filteredSports[0].id);
         setEditedItem(prevState => ({
           ...prevState,
-          sport_id: filteredSports[0].id,
+          sport_id: filteredSports[0]?.id,
+          skill:"",
         }));
+        setNewSkills([]);
       }
       setIsDropdownVisible(false);
     }
@@ -389,32 +386,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [filteredSports, noMatch]);
-
-  useEffect(() => {
-    if (sport && categories[sport]) {
-      setSubCategoryOptions(categories[sport]);
-    } else {
-      setSubCategoryOptions([]);
-    }
-    setSelectedCategories([]);
-    setSubSubCategories({});
-  }, [sport]);
-
-  const handleSubCategoryChange = (e) => {
-    const category = e.target.value;
-    if (category && !selectedCategories.includes(category)) {
-      setSelectedCategories([...selectedCategories, category]);
-      setSubSubCategories((prev) => ({
-        ...prev,
-        [category]: subCategories[category] || []
-      }));
-    }
-  };
-
-  const handleAddCategory = () => {
-    const availableOptions = categories[sport].filter(option => !selectedCategories.includes(option));
-    setSubCategoryOptions(availableOptions);
-  };
 
   //===================================================sport dropdown code ends here
 
@@ -851,7 +822,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 <p>Name</p>
                 <p>Email</p>
                 <p>Phone</p>
-                <p>Sport</p>
                 <p>Highlights</p>
                 <p>Date of Birth</p>
                 <p>Height</p>
@@ -940,69 +910,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </span>
                   )}
                 </p>
-                <>
-                  <div>
-                    <div ref={inputRef} style={{ position: 'relative', display: 'block' }}>
-                      <div>
-                        <input
-                          id=""
-                          name=""
-                          value={searchTerm}
-                          onChange={handleSportInputChange}
-                          autoComplete="off"
-                          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
-                          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
-                          disabled={isDisabled}
-                        />
-                      </div>
-                      {isDropdownVisible && (
-                        <div className='sport_box'>
-                          {noMatch ? (
-                            <div>No match found</div>
-                          ) : (
-                            filteredSports.map((sport) => (
-                              <div
-                                key={sport.id}
-                                onClick={() => handleSportSelect(sport)}
-                                style={{ padding: '5px', cursor: 'pointer' }}
-                              >
-                                {sport.name}
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    {sport && (
-                      <div>
-                        <label htmlFor="subCategory">Select Category:</label><br />
-                        <select name="subCategory" onChange={handleSubCategoryChange}>
-                          <option value="">--Select Category--</option>
-                          {subCategoryOptions.map((option) => (
-                            <option key={option} value={option}>{option}</option>
-                          ))}
-                        </select>
-                        {selectedCategories.length > 0 && (
-                          <div>
-                            {Object.keys(subSubCategories).map((category, index) => (
-                              <div key={index} id={category}>
-                                <label>{category} Options:</label><br />
-                                {subSubCategories[category].map((option) => (
-                                  <label key={option}>
-                                    <input type="checkbox" name={`${category}[]`} value={option} /> {option}
-                                  </label>
-                                ))}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {subCategoryOptions.length > 0 && (
-                          <button type="button" onClick={handleAddCategory}>Add Another Category</button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </>
                 <p>
                   {isLoading ? (
                     <span>-</span>
@@ -1158,6 +1065,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             <div className="detailsContent">
               <div className="detailsLeftContainer">
                 <p>Sport</p>
+                <p>Sub category</p>
               </div>
 
               <div className="detailsRightContainer">
@@ -1198,36 +1106,24 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                             </div>
                           )}
                         </div>
-                        {sport && (
-                          <div>
-                            <label htmlFor="subCategory">Select Category:</label><br />
-                            <select name="subCategory" onChange={handleSubCategoryChange} id='subCatdown'>
-                              <option value="">--Select Category--</option>
-                              {subCategoryOptions.map((option) => (
-                                <option key={option} value={option}>{option}</option>
-                              ))}
-                            </select>
-                            {selectedCategories.length > 0 && (
-                              <div>
-                                {Object.keys(subSubCategories).map((category, index) => (
-                                  <div key={index} id={category}>
-                                    <label>{category} Options:</label><br />
-                                    {subSubCategories[category].map((option) => (
-                                      <label key={option} id="sportOptions">
-                                        <input type="checkbox" name={`${category}[]`} value={option} /> {option}
-                                      </label>
-                                    ))}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                            {/* {subCategoryOptions.length > 0 && (
-                              <button type="button" onClick={handleAddCategory}>Add Another Category</button>
-                            )} */}
-                          </div>
-                        )}
                       </div>
                     </>
+                  )}
+                </p>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <CoachSkills
+                        isEditable={isEditable}
+                        isDisabled={isDisabled}
+                        faqs={newSkills}
+                        addSkills={addSkills}
+                        deleteSkills={deleteSkills}
+                        updateSkills={updateSkills}
+                      />
+                    </span>
                   )}
                 </p>
               </div>
@@ -1302,7 +1198,6 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             <div className="detailsContent">
               <div className="detailsLeftContainer3">
                 <p>Awards</p>
-                <p>Skills</p>
                 <p>Education</p>
                 <p>Experience</p>
               </div>
@@ -1321,22 +1216,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     />
                   </span>
                 )}</p>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <CoachSkills
-                        isEditable={isEditable}
-                        isDisabled={isDisabled}
-                        faqs={newSkills}
-                        addSkills={addSkills}
-                        deleteSkills={deleteSkills}
-                        updateSkills={updateSkills}
-                      />
-                    </span>
-                  )}
-                </p>
+
                 <p>
                   {isLoading ? (
                     <span>-</span>
