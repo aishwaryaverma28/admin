@@ -160,7 +160,24 @@ const LeadCards = ({
                 </div>
               </div>
             )}
-
+            {itemName === "player" && (
+              <div className="mail">
+                <div className="bmp-image-preview2">
+                  <a href={object?.logo === null
+                    ? `${cdnurl}asset/images/logo.svg`
+                    : `${cdnurl}player/${object?.id}/${object?.logo}`}
+                    target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={object?.logo === null
+                        ? `${cdnurl}asset/images/logo.svg`
+                        : `${cdnurl}player/${object?.id}/${object?.logo}`}
+                      alt="pofile"
+                      className="bmp-preview-image"
+                    />
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
