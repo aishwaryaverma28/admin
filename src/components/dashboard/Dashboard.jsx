@@ -194,19 +194,49 @@ const handleSearchChange = (event) => {
     apiUrl = toggleChecked
       ? `${SEARCH_API}bmp_user/id/${value}`
       : `${SEARCH_API}bmp_user/global/${value}`;
+
     axios.get(apiUrl, {
       headers: {
         Authorization: `Bearer ${decryptedToken}`,
       },
     })
       .then(response => {
-        setAcademy(response?.data?.data);
+        const data = response?.data?.data || [];
+
+        // Initialize arrays to store categorized objects
+        const searchCoach = [];
+        const searchAcademy = [];
+        const searchPlayer = [];
+
+        // Iterate through data and categorize based on type_id
+        data.forEach(item => {
+          switch (item.type_id) {
+            case 1:
+              searchCoach.push(item);
+              break;
+            case 2:
+              searchAcademy.push(item);
+              break;
+            case 3:
+              searchPlayer.push(item);
+              break;
+            default:
+              // Handle other cases or ignore
+              break;
+          }
+        });
+
+        setCoach(searchCoach);
+        setAcademy(searchAcademy);
+        setPlayer(searchPlayer);
+
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
   }
 };
+
 
 const resetData = () => {
   getAllUsers(1);
