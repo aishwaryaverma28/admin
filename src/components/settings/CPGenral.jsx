@@ -9,6 +9,7 @@ import {
 } from "../utils/Constants";
 
 const CPGenral = () => {
+  const id = localStorage.getItem("id");
   const decryptedToken = getDecryptedToken();
   const [orgId, setOrgId] = useState(null);
   const [company, setCompany] = useState({
@@ -23,7 +24,7 @@ const CPGenral = () => {
 
   const userInfo = () => {
     axios
-      .get(USER_INFO, {
+      .post(USER_INFO,{id:id}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

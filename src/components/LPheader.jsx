@@ -24,6 +24,7 @@ const LPheader = () => {
   const [isResetPassowrd, setIsResetPassword] = useState(false);
   const [userId, setUserId] = useState(null);
   const landingUrl = localStorage.getItem("landingUrl");
+  const id = localStorage.getItem("id");
   const [pageTitle, setPageTitle] = useState("Lead");
   const dispatch = useDispatch();
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -128,7 +129,7 @@ const LPheader = () => {
 
   async function getUser() {
     try {
-      const response = await axios.get(USER_INFO, {
+      const response = await axios.post(USER_INFO,{id:id}, {
         headers: {
           Authorization: `Bearer ${decryptedToken}`,
         },

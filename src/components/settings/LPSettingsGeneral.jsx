@@ -10,6 +10,7 @@ import EmailSyncTick from '../../assets/image/email-sync-tick.svg';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const LPSettingsGeneral = () => {
+  const id = localStorage.getItem("id");
   const { setName } = useContext(LPContext);
   const [clientData, setClientData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
@@ -25,9 +26,9 @@ const LPSettingsGeneral = () => {
 
   async function getUser() {
     try {
-      const response = await axios.get(USER_INFO, {
+      const response = await axios.post(USER_INFO,{id:id}, {
         headers: {
-          Authorization: `Bearer ${decryptedToken}`, // Include the JWT token in the Authorization header
+          Authorization: `Bearer ${decryptedToken}`,
         },
       });
       const data = response.data.data;
