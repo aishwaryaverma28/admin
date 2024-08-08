@@ -35,7 +35,7 @@ const CreateLead = ({ onClose }) => {
     address1: "",
     address2: "",
     loc_id: "",
-    city_id:"",
+    city_id: "",
     postcode: "",
     categories: "",
     friendly: "",
@@ -168,7 +168,7 @@ const CreateLead = ({ onClose }) => {
     setEditedItem(prevState => ({
       ...prevState,
       loc_id: sport?.id,
-      state: sport?.state,
+      location_state: sport?.state,
       city_id: sport?.city_id,
       city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
     }));
@@ -185,7 +185,7 @@ const CreateLead = ({ onClose }) => {
         setEditedItem(prevState => ({
           ...prevState,
           loc_id: filteredCity[0]?.id,
-          state: filteredCity[0]?.state,
+          location_state: filteredCity[0]?.state,
           city_id: filteredCity[0]?.city_id,
           city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
         }));
@@ -255,11 +255,11 @@ const CreateLead = ({ onClose }) => {
   };
   const handleDataTransfer = (data) => {
     setEditedItem({
-        ...editedItem,
-        about: data,
+      ...editedItem,
+      about: data,
     });
     setStateBtn(1);
-};
+  };
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     if (event.target.checked) {
@@ -320,7 +320,7 @@ const CreateLead = ({ onClose }) => {
             address1: "",
             address2: "",
             loc_id: "",
-            city_id:"",
+            city_id: "",
             postcode: "",
             categories: "",
             friendly: "",
@@ -378,7 +378,7 @@ const CreateLead = ({ onClose }) => {
                     <p>Rating</p>
                     <p>Experience</p>
                     <p>Option</p>
-                    <br/><br/>
+                    <br /><br />
                     <p className="about-textarea">About</p>
                   </div>
                   <div className="detailsRightContainer">
@@ -637,16 +637,16 @@ const CreateLead = ({ onClose }) => {
                       </span>
                     </p>
                     <p>
-                                            <span>
-                                                <div className='notesEditor details'>
-                                                    <QuillEditor
-                                                        onDataTransfer={handleDataTransfer}
-                                                        initialContent={editedItem?.about}
-                                                        readOnly={false}
-                                                    />
-                                                </div>
-                                            </span>
-                                        </p>
+                      <span>
+                        <div className='notesEditor details'>
+                          <QuillEditor
+                            onDataTransfer={handleDataTransfer}
+                            initialContent={editedItem?.about}
+                            readOnly={false}
+                          />
+                        </div>
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -702,6 +702,7 @@ const CreateLead = ({ onClose }) => {
                     <p>Address 1<span className="common-fonts redAlert"> *</span></p>
                     <p>Address 2</p>
                     <p>City<span className="common-fonts redAlert"> *</span></p>
+                    <p>State</p>
                     <p>Zipcode<span className="common-fonts redAlert"> *</span></p>
                   </div>
                   <div className="detailsRightContainer">
@@ -761,6 +762,17 @@ const CreateLead = ({ onClose }) => {
                         </div>
                       </div>
                     </>
+                    <p>
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem?.location_state}
+                          style={editStylingInput}
+                          disabled
+                        />
+                      </span>
+                    </p>
                     <p>
                       <span>
                         <input

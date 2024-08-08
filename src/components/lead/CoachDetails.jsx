@@ -138,6 +138,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       ...prevState,
       loc_id: sport?.id,
       city_id: sport?.city_id,
+      location_state: sport?.state,
       city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
     }));
     setFilteredCity([]);
@@ -154,6 +155,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
           ...prevState,
           loc_id: filteredCity[0]?.id,
           city_id: filteredCity[0]?.city_id,
+          location_state: filteredCity[0]?.state,
           city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
         }));
       }
@@ -245,7 +247,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         }
         if (response?.data?.data[0]?.email) {
           checkEmail(response?.data?.data[0]?.email);
-      }
+        }
         if (response?.data?.data[0]?.package !== "" &&
           response?.data?.data[0]?.package !== null) {
           const skillArray = response?.data?.data[0]?.package?.split(';');
@@ -259,20 +261,20 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
   };
   function checkEmail(email) {
     axios.post(EMAIL_VERIFY, { email: email }, {
-        headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-        },
+      headers: {
+        Authorization: `Bearer ${decryptedToken}`,
+      },
     })
-        .then((response) => {
-            console.log(response?.data?.status);
-            if (response?.data?.status === 1) {
-                setEmailVeri(true);
-            }
-        })
-        .catch((error) => [
-            console.log(error)
-        ])
-}
+      .then((response) => {
+        console.log(response?.data?.status);
+        if (response?.data?.status === 1) {
+          setEmailVeri(true);
+        }
+      })
+      .catch((error) => [
+        console.log(error)
+      ])
+  }
   const fetchSports = () => {
     let body = {
       sort: "name asc"
@@ -713,6 +715,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
             <div className="detailsContent">
               <div className="detailsLeftContainer">
                 <p>City</p>
+                <p>State</p>
                 <p>Training Location</p>
               </div>
               <div className="detailsRightContainer">
@@ -751,6 +754,24 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                     </div>
                   </div>
                 </>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="state"
+                        value={editedItem?.location_state}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled
+                      />
+                    </span>
+                  )}
+                </p>
+
                 <p>
                   {isLoading ? (
                     <span>-</span>

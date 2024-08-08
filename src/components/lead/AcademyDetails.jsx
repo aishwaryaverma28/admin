@@ -149,12 +149,12 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
     };
 
     const handleCitySelect = (sport) => {
-        console.log(sport);
         setSearchCity(sport?.city + ", " + sport?.state + " (" + sport?.type + ")");
         setEditedItem(prevState => ({
             ...prevState,
             loc_id: sport?.id,
             city_id: sport?.city_id,
+            location_state: sport?.state,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
         }));
         setFilteredCity([]);
@@ -171,6 +171,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
                     city_id: filteredCity[0]?.city_id,
+                    location_state: filteredCity[0]?.state,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
@@ -879,6 +880,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                 <p>Address 1</p>
                                 <p>Address 2</p>
                                 <p>City</p>
+                                <p>State</p>
                                 <p>Zipcode</p>
                             </div>
                             <div className="detailsRightContainer">
@@ -953,6 +955,23 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                         </div>
                                     </div>
                                 </>
+                                <p>
+                                    {isLoading ? (
+                                        <span>-</span>
+                                    ) : (
+                                        <span>
+                                            <input
+                                                type="text"
+                                                name="state"
+                                                value={editedItem?.location_state}
+                                                style={
+                                                    isEditable ? editStylingInput : normalStylingInput
+                                                }
+                                                disabled
+                                            />
+                                        </span>
+                                    )}
+                                </p>
                                 <p>
                                     {isLoading ? (
                                         <span>-</span>

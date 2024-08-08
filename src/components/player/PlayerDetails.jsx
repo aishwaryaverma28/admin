@@ -160,6 +160,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       ...prevState,
       loc_id: sport?.id,
       city_id: sport?.city_id,
+      location_state: sport?.state,
       city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
     }));
     setFilteredCity([]);
@@ -176,6 +177,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           ...prevState,
           loc_id: filteredCity[0]?.id,
           city_id: filteredCity[0]?.city_id,
+          location_state: filteredCity[0]?.state,
           city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
         }));
       }
@@ -889,6 +891,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
               <div className="detailsLeftContainer">
                 <p>Address</p>
                 <p>City</p>
+                <p>State</p>
               </div>
               <div className="detailsRightContainer">
                 <p>
@@ -944,6 +947,23 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </div>
                   </div>
                 </>
+                <p>
+                  {isLoading ? (
+                    <span>-</span>
+                  ) : (
+                    <span>
+                      <input
+                        type="text"
+                        name="state"
+                        value={editedItem?.location_state}
+                        style={
+                          isEditable ? editStylingInput : normalStylingInput
+                        }
+                        disabled
+                      />
+                    </span>
+                  )}
+                </p>
               </div>
             </div>
           </div>

@@ -166,6 +166,7 @@ const AddCoach = ({ onClose }) => {
             ...prevState,
             loc_id: sport?.id,
             city_id: sport?.city_id,
+            location_state: sport?.state,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
         }));
         setFilteredCity([]);
@@ -182,6 +183,7 @@ const AddCoach = ({ onClose }) => {
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
                     city_id: filteredCity[0]?.city_id,
+                    location_state: filteredCity[0]?.state,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
@@ -564,6 +566,7 @@ const AddCoach = ({ onClose }) => {
                                 <div className="detailsContent">
                                     <div className="detailsLeftContainer">
                                         <p>City <span className="common-fonts redAlert"> *</span></p>
+                                        <p>State</p>
                                         <p>Training Location</p>
                                     </div>
                                     <div className="detailsRightContainer">
@@ -601,6 +604,17 @@ const AddCoach = ({ onClose }) => {
                                                 </div>
                                             </div>
                                         </>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={editedItem?.location_state}
+                                                    style={editStylingInput}
+                                                    disabled
+                                                />
+                                            </span>
+                                        </p>
                                         <p>
                                             <span>
                                                 <div className="form-group-radio">

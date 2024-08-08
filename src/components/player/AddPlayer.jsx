@@ -86,7 +86,7 @@ const AddPlayer = ({ onClose }) => {
             ...prevState,
             sport_id: sport.id,
             sport: sport?.name,
-            skill:"",
+            skill: "",
         }));
         setNewSkills([]);
         setFilteredSports([]);
@@ -103,7 +103,7 @@ const AddPlayer = ({ onClose }) => {
                     ...prevState,
                     sport_id: filteredSports[0].id,
                     sport: filteredSports[0]?.name,
-                    skill:"",
+                    skill: "",
                 }));
                 setNewSkills([]);
             }
@@ -177,7 +177,7 @@ const AddPlayer = ({ onClose }) => {
             ...prevState,
             loc_id: sport?.id,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
-            state: sport.state,
+            location_state: sport?.state,
             city_id: sport?.city_id,
         }));
         setFilteredCity([]);
@@ -194,6 +194,7 @@ const AddPlayer = ({ onClose }) => {
                     ...prevState,
                     loc_id: filteredCity[0]?.id,
                     city_id: filteredCity[0]?.city_id,
+                    location_state: filteredCity[0]?.state,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
                 }));
             }
@@ -682,6 +683,7 @@ const AddPlayer = ({ onClose }) => {
                                     <div className="detailsLeftContainer">
                                         <p>Address</p>
                                         <p>City</p>
+                                        <p>State</p>
                                     </div>
                                     <div className="detailsRightContainer">
                                         <p>
@@ -733,6 +735,17 @@ const AddPlayer = ({ onClose }) => {
                                                 </div>
                                             </div>
                                         </>
+                                        <p>
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={editedItem?.location_state}
+                                                    style={editStylingInput}
+                                                    disabled
+                                                />
+                                            </span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
