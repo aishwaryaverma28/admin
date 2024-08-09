@@ -120,10 +120,10 @@ const LeadImage2 = (id) => {
                 }
                 return;
             }
-            if (file.type.startsWith("video/") && file.size > 19.8 * 1024 * 1024) {
-                alert("Video file size should be less than 20MB.");
-                return;
-            }
+            // if (file.type.startsWith("video/") && file.size > 19.8 * 1024 * 1024) {
+            //     alert("Video file size should be less than 20MB.");
+            //     return;
+            // }
             if (file.type.startsWith("image/")) {
                 submitImage2(file);
             } else if (file.type.startsWith("video/")) {
