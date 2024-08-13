@@ -536,7 +536,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                                     checked={editedItem?.email_verified === 1}
                                                 /> Email Verified
                                                 <div className="mail">
-                                                {emailVeri ? <img src={tick} alt="verified" className='img_size_1' /> : <img src={cross} alt="unverified" className='img_size_1' />}
+                                                {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
                                                 </div>
                                             </label>
 

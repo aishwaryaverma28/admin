@@ -539,9 +539,9 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                           disabled={isDisabled}
                           onChange={handleInputChange}
                           checked={editedItem?.email_verified === 1}
-                        /> Email Verified
+                        /> <div className='new_verify_input'></div>Email Verified
                         <div className="mail">
-                          {emailVeri ? <img src={tick} alt="verified" className='img_size_1' /> : <img src={cross} alt="unverified" className='img_size_1' />}
+                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
                         </div>
                       </label>
                     </span>
