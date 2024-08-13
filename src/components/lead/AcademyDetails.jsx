@@ -156,6 +156,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             city_id: sport?.city_id,
             location_state: sport?.state,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
+            postcode: sport?.postcode,
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
@@ -173,6 +174,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     city_id: filteredCity[0]?.city_id,
                     location_state: filteredCity[0]?.state,
                     city: filteredCity[0]?.city + ", " + filteredCity[0]?.state + " (" + filteredCity[0]?.type + ")",
+                    postcode: filteredCity[0]?.postcode,
                 }));
             }
             setIsCityDropdownVisible(false);
@@ -208,12 +210,16 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 if (response?.data?.data[0]?.sport_id) {
                     setSearchTerm(response?.data?.data[0]?.sport_name)
                 }
-                if (response?.data?.data[0]?.location_locality) {
-                    setSearchCity(response?.data?.data[0]?.location_locality)
-                } else if (response?.data?.data[0]?.location_city) {
+                // if (response?.data?.data[0]?.location_locality) {
+                //     setSearchCity(response?.data?.data[0]?.location_locality)
+                // } else if (response?.data?.data[0]?.location_city) {
+                //     setSearchCity(response?.data?.data[0]?.location_city)
+                // }
+                if (response?.data?.data[0]?.loc_id === 17500) {
+                    setSearchCity(response?.data?.data[0]?.city)
+                } else {
                     setSearchCity(response?.data?.data[0]?.location_city)
                 }
-              
                 if (response?.data?.data[0]?.email) {
                     checkEmail(response?.data?.data[0]?.email);
                 }
@@ -338,7 +344,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
             loc_id: editedItem?.loc_id,
             city_id: editedItem?.city_id,
             city: editedItem?.city,
-            postcode: editedItem?.postcode?.trim(),
+            postcode: editedItem?.postcode,
             categories: editedItem?.categories?.trim(),
             rating: editedItem?.rating?.trim(),
             reviews: editedItem?.reviews?.trim(),
@@ -536,7 +542,7 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                                                     checked={editedItem?.email_verified === 1}
                                                 /> Email Verified
                                                 <div className="mail">
-                                                {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
+                                                    {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
                                                 </div>
                                             </label>
 
@@ -875,123 +881,243 @@ const AcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                     </div>
                     <div className="detailsBox">
                         <p className="detailHead">ADDRESS INFORMATION</p>
-                        <div className="detailsContent">
-                            <div className="detailsLeftContainer">
-                                <p>Address 1</p>
-                                <p>Address 2</p>
-                                <p>City</p>
-                                <p>State</p>
-                                <p>Zipcode</p>
-                            </div>
-                            <div className="detailsRightContainer">
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="address1"
-                                                value={editedItem?.address1}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="address2"
-                                                value={editedItem?.address2}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
-                                <>
-                                    <div>
-                                        <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
-                                            <div>
+                        {editedItem?.loc_id === 17500 ? <>
+                            <div className="detailsContent">
+                                <div className="detailsLeftContainer">
+                                    <p>Address 1</p>
+                                    <p>Address 2</p>
+                                    <p>City</p>
+                                    <p>State</p>
+                                    <p>Zipcode</p>
+                                </div>
+                                <div className="detailsRightContainer">
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
                                                 <input
-                                                    id=""
-                                                    name=""
-                                                    value={searchCity}
-                                                    onChange={handleCityInputChange}
-                                                    autoComplete="off"
-                                                    className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
-                                                    style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                    type="text"
+                                                    name="address1"
+                                                    value={editedItem?.address1}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
                                                     disabled={isDisabled}
                                                 />
-                                            </div>
-                                            {isCityDropdownVisible && (
-                                                <div className='sport_box'>
-                                                    {noMatchCity ? (
-                                                        <div>No match found</div>
-                                                    ) : (
-                                                        filteredCity.map((city) => (
-                                                            <div
-                                                                key={city.id}
-                                                                onClick={() => handleCitySelect(city)}
-                                                                style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
-                                                            >
-                                                                {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
-                                                            </div>
-                                                        ))
-                                                    )}
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="address2"
+                                                    value={editedItem?.address2}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled={isDisabled}
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                    <>
+                                        <div>
+                                            <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                                                <div>
+                                                    <input
+                                                        id=""
+                                                        name=""
+                                                        value={searchCity}
+                                                        onChange={handleCityInputChange}
+                                                        autoComplete="off"
+                                                        className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                                                        style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                        disabled={isDisabled}
+                                                    />
                                                 </div>
-                                            )}
+                                                {isCityDropdownVisible && (
+                                                    <div className='sport_box'>
+                                                        {noMatchCity ? (
+                                                            <div>No match found</div>
+                                                        ) : (
+                                                            filteredCity.map((city) => (
+                                                                <div
+                                                                    key={city.id}
+                                                                    onClick={() => handleCitySelect(city)}
+                                                                    style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                                                >
+                                                                    {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                                                </div>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="state"
-                                                value={editedItem?.location_state}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled
-                                            />
-                                        </span>
-                                    )}
-                                </p>
-                                <p>
-                                    {isLoading ? (
-                                        <span>-</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                type="text"
-                                                name="postcode"
-                                                value={editedItem?.postcode}
-                                                onChange={handleInputChange}
-                                                style={
-                                                    isEditable ? editStylingInput : normalStylingInput
-                                                }
-                                                disabled={isDisabled}
-                                            />
-                                        </span>
-                                    )}
-                                </p>
+                                    </>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={editedItem?.state}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="number"
+                                                    name="postcode"
+                                                    value={editedItem?.postcode}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled={isDisabled}
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </> : <>
+                            <div className="detailsContent">
+                                <div className="detailsLeftContainer">
+                                    <p>Address 1</p>
+                                    <p>Address 2</p>
+                                    <p>City</p>
+                                    <p>State</p>
+                                    <p>Zipcode</p>
+                                </div>
+                                <div className="detailsRightContainer">
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="address1"
+                                                    value={editedItem?.address1}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled={isDisabled}
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="address2"
+                                                    value={editedItem?.address2}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled={isDisabled}
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                    <>
+                                        <div>
+                                            <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                                                <div>
+                                                    <input
+                                                        id=""
+                                                        name=""
+                                                        value={searchCity}
+                                                        onChange={handleCityInputChange}
+                                                        autoComplete="off"
+                                                        className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                                                        style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                                                        disabled={isDisabled}
+                                                    />
+                                                </div>
+                                                {isCityDropdownVisible && (
+                                                    <div className='sport_box'>
+                                                        {noMatchCity ? (
+                                                            <div>No match found</div>
+                                                        ) : (
+                                                            filteredCity.map((city) => (
+                                                                <div
+                                                                    key={city.id}
+                                                                    onClick={() => handleCitySelect(city)}
+                                                                    style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                                                >
+                                                                    {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                                                </div>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={editedItem?.location_state}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p>
+                                        {isLoading ? (
+                                            <span>-</span>
+                                        ) : (
+                                            <span>
+                                                <input
+                                                    type="number"
+                                                    name="postcode"
+                                                    value={editedItem?.postcode}
+                                                    onChange={handleInputChange}
+                                                    style={
+                                                        isEditable ? editStylingInput : normalStylingInput
+                                                    }
+                                                    disabled={isDisabled}
+                                                />
+                                            </span>
+                                        )}
+                                    </p>
+                                </div>
+                            </div>
+                        </>}
                     </div>
 
                 </div>

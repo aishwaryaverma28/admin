@@ -226,9 +226,9 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         if (response?.data?.data[0]?.sport_id) {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-        if (response?.data?.data[0]?.location_city) {
-          setSearchCity(response?.data?.data[0]?.location_city)
-        } else if (response?.data?.data[0]?.location_city) {
+        if(response?.data?.data[0]?.loc_id === 17500){
+          setSearchCity(response?.data?.data[0]?.city)
+        } else{
           setSearchCity(response?.data?.data[0]?.location_city)
         }
         if (response?.data?.data[0]?.height) {
@@ -458,9 +458,11 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
   };
   //player experience code ends here
   const handleUpdateClick = () => {
-    let edu = eduData.map(edu => `${edu.degree};${edu.college}`).join(',')
-    let exp = expData.map(edu => `${edu.playedFor};${edu.date};${edu.description}`).join(',')
-    const updatedFormData = {
+    const edu = eduData.map(item => `${item.degree};${item.college}`).join(',');
+    const exp = expData.map(item => `${item.playedFor};${item.date};${item.description}`).join(',');
+    
+    // Base form data
+    const baseFormData = {
       type: "org",
       name: editedItem?.name?.trim(),
       email: editedItem?.email?.trim(),
@@ -484,15 +486,18 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       position: editedItem?.position?.trim(),
       facebook: editedItem?.facebook?.trim(),
       instagram: editedItem?.instagram?.trim(),
+    };
+  
+    if (editedItem?.loc_id === 17500) {
+      baseFormData.postcode = editedItem?.postcode;
     }
+  
     axios
-      .put(UPDATE_PLAYER + id, updatedFormData
-        , {
-          headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-          },
-        }
-      )
+      .put(UPDATE_PLAYER + id, baseFormData, {
+        headers: {
+          Authorization: `Bearer ${decryptedToken}`,
+        },
+      })
       .then((response) => {
         if (response.data.status === 1) {
           toast.success("Details updated successfully", {
@@ -521,7 +526,8 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
       .finally(() => {
         setStateBtn(0);
       });
-  }
+  };
+  
   React.useImperativeHandle(ref, () => ({
     handleUpdateClick
   }));
@@ -630,7 +636,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                           checked={editedItem?.email_verified === 1}
                         /> Email Verified
                         <div className="mail">
-                        {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
+                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
                         </div>
                       </label>
                     </span>
@@ -887,85 +893,186 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
           </div>
           <div className="detailsBox">
             <p className="detailHead">ADDRESS INFORMATION</p>
-            <div className="detailsContent">
-              <div className="detailsLeftContainer">
-                <p>Address</p>
-                <p>City</p>
-                <p>State</p>
-              </div>
-              <div className="detailsRightContainer">
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="address"
-                        value={editedItem?.address}
-                        onChange={handleInputChange}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled={isDisabled}
-                      />
-                    </span>
-                  )}
-                </p>
-                <>
-                  <div>
-                    <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
-                      <div>
+            {editedItem?.loc_id === 17500 ? <>
+              <div className="detailsContent">
+                <div className="detailsLeftContainer">
+                  <p>Address</p>
+                  <p>City</p>
+                  <p>State</p>
+                  <p>Postcode</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
                         <input
-                          id=""
-                          name=""
-                          value={searchCity}
-                          onChange={handleCityInputChange}
-                          autoComplete="off"
-                          className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
-                          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                          type="text"
+                          name="address"
+                          value={editedItem?.address}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
                           disabled={isDisabled}
                         />
-                      </div>
-                      {isCityDropdownVisible && (
-                        <div className='sport_box'>
-                          {noMatchCity ? (
-                            <div>No match found</div>
-                          ) : (
-                            filteredCity.map((city) => (
-                              <div
-                                key={city.id}
-                                onClick={() => handleCitySelect(city)}
-                                style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
-                              >
-                                {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
-                              </div>
-                            ))
-                          )}
+                      </span>
+                    )}
+                  </p>
+                  <>
+                    <div>
+                      <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                        <div>
+                          <input
+                            id=""
+                            name=""
+                            value={searchCity}
+                            onChange={handleCityInputChange}
+                            autoComplete="off"
+                            className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                            style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                            disabled={isDisabled}
+                          />
                         </div>
-                      )}
+                        {isCityDropdownVisible && (
+                          <div className='sport_box'>
+                            {noMatchCity ? (
+                              <div>No match found</div>
+                            ) : (
+                              filteredCity.map((city) => (
+                                <div
+                                  key={city.id}
+                                  onClick={() => handleCitySelect(city)}
+                                  style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                >
+                                  {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="state"
-                        value={editedItem?.location_state}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled
-                      />
-                    </span>
-                  )}
-                </p>
+                  </>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem?.state}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="postcode"
+                          value={editedItem?.postcode}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
+            </> : <>
+              <div className="detailsContent">
+                <div className="detailsLeftContainer">
+                  <p>Address</p>
+                  <p>City</p>
+                  <p>State</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="address"
+                          value={editedItem?.address}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled={isDisabled}
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <>
+                    <div>
+                      <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                        <div>
+                          <input
+                            id=""
+                            name=""
+                            value={searchCity}
+                            onChange={handleCityInputChange}
+                            autoComplete="off"
+                            className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                            style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                            disabled={isDisabled}
+                          />
+                        </div>
+                        {isCityDropdownVisible && (
+                          <div className='sport_box'>
+                            {noMatchCity ? (
+                              <div>No match found</div>
+                            ) : (
+                              filteredCity.map((city) => (
+                                <div
+                                  key={city.id}
+                                  onClick={() => handleCitySelect(city)}
+                                  style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                >
+                                  {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem?.location_state}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </>}
+
           </div>
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>

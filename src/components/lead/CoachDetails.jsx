@@ -236,9 +236,9 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         if (response?.data?.data[0]?.sport_id) {
           setSearchTerm(response?.data?.data[0]?.sport_name)
         }
-        if (response?.data?.data[0]?.location_locality) {
-          setSearchCity(response?.data?.data[0]?.location_locality)
-        } else if (response?.data?.data[0]?.location_city) {
+        if(response?.data?.data[0]?.loc_id === 17500){
+          setSearchCity(response?.data?.data[0]?.city)
+        } else{
           setSearchCity(response?.data?.data[0]?.location_city)
         }
         if (response?.data?.data[0]?.skill) {
@@ -378,7 +378,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
   const handleUpdateClick = () => {
     setStateBtn(0);
     let gather = trainingLocation.toString() + "||" + trainInput;
-    const updatedFormData = {
+    let updatedFormData = {
       type: "org",
       name: editedItem?.name?.trim(),
       phone: editedItem?.phone?.trim(),
@@ -398,7 +398,9 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       gender: editedItem?.gender,
       location: gather,
     }
-
+    if (editedItem?.loc_id === 17500) {
+      updatedFormData.postcode = editedItem?.postcode;
+    }
     axios
       .put(UPDATE_COACH + id, updatedFormData
         , {
@@ -712,123 +714,279 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
           </div>
           <div className="detailsBox">
             <p className="detailHead">ADDRESS INFORMATION</p>
-            <div className="detailsContent">
-              <div className="detailsLeftContainer">
-                <p>City</p>
-                <p>State</p>
-                <p>Training Location</p>
-              </div>
-              <div className="detailsRightContainer">
-                <>
-                  <div>
-                    <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
-                      <div>
+            {editedItem?.loc_id === 17500 ? <>
+              <div className="detailsContent">
+                <div className="detailsLeftContainer">
+                  <p>Address</p>
+                  <p>City</p>
+                  <p>State</p>
+                  <p>Postcode</p>
+                  <p>Training Location</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
                         <input
-                          id=""
-                          name=""
-                          value={searchCity}
-                          onChange={handleCityInputChange}
-                          autoComplete="off"
-                          className={isDisabled ? "disabled disabled_width sport_new_input" : "sport_new_input"}
-                          style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                          type="text"
+                          name="address"
+                          value={editedItem?.address}
+                          onChange={handleInputChange}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
                           disabled={isDisabled}
                         />
-                      </div>
-                      {isCityDropdownVisible && (
-                        <div className='sport_box'>
-                          {noMatchCity ? (
-                            <div>No match found</div>
-                          ) : (
-                            filteredCity.map((city) => (
-                              <div
-                                key={city.id}
-                                onClick={() => handleCitySelect(city)}
-                                style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
-                              >
-                                {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <input
-                        type="text"
-                        name="state"
-                        value={editedItem?.location_state}
-                        style={
-                          isEditable ? editStylingInput : normalStylingInput
-                        }
-                        disabled
-                      />
-                    </span>
-                  )}
-                </p>
-
-                <p>
-                  {isLoading ? (
-                    <span>-</span>
-                  ) : (
-                    <span>
-                      <div className="form-group-radio">
-                        <label className="radio-inline">
+                      </span>
+                    )}
+                  </p>
+                  <>
+                    <div>
+                      <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                        <div>
                           <input
-                            type="checkbox"
-                            name="training_location"
-                            value="online"
-                            className="radio_disable check_input"
-                            disabled={isDisabled}
-                            onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("online")}
-                          /> Online
-                        </label>
-                        <label className="radio-inline">
-                          <input
-                            type="checkbox"
-                            name="training_location"
-                            value="home"
-                            className="radio_disable check_input"
-                            disabled={isDisabled}
-                            onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("home")}
-                          /> Home
-                        </label>
-                        <label className="radio-inline">
-                          <input
-                            type="checkbox"
-                            name="training_location"
-                            value="other"
-                            className="radio_disable check_input"
-                            disabled={isDisabled}
-                            onChange={handleCheckboxChange}
-                            checked={trainingLocation.includes("other")}
-                          /> Other
-                        </label>
-                        <span>
-                          <input
-                            type="text"
+                            id=""
                             name=""
-                            value={trainInput}
-                            onChange={handleChange}
-                            style={
-                              isEditable ? editStylingInput : normalStylingInput
-                            }
+                            value={searchCity}
+                            onChange={handleCityInputChange}
+                            autoComplete="off"
+                            className={isDisabled ? "disabled sport_new_input" : "sport_new_input"}
+                            style={isEditable ? editStylingSelect1 : normalStylingSelect1}
                             disabled={isDisabled}
                           />
-                        </span>
+                        </div>
+                        {isCityDropdownVisible && (
+                          <div className='sport_box'>
+                            {noMatchCity ? (
+                              <div>No match found</div>
+                            ) : (
+                              filteredCity.map((city) => (
+                                <div
+                                  key={city.id}
+                                  onClick={() => handleCitySelect(city)}
+                                  style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                >
+                                  {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
                       </div>
-                    </span>
-                  )}
-                </p>
+                    </div>
+                  </>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem?.state}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="number"
+                          name="postcode"
+                          value={editedItem?.postcode}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <div className="form-group-radio">
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="online"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("online")}
+                            /> Online
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="home"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("home")}
+                            /> Home
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="other"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("other")}
+                            /> Other
+                          </label>
+                          <span>
+                            <input
+                              type="text"
+                              name=""
+                              value={trainInput}
+                              onChange={handleChange}
+                              style={
+                                isEditable ? editStylingInput : normalStylingInput
+                              }
+                              disabled={isDisabled}
+                            />
+                          </span>
+                        </div>
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
+            </> : <>
+              <div className="detailsContent">
+                <div className="detailsLeftContainer">
+                  <p>City</p>
+                  <p>State</p>
+                  <p>Training Location</p>
+                </div>
+                <div className="detailsRightContainer">
+                  <>
+                    <div>
+                      <div ref={inputCityRef} style={{ position: 'relative', display: 'block' }}>
+                        <div>
+                          <input
+                            id=""
+                            name=""
+                            value={searchCity}
+                            onChange={handleCityInputChange}
+                            autoComplete="off"
+                            className={isDisabled ? "disabled disabled_width sport_new_input" : "sport_new_input"}
+                            style={isEditable ? editStylingSelect1 : normalStylingSelect1}
+                            disabled={isDisabled}
+                          />
+                        </div>
+                        {isCityDropdownVisible && (
+                          <div className='sport_box'>
+                            {noMatchCity ? (
+                              <div>No match found</div>
+                            ) : (
+                              filteredCity.map((city) => (
+                                <div
+                                  key={city.id}
+                                  onClick={() => handleCitySelect(city)}
+                                  style={{ padding: '5px', cursor: 'pointer', textTransform: 'capitalize' }}
+                                >
+                                  {city?.locality_name}, {city?.city}, {city?.state} ({city?.id})
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <input
+                          type="text"
+                          name="state"
+                          value={editedItem?.location_state}
+                          style={
+                            isEditable ? editStylingInput : normalStylingInput
+                          }
+                          disabled
+                        />
+                      </span>
+                    )}
+                  </p>
+
+                  <p>
+                    {isLoading ? (
+                      <span>-</span>
+                    ) : (
+                      <span>
+                        <div className="form-group-radio">
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="online"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("online")}
+                            /> Online
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="home"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("home")}
+                            /> Home
+                          </label>
+                          <label className="radio-inline">
+                            <input
+                              type="checkbox"
+                              name="training_location"
+                              value="other"
+                              className="radio_disable check_input"
+                              disabled={isDisabled}
+                              onChange={handleCheckboxChange}
+                              checked={trainingLocation.includes("other")}
+                            /> Other
+                          </label>
+                          <span>
+                            <input
+                              type="text"
+                              name=""
+                              value={trainInput}
+                              onChange={handleChange}
+                              style={
+                                isEditable ? editStylingInput : normalStylingInput
+                              }
+                              disabled={isDisabled}
+                            />
+                          </span>
+                        </div>
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </>}
           </div>
           <div className="detailsBox">
             <p className="detailHead">ADDITIONAL INFORMATION</p>
