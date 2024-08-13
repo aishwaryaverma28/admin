@@ -1493,3 +1493,24 @@
   align-items: center;
   gap:1rem;
 }
+
+.btn-verified{
+  color:#fff;
+  white-space: nowrap;
+  background-color: #077838;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  border: none;
+  outline: none;
+  font-size: 0.8rem;
+}
+.btn-unverified{
+  color:#fff;
+  white-space: nowrap;
+  background-color: #f14949;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  border: none;
+  outline: none;
+  font-size: 0.8rem;
+}
