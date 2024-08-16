@@ -239,7 +239,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         if(response?.data?.data[0]?.loc_id === 17500){
           setSearchCity(response?.data?.data[0]?.city)
         } else{
-          setSearchCity(response?.data?.data[0]?.location_city)
+          setSearchCity(response?.data?.data[0]?.location_locality)
         }
         if (response?.data?.data[0]?.skill) {
           const skillArray = response?.data?.data[0]?.skill?.split(',');

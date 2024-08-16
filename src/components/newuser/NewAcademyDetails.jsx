@@ -193,7 +193,7 @@ const NewAcademyDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                 if (response?.data?.data[0]?.loc_id === 17500) {
                     setSearchCity(response?.data?.data[0]?.city)
                 } else {
-                    setSearchCity(response?.data?.data[0]?.location_city)
+                    setSearchCity(response?.data?.data[0]?.location_locality)
                 }
                 if (response?.data?.data[0]?.email) {
                     checkEmail(response?.data?.data[0]?.email);
