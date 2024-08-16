@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { cdnurl, ALL_SPORTS, SEARCH_CITY, GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken, EMAIL_VERIFY } from './../utils/Constants';
+import { cdnurl, ALL_SPORTS, SEARCH_CITY, GET_PLAYER_ID, UPDATE_PLAYER, getDecryptedToken, EMAIL_VERIFY,VERIFICATION_EMAIL } from './../utils/Constants';
 import { toast } from "react-toastify";
 import { normalStylingInput, editStylingInput, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
 import CoachSkills from '../coach/CoachSkills';
@@ -8,10 +8,8 @@ import PlayerAwards from './PlayerAwards';
 import PlayerEdu from './PlayerEdu';
 import PlayerExp from './PlayerExp';
 import QuillEditor from '../QuillEditor';
-import tick from "../../assets/image/star_tick.svg"
-import cross from "../../assets/image/unverified.svg"
 
-const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
+const PlayerDetails = React.forwardRef(({ id, userid, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [isLoading, setIsLoading] = useState(true);
   const [sports, setSports] = useState([]);
@@ -280,6 +278,31 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
         console.log(error)
       ])
   }
+  function handleVerify (){
+    axios.post(VERIFICATION_EMAIL, {"userId": userid},{
+        headers:{
+            Authorization:`Bearer ${decryptedToken}`,
+        },
+    })
+    .then((response)=> {
+        if(response?.data?.status === 1)
+        {
+        toast.success(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+        });
+    }
+    else{
+        toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+        });
+    }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
   const fetchSports = () => {
     let body = {
       sort: "name asc"
@@ -636,7 +659,7 @@ const PlayerDetails = React.forwardRef(({ id, updateCheckState }, ref) => {
                           checked={editedItem?.email_verified === 1}
                         /> Email Verified
                         <div className="mail">
-                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
+                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified' onClick={handleVerify}>Verify Now</button>}
                         </div>
                       </label>
                     </span>

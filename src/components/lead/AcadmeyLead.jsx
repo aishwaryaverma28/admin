@@ -263,11 +263,10 @@ useEffect(() => {
                         </button>
                     </div>
                     {/* ===================================================================tabination content */}
-
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <AcademyDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
+                                <AcademyDetails id={selectedItem} userid={userId?.id} updateCheckState={updateCheckState} ref={childRef}/>
                             </div>
                         )}
                         {activeTab === "gallery" && (

@@ -264,7 +264,7 @@ const PlayerLead = ({ selectedItem, closeModal, onLeadAdded, page, limit, coachF
                     <div className="tab-content">
                         {activeTab === "details" && (
                             <div className="notes-tab-content">
-                                <PlayerDetails id={selectedItem} updateCheckState={updateCheckState} ref={childRef} />
+                                <PlayerDetails id={selectedItem} userid={userId?.id} updateCheckState={updateCheckState} ref={childRef} />
                             </div>
                         )}
                         {activeTab === "gallery" && (

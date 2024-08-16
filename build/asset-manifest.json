@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.c074fe09.css",
-    "main.js": "/static/js/main.084b215e.js",
+    "main.js": "/static/js/main.c14896a6.js",
     "static/js/703.69c34890.chunk.js": "/static/js/703.69c34890.chunk.js",
     "static/js/598.34531c71.chunk.js": "/static/js/598.34531c71.chunk.js",
     "static/media/404.jpg": "/static/media/404.848d7a9bea70cb1616e0.jpg",
@@ -14,7 +14,6 @@
     "static/media/logo.svg": "/static/media/logo.827671c11d02d24eac1721a33a848b22.svg",
     "static/media/setup.svg": "/static/media/setup.caddf8411392607bb2e0e2a711faf70c.svg",
     "static/media/calendar.svg": "/static/media/calendar.61918c5c96ba9fa2cd99af5cb3c68538.svg",
-    "static/media/star_tick.svg": "/static/media/star_tick.623b15c554665ffdfc71c0cee9c9601a.svg",
     "static/media/lock.svg": "/static/media/lock.c6323ba76ed8d88e71821c71f5bab1d8.svg",
     "static/media/time-blue.svg": "/static/media/time-blue.fbb92ac834a4c162dde60fef41b3ff32.svg",
     "static/media/time.svg": "/static/media/time.245fbc940075c22fbf2ceba5bbaff155.svg",
@@ -44,7 +43,6 @@
     "static/media/chart.svg": "/static/media/chart.04c7770aaf3062e7df84157df37e7292.svg",
     "static/media/finance.svg": "/static/media/finance.649ae31e0e6607e01f2caff739fee02b.svg",
     "static/media/deal-icon.svg": "/static/media/deal-icon.1aa4b318b1284c7f629e786e90c27fe3.svg",
-    "static/media/unverified.svg": "/static/media/unverified.b0d63c09a65c30f0c7273e3d8d0f66bd.svg",
     "static/media/performence.svg": "/static/media/performence.044bf29f63be43165266058fc581aa2e.svg",
     "static/media/career.svg": "/static/media/career.dea9e72298614e484d1a369bc65a9597.svg",
     "static/media/pin.svg": "/static/media/pin.136520e26c67c4870a3f9b6f9feccd81.svg",
@@ -75,12 +73,12 @@
     "static/media/greater-up.svg": "/static/media/greater-up.a8eef9ef909059b38a5aaebf46db2763.svg",
     "static/media/bluedot.svg": "/static/media/bluedot.8d480cafc752076cfa9b3ffc75b9a1c2.svg",
     "main.c074fe09.css.map": "/static/css/main.c074fe09.css.map",
-    "main.084b215e.js.map": "/static/js/main.084b215e.js.map",
+    "main.c14896a6.js.map": "/static/js/main.c14896a6.js.map",
     "703.69c34890.chunk.js.map": "/static/js/703.69c34890.chunk.js.map",
     "598.34531c71.chunk.js.map": "/static/js/598.34531c71.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c074fe09.css",
-    "static/js/main.084b215e.js"
+    "static/js/main.c14896a6.js"
   ]
 }

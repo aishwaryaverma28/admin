@@ -322,3 +322,4 @@ export const ADD_TICKET_REPLY = bmpStart+"/bmp/ticket/add-reply";
 export const GET_USER_TICKETS = bmpStart+"/bmp/ticket/get/";
 export const EXECUTE_PROCEDURE = bmpStart+"/bmp/exicute-procedure";
 export const EMAIL_VERIFY=bmpStart+"/bmp/user/isemailverified";
+export const VERIFICATION_EMAIL = bmpStart+"/bmp/user/send-verification-email";

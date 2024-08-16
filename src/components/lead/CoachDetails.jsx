@@ -4,7 +4,7 @@ import {
   cdnurl, SEARCH_CITY,
   GET_COACH_ID,
   getDecryptedToken,
-  UPDATE_COACH, ALL_SPORTS, EMAIL_VERIFY
+  UPDATE_COACH, ALL_SPORTS, EMAIL_VERIFY,VERIFICATION_EMAIL
 } from "./../utils/Constants";
 import { toast } from "react-toastify";
 import { normalStylingInput, editStylingInput, editStylingSelect1, normalStylingSelect1 } from "./../utils/variables";
@@ -12,8 +12,6 @@ import CoachFaq from '../coach/CoachFaq';
 import CoachSkills from '../coach/CoachSkills';
 import AddPricingSection from '../coach/AddPricingSection';
 import QuillEditor from '../QuillEditor';
-import tick from "../../assets/image/star_tick.svg"
-import cross from "../../assets/image/unverified.svg"
 const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) => {
   const decryptedToken = getDecryptedToken();
   const [sports, setSports] = useState([]);
@@ -266,7 +264,6 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
       },
     })
       .then((response) => {
-        console.log(response?.data?.status);
         if (response?.data?.status === 1) {
           setEmailVeri(true);
         }
@@ -275,6 +272,31 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
         console.log(error)
       ])
   }
+  function handleVerify (){
+    axios.post(VERIFICATION_EMAIL, {"userId": user_id?.id},{
+        headers:{
+            Authorization:`Bearer ${decryptedToken}`,
+        },
+    })
+    .then((response)=> {
+        if(response?.data?.status === 1)
+        {
+        toast.success(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+        });
+    }
+    else{
+        toast.error(response?.data?.message, {
+            position: "top-center",
+            autoClose: 1000,
+        });
+    }
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
   const fetchSports = () => {
     let body = {
       sort: "name asc"
@@ -543,7 +565,7 @@ const CoachDetails = React.forwardRef(({ user_id, id, updateCheckState }, ref) =
                           checked={editedItem?.email_verified === 1}
                         /> <div className='new_verify_input'></div>Email Verified
                         <div className="mail">
-                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified'>Verify Now</button>}
+                          {emailVeri ? <button className='btn-verified'>Verified</button> : <button className='btn-unverified' onClick={handleVerify}>Verify Now</button>}
                         </div>
                       </label>
                     </span>

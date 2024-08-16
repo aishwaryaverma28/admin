@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { getDecryptedToken, USER_LOG,GET_ACADEMY, UPDATE_ACADEMY,ACADEMY_TICKETS } from "./../utils/Constants";
-import BmpTickets from "../lead/BmpTickets";
 import NewAcademyDetails from "./NewAcademyDetails";
 import UserLogs from "../lead/UserLogs";
 import AssignAcademy from "../acadmey/AssignAcademy";
@@ -222,6 +221,7 @@ const NewUserLead = ({ selectedItem, closeModal, onLeadAdded }) => {
               <div className="notes-tab-content">
                 <NewAcademyDetails
                   id={selectedItem?.parent_id}
+                  userid={selectedItem?.id}
                   updateCheckState={updateCheckState}
                   ref={childRef}
                 />
