@@ -154,6 +154,7 @@ const NewAcademyDetails = React.forwardRef(({ id,userid, updateCheckState }, ref
             location_state: sport?.state,
             city: sport?.city + ", " + sport?.state + " (" + sport?.type + ")",
             postcode: sport?.postcode,
+            address2: sport?.locality_name
         }));
         setFilteredCity([]);
         setIsCityDropdownVisible(false);
@@ -211,7 +212,7 @@ const NewAcademyDetails = React.forwardRef(({ id,userid, updateCheckState }, ref
                 if (response?.data?.data[0]?.loc_id === 17500) {
                     setSearchCity(response?.data?.data[0]?.city)
                 } else {
-                    setSearchCity(response?.data?.data[0]?.location_locality)
+                    setSearchCity(response?.data?.data[0]?.city)
                 }
                 if (response?.data?.data[0]?.email) {
                     checkEmail(response?.data?.data[0]?.email);
@@ -358,7 +359,7 @@ const NewAcademyDetails = React.forwardRef(({ id,userid, updateCheckState }, ref
             timing: editedItem?.timing?.trim(),
             closed_on: editedItem?.closed_on?.trim(),
             address1: editedItem?.address1?.trim(),
-            address2: editedItem?.address2?.trim(),
+            address2: editedItem?.locality_name?.trim(),
             loc_id: editedItem?.loc_id,
             city_id: editedItem?.city_id,
             city: editedItem?.city,
@@ -888,7 +889,7 @@ const NewAcademyDetails = React.forwardRef(({ id,userid, updateCheckState }, ref
                         </div>
                     </div>
                     <div className="detailsBox">
-                        <p className="detailHead">ADDRESS INFORMATION</p>
+                        <p className="detailHead">ADDRESS INFORMATION ({editedItem?.loc_id})</p>
                         {editedItem?.loc_id === 17500 ? <>
                             <div className="detailsContent">
                                 <div className="detailsLeftContainer">
@@ -925,7 +926,7 @@ const NewAcademyDetails = React.forwardRef(({ id,userid, updateCheckState }, ref
                                                 <input
                                                     type="text"
                                                     name="address2"
-                                                    value={editedItem?.address2}
+                                                    value={editedItem?.locality_name}
                                                     onChange={handleInputChange}
                                                     style={
                                                         isEditable ? editStylingInput : normalStylingInput
